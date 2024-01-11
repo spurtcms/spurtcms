@@ -1,0 +1,38 @@
+{{define "header"}}
+<!doctype html>
+<html lang="en" class="{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} red {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} purple {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} blue {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}} default-blue {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}} yellow {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}} orange {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}} light-green {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}} green {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}} black {{end}}">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Spurt CMS | {{.title}}  </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">  
+        <link rel="stylesheet" href="/public/css/global.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/responsive.css">
+    <link rel="stylesheet" href="/public/css/newstyle.css">
+    <link rel="stylesheet" href="/public/css/bootstrap-material-datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
+       <!-- cropper -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
+</head>
+
+<body>
+
+    {{template "mainmenu" .}}
+
+ 
+    {{end}}

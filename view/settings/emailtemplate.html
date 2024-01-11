@@ -1,0 +1,185 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "settingshead" .}}
+{{$Translate := .translate}}
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+{{$BORDERCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
+{{end}}
+<div class="page-wrapper settings-wrapper">
+    <div class="details-roles emailtemp-details roles-permission">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <!-- <input type="hidden" name="userid" value="" id="userid"> -->
+        <div class="search-role">
+
+            <form action="/settings/emails/" class="filterform" method="get" autocomplete="off">
+                <a type="button" class="searchbtn" id="filterformsubmit" style="padding-top: 10px;"><img
+                        src="/public/img/search.svg"></a>
+                <div>
+                    <input type="text" id="searchemails" class="search" name="keyword" value="{{ .Filter.Keyword }}"
+                        placeholder="{{$Translate.Emailtemplate.Searchtemplates}}">
+                </div>
+            </form>
+
+        </div>
+        <div class="table-responsive page-ponit">
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>{{$Translate.Emailtemplate.Templatename}}</th>
+                        <th>{{$Translate.Lastupdatedon}}</th>
+                        <th class="text-center">{{$Translate.Channell.Status}}</th>
+                        <th>{{$Translate.Actions}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if .Template}}
+                    {{ range .Template }}
+                    <tr>
+
+                        <td>{{.TemplateName}}</td>
+                        <td class="role-desc">{{.DateString}}</td>
+
+                        <td class="text-center">
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="cb1{{.Id}}" data-id="{{.Id}}"
+                                    onclick="TempStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
+                                    {{end}} />
+                                <label class="tgl-btn" for="cb1{{.Id}}"></label>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#email-templateModal" data-id="{{ .Id }}" id="edit-btn">
+                                            <span><img src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}} </button></li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{else}}
+                    <tr>
+                        <td style="text-align: center;" colspan="8">
+                            <div class="noData-foundWrapper">
+
+                                <div class="empty-folder">
+                                    <img src="/public/img/folder-sh.svg" alt="">
+                                    <img src="/public/img/shadow.svg" alt="">
+                                </div>
+                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+
+                </tbody>
+            </table>
+        </div>
+        {{if .Template}}
+        <div class="pogination flexx pagenation-padding sticky-pagination">
+            {{if .Page}}
+            <ul class="flexx">
+                <li>
+                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a>
+                </li>
+                {{range .Page}}
+                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current {{$TEXTCOLOR}} {{$BORDERCOLOR}}"
+                        {{end}}>{{.}} </a></li>
+                {{end}}
+                <li>
+                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
+                        {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a>
+                </li>
+            </ul>
+            {{end}}
+            <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+<!-- Center Modal -->
+<div class="modal fade" id="email-templateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="emailtemp">{{$Translate.Emailtemplate.Updatetemplate}}</h3>
+                <button class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/settings/emails/update-temp" method="post" id="updtemp">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="userid" value="" id="userid">
+                    <div class="input-group" id="namegrb">
+                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatename}}</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" name="tempname" placeholder="{{$Translate.Emailtemplate.Entertemplatename}}"
+                                id="tempname" readonly>
+                        </div>
+                    </div>
+                    <div class="input-group" id="subgrb">
+                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatesubject}}</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" name="tempsub" placeholder="{{$Translate.Emailtemplate.Entertemplatesubject}}"
+                                id="tempsub">
+                        </div>
+                    </div>
+                    <div class="input-group email-textarea" id="textgrb">
+                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatecontent}}</label>
+                        <div class="ig-row">
+                            <textarea placeholder="{{$Translate.Emailtemplate.Entertemplatecontent}}" class="field" name="temcont"
+                                id="temcont"></textarea>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-save">
+                    <button class="btn-reg btn-md primary {{$THEMECOLOR}}" id="uptemplate"> {{$Translate.Update}} </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}
+<script src="/public/js/settings/emailtemplate/emailtemplate.js"></script>
+{{template "footerclose" .}}

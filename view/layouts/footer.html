@@ -1,0 +1,76 @@
+{{define "footer"}}
+{{$Translate := .translate}}
+<!-- Center Modal -->
+<div class="modal fade delete-modal" id="centerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="warn-image">
+          <img src="/public/img/wraning.svg" alt="" />
+        </div>
+        <h2 class="heading-second deltitle"></h2>
+        <p class="heading-three deldesc" id="content">
+        </p>
+        <a href="javascript:void(0)" class="heading-three delname"></a>
+      </div>
+      <div class="modal-footer">
+        <a id="delete" class="spaceid" href="javascript:void(0)">
+          <button type="button" class="btn-reg btn-md primary" id="delid" name="delid">{{$Translate.Yes}}</button></a>
+        </button>
+        <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="delcancel">
+          {{$Translate.No}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <p class="para">{{.Menu.Footer}}</p>
+</footer>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+  integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+<!-- sortable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"
+  integrity="sha512-Eezs+g9Lq4TCCq0wae01s9PuNWzHYoCMkE97e2qdkYthpI0pzC3UGB03lgEHn2XM85hDOUF6qgqqszs+iXU4UA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.js"
+  integrity="sha512-d+dtcSjz831KbYcB3pS7cd3cqlaZ/gbbnZWC4KeLM8AToNtm83Rbc5au5k3bFBh6EwlphOGJtj7oDg6k+NGbPA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+
+<!-- cropper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+
+<!-- superbuild cdn -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/super-build/ckeditor.js"></script>
+
+<!-- jquery validator-->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+<!--moment js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.js"
+  integrity="sha512-CTSrPIDxxtTdaIYlTKHEyvHa+70TOhC1pY3PLDgrUqCFifFtV7KrucZCvPy2K7hB0HtKgt0r4INTGBISqnaLNg=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!--cropper-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+
+<!--Local files-->
+<script src="/public/js/common.js"></script>
+<script src="/public/js/bootstrap-material-datetimepicker.js"></script>
+{{end}}

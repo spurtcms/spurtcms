@@ -1,0 +1,443 @@
+{{template "header" .}}
+{{$Translate := .translate}}
+
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}}
+{{end}}
+
+{{$CurrentLanguage := .Menu.CurrentLanguage}}
+
+<header class="channels-header">
+    <div class="header-left">
+        <a href="javascript:void(0)" id="back"> <img src="/public/img/back.svg" alt="" /></a>
+        <h1 class="heading" id="backto-prev" style="display: none;">Back to previous</h1>
+        <h1 class="heading" id="cr-ch-title">{{$Translate.Channell.Createchl}}</h1>
+    </div>
+    <div class="header-rht flexx">
+        <div class="btn-group language-group langdata">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"  data-code="{{$CurrentLanguage.LanguageCode}}" data-id="{{$CurrentLanguage.Id}}">
+                <img id="current-langflag" src="{{$CurrentLanguage.ImagePath}}" alt=""> {{$CurrentLanguage.LanguageName}} <img src="/public/img/arrow-down.svg" alt=""
+                class="drop-arrow">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                {{$CurrentLanguage := .Menu.CurrentLanguage}}
+                {{range .Menu.Languages}}
+                {{if and (eq .IsStatus 1) (ne $CurrentLanguage.Id .Id)}}
+                <li class="lang" data-code="{{.LanguageCode}}" data-id="{{.Id}}">
+                    <button class="dropdown-item" type="button"> <img src="{{.ImagePath}}" alt="">
+                        {{.LanguageName}}</button>
+                </li>
+                {{end}}
+                {{end}}
+            </ul>
+        </div>
+        <button> <img src="/public/img/notify.svg" alt=""> </button>
+        <a href="/settings/"><button> <img src="/public/img/settings.svg" alt=""> </button></a>
+        <div class="btn-group">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{if .Menu.ProfileImagePath}}/{{ .Menu.ProfileImagePath }}{{else}} /public/img/profile.png{{end}}"
+                    alt="" style="border-radius: 50%;">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <div class='profile-name-detail'>
+                    <span><img
+                            src="{{if .Menu.ProfileImagePath}}/{{ .Menu.ProfileImagePath }}{{else}} /public/img/profile.png{{end}}"
+                            alt="" style="border-radius: 50%;"></span>
+                    <div class='pnd'>
+                        <h4>Hello, {{.Menu.Name}}</h4>
+                        <p>{{.Menu.RoleName}}</p>
+                    </div>
+                </div>
+                <li><a href="/settings/myprofile"><button class="dropdown-item" type="button">{{$Translate.Myprofile}}</button></a></li>
+                <!-- <li><a href="/"><button class="dropdown-item" type="button">Login</button></a> </li> -->
+                <li><a href="/logout"><button class="dropdown-item" type="button">{{$Translate.Logout}}</button></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrapper channel-wrapper">
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}"/>
+    <!-- Step 1 -->
+    <div class="channelIdentifier-container">
+        <div class="channelIdentifier active" id="step1">
+            <div class="channelTdentifier-num">
+                <span class="heading-second">1</span>
+            </div>
+
+            <a href="javascript:void(0)" class="heading-three channelTdentifier-name">{{$Translate.Channell.Channelname}}</a>
+        </div>
+
+        <div class="channelIdentifier" id="step2">
+            <div class="channelTdentifier-num">
+                <span class="heading-second">2</span>
+            </div>
+
+            <a href="javascript:void(0)" class="heading-three channelTdentifier-name">{{$Translate.Channell.Channelfield}}</a>
+        </div>
+
+        <div class="channelIdentifier" id="step3">
+            <div class="channelTdentifier-num">
+                <span class="heading-second">3</span>
+            </div>
+
+            <a href="javascript:void(0)" class="heading-three channelTdentifier-name">{{$Translate.Channell.Challcategory}}</a>
+        </div>
+    </div>
+
+    <div class="channelsContainer channelstep1">
+        <div class="channelsContainer-heading">
+            <h1 class="heading">{{$Translate.Channell.Channelname}}</h1>
+            <p class="para">{{$Translate.Channell.Createdesc}}</p>
+        </div>
+
+        <div class="channels-body">
+            <form action="" id="channelcreate" name="channelform" method="post" >
+            <div class="channel-form">
+                <div class="input-group" id="cname">
+                    <label for="" class="input-label">{{$Translate.Channell.Channelname}}</label>
+                    <div class="ig-row">
+                        <input type="text" class="chanfield" placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname" value="{{.channel.ChannelName}}">
+                     
+                    </div>
+                </div>
+
+                <div class="input-group" id="cdesc">
+                    <label for="" class="input-label">{{$Translate.Description}}</label>
+                    <div class="ig-row">
+                        <textarea class="chanfield" placeholder="{{$Translate.Enterdescription}}" name="description" id="channeldesc" >{{.channel.ChannelDescription}}</textarea>
+            
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        </div>
+    </div>
+
+    <!-- Step 2-->
+    <div class="channelsContainer channelstep2" style="display: none;">
+        <div class="channelsContainer-heading">
+            <h1 class="heading">{{$Translate.Channell.Channelfield}} </h1>
+            <p class="para">
+                {{$Translate.Channell.Channeldesc}}
+            </p>
+        </div>
+
+        <div class="channels-body">
+            <div class="fieldsContainer">
+                <div class="chooseFields">
+                    <div class="field-top">
+                        <h2 class="heading-second">{{$Translate.Channell.Chosefld}} </h2>
+                    </div>                    
+
+                    <div class="chooseField-bottom">
+                        {{range .Fields}}
+                        {{if eq .TypeName "Section"}}
+                        <div class="field-tab new drag-able" id="newsection" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/newsection.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Newsection}}</h3>
+                        </div>
+                        {{end}}
+                        {{end}}
+
+                        {{range .Fields}}
+                        {{if eq .TypeName "Label"}}
+                        <!-- <div class="field-tab active drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/Ab.svg" alt="" /></div>
+                            <h3 class="heading-three">Label</h3>
+                        </div> -->
+                        {{end}}
+                        {{if eq .TypeName "Text"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/T.svg" alt="" /></div>
+                            <h3 class="heading-three">{{$Translate.Channell.Text}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "Link"}}
+                        <!-- <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/link.svg" alt="" /></div>
+                            <h3 class="heading-three">Link</h3>
+                        </div> -->
+                        {{end}}
+                        {{if eq .TypeName "Date & Time"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/dateTime.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Datetime}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "Select"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/select.svg" alt="" /></div>
+                            <h3 class="heading-three">{{$Translate.Channell.Select}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "Date"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/date.svg" alt="" /></div>
+                            <h3 class="heading-three">{{$Translate.Channell.Date}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "TextBox"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/textbox.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Textbox}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "TextArea"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/textarea.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Textarea}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "CheckBox"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/checkbox.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Checkbox}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "Text Editor"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div">
+                                <img src="/public/img/texteditor.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Texteditor}}</h3>
+                        </div>
+                        {{end}}
+                        {{if eq .TypeName "Radio Button"}}
+                        <div class="field-tab drag-able" data-id="{{.Id}}">
+                            <div class="img-div"><img src="/public/img/radio.jpg" alt="" /></div>
+                            <h3 class="heading-three">{{$Translate.Channell.Radiobutton}}</h3>
+                        </div>
+                        {{end}}
+                        {{end}}
+                    </div>
+                </div>
+                <div class="channelFields">
+                    <div class="field-top">
+                        <h2 class="heading-second">{{$Translate.Channell.Channelfield}}</h2>
+                    </div>
+                    <!-- <div class="channel-fields-empty">
+                        <img src="/public/img/nofields.svg" alt="">
+                        <h3 class="heading">No Fields Added</h3>
+                        <p class="para">Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet.</p>
+                    </div> -->
+                    <div class="section-drop-able channel-section-drop-able" id="Sortsection">
+
+                        <!-- <div class="section-fields-content">
+                            <div class="scetion-all">
+                                <h3 class="heading-three">Section</h3>
+                                <button class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+                            <div class="section-fields-content-child">
+                                <div class="img-div">
+                                    <img src="/public/img/Ab.svg" alt="" />
+                                </div>
+                                <h3 class="heading-three">Lable</h3>
+                                <button class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+
+                            <div class="section-fields-content-child">
+                                <div class="img-div">
+                                    <img src="/public/img/dateTime.svg" alt="" />
+                                </div>
+                                <h3 class="heading-three">Date &amp; Time</h3>
+                                <button class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+
+                            <div class="section-fields-content-child">
+                                <div class="img-div">
+                                    <img src="/public/img/radio.jpg" alt="" />
+                                </div>
+                                <h3 class="heading-three">Radio Button</h3>
+                                <button href="" class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="section-fields-content newSection-field">
+                            <div class="scetion-all">
+                                <h3 class="heading-three">New Section</h3>
+                            </div>
+                            <div class="section-fields-content-child">
+                                <div class="img-div">
+                                    <img src="/public/img/Ab.svg" alt="" />
+                                </div>
+                                <h3 class="heading-three">Lable</h3>
+                                <button class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+
+                            <div class="section-fields-content-child">
+                                <div class="img-div">
+                                    <img src="/public/img/dateTime.svg" alt="" />
+                                </div>
+                                <h3 class="heading-three">Date &amp; Time</h3>
+                                <button class="field-delete">
+                                    <img src="/public/img/bin.svg" alt="" />
+                                </button>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="channelProperties" id="field-properties" style="display: none;">
+                    <div class="field-top">
+                        <h2 class="heading-second">{{$Translate.Channell.Properties}}</h2>
+                    </div>
+
+                    <div class="propertiesContent">
+                        <input type="hidden" id="fieldid" data-fieldid="" data-newfieldid="" data-sectionid="" data-newsectionid="" data-sectionname=""/>
+                        <div class="selected-property" id="title">
+                            <div class="img-div fieldicon" id="fieldicon">
+                                <img src="/public/img/Ab.svg" alt="" />
+                            </div>
+                            <h3 class="heading-three">{{$Translate.Channell.Label}}</h3>
+                        </div>
+
+                        <div class="input-group prop propinput" id="distext">
+                            <label for="" class="input-label">{{$Translate.Channell.Fieldname}}</label>
+                            <div class="ig-row">
+                                <input type="text" placeholder="{{$Translate.Channell.Plstypehere}}" id="ftext" class="fieldinput">
+                                <label id="fieldname-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Fielderr}}</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group prop propinput" id="fcharallow">
+                            <label for="" class="input-label">{{$Translate.Channell.Characterallow}}</label>
+                            <div class="ig-row">
+                                <input type="text" placeholder="{{$Translate.Channell.Plcharallow}}" id="fcharvalue" value="0">
+                            </div>
+                        </div>
+
+
+                        <div class="input-group prop propinput" id="url">
+                            <label for="" class="input-label">{{$Translate.Channell.Url}} </label>
+                            <div class="ig-row">
+                                <input type="text" placeholder="{{$Translate.Channell.Plurl}}" id="furl" class="fieldinput">
+                                <label id="url-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Urlerr}}</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group user-drop-down prop propdropdown" id="dateform" style="margin-bottom: 20px;">
+                            <label for="" class="input-label">{{$Translate.Channell.Dateformat}}</label>
+                            <input type="hidden" name="mem_role" class="fidvalinput" id="fdatefor" value="">
+                            <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"  >
+                            {{$Translate.Channell.Dateformat}}                             </a>
+                            <label id="date-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Dateerr}}</label>
+                            <div class="dropdown-menu" aria-labelledby="triggerId" style="height: auto;" >
+                                <button type="button" class="dropdown-item propdrop" data-id="DD/MM/YYYY">DD/MM/YYYY</button>
+                                <button type="button" class="dropdown-item propdrop" data-id="MM/DD/YYYY">MM/DD/YYYY</button>
+                                <button type="button" class="dropdown-item propdrop" data-id="YYYY/MM/DD">YYYY/MM/DD</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group user-drop-down prop propdropdown" id="timefor" style="margin-bottom: 20px;">
+                            <label for="" class="input-label ">{{$Translate.Channell.Timeformat}}</label>
+                            <input type="hidden" name="mem_role" class="fidvalinput" id="ftimefor" value="">
+                            <a class="dropdown-toggle" type="button" id="time-format" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"  >
+                            {{$Translate.Channell.Timeformat}}
+                            </a>
+                            <label id="time-error" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Timeerr}} </label>
+                            <div class="dropdown-menu" aria-labelledby="time-format" style="height: auto;">
+                                <button type="button" class="dropdown-item propdrop" data-id="12Hours">12 {{$Translate.Channell.Hours}}</button>
+                                <button type="button" class="dropdown-item propdrop" data-id="24Hours">24 {{$Translate.Channell.Hours}}</button>
+                            </div>
+                        </div>
+
+                        <div class="addOption-container prop" id="option">
+                            <div class="input-group">
+                                <label for="" class="input-label">{{$Translate.Channell.Options}}</label>
+                                <div class="ig-row addOption">
+                                    <input type="text" placeholder="{{$Translate.Channell.Pladdoption}}" id="foptname"/>
+                                    <button class="addOption-btn" id="addvalue">
+                                        <img src="/public/img/addOption.svg" alt="" />
+                                    </button>
+                                </div>
+                                <label id="select-error" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Optionerr}} </label>
+                                <label id="select-error1" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Optionserr}} </label>
+                            </div>
+                            <div class="addedOption-grp options-added">
+                            </div>
+
+                        </div>
+                        <div class="chk-group chk-group-label">
+                            <input type="checkbox" id="Check2"/>
+                            <label for="Check2" class="para">{{$Translate.Channell.Mandatory}}</label>
+                        </div>
+
+                        <!-- <button class="btn-reg btn-md primary"> Submit </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Step 3-->
+    <div class="channelsContainer channelstep3" style="display: none;">
+        <div class="channelsContainer-heading ">
+            <h1 class="heading">{{$Translate.Channell.Challcategory}} </h1>
+            <p class="para">
+               {{$Translate.Channell.Challdesc}}
+            </p>
+        </div>
+
+        <div class="channels-body">
+
+            {{template "categoryselect" .}}
+        </div>
+    </div>
+    <div class="configurationContent-btm channel-btm">
+       <a href="/channels/"><button class="btn-reg btn-lg secondary" id="cancel"> {{$Translate.Cancel}}</button></a> 
+        <button class="btn-reg btn-lg primary" id="nextstep">{{$Translate.Next}}</button>
+        <button class="btn-reg btn-lg primary channelsave" style="display: none;"> {{$Translate.Submit}}</button>
+        <button class="btn-reg btn-lg primary channelupt" style="display: none;">{{$Translate.Update}}</button>
+    </div>
+</div>
+
+{{template "footer" .}}
+<script src="/public/js/channels/channel.js"></script>
+{{template "footerclose" .}}

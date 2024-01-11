@@ -1,0 +1,361 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "settingshead" .}}
+{{$Translate := .translate}}
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+{{$BORDERCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
+{{end}}
+
+<div class="page-wrapper settings-wrapper">
+    <div class="details-roles roles-permission language-details">
+        <div class="search-role">
+            <form action="/settings/languages/" method="get">
+                <div class="search-grp">
+                <a type="button"><img src="/public/img/search.svg"></a>
+                <input type="text" name="keyword" placeholder="{{$Translate.Languages.Searchlanguages}}" value="{{ .Filter.Keyword }}">
+            </div>
+            </form>
+            <a href="javascript:void(0)" class="primary-link {{$TEXTCOLOR}}" data-bs-toggle="modal" data-bs-target="#laguangeModal">
+                <div class="add-new"><img src="/public/img/add-icon.svg" alt="">
+                    <p class="primary-link {{$TEXTCOLOR}}">{{$Translate.Languages.NewLanguage}}</p>
+                </div>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{{$Translate.Languages.Languagename}}</th>
+                        <th class="text-center">{{$Translate.Languages.Languagecode}}</th>
+                        <th>{{$Translate.Languages.Lastupdatedon}}</th>
+                        <th class="text-center">{{$Translate.Languages.Status}}</th>
+                        <th>{{$Translate.Actions}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if .Languages}}
+                    {{range .Languages}}
+                    <tr>
+                        <td>
+                            <div class="tbl-img-content flexx">
+                                <div class="tbl-img lang-img"><img src="{{.ImagePath}}" alt=""></div>
+                                <h4>{{.LanguageName}}</h4>
+                                {{if ne .DefaultLanguageId 0}}<span class="default">{{$Translate.Languages.Default}}</span>{{end}}
+                            </div>
+                        </td>
+                        <td class="text-center role-desc">{{.LanguageCode}}</td>
+                        <td class="role-desc">{{.DateString}}</td>
+
+                        <td class="text-center">
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox" {{if eq .IsStatus 1}}checked{{end}}/>
+                                <label class="tgl-btn" for="cb{{.Id}}"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <!-- <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/published.svg" alt=""></span> Published</button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/eye_off.svg" alt=""></span> Unpublished </button>
+                                    </li> -->
+                                    <li><a href="/settings/languages/downloadlanguage/{{.Id}}"><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/copy.svg" alt=""></span>  {{$Translate.Download}} </button></a></li>
+                                    <li><button class="dropdown-item edit-language" type="button"  data-id="{{.Id}}" > <span><img
+                                                    src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}} </button></li>
+                                    <li><button class="dropdown-item delete-language" type="button" data-id="{{.Id}}"> <span><img
+                                                    src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}} </button></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{else}}
+                    <tr class="noData-found-row">
+                        <td colspan="7" class="text-center">
+                            <div class="noData-foundWrapper">
+
+                                <div class="empty-folder">
+                                    <img src="/public/img/folder-sh.svg" alt="" />
+                                    <img src="/public/img/shadow.svg" alt="">
+                                </div>
+                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                <p class="para">
+                                   {{$Translate.Pagesorry}}
+                                   {{$Translate.Gobackhome}}
+                                </p>
+                                <a href="javascript:void(0)" class="heading-three {{$TEXTCOLOR}}" data-bs-toggle="modal" data-bs-target="#laguangeModal">{{$Translate.Clickadd}} >></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    <!-- <tr>
+                        <td>
+                            <div class="tbl-img-content flexx">
+                                <div class="tbl-img"><img src="/public/img/spain.png" alt=""></div>
+                                <h4>Spanish</h4>
+                                <span class="default">Default</span>
+                            </div>
+                        </td>
+                        <td class="text-center role-desc">sp</td>
+                        <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                        <td class="text-center">
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="cb1" type="checkbox" />
+                                <label class="tgl-btn" for="cb1"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Action <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/published.svg" alt=""></span> Published</button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/eye_off.svg" alt=""></span> Unpublished </button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/copy.svg" alt=""></span> Copy </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/edit.svg" alt=""></span> Edit </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/delete.svg" alt=""></span> Delete </button></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="tbl-img-content flexx">
+                                <div class="tbl-img"><img src="/public/img/spain.png" alt=""></div>
+                                <h4>Spanish</h4>
+                                <span class="default">Default</span>
+                            </div>
+                        </td>
+                        <td class="text-center role-desc">sp</td>
+                        <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                        <td class="text-center">
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="cb1" type="checkbox" />
+                                <label class="tgl-btn" for="cb1"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Action <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/published.svg" alt=""></span> Published</button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/eye_off.svg" alt=""></span> Unpublished </button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/copy.svg" alt=""></span> Copy </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/edit.svg" alt=""></span> Edit </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/delete.svg" alt=""></span> Delete </button></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="tbl-img-content flexx">
+                                <div class="tbl-img"><img src="/public/img/spain.png" alt=""></div>
+                                <h4>Spanish</h4>
+                                <span class="default">Default</span>
+                            </div>
+                        </td>
+                        <td class="text-center role-desc">sp</td>
+                        <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                        <td class="text-center">
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="cb1" type="checkbox" />
+                                <label class="tgl-btn" for="cb1"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Action <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/published.svg" alt=""></span> Published</button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/eye_off.svg" alt=""></span> Unpublished </button>
+                                    </li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/copy.svg" alt=""></span> Copy </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/edit.svg" alt=""></span> Edit </button></li>
+                                    <li><button class="dropdown-item" type="button"> <span><img
+                                                    src="/public/img/delete.svg" alt=""></span> Delete </button></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Center Modal -->
+<div class="modal fade" id="laguangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{{$Translate.Languages.Addnewlanguage}}</h3>
+                <button class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <form action="/settings/languages/addlanguage" name="language-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="modal-body">
+                <h1 class="heading">{{$Translate.Languages.Basicinfo}}</h1>
+                <div class="fill-account-details">
+                    <div class="input-field-group">
+                        <div class="input-group">
+                            <label class="input-label" for="">{{$Translate.Languages.Languagename}}</label>
+                            <div class="ig-row">
+                                <input type="text" name="lang_name" placeholder="language name">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="">{{$Translate.Languages.Languagecode}}</label>
+                            <div class="ig-row">
+                                <input type="text" name="lang_code" placeholder="language code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field-group">
+                        <div class="active-toggle">
+                            <div class="active-content">
+                                <h4 class="heading-four">{{$Translate.Languages.Active}}</h4>
+                                <!-- <p class="para-light">Lorem ipsum dolor sit amet, consetetur </p> -->
+                            </div>
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="ckb1" name="lang_status" type="checkbox" />
+                                <label class="tgl-btn" for="ckb1"></label>
+                            </div>
+                        </div>
+                        <div class="active-toggle">
+                            <div class="active-content">
+                                <h4 class="heading-four">{{$Translate.Languages.Makedefault}}</h4>
+                                <!-- <p class="para-light">Lorem ipsum dolor sit amet, consetetur </p> -->
+                            </div>
+                            <div class="toggle">
+                                <input class="tgl tgl-light" id="ckb2" name="lang_default" type="checkbox" />
+                                <label class="tgl-btn" for="ckb2"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="upload-lang-modal">
+                    <h1 class="heading">{{$Translate.Languages.Upload}}</h1>
+                    <div class="full-upload" style="margin-bottom: 1rem;">
+                        <div class="upload-json">
+                            <span>{{$Translate.Languages.Jsonfile}}</span>
+                            <div class="file-upload">
+                                <img src="/public/img/folder.svg" alt="">
+                                <p class="para">Drag your JSON file or choose from directory</p>
+                                <div class="upload-button">
+                                    <button class="btn-reg btn-xs primary {{$THEMECOLOR}}"> {{$Translate.Browse}} </button>
+                                    <input type="file" name="lang_json">
+                                </div>
+                            </div>
+                            <label id="lang_json-error" class="error lang_file" for="lang_json">This field is required.</label>
+                        </div>
+                        <div class="upload-json">
+                            <span>{{$Translate.Languages.Flagpicture}}</span>
+                            <div class="file-upload">
+                                <img src="/public/img/upload-logo.svg" alt="">
+                                <p class="para">Drag your JSON file or choose from directory</p>
+                                <div class="upload-button">
+                                    <button class="btn-reg btn-xs primary {{$THEMECOLOR}}"> {{$Translate.Browse}} </button>
+                                    <input type="file" name="flag_imgpath">
+                                </div>
+                            </div>
+                            <label id="flag_imgpath-error" class="error lang_file" for="flag_imgpath">This field is required.</label>
+                        </div>
+                    </div>
+                    <!-- <div class="full-upload">
+                        <div class="upload-json">
+                            <span>JSON file</span>
+                            <div class="uploaded-file">
+                                <img src="/public/img/folder.svg" alt="">
+                                <p class="para">spanish.json</p>
+                                <a href="#"><img src="/public/img/delete-icon.svg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="upload-json">
+                            <span>Flag picture</span>
+                            <div class="uploaded-file">
+                                <img src="/public/img/spain-flag.png" alt="" class="uploaded-img-flag">
+                                <button class="delete-flag"><img src="/public/img/delete-white-icon.svg"
+                                        alt=""></button>
+                                <div class="hover-delete-img"></div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-save">
+                    <button type="button" class="btn-reg btn-md primary {{$THEMECOLOR}}"> {{$Translate.Save}} </button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+{{template "mediamodal" .}}
+{{template "cropmodal" .}}
+{{template "footer" .}}
+<script src="/public/js/settings/languages/language.js"></script>
+<script src="/public/js/media/media.js"></script>
+{{template "footerclose" .}}

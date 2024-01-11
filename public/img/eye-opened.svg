@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_2874" data-name="Path 2874" d="M0,0H14V14H0Z" transform="translate(0 1)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="view_1_" data-name="view (1)" transform="translate(0 -1)" clip-path="url(#clip-path)">
+    <path id="Path_2872" data-name="Path 2872" d="M10.333,7.615a2.333,2.333,0,1,0,2.333,2.333A2.333,2.333,0,0,0,10.333,7.615ZM9.167,9.949a1.167,1.167,0,1,1,1.167,1.167A1.167,1.167,0,0,1,9.167,9.949Z" transform="translate(-3.333 -2.173)" fill="#112d55" fill-rule="evenodd"/>
+    <path id="Path_2873" data-name="Path 2873" d="M12.775,7.392a8.167,8.167,0,0,0-11.549,0L.171,8.446a.583.583,0,0,0,0,.825l1.054,1.054a8.167,8.167,0,0,0,11.549,0l1.054-1.054a.583.583,0,0,0,0-.825ZM2.05,8.217a7,7,0,0,1,9.9,0l.642.642L11.95,9.5a7,7,0,0,1-9.9,0l-.642-.642Z" transform="translate(0 -1.083)" fill="#112d55" fill-rule="evenodd"/>
+  </g>
+</svg>

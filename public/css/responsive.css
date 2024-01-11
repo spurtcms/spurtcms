@@ -1,0 +1,33 @@
+@import url(variables.css);
+
+@media (min-width: 1680.2px) {
+    
+}
+@media (max-width: 1680.1px) {    
+   
+}
+
+@media (max-width: 1420px) {
+    .dash-list-role {
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+  
+}
+@media (max-width: 768px) {
+  
+}
+@media (max-width: 1100px) {
+ 
+}
+@media (max-width: 850px) {
+  
+}
+@media (max-width: 730px) {
+  
+}
+@media (max-width: 500px) {
+  
+}

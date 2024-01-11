@@ -1,0 +1,196 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+{{$BORDERCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
+{{end}}
+<div class="page-wrapper">
+    <div class="tablst space-tabList">
+        <!-- <div class="tab-breadCrumb">
+            <ul class="breadcrumb-container">
+                <li><a href="">Settings </a></li>
+                <li><a href="">Manage Channels </a></li>
+                <li><a href=""> Edit Channels</a></li>
+            </ul>
+        </div> -->
+    </div>
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <input type="hidden" id="spid" value="{{.spaceid}}">
+    <div class="all-tab-content" id="channelconfiguration">
+        <div class="configuration-contianer">
+            <div class="configuration-contentBody space-asideBody">
+                <div class="configurationContent-aside-lft space-aside-lft">
+                    <div class="aside-lft-head">
+                        <h2 class="heading-second">Pages</h2>
+                        <div class="btn-group language-group space-option-grp">
+                            <button class="btn-reg btn-sm primary dropdown-tog {{$THEMECOLOR}}" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="true">
+                                <img src="/public/img/add.svg" alt="" /> Add New
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="position: absolute;inset: 0px 0px auto auto;margin: 0px;transform: translate(0px, 22px);">
+                                <li>
+                                    <button class="dropdown-item" type="button" id="addpage">
+                                        New Page
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item" type="button">
+                                        New Page Group
+                                    </button>
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <div class="aside-lft-body newpages">
+                       
+                    </div>
+                </div>
+                <div class="configurationContent-section-container">
+                    <div class="configurationContent-section">
+                        <div class="configurationContent-section-lft">
+                            <div class="section-space">
+                                <div class="space-head">
+                                    <!-- <h2 class="heading-second">Introduction</h2> -->
+                                    <input class="heading-second pagetitle" id="title" placeholder="Enter the Page Title">
+
+                                    <div class="space-head-right" style="display: none;">
+                                        <span class="para">CREATED BY</span>
+                                        <p class="para">admin</p>
+                                    </div>
+
+                                    <div class="space-head-right" style="display: none;">
+                                        <span class="para">CREATED DATE</span>
+
+                                        <p class="para">01 Nov 2023 7:45 PM</p>
+                                    </div>
+
+                                    <div class="space-head-right" style="display: none;">
+                                        <span class="para">LAST DATE</span>
+                                        <p class="para">02 Nov 2023 11:52 AM</p>
+                                    </div>
+
+                                    <div class="space-head-right" style="display: none;">
+                                        <button class="revision-btn">
+                                          <img src="/public/img/revision.svg" alt="">
+                                          <a href="javascript:void(0)" class="para">Revision</a>
+                                        </button>
+                                      </div>
+
+                                </div>
+
+                                <div class="section-space-content">
+                                    <div class="space-txt">
+                                        <textarea name="content" class="ckEditor1" id="neweditor" style="display: none;"></textarea>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!--btm-->
+                    <div class="configurationContent-btm spaceContent-btm">
+                        <button class="btn-reg btn-lg secondary">Cancel</button>
+                        <button class="btn-reg btn-lg primary {{$THEMECOLOR}}" id="savebtn">Save</button>
+
+                        <button class="btn-reg btn-lg primary {{$THEMECOLOR}}" data-bs-toggle="modal"
+                            data-bs-target="#rightModal">Publish</button>
+                    </div>
+                </div>
+
+                <div class="space-section-right revisionmenu"  style="display: none;">
+
+                    <div class="space-section-rgt-head">
+                        <div class="revision-lft">
+                            <img src="/public/img/revision-dark.svg" alt="">
+                            <h3 class="heading-three">Revision</h3>
+                        </div>
+                        <button class="close revisionclose" > <img src="/public/img/modal-close.svg" alt=""> </button>
+
+                    </div>
+
+                    <div class="space-section-rgt-body">
+                        <div class="space-rgt-bdy-row">
+                            <div class="space-rgt-bdy-col">
+                                <h3 class="para-light">Admin</h3>
+                                <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                            </div>
+                            <div class="space-rgt-bdy-col">
+                                <p class="para-extralight status-updated">Updated</p>
+                            </div>
+                        </div>
+
+                        <div class="space-rgt-bdy-row">
+                            <div class="space-rgt-bdy-col">
+                                <h3 class="para-light">Admin</h3>
+                                <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                            </div>
+                            <div class="space-rgt-bdy-col">
+                                <p class="para-extralight status-updated">Updated</p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="space-rgt-bdy-row">
+                            <div class="space-rgt-bdy-col">
+                                <h3 class="para-light">Admin</h3>
+                                <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                            </div>
+                            <div class="space-rgt-bdy-col">
+                                <p class="para-extralight status-updated">Updated</p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="space-rgt-bdy-row">
+                            <div class="space-rgt-bdy-col">
+                                <h3 class="para-light">Admin</h3>
+                                <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                            </div>
+                            <div class="space-rgt-bdy-col">
+                                <p class="para-extralight status-published">Publish</p>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{{template "footer" .}}
+<script src="/public/js/pages/pages.js"></script>
+{{template "footerclose" .}}

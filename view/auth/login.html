@@ -1,0 +1,60 @@
+{{template "authheader" .}}
+<div class="login-container">
+    <div class="login-header">
+        <img src="/public/img/login-logo.svg" alt="" />
+    </div>
+
+    <div class="login-body">
+        <div class="admin-form">
+            <h1 class="login-heading">Sign In</h1>
+            <h3 class="heading">Welcome Back</h3>
+            <p class="para">Please enter your login details below</p>
+
+            <form action="/" method="post" name="loginform" id="loginform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <div class="input-container">
+
+                    <div class="input-group" id="usergrp">
+                        <label for="" class="input-label">User Name</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" placeholder="Enter User Name" name="username" class="field"
+                                id="usrid" />
+                            <p id="em-error" class="error logScr" style="display: none;">
+                                *
+                                You are not registered with us!</p>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group" id="passgrp">
+                        <label for="" class="input-label">Password</label>
+                        <div class="ig-row">
+                            <input name="pass" class="field" type="password" placeholder="Enter Password" class="field"
+                                id="passid" />
+                            <button class="eye" id="eye" type="button">
+                                <img src="/public/img/eye-closed.svg" alt="" />
+                            </button>
+                            <p id="pas-error" class="error logScr" style="display: none;">
+                                *
+                                Invalid Password</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-flexx">
+                    <div class="chk-group chk-group-label">
+                        <input type="checkbox" id="Check2" />
+                        <label for="Check2" class="para">Remember me</label>
+                    </div>
+                    <a href="/forgot" class="primary-link txtclr-default">Forgot Password ?</a>
+                </div>
+
+
+                <button class="btn-reg btn-lg primary w-100 bgclr-default" type="submit" id="loginf"> Login </button>
+            </form>
+        </div>
+    </div>
+</div>
+{{template "authfooter" .}}

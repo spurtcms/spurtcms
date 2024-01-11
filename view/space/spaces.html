@@ -1,0 +1,364 @@
+{{template "header" .}}
+{{template "head" .}}
+
+{{$Translate := .translate}}
+
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+{{$BORDERCOLOR := ""}}
+{{$IMAGEPATH := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}} {{$IMAGEPATH = "/public/img/filter-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}} {{$IMAGEPATH = "/public/img/filter-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}} {{$IMAGEPATH = "/public/img/filter-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}} {{$IMAGEPATH = "/public/img/filter.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}} {{$IMAGEPATH = "/public/img/filter-yellow.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}} {{$IMAGEPATH = "/public/img/filter-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}} {{$IMAGEPATH = "/public/img/filter-light-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}} {{$IMAGEPATH = "/public/img/filter-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}} {{$IMAGEPATH = "/public/img/filter-black.svg"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}} {{$IMAGEPATH = "/public/img/filter.svg"}}
+{{end}}
+
+<div class="page-wrapper">
+    <div class="all-tab-content br-top" id="entriesContent ">
+        <!--1-->
+
+        <div class="topOptions">
+            <div class="leftHeader">
+                <div class="caption-flexx">
+                    <p class="para">
+                        <span class="para" id="searchcount"> {{.Count}} </span>
+                        {{if gt .Count 1}}{{$Translate.Spaces.Spacess}}{{else}}{{$Translate.Spaces.Space}}{{end}} {{$Translate.Available}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="transitionSearch active">
+                <!-- <form action="/spaces/" method="get" class="filterform" autocomplete="off"> -->
+                    <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
+                    <input type="text" class="search" name="keyword" id="searchspacename" placeholder="{{$Translate.Spaces.Searchspacename}}">
+                <!-- </form> -->
+            </div>
+
+            <div class="dropdown filter-dropdown space-filter">
+
+                <button class="btn-reg btn-sm btn-outline {{$TEXTCOLOR}} {{$BORDERCOLOR}}" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{$IMAGEPATH}}" alt="" /> {{$Translate.Spaces.Filter}}
+                </button>
+
+
+                <div class="dropdown-menu dropdown-menu-end filter-dropdown-menu">
+                    <div class="ig-row ig-channel-input">
+                            <input type="text" id="searchcategory" class="search" name="keyword" placeholder="{{$Translate.Spaces.Searchcategory}}" value="{{.Filter.Keyword}}">
+
+                    </div>
+                    <div class="channels-list-row">
+                        {{range $index,$value := .AllCategories}}
+                        <button class="channels-list-btn spaceformats searchcategorylist">   {{range .Categories}} <input type="hidden" class="id" data-id="{{.Id}}" id=""> <span> {{.Category}} </span>  <img src="/public/img/breadcrumb-arrow.svg" class="img"> {{end}}
+                        </button>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" data-bs-toggle="modal" data-bs-target="#rightModal"
+                id="addspace">
+                <img src="/public/img/add.svg" alt="" /> {{$Translate.Spaces.Newspace}}
+            </button>
+        </div>
+
+        <div class="tablePagination-wrapper">
+            {{if .Space}}
+
+            <div class="spaceCards">
+
+                {{range .Space}}
+
+                <div class="spaceCard-child">
+
+                    <div class="spaceCard-top">
+                        <img src="{{.ImagePath}}" style="object-fit: fill;width: 100%;height: 100%;border: none;">
+                    </div>
+
+                    <div class="spaceCard-btm">
+
+                       <a class="heading-four" href="" id="spacecontentname">
+                            {{.SpacesName}}
+                        </a>
+
+                        <div class="card-breadCrumb">
+                            <ul class="breadcrumb-container" id="spacecategory">
+                                <li>
+                                 <a href="" id="catlist" class="para-light space-path-list" style="display: flex;gap: 4px;flex-wrap: wrap;height: 1.875rem;">
+                                    {{range $index,$value := .CategoryNames}}
+                                    <span class="card-buttonOption"> {{.CategoryName}} </span> 
+                                     <img src="/public/img/breadcrumb-arrow.svg" class="img">
+                                    {{end}} 
+                                   
+                                 </a>
+                             
+                                 <p class="forsearch categorylen" style="display: none;">{{range .CategoryNames}}>{{.CategoryName}}{{end}}</p>
+
+                                </li>
+                       
+                            </ul>
+
+                        </div>
+
+                       <p class="para-extralight desclist" id="spacecontentdesc" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{.SpaceFullDescription}}">
+                  
+                           {{.SpacesDescription}}
+                        </p>
+
+                        <h6 class="para-extralight">{{$Translate.Updated}}: {{.ModifiedDate}}</h6>
+
+                        <div class="card-buttonOption">
+
+                            <a href="/spaces/page/{{.Id}}"> <button class="btn-reg btn-lg primary {{$THEMECOLOR}}">
+                                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Spaces.Addpage}}
+
+                                </button></a>
+
+                            <div class="card-option">
+                                <div class="btn-group language-group">
+                                    <button type="button" class="dropdown-tog" data-bs-toggle="dropdown"
+                                        aria-expanded="true">
+                                        <img src="/public/img/card-option.svg" alt="">
+                                        <img src="/public/img/card-option-bg.svg" alt="">
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end " data-popper-placement="bottom-end"
+                                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 22px);">
+                                        <li><button class="dropdown-item" id="clonebtn" type="button"
+                                                data-cid="{{.PageCategoryId}}" data-id="{{.Id}}" data-bs-toggle="modal"
+                                                data-bs-target="#rightModal"> <span><img src="/public/img/copy.svg"
+                                                        alt=""></span> {{$Translate.Spaces.Clone}}  </button></li>
+                                        <li><button class="dropdown-item" id="edit" type="button"
+                                                data-cid="{{.PageCategoryId}}" data-id="{{.Id}}" data-bs-toggle="modal"
+                                                data-bs-target="#rightModal"> <span><img src="/public/img/edit.svg"
+                                                        alt=""></span> {{$Translate.Edit}} </button></li>
+                                        <li><button class="dropdown-item" id="deletespace" data-id="{{.Id}}"
+                                                type="button" data-bs-toggle="modal" data-bs-target="#centerModal">
+                                                <span><img src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}} </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                {{end}}
+              
+                {{else}}
+
+                <div class="noData-foundWrapper">
+
+                    <div class="empty-folder">
+                        <img src="/public/img/folder-sh.svg" alt="">
+                        <img src="/public/img/shadow.svg" alt="">
+                    </div>
+                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                    <p class="para">
+                        {{$Translate.Pagesorry}}
+                        {{$Translate.Gobackhome}}
+                    </p>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd" data-bs-target="#rightModal"
+                    class="heading-three">{{$Translate.Clickadd}} >></a>
+                   
+                </div>
+
+                {{end}}
+
+            </div>
+
+            <!-- <div class="pogination flexx pagenation-padding">
+                {{if .Page}}
+                <ul class="flexx">
+                    <li>
+                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    {{range .Page}}
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current" {{end}}>{{.}} </a></li>
+                    {{end}}
+                    <li>
+                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}}
+                            class="next" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                </ul>
+                {{end}}
+                <p>Items Per Page: {{.Limit}} and {{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+            </div> -->
+            <!-- <div class="pogination flexx pagenation-padding">
+                <ul class="flexx pagination">
+                    <li class="page-item previous-page disable">
+                        <a class="page-link" href="#">                                                  
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    <li class="page-item current-page active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item dots">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item current-page">
+                        <a class="page-link" href="#">5</a>
+                    </li>
+                    <li class="page-item current-page">
+                        <a class="page-link" href="#">6</a>
+                    </li>
+                    <li class="page-item dots">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item current-page">
+                        <a class="page-link" href="#">10</a>
+                    </li>
+                    <li class="page-item next-page">
+                        <a class="page-link" href="#">      
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+
+                </ul>
+                <p>Items Per Page: {{.Count}} and {{.Paginationstartcount}} – {{.Paginationendcount}} of{{.Count}}</p>
+            </div> -->
+        </div>
+    </div>
+    <!--2-->
+</div>
+
+
+<!-- Right Modal -->
+<div class="modal fade right member-modal" id="rightModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="title"> {{$Translate.Spaces.Newspace}} </h3>
+                <button class="close" data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" autocomplete="off" id="spaceform" name="newspace">
+                    <input type="hidden" id="langid" value="1" name="langid">
+                    <input type="hidden" id="id" value="" name="id">
+                    <input type="hidden" id="spacepageno" value="" name="spacepageno">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+
+
+                    <div class="input-group" id="spcname">
+                        <label for="" class="input-label">{{$Translate.Spaces.Spacename}}</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" name="spacename" id="spacename"
+                                placeholder="{{$Translate.Spaces.Plspacename}}">
+                        </div>
+                    </div>
+
+
+                    <div class="input-group" id="grbcat">
+                        <div class="input-group  user-drop-down" id="catdropdown" >
+                            <label for="" class="input-label">{{$Translate.Spaces.Category}}</label>
+                            <a class="dropdown-toggle field" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{$Translate.Spaces.Selectcategory}}
+                            </a>
+                            <label id="catiddd-error" class="error" for="catiddd" style="display: none;">* {{$Translate.Spaces.Categoryerr}}
+                            </label>
+                            <div class="dropdown-menu" aria-labelledby="triggerId">
+                                <input type="hidden" name="catiddd" id="catiddd" value="">
+
+                                {{range $index,$value := .AllCategories}}
+                                <button class="dropdown-item dropdown-values spaceformat categorydropdown" type="button" style="display: flex;gap: 4px;flex-wrap: wrap;"> {{range .Categories}}
+                                    <input type="hidden" class="id"   id="{{.Id}}"> {{.Category}}  <img src="/public/img/breadcrumb-arrow.svg" class="img" style="margin-top: 8px;">   {{end}}
+                                </button>
+                               {{end}}
+                            </div>
+                          
+                        </div>
+
+                    </div>
+
+                    <div class="input-group" id="spcdes">
+                        <label for="" class="input-label">{{$Translate.Description}} </label>
+                        <div class="ig-row">
+                            <textarea placeholder="{{$Translate.Spaces.Plspacedesc}}" class="field" id="spacedescription"
+                                name="spacedescription"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group upload-img">
+                        <label for="" class="input-label">{{$Translate.Spaces.Spaceimg}}</label>
+
+                        <div class="ig-row file-input-row file-upload uploaded-file">
+                            <div id="spacedel-img">
+                                <button class="delete-flag" type="button"><img src="/public/img/delete-white-icon.svg" alt=""></button>
+                                <div class="hover-delete-img"></div>
+                           
+                            </div>
+
+                            <h3 class="heading-three" id="uplaodimg">{{$Translate.Uploadneworchoose}}</h3>
+
+                            <button class="btn-reg btn-xs primary {{$THEMECOLOR}}" type="button" id="browse" data-bs-toggle="modal" data-bs-target="#addnewimageModal"> Browse
+                            </button>
+                         <input type="hidden" value="" name="spimage" id="spimage">
+                         <img src="" name="spimagehide" id="spimagehide" style="position: absolute;height: 100%;">
+
+
+                        </div>
+                        <!-- <label id="spaceimg-error" class="error" for="spaceimg" style="display: none;">This field is required.</label> -->
+
+
+                    </div>
+
+                </form>
+
+                <div class="button-col flexx">
+                    <button class="btn-reg btn-md primary {{$THEMECOLOR}} " type="button" id="save">  {{$Translate.Submit}} </button>
+                    <button class="btn-reg btn-md primary {{$THEMECOLOR}} " type="button" id="update" style="display: none;"> {{$Translate.Update}}
+                    </button>
+                    <button class="btn-reg btn-md primary {{$THEMECOLOR}} " type="button" id="clone" style="display: none;"> {{$Translate.Spaces.Clone}}
+                    </button>
+                    <button class="btn-reg btn-md secondary" id="cancel-btn" data-bs-dismiss="modal"> {{$Translate.Cancel}} </button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "mediamodal" .}}
+
+{{template "cropmodal" .}}
+
+{{template "footer" .}}
+
+
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+
+
+<script src="/public/js/media/media.js"></script>
+<script src="/public/js/spaces/spaces.js"></script>
+
+{{template "footerclose" .}}

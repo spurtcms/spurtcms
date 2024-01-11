@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3675" data-name="Rectangle 3675" width="36" height="36" transform="translate(326 262)" fill="#fff" stroke="#fff" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_547" data-name="Mask Group 547" transform="translate(-326 -262)" clip-path="url(#clip-path)">
+    <g id="camera-svgrepo-com" transform="translate(323.907 259.907)">
+      <circle id="Ellipse_15" data-name="Ellipse 15" cx="5.023" cy="5.023" r="5.023" transform="translate(15.07 16.744)" fill="none" stroke="#fff" stroke-width="2.512"/>
+      <path id="Path_2072" data-name="Path 2072" d="M16.372,35.163h7.442c5.226,0,7.839,0,9.716-1.231a7.381,7.381,0,0,0,2.053-2.016c1.254-1.843,1.254-4.408,1.254-9.539s0-7.7-1.254-9.539a7.378,7.378,0,0,0-2.053-2.016c-1.206-.791-2.716-1.074-5.028-1.175a2.354,2.354,0,0,1-2.269-1.883,3.456,3.456,0,0,0-3.4-2.74H17.358a3.456,3.456,0,0,0-3.4,2.74,2.354,2.354,0,0,1-2.269,1.883c-2.312.1-3.822.384-5.028,1.175A7.376,7.376,0,0,0,4.6,12.837c-1.254,1.843-1.254,4.408-1.254,9.539s0,7.7,1.254,9.539a7.378,7.378,0,0,0,2.053,2.016C8.533,35.163,11.146,35.163,16.372,35.163Z" fill="none" stroke="#fff" stroke-width="2.512"/>
+      <path id="Path_2073" data-name="Path 2073" d="M31.814,16.744H30.14" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2.512"/>
+    </g>
+  </g>
+</svg>

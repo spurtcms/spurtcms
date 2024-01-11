@@ -1,0 +1,45 @@
+{{define "cropmodal"}}
+{{$Translate := .translate}}
+
+<!-- Crop Modal -->
+<div class="modal fade  cropImagemodal" id="changepicModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="admin-header">
+        <h3>{{$Translate.Cropimage}} <!-- <span>(Supported Formats: .jpeg &amp; .png; Preferred Dimension: 96 x 96)</span> --></h3>
+        <p>{{$Translate.Cropimgdesc}}</p>
+        <!-- <p>Use the blue box to set the are of the image which you want to display in your profile image.</p> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <img id="crop-cancel" src="/public/img/modal-close.svg" alt="">
+        </button>
+      </div>
+      <div class="admincropimg-wrap flexx">
+        <div class="admincropimg-left">
+          <!-- <div class="admincropping-fade"> -->
+            <div id="crop-container"></div>
+            <div id="crop-container1" style="display: none;"></div>
+          <!-- </div> -->
+        </div>
+        <div class="admincropimg-right">
+          <div class="admincropimg-rht-preview">
+            <div id="zoom-div" class="drag-progress">
+              <span class="cropadds">{{$Translate.Zoom}}</span><br>
+            </div>
+            <div id="rotate-div" style="margin-top: 10px;" class="drag-progress">
+              <span class="cropadds">{{$Translate.Rotate}}</span></br>
+              <input type="range" id="rotateSlider" min="0" max="180" step="1" value="0">
+            </div>
+          </div>
+          <div class="save-cancel flexx">
+            <button class="button-reg save btn-md" id="crop-button">{{$Translate.Crop}}</button>
+            <button class="button-reg cancel btn-md" id="close">{{$Translate.Cancel}}</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}
+

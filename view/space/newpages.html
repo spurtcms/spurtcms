@@ -1,0 +1,259 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+{{$BORDERCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
+{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
+{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
+{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
+{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
+{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
+{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
+{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
+{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
+{{else}}
+{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
+{{end}}
+
+<div class="page-wrapper space-wrapper">
+    <div class="tablst br-top br-btm">
+        <div class="tab-breadCrumb space-tab-breadCrumb">
+            <ul class="breadcrumb-container">
+                <li><a href="/spaces/">{{$Translate.Spaces.Lms}} </a></li>
+                <li><a href="/spaces/">{{$Translate.Spaces.Spacess}} </a></li>
+                <li><a href="">{{$Translate.Spaces.Createpages}}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="spaceContainer">
+
+        <div class="space-page">
+            <div class="space-head aside-lft-head">
+                <h2 class="heading-second">{{$Translate.Spaces.Pages}}</h2>
+
+                <div class="btn-group language-group space-option-grp">
+                    <button class="btn-reg btn-sm primary dropdown-tog" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="true">
+                        <img src="/public/img/add.svg" alt="" /> {{$Translate.Spaces.Addnew}}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="
+                position: absolute;
+                inset: 0px 0px auto auto;
+                margin: 0px;
+                transform: translate(0px, 22px);
+              ">
+                        <li>
+                            <button class="dropdown-item" type="button" id="addpage">{{$Translate.Spaces.Newpage}}</button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" type="button" id="addgroup">
+                                {{$Translate.Spaces.Newpagegroup}}
+                            </button>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="space-body newpages">
+
+            </div>
+        </div>
+        <div class="space-edit gridCalc">
+
+            <div class="space-head rgt">
+
+<!-- 
+                <div class="space-head-right">
+                    <span class="para">CREATED BY</span>
+                    <p class="para">admin</p>
+                </div>
+
+                <div class="space-head-right">
+                    <span class="para">CREATED DATE</span>
+
+                    <p class="para">01 Nov 2023 7:45 PM</p>
+                </div>
+
+                <div class="space-head-right">
+                    <span class="para">LAST DATE</span>
+                    <p class="para">02 Nov 2023 11:52 AM</p>
+                </div> -->
+
+                <div class="space-head-right">
+                    <button class="revision-btn">
+                      <img src="/public/img/revision.svg" alt="">
+                      <a href="javascript:void(0)" class="para">{{$Translate.Spaces.Revision}} </a>
+                    </button>
+                  </div>
+
+               
+            </div>
+
+            <div class="space-textarea gridCalc">
+
+
+                <div class="blogTop-center">
+                    <button class="ck-options">
+                        <img src="/public/img/ck-blod.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-italic.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-dotlist.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-numlist.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-quote.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-braces.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-line.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-link.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-code.svg" alt="">
+                    </button>
+                    <button class="ck-options">
+                        <img src="/public/img/ck-img.svg" alt="">
+                    </button>
+                </div>
+                <div class="input-grp gridCalc">
+                    <!-- <label for="spaceContent">What you wear is how you present yourself to the world,especially today.</label> -->
+                    <input type="text" value="" placeholder="{{$Translate.Spaces.Plentertitle}}" id="pagetitle">
+                    <textarea placeholder="{{$Translate.Spaces.Pllckeditor}}" name="spaceContent" class="ckEditor1"
+                        id="neweditor"></textarea>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="space-section-right" style="display: none;">
+            <div class="space-section-rgt-head">
+                <div class="revision-lft">
+                    <img src="/public/img/revision-dark.svg" alt="">
+                    <h3 class="heading-three">{{$Translate.Spaces.Revision}}</h3>
+                </div>
+                <button class="close" id="revisionclose" data-bs-dismiss=""> <img src="/public/img/modal-close.svg" alt=""> </button>
+                 
+            </div>
+            <div class="space-section-rgt-body">
+                <div class="space-rgt-bdy-row">
+                    <div class="space-rgt-bdy-col">
+                        <h3 class="para-light">Admin</h3>
+                        <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                    </div>
+                    <div class="space-rgt-bdy-col">
+                        <p class="para-extralight status-updated">Updated</p>
+                    </div>
+                </div>
+
+                <div class="space-rgt-bdy-row">
+                    <div class="space-rgt-bdy-col">
+                        <h3 class="para-light">Admin</h3>
+                        <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                    </div>
+                    <div class="space-rgt-bdy-col">
+                        <p class="para-extralight status-updated">Updated</p>
+                    </div>
+                </div>
+                <div class="space-rgt-bdy-row">
+                    <div class="space-rgt-bdy-col">
+                        <h3 class="para-light">Admin</h3>
+                        <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                    </div>
+                    <div class="space-rgt-bdy-col">
+                        <p class="para-extralight status-updated">Updated</p>
+                    </div>
+                </div>
+
+                <div class="space-rgt-bdy-row">
+                    <div class="space-rgt-bdy-col">
+                        <h3 class="para-light">Admin</h3>
+                        <p class="para-extralight">02 Nov 2023 10:04 AM</p>
+                    </div>
+                    <div class="space-rgt-bdy-col">
+                        <p class="para-extralight status-published">Publish</p>
+                    </div>
+                </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="configurationContent-btm spaceContent-btm">
+       <a href="/spaces/"><button class="btn-reg btn-lg secondary">{{$Translate.Cancel}}</button></a> 
+        <button class="btn-reg btn-lg primary">{{$Translate.Save}}</button>
+
+        <button class="btn-reg btn-lg primary">{{$Translate.Spaces.Publish}}</button>
+    </div>
+</div>
+
+<!--movepage-->
+<div class="modal fade right movemodal" id="moveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{{$Translate.Spaces.Movepage}}</h3>
+                <button class="close" data-bs-dismiss="modal">
+                    <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="input-group  user-drop-down">
+
+                    <label for="" class="input-label">{{$Translate.Spaces.Movepage}}</label>
+
+                    <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        {{$Translate.Spaces.Choosepagegroup}}
+                    </a>
+                    <input type="hidden" id="rolen" value="" name="user_role">
+
+                    <div class="dropdown-menu movegroupdiv" aria-labelledby="triggerId" style="height: auto;">
+
+                        <!-- <button type="button"  class="dropdown-item">dfsdf</button> -->
+                       
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <div class="move-btn-group">
+                    <button class="btn-reg btn-md primary"> {{$Translate.Spaces.Movepage}}</button>
+                    <button class="btn-reg btn-md secondary"> {{$Translate.Cancel}} </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
+<script src="/public/js/pages/newpages.js"></script>
+{{template "footerclose" .}}

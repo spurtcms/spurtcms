@@ -1,0 +1,96 @@
+
+{{define "categoryselect"}}
+{{$Translate := .translate}}
+
+<div class="configurationContent-section-lft categories-content">
+    <div class="available-selected-Categories">
+        <div class="availableCategories-top">
+            <h3 class="para">{{$Translate.Channell.Availablecategories}}</h3>
+            <div class="ig-row ava-sel-srch">
+                <img src="/public/img/Magnifying-Glass.svg" alt="">
+                <input type="text" placeholder="{{$Translate.Channell.Searchchannelname}}" class="para search parentwithchild" id="category" name="keyword" />
+            </div>
+        </div>
+
+        <div class="categories-list">
+            {{range $index,$value := .AllCategories}}
+
+            <div class="categories-list-child categorypdiv" id="category-{{range .Categories}}{{.Id}}{{end}}">
+                <div class="choose-cat-list-col" style="display: flex;" data-id={{$index}}>
+                    {{$catelen := len .Categories}}
+                    {{range  $index,$value := .Categories}}
+                        <h3 class="para categoryname" data-id="{{.Id}}">{{.Category}}</h3>
+                        {{if ne $index $catelen}}
+                        <h3 class="para">&nbsp;/&nbsp;</h3>
+                        {{end}}
+                    {{end}}
+                </div>
+                <a href="javascript:void(0)" class="category-select-btn" data-categoryid="{{range .Categories}}{{.Id}}{{end}}">
+                    <img src="/public/img/add-category.svg" alt="" />
+                </a>
+                <p class="forsearch" style="display: none;">{{range .Categories}}~{{.Category}}{{end}}</p>
+            </div>
+            {{end}}
+        </div>
+
+        <div class="caption-flexx">
+            <p class="para">
+                <span class="para" id="avacatcount">0</span>
+                {{$Translate.Recordsavailable}}
+            </p>
+        </div>
+    </div>
+
+    <button class="available-selected-Center">
+        <img src="/public/img/arrow-lft-rgt.svg" alt="" />
+    </button>
+
+    <!--selected-->
+
+    <div class="available-selected-Categories">
+        <div class="availableCategories-top">
+            <div style="display: flex;">
+            <h3 class="para">{{$Translate.Channell.Selectedcategories}}</h3>
+            <!-- <label id="category-error" class="error" style="display: inline-flex;font-size: 0.75rem;font-weight: 400;
+            color: #F26674;padding-left: 2px">* Please Select category </label> -->
+            </div>
+            <div class="ig-row ava-sel-srch">
+                <img src="/public/img/Magnifying-Glass.svg" alt="">
+                <input type="text" placeholder="{{$Translate.Channell.Searchchannelname}}" class="para search" id="selectcategory" name="keyword" />
+            </div>
+        </div>
+
+        <div class="categories-list selected_category">
+
+            {{range $index,$value := .SelectedCategories}}
+
+            <div class="categories-list-child selectedcategorydiv" >
+                <div class="choose-cat-list-col" style="display: flex;">
+                    {{range .Categories}}
+                    <h3 class="para categoryname" data-id="{{.Id}}">{{.Category}}</h3>
+                    <h3 class="para">&nbsp;/&nbsp;</h3>
+                    {{end}}
+                </div>
+                <a href="javascript:void(0)" class="category-unselect-btn"  data-categoryid="{{range .Categories}}{{.Id}}{{end}}">
+                    <img src="/public/img/bin.svg" alt="" />
+                </a>
+                <p class="forsearches" style="display: none;">{{range .Categories}}~{{.Category}}{{end}}</p>
+            </div>
+            {{end}}
+
+            <!-- <div class="categories-list-child">
+                <h3 class="para">Category 5 / Parent Data</h3>
+
+                <a href=""><img src="/public/img/bin.svg" alt="" /></a>
+            </div> -->
+        </div>
+
+        <div class="caption-flexx">
+            <p class="para">
+                <span class="para" id="selcatcount">{{if .SelectedCategories}}{{len .SelectedCategories}}{{else}}0{{end}}</span>
+                {{$Translate.Recordsavailable}}
+            </p>
+        </div>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,140 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+<div class="page-wrapper">
+  <input type="hidden" name="csrf" value="{{.csrf}}">
+  <div class="setting-admin">
+    {{range .Menu.TblModule}}
+    {{if eq .ModuleName "Settings"}}
+    
+    <div class="setting-profile">
+      <h2 class="heading-second">{{$Translate.Profile}}</h2>
+      <p class="para">{{$Translate.Setting.Profilecontent}}</p>
+      <div class="full-details">
+        {{range .SubModule}}
+        {{if eq .ModuleName "My Account"}}
+        <a href="/settings/myprofile" class="details">
+          <img src="/public/img/profile.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">My Account</h3>
+            <p class="para">Here you can change your email id and password.</p>
+          </div>
+        </a>
+        {{end}}
+        {{if eq .ModuleName "Personalize"}}
+        <a href="/settings/personalize/" class="details">
+          <img src="/public/img/personalize.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Personalize</h3>
+            <p class="para">You can change the theme according your preference. </p>
+          </div>
+        </a>
+        {{end}}
+        {{if eq .ModuleName "Security"}}
+        <a href="/settings/changepassword" class="details">
+          <img src="/public/img/security.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Security</h3>
+            <p class="para">To protech your account, you can change your password at regular intervals. </p>
+          </div>
+        </a>
+        {{end}}
+        {{end}}
+      </div>
+      <div class="sep-settings"></div>
+    </div>
+
+    {{$FLG := ""}}
+
+    <div class="setting-profile" {{range .SubModule}}{{if eq .ModuleName "Roles & Permissions"}} {{if .Routes}} {{$FLG = "true"}} {{end}}{{else if  eq .ModuleName "Team"}} {{if .Routes}} {{$FLG = "true"}} {{end}} {{end}}{{end}} {{if ne $FLG "true"}} style="display: none;"{{end}}>
+      <h2 class="heading-second">{{$Translate.Permission.Permissions}}</h2>
+      <p class="para">{{$Translate.Setting.Permissionscontent}}</p>
+      <div class="full-details">
+        {{range .SubModule}}
+        {{if eq .ModuleName "Roles & Permissions"}}
+        {{if .Routes}}
+        <a href="/settings/roles/" class="details">
+          <img src="/public/img/roles-permision.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Roles & Permissions</h3>
+            <p class="para">Create different admin roles and assign permissions to them based on their responsibilities.
+            </p>
+          </div>
+        </a>
+        {{end}}
+        {{end}}
+        <!-- <a href="/settings/users" class="details">
+
+              <img src="/public/img/user.svg" alt="">
+              <div class="details-content">
+                <h3 class="heading-three">Users</h3>
+                <p class="para">Create and manage additional roles based on the needs for their tasks and activities in
+                  the control panel.</p>
+              </div>
+
+          </a> -->
+        {{if eq .ModuleName "Team"}}
+        {{if .Routes}}
+        <a href="/settings/users" class="details">
+          <img src="/public/img/team.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Team</h3>
+            <p class="para">Create a team of different admin roles. 
+            </p>
+          </div>
+        </a>
+        {{end}}
+        {{end}}
+        {{end}}
+      </div>
+      <div class="sep-settings"></div>
+    </div>
+
+    {{$FLG2 := ""}}
+    <div class="setting-profile" {{range .SubModule}}{{if eq .ModuleName "Languages"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}}{{else if  eq .ModuleName "Email Templates"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}} {{end}}{{end}} {{if ne $FLG2 "true"}} style="display: none;"{{end}}>
+      <h2 class="heading-second">{{$Translate.Setting.System}}</h2>
+      <p class="para">{{$Translate.Setting.Systemcontent}}</p>
+      <div class="full-details">
+        {{range .SubModule}}
+        {{if eq .ModuleName "Languages"}}
+        {{if .Routes}}
+        <a href="/settings/languages/" class="details">
+          <img src="/public/img/language.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Language</h3>
+            <p class="para">Create and maintain master list of language of preferences for viewing content on the screen in preferred language. </p>
+          </div>
+        </a>
+        {{end}}
+        {{end}}
+        {{if eq .ModuleName "Email Templates"}}
+        {{if .Routes}}
+        <a href="/settings/emails/" class="details">
+          <img src="/public/img/email.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Email Templates</h3>
+            <p class="para">Create and Maintain Email Templates that are to be sent to users in different scenarios.</p>
+          </div>
+        </a>
+        {{end}}
+        {{end}}
+        {{end}}
+        <!-- <a href="#" class="details">
+          <img src="/public/img/data.svg" alt="">
+          <div class="details-content">
+            <h3 class="heading-three">Data</h3>
+            <p class="para">You may import and export data as and when needed.</p>
+          </div>
+        </a> -->
+        
+      </div>
+
+    </div>
+ 
+    {{end}}
+    {{end}}
+  </div>
+</div>
+{{template "footer" .}}
+
+{{template "footerclose" .}}

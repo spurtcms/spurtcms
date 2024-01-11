@@ -1,0 +1,115 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$THEMECOLOR := ""}}
+{{$TEXTCOLOR := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} 
+     {{$THEMECOLOR = "bgclr1"}}  {{$TEXTCOLOR = "txtclr1"}}  
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} 
+     {{$THEMECOLOR = "bgclr2"}}   {{$TEXTCOLOR = "txtclr2"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} 
+    {{$THEMECOLOR = "bgclr3"}}   {{$TEXTCOLOR = "txtclr3"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}} 
+    {{$THEMECOLOR = "bgclr4"}}   {{$TEXTCOLOR = "txtclr4"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}} 
+    {{$THEMECOLOR = "bgclr5"}}    {{$TEXTCOLOR = "txtclr5"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}} 
+    {{$THEMECOLOR = "bgclr6"}}    {{$TEXTCOLOR = "txtclr6"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}} 
+    {{$THEMECOLOR = "bgclr7"}}   {{$TEXTCOLOR = "txtclr7"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}} 
+    {{$THEMECOLOR = "bgclr8"}}   {{$TEXTCOLOR = "txtclr8"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}} 
+    {{$THEMECOLOR = "bgclr9"}}  {{$TEXTCOLOR = "txtclr9"}}
+{{else}} 
+    {{$THEMECOLOR = "bgclr-default"}}   {{$TEXTCOLOR = "txtclr-default"}}
+{{end}}
+<div class="page-wrapper">
+    {{template "cmstab" .}}
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <div class="all-tab-content" id="entriesContent">
+        <!--1-->
+
+        <div class="topOptions">
+            <div class="leftHeader">
+                <div class="caption-flexx">
+                    <p class="para">
+                        <span class="para">{{.count}}</span>
+                        {{if gt .count 1}}{{$Translate.Channell.Channels}}{{else}}{{$Translate.Channell.Channel}}{{end}} {{$Translate.Available}}
+
+                    </p>
+                </div>
+            </div>
+          
+            <div class="transitionSearch active {{if .filter}}active{{end}}">
+                <form action="/channels/" method="get" class="filterform" autocomplete="off">
+                    <img src="/public/img/Magnifying-Glass.svg" alt="" />
+                    <input type="text" class="search" name="keyword" id="" placeholder="{{$Translate.Channell.Searchchannelname}}" value="{{if .filter}}{{.filter}}{{end}}" />
+                </form>
+            </div>
+            <a href="/channels/newchannel">
+                <button class="btn-reg btn-sm primary {{$THEMECOLOR}}">
+                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}} 
+                </button></a>
+        </div>
+
+
+        <div class="channels-container">
+            <div class="channels-cards-container">
+                {{range .channel}}
+                <div class="channels-card">
+                    <div class="channels-card-top">
+                        <div class="card-top-head">
+                            <div style="display: flex; justify-content: space-between;">
+                                <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
+                                <h6 class="para-extralight">({{.IsDeleted}} {{$Translate.Channell.Entriesavailable}} )</h6>
+                            </div>
+                            <h3 class="heading-five">{{.ChannelName}}</h3>
+                        </div>
+                        <p class="para-extralight" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+                        title="{{.SlugName}}" style="height: 2.5rem;">{{.ChannelDescription}}
+                        </p>
+                    </div>
+
+                    <div class="channels-card-btm">
+                        <div class="btn-group action-btn-grp">
+                            <button type="button" class="dropdown-toggle primary {{$THEMECOLOR}}" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                {{$Translate.Action}}
+                                <img src="/public/img/arrow-white-down.svg" alt="" />
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="/channels/editchannel/{{.Id}}">
+                                        <button class="dropdown-item" type="button">
+                                            <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
+                                            {{$Translate.Configuration}}
+                                        </button></a>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item channeldelete" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#centerModal" data-id="{{.Id}}">
+                                        <span><img src="/public/img/delete.svg" alt="" /></span> {{$Translate.Delete}} 
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="toggle">
+                            <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox"
+                                onclick="ChannelStatus('{{.Id}}')" {{if eq .IsActive 1}} checked {{end}} />
+                            <label class="tgl-btn" for="cb{{.Id}}"></label>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <!--2-->
+</div>
+{{template "footer" .}}
+<script src="/public/js/channels/channellist.js"></script>
+{{template "footerclose" .}}

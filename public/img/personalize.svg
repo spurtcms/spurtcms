@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3639" data-name="Rectangle 3639" width="32" height="32" transform="translate(512 179)" fill="#112d55" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_536" data-name="Mask Group 536" transform="translate(-512 -179)" clip-path="url(#clip-path)">
+    <g id="equalizer_1" data-name="equalizer 1" transform="translate(509.333 176.333)">
+      <path id="Path_2006" data-name="Path 2006" d="M33.333,20H16a1.333,1.333,0,1,1,0-2.667H33.333a1.333,1.333,0,0,1,0,2.667Z" fill="#112d55"/>
+      <path id="Path_2007" data-name="Path 2007" d="M21.333,30.667H4A1.333,1.333,0,0,1,4,28H21.333a1.333,1.333,0,0,1,0,2.667Z" fill="#112d55"/>
+      <path id="Path_2008" data-name="Path 2008" d="M21.333,9.333H4A1.26,1.26,0,0,1,2.667,8,1.26,1.26,0,0,1,4,6.667H21.333A1.26,1.26,0,0,1,22.667,8,1.26,1.26,0,0,1,21.333,9.333Z" fill="#112d55"/>
+      <path id="Path_2009" data-name="Path 2009" d="M10.667,13.333a1.26,1.26,0,0,0-1.333,1.333v2.667H4A1.333,1.333,0,1,0,4,20H9.333v2.667A1.26,1.26,0,0,0,10.667,24,1.26,1.26,0,0,0,12,22.667v-8A1.26,1.26,0,0,0,10.667,13.333Z" fill="#112d55"/>
+      <path id="Path_2010" data-name="Path 2010" d="M33.333,28H28V25.333a1.333,1.333,0,1,0-2.667,0v8a1.333,1.333,0,0,0,2.667,0V30.667h5.333a1.333,1.333,0,0,0,0-2.667Z" fill="#112d55"/>
+      <path id="Path_2011" data-name="Path 2011" d="M33.333,6.667H28V4a1.333,1.333,0,1,0-2.667,0v8A1.333,1.333,0,1,0,28,12V9.333h5.333A1.26,1.26,0,0,0,34.667,8,1.26,1.26,0,0,0,33.333,6.667Z" fill="#112d55"/>
+    </g>
+  </g>
+</svg>

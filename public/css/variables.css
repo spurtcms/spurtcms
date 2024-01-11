@@ -1,0 +1,49 @@
+:root {
+    --clr-primary-color: #2FACD6;
+    --clr-dropdown-hover: #E4F8FF;
+    --clr-tags-bg-color: #EAFAFF;
+    --clr-text-dark-color: #152027;
+    --clr-text-light-color: #B6B6B7;
+    --clr-sidebar-menu-hover: rgba(0,0,0,0.24);
+    --clr-border: #B1EBFF;
+}
+.red {
+    --clr-primary-color: #F26674;
+    --clr-dropdown-hover: #FFE0E3;
+    --clr-tags-bg-color: #FFE0E3;
+}
+.purple {
+    --clr-primary-color: #AE3EF9;
+    --clr-dropdown-hover: #F8EDFF;
+    --clr-tags-bg-color: #F5E5FF;
+}
+.blue {
+    --clr-primary-color: #82BDF4;
+    --clr-dropdown-hover: #EDF6FF;
+    --clr-tags-bg-color: #E6F3FF;
+}
+.yellow {
+    --clr-primary-color: #FFDE76;
+    --clr-dropdown-hover: #FFF9E5;
+    --clr-tags-bg-color: #FFF7DE;
+}
+.orange {
+    --clr-primary-color: #F8834C;
+    --clr-dropdown-hover: #FFEDE5;
+    --clr-tags-bg-color: #FFE4D8;
+}
+.light-green {
+    --clr-primary-color: #B5E08C;
+    --clr-dropdown-hover: #EFFFE0;
+    --clr-tags-bg-color: #E3FFC9;
+}
+.green {
+    --clr-primary-color: #9DCC6B;
+    --clr-dropdown-hover: #F0FFE0;
+    --clr-tags-bg-color: #E7FFCE;
+}
+.black {
+    --clr-primary-color: #152027;
+    --clr-dropdown-hover: #F1F2F2;
+    --clr-tags-bg-color: #E7E8E9;
+}
