@@ -41,7 +41,7 @@ https://github.com/spurtcms/spurtcms-admin.git
 After successful git clone, you should see a folder “spurtcms-admin” with folders locales, view, storage, public and files such as binary file, spurtCMS-admin.sql file and  .env, file.
 
 
-### Step 2:Database Setup
+### Step 2: Database Setup
 
 Utilize the "Restore" feature in PgAdmin to populate the database with the necessary content from the database dump spurtCMS-admin.sql cloned in the above step.
 
@@ -61,7 +61,7 @@ DB_SSL_MODE=disable
 Successful completion of this step completes the database configuration for spurtCMS Admin application.
 
 
-### Step 3:Running the Project
+### Step 3: Running the Project
 
 Open the terminal within the project / cloned folder “spurtcms-admin-app”, note down the binary file name and execute the following command:
 
@@ -75,8 +75,12 @@ This command initiates the spurtCMS Admin application, allowing you to begin you
 By following the steps outlined in this article, you have successfully set up spurtCMS Admin on your system. Ensure that all prerequisites are met and the configuration steps are accurately executed to enjoy a seamless experience with spurtCMS Admin application. Now you can explore the features and functionalities of spurtCMS Admin for efficient content management.
 
 
+live demo of our intuitive Admin Panel .
 
-
+```
+Username : Admin
+Password : Admin@123
+```
 
 
 ## 🤔 Support , Document and Help
