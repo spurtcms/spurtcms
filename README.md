@@ -29,9 +29,9 @@
 
 ## ❯  🚀 Easy to Deploy Spurtcms Admin Panel on your server
 
-This is the official repository of Spurtcms. Using these Build , you can easily deploy spurtcms Multi-Vendor Marketplace in your local server.
+This is the official repository of Spurtcms. Using these Build , you can easily deploy spurtcms in your local server.
 
-### Step 1:
+### Step 1: Download the source files:
 
 Clone the Git repository that contains spurtCMS Admin project files, PostgreSQL dump file and .env file from the path https://github.com/spurtcms-admin.git using the “git clone” command.
 
@@ -42,11 +42,13 @@ After successful git clone, you should see a folder “spurtcms-admin” with fo
 
 
 ### Step 2:Database Setup
+
 Utilize the "Restore" feature in PgAdmin to populate the database with the necessary content from the database dump spurtCMS-admin.sql cloned in the above step.
 
 Locate the .env file inside the project folder “spurtcms-admin-app” and configure it with the details of newly created database such as database name, user name, password etc
 
-# PostgreSQL Database Configuration
+#### PostgreSQL Database Configuration
+
 ```
 DB_HOST=localhost
 DB_PORT=5432
