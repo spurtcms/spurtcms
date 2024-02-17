@@ -7,7 +7,7 @@
 </p>
 <h3 align="center">Open Source Golang based CMS Solution - Self hosted </h3>
 <p align="center"> Build with Golang + PostgreSQL</p>
-<p align="center"><a href="https://www.spurtcms.com/price-details"> Support PRO</a> · <a href="https://www.spurtcms.com/price-details"> Frontend </a> ·  <a href="https://www.spurtcms.com/price-details"> API Suite </a></p>
+
 <br />
 <p align="center">
   <a href="https://github.com/spurtcms/spurtcms-admin/releases">
@@ -26,7 +26,10 @@
 > [!IMPORTANT]
 > 🎉 <strong>Spurtcms 1.0 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.
 <br />
-
+<p>
+spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful tools for content creation, management, and defining CMS workspaces. Administrators have precise control over member access, ensuring streamlined member management. Dynamic channel management allows effective content structuring, enhancing the overall user experience. Administrators effortlessly create and manage channels and spaces, providing a comprehensive, user-centric content management solution for personalized and organized web environments.
+</p>
+<br />
 ## ❯  🚀 Easy to Deploy Spurtcms Admin Panel on your server
 
 This is the official repository of Spurtcms. Using these Build , you can easily deploy spurtcms in your local server.
