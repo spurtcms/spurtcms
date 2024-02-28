@@ -31,3 +31,52 @@
 @media (max-width: 500px) {
   
 }
+
+
+@media (max-width: 1440px) {
+    .admin-login-body {
+        padding: 3.4rem 6.25rem !important;
+    }
+}
+
+@media (max-width: 1100px) {}
+
+@media (max-width: 992px) {
+    .admin-login-body {
+        gap: 4.3125rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    .admin-login-body {
+        padding: 4.5rem 4.25rem !important;
+    }
+    .admin-form {
+        height: auto;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .admin-login-body {
+        padding: 3.5rem 2.25rem !important;
+        gap: 2.3125rem;
+    }
+    .admin-form {
+        padding: 1.5rem;
+        height: auto;
+    }
+
+}
+@media (min-width: 1980.2px) {
+    .admin-login-body{
+        max-width: 120rem;
+        margin: auto;
+    }
+}
+
+
+@media screen and (min-width: 1440px) and (max-width:1980px)  {
+    .admin-login-body {
+        padding: 0rem 6.25rem !important;
+    }
+}

@@ -24,6 +24,7 @@ $(document).on('click', '#loginf', function () {
     var formcheck = $("#loginform").valid();
     if (formcheck == true) {
         $('#loginform')[0].submit();
+        $('.spinner-border').show()
     }
     else {
         Validationcheck()
@@ -90,3 +91,33 @@ $(document).on('click', '#eye', function () {
         $(this).find('img').attr('src', '/public/img/eye-closed.svg');
     }
 })
+
+$(document).on('keyup', ".field", function () {
+    $('#em-error').hide();
+    $('#pas-error').hide();
+    $('#passgrp').removeClass('input-group-error');
+    $('#usergrp').removeClass('input-group-error');
+})
+
+
+// const rmCheck = document.getElementById("Check2"),
+//     emailInput = document.getElementById("usrid");
+
+// if (localStorage.checkbox && localStorage.checkbox !== "") {
+//   rmCheck.setAttribute("checked", "checked");
+//   emailInput.value = localStorage.username;
+// } else {
+//   rmCheck.removeAttribute("checked");
+//   emailInput.value = "";
+// }
+
+// function lsRememberMe() {
+//   if (rmCheck.checked && emailInput.value !== "") {
+//     localStorage.username = emailInput.value;
+//     localStorage.checkbox = rmCheck.value;
+//   } else {
+//     console.log("uncehckkkk")
+//     localStorage.username = "";
+//     localStorage.checkbox = "";
+//   }
+// }

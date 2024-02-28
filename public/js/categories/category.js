@@ -2,14 +2,28 @@ var languagedata
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
+  var languagepath = $('.language-group>button').attr('data-path')
   
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
-        
-        languagedata = data
-    })
+  await $.getJSON(languagepath, function (data) {
+      
+      languagedata = data
+  })
   
    $('.Content').addClass('checked');
+
+   $('.category-path-list').each(function(){
+
+    var length = $(this).children('.categorylistname').length-1
+
+      $(this).children('.categorylistname').each(function(index){
+
+        if(length == index ){
+          
+          $(this).next().remove();
+        }
+
+      })
+  })
 
 });
 
@@ -18,13 +32,13 @@ $("#save").click(function () {
   jQuery.validator.addMethod("duplicatename", function (value) {
 
     var result;
-    category_id = $("#category_id").val()
+    category_id = $("#categoryid").val()
 
     $.ajax({
-      url: "/categories/checkcategoryname",
+      url: "/categories/checksubcategoryname",
       type: "POST",
       async: false,
-      data: { "category_name": value, "category_id": category_id, csrf: $("input[name='csrf']").val() },
+      data: { "cname": value, "categoryid": category_id, csrf: $("input[name='csrf']").val() },
       datatype: "json",
       caches: false,
       success: function (data) {
@@ -48,8 +62,10 @@ $("#save").click(function () {
       },
       cdesc: {
         required: true,
-        space: true
+        space: true,
         // category_desc: true
+        maxlength: 250,
+       
       },
       subcategoryid: {
         required: true
@@ -66,7 +82,8 @@ $("#save").click(function () {
       },
       cdesc: {
         required: "* " + languagedata.Categoryy.catdescvalid,
-        space: "* " + languagedata.spacergx
+        space: "* " + languagedata.spacergx,
+        maxlength: "* "+languagedata?.Permission?.descriptionchat
 
       },
       subcategoryid: {
@@ -133,7 +150,6 @@ $("body").on("click", "#edit", function () {
     dataType: "json",
     data: { "id": data },
     success: function (result) {
-      console.log("sd", result);
       if (result.Id != 0) {
         var name = $("#cname").val(result.CategoryName);
         var desc = $("#cdesc").val(result.Description);
@@ -142,56 +158,55 @@ $("body").on("click", "#edit", function () {
         $("#cname").text(name);
         $("#cdesc").text(desc);
         $("#categoryimage").val(result.ImagePath)
+        $("#cid").val(result.ParentId)
 
+        $("#id").val(result.Id)
+        $("#category_id").val(result.Id)
 
+        
+        var keyword = $("#searchcatlists").val()
 
-        if (image != "") {
-          $("#browse").hide();
-          $("#mediadesc").hide();
-          $("#catdel-img").show();
+        if(keyword != ""){
+          $("#searchcatlists").val("")
+          $(".noData-foundWrapper").hide()
 
         }
-        //   if ($("#categoryimage").attr("src") === "") {
-        //     $("#uploadimage").show();
-        //     $("#choosebtn").show();
-        //     // $("#categoryimage").hide();
-        //     $("#catdel-img").hide();
-        // } else {
-        //     $("#uploadimage").hide();
-        //     $("#choosebtn").hide();
-        //     $("#categoryimage").show();
-        //     $("#catdel-img").show();
-        // }
 
-        // if ("form[name='edit']") {
-        //   $(".categorypdiv").each(function (index, element) {
+        if (result.ImagePath != "") {
+          $("#browse").hide();
+          $("#mediadesc").hide();
+          $("#catdel-img").show()
 
-        //     var id = $(element).attr("data-id")
-        //     var categoryname = $(element).find("p").text().trim()
-        //     var parentid = $(element).attr("data-parentid")
+        }else{
+          $("#catdel-img").hide()
 
-        //     if (result.Id == id) {
-        //       $(element).hide()
-        //     } else if (result.Id == parentid) {
-        //       $(element).hide()
-        //     } else if (categoryname.indexOf(result.CategoryName) != -1) {
-        //       $(element).hide()
-        //     } else {
-        //       $(element).show()
-        //     }
+        }
+    
 
-        //   })
-        // }
+        if ("form[name='edit']") {
+          $(".drp").each(function (index, element) {
 
-        // $(".radbtn").each(function (index, element) {
-        //   var Id = $(element).attr("data-id");
-        //   if (result.ParentId == Id) {
-        //     $(element).prop("checked", true)
-        //   }
-        // })
+            var id = $(element).attr("data-id")
+            var categoryname = $(element).find("p").text().trim()
+            var parentid = $(element).attr("data-parentid")
+
+
+            console.log("id",id,categoryname,parentid,result.Id);
+
+            if (result.Id == id) {
+              $(element).hide()
+            } else if (result.Id == parentid) {
+              $(element).hide()
+            } else if (categoryname.indexOf(result.CategoryName) != -1) {
+              $(element).hide()
+            } else {
+              $(element).show()
+            }
+
+          })
+        }
       } else {
-        // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>'+languagedata.internalserverr+'</span></div>';
-        // $(notify_content).insertBefore(".breadcrumbs");
+        
         notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast.internalserverr + '</span></div>';
         $(notify_content).insertBefore(".breadcrumbs");
         setTimeout(function () {
@@ -205,22 +220,15 @@ $("body").on("click", "#edit", function () {
   })
 });
 
-// $("#addnewcategoriesModal").on('hidden.bs.modal', function () {
-//   $("#submit").show()
-//   $("#update").hide()
-//   $("#cname").val("")
-//   $("#cdesc").val("")
-//   $("#cname-error").hide()
-//   $("#cdesc-error").hide()
-
-// })
 
 // delete popup
 $(document).on('click', '#delete-btn', function () {
   var data = $(this).attr("data-id");
   var parent_id = $("#categoryid").val();
   var del = $(this).closest("tr");
-
+  var url=window.location.search
+    const urlpar= new URLSearchParams(url)
+    pageno = urlpar.get('page')
   $.ajax({
     url: "/categories/deletepopup",
     type: "GET",
@@ -232,7 +240,13 @@ $(document).on('click', '#delete-btn', function () {
         $(".deltitle").text(languagedata.Categoryy.deltitle)
         $('.delname').text(del.find('td:eq(0)').text())
         $('#delid').show();
-        $('#delete').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
+        if (pageno == null){
+          $('#delete').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
+
+        }else{
+          $('#delete').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id + "?page=" +pageno);
+
+        }
         $('#btn3').text(languagedata.no);
 
       } else {
@@ -272,28 +286,26 @@ $("#caddbtn , #clickadd").on("click", function () {
   $("#mediadesc").show();
   $("#update").hide()
   $("#catdel-img").hide()
+
+  $("#form").attr("name", "")
+
+
+  var keyword = $("#searchcatlists").val()
+
+       
+
+  if ("form[name='']") {
+    $(".drp").each(function (index, element) {
+      if(keyword != ""){
+        $("#searchcatlists").val("")
+        $(".noData-foundWrapper").hide()
+
+      }
+          $(element).show()
+    })
+  }
 });
 
-// media image insert
-
-// $(document).on('click', ".upload-folders", function () {
-
-//   var src = $(this).find('img').attr("src");
-
-//   $("#categoryimage").val(src)
-//   var data = $("#ctimagehide").attr("src", src);
-
-//   if (data != "") {
-//     $("#mediadesc").hide();
-//     $("#browse").hide();
-//     $("#ctimagehide").attr("src", src).show()
-//     $("#catdel-img").show()
-
-//   }
-//   $("#addnewimageModal").hide()
-//   $("#categoryModal").modal('show')
-
-// })
 
 $('#categoryModal').on('hide.bs.modal', function (event) {
   $('.modal-backdrop').remove()
@@ -333,13 +345,14 @@ $('#update').click(function () {
   jQuery.validator.addMethod("duplicatename", function (value) {
 
     var result;
-    category_id = $("#category_id").val()
+    parent_id = $("#categoryid").val()
+    categoryid = $("#category_id").val()
 
     $.ajax({
-      url: "/categories/checkcategoryname",
+      url: "/categories/checksubcategoryname",
       type: "POST",
       async: false,
-      data: { "category_name": value, "category_id": category_id, csrf: $("input[name='csrf']").val() },
+      data: { "cname": value, "parentid": parent_id,"categoryid":categoryid, csrf: $("input[name='csrf']").val() },
       datatype: "json",
       caches: false,
       success: function (data) {
@@ -362,7 +375,8 @@ $('#update').click(function () {
       },
       cdesc: {
         required: true,
-        space: true
+        space: true,
+        maxlength: 250,
         // category_desc: true
       },
       subcategoryid: {
@@ -380,7 +394,8 @@ $('#update').click(function () {
       },
       cdesc: {
         required: "* " + languagedata.Categoryy.catdescvalid,
-        space: "* " + languagedata.spacergx
+        space: "* " + languagedata.spacergx,
+        maxlength: "* "+languagedata?.Permission?.descriptionchat
 
       },
       subcategoryid: {
@@ -392,30 +407,37 @@ $('#update').click(function () {
 
   var formcheck = $("#form").valid();
   if (formcheck == true) {
-    $('#form')[0].submit();
-
-    var id = $(this).val()
-
     $("#form").attr("action", "")
+
+    var id = $("#category_id").val()
+
     var cname = $("#cname").val();
     var cdesc = $("#cdesc").val();
-    var categoryid = $("#cid").val();
+    var pcategoryid = $("#cid").val();
     var parentid = $("#categoryid").val();
     var image = $("#categoryimage").val();
     var pageno = $("#catpageno").val();
+
+  
     if ($("#form").valid()) {
       $.ajax({
-        url: "/categories/updatesubcategory",
+        url: "/categories/editsubcategory",
         type: "POST",
         datatype: "json",
-        data: { "id": id, "cname": cname, "cdesc": cdesc, "categoryid": categoryid, "image": image, csrf: $("input[name='csrf']").val() },
+        data: { "id": id, "cname": cname, "cdesc": cdesc, "pcategoryid": pcategoryid, "image": image, csrf: $("input[name='csrf']").val() },
         success: function (result) {
           if (result) {
-            window.location.href = "/categories/addcategory/" + parentid;
+
+            if (pageno == 0){
+              window.location.href = "/categories/addcategory/" + parentid;
+
+            }else{
+              window.location.href = "/categories/addcategory/" + parentid + "?page="+pageno;
+
+            }
   
           } else {
-            // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>'+languagedata.internalserverr+'</span></div>';
-            // $(notify_content).insertBefore(".breadcrumbs");
+           
             notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast.internalserverr + '</span></div>';
             $(notify_content).insertBefore(".breadcrumbs");
             setTimeout(function () {
@@ -459,7 +481,7 @@ function Validationcheck() {
 
 }
 
-$(document).on('keyup', '.search', function () {
+$(document).on('keyup', '#searchsubcategory', function () {
 
   var categoryid = $("#categoryid").val();
   if ($('.search').val() == "") {
@@ -476,11 +498,9 @@ $(document).on('click', '#medcancel', function () {
 
 $(".drp").on("click", function () {
 
-  var text = $(this).html()
-
   var id = $(this).attr("data-id")
-  $(this).parent('.dropdown-menu').siblings('a').html($(this).html(text))
-  $(this).parent().siblings("input").val(id)
+  $(this).parents('.dropdown-menu').siblings('a').html($(this).html())
+  $(this).parent().siblings("input[name='subcategoryid']").val(id)
 
   if (id == 0) {
     $("#availablecat").addClass('input-group-error')
@@ -491,9 +511,36 @@ $(".drp").on("click", function () {
   }
 })
 
-const imagee = document.querySelectorAll('.category-path-list ');
-imagee.forEach(group => {
-  const image = group.querySelectorAll('img');
-  image[image.length - 1].style.display = 'none';
-});
 
+// form category search in keyup
+
+$("#searchcatlists").keyup(function () {
+  var keyword = $(this).val().trim().toLowerCase()
+  $(".catrgory-dropdownlist button").each(function (index, element) {
+      var title = $(element).text().toLowerCase()
+      var categoryid = $("#category_id").val()
+      var currentid = $(element).attr("data-id")
+      if (title.includes(keyword) && categoryid != currentid) {
+          $(element).show()
+          $(".noData-foundWrapper").hide()
+
+      } else {
+          $(element).hide()
+          if($('.catrgory-dropdownlist button:visible').length==0){
+            $(".noData-foundWrapper").show()
+        }
+      }
+  })
+})
+
+// description focus 
+const GroupDesc = document.getElementById('cdesc');
+const inputGroup = document.querySelectorAll('.input-group');
+
+GroupDesc.addEventListener('focus', () => {
+
+  GroupDesc.closest('.input-group').classList.add('input-group-focused');
+});
+GroupDesc.addEventListener('blur', () => {
+  GroupDesc.closest('.input-group').classList.remove('input-group-focused');
+});

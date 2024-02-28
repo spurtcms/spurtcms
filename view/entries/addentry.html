@@ -8,32 +8,33 @@
 {{$IMAGEPATH := ""}}
 {{$IMAGEPATHM :=""}}
 
-
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}} {{$IMAGEPATH = "/public/img/blogUpload-img-red.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-red.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}} {{$IMAGEPATH = "/public/img/blogUpload-img-purple.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-purple.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}} {{$IMAGEPATH = "/public/img/blogUpload-img-blue.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}} {{$IMAGEPATH = "/public/img/blogUpload-img.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}} {{$IMAGEPATH = "/public/img/blogUpload-img-yellow.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-yellow.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}} {{$IMAGEPATH = "/public/img/blogUpload-img-orange.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-orange.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}} {{$IMAGEPATH = "/public/img/blogUpload-img-light-green.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-light-green.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}} {{$IMAGEPATH = "/public/img/blogUpload-img-green.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-light-green.svg"}}
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
+{{$IMAGEPATH = "/public/img/blogUpload-img-red.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-purple.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-blue.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-bwron.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-yellow.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-orange.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-green.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-light-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-teal-blue.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-light-green.svg"}}
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}} {{$IMAGEPATH = "/public/img/blogUpload-img-black.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-black.svg"}}
+ {{$IMAGEPATH = "/public/img/blogUpload-img-black.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop-black.svg"}}
 {{else}}
 {{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}} {{$IMAGEPATH = "/public/img/blogUpload-img.svg"}} {{$IMAGEPATHM = "/public/img/manage-drop.svg"}}
 {{end}}
 
 
 
+
 <div class="page-wrapper">
+  <input type="hidden" id="urlid" value="{{.URL}}">
   <input type="hidden" name="csrf" value="{{.csrf}}">
 
     <div class="tablst channel-tabList br-btm">
@@ -59,28 +60,32 @@
               <div class="dropdown avaliable-dropdown">
               
                <input type="hidden" id="chanid" >
-                <button
+               <div class="blogDropdown"
+               data-bs-toggle="dropdown"
+               aria-expanded="false" style="display: flex;">
+                <p
                 type="button"
-                class="blogDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                id="blogn"
-              >
+                class="blogDropdown1"
+                id="blogn"data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title=""
+              >{{$Translate.Channell.Selectchannel}}
+           
+              </p>
               <img src="/public/img/blog-drop.svg" alt=""  class="blogimg"/>
-              </button>
-
-              <img class="tooltip-icon-addentry" src="/public/img/info.svg">
+            </div>
+              <!-- <img class="tooltip-icon-addentry" src="/public/img/info.svg"> -->
 
                 <div class="dropdown-menu dropdown-menu-end avaliable-dropdown-menu">
                     <div class="drop-item-wrapper">
-                      {{$ChannelId := .chnid}}
+                     
                       {{range .channellist}}
-                       
-                        <div class="avaliable-dropdown-item {{if eq $ChannelId .Id}} active {{end}}" id="{{.Id}}">
+                      
+                        <div class="avaliable-dropdown-item" id="{{.Id}}">
                           <input type="hidden" data-id="{{.Id}}" >
                             <div class="avaliable-dropdown-itemLeft">
-                                <p class="para">{{.ChannelName}}</p>
-                                <p class="para-extralight" data-id="{{.SlugName}}" id="encount" >{{.EntriesCount}}  {{$Translate.Channell.Blogavailable}}</p>
+                                <p class="para" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="{{.ChannelName}}">{{.ChannelName}}</p>
+                                <p class="para-extralight" data-id="{{.SlugName}}" id="encount" >
+                                  {{$Translate.Total}}  {{if gt .EntriesCount 1}}{{$Translate.Entries}} :  {{.EntriesCount}}    {{else}} {{$Translate.Channell.Entry}} : {{.EntriesCount}} {{end}} </p>
+                                 
                           </div>
                          
                         </div>
@@ -90,7 +95,8 @@
                    
                 </div>
             </div>
-              <span class="para-extralight" id="blogcount" >{{.entrycount}} {{$Translate.Channell.Blogavailable}}</span>
+              <span class="para-extralight" id="blogcount" ></span>
+              <label id="channelslct-error" class="error" style="display: inline-flex; display: none; color: #F26674;  font-size: 0.75rem;font-weight: 400;"> *{{$Translate.Channell.Channelselect}}</label>
             </div>
 
             <div class="blogTop-center">
@@ -186,23 +192,38 @@
            
             <div class="blogBottom-center">
 
-              <div class="GenerateApi">
+              <!-- <div class="GenerateApi">
                 <img src="/public/img/Generate-api.svg" alt="" />
                 <button data-bs-toggle="modal" data-bs-target="#articelTitle">
                   {{$Translate.Channell.Generateai}}
                 </button>
-              </div>
-             
-              <div id="spacedel-img" style="display: none; margin-inline-start: auto; margin-top: -4px;  padding: 8px;">
-                <img id="trashimg" src="/public/img/delete.svg" alt="delete-img" style="margin-inline-start: auto; border-radius: 50%; background-color: #bce3e982 ; padding: 8px;"></div>
-              <img src="" name="spimagehide" id="spimagehide" >
-              <div class="blogBottom-imgSelect" id="cenimg">
-              
+              </div> -->
+<!--              
+              <div id="spacedel-img" style="display: none; margin-inline-start: auto; margin-top: -4px;  padding: 8px; cursor: pointer;">
+                <img id="trashimg" src="/public/img/delete.svg" alt="delete-img" style="margin-inline-start: auto; border-radius: 50%; background-color: #bce3e982 ; padding: 8px;">
+                <div class="hover-delete-img" ></div></div> -->
+                <!-- <div id="spacedel-img" style="display: none; margin-inline-start: auto; margin-top: -4px;  padding: 8px; cursor: pointer;">
+                  <button class="delete-flag" type="button"><img src="/public/img/delete-white-icon.svg"
+                          alt=""></button>
+                  <div class="hover-delete-img"></div>
+                  <img src="" name="spimagehide" id="spimagehide" > 
+              </div> -->
+            
+               
+              <div class="blogBottom-imgSelect" id="cenimg"> 
+                <button class="delete-flag" type="button" style="border-radius: 50% ; border:1px solid #fff !important; padding: 5px;"><img src="/public/img/delete-white-icon.svg" style="height: 15px;"
+                  alt=""></button>
+                <div id="spacedel-img" style="display: none; ">
+                  
+                  <div class="hover-delete-img"></div>
+                 
+              </div> 
+              <img src="" name="spimagehide" id="spimagehide" >     
                 <div class="imgSelect-image">
                   <img src="/public/img/blogSelect-img.svg" class="ruffimg" alt="" />
                 
                 </div>
-                <p class="heading-three">
+                <p class="heading-three uplclass">
                   {{$Translate.Channell.Uploadordragging}}
                 </p>
                 <div class="imgSelect-btn"  data-bs-toggle="modal" data-bs-target="#addnewimageModal">
@@ -216,7 +237,7 @@
 
               <div class="blogBottom-textArea">
 
-                <textarea type="text" id="titleid" placeholder="{{$Translate.Channell.Title}}"></textarea>
+                <textarea type="text" id="titleid" oninput="adjustRows()"  style="white-space: normal !important; " placeholder="{{$Translate.ContentAccessControl.Title}}"></textarea>
 
 
 
@@ -306,7 +327,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h3>{{$Translate.Channell.Categoryc}}</h3>
-            <button class="close" data-bs-dismiss="modal">
+            <button class="close" id="cateclose" data-bs-dismiss="modal">
               <img src="/public/img/modal-close.svg" alt="" />
             </button>
           </div>
@@ -322,39 +343,18 @@
                     <input type="text" placeholder="{{$Translate.Channell.Plsearchcategory}}" class="para search parentwithchild" id="category" name="keyword" />
                 </div>
                 </div>
-                <div class="categories-list" style="gap: 0.63rem !important">
-                  {{range $index,$value := .AllCategories}}
+                <div class="categories-list slist" style="gap: 0.63rem !important">
+                 
       
-                  <div class="categories-list-child categorypdiv" id="category-{{range .Categories}}{{.Id}}{{end}}">
-                      <div class="choose-cat-list-col" style="display: flex;" data-id={{$index}}>
-                          {{$catelen := len .Categories}}
-                          {{range  $index,$value := .Categories}}
-                              <h3 class="para categoryname" data-id="{{.Id}}" style="font-weight: 400;">{{.Category}}</h3>
-                              {{if ne $index $catelen}}
-                              <h3 class="para">&nbsp;/&nbsp;</h3>
-                              {{end}}
-                          {{end}}
-                      </div>
-                      <a href="javascript:void(0)" class="category-select-btn" data-categoryid="{{range .Categories}}{{.Id}}{{end}}">
-                          <img src="/public/img/add-category.svg" alt="" />
-                      </a>
-                      <p class="forsearch" style="display: none;">{{range .Categories}}~{{.Category}}{{end}}</p>
-                  </div>
-                  <div class="noData-foundWrapper" id="categorynodatafound" style="display: none;">
-    
-                    <div class="empty-folder">
-                        <img src="/public/img/folder-sh.svg" alt="">
-                        <img src="/public/img/shadow.svg" alt="">
-                    </div>
-                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                    </div>
-                  {{end}}
+           
+                 
               </div>
       
               <div class="caption-flexx">
                   <p class="para">
-                      <span class="para" id="avacatcount">0</span>
-                      {{$Translate.Channell.Categoriesavailable}}
+                      <span class="para"    id="avacatcount">0</span>
+                     {{$Translate.Channell.Categoriesavailable}}
+                      
                   </p>
               </div>
               </div>
@@ -404,8 +404,9 @@
         
                 <div class="caption-flexx">
                     <p class="para">
-                        <span class="para" id="selcatcount">{{if .SelectedCategories}}{{len .SelectedCategories}}{{else}}0{{end}}</span>
-                        {{$Translate.Channell.Categoriesavailable}}
+                      <span class="para" id="selcatcount">{{if .SelectedCategories}}{{len .SelectedCategories}}{{else}}0{{end}}</span>
+                      {{$Translate.Channell.Categoriesavailable}}
+                   
                       </p>
                 </div>
             </div>
@@ -437,11 +438,26 @@
           <div class="modal-header">
             <div class="modal-header-rgt">
               <h3>{{$Translate.Channell.Additionaldata}}</h3>
+              {{range .Menu.TblModule}}
+              {{if eq .ModuleName "Channels"}}
+              {{range .SubModule}}
+              {{if eq .ModuleName "Channels"}}
+              {{if .Routes}}
               <div class="fields-top-rgt">
+               
                 <img src="/public/img/add-setting.svg" alt="" />
-                <a href="" id="configbtn">{{$Translate.Config}}</a>
+               
+                <button data-bs-toggle="modal"
+                data-bs-target="#ChannelEditmodal"
+                 id="configbtn">{{$Translate.Configuration}}</button>
+                
               </div>
-              <img class="tooltip-icon-adddata" src="/public/img/info.svg">
+              <img class="tooltip-icon-adddata" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="{{$Translate.Channell.Configtooltip}}" src="/public/img/info.svg">
+              {{end}}
+                {{end}}
+                {{end}}
+                {{end}}
+                {{end}}
             </div>
             <button class="close" data-bs-dismiss="modal" id="fieldcancelid">
               <img src="/public/img/modal-close.svg" alt="" />
@@ -484,7 +500,7 @@
             <h3>{{$Translate.Channell.Seo}}</h3>
             
           </div>
-          <button class="close" data-bs-dismiss="modal">
+          <button class="close" id="seoclose" data-bs-dismiss="modal">
             <img src="/public/img/modal-close.svg" alt="" />
           </button>
         </div>
@@ -493,38 +509,49 @@
       <form action="" id="seoform" method="post">
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <div class="input-group" id="grbname">
+          <div class="tooltipdiv">
           <label class="input-label" for="">{{$Translate.Channell.Metatitle}}</label>
-          <img class="tooltip-icon-metatitle" src="/public/img/info.svg">
+         <img class="tooltip-icon" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+         data-bs-placement="top"  title="{{$Translate.Channell.Titletooltip}}" src="/public/img/info.svg">
+        </div>
           <div class="ig-row">
-            <input type="text" class="field" name="metatitle" id="metatitle" placeholder="{{$Translate.Channell.Pltitle}}">
+            <input type="text" class="field"  name="metatitle" id="metatitle"  placeholder="{{$Translate.Channell.Pltitle}}">
           </div>
-          <label for="" class="error" style="display: none;">{{$Translate.Channell.Titlevaild}}</label>
+          <!-- <label for="" class="error" id="mtitleerr" style="display: none;">*Please Enter Meta Tag Title</label> -->
+          <label for="" class="error" id="prefixerr" style="display: none;">* No Space in Prefix</label>
+          <label for="" class="error"style="display: none;" >{{$Translate.Channell.Titlevaild}}</label>
       </div>
      
       <div class="input-group" id="grbdesc">
+        <div class="tooltipdiv">
         <label for="" class="input-label">{{$Translate.Channell.Metadescription}}</label>
-        <img class="tooltip-icon-metadesc" src="/public/img/info.svg">
+        <img class="tooltip-icon"  data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{$Translate.Channell.Desctooltip}}"src="/public/img/info.svg">
+        </div>
         <div class="ig-row">
           <textarea placeholder="{{$Translate.Channell.Metadescription}}" class="field"  name="metadesc" id="metadesc"></textarea>
         </div>
         <label for="" class="error" style="display: none;">{{$Translate.Channell.Descerrvaild}}</label>
     </div>
-  </form>
-      <div class="input-group">
-        <label for="" class="input-label">{{$Translate.Channell.Keywords}}</label>
-        <img class="tooltip-icon-keyword" src="/public/img/info.svg">
+ 
+      <div class="input-group" id="grbkey">
+        <div class="tooltipdiv">
+        <label for="" class="input-label">{{$Translate.Channell.Metakeyword}}</label>
+        <img class="tooltip-icon" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{$Translate.Channell.Keywordtooltip}}" src="/public/img/info.svg">
+        </div>
         <div class="ig-row">
-          <input type="text" placeholder="{{$Translate.Channell.Plkeyword}}" id="metakey">
+          <input type="text" class="field" name="metakeyword" placeholder="{{$Translate.Channell.Plkeyword}}" id="metakey">
         </div>
     </div>
     <div class="input-group">
-      <label for="" class="input-label">{{$Translate.Channell.Slug}} </label>
-      <img class="tooltip-icon-slug" src="/public/img/info.svg">
+      <div class="tooltipdiv">
+      <label for="" class="input-label">{{$Translate.Channell.Metaslug}} </label>
+      <img class="tooltip-icon" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{$Translate.Channell.Slugtooltip}}" src="/public/img/info.svg">
+      </div>
       <div class="ig-row">
-        <input type="text" placeholder="{{$Translate.Channell.Plslug}}" id="metaslug">
+        <input type="text" name="metaslug" class="field" placeholder="{{$Translate.Channell.Plslug}}" id="metaslug">
       </div>
   </div>
-
+</form>
 
        </div>
         </div>
@@ -927,8 +954,8 @@
   
           <div class="checkText-grp">
             <div class="chk-group chk-group-label">
-              <input type="checkbox" id="Check2" />
-              <label for="Check2" class="para">Add Image</label>
+              <input type="checkbox" id="Check3" />
+              <label for="Check3" class="para">Add Image</label>
             </div>
   
             <div class="input-gridd">
@@ -988,14 +1015,271 @@
     </div>
   </div>
 
+  <div
+  class="modal fade channeledit-modal"
+  id="ChannelEditmodal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="text-transform: uppercase;">{{$Translate.Channell.Channelfield}}</h3>
+        <button class="close" data-bs-dismiss="modal">
+          <img src="/public/img/modal-close.svg" alt="" />
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="channelsContainer channelstep2" >
+          <div class="channelsContainer-heading">
+            <h5 class="heading">{{$Translate.Channell.Channelfield}} </h5>
+            <p class="para">
+                {{$Translate.Channell.Channeldesc}}
+            </p>
+          </div>
+      
+          <div class="channels-body">
+              <div class="fieldsContainer">
+                  <div class="chooseFields">
+                      <div class="field-top">
+                          <h2 class="heading-second">{{$Translate.Channell.Chosefld}} </h2>
+                      </div>                    
+      
+                      <div class="chooseField-bottom">
+                          {{range .Fields}}
+                          {{if eq .TypeName "Section"}}
+                          <div class="field-tab new drag-able" id="newsection" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/newsection.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">New Section</h3>
+                          </div>
+                          {{end}}
+                          {{end}}
+      
+                          {{range .Fields}}
+                          {{if eq .TypeName "Label"}}
+                          <!-- <div class="field-tab active drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/Ab.svg" alt="" /></div>
+                              <h3 class="heading-three">Label</h3>
+                          </div> -->
+                          {{end}}
+                          {{if eq .TypeName "Text"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/T.svg" alt="" /></div>
+                              <h3 class="heading-three">Text</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "Link"}}
+                          <!-- <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/link.svg" alt="" /></div>
+                              <h3 class="heading-three">Link</h3>
+                          </div> -->
+                          {{end}}
+                          {{if eq .TypeName "Date & Time"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/dateTime.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">Date & Time</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "Select"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/select.svg" alt="" /></div>
+                              <h3 class="heading-three">Select</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "Date"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/date.svg" alt="" /></div>
+                              <h3 class="heading-three">Date</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "TextBox"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/textbox.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">TextBox</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "TextArea"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/textarea.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">TextArea</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "CheckBox"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/checkbox.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">CheckBox</h3>
+                          </div>
+                          {{end}}
+                          {{if eq .TypeName "Text Editor"}}
+                          <!-- <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div">
+                                  <img src="/public/img/texteditor.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">{{$Translate.Channell.Texteditor}}</h3>
+                          </div> -->
+                          {{end}}
+                          {{if eq .TypeName "Radio Button"}}
+                          <div class="field-tab drag-able" data-id="{{.Id}}">
+                              <div class="img-div"><img src="/public/img/radio.jpg" alt="" /></div>
+                              <h3 class="heading-three">Radio Button</h3>
+                          </div>
+                          {{end}}
+                          {{end}}
+                      </div>
+                  </div>
+                  <div class="channelFields">
+                      <div class="field-top">
+                          <h2 class="heading-second">{{$Translate.Channell.Channelfield}}</h2>
+                      </div>
+                      <!-- <div class="channel-fields-empty">
+                          <img src="/public/img/nofields.svg" alt="">
+                          <h3 class="heading">No Fields Added</h3>
+                          <p class="para">Lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet.</p>
+                      </div> -->
+                      <div class="section-drop-able channel-section-drop-able" id="Sortsection">
+      
+                        
+                      </div>
+                  </div>
+                  <div class="channelProperties" id="field-properties" style="display: none;">
+                      <div class="field-top">
+                          <h2 class="heading-second">{{$Translate.Channell.Properties}}</h2>
+                      </div>
+      
+                      <div class="propertiesContent">
+                          <input type="hidden" id="fieldid" data-fieldid="" data-newfieldid="" data-sectionid="" data-newsectionid="" data-sectionname=""/>
+                          <div class="selected-property" id="title">
+                              <div class="img-div fieldicon" id="fieldicon">
+                                  <img src="/public/img/Ab.svg" alt="" />
+                              </div>
+                              <h3 class="heading-three">{{$Translate.Channell.Label}}</h3>
+                          </div>
+      
+                          <div class="input-group prop propinput" id="distext">
+                              <label for="" class="input-label">{{$Translate.Channell.Fieldname}}</label>
+                              <div class="ig-row">
+                                  <input type="text" placeholder="{{$Translate.Channell.Plstypehere}}" id="ftext" class="fieldinput">
+                                  <label id="fieldname-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Fielderr}}</label>
+                              </div>
+                          </div>
+      
+                          <div class="input-group prop propinput" id="fcharallow">
+                              <label for="" class="input-label">{{$Translate.Channell.Characterallow}}</label>
+                              <div class="ig-row">
+                                  <input type="text" placeholder="{{$Translate.Channell.Plcharallow}}" id="fcharvalue" value="0">
+                              </div>
+                          </div>
+      
+      
+                          <div class="input-group prop propinput" id="url">
+                              <label for="" class="input-label">{{$Translate.Channell.Url}} </label>
+                              <div class="ig-row">
+                                  <input type="text" placeholder="{{$Translate.Channell.Plurl}}" id="furl" class="fieldinput">
+                                  <label id="url-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Urlerr}}</label>
+                              </div>
+                          </div>
+      
+                          <div class="input-group user-drop-down prop propdropdown" id="dateform" style="margin-bottom: 20px;">
+                              <label for="" class="input-label">{{$Translate.Channell.Dateformat}}</label>
+                              <input type="hidden" name="mem_role" class="fidvalinput" id="fdatefor" value="">
+                              <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false"  >
+                              {{$Translate.Channell.Dateformat}}                             </a>
+                              <label id="date-error" class="error" for="channelname" style="display: none;">* {{$Translate.Channell.Dateerr}}</label>
+                              <div class="dropdown-menu" aria-labelledby="triggerId" style="height: auto;" >
+                                  <button type="button" class="dropdown-item propdrop" data-id="DD/MM/YYYY">DD/MM/YYYY</button>
+                                  <button type="button" class="dropdown-item propdrop" data-id="MM/DD/YYYY">MM/DD/YYYY</button>
+                                  <button type="button" class="dropdown-item propdrop" data-id="YYYY/MM/DD">YYYY/MM/DD</button>
+                              </div>
+                          </div>
+      
+                          <div class="input-group user-drop-down prop propdropdown" id="timefor" style="margin-bottom: 20px;">
+                              <label for="" class="input-label ">{{$Translate.Channell.Timeformat}}</label>
+                              <input type="hidden" name="mem_role" class="fidvalinput" id="ftimefor" value="">
+                              <a class="dropdown-toggle" type="button" id="time-format" data-bs-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false"  >
+                              {{$Translate.Channell.Timeformat}}
+                              </a>
+                              <label id="time-error" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Timeerr}} </label>
+                              <div class="dropdown-menu" aria-labelledby="time-format" style="height: auto;">
+                                  <button type="button" class="dropdown-item propdrop" data-id="12Hours">12 Hours</button>
+                                  <button type="button" class="dropdown-item propdrop" data-id="24Hours">24 Hours</button>
+                              </div>
+                          </div>
+      
+                          <div class="addOption-container prop" id="option">
+                              <div class="input-group">
+                                  <label for="" class="input-label">{{$Translate.Channell.Options}}</label>
+                                  <div class="ig-row addOption">
+                                      <input type="text" placeholder="{{$Translate.Channell.Pladdoption}}" id="foptname"/>
+                                      <button class="addOption-btn" id="addvalue">
+                                          <img src="/public/img/addOption.svg" alt="" />
+                                      </button>
+                                  </div>
+                                  <label id="select-error" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Optionerr}} </label>
+                                  <label id="select-error1" class="error" for="channelname" style="display: none;">*{{$Translate.Channell.Optionserr}} </label>
+                              </div>
+                              <div class="addedOption-grp options-added">
+                              </div>
+      
+                          </div>
+                          <div class="chk-group chk-group-label">
+                              <input type="checkbox" id="Check2"/>
+                              <label for="Check2" class="para">{{$Translate.Channell.Mandatory}}</label>
+                          </div>
+      
+                          <!-- <button class="btn-reg btn-md primary"> Submit </button> -->
+                      </div>
+                  </div>
+
+                  
+              </div>
+          </div>
+      </div>
+      </div>
+      <div class="configurationContent-btm">
+        <button class="btn-reg btn-lg secondary"  data-bs-dismiss="modal" id="">{{$Translate.Cancel}} </button>
+        <button class="btn-reg btn-lg primary"  id="uptchannelfield" >{{$Translate.Update}} </button>
+      </div>
+    </div>
+  </div>
+</div>
+
  
 
  
 {{template "mediamodal" .}} 
 
+{{template "mediadecidemodal" .}}
+
 {{template "cropmodal" .}}
 
 {{template "footer" .}}
+
 <script src="/public/js/entries/entry.js"></script>
+
+<script src="/public/js/channels/channel.js"></script>
 <script src="/public/js/media/media.js"></script>
+
+
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 {{template "footerclose" .}}

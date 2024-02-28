@@ -5,26 +5,32 @@ var seodetails = {};
 var channeldata = []
 checkboxarr = []
 var cateogryarr = []
+selctcategory = []
+var Channelid
+var flagg = false
+var result1 = []
+var newchanneldata =[]
 
-console.log(cateogryarr, seodetails, categoryIds, "kdfjdfdkffdfd")
 
-/** */
-// $(document).ready(async function () {
+console.log(channeldata, 'channeldata')
+// Return to entries list function //
+$(".searchentry").click(function () {
 
-//     var languagecode = $('.language-group>button').attr('data-code')
+    id = $(this).attr('id')
 
-//     await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    if ($(this).is(':checked')) {
 
-//         languagedata = data
-//     })
+        window.location.href = "/channel/entrylist/" + id
+    } else {
+        window.location.href = "/channel/entrylist/"
+    }
 
-// })
-
+})
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
+    var languagepath = $('.language-group>button').attr('data-path')
 
-    await $.getJSON("/locales/" + languagecode + ".json", function (data) {
+    await $.getJSON(languagepath, function (data) {
 
         languagedata = data
     })
@@ -51,54 +57,80 @@ $(document).ready(async function () {
     console.log("url", url)
 
     var pageurl = window.location.search
+
     const urlpar = new URLSearchParams(pageurl)
+
     pageno = urlpar.get('page')
 
-    var urlvalue = url.split('?')[0]
-    var id = urlvalue.split('/').pop()
+    // if (url.includes('/editentry')) {
+        var urlvalue = url.split('?')[0]
 
-    // var id = url.split('/').pop().split('?')[0];
-    // var id = url.split('/').pop();
+        var id = urlvalue.split('/').pop()
 
-    // var channelname= url.split('/').pop();
+        var array = url.split('/');
 
-    var array = url.split('/');
+        var channelname = array[array.length - 2];
+        console.log("id", id, channelname);
+
+    // }
+
 
     // var id = array[array.length - 1];
+    var editurl
 
-    var channelname = array[array.length - 2];
-    console.log("id", id, channelname);
+    if (pageno == null) {
+        editurl = "/channel/editentrydetails/" + channelname + "/" + id
+    } else {
+        editurl = "/channel/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
+    }
+
+
     if (/^\d+$/.test(id)) {
         $.ajax({
-            url: "/channel/editentrydetails/" + channelname + "/" + id +"?page=" + pageno,
+            url: editurl,
             type: "GET",
             dataType: "json",
             data: { "id": id, csrf: $("input[name='csrf']").val() },
             success: function (result) {
                 console.log(result, "result")
 
+                result1 = result
+
+                console.log("result1", result1)
+
+                Channelid = result.Entries.ChannelId
+
+                categoryIds = result.Entries.CategoriesId.split(",")
+
                 if (result.Entries.CoverImage == "") {
                     $('#cenimg').show()
 
                 }
                 else {
-                    $('#cenimg').hide()
-                    $("#spimagehide").css("height", "23.120rem")
-                    $("#spimagehide").css("width", "46.25rem")
+                    $(".imgSelect-image").hide()
+
+                    $(".uplclass").hide()
+
+                    $(".imgSelect-btn").hide()
+                    // $("#spimagehide").css("height", "23.120rem")
+                    // $("#spimagehide").css("width", "46.25rem")
+                    $(".blogBottom-imgSelect").css("padding-block", "0rem")
                     $("#spacedel-img").show();
                     $('#spimagehide').attr('src', result.Entries.CoverImage)
                 }
 
                 $('#titleid').val(result.Entries.Title)
                 // $('#text').val(result.Description)
+                $('#titleid').css('height', '100%')
                 ckeditor1.setData(result.Entries.Description)
                 $('#chanid').val(result.Entries.ChannelId)
                 $('#metatitle').val(result.Entries.MetaTitle)
                 $('#metadesc').val(result.Entries.MetaDescription)
                 $('#metakey').val(result.Entries.Keyword)
                 $('#metaslug').val(result.Entries.Slug)
-                $('#seosavebtn').text(languagedata.update)
-                $('#categorysave').text(languagedata.update)
+                $('#seosavebtn').text(languagedata?.update)
+                $('#categorysave').text(languagedata?.update)
+                // $('#configbtn').attr('href', '/channels/editchannel/' + result.Entries.ChannelId)
 
                 seodetails = { title: result.Entries.MetaTitle, desc: result.Entries.MetaDescription, keyword: result.Entries.Keyword, slug: result.Entries.Slug }
                 console.log("seodetails", seodetails)
@@ -115,11 +147,60 @@ $(document).ready(async function () {
                         console.log("name", channelname, count, itemId);
 
                         $('#chanid').val(itemId)
-                        $('#blogn').text(channelname)
+                        $('#blogn').text(channelname).css('color', 'black')
+                        $('.blogDropdown1').attr('data-bs-original-title', channelname)
                         $('#blogcount').text(count)
-                        $('.blogDropdown').append('<img class="blogimg" src="/public/img/blog-drop.svg" alt="">');
+                        // $('.blogDropdown').append('<img class="blogimg" src="/public/img/blog-drop.svg" alt="">');
                     }
                 }
+                if (result.CategoryName !== null) {
+
+                    var div = ""
+
+                    for (let y of result.CategoryName) {
+
+                        var categoriess = ""
+
+                        var ids = ""
+
+                        var id = ""
+
+                        div +=
+                            `    <div class="categories-list-child categorypdiv" id="category-">
+                        <div class="choose-cat-list-col" style="display: flex;" data-id=>`
+
+                        for (let x of y.Categories) {
+
+                            div += `<h3 class="para categoryname" data-id="` + x.Id + `" style="font-weight: 400;">  ` + x.Category + `</h3>
+                              
+                                <h3 class="para">&nbsp;/&nbsp;</h3>`
+
+                            categoriess += x.Category + "~"
+
+                            ids += x.Id
+
+                            id = x.Id
+                        }
+
+                        div += `</div>
+                        <a href="javascript:void(0)" class="category-select-btn" data-id="`+ id + `" data-categoryid="` + ids + `">
+                            <img src="/public/img/add-category.svg" alt="" />
+                        </a>
+                        <p class="forsearch" style="display: none;">`+ categoriess + `</p>
+                    </div>
+                    <div class="noData-foundWrapper" id="categorynodatafound" style="display: none;">
+    
+                    <div class="empty-folder">
+                        <img src="/public/img/folder-sh.svg" alt="">
+                        <img src="/public/img/shadow.svg" alt="">
+                    </div>
+                    <h1 class="heading">Oops No Data Found</h1>
+                    </div>  
+                      `
+                    }
+                    $('.slist').html(div);
+                }
+
 
 
                 if (result.SelectedCategory !== null) {
@@ -129,19 +210,6 @@ $(document).ready(async function () {
                         newcategory = category.split(',').join('');
 
                         cateogryarr.push(newcategory)
-
-
-
-                    })
-                }
-
-
-
-                if (cateogryarr !== null) {
-
-                    cateogryarr.forEach(function (category) {
-
-                        $('#category-' + category).show();
 
                     })
                 }
@@ -157,16 +225,15 @@ $(document).ready(async function () {
                     }
                 })
 
-
                 $('#avacatcount').text(count);
 
                 //channel field section//
-                $('#channelfieldsave').text('Update')
+                $('#channelfieldsave').text(languagedata?.update)
 
                 if (result.Section != null) {
                     result.Section.forEach(function (section) {
 
-                        $('.secid').append(`<div id="${section.SectionId}"><h6 class="sechead">${section.SectionName}</h6></div>`)
+                        $('.secid').append(`<div style="margin-bottom:10px" id="${section.SectionId}"><h6 style="margin-bottom:10px" class="sechead">${section.SectionName}</h6></div>`)
 
                     })
                     if (result.FieldValue != null) {
@@ -176,10 +243,10 @@ $(document).ready(async function () {
                     <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
                     <div class="ig-row date-input">
-                      <input type="text" class="date" data-id="" data-date="${fieldValue.DateFormat}" data-time="${fieldValue.TimeFormat}" placeholder="` + languagedata.Channell.seldate + ` "  id="date${fieldValue.FieldId}"   value=""/>
+                      <input type="text" class="date" data-id="" data-date="${fieldValue.DateFormat}" data-time="${fieldValue.TimeFormat}" placeholder="` + languagedata?.Channell?.seldate + ` "  id="date${fieldValue.FieldId}"   value=""/>
                     
                     </div>
-                    <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                    <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                   </div>
                 `);
                             }
@@ -200,7 +267,7 @@ $(document).ready(async function () {
                 
                                             
                                         </div>
-                                        <label class="error" id="opterr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                                        <label class="error manerr" id="opterr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
         
                                     </div>
                 `);
@@ -211,11 +278,11 @@ $(document).ready(async function () {
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
                     <div class="ig-row date-input">
-                      <input type="text"class="date" data-id="" data-date="${fieldValue.DateFormat}" id="date${fieldValue.FieldId}"  placeholder="` + languagedata.Channell.seldate + `" />
+                      <input type="text"class="date" data-id="" data-date="${fieldValue.DateFormat}" id="date${fieldValue.FieldId}"  placeholder="` + languagedata?.Channell?.seldate + `" />
                     
                     
                     </div>
-                    <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                    <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                   </div>
                 `);
                             }
@@ -229,7 +296,7 @@ $(document).ready(async function () {
                 <div class="button-col entry-radio-row flexx" id="radio${fieldValue.FieldId}">
               
             </div>
-            <label class="error" id="radioerr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+            <label class="error manerr" id="radioerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
             </div>
             </div>
             
@@ -239,35 +306,38 @@ $(document).ready(async function () {
                             }
                             if (fieldValue.MasterFieldId == 8) {
                                 $(`#${fieldValue.SectionId}`).append(` 
-                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" >
+                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}" >
                 <label  class="input-label"  data-id="${fieldValue.FieldId}" id="textarealabel" for="">${fieldValue.FieldName}</label>
              
                 <div class="ig-row">
-                  <textarea placeholder="`+ languagedata.Channell.pltexthere + `" data-id="" id="${fieldValue.FieldId}" ></textarea>
+                  <textarea placeholder="`+ languagedata?.Channell?.pltexthere + `" data-id="" id="${fieldValue.FieldId}" ></textarea>
                 </div>
-                <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
               </div>
                 `);
                             }
                             if (fieldValue.MasterFieldId == 2) {
                                 $(`#${fieldValue.SectionId}`).append(` 
-                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
+                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
-                        <input type="text" data-id="" placeholder="`+ languagedata.Channell.pltexthere + `" id="${fieldValue.FieldId}"   value="" />
+                        <input type="text" data-id="" placeholder="`+ languagedata?.Channell?.pltexthere + `" id="${fieldValue.FieldId}"   value="" />
                       </div>
-                      <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                      <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                      <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
                     </div>
                 `);
                             }
                             if (fieldValue.MasterFieldId == 7) {
                                 $(`#${fieldValue.SectionId}`).append(` 
-                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
+                <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
-                        <input type="text" data-id="" placeholder="`+ languagedata.Channell.pltexthere + `" id="${fieldValue.FieldId}"   value=""   />
+                        <input type="text" data-id="" placeholder="`+ languagedata?.Channell?.pltexthere + `" id="${fieldValue.FieldId}"   value=""   />
                       </div>
-                      <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                      <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                      <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
                     </div>
                 `);
                             }
@@ -280,14 +350,14 @@ $(document).ready(async function () {
          
                                          <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
                                              aria-haspopup="true" aria-expanded="false">
-                                         option
+                                         Option
                                          </a>
                                          <input type="hidden" data-id="" class="checkfieldid" id="${fieldValue.FieldId}"  value=""  >
                                          <div class="dropdown-menu additional-entry-drop" id="check${fieldValue.FieldId}" aria-labelledby="triggerId">
                  
                                              
                                          </div>
-                                         <label class="error" id="opterrr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                                         <label class="error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
          
                                      </div>
                 `)
@@ -295,8 +365,6 @@ $(document).ready(async function () {
 
                             }
 
-                            //     })
-                            // }
                             if (result.Entries.TblChannelEntryField != null) {
                                 result.Entries.TblChannelEntryField.forEach(function (field) {
 
@@ -353,7 +421,29 @@ $(document).ready(async function () {
 
                 }
 
+                $('.getvalue').each(function () {
+                    obj = {}
+                    obj = {
+                        "name": $(this).children('.input-label').text().trim(),
+                        "fid": $(this).children('.input-label').attr('data-id'),
+                        "value": $(this).find('input').val() || $(this).find('textarea').val() || $(this).find('.fieldid').val(),
+                        "fieldid": $(this).find('input').attr('data-id') || $(this).find('textarea').attr('data-id') || $(this).find('.fieldid').attr('data-id')
 
+                    }
+                    console.log("object", obj.value)
+
+                    if ((obj.fieldid == undefined) || (obj.fieldid == '')) {
+                        obj.fieldid = '0'
+
+                    }
+                    if ((obj.value != '') && (obj.value != undefined)) {
+                        channeldata.push(obj)
+                        newchanneldata.push(obj)
+                    }
+
+
+                    console.log("channeldata", channeldata)
+                })
                 var radval = $('.radioval').val()
                 console.log(radval, "radiovalue")
                 $('.radiodiv').each(function () {
@@ -362,20 +452,6 @@ $(document).ready(async function () {
                         $(this).find('input').prop('checked', true)
                     }
                 })
-                //category bind//
-
-                categoryIds = result.Entries.CategoriesId.split(',');
-
-                console.log("categorids", categoryIds)
-                var catselect = document.querySelectorAll('.categories-list-child');
-                console.log(catselect, "catelist");
-                categoryIds.forEach(function (categoryId) {
-                    var matchedH3 = document.querySelector('a[data-id="' + categoryId + '"]');
-                    console.log("match", matchedH3);
-
-                    matchedH3.click()
-
-                });
 
                 var cheval = $('.checkfieldid').val()
                 var values = cheval.split(','); // Split the string by comma
@@ -391,50 +467,23 @@ $(document).ready(async function () {
                     }
                 })
 
-
-
-
-
-
-
-
             }
         })
 
     }
 })
 
-/** Category select */
+
 $(document).ready(function () {
 
-    $('.categorypdiv').hide();
+    console.log("checksdfdf")
+    if ($('.channeltitle1').text() == '') {
 
-    var count = 0
+        console.log("$sdfdfdf")
 
-    $('.categorypdiv').each(function () {
-
-        if ($(this).css('display') != "none") {
-
-            count = count + 1
-
-        }
-
-        var id
-
-        $(this).children('.choose-cat-list-col').children('.categoryname').each(function () {
-
-            id = $(this).attr('data-id');
-
-        })
-
-        $(this).children('.category-select-btn').attr('data-id', id).attr('id', 'lastcatid-' + id)
-    })
-
-    // $('#avacatcount').text(count);
-
+        $('.channeltitle1').css('display', 'none')
+    }
 })
-
-
 $(document).on('keyup', '#searchkey', function () {
 
     if ($('.search').val() === "") {
@@ -484,17 +533,27 @@ $(document).on('click', '.deleteentry', function () {
 
     $('.delname').text(del.find('td:eq(2)').text())
 
-    $('.deltitle').text(languagedata.Channell.delentrytitle)
+    $('.deltitle').text(languagedata?.Channell?.delentrytitle)
 
-    $('.deldesc').text(languagedata.Channell.delentrycontent)
+    $('.deldesc').text(languagedata?.Channell?.delentrycontent)
 
     $('#delid').attr('data-id', $(this).attr('data-id'))
 
-    $('#delid').text(languagedata.yes)
+    $('#delid').text(languagedata?.yes)
 
-    $('#delcancel').text(languagedata.no)
+    $('#delcancel').text(languagedata?.no)
 
-    $('#delid').parent('#delete').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame);
+    var pageno = $(this).attr("data-page")
+
+    if (pageno == "") {
+        $('#delid').parent('#delete').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame);
+
+    } else {
+        $('#delid').parent('#delete').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame + "&page=" + pageno);
+
+    }
+
+    // $('#delid').parent('#delete').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame + "&page="+pageno);
 
     // $('#delid').parent('#delete').attr('href', "/channel/deleteentries/"+ entryId + "/" + channelname);
 
@@ -503,94 +562,129 @@ $(document).on('click', '.deleteentry', function () {
 
 
 //*Publish and Unpublish status change */
-function ChangeStatus(entryid, channelname, status) {
 
-    $('.filter-dropdown-menu ').hide()
+var entryid
 
-    $.ajax({
-        url: "/channel/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + status,
-        type: "post",
-        data: {
-            entryid: entryid,
-            status: status,
-            cname: channelname,
-            csrf: $("input[name='csrf']").val()
-        },
-        datatype: "json",
-        success: function (result) {
+var channelname
 
-            console.log("result", result)
-            if (result) {
+var chlstatus
 
-                if (status == 1) {
+$(document).on("click", "#publish", function () {
 
-                    $("#statusname-" + entryid).text("Published");
+    entryid = $(this).attr("data-id")
+    channelname = $(this).attr("data-channelname")
+    chlstatus = $(this).attr("data-status")
 
-                    $("#statusname-" + entryid).removeClass('unpublished').addClass('published')
+    $('#content').text(languagedata.Channell.publishcontent);
+    $('.delname').text(channelname)
+    $('.deltitle').text(languagedata.Channell.publishtitle)
+    $("#delid").text(languagedata.Channell.publish)
+    $("#delcancel").text(languagedata.cancel)
 
-                    $("#statusname-" + entryid).removeClass('draft').addClass('published')
+})
 
-                } else if (status == 2) {
+$(document).on("click", "#unpublish", function () {
 
-                    $("#statusname-" + entryid).text("Unpublished");
+    entryid = $(this).attr("data-id")
+    channelname = $(this).attr("data-channelname")
+    chlstatus = $(this).attr("data-status")
 
-                    $("#statusname-" + entryid).removeClass('published').addClass('unpublished')
+    $('#content').text(languagedata.Channell.unpublishcontent);
+    $('.delname').text(channelname)
+    $('.deltitle').text(languagedata.Channell.unpublishtitle)
+    $("#delid").text(languagedata.Channell.unpublish)
+    $("#delcancel").text(languagedata.cancel)
 
-                    $("#statusname-" + entryid).removeClass('draft').addClass('unpublished')
+
+})
+
+$(document).on("click", "#delid", function () {
+    if (window.location.href.includes('/channel/entrylist/')) {
+
+        $.ajax({
+            url: "/channel/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
+            type: "post",
+            data: {
+                entryid: entryid,
+                status: chlstatus,
+                cname: channelname,
+                csrf: $("input[name='csrf']").val()
+            },
+            datatype: "json",
+            success: function (result) {
+
+                if (result) {
+
+                    if (chlstatus == 1) {
+
+                        $("#statusname-" + entryid).text("Published");
+
+                        $("#statusname-" + entryid).removeClass('unpublished').addClass('published')
+
+                        $("#statusname-" + entryid).removeClass('draft').addClass('published')
+
+                        $("#unpublish").show()
+
+                        $("#publish").hide()
+
+                        setCookie("get-toast", "Entry Published Successfully")
+
+                        setCookie("Alert-msg", "success", 1)
+
+                    } else if (chlstatus == 2) {
+
+                        $("#statusname-" + entryid).text("Unpublished");
+
+                        $("#statusname-" + entryid).removeClass('published').addClass('unpublished')
+
+                        $("#statusname-" + entryid).removeClass('draft').addClass('unpublished')
+
+                        $("#unpublish").hide()
+
+                        $("#publish").show()
+
+                        setCookie("get-toast", "Entry Unpublished Successfully")
+
+                        setCookie("Alert-msg", "success", 1)
+
+                    }
+                    // setCookie("get-toast", languagedata?.Toast?.entryupdatenotify)
+                    // setCookie("Alert-msg", "success", 1)
+                    window.location.reload()
+
+
+
+                } else {
+
+                    setCookie("Alert-msg", languagedata?.Toast?.internalserverr)
 
 
 
                 }
-
-                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Toast.entryupdatenotify + '</span></div>';
-                $(notify_content).insertBefore(".header-rht");
-                setTimeout(function () {
-                    $('.toast-msg').fadeOut('slow', function () {
-                        $(this).remove();
-                    });
-                }, 5000); // 5000 milliseconds = 5 seconds
-
-
-            } else {
-
-
-                notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast.internalserverr + '</span></div>';
-                $(notify_content).insertBefore(".header-rht");
-                setTimeout(function () {
-                    $('.toast-msg').fadeOut('slow', function () {
-                        $(this).remove();
-                    });
-                }, 5000); // 5000 milliseconds = 5 seconds
-
-
             }
-        }
-    })
+        })
+    }
+})
 
-}
 
-// $(document).on('click', ".upload-folder-img", function () {
-//     var src = $(this).find('img').attr("src");
-//     var data = $("#spimage").val(src)
-//     var data1 = $("#spimagehide").attr("src", src);
-
-//     if (data1 != "") {
-
-//         $('#cenimg').hide()
-//         $("#spimagehide").css("height", "23.120rem")
-//         $("#spimagehide").css("width", "46.25rem")
-//         $("#spimagehide").attr("src", src).show()
-//         $("#spacedel-img").show();
-//     }
-//     $("#addnewimageModal").hide()
-// })
-
-$('#spacedel-img').click(function () {
+$('.delete-flag').click(function () {
     $('input[name=spaceimagepath]').val("")
     $('#spimagehide').attr('src', '')
     $(this).hide()
-    $('#cenimg').show()
+    // $('#cenimg').show()
     $('#spimagehide').hide()
+
+    $(".imgSelect-image").show()
+
+    $(".uplclass").show()
+
+    $(".imgSelect-btn").show()
+
+    $(".blogBottom-imgSelect").css("padding-block", "5.44rem 7.75rem")
+
+    $("#spacedel-img").hide()
+
+    $(this).hide()
 })
 
 //Save to Draft Function//
@@ -601,12 +695,28 @@ $('#draftbtn').click(function () {
 
     console.log("url", url)
 
+    var pageurl = window.location.search
+    const urlpar = new URLSearchParams(pageurl)
+    pageno = urlpar.get('page')
+
+
+
     if (url.includes('editentry')) {
-        var eid = url.split('/').pop();
+
+        var urlvalue = url.split('?')[0]
+        var eid = urlvalue.split('/').pop()
+        // var eid = url.split('/').pop();
 
         console.log("id", eid);
     }
+    var drafturl
 
+    if (pageno == null) {
+        drafturl = "/channel/draftentry/" + eid
+    } else {
+        drafturl = "/channel/draftentry/" + eid + "?page=" + pageno
+
+    }
     var data = ckeditor1.getData();
 
     var entryId = $('#chanid').val()
@@ -627,8 +737,10 @@ $('#draftbtn').click(function () {
 
     blogcount = $('#encount').attr('data-id')
 
+    Removeslashcategory()
+
     if (title === '' && data === '' && img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.descerr + ' </span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descerr + ' </span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -637,7 +749,7 @@ $('#draftbtn').click(function () {
         }, 5000); // 5000 milliseconds = 5 seconds
 
     } else if (data === '' && img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.descimgerr + '</span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descimgerr + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -646,7 +758,7 @@ $('#draftbtn').click(function () {
         }, 5000); // 5000 milliseconds = 5 seconds
 
     } else if (img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.imgerr + '</span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.imgerr + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -654,71 +766,79 @@ $('#draftbtn').click(function () {
             });
         }, 5000); // 5000 milliseconds = 5 seconds
 
+
+
+    } else if (data === '') {
+
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descriptionentry + '</span></div>';
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.toast-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+
     }
-    if (title !== '' && data !== '' && img !== '') {
+
+    if (title !== '' && data !== '' && img !== '' && entryId == '') {
+
+        $('#channelslct-error').show()
+    }
+
+    if (title !== '' && data !== '' && img !== '' && entryId !== '') {
         var flag = channelfieldvalidation()
 
         channelfieldkeyup()
 
         if (flag == false) {
             $('#channelModal').modal('show');
+            return
         }
+
         var flag1 = categoryvalidation()
     }
     if (title && data != '' && img != '' && (flag == true) && (flag1 == true)) {
         $.ajax({
-            url: "/channel/draftentry/" + eid,
+            url: drafturl,
             type: "POST",
             dataType: "json",
-            data: { "id": entryId, "cname": channelname, "image": img, "title": title, "text": data, "status": 0, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val() },
+            data: { "id": entryId, "cname": channelname, "image": img, "title": title, "text": data, "status": 0, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), "page": pageno, csrf: $("input[name='csrf']").val() },
             success: function (result) {
-
-                console.log("resultiiii", result)
-
 
                 // if (result == true) {
 
-                $('.blog-status-container').show()
+                // $('.blog-status-container').show()
+                // setTimeout(function () {
+                //     $('.blog-status-container').hide();
+                // }, 5000);
+
+                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>entry draft saved successfully</span></div>';
+                $(notify_content).insertBefore(".header-rht");
                 setTimeout(function () {
-                    $('.blog-status-container').hide();
-                }, 5000);
+                    $('.toast-msg').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                }, 5000); // 5000 milliseconds = 5 seconds
 
                 setTimeout(function () {
-                    window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id
+                    // window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id
+                    if (pageno == null) {
+                        window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id
+
+                    } else {
+                        window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id + "?page=" + pageno
+
+                    }
                 }, 2000);
 
-                //   var  route =eid
-                //     console.log(route,"hhhhh")
-                //     if (eid =='newentry'){
-                //         console.log("eiddd")
-                //     bcount = parseInt(blogcount) + 1;
-                //     $('#blogcount').text(bcount + ' Blog Available')
-                //     $('#encount').text(bcount + ' Blog Available')
-                //        }
-                //     $('#chanid').val('')
-                //     $('#spimagehide').attr('src', '')
-                //     $('#titleid').val('')
-                //     $('#text').val('')
-                //     $('#cenimg').show()
-                //     $('#spimagehide').hide()
-                //     $("#spacedel-img").hide();
-                //     ckeditor1.setData('')
 
-                // } else {
-
-                //     notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>"Internal Server Error"</span></div>';
-                //     $(notify_content).insertBefore(".header-rht");
-                //     setTimeout(function () {
-                //         $('.toast-msg').fadeOut('slow', function () {
-                //             $(this).remove();
-                //         });
-                //     }, 5000); // 5000 milliseconds = 5 seconds
-                // }
             }
         })
     }
 })
-
+// return flagg
+// }
 
 
 $('#previewbtn').click(function () {
@@ -726,8 +846,6 @@ $('#previewbtn').click(function () {
     img = $('#spimagehide').attr('src')
 
     title = $('#titleid').val()
-
-    // text =$('#text').val()
 
     var data = ckeditor1.getData();
 
@@ -748,9 +866,11 @@ $('.avaliable-dropdown-item').click(function () {
 
     var count = $(this).find('.para-extralight').text();
 
-    $('.blogDropdown').text(channelname)
+    $('.blogDropdown1').text(channelname).css('color', 'black');
 
-    $('.blogDropdown').append('<img class="blogimg" src="/public/img/blog-drop.svg" alt="">');
+    $('.blogDropdown1').attr('data-bs-original-title', channelname)
+
+    // $('.blogDropdown').append('<img class="blogimg" src="/public/img/blog-drop.svg" alt="">');
 
     $('#blogcount').text(count)
 
@@ -761,24 +881,28 @@ $('.avaliable-dropdown-item').click(function () {
 
 $('#publishbtn').click(function () {
 
-    var url = window.location.href;
+    flagg = true
 
-    console.log("url", url)
+    var url = window.location.href;
 
     var pageurl = window.location.search
     const urlpar = new URLSearchParams(pageurl)
     pageno = urlpar.get('page')
 
-    if (url.includes('editentry')) {
-        // var eid = url.split('/').pop();
+    var homeurl
 
+    if (pageno == null) {
+        homeurl = "/channel/entrylist/"
+    } else {
+        homeurl = "/channel/entrylist/?page=" + pageno;
+    }
+
+    if (url.includes('editentry')) {
         var urlvalue = url.split('?')[0]
         var eid = urlvalue.split('/').pop()
 
-        console.log("id", eid);
     }
     var data = ckeditor1.getData();
-
 
     var entryId = $('#chanid').val()
 
@@ -796,8 +920,11 @@ $('#publishbtn').click(function () {
 
     blogcount = $('#encount').attr('data-id')
 
+    Removeslashcategory()
+
+
     if (title === '' && data === '' && img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.descerr + '</span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descerr + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -806,7 +933,7 @@ $('#publishbtn').click(function () {
         }, 5000); // 5000 milliseconds = 5 seconds
 
     } else if (data === '' && img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.descimgerr + '</span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descimgerr + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -815,15 +942,31 @@ $('#publishbtn').click(function () {
         }, 5000); // 5000 milliseconds = 5 seconds
 
     } else if (img === '') {
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Channell.imgerr + '</span></div>';
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.imgerr + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
                 $(this).remove();
             });
         }, 5000); // 5000 milliseconds = 5 seconds
+    } else if (data === '') {
+
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descriptionentry + '</span></div>';
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.toast-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+
     }
-    if (title !== '' && data !== '' && img !== '') {
+
+    if (title !== '' && data !== '' && img !== '' && entryId == '') {
+
+        $('#channelslct-error').show()
+    }
+    if (title !== '' && data !== '' && img !== '' && entryId !== '') {
         console.log("kkkkk")
         var flag = channelfieldvalidation()
 
@@ -831,13 +974,15 @@ $('#publishbtn').click(function () {
 
         if (flag == false) {
             $('#channelModal').modal('show');
+            return
         }
 
         var flag1 = categoryvalidation()
 
 
     }
-    if (title && data != '' && img != '' && (flag == true) && (flag1 == true)) {
+
+    if (title != '' && data != '' && img != '' && (flag == true) && (flag1 == true)) {
 
         $.ajax({
             url: "/channel/publishentry/" + eid,
@@ -846,28 +991,16 @@ $('#publishbtn').click(function () {
             data: { "id": entryId, "cname": channelname, "image": img, "title": title, "status": 1, "text": data, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val() },
             success: function (result) {
 
-                console.log("result", result)
-                // if (result == 0) {
-
-
-                window.location.href = "/channel/entrylist/?page=" + pageno;
-
-                // }
-
-
+                window.location.href = homeurl;
             }
         })
 
     }
 
+
 })
 
-
-
-
-
-
-//   //EDIT FUNCTION IN ENTRY PAGE//
+//EDIT FUNCTION IN ENTRY PAGE//
 $(document).on('click', '#editbtn', function () {
 
     $('.filter-dropdown-menu ').hide()
@@ -877,9 +1010,13 @@ $(document).on('click', '#editbtn', function () {
 
 function CKEDITORS() {
 
+    var url = $('#urlid').val();
+
+    console.log("urlasas", url)
+
     CKEDITOR.ClassicEditor.create(document.getElementById("text"), {
         toolbar: {
-            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'link', 'code'],
+            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'horizontalLine', 'link', 'code'],
             shouldNotGroupWhenFull: true
         },
         list: {
@@ -900,7 +1037,7 @@ function CKEDITORS() {
                 { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
             ]
         },
-        placeholder: languagedata.Channell.plckeditor,
+        placeholder: languagedata?.Channell?.plckeditor,
         fontFamily: {
             options: [
                 'default',
@@ -993,7 +1130,7 @@ function CKEDITORS() {
                             const formData = new FormData();
                             formData.append('file', file);
                             formData.append('csrf', $("input[name='csrf']").val())
-                            fetch('/channel/imageupload', {
+                            fetch(url + '/channel/imageupload', {
                                 method: 'POST',
                                 body: formData
                             })
@@ -1002,6 +1139,7 @@ function CKEDITORS() {
                                     if (data.success) {
                                         resolve({
                                             default: data.url // URL to the uploaded image
+
                                         });
                                     } else {
                                         reject(data.error);
@@ -1027,15 +1165,8 @@ function CKEDITORS() {
 $(document).on('click', '#categorysave', function () {
     categoryIds = [];
 
-
     categoryvalidation()
 
-    // console.log("flag",flag1)
-
-    // if (flag1==true){
-
-    //     $('#categoryModal').modal('hide');
-    // }
     $('.category-unselect-btn').each(function () {
         var categoryId = $(this).attr('data-id');
         categoryIds.push(categoryId);
@@ -1043,17 +1174,24 @@ $(document).on('click', '#categorysave', function () {
 
     if (categoryIds.length !== 0) {
 
-        notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Channell.categoryerr + '</span></div>';
-        $(notify_content).insertBefore(".header-rht");
-        setTimeout(function () {
-            $('.toast-msg').fadeOut('slow', function () {
-                $(this).remove();
-            });
-        }, 5000); // 5000 milliseconds = 5 seconds
+
+
+        // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata?.Channell?.categoryerr + '</span></div>';
+        // $(notify_content).insertBefore(".header-rht");
+        // setTimeout(function () {
+        //     $('.toast-msg').fadeOut('slow', function () {
+        //         $(this).remove();
+        //     });
+        // }, 5000); // 5000 milliseconds = 5 seconds
         $('#categoryModal').modal('hide');
         $("#category-error").hide()
-    }
 
+        if (flagg == false) {
+            $('#draftbtn').click()
+        } else {
+            $('#publishbtn').click()
+        }
+    }
 
 })
 
@@ -1066,29 +1204,38 @@ $.validator.addMethod("customLength", function (value, element, params) {
 //SEO DETAILS SAVE FUNCTION//
 $(document).on('click', '#seosavebtn', function () {
 
+
+
     seodetails = {}
 
-    //   var flag  = SeoValidation()
     $("#seoform").validate({
         rules: {
             metatitle: {
-                customLength: [1, 60]
+                customLength: [1, 60],
+                titlemethod: true,
+                titlespace: true
             },
             metadesc: {
                 customLength: [1, 150]
-            }
+            },
+
+
+
         },
         messages: {
             metatitle: {
-                customLength: "*" + languagedata.Channell.metatitlemsg
+                customLength: "*" + languagedata?.Channell?.metatitlemsg,
+                titlemethod: "*Please Enter Meta tag title",
+                titlespace: "* " + languagedata.spacergx
             },
             metadesc: {
-                customLength: "*" + languagedata.Channell.metadescmsg
+                customLength: "*" + languagedata?.Channell?.metadescmsg,
+
             }
         }
     });
     var formcheck = $("#seoform").valid();
-    if (formcheck == true) {
+    if ((formcheck == true)) {
         // $('#seoform')[0].submit();
         $('#seoModal').modal('hide');
 
@@ -1101,20 +1248,28 @@ $(document).on('click', '#seosavebtn', function () {
             // seodetails.push({ title: title, desc: desc, keyword: keyword, slug: slug });
             seodetails = { title: title, desc: desc, keyword: keyword, slug: slug }
         }
+
+
         console.log("seodetails", seodetails)
         if (Object.keys(seodetails).length !== 0) {
 
-            notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Channell.seoerr + '</span></div>';
-            $(notify_content).insertBefore(".header-rht");
-            setTimeout(function () {
-                $('.toast-msg').fadeOut('slow', function () {
-                    $(this).remove();
-                });
-            }, 5000); // 5000 milliseconds = 5 seconds
+            // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata?.Channell?.seoerr + '</span></div>';
+            // $(notify_content).insertBefore(".header-rht");
+            // setTimeout(function () {
+            //     $('.toast-msg').fadeOut('slow', function () {
+            //         $(this).remove();
+            //     });
+            // }, 5000); // 5000 milliseconds = 5 seconds
 
+            if (flagg == false) {
+                $('#draftbtn').click()
+            } else {
+                $('#publishbtn').click()
+            }
         }
     }
     else {
+
 
         $('#seoModal').modal('show');
         Validationcheck()
@@ -1130,6 +1285,8 @@ $(document).on('click', '.btn-close', function () {
 })
 
 $(document).ready(function () {
+
+
 
     $('.categorypdiv').each(function () {
 
@@ -1176,16 +1333,29 @@ document.querySelectorAll('.input-group input').forEach(input => {
     });
 });
 
-//**description focus function */
-const Desc = document.getElementById('metadesc');
-const inputGroup = document.querySelectorAll('.input-group');
+document.querySelectorAll('.secid input').forEach(input => {
+    console.log("vvvvv")
 
-Desc.addEventListener('focus', () => {
+    input.addEventListener('focus', (event) => {
+        console.log("focusss")
+        event.target.closest('.input-group').classList.add('input-group-focused');
+    });
 
-    Desc.closest('.input-group').classList.add('input-group-focused');
+    input.addEventListener('blur', (event) => {
+        event.target.closest('.input-group').classList.remove('input-group-focused');
+    });
 });
-Desc.addEventListener('blur', () => {
-    Desc.closest('.input-group').classList.remove('input-group-focused');
+
+//**description focus function */
+const Desci = document.getElementById('metadesc');
+
+
+Desci.addEventListener('focus', () => {
+
+    Desci.closest('.input-group').classList.add('input-group-focused');
+});
+Desci.addEventListener('blur', () => {
+    Desci.closest('.input-group').classList.remove('input-group-focused');
 });
 
 $(document).on('click', '#seocancelbtn', function () {
@@ -1194,30 +1364,71 @@ $(document).on('click', '#seocancelbtn', function () {
     $('#metadesc').val('')
     $('#metakey').val('')
     $('#metaslug').val('')
+    $('#metatitle-error').hide()
+    $('.input-group').removeClass('input-group-error')
+    $('#prefixerr').hide()
+    $('.field').removeClass('error')
 
 })
 
-$(document).ready(function () {
+$(document).on('click', '#seoclose', function () {
 
-    var url = window.location.href;
+    // $('#metatitle').val('')
+    // $('#metadesc').val('')
+    // $('#metakey').val('')
+    // $('#metaslug').val('')
+    $('#metatitle-error').hide()
+    $('.input-group').removeClass('input-group-error')
+    $('#prefixerr').hide()
+    $('.field').removeClass('error')
 
-    var id = url.split('/').pop();
-    console.log("id", id);
-    if (id === 'newentry') {
-        console.log("hhkkkk")
-        var dropdownItems = $('.avaliable-dropdown-item');
-        dropdownItems.eq(0).click();
-    }
-});
+
+})
+
+// $(document).ready(function () {
+
+//     var url = window.location.href;
+
+//     var id = url.split('/').pop();
+//     console.log("id", id);
+//     if (id === 'newentry') {
+//         console.log("hhkkkk")
+//         var dropdownItems = $('.avaliable-dropdown-item');
+//         dropdownItems.eq(0).click();
+//     }
+// });
 
 $(document).on('click', '.avaliable-dropdown-item ', function () {
 
+    console.log("checkss")
+
+    categoryIds = []
+
+    seodetails = {};
+
+    channeldata = []
+
+    // $('.channeltitle1').show()
 
     channelid = $('#chanid').val()
 
-    console.log("jiddd", channelid)
+    // $('#configbtn').attr('href', '/channels/editchannel/' + channelid)
 
-    $('.categorypdiv').hide();
+    chanid = $(this).attr('id')
+
+    if (channelid != '') {
+
+        $('#channelslct-error').hide()
+    }
+
+    $('.avaliable-dropdown-item').removeClass('active')
+
+    if (channelid == chanid) {
+
+        $(this).addClass('active')
+    }
+
+    console.log("jiddd", channelid)
 
     $('.secid').empty();
 
@@ -1225,12 +1436,61 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
         url: "/channel/channelfields/" + channelid,
         type: "GET",
         dataType: "json",
-        data: { "id": channelid, csrf: $("input[name='csrf']").val() },
+        data: { "id": channelid },
         success: function (result) {
             console.log(result, "resultddddd")
             cateogryarr = []
-
             //category section//
+
+            if (result.CategoryName !== null) {
+
+                var div = ""
+
+                for (let y of result.CategoryName) {
+
+                    var categoriess = ""
+
+                    var ids = ""
+
+                    var id = ""
+
+                    div +=
+                        `    <div class="categories-list-child categorypdiv" id="category-">
+                    <div class="choose-cat-list-col" style="display: flex;" data-id=>`
+
+                    for (let x of y.Categories) {
+
+                        div += `<h3 class="para categoryname" data-id="` + x.Id + `" style="font-weight: 400;">  ` + x.Category + `</h3>
+                          
+                            <h3 class="para">&nbsp;/&nbsp;</h3>`
+
+                        categoriess += x.Category + "~"
+
+                        ids += x.Id
+
+                        id = x.Id
+                    }
+
+                    div += `</div>
+                    <a href="javascript:void(0)" class="category-select-btn" data-id="`+ id + `" data-categoryid="` + ids + `">
+                        <img src="/public/img/add-category.svg" alt="" />
+                    </a>
+                    <p class="forsearch" style="display: none;">`+ categoriess + `</p>
+                </div>
+                  
+                <div class="noData-foundWrapper" id="categorynodatafound" style="display: none;">
+    
+                <div class="empty-folder">
+                    <img src="/public/img/folder-sh.svg" alt="">
+                    <img src="/public/img/shadow.svg" alt="">
+                </div>
+                <h1 class="heading">Oops No Data Found</h1>
+                </div>
+                    
+                  `
+                }
+                $('.slist').html(div);
+            }
 
             if (result.SelectedCategory !== null) {
                 result.SelectedCategory.forEach(function (category) {
@@ -1238,19 +1498,6 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                     newcategory = category.split(',').join('');
 
                     cateogryarr.push(newcategory)
-
-
-
-                })
-            }
-            console.log(cateogryarr, "arrayyyyy")
-
-            if (cateogryarr !== null) {
-
-                cateogryarr.forEach(function (category) {
-
-                    $('#category-' + category).show();
-
                 })
             }
 
@@ -1268,16 +1515,15 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
             $('#avacatcount').text(count);
 
-            // var count = $('.categorypdiv:visible').length;
-            // console.log("count",count)
-            // $('#avacatcount').text(count);
+
+
 
             //channel field section//
 
             if (result.Section != null) {
                 result.Section.forEach(function (section) {
 
-                    $('.secid').append(`<div id="${section.SectionId}"><h6 class="sechead">${section.SectionName}</h6></div>`)
+                    $('.secid').append(`<div style="margin-bottom:10px" id="${section.SectionId}"><h6 class="sechead" style="margin-bottom:10px">${section.SectionName}</h6></div>`)
 
                 })
                 if (result.FieldValue != null) {
@@ -1286,7 +1532,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
                         if (fieldValue.MasterFieldId == 4) {
                             $(`#${fieldValue.SectionId}`).append(` 
-                    <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
+                    <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
                     <div class="ig-row date-input">
@@ -1294,7 +1540,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                     
                     
                     </div>
-                    <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                    <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                   </div>
                 `);
                         }
@@ -1302,18 +1548,18 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                         if (fieldValue.MasterFieldId == 5) {
                             $(`#${fieldValue.SectionId}`).append(` 
             
-            <div class="input-group  user-drop-down getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}" id="dropoption" style="margin-bottom: 20px">
+            <div class="input-group  user-drop-down getvalue" data-id="${fieldValue.Mandatory}"  id="dropoption" style="margin-bottom: 20px">
         
                                         <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
         
                                         <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                        option
+                                        Option
                                         </a>
                                         <div class="ig-row">
                                         <input type="hidden" class="fieldid" id="${fieldValue.FieldId}"  value=""  >
                                         </div>
-                                        <label class="error" id="opterr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                                        <label class="error manerr" id="opterr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
         
                                         <div class="dropdown-menu" id="drop${fieldValue.FieldId}" aria-labelledby="triggerId">
                 
@@ -1326,7 +1572,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
                         if (fieldValue.MasterFieldId == 6) {
                             $(`#${fieldValue.SectionId}`).append(` 
-                    <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
+                    <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" >
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
                     <div class="ig-row date-input">
@@ -1334,20 +1580,20 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                      
                     
                     </div>
-                    <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                    <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                   </div>
                 `);
                         }
                         if (fieldValue.MasterFieldId == 9) {
                             $(`#${fieldValue.SectionId}`).append(` 
-                <div class="input-group getvalue" id="radiogrb" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
+                <div class="input-group getvalue" id="radiogrb" data-id="${fieldValue.Mandatory}" >
                 <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
                 <div class="ig-row">
                 <input type="hidden" class="radioval" value="">
                 <div class="button-col entry-radio-row flexx" id="radio${fieldValue.FieldId}">
               
             </div>
-            <label class="error" id="radioerr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+            <label class="error manerr" id="radioerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
             </div>
             </div>
             
@@ -1360,9 +1606,10 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 <label  class="input-label"  data-id="${fieldValue.FieldId}" id="textarealabel" for="">${fieldValue.FieldName}</label>
              
                 <div class="ig-row">
-                  <textarea placeholder="`+ languagedata.Channell.pltexthere + `" id="chtextarea"></textarea>
+                  <textarea placeholder="`+ languagedata?.Channell?.pltexthere + `" id="chtextarea"></textarea>
                 </div>
-                <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
               </div>
                 `);
                         }
@@ -1371,9 +1618,9 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}"  data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
-                        <input type="text"  placeholder="`+ languagedata.Channell.pltexthere + `" id="chtextbox" />
+                        <input type="text"  placeholder="`+ languagedata?.Channell?.pltexthere + `" id="chtextbox" />
                       </div>
-                      <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                      <label class="error manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
 
                       <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
                     </div>
@@ -1384,27 +1631,28 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
-                        <input type="text" placeholder="`+ languagedata.Channell.pltexthere + `"  />
+                        <input type="text" placeholder="`+ languagedata?.Channell?.pltexthere + `"  />
                       </div>
-                      <label class="error" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                      <label class="error  manerr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                      <label class="error cerr" style="display: none">* Please Enter ${fieldValue.CharacterAllowed} character only</label>
                     </div>
                 `);
                         }
 
                         if (fieldValue.MasterFieldId == 10) {
                             $(`#${fieldValue.SectionId}`).append(`
-               <div class="input-group  user-drop-down getvalue" id="checkdrop" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}" style="margin-bottom: 20px">
+               <div class="input-group  user-drop-down getvalue" id="checkdrop" data-id="${fieldValue.Mandatory}"  style="margin-bottom: 20px">
         
                                         <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
         
                                         <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                        option
+                                        Option
                                         </a>
                                       
                                         <input type="hidden" class="checkfieldid" id="${fieldValue.FieldId}"  value=""  >
                                       
-                                        <label class="error" id="opterrr" style="display: none">*`+ languagedata.Channell.errmsg + `</label>
+                                        <label class="error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                                         <div class="dropdown-menu additional-entry-drop" id="check${fieldValue.FieldId}" aria-labelledby="triggerId">
                 
                                             
@@ -1461,7 +1709,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
 $(document).on('click', '#channelfieldsave', function () {
 
-    channeldata = [];
+    // channeldata = [];
 
     var flag = channelfieldvalidation()
 
@@ -1492,26 +1740,38 @@ $(document).on('click', '#channelfieldsave', function () {
 
     if ((channeldata.length !== 0) && (flag == true)) {
 
-        notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span> ' + languagedata.Channell.saveerr + ' </span></div>';
-        $(notify_content).insertBefore(".header-rht");
-        setTimeout(function () {
-            $('.toast-msg').fadeOut('slow', function () {
-                $(this).remove();
-            });
-        }, 5000); // 5000 milliseconds = 5 seconds
+        // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span> ' + languagedata?.Channell?.saveerr + ' </span></div>';
+        // $(notify_content).insertBefore(".header-rht");
+        // setTimeout(function () {
+        //     $('.toast-msg').fadeOut('slow', function () {
+        //         $(this).remove();
+        //     });
+        // }, 5000); // 5000 milliseconds = 5 seconds
+
+        if (flagg == false) {
+            $('#draftbtn').click()
+        } else {
+            $('#publishbtn').click()
+        }
+
+
+
 
     }
 
     if (flag == true) {
         $('#channelModal').modal('hide');
     }
-
 })
 
 $(document).on('click', '#addcategory', function () {
+
+
+    channelid = $('#chanid').val()
+
     title = $('#titleid').val()
     if (title == '') {
-        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata.Channell.titleerr + `</span></div>`;
+        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata?.Channell?.titleerr + `</span></div>`;
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -1520,23 +1780,67 @@ $(document).on('click', '#addcategory', function () {
         }, 5000); // 5000 milliseconds = 5 seconds
 
     }
-    else {
+    else if ((title != '') && (channelid == '')) {
+
+        $('#channelslct-error').show()
+
+    } else {
 
         $('#categoryModal').modal('show')
     }
+
+
+    // categoryIds = catid.split(',');
+
+    console.log("categorids", categoryIds)
+    var catselect = document.querySelectorAll('.categories-list-child');
+    console.log(catselect, "catelist");
+    if (Channelid == channelid) {
+        categoryIds.forEach(function (categoryId) {
+            var matchedH3 = document.querySelector('a[data-id="' + categoryId + '"]');
+            console.log("match", matchedH3);
+
+            matchedH3.click()
+
+        });
+    }
+    Removeslashcategory()
+
+
 })
 
 $(document).on('click', '#channelfield', function () {
+
+
+    if (newchanneldata != '') {
+        bindchanneldata()
+    }
+
+
+    channelid = $('#chanid').val()
+
     title = $('#titleid').val()
 
     if (title == '') {
-        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata.Channell.titleerr + `</span></div>`;
+        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata?.Channell?.titleerr + `</span></div>`;
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
                 $(this).remove();
             });
         }, 5000); // 5000 milliseconds = 5 seconds
+
+    } else if ((title != '') && (channelid == '')) {
+
+        // console.log("alertt")
+        // notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata?.Channell?.channelselect+ `</span></div>`;
+        // $(notify_content).insertBefore(".header-rht");
+        // setTimeout(function () {
+        //     $('.toast-msg').fadeOut('slow', function () {
+        //         $(this).remove();
+        //     });
+        // }, 5000); // 5000 milliseconds = 5 seconds
+        $('#channelslct-error').show()
 
     }
     else {
@@ -1548,7 +1852,7 @@ $(document).on('click', '#seo', function () {
     title = $('#titleid').val()
     if (title == '') {
 
-        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata.Channell.titleerr + `</span></div>`;
+        notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>` + languagedata?.Channell?.titleerr + `</span></div>`;
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
             $('.toast-msg').fadeOut('slow', function () {
@@ -1562,13 +1866,157 @@ $(document).on('click', '#seo', function () {
     }
 })
 
+
 $(document).on('click', '#configbtn', function () {
 
+    $('#Sortsection').html("");
 
     console.log("congiggg")
-    channelid = $('#chanid').val()
+    id = $('#chanid').val()
 
-    $(this).attr('href', '/channels/editchannel/' + channelid)
+    // $('#ChannelEditmodal').modal('show');
+    $.ajax({
+        url: '/channels/getfields',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "id": id,
+            csrf: $("input[name='csrf']").val()
+        },
+        success: function (data) {
+
+            console.log("dataaaa", data)
+
+            sections = data.Section
+
+            if(data.FieldValue !=null){
+
+                fiedlvalue = data.FieldValue
+
+            }else{
+
+                fiedlvalue =[]
+            }
+
+
+            if (data.SelectedCategory != null) {
+
+                SelectedCategoryValue = data.SelectedCategory
+            }
+
+            var sectionstr = ``
+
+            for (let x of data.Section) {
+
+                sectionstr += `<div class="section-fields-content drop-able ui-droppable" style="margin-bottom: 10px;" id="section-` + x['SectionId'] + `` + x['SectionNewId'] + `" data-id ="` + x['SectionId'] + `"  data-newid="` + x['SectionNewId'] + `" data-orderindex="` + x['OrderIndex'] + `">
+            <div class="section-class">
+              <input type="text" class="sectionname" placeholder="" style="font-size:0.825rem" value="`+ x['SectionName'] + `">
+              <button class="sectiondel" style="margin-right: 11px;"><img src="/public/img/bin.svg"></button>   
+            </div>
+          </div>`
+
+            }
+
+            $('#Sortsection').append(sectionstr);
+
+            for (let x of data.Section) {
+
+                SortableSection(x['SectionId'], x['SectionNewId'])
+
+            }
+if(data.FieldValue !=null){
+
+
+            for (let [index, x] of data.FieldValue.entries()) {
+
+                $('.section-fields-content').each(function () {
+
+                    if ($(this).attr('data-id') == x['SectionId'] && $(this).attr('data-newid') == x['SectionNewId']) {
+
+                        var fieldstr = `<div class="section-fields-content-child fieldapp" data-masterfieldid=` + x.MasterFieldId + ` data-newfieldid=` + x.NewFieldId + ` data-fieldid=` + x.FieldId + ` data-orderindex=` + x.OrderIndex + ` id=fieldapp` + x.FieldId + `` + x.NewFieldId + `>
+                <input type="hidden" class="orderval" value="">
+                    <div class="img-div">
+                        <img src="`+ x.IconPath + `" alt="">
+                    </div>
+                    <h3 class="heading-three" id=fieldtitle`+ x.FieldId + `` + x.NewFieldId + `>` + x.FieldName + `</h3>
+                    <a href="javascript:void(0)" class="field-delete delete" data-id="`+ id + `" >
+                        <img src="/public/img/bin.svg" alt="">
+                    </a>
+                </div> `
+
+                        $(this).append(fieldstr);
+
+                    }
+
+                })        
+                if (fiedlvalue[index].OptionValue == null) {
+
+                    fiedlvalue[index].OptionValue = []
+
+                }
+
+
+            }
+        }
+            if (sections.length == 0) {
+
+                var sectionobj = SectionObjectCreate()
+
+                sectionobj.SectionName = "New Section"
+                sections.push(sectionobj)
+
+                $("#Sortsection").append(`<div class="section-fields-content drop-able active ui-droppable" style="margin-bottom: 10px;" id="section-0` + sectionid + `" data-newid=${sectionid} data-id=0 data-orderindex=${orderindex}>
+          <div class="section-class" >
+            <input type="text" class="sectionname" placeholder="" style="font-size:0.825rem" value="New Section"/>
+            <button class="sectiondel" style="margin-right: 11px" ><img src="/public/img/bin.svg"></button>   
+          </div>
+        </div>`)
+
+                sectionid++;
+
+                orderindex++;
+
+            }
+
+
+            // drop
+            $(".drop-able").droppable({
+                tolerance: 'pointer',
+
+                drop: function (ev, ui) {
+
+                    console.log("draggggggg")
+                    var id = ui.draggable[0]['dataset'].id;
+                    var name = ui.draggable.text().trim().split("\n");
+                    var img = ui.draggable.find("img").attr("src");
+                    var newsection = ui.draggable[0]['id']
+                    console.log("newsectiondrop1111", id, name, img, newsection)
+                    if (newsection != "newsection") {
+                        $(this).append(`
+                    <div class="section-fields-content-child fieldapp" data-masterfieldid=`+ id + ` data-newfieldid=` + newFieldid + ` data-fieldid=` + fielid + ` data-orderindex=` + orderindex + ` id=fieldapp` + fielid + `` + newFieldid + `>
+                    <input type="hidden" class="orderval" value="">
+                        <div class="img-div">
+                            <img src="`+ img + `" alt="">
+                        </div>
+                        <h3 class="heading-three" id=fieldtitle`+ fielid + `` + newFieldid + `>` + name[0] + `</h3>
+                        <a href="javascript:void(0)" class="field-delete delete" data-id="`+ id + `" >
+                            <img src="/public/img/bin.svg" alt="">
+                        </a>
+                    </div>    
+                `)
+
+
+                        newFieldid = newFieldid + 1;
+                        orderindex = orderindex + 1;
+                    }
+
+                },
+            });
+
+
+        }
+    })
 
 })
 
@@ -1577,24 +2025,24 @@ function channelfieldvalidation() {
     var flag = true;
     $('.getvalue').each(function () {
 
+        charallowed = $(this).data('char')
 
+        console.log(charallowed, "yyyy")
         if ((($(this).find('input').val() === '') && ($(this).data('id') == 1)) || (($(this).find('textarea').val() === '') && ($(this).data('id') == 1))) {
 
             $(this).addClass('input-group-error');
-            $(this).find('.error').show()
+            $(this).find('.manerr').show()
             flag = false
         }
-
-        // charallowed = $(this).data('char')
-
-        // console.log(charallowed, "yyyy")
-        // if (charallowed < $(this).find('input').val().maxLength) {
-
-        //     console.log("gggg")
-        //     $(this).addClass('input-group-error');
-        //     $(this).find('.cerr').show()
-        //     flag = false
-        // }
+        if (($(this).find('input,textarea').val() !== '') && charallowed != 0) {
+            console.log("dfdfdfdff")
+            if ($(this).find('input,textarea').val().length > charallowed) {
+                console.log("gggg")
+                $(this).addClass('input-group-error');
+                $(this).find('.cerr').show()
+                flag = false
+            }
+        }
     })
     return flag;
 }
@@ -1611,7 +2059,7 @@ function channelfieldkeyup() {
             } else {
 
                 $(this).closest('.input-group').addClass('input-group-error');
-                $(this).parent('.ig-row').siblings('.error').show();
+                $(this).parent('.ig-row').siblings('.manerr').show();
 
 
             }
@@ -1625,7 +2073,7 @@ function channelfieldkeyup() {
             } else {
 
                 $(this).closest('.input-group').addClass('input-group-error');
-                $(this).parent('.ig-row').siblings('.error').show();
+                $(this).parent('.ig-row').siblings('.manerr').show();
 
 
             }
@@ -1669,6 +2117,33 @@ function Validationcheck() {
 
 }
 
+function Seovalidationspce() {
+    var flag = true
+
+    // $(document).on('keyup','#metatitle',function(){
+    var value = $('#metatitle').val();
+
+    if (value[0] === ' ') {
+
+        console.log("sddddddd")
+        $('#prefixerr').show();
+        $('#prefixerr').text("No Space in Prefix ");
+        $('#grbname').addClass('input-group-error');
+        flag = false;
+
+
+    } else {
+        $('#prefixerr').hide();
+        $('#grbname').removeClass('input-group-error');
+        flag = true;
+
+    }
+
+
+    // });
+
+    return flag;
+}
 $(document).on('click', '#channelfieldcancel', function () {
     $('.getvalue').each(function () {
         $(this).find('input,textarea,.fieldid').val('')
@@ -1683,7 +2158,9 @@ $(document).on('click', '#channelfieldcancel', function () {
 
 $(document).on('click', '#categorycancel', function () {
 
-    $('.selectedcategorydiv').remove()
+    // $('.selectedcategorydiv').remove()
+    $('.category-unselect-btn').click()
+
 })
 
 
@@ -1800,3 +2277,476 @@ $(document).on('click', '.category-select-btn', function () {
     $("#category-error").hide()
 
 })
+
+$(document).on('click', '#cateclose', function () {
+
+    $('.category-unselect-btn').click()
+
+})
+
+
+const averageWordWidth = 15;
+
+function adjustRows() {
+    var textarea = document.getElementById('titleid');
+    textarea.style.height = '100% ';
+    // console.log(textarea,"jjjj")
+    var textareaWidth = textarea.clientWidth;
+    var averageWordsPerLine = Math.floor(textareaWidth / averageWordWidth);
+    var lineCount = Math.ceil(textarea.value.length / averageWordsPerLine);
+    textarea.rows = lineCount > 1 ? lineCount : 2;
+}
+
+
+
+$.validator.addMethod("titlemethod", function (value) {
+
+    var flag = true;
+
+    if (($('#metatitle').val() == '') && ($('#metadesc').val() != '' || $('#metakey').val() != '' || $('#metaslug').val() != '')) {
+        flag = false;
+    }
+
+    return flag;
+});
+
+$.validator.addMethod('titlespace', function () {
+
+
+    var value = $('#metatitle').val();
+
+    var flag = true;
+
+    if ($('#metatitle').val() !== '' && (value[0] === ' ')) {
+        flag = false;
+    }
+    return flag;
+})
+
+$(document).on('keyup', '#titleid', function () {
+
+    if ($('#titleid').val() == '') {
+
+        var textarea = document.getElementById('titleid');
+        textarea.style.height = '3rem ';
+
+    }
+
+})
+
+
+function Removeslashcategory() {
+
+    $('.categorypdiv').each(function () {
+
+        var length = $(this).find('.categoryname').length - 1
+
+        var name = $(this).find('.categoryname')
+
+        $(this).find('.categoryname').each(function (index) {
+
+            if (length == index) {
+
+                $(this).next().remove();
+            }
+
+        })
+
+    })
+
+    $('.selected_category').each(function () {
+
+        var length = $(this).find('.categoryname').length - 1
+
+        $(this).find('.categoryname').each(function (index) {
+
+            if (length == index) {
+
+                $(this).next().remove();
+            }
+
+        })
+
+    })
+}
+
+
+
+$(document).on('focus', '.getvalue input', function () {
+
+    $(this).parents('.getvalue').addClass("input-group-focused");
+})
+$(document).on('blur', '.getvalue input', function () {
+
+    $(this).parents('.getvalue').removeClass("input-group-focused");
+})
+$(document).on('focus', '.getvalue textarea', function () {
+
+    $(this).parents('.getvalue').addClass("input-group-focused");
+})
+$(document).on('blur', '.getvalue textarea', function () {
+
+    $(this).parents('.getvalue').removeClass("input-group-focused");
+})
+
+
+$(document).on('click', '#uptchannelfield', function () {
+  
+
+     if(fiedlvalue ==''){
+
+        $('.fieldapp').each(function () {
+
+        var obj = CreatePropertiesObjec()
+
+        obj.MasterFieldId = parseInt($(this).attr('data-masterfieldid'))
+
+        obj.NewFieldId = parseInt($(this).attr('data-newfieldid'))
+
+        obj.FieldName = $(this).children('.heading-three').text();
+
+        obj.IconPath = $(this).children('.img-div').children('img').attr('src')
+
+        obj.SectionId = parseInt($(this).parent('.section-fields-content').attr('data-id'));
+
+        obj.SectionNewId = parseInt($(this).parent('.section-fields-content').attr('data-newid'));
+
+        obj.SectionName = $(this).parent('.section-fields-content').children('.section-class').children('input').val();
+
+        fiedlvalue.push(obj)
+
+        console.log(fiedlvalue,"arrayfield")
+    })
+}
+
+    $('.fieldapp').each(function () {
+
+    
+
+        const index = fiedlvalue.findIndex(obj => {
+
+            return obj.FieldId == $(this).attr('data-fieldid') && obj.NewFieldId == $(this).attr('data-newfieldid');
+
+        });       
+
+        if (index < 0) {
+
+            var obj = CreatePropertiesObjec()
+
+            obj.MasterFieldId = parseInt($(this).attr('data-masterfieldid'))
+
+            obj.NewFieldId = parseInt($(this).attr('data-newfieldid'))
+
+            obj.FieldName = $(this).children('.heading-three').text();
+
+            obj.IconPath = $(this).children('.img-div').children('img').attr('src')
+
+            obj.SectionId = parseInt($(this).parent('.section-fields-content').attr('data-id'));
+
+            obj.SectionNewId = parseInt($(this).parent('.section-fields-content').attr('data-newid'));
+
+            obj.SectionName = $(this).parent('.section-fields-content').children('.section-class').children('input').val();
+
+            fiedlvalue.push(obj)
+        }
+
+    })
+
+    SortFieldsandSection()
+
+    flg = FieldValidation1()
+
+    console.log("flg==", flg);
+
+    if (!flg) {
+
+        return false
+    }
+
+
+    //   var name = $('#channelname').val();
+
+    //   var desc = $('#channeldesc').val();
+
+    $.ajax({
+
+        url: '/channels/Updatechannelfields',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "id": $("#chanid").val(),
+
+            "sections": JSON.stringify({ sections }),
+            "deletesections": JSON.stringify({ deletesecion }),
+            "deletefields": JSON.stringify({ deletefields }),
+            "deleteoptions": JSON.stringify({ deleteoption }),
+            "fiedlvalue": JSON.stringify({ fiedlvalue }),
+
+            csrf: $("input[name='csrf']").val()
+        },
+        success: function (data) {
+
+            if (data == true) {
+
+                $('#ChannelEditmodal').modal('hide')
+
+                // $('.avaliable-dropdown-item.active').click()
+                $('.avaliable-dropdown-item').each(function () {
+                    console.log("dropdown")
+                    if ($(this).attr('id') === $('#chanid').val()) {
+                        $(this).click();
+                    }
+                });
+
+
+                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata?.Toast?.Channelupt + '</span></div>';
+                $(notify_content).insertBefore(".header-rht");
+                setTimeout(function () {
+                    $('.toast-msg').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                }, 5000); // 5000 milliseconds = 5 seconds
+
+            }
+            else {
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+            // window.location.href = "/channels/"
+
+        }
+    })
+
+
+
+
+
+})
+
+
+$(document).on('click', '#Check2', function () {
+
+    console.log("checked")
+
+    if ($(this).is(':checked')) {
+
+        $(this).prop('checked', true);
+
+    } else {
+
+        $(this).prop('checked', false);
+
+    }
+
+    var fieldid = parseInt($('#fieldid').attr('data-fieldid'));
+
+    var newfieldid = parseInt($('#fieldid').attr('data-newfieldid'));
+
+    const index = fiedlvalue.findIndex(obj => {
+
+        return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
+
+    });
+
+    console.log(index, $(this).is(':checked'));
+
+    if (fiedlvalue.length == 0 || index < 0) {
+
+        const obj = CreatePropertiesObjec()
+
+        obj.MasterFieldId = parseInt($('#fieldid').attr('data-masterfieldid'));
+
+        fiedlvalue.push(obj)
+
+    } else {
+
+        fiedlvalue[index].Mandatory = $(this).is(':checked') == true ? 1 : 0;
+
+    }
+
+    console.log(fiedlvalue[index], "mandatory")
+
+})
+
+
+
+
+$(document).on('click', ".propdrop", function () {
+
+    console.log("dateformatsssssssss")
+
+    var value = $(this).parents('.dropdown-menu').siblings('.fidvalinput').val()
+
+    if (value != "") {
+
+        $(this).parents('.dropdown-menu').siblings('label.error').hide();
+
+        $(this).parents('.input-group').removeClass('input-group-error');
+
+
+    }
+
+
+})
+
+
+function bindchanneldata() {
+    console.log(result1, "log")
+
+    $('.getvalue').each(function () {
+
+        var id = $(this).find('.input-label').attr('data-id')
+
+        const changedataindex = newchanneldata.findIndex(obj => {
+
+            return obj.fid == id
+
+        })
+
+        console.log(newchanneldata[changedataindex], newchanneldata);
+
+        if (changedataindex >= 0) {
+
+
+            $(this).find('.input-label').siblings('.ig-row').children('input').val(newchanneldata[changedataindex].value)
+        }
+
+    })
+
+}
+function FieldValidation1() {
+
+    console.log(fiedlvalue, "validation")
+
+    // if (fiedlvalue.length == 0) {
+
+    //   notify_content = `<div class="toast-msg dang-red" ><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span> ` + languagedata?.Channell?.fieldselcterr + `</span></div>`;
+    //   $(notify_content).insertBefore("#ChannelEditmodal .modal-content");
+    //   setTimeout(function () {
+    //     $('.toast-msg').fadeOut('slow', function () {
+    //       $(this).remove();
+    //     });
+    //   }, 5000); // 5000 milliseconds = 5 seconds
+
+    //   return false
+
+    // }
+
+    if (fiedlvalue != null) {
+
+        for (let x of fiedlvalue) {
+
+            if (x['FieldName'] == "") {
+
+                $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                $('#fieldname-error').show();
+
+                $('#fieldname-error').parents('.input-group').addClass('input-group-error')
+
+                console.log("fieldname empty");
+
+                return false
+
+            }
+
+            if (x["MasterFieldId"] == 3) {
+
+                if (x['Url'] == "") {
+
+                    $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                    $('#url-error').show();
+
+                    $('#url-error').parents('.input-group').addClass('input-group-error')
+
+                    console.log("url empty");
+
+                    return false
+
+                }
+
+
+
+            } else if (x["MasterFieldId"] == 4) {
+
+                var flg = true
+                var flg2 = true
+
+                if (x['DateFormat'] == "") {
+
+                    $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                    $('#date-error').show();
+
+                    $('#date-error').parent('.input-group').addClass('input-group-error')
+
+                    console.log("dateformat empty");
+
+                    flg = false
+
+                }
+
+                if (x['TimeFormat'] == "") {
+
+                    $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                    console.log("timeformat empty");
+
+                    $('#time-error').show();
+
+                    $('#time-error').parents('.input-group').addClass('input-group-error')
+
+                    flg2 = false
+                }
+
+                if (!flg || !flg2) {
+
+                    console.log("11");
+
+                    return false
+
+                }
+
+
+            } else if (x["MasterFieldId"] == 5 || x["MasterFieldId"] == 9 || x["MasterFieldId"] == 10) {
+
+                if (x['OptionValue'].length == 0) {
+
+                    $('#select-error').show();
+
+                    $('#select-error').parents('.input-group').addClass('input-group-error')
+
+                    $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                    console.log("options empty");
+
+                    return false
+
+                }
+
+            } else if (x["MasterFieldId"] == 6) {
+
+                if (x['DateFormat'] == "") {
+
+                    $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
+
+                    $('#date-error').parents('.input-group').addClass('input-group-error')
+
+                    $('#date-error').show();
+
+                    console.log("dateformat empty");
+
+                    return false
+
+                }
+
+            }
+
+        }
+
+    }
+    return true
+}

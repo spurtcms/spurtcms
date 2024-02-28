@@ -2,9 +2,9 @@ var languagedata
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
+    var languagepath = $('.language-group>button').attr('data-path')
   
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
@@ -121,13 +121,20 @@ $(document).on("click", "#filterformsubmit", function () {
 })
 
 $(document).on('click', '#delete-btn', function () {
+   
+    var categoryId = $(this).attr("data-id")
+    $("#content").text(languagedata.Categoryy.delcatgrp)
     var url=window.location.search
     const urlpar= new URLSearchParams(url)
     pageno = urlpar.get('page')
-    var categoryId = $(this).attr("data-id")
-    console.log("categoryId",categoryId);
-    $("#content").text(languagedata.Categoryy.delcatgrp)
-    $('#delid').parent('#delete').attr('href', "/categories/deletecategory/" + categoryId);
+
+    if (pageno == null) {
+        $('#delid').parent('#delete').attr('href', "/categories/deletecategory/" + categoryId);
+
+    } else {
+        $('#delid').parent('#delete').attr('href', "/categories/deletecategory/" + categoryId + "?page=" +pageno);
+
+    }
     $(".deltitle").text(languagedata.Categoryy.delgrptitle)
     $('.delname').text($(this).parents('tr').find('td:eq(0)').text())
 
@@ -255,16 +262,17 @@ $("#searchforminclist").keyup(function(event){
     }
    
 })
+
+// description focus 
 const GroupDesc = document.getElementById('category_desc');
-console.log("des",GroupDesc)
 const inputGroup = document.querySelectorAll('.input-group');
 
 GroupDesc.addEventListener('focus', () => {
 
-  GroupDesc.closest('.input-group').classList.add('focus');
+  GroupDesc.closest('.input-group').classList.add('input-group-focused');
 });
 GroupDesc.addEventListener('blur', () => {
-  GroupDesc.closest('.input-group').classList.remove('focus');
+  GroupDesc.closest('.input-group').classList.remove('input-group-focused');
 });
 
 $('#save').click(function(){
@@ -298,7 +306,9 @@ $('#save').click(function(){
             },
             category_desc: {
                 required: true,
-                // categorys_desc: true
+                // categorys_desc: true,
+                maxlength: 250,
+                space :true
             }
         },
         messages: {
@@ -309,6 +319,8 @@ $('#save').click(function(){
             },
             category_desc: {
                 required: "* " + languagedata.Categoryy.catgrpdescvalid,
+                maxlength: "* "+languagedata?.Permission?.descriptionchat
+
             },
         }
     });
@@ -360,6 +372,9 @@ $('#update-btn').click(function(){
             category_desc: {
                 required: true,
                 // categorys_desc: true
+                maxlength: 250,
+                space :true
+
             }
         },
         messages: {
@@ -371,6 +386,8 @@ $('#update-btn').click(function(){
             },
             category_desc: {
                 required: "* " + languagedata.Categoryy.catgrpdescvalid,
+                maxlength: "* "+languagedata?.Permission?.descriptionchat
+
             },
         }
     });
@@ -380,7 +397,6 @@ $('#update-btn').click(function(){
         category_id= $("#category_id").val()
         value = $("#category_name").val()
 
-        console.log("values" , category_id,value);
         $.ajax({
             url:"/categories/checkcategoryname",
             type:"POST",
@@ -390,7 +406,6 @@ $('#update-btn').click(function(){
             caches:false,
             success: function (data) {
 
-              console.log("data",data);
                 if (data){
                     $('#category_form')[0].submit();
 
@@ -434,13 +449,12 @@ $(document).on('click', '#back',function(){
     $('#catname').removeClass('input-group-error')
     $('#catdes').removeClass('input-group-error')
 })
-
+// Search return home page
 $(document).on('keyup','.search',function(){
 
     if($('.search').val()===""){
-        console.log("check")
         window.location.href ="/categories"
         
     }
-  
-  })
+
+})

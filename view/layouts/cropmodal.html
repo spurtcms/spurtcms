@@ -3,9 +3,9 @@
 
 <!-- Crop Modal -->
 <div class="modal fade  cropImagemodal" id="changepicModal" tabindex="-1" role="dialog"
-  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+    <div class="modal-content banner_crop">
       <div class="admin-header">
         <h3>{{$Translate.Cropimage}} <!-- <span>(Supported Formats: .jpeg &amp; .png; Preferred Dimension: 96 x 96)</span> --></h3>
         <p>{{$Translate.Cropimgdesc}}</p>
@@ -14,29 +14,38 @@
           <img id="crop-cancel" src="/public/img/modal-close.svg" alt="">
         </button>
       </div>
-      <div class="admincropimg-wrap flexx">
-        <div class="admincropimg-left">
-          <!-- <div class="admincropping-fade"> -->
-            <div id="crop-container"></div>
-            <div id="crop-container1" style="display: none;"></div>
-          <!-- </div> -->
+      <div class="admincropimg-wrap flexx profile-cropimg">
+        <div class="admincropimg-row">
+          <div class="admincropimg-left">
+            <!-- <div class="admincropping-fade"> -->
+              <div id="crop-container"></div>
+              <div id="crop-container1" style="display: none;"></div>
+            <!-- </div> -->
+          </div>
+          <div class="admincropimg-btns-rht flexx">
+            <button class="portrait-btn"></button>
+            <button class="square-btn"></button>
+            <button class="landscape-btn active"></button>
+          </div>
         </div>
-        <div class="admincropimg-right">
+
+        <div class="admincropimg-right cropmodal-zoom">
           <div class="admincropimg-rht-preview">
-            <div id="zoom-div" class="drag-progress">
-              <span class="cropadds">{{$Translate.Zoom}}</span><br>
+            <div id="zoom-div" class="drag-progress cpzr-col">
+              <span class="cropadds"> <img src="/public/img/zoom.svg" alt=""> {{$Translate.Zoom}}</span>
             </div>
-            <div id="rotate-div" style="margin-top: 10px;" class="drag-progress">
-              <span class="cropadds">{{$Translate.Rotate}}</span></br>
+            <div id="rotate-div" class="drag-progress cpzr-col">
+              <span class="cropadds"> <img src="/public/img/rotate.svg" alt=""> {{$Translate.Rotate}}</span>
               <input type="range" id="rotateSlider" min="0" max="180" step="1" value="0">
             </div>
-          </div>
-          <div class="save-cancel flexx">
-            <button class="button-reg save btn-md" id="crop-button">{{$Translate.Crop}}</button>
-            <button class="button-reg cancel btn-md" id="close">{{$Translate.Cancel}}</button>
-          </div>
+          </div>          
         </div>
-        
+
+        <div class="save-cancel cropmodal-save flexx">
+          <button class="button-reg save btn-md" id="crop-button">Save</button>
+          <!-- <button class="button-reg save btn-md" id="crop-button">{{$Translate.Crop}}</button> -->
+          <!-- <button class="button-reg cancel btn-md" id="close">{{$Translate.Cancel}}</button> -->
+        </div>
       </div>
     </div>
   </div>

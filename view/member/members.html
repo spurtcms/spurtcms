@@ -6,27 +6,7 @@
 {{$TEXTCOLOR := ""}}
 {{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
+
 
 <div class="page-wrapper">
 
@@ -38,28 +18,31 @@
         <div class="tablePagination-wrapper member-tablePagination-wrapper">
             <div class="table-responsive entries-table">
                 <table class="table">
-                    <caption class="table-caption">
+                    <caption class="table-caption" style="padding-left: 0px;">
                         <div class="caption-flexx">
                             <p class="para">
-                                <span class="para">{{.Count}}</span>
-                                {{if gt .Count 1}}{{$Translate.Memberss.Members}}{{else}}{{$Translate.Memberss.Member}}{{end}} {{$Translate.Available}}
+
+                                {{$Translate.Total}} {{ if gt .Count 1}}   {{$Translate.Memberss.Members}} : {{else}} {{$Translate.Memberss.Member}} :  {{end}} <span class="para">{{.Count}}</span>
+                                
                             </p>
 
                             <div class="transitionSearch active">
                                 <form action="/member/" class="filterform" method="get" autocomplete="off">
-                                <img src="/public/img/Magnifying-Glass.svg" alt=""  style="bottom: 5px;"/>
-                                <input type="text" name="keyword" id="" placeholder="{{$Translate.Memberss.Searchmembers}}" value="{{.Filter.Keyword}}">
+                                    <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
+                                    <input type="text" name="keyword" class="search" id="searchmember"
+                                        placeholder="{{$Translate.Memberss.Searchmembers}}" value="{{.Filter.Keyword}}">
                                 </form>
                             </div>
                             {{$MENU := .Menu}}
-                            
+
                             {{range .Menu.TblModule}}
                             {{if eq .ModuleName "Members"}}
                             {{range .SubModule}}
                             {{if eq .ModuleName "Member"}}
                             {{range .Routes}}
                             {{if eq .DisplayName "Create"}}
-                            <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" data-bs-toggle="modal" id="addmember" data-bs-target="#memModal">
+                            <button class="btn-reg btn-sm primary" data-bs-toggle="modal" id="addmember"
+                                data-bs-target="#memModal">
                                 <img src="/public/img/add.svg" alt="" />{{$Translate.Memberss.Addmember}}
                             </button>
                             {{end}}
@@ -77,18 +60,18 @@
                             <th>{{$Translate.Memberss.Group}}</th>
                             <th>{{$Translate.Memberss.Createdon}}</th>
                             <th>{{$Translate.Memberss.Updatedon}}</th>
-                            {{range $MENU.TblModule}} 
+                            {{range $MENU.TblModule}}
                             {{if eq .ModuleName "Members"}}
-                             {{range .SubModule}}
-                             {{if eq .ModuleName "Member"}}
-                            {{if eq .Action true}} 
-                            <th style="width:100px ;" >{{$Translate.Actions}}</th>
-                             {{end}} 
-                             {{end}}
-                             {{end}}
-                             {{end}}
-                             {{end}}
-        
+                            {{range .SubModule}}
+                            {{if eq .ModuleName "Member"}}
+                            {{if eq .Action true}}
+                            <th style="width:100px ;">{{$Translate.Actions}}</th>
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+
                         </tr>
                     </thead>
                     <tbody>
@@ -97,23 +80,26 @@
                         <tr>
                             <td>
                                 <div class="tbl-img-content member-detail">
-                                {{if .ProfileImagePath}}
-                                <div class="tbl-img">
-                                    <img src="{{if .ProfileImagePath}}/{{.ProfileImagePath}}{{else}}/public/img/profile-avtar.svg{{end}}" alt="" id="mem-img">  
+                                    {{if .ProfileImagePath}}
+                                    <div class="tbl-img">
+                                        <img src="{{if .ProfileImagePath}}/{{.ProfileImagePath}}{{else}}/public/img/profile-avtar.svg{{end}}"
+                                            alt="" id="mem-img">
 
-                                </div>
-                                {{else}}
-                               <div class="profile-name">  <span>{{.NameString}} </span></div>
-                                {{end}}
-                                <h4> {{.FirstName}} {{.LastName}}</h4>
+                                    </div>
+                                    {{else}}
+                                    <div class="profile-name"> <span>{{.NameString}} </span></div>
+                                    {{end}}
+                                    <h4 id="membername"> {{.FirstName}} {{.LastName}}</h4>
                             </td>
-                            <td> {{.GroupName}} </td> 
+                            <td> {{.GroupName}} </td>
                             <td> {{.CreatedDate}} </td>
 
                             <td class="date"> {{.ModifiedDate}} </td>
 
                             {{$Id := .Id}}
-                            <td {{range $MENU.TblModule}} {{if eq .ModuleName "Members"}} {{range .SubModule}}{{if eq .ModuleName "Member"}} {{if ne .Action true}} style="display: none;" {{end}} {{end}}{{end}}{{end}}{{end}}>
+                            <td {{range $MENU.TblModule}} {{if eq .ModuleName "Members" }} {{range .SubModule}}{{if eq
+                                .ModuleName "Member" }} {{if ne .Action true}} style="display: none;" {{end}}
+                                {{end}}{{end}}{{end}}{{end}}>
                                 <div class="btn-group language-group">
                                     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -127,7 +113,8 @@
                                         {{range .Routes}}
                                         {{if eq .DisplayName "Update"}}
                                         <li>
-                                            <button class="dropdown-item" type="button" id="editmem" data-id="{{$Id}}" data-bs-toggle="modal" data-bs-target="#memModal">
+                                            <button class="dropdown-item" type="button" id="editmem" data-id="{{$Id}}"
+                                                data-bs-toggle="modal" data-bs-target="#memModal">
                                                 <span><img src="/public/img/edit.svg" alt="" /></span>
                                                 {{$Translate.Edit}}
                                             </button>
@@ -135,10 +122,10 @@
                                         {{end}}
                                         {{if eq .DisplayName "Delete"}}
                                         <li>
-                                            <button class="dropdown-item" type="button" id="del" data-id="{{$Id}}" data-bs-toggle="modal"
-                                                data-bs-target="#centerModal">
+                                            <button class="dropdown-item" type="button" id="del" data-id="{{$Id}}"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/delete.svg" alt="" /></span>
-                                                {{$Translate.Delete}} 
+                                                {{$Translate.Delete}}
 
                                             </button>
                                         </li>
@@ -181,7 +168,9 @@
                                         {{$Translate.Pagesorry}}
                                         {{$Translate.Gobackhome}}
                                     </p>
-                                    <a href="javascript:void(0)" data-bs-toggle="modal"  id="clickadd" data-bs-target="#memModal"  class="heading-three {{$TEXTCOLOR}}">{{$Translate.Clickadd}} >></a>
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd"
+                                        data-bs-target="#memModal"
+                                        class="heading-three">{{$Translate.Clickadd}} >></a>
                                 </div>
                             </td>
                         </tr>
@@ -201,11 +190,12 @@
                         </a>
                     </li>
                     {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current {{$TEXTCOLOR}} {{$BORDERCOLOR}}" {{end}}>{{.}} </a></li>
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current"
+                            {{end}}>{{.}} </a></li>
                     {{end}}
                     <li>
-                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
-                            {{end}}>
+                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}}
+                            class="next" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
                         </a>
                     </li>
@@ -228,135 +218,178 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/member/newmember" id="memberform" name="createmember" enctype="multipart/form-data" method="post">
+                <form action="/member/newmember" id="memberform" name="createmember" enctype="multipart/form-data"
+                    method="post">
                     <input type="hidden" name="csrf" value="{{.csrf}}">
                     <input type="hidden" name="mem_id" value="" id="mem_id">
                     <input type="hidden" name="memgrbpageno" id="memgrbpageno" value="">
                     <input type="hidden" name="crop_data">
-            
-                <h1 class="heading">{{$Translate.Memberss.Basicinfo}}</h1>
-                <div class="update-account">
-                    <div class="update-profile-img">
-                        <img src="/public/img/default profile .svg" name="profpic" id="profpic" alt="">
-                        <div class="name-string" style="display: none;"></div>
 
-                        <div class="profile-info">
-                        </div>
-                        <button class="cam-logo" type="button">
-                            <input id="myfile" name="prof_pic" type="file"> 
-                            <img src="/public/img/cam-logo.svg" alt=""></button>
-                    </div>
-                    <div class="fill-account-details">
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Memberss.Firstname}}</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" placeholder="{{$Translate.Memberss.Entermemname}}" value="" id="mem_name" name="mem_name">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Memberss.Lastname}}</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" placeholder="{{$Translate.Memberss.Enterlastname}}" value="" id="mem_lname" name="mem_lname">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Memberss.Email}}</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" placeholder="{{$Translate.Memberss.Entermememail}}" value="" id="mem_email" name="mem_email">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Memberss.Mobile}}</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" placeholder="{{$Translate.Memberss.Entermemmobnum}}"
-                                        id="mem_mobile" value="" name="mem_mobile" maxlength="13">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Memberss.Username}}</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" placeholder="{{$Translate.Memberss.Enterusername}}" value="" id="mem_usrname" name="mem_usrname">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Memberss.Password}}</label>
-                                <div class="ig-row">
-                                    <input type="password" class="field" placeholder="{{$Translate.Memberss.Enterpswd}}" id="mem_pass" name="mem_pass">
-                                    <button type="button" class="eye" id="eye">
-                                        <img id="img" src="/public/img/eye-closed.svg" alt="">
+                    <h1 class="heading">{{$Translate.Memberss.Basicinfo}}</h1>
+                    <div class="update-account">
+                        <div class="update-profile-img">
+                            <img src="" name="profpic" id="profpic" alt="">
+                            <div class="name-string" style="display: none;"></div>
 
-                                    </button>
-
-                                </div>
+                            <div class="profile-info">
                             </div>
+                            <button class="cam-logo" type="button">
+                                <input id="myfile" name="prof_pic" type="file">
+                                <img src="/public/img/cam-logo.svg" alt=""></button>
+                            <label id="myfile-error" class="error" for="myfile" style="display: none;
+                            font-size: 0.75rem;
+                            font-weight: 400;
+                            color: #F26674;position: absolute;
+                            top: 100%;">* Please select jpg|png|jpeg files only</label>
                         </div>
-                        <div class="input-field-group">
-                            
-                            <div class="input-group  user-drop-down" id="memgrp">
-                                <label for=""  class="input-label">{{$Translate.Memberss.Membergroup}}</label>
-                                <a class="dropdown-toggle field" type="button" id="triggerId" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false"> {{$Translate.Memberss.Choosegroup}}
-                                  
-                                </a>
-                                <input type="hidden" name="membergroupid" id="membergroupid" value="">
-                                <input type="hidden" name="membergroupvalue" id="membergroupvalue" value="">
-                               
-                                <div class="dropdown-menu" aria-labelledby="triggerId">
-                                {{if .Group}}
-                                {{range .Group}}
-                                 <button class="dropdown-item dropdown-values" type="button" data-id="{{.Id}}">{{.Name}}</button>
-                                {{end}}
-                                {{else}}
-                                <div class="noData-foundWrapper" style="margin-top: -40px;">
-
-                                    <div class="empty-folder">
-                                        <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
+                        <div class="fill-account-details">
+                            <div class="input-field-group">
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Firstname}} *</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field"
+                                            placeholder="{{$Translate.Memberss.Entermemname}}" value="" id="mem_name"
+                                            name="mem_name">
                                     </div>
-                                    <h1 style="text-align: center;font-size: 10px;" class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    
                                 </div>
-                                
-                                {{end}}
-                           
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Lastname}}</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field"
+                                            placeholder="{{$Translate.Memberss.Enterlastname}}" value="" id="mem_lname"
+                                            name="mem_lname">
+                                    </div>
                                 </div>
-                                <label id="membergroupvalue-error" class="error" for="membergroupvalue" style="display: none;">* {{$Translate.Memberss.Selectmemerr}}</label>
                             </div>
-
-
-                            <div class="active-toggle">
-                                <div class="active-content">
-                                    <h4 class="heading-four">{{$Translate.Memberss.Active}}</h4>
-                                    <p class="para-light">{{$Translate.Memberss.Activetoggle}}</p>
+                            <div class="input-field-group">
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Email}} *</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field"
+                                            placeholder="{{$Translate.Memberss.Entermememail}}" value="" id="mem_email"
+                                            name="mem_email">
+                                    </div>
                                 </div>
-                                <div class="toggle">
-                                    
-                                    <!-- <input class="tgl tgl-light" id="cb1" type="checkbox" />
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Mobile}} *</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field"
+                                            placeholder="{{$Translate.Memberss.Entermemmobnum}}" id="mem_mobile"
+                                            value="" name="mem_mobile" maxlength="10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field-group">
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Username}} *</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field"
+                                            placeholder="{{$Translate.Memberss.Enterusername}}" value=""
+                                            id="mem_usrname" name="mem_usrname">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Password}} *</label>
+                                    <div class="ig-row">
+                                        <input type="password" class="field"
+                                            placeholder="{{$Translate.Memberss.Enterpswd}}" id="mem_pass"
+                                            name="mem_pass" autocomplete="off">
+                                        <button type="button" class="eye" id="eye">
+                                            <img id="img" src="/public/img/eye-closed.svg" alt="">
+
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field-group">
+
+                                <div class="input-group  user-drop-down" id="memgrp">
+                                    <label for="" class="input-label">{{$Translate.Memberss.Membergroup}}</label>
+                                    <a class="dropdown-toggle field" type="button" id="triggerId"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{$Translate.Memberss.Choosegroup}}
+
+                                    </a>
+                                    <input type="hidden" name="membergroupid" id="membergroupid" value="">
+                                    <input type="hidden" name="membergroupvalue" id="membergroupvalue" value="">
+
+                                    <div class="dropdown-menu filter-dropdown-menu" aria-labelledby="triggerId">
+                                        {{if .Group}}
+                                        <div class="ig-row ig-channel-input">
+                                            <input type="text" id="searchmembergrp" class="search" name="keyword" placeholder="{{$Translate.MembersGroup.Searchgrpname}}" value="">
+                    
+                                        </div>
+                                        <div class="membergrp-list-row">
+
+                                            {{range .Group}}
+                                            <button class="dropdown-item dropdown-values" type="button"
+                                                data-id="{{.Id}}">{{.Name}}</button>
+
+                                            {{end}}
+                                        </div>
+                                        {{else}}
+                                        <div class="noData-foundWrapper" style="margin-top: -40px;">
+
+                                            <div class="empty-folder">
+                                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                                <img src="/public/img/shadow.svg" alt="">
+                                            </div>
+                                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                {{$Translate.Oopsnodata}}</h1>
+
+                                        </div>
+
+                                        {{end}}
+
+                                        <div class="noData-foundWrapper" id="nodatafoundtext" style="margin-top: -40px;display: none;">
+
+                                            <div class="empty-folder">
+                                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                                <img src="/public/img/shadow.svg" alt="">
+                                            </div>
+                                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                {{$Translate.Oopsnodata}}</h1>
+
+                                        </div>
+
+                                    </div>
+                                    <label id="membergroupvalue-error" class="error" for="membergroupvalue"
+                                        style="display: none;">* {{$Translate.Memberss.Selectmemerr}}</label>
+                                </div>
+
+
+                                <div class="active-toggle">
+                                    <div class="active-content">
+                                        <h4 class="heading-four">{{$Translate.Memberss.Active}}</h4>
+                                        <p class="para-light">{{$Translate.Memberss.Activetoggle}}</p>
+                                    </div>
+                                    <div class="toggle">
+
+                                        <!-- <input class="tgl tgl-light" id="cb1" type="checkbox" />
                                     <label class="tgl-btn" for="cb1"></label> -->
 
-                                    <input class="tgl tgl-light" name="mem_activestat" id="mem_activestat" value="" id="cb1" type="checkbox"  />
-                                    <label class="tgl-btn" for="mem_activestat"></label>
+                                        <input class="tgl tgl-light" name="mem_activestat" id="cb1" value=""
+                                            type="checkbox" />
+                                        <label class="tgl-btn" for="cb1"></label>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
+                    </div>
             </div>
-            
+
             <div class="modal-footer">
                 <div class="modal-save">
-                   <button class="btn-reg btn-md primary {{$THEMECOLOR}}" type="button" id="save"> {{$Translate.Save}} </button>
-                   <button class="btn-reg btn-md primary btn-submit {{$THEMECOLOR}}"  type="button" id="update" style="display: none;">{{$Translate.Update}}</button>
+                    <button class="btn-reg btn-md primary" type="button" id="save"> {{$Translate.Save}}
+                    </button>
+                    <button class="btn-reg btn-md primary btn-submit" type="button" id="update"
+                        style="display: none;">{{$Translate.Update}}</button>
                 </div>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>

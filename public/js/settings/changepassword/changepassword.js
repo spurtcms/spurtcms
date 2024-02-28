@@ -2,43 +2,25 @@ var languagedata
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
 
 })
 
-$(document).ready(function () {
+$(document).on('click', '.passsave', function (event) {
+
+    event.preventDefault()
 
     $.validator.addMethod("password1", function (value) {
         return /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).{8,}$/.test(value);
-    }, '* '+languagedata.Userss.usrpswdrgx);
- 
-});
+    }, '* ' + languagedata.Userss.usrpswdrgx);
 
-$(document).on('click','.passsave',function(){
+    $("form[name='passform']").validate({
 
-    // jQuery.validator.addMethod("duplicatepassword", function (value) {
-    //     var result;
-    //     $.ajax({
-    //         url:"/settings/checkpassword",
-    //         type:"POST",
-    //         async:false,
-    //         data:{"pass":value,csrf:$("input[name='csrf']").val()},
-    //         datatype:"json",
-    //         caches:false,
-    //         success: function (data) {
-    //             result = data.trim();
-    //         }
-    //     })
-    //     return result.trim()!="true" ;
-    // });
-
-    $("#passform").validate({
-        
         rules: {
             pass: {
                 required: true,
@@ -52,20 +34,51 @@ $(document).on('click','.passsave',function(){
         },
         messages: {
             pass: {
-                required: "* "+languagedata.Userss.usrpswd,
+                required: "* " + languagedata.Userss.usrpswd,
                 // duplicatepassword: "* New password must be different from the old password"
             },
             cpass: {
-                required: "* "+languagedata.confirmpswd,
-                equalTo: "* "+languagedata.confirmpswdrgx
+                required: "* " + languagedata.confirmpswd,
+                equalTo: "* " + languagedata.confirmpswdrgx
             }
         }
     })
     var formcheck = $("#passform").valid();
+    console.log("formchk", formcheck == true);
     if (formcheck == true) {
-        $('#passform')[0].submit();
+        console.log("okkk");
+        $.ajax({
+            url: "/settings/checkpassword",
+            type: "POST",
+            async: false,
+            data: { "pass": $("input[name='pass']").val(), csrf: $("input[name='csrf']").val() },
+            datatype: "json",
+            caches: false,
+            success: function (data) {
+                console.log("result", data.pass, data.pass == true);
+                if (data.pass == true) {
+                    $('#passform')[0].reset();
+                    notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span> New password must be different from the old password </span></div>';
+
+                    $(notify_content).insertBefore(".header-rht");
+
+                    setTimeout(function () {
+
+                        $('.toast-msg').fadeOut('slow', function () {
+
+                            $(this).remove();
+
+                        });
+
+                    }, 5000);
+
+                } else {
+                    $('#passform')[0].submit();
+                }
+            }
+        })
     }
-    else{
+    else {
         Validationcheck()
         $(document).on('keyup', ".field", function () {
             Validationcheck()
@@ -73,17 +86,17 @@ $(document).on('click','.passsave',function(){
     }
 })
 
-function Validationcheck(){
-   
+function Validationcheck() {
+
     if ($('#pass').hasClass('error')) {
         $('#passgroup').addClass('input-group-error');
-    }else{
+    } else {
         $('#passgroup').removeClass('input-group-error');
     }
-    
-    if ($('#cpass').hasClass('error')){
+
+    if ($('#cpass').hasClass('error')) {
         $('#cpassgroup').addClass('input-group-error');
-    }else{
+    } else {
         $('#cpassgroup').removeClass('input-group-error');
     }
 }
@@ -94,16 +107,21 @@ $(document).on('click', '#eye1', function () {
 
     if ($(This).attr('type') === 'password') {
 
-        $(This).attr('type', 'text');
+        $('#eye-close1').hide()
 
-        $(this).find('img').attr('src', '/public/img/eye-opened.svg');
-        
+        $('#eye-open1').show()
+
+        $(This).attr('type', 'text');
 
     } else {
 
+        $('#eye-open1').hide()
+
+        $('#eye-close1').show()
+
         $(This).attr('type', 'password');
 
-        $(this).find('img').attr('src', '/public/img/eye-closed.svg');
+    
     }
 })
 
@@ -114,15 +132,21 @@ $(document).on('click', '#eye2', function () {
 
     if ($(This).attr('type') === 'password') {
 
+        $('#eye-close2').hide()
+
+        $('#eye-open2').show()
+
         $(This).attr('type', 'text');
 
-        $(this).find('img').attr('src', '/public/img/eye-opened.svg');
 
     } else {
 
+        $('#eye-open2').hide()
+
+        $('#eye-close2').show()
+
         $(This).attr('type', 'password');
 
-        $(this).find('img').attr('src', '/public/img/eye-closed.svg');
     }
 })
 

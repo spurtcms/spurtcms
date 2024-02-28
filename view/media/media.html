@@ -44,9 +44,9 @@
                         {{if gt .Count 9}}{{$Translate.Mediaa.Images}}{{else}}{{$Translate.Mediaa.Image}}{{end}} {{$Translate.Available}} 
                     </p> -->
                     <p class="para">
-                        <span class="para"> {{.Count}}  </span>
-                        {{if gt .Count 1}}Media Files Available{{else}}Media File Available{{end}}
-                    </p>
+                       
+                        {{ if gt .Count 1}} {{$Translate.Total}} {{$Translate.Mediaa.Mediafiles}} : <span class="para"> {{.Count}}  </span>{{else}} {{$Translate.Total}} {{$Translate.Mediaa.Mediafile}}: <span class="para"> {{.Count}}  </span>  {{end}}
+                        </p>
                 </div>
             </div>
 
@@ -56,16 +56,16 @@
                 <input type="text" class="search" name="keyword" id="mediasearch" placeholder="Search Media Files" />
             </div>
 
-            <button class="btn-reg btn-sm btn-outline {{$TEXTCOLOR}} {{$BORDERCOLOR}} " id="Refreshdiv"> <img src="/public/img/reload.svg" alt="" style="width: 13px;">
+            <button class="btn-reg btn-sm btn-outline" id="Refreshdiv"> <img src="/public/img/reload.svg" alt="" style="width: 13px;">
                 {{$Translate.Mediaa.Refresh}} 
             </button>
 
-            <button class="btn-reg btn-sm btn-outline {{$TEXTCOLOR}} {{$BORDERCOLOR}}" id="addfolder"> <img src="/public/img/add-icon.svg" alt="">
+            <button class="btn-reg btn-sm btn-outline" id="addfolder"> <img src="/public/img/add-icon.svg" alt="">
                 {{$Translate.Mediaa.Folder}}  
                 </button>
 
         <form id="imageForm">
-            <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" type="button" id="upload" >
+            <button class="btn-reg btn-sm primary" type="button" id="upload" >
                 <img src="/public/img/upload-ico.svg" alt="" />  {{$Translate.Mediaa.Upload}}   
             </button>
             <input type="file" id="imgupload" style="display: none;" />                    
@@ -73,10 +73,10 @@
         </div>
         
          <div class="media-select-del flexx">
-            <a href="javascript:void(0)" class="primary-link {{$TEXTCOLOR}}" id="selectall">{{$Translate.Selectall}}</a>
-            <a href="javascript:void(0)" class="primary-link {{$TEXTCOLOR}}" id="unselectall" style="display: none;">{{$Translate.Mediaa.Unselectall}}</a>
+            <a href="javascript:void(0)" class="primary-link" id="selectall" {{if .Media}}{{else}}style="display: none;"{{end}}>{{$Translate.Selectall}}</a>
+            <a href="javascript:void(0)" class="primary-link" id="unselectall" style="display: none;">{{$Translate.Mediaa.Unselectall}}</a>
 
-           <a href="javascript:void(0)" class="primary-link disabled {{$TEXTCOLOR}}">{{$Translate.Delete}} </a>
+           <a href="javascript:void(0)" class="primary-link disabled " {{if .Media}}{{else}}style="display: none;"{{end}} id="media-del-btn">{{$Translate.Delete}} </a>
         </div>
 
         <div class="media-upload">
@@ -93,9 +93,9 @@
                 </div>
             </div>
 
-            <div class="media-library-header flexx mediabreadcrumb">
-                <ul class="media-innr-breadcrumbs flexx" style="list-style: none;">
-                    <li><a href="javascript:void(0)"  class="{{$TEXTCOLOR}}" data-id="/">{{$Translate.Mediaa.Medialibrary}}</a></li>
+            <div class="media-library-header flexx mediabreadcrumb tab-breadCrumb">
+                <ul class="media-innr-breadcrumbs flexx breadcrumb-container" style="list-style: none;">
+                    <li><a href="javascript:void(0)"  class="" data-id="/">{{$Translate.Mediaa.Medialibrary}}</a></li>
                     <!-- <li>/</li> -->
                 </ul>
             </div>
@@ -120,8 +120,8 @@
 
             <div class="upload-files media-library-list" id="drivelist">
                 {{ if .Media }}
-
-                {{range .Folder}}
+                {{range .Media}}
+                {{if eq .File true}}
                 <div class="upload-folders  folderdiv">
                     <p class="forsearch" style="display: none;">{{.Name}}</p>
 
@@ -130,17 +130,19 @@
                         <label for="{{.Name}}"></label>
                     </div>
                     <div class="upload-folder-img folder">
-                        <img src="/public/img/folder-media.svg" alt="" style="cursor: pointer;">
+                        <img src="/public/img/folder-media.svg" alt="">
                     </div>
                     <div class="file-detail">
+                        {{if ge (len .Name) 20}}
+                        <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
+                        title={{.Name}}>{{.Name}}</h3>
+                        {{else}}
                         <h3>{{.Name}}</h3>
-                        <!-- <p>10 Files</p> -->
-                        <p></p>
+                        {{end}}
+                        <p>{{if gt .TotalSubMedia 1}}{{.TotalSubMedia}} Files{{else}}{{.TotalSubMedia}} File{{end}}</p>
                     </div>
                 </div>
-                {{end}}
-                {{range .File}}
-                
+                {{else}}
                 <div class="upload-folders filediv">
                     <p class="forsearch" style="display: none;">{{.Name}}</p>
 
@@ -152,18 +154,19 @@
                         <img src="/{{.Path}}{{.Name}}" alt="">
                     </div>
                     <div class="file-detail">
+                        {{if ge (len .Name) 20}}
+                        <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
+                        title={{.Name}}>{{.Name}}</h3>
+                        {{else}}
                         <h3>{{.Name}}</h3>
-                        <!-- <p>10 Files</p> -->
-                        <p></p>
+                        {{end}}
+                        <!-- <p></p> -->
                     </div>
                 </div>
                 {{end}}
-                
-               
+                {{end}}
+                {{end}}
             </div>
-            {{end}}
-            
-      
         </div>
     </div>
     <!--2-->

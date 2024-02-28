@@ -6,7 +6,7 @@
     <div class="header-rht flexx">
         <div class="btn-group language-group langdata">
             {{$CurrentLanguage := .Menu.CurrentLanguage}}
-            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-code="{{$CurrentLanguage.LanguageCode}}" data-id="{{$CurrentLanguage.Id}}">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-path="/{{$CurrentLanguage.JsonPath}}" data-id="{{$CurrentLanguage.Id}}">
                 <img id="current-langflag" src="{{$CurrentLanguage.ImagePath}}" alt=""> {{$CurrentLanguage.LanguageName}} <img src="/public/img/arrow-down.svg" alt=""
                     class="drop-arrow">
             </button>

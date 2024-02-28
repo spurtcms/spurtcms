@@ -2,9 +2,9 @@ var languagedata
 /**This if for Language json file */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
@@ -48,7 +48,13 @@ $(document).on('click', '.saverolperm', function () {
     if (formcheck == true) {
         var id = $("#rolid").val()
         var value = $("#rolename").val()
-        console.log("id", value);
+        var url = window.location.search;
+        const urlpar = new URLSearchParams(url);
+        pageno = urlpar.get('page');
+
+    if (pageno == null) {
+        pageno = "1";
+    }
         $.ajax({
             url: "/settings/roles/checkrole",
             type: "POST",
@@ -88,7 +94,16 @@ $(document).on('click', '.saverolperm', function () {
                         datatype: "json",
                         caches: false,
                         success: function (data) {
-                            window.location.href = "/settings/roles/"
+                            if(data.role == "added"){
+                            setCookie('get-toast','Role Created Successfully',1)
+                            setCookie('Alert-msg','success',1)
+                            window.location.href = "/settings/roles?page="+pageno
+                        }
+                        if(data.role == "updated"){
+                            setCookie('get-toast','Role Updated Successfully',1)
+                            setCookie('Alert-msg','success',1)
+                            window.location.href = "/settings/roles?page="+pageno
+                        }
                         }
                     })
                 }
@@ -117,6 +132,12 @@ $(document).on('click', '.roledit', function () {
     $('#rolid').val(id);
     Editrole(id,languagedata)
 
+    var url = window.location.search;
+    const urlpar = new URLSearchParams(url);
+    pageno = urlpar.get('page');
+
+    $("#pageno").val(pageno)
+
 })
 
 $(document).on('click', '.add-new', function () {
@@ -141,13 +162,18 @@ $(document).on('click', '.roldel', function () {
 
     var name = $(this).parents('tr').children('td:first').text();
 
-    $('.deltitle').text('Delete Role ?')
+    $('.deltitle').text(languagedata.Roless.deleterole)
 
-    $('.deldesc').text('Are you sure ! you want to delete this Role?')
+    $('.deldesc').text(languagedata.Roless.delrole)
 
     $('.delname').text(name)
 
-    $('#delete').attr('href', '/settings/roles/deleterole?id=' + id)
+    var url = window.location.search;
+     const urlpar = new URLSearchParams(url);
+     pageno = urlpar.get('page');
+
+
+    $('#delete').attr('href', '/settings/roles/deleterole?id=' + id +"&page=" +pageno)
 
 })
 
@@ -189,7 +215,7 @@ function RoleStatus(id) {
         dataType: 'json',
         cache: false,
         success: function (result) {
-            notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>Roles Updated Successfully</span></div>';
+            notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>'+languagedata.Toast.rolestatupdnotify+'</span></div>';
             $(notify_content).insertBefore(".header-rht");
             setTimeout(function () {
                 $('.toast-msg').fadeOut('slow', function () {

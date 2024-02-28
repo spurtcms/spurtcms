@@ -4,20 +4,22 @@ var DeleteListArray = [];
 
 var MediaBreadcrumbRoot = [];
 
-let cropHeight, cropWidth, viewportType, dimension, html_imgurl;
+let cropHeight, cropWidth, dimension, html_imgurl;
 
 var img, canvas, ctx;
 
-let logoexpand_cropper,cropper;
+let default_cropper, logoexpand_cropper, portrait_cropper, square_cropper;
+
+var breadcrumbLength
 
 /** */
 $(document).ready(async function () {
 
     $('.Content').addClass('checked');
 
-    var languagecode = $('.language-group>button').attr('data-code')
+    var languagePath = $('.language-group>button').attr('data-path')
 
-    await $.getJSON("/locales/" + languagecode + ".json", function (data) {
+    await $.getJSON(languagePath, function (data) {
 
         languagedata = data
     })
@@ -30,24 +32,30 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
         decoded_url = decodeURIComponent($(this).attr('src'))
 
+        console.log("chking", decoded_url);
+
         html_imgurl = "/"
 
-        var cuts =  decoded_url.split("/")
+        var cuts = decoded_url.split("/")
 
-        for(let x in cuts){
+        console.log("cuts", cuts);
 
-            if(cuts[x]!=""){
+        for (let x in cuts) {
 
-                if(x==cuts.length-1){
+            if (cuts[x] != "") {
+
+                if (x == cuts.length - 1) {
 
                     html_imgurl += cuts[x]
 
-                }else{
+                } else {
 
-                    html_imgurl += cuts[x]+"/"
+                    html_imgurl += cuts[x] + "/"
                 }
             }
         }
+
+        console.log("src", html_imgurl);
 
         img = new Image()
 
@@ -55,11 +63,13 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
         if (window.location.href.indexOf("spaces") != -1) {
 
+            $('#changepicModal .admin-header >h3').text('Crop Space Image')
+
             $('#crop-container').removeClass('croppie-container').empty().show()
 
             $('#crop-container1').removeClass('croppie-container').empty().hide()
 
-            cropper = $('#crop-container').croppie({
+            default_cropper = $('#crop-container').croppie({
 
                 enableExif: true,
 
@@ -72,8 +82,6 @@ $(document).on('click', '.upload-folder-img>img', function () {
                     width: 500,
 
                     height: 250,
-
-                    type: viewportType
 
                 },
 
@@ -86,13 +94,23 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
         } else if (window.location.href.indexOf("entry") != -1) {
 
-            $('#changepicModal .modal-content').addClass('banner_crop')
+            $('#changepicModal .admin-header >h3').text('Crop Entries Image')
+
+            $('.admincropimg-row').addClass("grid-row")
+
+            $('.admincropimg-wrap').removeClass('profile-cropimg')
+
+            $('.admincropimg-btns-rht').show()
+
+            $('.admincropimg-btns-rht .active').removeClass('active')
+
+            $('.landscape-btn').addClass('active')
 
             $('#crop-container').removeClass('croppie-container').empty().show()
 
             $('#crop-container1').removeClass('croppie-container').empty().hide()
 
-            cropper = $('#crop-container').croppie({
+            default_cropper = $('#crop-container').croppie({
 
                 enableExif: true,
 
@@ -102,9 +120,9 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
                 viewport: {
 
-                    width: 740,
+                    width: 680,
 
-                    height: 370,
+                    height: 340,
                 },
 
                 showZoomer: false,
@@ -112,15 +130,17 @@ $(document).on('click', '.upload-folder-img>img', function () {
                 // fit: true,
             });
 
-            dimension = '740*370'
+            dimension = '680*340'
 
         } else if (window.location.href.indexOf("languages") != -1) {
 
+            $('#changepicModal .admin-header >h3').text('Crop Flag Image')
+
             $('#crop-container').removeClass('croppie-container').empty().show()
 
             $('#crop-container1').removeClass('croppie-container').empty().hide()
 
-            cropper = $('#crop-container').croppie({
+            default_cropper = $('#crop-container').croppie({
 
                 enableExif: true,
 
@@ -130,9 +150,9 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
                 viewport: {
 
-                    width: 360,
+                    width: 400,
 
-                    height: 240,
+                    height: 280,
 
                 },
 
@@ -141,15 +161,17 @@ $(document).on('click', '.upload-folder-img>img', function () {
                 // fit: true,
             });
 
-            dimension = '360*240'
+            dimension = '400*280'
 
         } else if (window.location.href.indexOf("category") != -1) {
+
+            $('#changepicModal .admin-header >h3').text('Crop Category Image')
 
             $('#crop-container').removeClass('croppie-container').empty().show()
 
             $('#crop-container1').removeClass('croppie-container').empty().hide()
 
-            cropper = $('#crop-container').croppie({
+            default_cropper = $('#crop-container').croppie({
 
                 enableExif: true,
 
@@ -165,12 +187,14 @@ $(document).on('click', '.upload-folder-img>img', function () {
                 },
 
                 showZoomer: false,
-                
+
                 // fit: true,
             });
             dimension = '500*250'
 
-        }else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val()=="1"){
+        } else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1") {
+
+            $('#changepicModal .admin-header >h3').text('Crop Expand Logo Image')
 
             $('#crop-container').removeClass('croppie-container').empty().hide()
 
@@ -197,15 +221,17 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
             dimension = '500*250'
 
-        }else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val()!="1"){
+        } else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() != "1") {
+
+            $('#changepicModal .admin-header >h3').text('Crop Logo Image')
 
             $('#crop-container').removeClass('croppie-container').empty().show()
 
             $('#crop-container1').removeClass('croppie-container').empty().hide()
-            
+
             // $('.cr-slider-wrap').remove()
 
-            cropper = $('#crop-container').croppie({
+            default_cropper = $('#crop-container').croppie({
 
                 enableExif: true,
 
@@ -218,10 +244,8 @@ $(document).on('click', '.upload-folder-img>img', function () {
                     width: 300,
 
                     height: 300,
-
-                    type: viewportType
                 },
-                
+
                 showZoomer: false,
                 // fit: true,
             });
@@ -229,7 +253,7 @@ $(document).on('click', '.upload-folder-img>img', function () {
             dimension = '300*300'
         }
 
-        if($('.cr-slider-wrap').length>1){
+        if ($('.cr-slider-wrap').length > 1) {
 
             $('.cr-slider-wrap')[1].remove()
         }
@@ -242,9 +266,66 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
         $('#rotateSlider').val("0")
 
+        $('#mediaDecideModal .imgname').text($(this).parents('.upload-folders').find('.file-detail>h3').text())
+
+        $('#mediaDecideModal #imgsrc-input').val(html_imgurl)
+
+        // $('#changepicModal').modal({backdrop: 'static', keyboard: false}) 
+
         $('#changepicModal').modal('show')
+
     }
+
 })
+
+$(document).on('click', '#mediaDecideModal #crop-img', function () {
+
+    $('#mediaDecideModal').modal('hide')
+
+    $('#changepicModal').modal('show')
+
+})
+
+$(document).on('click', '#mediaDecideModal #assign-img', function () {
+
+    var src = $('#mediaDecideModal #imgsrc-input').val()
+
+    IntegrateMediaImages(src)
+
+    $('#mediaDecideModal').modal('hide')
+
+    $('#addnewimageModal').modal('hide')
+
+    $("#rightModal").modal('show')
+
+})
+
+
+function IntegrateMediaImages(src) {
+
+    if (window.location.href.indexOf("spaces") != -1) {
+
+        BindCropImageInSpace(src)
+
+    } else if (window.location.href.indexOf("entry") != -1) {
+
+        BindCropImageInEntry(src)
+
+    } else if (window.location.href.indexOf("personalize") != -1) {
+
+        BindCropImageInPersonalize(src)
+
+    } else if (window.location.href.indexOf("addcategory") != -1) {
+
+        BindCropImageInCategory(src)
+
+    } else if (window.location.href.indexOf("") != -1) {
+
+        BindCropImageInLanguage(src)
+
+    }
+}
+
 
 $('#changepicModal').on('shown.bs.modal', function () {
 
@@ -252,40 +333,33 @@ $('#changepicModal').on('shown.bs.modal', function () {
 
     ctx = canvas.getContext('2d');
 
-    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val()=="1") {
+    let common_cropper
 
-        logoexpand_cropper.croppie('bind', {
+    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1") {
 
-            url: html_imgurl,
+        common_cropper = logoexpand_cropper
 
-            orientation: 0,
+    } else {
 
-            zoom: 0
-
-        }).then(function () {
-
-            // cropper.croppie('setZoom',0)
-
-            console.log("cropper initialized!");
-        })
-
-    }else{
-
-        cropper.croppie('bind', {
-
-            url: html_imgurl,
-
-            orientation: 0,
-
-            zoom: 0
-
-        }).then(function () {
-
-            // cropper.croppie('setZoom',0)
-
-            console.log("cropper initialized!");
-        })
+        common_cropper = default_cropper
     }
+
+    console.log("cropper src", html_imgurl);
+
+    common_cropper.croppie('bind', {
+
+        url: html_imgurl,
+
+        orientation: 0,
+
+        zoom: 0
+
+    }).then(function () {
+
+        // cropper.croppie('setZoom',0)
+
+        console.log("cropper initialized!");
+    })
 
 });
 
@@ -310,209 +384,110 @@ $('#rotateSlider').on('input', function () {
 
 $('#crop-button').click(function () {
 
-    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val()=="1"){
+    let common_cropper
 
-        logoexpand_cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg' }).then(function (dataUrl) {
+    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1" && $('.admincropimg-btns-rht:visible').length == 0) {
 
-            imgData = GetImageProcessData(html_imgurl)
+        common_cropper = logoexpand_cropper
 
-            console.log("chk",imgData);
+    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.portrait-btn').hasClass('active')) {
 
-            var final_imgName = ''
+        common_cropper = portrait_cropper
 
-            const currentTimestamp = new Date().toISOString();
+    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.square-btn').hasClass('active')) {
 
-            if (imgData[0].indexOf(`(${dimension})`) == -1) {
+        common_cropper = square_cropper
 
-                final_imgName = imgData[0] + "(" + dimension + ")(" + currentTimestamp + ")." + imgData[1]
+    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.landscape-btn').hasClass('active')) {
 
-            } else {
+        common_cropper = default_cropper
 
-                final_imgName = imgData[0].split(dimension)[0] + dimension + ")(" + currentTimestamp + ")." + imgData[1]
+    } else {
 
-            }
+        common_cropper = default_cropper
 
-            console.log("final_name",final_imgName);
-
-            if (imgData[0] != "" && imgData[1] != "" && dimension != "") {
-
-                var formData = new FormData()
-
-                formData.append('csrf', $("input[name='csrf']").val())
-
-                formData.append('file', dataUrl)
-
-                formData.append('path', html_imgurl.split('/')[1] + "/" + html_imgurl.split('/')[2])
-
-                formData.append('name', final_imgName)
-
-                $.ajax({
-
-                    type: "post",
-
-                    url: "/media/uploadimage",
-
-                    data: formData,
-
-                    datatype: "json",
-
-                    cache: false,
-
-                    processData: false,
-
-                    contentType: false,
-
-                    success: function (result) {
-
-                        html_imgurl = ""
-
-                        parsed_obj = JSON.parse(result)
-
-                        if (window.location.href.indexOf("spaces") != -1) {
-
-                            BindCropImageInSpace(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("entry") != -1) {
-
-                            BindCropImageInEntry(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("personalize") != -1) {
-
-                            BindCropImageInPersonalize(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("addcategory") != -1) {
-
-                            BindCropImageInCategory(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("") != -1) {
-
-                            BindCropImageInLanguage(parsed_obj.Path)
-
-                        }
-
-                        $("#rightModal").modal('show')
-
-                        $('#changepicModal').modal('hide')
-
-                        $('#crop-container').removeClass('croppie-container').empty().show()
-
-                        $('#crop-container1').removeClass('croppie-container').empty().hide()
-
-                        $('#addnewimageModal').modal('hide')
-
-                    }
-
-                })
-
-            } else {
-
-                console.log("imgdata", imgData[0], imgData[1], dimension);
-            }
-
-        });
-
-
-    }else{
-
-        cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg' }).then(function (dataUrl) {
-
-            imgData = GetImageProcessData(html_imgurl)
-
-            console.log("chk",imgData);
-
-            var final_imgName = ''
-
-            const currentTimestamp = new Date().toISOString();
-
-            if (imgData[0].indexOf(`(${dimension})`) == -1) {
-
-                final_imgName = imgData[0] + "(" + dimension + ")(" + currentTimestamp + ")." + imgData[1]
-
-            } else {
-
-                final_imgName = imgData[0].split(dimension)[0] + dimension + ")(" + currentTimestamp + ")." + imgData[1]
-
-            }
-
-            console.log("final_name",final_imgName);
-
-            if (imgData[0] != "" && imgData[1] != "" && dimension != "") {
-
-                var formData = new FormData()
-
-                formData.append('csrf', $("input[name='csrf']").val())
-
-                formData.append('file', dataUrl)
-
-                formData.append('path', html_imgurl.split('/')[1] + "/" + html_imgurl.split('/')[2])
-
-                formData.append('name', final_imgName)
-
-                $.ajax({
-
-                    type: "post",
-
-                    url: "/media/uploadimage",
-
-                    data: formData,
-
-                    datatype: "json",
-
-                    cache: false,
-
-                    processData: false,
-
-                    contentType: false,
-
-                    success: function (result) {
-
-                        html_imgurl = ""
-
-                        parsed_obj = JSON.parse(result)
-
-                        if (window.location.href.indexOf("spaces") != -1) {
-
-                            BindCropImageInSpace(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("entry") != -1) {
-
-                            BindCropImageInEntry(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("personalize") != -1) {
-
-                            BindCropImageInPersonalize(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("addcategory") != -1) {
-
-                            BindCropImageInCategory(parsed_obj.Path)
-
-                        } else if (window.location.href.indexOf("") != -1) {
-
-                            BindCropImageInLanguage(parsed_obj.Path)
-
-                        }
-
-                        $("#rightModal").modal('show')
-
-                        $('#changepicModal').modal('hide')
-
-                        $('#crop-container').removeClass('croppie-container').empty().show()
-
-                        $('#crop-container1').removeClass('croppie-container').empty().hide()
-
-                        $('#addnewimageModal').modal('hide')
-                    }
-
-                })
-
-            } else {
-
-                console.log("imgdata", imgData[0], imgData[1], dimension);
-
-            }
-
-        });
     }
+
+    common_cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg' }).then(function (dataUrl) {
+
+        imgData = GetImageProcessData(html_imgurl)
+
+        console.log("chk", imgData);
+
+        var final_imgName = ''
+
+        const currentTimestamp = new Date().toISOString();
+
+        if (imgData[0].indexOf(`(${dimension})`) == -1) {
+
+            final_imgName = imgData[0] + "(" + dimension + ")(" + currentTimestamp + ")." + imgData[1]
+
+        } else {
+
+            final_imgName = imgData[0].split(dimension)[0] + dimension + ")(" + currentTimestamp + ")." + imgData[1]
+
+        }
+
+        console.log("final_name", final_imgName);
+
+        if (imgData[0] != "" && imgData[1] != "" && dimension != "") {
+
+            var formData = new FormData()
+
+            formData.append('csrf', $("input[name='csrf']").val())
+
+            formData.append('file', dataUrl)
+
+            formData.append('path', html_imgurl.split('/')[1] + "/" + html_imgurl.split('/')[2])
+
+            formData.append('name', final_imgName)
+
+            $.ajax({
+
+                type: "post",
+
+                url: "/media/uploadimage",
+
+                data: formData,
+
+                datatype: "json",
+
+                cache: false,
+
+                processData: false,
+
+                contentType: false,
+
+                success: function (result) {
+
+                    html_imgurl = ""
+
+                    parsed_obj = JSON.parse(result)
+
+                    IntegrateMediaImages(parsed_obj.Path)
+
+                    $("#rightModal").modal('show')
+
+                    $('#changepicModal').modal('hide')
+
+                    $('#crop-container').removeClass('croppie-container').empty().show()
+
+                    $('#crop-container1').removeClass('croppie-container').empty().hide()
+
+                    $('#addnewimageModal').modal('hide')
+
+                    $('#Refreshdiv').click();
+                }
+
+            })
+
+        } else {
+
+            console.log("imgdata", imgData[0], imgData[1], dimension);
+
+        }
+
+    });
 
 });
 
@@ -544,13 +519,24 @@ $('#changepicModal').on('hide.bs.modal', function (event) {
 
 $("#addnewimageModal").on('show.bs.modal', function () {
 
-    $('#Refreshdiv').click();
+    if (breadcrumbLength > 0) {
+
+        $('#Refreshdiv').click();
+    }
+
+})
+
+$("#addnewimageModal").on('hide.bs.modal', function () {
+
+    breadcrumbLength = MediaBreadcrumbRoot.length
+
+    MediaBreadcrumbRoot = []
 
 })
 
 function GetImageProcessData(html_imgurl) {
 
-    console.log("raw",html_imgurl);
+    console.log("raw", html_imgurl);
 
     var ext = html_imgurl.split('/')[3].split('.').pop()
 
@@ -560,9 +546,9 @@ function GetImageProcessData(html_imgurl) {
 
         for (let part in html_imgurl.split('/')[3].split('.')) {
 
-            if(part<html_imgurl.split('/')[3].split('.').length-1){
+            if (part < html_imgurl.split('/')[3].split('.').length - 1) {
 
-                 imgName = imgName + html_imgurl.split('/')[3].split('.')[part]
+                imgName = imgName + html_imgurl.split('/')[3].split('.')[part]
             }
 
         }
@@ -584,12 +570,12 @@ function BindCropImageInSpace(src) {
 
     if (data != "") {
 
-        $(".heading-three").hide();
+        // $(".heading-three").hide();
 
         $("#browse").hide();
 
         $("#spimagehide").attr("src", src).show()
-        
+
         $("#spacedel-img").show();
 
         $("#addnewimageModal").modal('hide')
@@ -606,11 +592,19 @@ function BindCropImageInEntry(src) {
 
     if (data != "") {
 
-        $('#cenimg').hide()
+        // $('#cenimg').hide()
 
-        $("#spimagehide").css("height", "23.120rem")
+        // $("#spimagehide").css("height", "23.120rem")
 
-        $("#spimagehide").css("width", "46.25rem")
+        // $("#spimagehide").css("width", "46.25rem")
+
+        $(".imgSelect-image").hide()
+
+        $(".uplclass").hide()
+
+        $(".imgSelect-btn").hide()
+
+        $(".blogBottom-imgSelect").css("padding-block", "0rem")
 
         $("#spimagehide").attr("src", src).show()
 
@@ -638,7 +632,7 @@ function BindCropImageInPersonalize(src) {
 
         $('.modal-backdrop').remove()
 
-    }else{
+    } else {
 
         $("#upload-logo").remove()
 
@@ -661,7 +655,7 @@ function BindCropImageInCategory(src) {
 
     if (data != "") {
 
-        $(".heading-three").hide();
+        // $(".heading-three").hide();
 
         $("#browse").hide();
 
@@ -687,7 +681,7 @@ function BindCropImageInLanguage(src) {
 
             <img src="`+ src + `" alt="" class="uploaded-img-flag">
 
-            <button class="delete-flag" onclick="RemoveFlagImage(this)" ><img src="/public/img/delete-white-icon.svg" alt=""></button>
+            <button class="delete-flag"><img id="delete-flag" src="/public/img/delete-white-icon.svg" alt=""></button>
 
             <div class="hover-delete-img"></div>
 
@@ -706,9 +700,76 @@ function BindCropImageInLanguage(src) {
 /*Add Folder Button hide and show*/
 $(document).on("click", "#addfolder", function () {
 
-    $("#addfoldervalues").toggle();
+    var inputdiv = document.querySelector('#addfoldervalues')
 
-    $("#foldername").val('');
+    var inputfield = document.getElementById("foldername")
+
+    if (window.location.href.indexOf("media") != -1) {
+
+        var mediaDiv = document.querySelector('.media-upload')
+
+        if (mediaDiv.scrollHeight > mediaDiv.clientHeight) {
+
+            var offset = inputdiv.offsetTop - mediaDiv.offsetTop;
+
+            if (mediaDiv.scrollTop <= offset || mediaDiv.scrollTop < offset + 8.75 && $(inputdiv).css('display') != 'none') {
+
+                $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+
+                $(inputdiv).hide()
+
+            } else {
+
+                $(inputdiv).show()
+
+                // Scroll the div to make the input visible
+                mediaDiv.scrollTo({ top: offset, behavior: 'smooth' });
+
+                $(inputfield).focus()
+
+            }
+
+        } else {
+
+            if ($(inputdiv).css('display') == 'none') {
+
+                $(inputdiv).show();
+
+                $(inputfield).focus()
+
+            } else {
+
+                $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+
+                $(inputdiv).hide();
+
+            }
+
+        }
+
+    } else {
+
+        var mediaDiv = document.querySelector('.media-library-list')
+
+        if ($(inputdiv).css('display') == 'none') {
+
+            $(inputdiv).show();
+
+            $(inputfield).focus()
+
+        } else {
+
+            $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+
+            $(inputdiv).hide();
+
+        }
+
+    }
+
+    $('#foldername-error').hide()
+
+    $(inputfield).val('');
 
 })
 
@@ -720,6 +781,14 @@ $("#foldername").keyup(function () {
 
     $("#foldername-error").hide()
 
+})
+
+$('#foldername[type=text]').keypress(function(event){
+
+    if(event.which==13){
+
+        $('#newfileadd').click()
+    }
 })
 
 /*Add Folder function */
@@ -778,59 +847,59 @@ $(document).on('click', '#newfileadd', function () {
 
                     $('#Refreshdiv').trigger('click');
 
-                    var message = `Folder Created Successfully`
-    
-                    if(window.location.href.indexOf("media")!=-1){
-        
+                    var message = languagedata?.Toast?.foldercreated
+
+                    if (window.location.href.indexOf("media") != -1) {
+
                         notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-        
+
                         $(notify_content).insertBefore(".header-rht");
-                
-                    }else{
-        
+
+                    } else {
+
                         notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-                
-                        $(notify_content).insertBefore('.modal-content')
+
+                        $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
                     }
 
                     setTimeout(function () {
 
                         $('.toast-msg').fadeOut('slow', function () {
-  
-                          $(this).remove();
-  
+
+                            $(this).remove();
+
                         });
-  
-                     }, 5000);
-  
+
+                    }, 5000);
+
 
                 } else {
-                   
-                   var message = `Unable to create Folder,Please try again later`
 
-                   if(window.location.href.indexOf("media")!=-1){
+                    var message = languagedata?.Toast?.foldercreateerrmsg
 
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+                    if (window.location.href.indexOf("media") != -1) {
 
-                     $(notify_content).insertBefore(".header-rht");
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                   }else{
+                        $(notify_content).insertBefore(".header-rht");
 
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+                    } else {
 
-                     $(notify_content).insertBefore(".modal-content");
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                   }
+                        $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
 
-                   setTimeout(function () {
+                    }
 
-                      $('.toast-msg').fadeOut('slow', function () {
+                    setTimeout(function () {
 
-                        $(this).remove();
+                        $('.toast-msg').fadeOut('slow', function () {
 
-                      });
+                            $(this).remove();
 
-                   }, 5000);
+                        });
+
+                    }, 5000);
 
                 }
             }
@@ -889,7 +958,7 @@ $(document).on('click', '.ckbox', function () {
         });
     }
 
-    console.log("checking media delete array",DeleteListArray);
+    console.log("checking media delete array", DeleteListArray);
 
     TrashButton()
 
@@ -940,17 +1009,52 @@ $(document).on('click', '.dis', function () {
 
         $(".deltitle").text(languagedata.Mediaa.deltitle)
 
-        $('#content').text(languagedata.Mediaa.delmediacontent);
+        if (DeleteListArray.length == 1) {
 
-        // $(".deltitle").text('Delete Media File ?')
+            $('#centerModal .modal-body>#content').text(languagedata.Mediaa.delmediacontent)
 
-        // $('#centerModal .modal-body>#content').text('Are you sure, you want to delete this media files ?')
+        } else if (DeleteListArray.length > 1) {
+
+            $('#centerModal .modal-body>#content').text(languagedata.Mediaa.delmediacontents)
+        }
 
         $('#delid').show();
 
         $('#delete').attr('href', 'javascript:void(0)');
 
         $('#delcancel').text(languagedata.no);
+
+    }
+})
+
+$(document).on('click', '#media-del-btn', function () {
+
+    if (DeleteListArray.length == 0) {
+
+        var message = languagedata.Mediaa.deleteerr
+
+        if (window.location.href.indexOf("media") != -1) {
+
+            notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+            $(notify_content).insertBefore(".header-rht");
+
+        } else {
+
+            notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+            $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
+
+        }
+
+        setTimeout(function () {
+
+            $('.toast-msg').fadeOut('slow', function () {
+
+                $(this).remove();
+            });
+
+        }, 5000); // 5000 milliseconds = 5 seconds
 
     }
 })
@@ -965,101 +1069,106 @@ $(document).on('click', '#delcancel', function () {
 /*Trash */
 $(document).on('click', "#delete", function () {
 
-    var folderpath = ""
+    if (window.location.href.indexOf('media') != -1 || $('#addnewimageModal').css('display') == 'block') {
 
-    for (let x of MediaBreadcrumbRoot) {
+        $('.toast-msg').remove()
 
-        folderpath +=  x + "/"
-    }
+        var folderpath = ""
 
-    console.log("delelist", DeleteListArray);
+        for (let x of MediaBreadcrumbRoot) {
 
-    $.ajax({
+            folderpath += x + "/"
+        }
 
-        type: "post",
+        console.log("delelist", DeleteListArray);
 
-        url: "/media/deletefolfile",
+        $.ajax({
 
-        data: {
+            type: "post",
 
-            csrf: $("input[name='csrf']").val(),
+            url: "/media/deletefolfile",
 
-            id: JSON.stringify(DeleteListArray),
+            data: {
 
-            path: folderpath
+                csrf: $("input[name='csrf']").val(),
 
-        },
+                id: JSON.stringify(DeleteListArray),
 
-        datatype: "json",
+                path: folderpath
 
-        success: function (response) {
+            },
 
-            if(response){
+            datatype: "json",
 
-                $('.dis').removeClass('dis').addClass('disabled');
-    
-                $('#Refreshdiv').trigger('click');
-    
-                $("#delcancel").trigger('click')
-    
-                DeleteListArray = []
-    
-                var message = `Mediafile Deleted Successfully`
-    
-                if(window.location.href.indexOf("media")!=-1){
-    
-                    notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-    
-                    $(notify_content).insertBefore(".header-rht");
-            
-                }else{
-    
-                    notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-            
-                    $(notify_content).insertBefore('.modal-content')
+            success: function (response) {
+
+                if (response) {
+
+                    $('.dis').removeClass('dis').addClass('disabled');
+
+                    $('#Refreshdiv').trigger('click');
+
+                    $("#delcancel").trigger('click')
+
+                    DeleteListArray = []
+
+                    var message = languagedata.Toast.deletemsg
+
+                    if (window.location.href.indexOf("media") != -1) {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore(".header-rht");
+
+                    } else {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
+                    }
+
+                    setTimeout(function () {
+
+                        $('.toast-msg').fadeOut('slow', function () {
+
+                            $(this).remove();
+                        });
+
+                    }, 5000); // 5000 milliseconds = 5 seconds
+
+                } else {
+
+                    var message = languagedata?.Toast?.deleteerrmsg
+
+                    if (window.location.href.indexOf("media") != -1) {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore(".header-rht");
+
+                    } else {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
+
+                    }
+
+                    setTimeout(function () {
+
+                        $('.toast-msg').fadeOut('slow', function () {
+
+                            $(this).remove();
+
+                        });
+
+                    }, 5000);
+
                 }
-            
-                setTimeout(function () {
-    
-                    $('.toast-msg').fadeOut('slow', function () {
-    
-                        $(this).remove();
-                    });
-    
-                }, 5000); // 5000 milliseconds = 5 seconds
-
-            }else{
-
-                   var message = `Unable to delete,Please try again later`
-
-                   if(window.location.href.indexOf("media")!=-1){
-
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                     $(notify_content).insertBefore(".header-rht");
-
-                   }else{
-
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                     $(notify_content).insertBefore(".modal-content");
-
-                   }
-
-                   setTimeout(function () {
-
-                      $('.toast-msg').fadeOut('slow', function () {
-
-                        $(this).remove();
-
-                      });
-
-                   }, 5000);
 
             }
-
-        }
-    })
+        })
+    }
 })
 
 /*Upload file*/
@@ -1069,7 +1178,7 @@ $(document).on('change', '#imgupload', function () {
 
     for (let x of MediaBreadcrumbRoot) {
 
-        folderpath +=  x + "/"
+        folderpath += x + "/"
 
     }
 
@@ -1101,94 +1210,139 @@ $(document).on('change', '#imgupload', function () {
 
             success: function (response) {
 
-                if(response){
+                if (response) {
 
-                   $('#Refreshdiv').click()
+                    $('#Refreshdiv').click()
 
-                   var message = `Image Uploaded Successfully`
+                    var message = languagedata?.Toast?.imgupload
 
-                   if(window.location.href.indexOf("media")!=-1){
+                    if (window.location.href.indexOf("media") != -1) {
 
-                    notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                     $(notify_content).insertBefore(".header-rht");
-        
-                   }else{
+                        $(notify_content).insertBefore(".header-rht");
 
-                    notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-        
-                     $(notify_content).insertBefore('.modal-content')
-                   }
-        
-                   setTimeout(function () {
+                    } else {
 
-                    $('.toast-msg').fadeOut('slow', function () {
+                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                        $(this).remove();
-                    });
+                        $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
+                    }
 
-                  }, 5000); // 5000 milliseconds = 5 seconds
+                    setTimeout(function () {
 
-                }else{
+                        $('.toast-msg').fadeOut('slow', function () {
 
-                    var message = `Unable to upload image,Please try again later`
+                            $(this).remove();
+                        });
 
-                   if(window.location.href.indexOf("media")!=-1){
+                    }, 5000); // 5000 milliseconds = 5 seconds
 
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+                } else {
 
-                     $(notify_content).insertBefore(".header-rht");
+                    var message = languagedata.Toast.imguploaderrmsg
 
-                   }else{
+                    if (window.location.href.indexOf("media") != -1) {
 
-                     notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                     $(notify_content).insertBefore(".modal-content");
+                        $(notify_content).insertBefore(".header-rht");
 
-                   }
+                    } else {
 
-                   setTimeout(function () {
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-                      $('.toast-msg').fadeOut('slow', function () {
+                        $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
 
-                        $(this).remove();
+                    }
 
-                      });
+                    setTimeout(function () {
 
-                   }, 5000);
+                        $('.toast-msg').fadeOut('slow', function () {
+
+                            $(this).remove();
+
+                        });
+
+                    }, 5000);
 
                 }
 
             },
 
-            error: function () {
+            error: function (xhr) {
 
-                $("#result").text(languagedata.Mediaa.uploaderrmsg);
+                if (xhr) {
+
+                    var message = ''
+
+                    if (xhr.status == 424) {
+
+                        message = "Imagename shouldnot contains only % symbol"
+
+                    }else if(xhr.status == 413) {
+
+                        message = "Image size should be less than 1mb"
+
+                    } else if (xhr.status == 500) {
+
+                        message = "Internal Server Error"
+
+                    } else {
+
+                        message = "unable to upload image in the specified path"
+                    }
+
+                    if (window.location.href.indexOf("media") != -1) {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore(".header-rht");
+
+                    } else {
+
+                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                        $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
+
+                    }
+
+                    setTimeout(function () {
+
+                        $('.toast-msg').fadeOut('slow', function () {
+
+                            $(this).remove();
+
+                        });
+
+                    }, 5000);
+
+                }
             }
         });
     }
     else {
 
-        var message = "Please choose images with jpg || jpeg || png formats only"
+        var message = languagedata?.Toast?.errmsgupload
 
-         if(window.location.href.indexOf("media")!=-1){
+        if (window.location.href.indexOf("media") != -1) {
 
-            var notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+            var notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
             $(notify_content).insertBefore(".header-rht");
 
-         }else{
+        } else {
 
-            var notify_content = '<div style="top:2px" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+            var notify_content = '<div style="top:2px" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
-            $(notify_content).insertBefore('.modal-content')
-         }
+            $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
+        }
 
         setTimeout(function () {
 
             $('.toast-msg').fadeOut('slow', function () {
 
-              $(this).remove();
+                $(this).remove();
 
             });
 
@@ -1198,10 +1352,10 @@ $(document).on('change', '#imgupload', function () {
 
 $(document).on('click', '#imgupload', function () {
 
-    if($(this).val()!=""){
+    if ($(this).val() != "") {
 
         $(this).val("")
-    } 
+    }
 })
 
 /*Refresh */
@@ -1209,31 +1363,31 @@ $(document).on('click', '#Refreshdiv', function () {
 
     var folderpath = ""
 
-    var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata.Mediaa.medialibrary + `</a></li>`
+    var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata?.Mediaa?.medialibrary + `</a></li>`
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if(MediaBreadcrumbRoot.length==1){
+        if (MediaBreadcrumbRoot.length == 1) {
 
             folderpath += MediaBreadcrumbRoot[x]
-            
-        }else{
 
-            if(x==0){
+        } else {
 
-                folderpath +=  MediaBreadcrumbRoot[x] + "/"
-    
-            }else if(x==MediaBreadcrumbRoot.length-1){
-    
-                folderpath +=  MediaBreadcrumbRoot[x] 
-    
-            }else{
-    
-                folderpath +=  MediaBreadcrumbRoot[x] + "/" 
+            if (x == 0) {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
+
+            } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                folderpath += MediaBreadcrumbRoot[x]
+
+            } else {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
             }
         }
 
-        bcrumb += `<li>/</li><li><a href="javascript:void(0)" data-id="` +  MediaBreadcrumbRoot[x] + `" class="bclick">` +  MediaBreadcrumbRoot[x] + `</a></li>`
+        bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
 
     }
 
@@ -1269,88 +1423,117 @@ $(document).on('click', '#Refreshdiv', function () {
 
             str = "";
 
-            if (res.folder != null || res.file != null) {
+            var count_text = ''
+
+            if (res.mediaCount != null) {
+
+                if (res.mediaCount > 1) {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafilesavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+
+                } else {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafileavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+                }
+            }
+
+            $('.leftHeader>.caption-flexx>p').html(count_text)
+
+            if (res.Media != null) {
 
                 $('.media-select-del').children().not('#unselectall').show()
 
-                if (res.folder != null) {
+                for (let x of res.Media) {
 
-                    for (let x of res.folder) {
+                    var mediaClass, src, fileType, totalSubMedia, mediaNameHtml = ''
 
-                        str += `   <div class="upload-folders folderdiv ">
+                    var subMediaHtml = ''
 
-               <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                    if (x.File === true) {
 
-               <div class="chk-group chk-group-box">
+                        mediaClass = 'folderdiv'
 
-                   <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                        src = '/public/img/folder-media.svg'
 
-                   <label for="`+ x.Name + `"></label>
+                        fileType = 'folder'
 
-               </div>
+                        if (x.TotalSubMedia > 1) {
 
-               <div class="upload-folder-img folder" style="cursor: pointer;">
+                            totalSubMedia = x.TotalSubMedia + ' Files'
 
-                   <img src="/public/img/folder-media.svg" alt="">
+                        } else {
 
-               </div>
+                            totalSubMedia = x.TotalSubMedia + ' File'
 
-               <div class="file-detail media-library-content">
+                        }
 
-                   <h3>`+ x.Name + `</h3>
+                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
 
-                   <p></p>
+                    } else {
 
-               </div>
+                        mediaClass = 'filediv'
 
-           </div>`
+                        if (MediaBreadcrumbRoot.length >= 1) {
+
+                            src = "/" + x.Path + "/" + x.Name
+
+                        } else {
+
+                            src = "/" + x.Path + x.Name
+                        }
+
+                        fileType = 'file'
 
                     }
-                }
 
-                if (res.file != null) {
+                    if(x.Name.length>=20){
 
-                    for (let j of res.file) {
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
 
-                        str += `
+                    }else{
 
-                    <div class="upload-folders filediv ">
+                        mediaNameHtml = `<h3>${x.Name}</h3>`
 
-                    <p class="forsearch" style="display: none;">`+ j.Name + `</p>
-
-
-                    <div class="chk-group chk-group-box">
-
-                        <input type="checkbox" class="ckbox" id="`+ j.Name + `" data-id="` + j.Name + `" for="` + j.Name + `">
-                        
-                        <label for="`+ j.Name + `"></label>
-
-                    </div>
-
-                    <div class="upload-folder-img" style="cursor: pointer;">
-
-                    <img src="/`+ encodeURIComponent(j.Path + '/' + j.Name) + `" alt="" id="cimg" >
-
-                    </div>
-
-                    <div class="file-detail media-library-content">
-
-                        <h3>`+ j.Name + `</h3>
-
-                        <p></p>
-
-                    </div>
-
-                </div>
-                    `
                     }
+
+                    str += `<div class="upload-folders ${mediaClass}">
+
+                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+
+                                <div class="chk-group chk-group-box">
+
+                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+
+                                    <label for="`+ x.Name + `"></label>
+
+                                </div>
+  
+                                <div class="upload-folder-img ${fileType}">
+
+                                    <img src="${src}" alt="">
+
+                                </div>
+
+                                <div class="file-detail media-library-content">
+
+                                    ${mediaNameHtml}
+
+                                    ${subMediaHtml}
+
+                                </div>
+
+                            </div>`
                 }
 
                 $("#drivelist").html(str)
 
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
             } else {
 
                 $('.media-select-del').children().hide()
+
+                $('#addfoldervalues').hide()
 
                 $('#errorhtml').html(`<div class="noData-foundWrapper">
 
@@ -1391,34 +1574,34 @@ $(document).on('click', '.folder', function () {
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if(MediaBreadcrumbRoot.length==1){
+        if (MediaBreadcrumbRoot.length == 1) {
 
             folderpath += MediaBreadcrumbRoot[x]
-            
-        }else{
 
-            if(x==0){
+        } else {
 
-                folderpath +=  MediaBreadcrumbRoot[x] + "/"
-    
-            }else if(x==MediaBreadcrumbRoot.length-1){
-    
-                folderpath +=  MediaBreadcrumbRoot[x] 
-    
-            }else{
-    
-                folderpath +=  MediaBreadcrumbRoot[x] + "/" 
+            if (x == 0) {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
+
+            } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                folderpath += MediaBreadcrumbRoot[x]
+
+            } else {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
             }
         }
 
-        bcrumb += `<li>/</li><li><a href="javascript:void(0)" data-id="` +  MediaBreadcrumbRoot[x] + `" class="bclick">` +  MediaBreadcrumbRoot[x] + `</a></li>`
+        bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
 
     }
 
     $('.mediabreadcrumb').children('ul').html(bcrumb);
 
     $.ajax({
- 
+
         type: "post",
 
         url: "/media/singlefolder",
@@ -1447,88 +1630,117 @@ $(document).on('click', '.folder', function () {
 
             str = "";
 
-            if (res.folder != null || res.file != null) {
+            var count_text = ''
+
+            if (res.mediaCount != null) {
+
+                if (res.mediaCount > 1) {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafilesavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+
+                } else {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafileavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+                }
+            }
+
+            $('.leftHeader>.caption-flexx>p').html(count_text)
+
+            if (res.Media != null) {
 
                 $('.media-select-del').children().not('#unselectall').show()
 
-                if (res.folder != null) {
+                for (let x of res.Media) {
 
-                    for (let x of res.folder) {
+                    var mediaClass, src, fileType, totalSubMedia, mediaNameHtml = ''
 
-                        str += `   <div class="upload-folders folderdiv ">
+                    var subMediaHtml = ''
 
-                        <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                    if (x.File === true) {
 
-                        <div class="chk-group chk-group-box">
+                        mediaClass = 'folderdiv'
 
-                            <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                        src = '/public/img/folder-media.svg'
 
-                            <label for="`+ x.Name + `"></label>
+                        fileType = 'folder'
 
-                        </div>
+                        if (x.TotalSubMedia > 1) {
 
-                        <div class="upload-folder-img folder" style="cursor: pointer;">
+                            totalSubMedia = x.TotalSubMedia + ' Files'
 
-                            <img src="/public/img/folder-media.svg" alt="">
+                        } else {
 
-                        </div>
+                            totalSubMedia = x.TotalSubMedia + ' File'
 
-                        <div class="file-detail media-library-content">
+                        }
 
-                            <h3>`+ x.Name + `</h3>
+                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
 
-                            <p></p>
+                    } else {
 
-                        </div>
+                        mediaClass = 'filediv'
 
-                    </div>`
+                        if (MediaBreadcrumbRoot.length >= 1) {
+
+                            src = "/" + x.Path + "/" + x.Name
+
+                        } else {
+
+                            src = "/" + x.Path + x.Name
+                        }
+
+                        fileType = 'file'
+
+                    }
+
+                    if(x.Name.length>=20){
+
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
+
+                    }else{
+
+                        mediaNameHtml = `<h3>${x.Name}</h3>`
 
                     }
 
-                }
+                    str += `<div class="upload-folders ${mediaClass}">
 
-                if (res.file != null) {
+                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
 
-                    for (let j of res.file) {
-                        
-                        str += `
+                                <div class="chk-group chk-group-box">
 
-                        <div class="upload-folders filediv">
+                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
 
-                        <p class="forsearch" style="display: none;">`+ j.Name + `</p>
+                                    <label for="`+ x.Name + `"></label>
 
-                        <div class="chk-group chk-group-box">
+                                </div>
+  
+                                <div class="upload-folder-img ${fileType}">
 
-                            <input type="checkbox" class="ckbox" id="`+ j.Name + `" data-id="` + j.Name + `" for="` + j.Name + `">
+                                    <img src="${src}" alt="">
 
-                            <label for="`+ j.Name + `"></label>
+                                </div>
 
-                        </div>
+                                <div class="file-detail media-library-content">
 
-                        <div class="upload-folder-img" style="cursor: pointer;">
+                                    ${mediaNameHtml}
 
-                        <img src="/`+ encodeURIComponent(j.Path + '/' + j.Name) + `" alt="" id="cimg" >
+                                    ${subMediaHtml}
 
-                        </div>
+                                </div>
 
-                        <div class="file-detail media-library-content">
-
-                            <h3>`+ j.Name + `</h3>
-
-                            <p></p>
-
-                        </div>
-
-                    </div>`
-
-                    }
+                            </div>`
                 }
 
                 $('#drivelist').html(str);
 
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
             } else {
 
                 $('.media-select-del').children().hide()
+
+                $('#addfoldervalues').hide()
 
                 $('#errorhtml').html(`<div class="noData-foundWrapper">
 
@@ -1563,31 +1775,31 @@ $(document).on('click', '.bclick', function () {
 
     var folderpath = ""
 
-    var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick"> ` + languagedata.Mediaa.medialibrary + ` </a></li>`
+    var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata.Mediaa.medialibrary + `</a></li>`
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if(MediaBreadcrumbRoot.length==1){
+        if (MediaBreadcrumbRoot.length == 1) {
 
             folderpath += MediaBreadcrumbRoot[x]
-            
-        }else{
 
-            if(x==0){
+        } else {
 
-                folderpath +=  MediaBreadcrumbRoot[x] + "/"
-    
-            }else if(x==MediaBreadcrumbRoot.length-1){
-    
-                folderpath +=  MediaBreadcrumbRoot[x] 
-    
-            }else{
-    
-                folderpath +=  MediaBreadcrumbRoot[x] + "/" 
+            if (x == 0) {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
+
+            } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                folderpath += MediaBreadcrumbRoot[x]
+
+            } else {
+
+                folderpath += MediaBreadcrumbRoot[x] + "/"
             }
         }
 
-        bcrumb += `<li>/</li><li><a href="javascript:void(0)" data-id="` +  MediaBreadcrumbRoot[x] + `" class="bclick">` +  MediaBreadcrumbRoot[x] + `</a></li>`
+        bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
 
     }
 
@@ -1623,88 +1835,117 @@ $(document).on('click', '.bclick', function () {
 
             str = "";
 
-            if (res.folder != null || res.file != null) {
+            var count_text = ''
+
+            if (res.mediaCount != null) {
+
+                if (res.mediaCount > 1) {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafilesavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+
+                } else {
+
+                    count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafileavailable + ":" + ` <span class="para">${res.mediaCount}</span> `
+                }
+            }
+
+            $('.leftHeader>.caption-flexx>p').html(count_text)
+
+            if (res.Media != null) {
 
                 $('.media-select-del').children().not('#unselectall').show()
 
-                if (res.folder != null) {
+                for (let x of res.Media) {
 
-                    for (let x of res.folder) {
+                    var mediaClass, src, fileType, totalSubMedia, mediaNameHtml = ''
 
-                        str += `   <div class="upload-folders folderdiv ">
+                    var subMediaHtml = ''
 
-                        <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                    if (x.File === true) {
 
-                        <div class="chk-group chk-group-box">
+                        mediaClass = 'folderdiv'
 
-                            <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                        src = '/public/img/folder-media.svg'
 
-                            <label for="`+ x.Name + `"></label>
+                        fileType = 'folder'
 
-                        </div>
+                        if (x.TotalSubMedia > 1) {
 
-                        <div class="upload-folder-img folder" style="cursor: pointer;">
+                            totalSubMedia = x.TotalSubMedia + ' Files'
 
-                            <img src="/public/img/folder-media.svg" alt="">
+                        } else {
 
-                        </div>
+                            totalSubMedia = x.TotalSubMedia + ' File'
 
-                        <div class="file-detail media-library-content">
+                        }
 
-                            <h3>`+ x.Name + `</h3>
+                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
 
-                            <p></p>
+                    } else {
 
-                        </div>
+                        mediaClass = 'filediv'
 
-                    </div>`
+                        if (MediaBreadcrumbRoot.length >= 1) {
+
+                            src = "/" + x.Path + "/" + x.Name
+
+                        } else {
+
+                            src = "/" + x.Path + x.Name
+                        }
+
+                        fileType = 'file'
 
                     }
-                }
 
-                if (res.file != null) {
+                    if(x.Name.length>=20){
 
-                    for (let j of res.file) {
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
 
-                        str += `
+                    }else{
 
-                 <div class="upload-folders filediv ">
+                        mediaNameHtml = `<h3>${x.Name}</h3>`
 
-                 <p class="forsearch" style="display: none;">`+ j.Name + `</p>
-
-                 <div class="chk-group chk-group-box">
-
-                     <input type="checkbox" class="ckbox" id="`+ j.Name + `" data-id="` + j.Name + `" for="` + j.Name + `">
-
-                     <label for="`+ j.Name + `"></label>
-
-                 </div>
-
-                 <div class="upload-folder-img" style="cursor: pointer;">
-
-                 <img src="/`+ encodeURIComponent(j.Path + '/' + j.Name) + `" alt="" id="cimg">
-
-                 </div>
-
-                 <div class="file-detail media-library-content">
-
-                     <h3>`+ j.Name + `</h3>
-
-                     <p></p>
-
-                 </div>
-
-             </div>`
-             
                     }
 
+                    str += `<div class="upload-folders ${mediaClass}">
+
+                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+
+                                <div class="chk-group chk-group-box">
+
+                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+
+                                    <label for="`+ x.Name + `"></label>
+
+                                </div>
+  
+                                <div class="upload-folder-img ${fileType}">
+
+                                    <img src="${src}" alt="">
+
+                                </div>
+
+                                <div class="file-detail media-library-content">
+
+                                    ${mediaNameHtml}
+
+                                    ${subMediaHtml}
+
+                                </div>
+
+                            </div>`
                 }
 
                 $('#drivelist').html(str);
 
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
             } else {
 
                 $('.media-select-del').children().hide()
+
+                $('#addfoldervalues').hide()
 
                 $('#errorhtml').html(`<div class="noData-foundWrapper">
 
@@ -1732,13 +1973,13 @@ $("#selectall").click(function () {
 
         var name = $(this).parent().siblings('.file-detail').find('h3').text();
 
-        console.log("name",name);
+        console.log("name", name);
 
-        if($(this).parents('.upload-folders').css('display')=='block'){
+        if ($(this).parents('.upload-folders').css('display') == 'block' && !$(this).is(":checked")) {
 
             DeleteListArray.push(name)
 
-            $(this).prop('checked',true)
+            $(this).prop('checked', true)
 
         }
 
@@ -1750,7 +1991,7 @@ $("#selectall").click(function () {
 
     $("#unselectall").show()
 
-    console.log("media delete array",DeleteListArray);
+    console.log("media delete array", DeleteListArray);
 
 })
 
@@ -1758,7 +1999,7 @@ $("#unselectall").click(function () {
 
     DeleteListArray = []
 
-    $('.ckbox').prop('checked',false)
+    $('.ckbox').prop('checked', false)
 
     TrashButton()
 
@@ -1766,7 +2007,7 @@ $("#unselectall").click(function () {
 
     $("#selectall").show()
 
-    console.log("media delete array",DeleteListArray);
+    console.log("media delete array", DeleteListArray);
 
 })
 
@@ -1774,11 +2015,11 @@ $("#mediasearch").keyup(function () {
 
     var keyword = $(this).val().trim().toLowerCase()
 
-    if(keyword!=""){
+    if (keyword != "") {
 
         PerformMediaSearch(keyword)
 
-    }else{
+    } else {
 
         $('.noData-foundWrapper').remove()
 
@@ -1788,36 +2029,97 @@ $("#mediasearch").keyup(function () {
 
         $('.media-select-del').children().not('#unselectall').show()
 
+        if ($('.upload-folders:visible').length == 0) {
+
+            $('.media-select-del').children().hide()
+
+            $('#errorhtml').html(`<div class="noData-foundWrapper">
+
+            <div class="empty-folder">
+
+                <img src="/public/img/folder-sh.svg" alt="">
+
+                <img src="/public/img/shadow.svg" alt="">
+
+            </div>
+
+            <h1 class="heading">`+ languagedata.oopsnodata + `</h1>
+
+        </div>`)
+
+        }
+
     }
 
     DeleteListArray = []
 
     TrashButton()
 
-    $('.upload-folders>.chk-group>.ckbox').prop('checked',false)
+    $('.upload-folders>.chk-group>.ckbox').prop('checked', false)
+
+    CrossCheckCount()
 
 })
 
-function PerformMediaSearch(keyword){
+function PerformMediaSearch(keyword) {
 
-    $('.upload-folders').each(function(){
+    $('.upload-folders').each(function () {
 
-        mediaName = $(this).find('.file-detail>h3').text()
+        mediaName = $(this).find('.file-detail>h3').text().toLowerCase()
 
-        if(mediaName.includes(keyword)){
+        if (mediaName.includes(keyword)) {
 
-            $('.noData-foundWrapper').remove()
+            if ($(this).hasClass('folderdiv')) {
 
-            $(this).show()
+                if (mediaName.includes(keyword) === true) {
 
-        }else{
+                    $(this).show()
+
+                }
+
+            } else if ($(this).hasClass('filediv')) {
+
+                var imagefinalkey = ''
+
+                var imageExt = ''
+
+                var lastDotIndex = mediaName.lastIndexOf(".")
+
+                if (lastDotIndex !== -1) {
+
+                    imagefinalkey = mediaName.substring(0, lastDotIndex)
+
+                    imageExt = mediaName.substring(lastDotIndex, mediaName.length - 1)
+
+                }
+
+                if (imagefinalkey.includes(keyword) === true) {
+
+                    $(this).show()
+
+                } else {
+
+                    $(this).hide()
+                }
+
+            }
+
+            if ($('.upload-folders:visible').length > 0) {
+
+                $('.noData-foundWrapper').remove()
+
+            }
+
+        } else {
 
             $(this).hide()
 
-            if($('.upload-folders:visible').length==0){
+            if ($('.upload-folders:visible').length == 0) {
 
                 $('.media-select-del').children().hide()
-    
+
+                $('#addfoldervalues').hide()
+
                 $('#errorhtml').html(`<div class="noData-foundWrapper">
     
                 <div class="empty-folder">
@@ -1831,13 +2133,13 @@ function PerformMediaSearch(keyword){
                 <h1 class="heading">`+ languagedata.oopsnodata + `</h1>
     
             </div>`)
-    
-            }else{
+
+            } else {
 
                 $('.media-select-del>#unselectall').hide()
 
                 $('.media-select-del').children().not('#unselectall').show()
-    
+
                 $('.noData-foundWrapper').remove()
 
             }
@@ -1847,7 +2149,245 @@ function PerformMediaSearch(keyword){
     })
 }
 
+$(document).on('click', '.portrait-btn', function () {
 
+    $('#crop-container').removeClass('croppie-container').empty().hide()
 
+    $('#crop-container1').removeClass('croppie-container').empty().show()
 
+    $('.admincropimg-wrap').removeClass('profile-cropimg')
 
+    $('.admincropimg-btns-rht .active').removeClass('active')
+
+    $(this).addClass('active')
+
+    portrait_cropper = $('#crop-container1').croppie({
+
+        enableExif: true,
+
+        enableResize: false,
+
+        enableOrientation: true,
+
+        viewport: {
+
+            width: 370,
+
+            height: 440,
+        },
+
+        showZoomer: false,
+
+        // fit: true,
+    });
+
+    dimension = '370*440'
+
+    if ($('.cr-slider-wrap').length > 1) {
+
+        $('.cr-slider-wrap')[1].remove()
+    }
+
+    $('.cr-slider-wrap').appendTo($('#zoom-div'));
+
+    $('canvas[class=cr-image]').css('opacity', '0')
+
+    $('.cr-slider').css('display', 'block')
+
+    $('#rotateSlider').val("0")
+
+    $('#mediaDecideModal .imgname').text($(this).parents('.upload-folders').find('.file-detail>h3').text())
+
+    $('#mediaDecideModal #imgsrc-input').val(html_imgurl)
+
+    canvas = document.querySelector('canvas[class=cr-image]');
+
+    ctx = canvas.getContext('2d');
+
+    portrait_cropper.croppie('bind', {
+
+        url: html_imgurl,
+
+        orientation: 0,
+
+        zoom: 0
+
+    }).then(function () {
+
+        // cropper.croppie('setZoom',0)
+
+        console.log("cropper initialized!");
+    })
+
+})
+
+$(document).on('click', '.square-btn', function () {
+
+    $('#crop-container').removeClass('croppie-container').empty().hide()
+
+    $('#crop-container1').removeClass('croppie-container').empty().show()
+
+    $('.admincropimg-wrap').removeClass('profile-cropimg')
+
+    $('.admincropimg-btns-rht .active').removeClass('active')
+
+    $(this).addClass('active')
+
+    square_cropper = $('#crop-container1').croppie({
+
+        enableExif: true,
+
+        enableResize: false,
+
+        enableOrientation: true,
+
+        viewport: {
+
+            width: 370,
+
+            height: 370,
+        },
+
+        showZoomer: false,
+
+        // fit: true,
+    });
+
+    dimension = '370*370'
+
+    if ($('.cr-slider-wrap').length > 1) {
+
+        $('.cr-slider-wrap')[1].remove()
+    }
+
+    $('.cr-slider-wrap').appendTo($('#zoom-div'));
+
+    $('canvas[class=cr-image]').css('opacity', '0')
+
+    $('.cr-slider').css('display', 'block')
+
+    $('#rotateSlider').val("0")
+
+    $('#mediaDecideModal .imgname').text($(this).parents('.upload-folders').find('.file-detail>h3').text())
+
+    $('#mediaDecideModal #imgsrc-input').val(html_imgurl)
+
+    canvas = document.querySelector('canvas[class=cr-image]');
+
+    ctx = canvas.getContext('2d');
+
+    square_cropper.croppie('bind', {
+
+        url: html_imgurl,
+
+        orientation: 0,
+
+        zoom: 0
+
+    }).then(function () {
+
+        // cropper.croppie('setZoom',0)
+
+        console.log("cropper initialized!");
+    })
+
+})
+
+$(document).on('click', '.landscape-btn', function () {
+
+    $('#crop-container').removeClass('croppie-container').empty().show()
+
+    $('#crop-container1').removeClass('croppie-container').empty().hide()
+
+    $('.admincropimg-wrap').removeClass('profile-cropimg')
+
+    $('.admincropimg-btns-rht .active').removeClass('active')
+
+    $(this).addClass('active')
+
+    default_cropper = $('#crop-container').croppie({
+
+        enableExif: true,
+
+        enableResize: false,
+
+        enableOrientation: true,
+
+        viewport: {
+
+            width: 680,
+
+            height: 340,
+        },
+
+        showZoomer: false,
+
+        // fit: true,
+    });
+
+    dimension = '680*340'
+
+    if ($('.cr-slider-wrap').length > 1) {
+
+        $('.cr-slider-wrap')[1].remove()
+    }
+
+    $('.cr-slider-wrap').appendTo($('#zoom-div'));
+
+    $('canvas[class=cr-image]').css('opacity', '0')
+
+    $('.cr-slider').css('display', 'block')
+
+    $('#rotateSlider').val("0")
+
+    $('#mediaDecideModal .imgname').text($(this).parents('.upload-folders').find('.file-detail>h3').text())
+
+    $('#mediaDecideModal #imgsrc-input').val(html_imgurl)
+
+    canvas = document.querySelector('canvas[class=cr-image]');
+
+    ctx = canvas.getContext('2d');
+
+    default_cropper.croppie('bind', {
+
+        url: html_imgurl,
+
+        orientation: 0,
+
+        zoom: 0
+
+    }).then(function () {
+
+        // cropper.croppie('setZoom',0)
+
+        console.log("cropper initialized!");
+    })
+
+})
+
+function CrossCheckCount() {
+
+    var count_text = ''
+
+    var count = $('.upload-folders:visible').length
+
+    if ($('.upload-folders:visible').length > 0) {
+
+        if (count > 1) {
+
+            count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafilesavailable + ":" + ` <span class="para">` + count + `</span> `
+
+        } else {
+
+            count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafileavailable + ":" + ` <span class="para">` + count + `</span> `
+        }
+
+    } else {
+
+        count_text = languagedata.total + " " + languagedata?.Mediaa?.mediafileavailable + ":" + ` <span class="para">` + count + `</span> `
+
+    }
+
+    $('.leftHeader>.caption-flexx>p').html(count_text)
+
+}

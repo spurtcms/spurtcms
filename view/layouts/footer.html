@@ -25,6 +25,31 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade delete-modal" id="centerModal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="warn-image">
+          <img src="/public/img/wraning.svg" alt="" />
+        </div>
+        <h2 class="heading-second deltitle"></h2>
+        <p class="heading-three deldesc" id="content">
+        </p>
+        <a href="javascript:void(0)" class="heading-three delname"></a>
+      </div>
+      <div class="modal-footer">
+        <a id="delete" class="spaceid" href="javascript:void(0)">
+          <button type="button" class="btn-reg btn-md primary" id="delid1" name="delid">{{$Translate.Yes}}</button></a>
+        </button>
+        <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="delcancel1">
+          {{$Translate.No}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <footer>
   <p class="para">{{.Menu.Footer}}</p>
 </footer>
@@ -73,4 +98,13 @@
 <!--Local files-->
 <script src="/public/js/common.js"></script>
 <script src="/public/js/bootstrap-material-datetimepicker.js"></script>
+<!-- Xlsx -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script>
+  // Initialize tooltips
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
 {{end}}

@@ -40,9 +40,9 @@ let deletesubarr = []
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })

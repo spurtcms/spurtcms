@@ -1,4 +1,5 @@
 {{define "cmstab"}}
+{{$Translate := .translate}}
 <div class="tablst br-btm">
     <ul class="nav entries-tab" id="myTab" role="tablist">
         {{$Entriestab := .Entriestab}}
@@ -6,14 +7,14 @@
         {{$Categoriesmenu := .Categoriesmenu}}
         {{$Mediamenu := .Mediamenu}}
         {{range .Menu.TblModule}}
-        {{if eq .ModuleName "CMS"}}
+        {{if eq .ModuleName "Channels"}}
         {{range .SubModule}}
         {{if eq .ModuleName "Entries"}}
         {{if .Routes}}
         <li class="nav-itm" role="presentation">
             <a class="nav-lnk incmsmenu entriesmenu {{if eq $Entriestab true}}active{{end}}" href="/channel/entrylist/">
                 <img src="/public/img/entries.svg" alt="" />
-                <span class="heading-three">{{.ModuleName}}</span>
+                <span class="heading-three">{{$Translate.Entries}}</span>
             </a>
         </li>
         {{end}}
@@ -23,7 +24,7 @@
         <li class="nav-itm" role="presentation">
             <a class="nav-lnk heading-three incmsmenu channelsmenu {{if eq $Channelsmenu true}}active{{end}}" href="/channels/">
                 <img src="/public/img/channels.svg" alt="" />
-                <span class="heading-three">{{.ModuleName}}</span>
+                <span class="heading-three">{{$Translate.Channell.Channels}}</span>
             </a>
         </li>
         {{end}}
@@ -33,7 +34,7 @@
         <li class="nav-itm" role="presentation">
             <a  class="nav-lnk heading-three incmsmenu categoriesmenu {{if eq $Categoriesmenu true}}active{{end}}" href="/categories/">
                 <img src="/public/img/categories.svg" alt="" />
-                <span class="heading-three">{{.ModuleName}}</span>
+                <span class="heading-three">{{$Translate.Categoriess}}</span>
             </a>
         </li>
         {{end}}
@@ -42,7 +43,7 @@
         <li class="nav-itm" role="presentation">
             <a class="nav-lnk heading-three incmsmenu mediamenu {{if eq  $Mediamenu true}}active{{end}}"  href="/media/">
                 <img src="/public/img/media.svg" alt="" />
-                <span class="heading-three">{{.ModuleName}}</span>
+                <span class="heading-three">{{$Translate.Media}}</span>
             </a>
         </li>
         {{end}}

@@ -2,18 +2,22 @@ var languagedata
 /**This if for Language json file */
 $(document).ready(async function () {
 
-  var languagecode = $('.language-group>button').attr('data-code')
-
-  await $.getJSON("/locales/"+languagecode+".json", function (data) {
-      
-      languagedata = data
-  })
+  var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
+        
+        languagedata = data
+    })
 
 });
 
 $(document).on('click','#edit-btn',function(){
       tempid = $(this).attr('data-id')
       $('#userid').val(tempid)
+      var url = window.location.search;
+      const urlpar = new URLSearchParams(url);
+      pageno = urlpar.get('page');
+      $("#pageno").val(pageno)
       $.ajax({
         url: "/settings/emails/edit-template",
         type: "GET",
@@ -115,7 +119,7 @@ $("#updtemp").validate({
       temcont:{
         required: true,
         space: true,
-        maxlength: 250,
+        // maxlength: 250,
       },
   },
   messages: {
@@ -132,7 +136,7 @@ $("#updtemp").validate({
       temcont: {
         required: "* Please enter templatecontent" ,
           space: "* " + languagedata.spacergx,
-          maxlength: "* Maximum 250 character allowed"
+          // maxlength: "* Maximum 250 character allowed"
       }
   }
 });

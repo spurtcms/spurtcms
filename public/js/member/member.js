@@ -2,58 +2,27 @@ var languagedata
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    $.getJSON("/locales/" + languagecode + ".json", function (data) {
-
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
+        
         languagedata = data
     })
 })
 
-$(document).ready(function () {
-    // $('.nav-link.Members').parent().addClass("active");
-    $('.Members').addClass('checked');
-
-    // $.validator.addMethod("fname_validator", function (value) {
-    //     return /^[\S+(?: \S+)]{3,15}$/.test(value);
-    // }, '* Please Enter a Valid Name.');
-
-    // $.validator.addMethod("username_validator", function (value) {
-    //     return /^[\S+(?: \S+)]{3,15}$/.test(value);
-    // }, ' * Please Enter a Valid Name.');
-
-    // $.validator.addMethod("mob_validator", function (value) {
-    //     return /^[6-9]{1}[0-9]{9}$/.test(value);
-    // }, '* ' + languagedata.Userss.usrmobnumrgx);
-
-    // jQuery.validator.addMethod("mob_validator", function (value) {
-    //     return /^([0|\+[0-9]{1,5})?([6-9]{1}[0-9]{9})$/.test(value)
-    // }, "*" + languagedata.Memberss.memmobvailderr);
-
-    // $.validator.addMethod("email_validator", function (value) {
-    //     return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
-    // }, '* ' + languagedata.Memberss.mememailrgx);
-
-    // jQuery.validator.addMethod("pass_validator", function (value, element) {
-    //     if (value != "") {
-    //         if (/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/.test(value))
-    //             return true;
-    //         else return false;
-    //     }
-    //     else return true;
-    // }, "* " + languagedata.Memberss.mempswdrgx
-    // );
-
-});
-
 $(document).on('click', '#crop-button', function () {
     $(".name-string").hide()
-    // $('#profpic').show()
+    $('#profpic').show()
 })
 
 $("#addmember , #clickadd").click(function () {
+
+    $('#profpic').attr('src', '/public/img/default profile .svg').show()
+
+
     $("#title").text(languagedata.Memberss.addmember)
-    $("#triggerId").text(languagedata.Memberss.choosegroup)
+    $("#triggerId").text(languagedata.Memberss.defaultgroup)
+    $("#membergroupvalue").val(1)
 
     $("#mem_id").val("")
     $("#mem_name").val("")
@@ -70,14 +39,15 @@ $("#addmember , #clickadd").click(function () {
     $("#mem_email-error").hide()
     $("#mem_mobile-error").hide()
     $("#mem_usrname-error").hide()
+    $("#myfile-error").css("display", "none")
     // $("#mem_activestat-error").hide()
     $("#membergroupvalue-error").hide()
     $("#memberimg-error").hide()
     $("#mem_pass-error").hide()
     $(".input-group").removeClass("input-group-error")
-    $('.update-profile-img>img').attr('src', '/public/img/profile.png')
     $('input[type=hidden][name=crop_data]').val("")
     $(".name-string").hide()
+    $("#myfile-error").hide()
 
 
     $("#save").show()
@@ -86,38 +56,44 @@ $("#addmember , #clickadd").click(function () {
 })
 
 // only allow numbers
-// $('#mem_mobile').keyup(function () {
-//     this.value = this.value.replace(/[^0-9\.]/g, '');
-// });
+$('#mem_mobile').keyup(function () {
+    this.value = this.value.replace(/[^0-9\.]/g, '');
+});
 
 // delete btn
 $(document).on('click', '#del', function () {
     var MemberId = $(this).attr("data-id")
     $(".deltitle").text(languagedata.Memberss.deltitle)
-    $('.delname').text($(this).parents('tr').find('td:eq(0)').text())
+    $('.delname').text($(this).parents('tr').find('#membername').text())
     $("#content").text(languagedata.Memberss.delmember)
-    $('#delete').attr('href', '/member/deletemember?id=' + MemberId);
-})
+    var url = window.location.search
+    const urlpar = new URLSearchParams(url)
+    pageno = urlpar.get('page')
 
-$(document).on("click", "#editmembergroup", function () {
-    var url = window.location.search;
-    const urlpar = new URLSearchParams(url);
-    pageno = urlpar.get('page');
-    console.log(pageno,"chech")
     if (pageno == null) {
-        pageno = "1";
+        $('#delete').attr('href', '/member/deletemember?id=' + MemberId);
+
+    } else {
+        $('#delete').attr('href', '/member/deletemember?id=' + MemberId + "&page=" + pageno);
+
     }
-    $("#memgrbpageno").val(pageno)
-    // var memberId = $(this).data("id");
-    var editUrl = $(this).attr("href");
-    window.location.href = editUrl + "&page=" + pageno;
-});
+})
 
 // editbtn
 var edit
 $(document).on('click', '#editmem', function () {
 
     $(".input-group").removeClass("input-group-error")
+    $("#mem_name-error").hide()
+    $("#mem_lname-error").hide()
+    $("#mem_email-error").hide()
+    $("#mem_mobile-error").hide()
+    $("#mem_usrname-error").hide()
+    $("#membergroupvalue-error").hide()
+    $("#memberimg-error").hide()
+    $("#mem_pass-error").hide()
+    $("#myfile-error").css("display", "none")
+
 
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
@@ -126,7 +102,6 @@ $(document).on('click', '#editmem', function () {
     $("#memgrbpageno").val(pageno)
 
     var data = $(this).attr("data-id");
-    console.log("id", data);
     $("#title").text(languagedata.Memberss.uptmember)
     $("#save").hide()
     $("#update").show()
@@ -139,12 +114,11 @@ $(document).on('click', '#editmem', function () {
     $("#triggerId").text(desc);
 
     $.ajax({
-        url: "/member/editmember",
+        url: "/member/updatemember",
         type: "GET",
         dataType: "json",
         data: { "id": data },
         success: function (result) {
-
             $("#mem_id").val(result.Member.Id)
             $("#mem_name").val(result.Member.FirstName)
             $("#mem_lname").val(result.Member.LastName)
@@ -155,23 +129,20 @@ $(document).on('click', '#editmem', function () {
             // $("#profpic").attr("src", "/" + result.Member.ProfileImagePath)
 
             if (result.Member.ProfileImagePath != "") {
-                $('#profpic').attr('src',result.Member.ProfileImagePath.replace(/^/, '/')).show();
+                $('#profpic').attr('src', result.Member.ProfileImagePath.replace(/^/, '/')).show();
                 $(".name-string").hide()
             } else {
                 $('#profpic').hide()
                 $(".name-string").text(result.Member.NameString).show()
             }
-          
 
             $("#triggerId").val(result.Group.Name)
 
-            var res = $("#mem_activestat").val(result.Member.IsActive)
+            var isactive = $("#cb1").val(result.Member.IsActive)
+            $('.tgl-btn').val(isactive)
 
-            if (res == 1) {
-                $("#mem_activestat").prop("checked", true)
-
-            } else {
-                $("#mem_activestat").prop("", false)
+            if ($("#cb1").val() == 1) {
+                $('input[name=mem_activestat]').prop('checked', true)
 
             }
 
@@ -189,7 +160,7 @@ $(document).on('click', '#update', function () {
 
         var result;
         var mem_id = $("#mem_id").val()
-    
+
         $.ajax({
             url: "/member/checkemailinmember",
             type: "POST",
@@ -199,17 +170,17 @@ $(document).on('click', '#update', function () {
             caches: false,
             success: function (data) {
                 result = data.trim();
-    
+
             }
         })
         return result.trim() != "true"
     })
-    
+
     jQuery.validator.addMethod("duplicatenumber", function (value) {
-    
+
         var result;
         var mem_id = $("#mem_id").val()
-    
+
         $.ajax({
             url: "/member/checknumberinmember",
             type: "POST",
@@ -219,17 +190,17 @@ $(document).on('click', '#update', function () {
             caches: false,
             success: function (data) {
                 result = data.trim();
-    
+
             }
         })
         return result.trim() != "true"
     })
-    
+
     jQuery.validator.addMethod("duplicatename", function (value) {
-    
+
         var result;
         var mem_id = $("#mem_id").val()
-    
+
         $.ajax({
             url: "/member/checknameinmember",
             type: "POST",
@@ -239,16 +210,17 @@ $(document).on('click', '#update', function () {
             caches: false,
             success: function (data) {
                 result = data.trim();
-    
+
             }
         })
         return result.trim() != "true"
     })
-    
 
-    jQuery.validator.addMethod("mob_validator", function (value) {
-        return /^([0|\+[0-9]{1,5})?([6-9]{1}[0-9]{9})$/.test(value)
-    }, "*" + languagedata.Memberss.memmobvailderr);
+    $.validator.addMethod("mob_validator", function (value) {
+        if (/^[6-9]{1}[0-9]{9}$/.test(value))
+            return true;
+        else return false;
+    }, "*" + languagedata.Memberss.memmobnumrgx);
 
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
@@ -285,9 +257,9 @@ $(document).on('click', '#update', function () {
                 email_validator: true,
                 duplicateemail: true
             },
-            membergroupvalue: {
-                required: true,
-            },
+            // membergroupvalue: {
+            //     required: true,
+            // },
             mem_usrname: {
                 required: true,
                 //  username_validator: true,
@@ -327,9 +299,9 @@ $(document).on('click', '#update', function () {
                 required: "* " + languagedata.Memberss.memmail,
                 duplicateemail: "* " + languagedata.Memberss.emailexist
             },
-            membergroupvalue: {
-                required: "* " + languagedata.memgroup
-            },
+            // membergroupvalue: {
+            //     required: "* " + languagedata.memgroup
+            // },
             mem_usrname: {
                 required: "* " + languagedata.Memberss.memname,
                 space: "* " + languagedata.spacergx,
@@ -350,12 +322,6 @@ $(document).on('click', '#update', function () {
 
     $('input[name=mem_pass]').rules('remove', 'required')
 
-    // $("#newmember").valid();
-    // if ($('#newmember').valid()) {
-    //     $("#password").removeClass('.error').addClass("valid");
-    //     $('#newmember')[0].submit();
-    // }
-
     var formcheck = $("#memberform").valid();
     if (formcheck == true) {
         $('#memberform')[0].submit();
@@ -363,12 +329,13 @@ $(document).on('click', '#update', function () {
         $(document).on('keyup', ".field", function () {
             Validationcheck()
         })
-        $('.input-group').each(function () {
-            var inputField = $(this).find('input');
-            if (!inputField.valid() || inputField.val() === "") {
-                $(this).addClass('validate');
-            }
-        });
+        Validationcheck()
+        // $('.input-group').each(function () {
+        //     var inputField = $(this).find('input');
+        //     if (!inputField.valid() || inputField.val() === "") {
+        //         $(this).addClass('validate');
+        //     }
+        // });
     }
 
     return false
@@ -376,6 +343,7 @@ $(document).on('click', '#update', function () {
 // savebtn
 
 $("#save").click(function () {
+
     jQuery.validator.addMethod("duplicateemail", function (value) {
 
         var result;
@@ -436,9 +404,11 @@ $("#save").click(function () {
         return result.trim() != "true"
     })
 
-    jQuery.validator.addMethod("mob_validator", function (value) {
-        return /^([0|\+[0-9]{1,5})?([6-9]{1}[0-9]{9})$/.test(value)
-    }, "*" + languagedata.Memberss.memmobvailderr);
+    $.validator.addMethod("mob_validator", function (value) {
+        if (/^[6-9]{1}[0-9]{9}$/.test(value))
+            return true;
+        else return false;
+    }, "*" + languagedata.Memberss.memmobnumrgx);
 
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
@@ -478,9 +448,9 @@ $("#save").click(function () {
                 email_validator: true,
                 duplicateemail: true
             },
-            membergroupvalue: {
-                required: true,
-            },
+            // membergroupvalue: {
+            //     required: true,
+            // },
             mem_usrname: {
                 required: true,
                 //  username_validator: true,
@@ -520,9 +490,9 @@ $("#save").click(function () {
                 required: "* " + languagedata.Memberss.memmail,
                 duplicateemail: "* " + languagedata.Memberss.emailexist
             },
-            membergroupvalue: {
-                required: "* " + languagedata.memgroup
-            },
+            // membergroupvalue: {
+            //     required: "* " + languagedata.memgroup
+            // },
             mem_usrname: {
                 required: "* " + languagedata.Memberss.memname,
                 space: "* " + languagedata.spacergx,
@@ -571,8 +541,8 @@ $("#save").click(function () {
 $(".dropdown-values").on("click", function () {
     var text = $(this).text()
     var id = $(this).attr("data-id")
-    $(this).parent().siblings("a").text(text)
-    $(this).parent().siblings("input").val(id)
+    $(this).parents().siblings("a").text(text)
+    $(this).parents().siblings("input[name='membergroupvalue']").val(id)
     if ($('#membergroupvalue').val() !== '') {
         $('#membergroupvalue-error').hide()
         $('.user-drop-down').removeClass('input-group-error')
@@ -591,7 +561,7 @@ $("input[name=mem_activestat]").click(function () {
 })
 
 /*search */
-$(document).on("click", "#filterformsubmit1", function () {
+$(document).on("submit", "#filterformsubmit", function () {
     var key = $(this).siblings().children(".search").val();
     if (key == "") {
         window.location.href = "/member/"
@@ -620,7 +590,6 @@ $(document).on('click', '#newdd-input', function () {
 
 
 $('#newdd-input').blur(function () {
-    console.log("ssss")
     if ($('#valmem').val() !== '') {
         $(this).parents('.input-group').removeClass('validate')
     }
@@ -633,7 +602,6 @@ function Validationcheck() {
     inputGro.forEach(inputGroup => {
         let inputField = inputGroup.querySelector('input:not([name="membergroupvalue"])');
         var inputName = inputField.getAttribute('name');
-        console.log("input", inputName)
 
         if (inputField.classList.contains('error')) {
             inputGroup.classList.add('input-group-error');
@@ -641,7 +609,6 @@ function Validationcheck() {
             inputGroup.classList.remove('input-group-error');
         }
         if ($('#membergroupvalue-error').css('display') !== 'none') {
-            console.log("check")
             $('#memgrp').addClass('input-group-error')
         }
         else {
@@ -654,7 +621,6 @@ $(document).on("click", "#editmembergroup", function () {
     var url = window.location.search;
     const urlpar = new URLSearchParams(url);
     pageno = urlpar.get('page');
-    console.log(pageno, "chech")
     if (pageno == null) {
         pageno = "1";
     }
@@ -665,7 +631,6 @@ $(document).on("click", "#editmembergroup", function () {
 });
 
 $("#searchrole").keyup(function () {
-    console.log("check")
     var keyword = $(this).val().trim().toLowerCase()
     $(".choose-rel-articles .newck-group").each(function (index, element) {
         var title = $(element).find('h4').text().toLowerCase()
@@ -673,6 +638,7 @@ $("#searchrole").keyup(function () {
             $(element).show()
         } else {
             $(element).hide()
+           
         }
     })
 })
@@ -681,13 +647,12 @@ function refreshdiv() {
     $('.choose-rel-articles').load(location.href + ' .choose-rel-articles');
 }
 
-$(document).on('keyup', '#searchroles', function () {
+/*search redirect home page */
 
+$(document).on('keyup', '#searchmember', function () {
     if ($('.search').val() === "") {
-        window.location.href = "/member"
-
+        window.location.href = "/member/"
     }
-
 })
 
 // pasword show and close
@@ -715,39 +680,80 @@ $(document).on('click', '#eye', function () {
     }
 })
 
-$('form[class=filterform]>img').click(function () {
+// $('form[class=filterform]>img').click(function () {
 
-    if ($(this).siblings('input[name=keyword]').val() != "" && $(this).parents('.transitionSearch').hasClass('active')) {
+//     if ($(this).siblings('input[name=keyword]').val() != "" && $(this).parents('.transitionSearch').hasClass('active')) {
 
-        var keyword = $(this).siblings('input[name=keyword]').val()
+//         var keyword = $(this).siblings('input[name=keyword]').val()
 
-        window.location.href = "/membersgroup/?keyword=" + keyword
-    }
-})
+//         window.location.href = "/membersgroup/?keyword=" + keyword
+//     }
+// })
 
-$('#memModal').on('hide.bs.modal', function () {
+// $('#memModal').on('hide.bs.modal', function () {
 
-    $('.input-field-group .input-group').each(function () {
+//     $('.input-field-group .input-group').each(function () {
 
-        if ($(this).hasClass('input-group-error')) {
+//         if ($(this).hasClass('input-group-error')) {
 
-            $(this).removeClass('input-group-error')
+//             $(this).removeClass('input-group-error')
+//         }
+//     })
+
+//     $('label[class=error').removeClass('error').hide()
+
+//     $("#memberform").attr("action", "/member/newmember");
+
+//     $("#memberform").attr("name", "createmember");
+
+//     $('#mem_pass-error').remove()
+
+//     // $('input[name=mem_activestat]').remove()
+
+//     // $('<input class="tgl tgl-light" name="mem_activestat" id="mem_activestat" type="checkbox">').insertBefore('label[for=mem_activestat]')
+
+//     $('input[type=hidden][name=membergroupvalue]').val("")
+
+// })
+
+// dropdown filter input box search
+$("#searchmembergrp").keyup(function () {
+    var keyword = $(this).val().trim().toLowerCase()
+    $(".membergrp-list-row button").each(function (index, element) {
+        var title = $(element).text().toLowerCase()
+
+        if (title.includes(keyword)) {
+            $(element).show()
+            $("#nodatafoundtext").hide()
+
+        } else {
+            $(element).hide()
+            if($('.membergrp-list-row button:visible').length==0){
+                $("#nodatafoundtext").show()
+            }
+           
         }
     })
 
-    $('label[class=error').removeClass('error').hide()
-
-    $("#memberform").attr("action", "/member/newmember");
-
-    $("#memberform").attr("name", "createmember");
-
-    $('#mem_pass-error').remove()
-
-    $('input[name=mem_activestat]').remove()
-
-    $('<input class="tgl tgl-light" name="mem_activestat" id="mem_activestat" type="checkbox">').insertBefore('label[for=mem_activestat]')
-
-    $('input[type=hidden][name=membergroupvalue]').val("")
-
 })
 
+
+// search key value empty in dropdown search
+
+$("#triggerId").on("click",function(){
+
+    var keyword = $("#searchmembergrp").val()
+    $(".membergrp-list-row button").each(function (index, element) {
+        if(keyword != ""){
+        $("#searchmembergrp").val("")
+        $("#nodatafoundtext").hide()
+        $(element).show()
+      }else{
+        $("#searchmembergrp").val()
+        $("#nodatafoundtext").hide()
+        $(element).show()
+    
+      }
+    })
+   
+  })

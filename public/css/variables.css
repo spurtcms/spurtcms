@@ -1,47 +1,68 @@
 :root {
-    --clr-primary-color: #2FACD6;
-    --clr-dropdown-hover: #E4F8FF;
-    --clr-tags-bg-color: #EAFAFF;
+    --clr-primary-color: #09ABD9;
+    --clr-dropdown-hover: #E8FAFF;
+    --clr-tags-bg-color: #DDF8FF;
+    
     --clr-text-dark-color: #152027;
     --clr-text-light-color: #B6B6B7;
-    --clr-sidebar-menu-hover: rgba(0,0,0,0.24);
+    --clr-sidebar-menu-hover: rgba(0, 0, 0, 0.24);
     --clr-border: #B1EBFF;
 }
+
 .red {
-    --clr-primary-color: #F26674;
-    --clr-dropdown-hover: #FFE0E3;
-    --clr-tags-bg-color: #FFE0E3;
+    --clr-primary-color: #E16661;
+    --clr-dropdown-hover: #FFEDED;
+    --clr-tags-bg-color: #FFE6E6;
 }
+
 .purple {
-    --clr-primary-color: #AE3EF9;
-    --clr-dropdown-hover: #F8EDFF;
-    --clr-tags-bg-color: #F5E5FF;
+    --clr-primary-color: #8060B9;
+    --clr-dropdown-hover: #F1ECF8;
+    --clr-tags-bg-color: #F0E6FF;
 }
+
 .blue {
-    --clr-primary-color: #82BDF4;
-    --clr-dropdown-hover: #EDF6FF;
-    --clr-tags-bg-color: #E6F3FF;
+    --clr-primary-color: #3981EA;
+    --clr-dropdown-hover: #EAF1FD;
+    --clr-tags-bg-color: #E2ECFF;
 }
-.yellow {
+
+/* .yellow {
     --clr-primary-color: #FFDE76;
     --clr-dropdown-hover: #FFF9E5;
     --clr-tags-bg-color: #FFF7DE;
+} */
+
+.brown {
+    --clr-primary-color: #6D4D40;
+    --clr-dropdown-hover: #F0E9E7;
+    --clr-tags-bg-color: #EDDED8;
 }
+
 .orange {
-    --clr-primary-color: #F8834C;
-    --clr-dropdown-hover: #FFEDE5;
-    --clr-tags-bg-color: #FFE4D8;
+    --clr-primary-color: #F38507;
+    --clr-dropdown-hover: #FEF2E5;
+    --clr-tags-bg-color: #FFEED9;
 }
-.light-green {
+
+/* .light-green {
     --clr-primary-color: #B5E08C;
     --clr-dropdown-hover: #EFFFE0;
     --clr-tags-bg-color: #E3FFC9;
-}
+} */
+
 .green {
-    --clr-primary-color: #9DCC6B;
-    --clr-dropdown-hover: #F0FFE0;
-    --clr-tags-bg-color: #E7FFCE;
+    --clr-primary-color: #4BA34A;
+    --clr-dropdown-hover: #E9F6E8;
+    --clr-tags-bg-color: #E1F4DF;
 }
+
+.teal-blue {
+    --clr-primary-color: #008C8C;
+    --clr-dropdown-hover: #DBF4F4;
+    --clr-tags-bg-color: #C5F0F0;
+}
+
 .black {
     --clr-primary-color: #152027;
     --clr-dropdown-hover: #F1F2F2;

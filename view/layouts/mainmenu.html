@@ -1,4 +1,5 @@
 {{define "mainmenu"}}
+{{$Translate := .translate}}
 <aside class="{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} bgclr1 {{else if eq
     .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} bgclr2 {{else if eq
     .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} bgclr3 {{else if eq
@@ -23,34 +24,34 @@
             {{if eq .ModuleName "Dashboard"}}
             <a href='/dashboard/' class="mainmenu dashboardmenu {{if eq $Dashboardmenu true}}active{{end}}">
                 <img src='/public/img/dashboard.svg' /> <img src='/public/img/dashboard-on.svg' />
-                <span>{{.ModuleName}}</span>
-                <p>{{.ModuleName}}</p>
+                <span>{{$Translate.Dashboard}}</span>
+                <p>{{$Translate.Dashboard}}</p>
             </a>
             {{end}}
-            {{if eq .ModuleName "CMS"}}
+            {{if eq .ModuleName "Channels"}}
             {{if eq .EmptyCheck false}}
             <a href='{{.HrefRoute.RouteName}}' class="mainmenu cmsmenu {{if eq $Cmsmenu true}}active{{end}}">
                 <img src='/public/img/cms.svg' /> <img src='/public/img/cms-on.svg' />
-                <span>{{.ModuleName}}</span>
-                <p>{{.ModuleName}}</p>
+                <span>{{$Translate.Channell.Channels}}</span>
+                <p>{{$Translate.Channell.Channels}}</p>
             </a>
             {{end}}
             {{end}}
             {{if eq .ModuleName "Members"}}
             {{if eq .EmptyCheck false}}
             <a href='{{.HrefRoute.RouteName}}' class="mainmenu membermenu {{if eq $Membermenu true}}active{{end}}">
-                <img src='{{.IconPath}}' /> <img src='{{.IconPath}}' /> 
-                <span>{{.ModuleName}}</span>
-                <p>{{.ModuleName}}</p>
+                <img src='/public/img/members.svg' /> <img src='/public/img/members-on.svg' /> 
+                <span>{{$Translate.Memberss.Members}}</span>
+                <p>{{$Translate.Memberss.Members}}</p>
             </a>
             {{end}}
             {{end}}
-            {{if eq .ModuleName "LMS"}}
+            {{if eq .ModuleName "Spaces"}}
             {{if .Routes}}
             <a href='/spaces/' class="mainmenu spacemenu {{if eq $Lmsmenu true}}active{{end}}">
-                <img src='/public/img/LMS.svg' /> <img src='/public/img/LMS.svg' />
-                <span>{{.ModuleName}}</span>
-                <p>{{.ModuleName}}</p>
+                <img src= '/public/img/LMS.svg' /> <img src='/public/img/LMS-on.svg' />
+                <span>{{$Translate.Spaces.Spacess}}</span>
+                <p>{{$Translate.Spaces.Spacess}}</p>
             </a>
             {{end}}
             {{end}}

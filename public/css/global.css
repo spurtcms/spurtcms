@@ -72,7 +72,7 @@
   font-style: normal;
   font-display: swap;
 }
-html, body, div, span, applet, object, iframe,  blockquote,  abbr, acronym, big, font, img, small, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, input, textarea, select, a {
+html, body, div, span, applet, object, iframe,  blockquote,  abbr, acronym, big, font, img, small, center, dl, dt, dd, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, input, textarea, select, a {
   margin:0;
   padding:0;
   border:0;
@@ -574,10 +574,12 @@ img {
     font-weight: 400;
 }
 .pogination ul {
-    margin-left: auto;
+    margin: 0 0 0 auto;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    padding: 0;
+    list-style: none;
 }
 .pogination ul li a {
     width: 2rem;

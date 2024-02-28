@@ -3,39 +3,34 @@ var categoryIds = [];
 var spaces = [];
 var arraydatacheck =[]
 var sdata
-/** */
-$(document).ready(function(){
-    //main menu
-    $('.mainmenu').removeClass('active');
-    $('.spacemenu').addClass('active');
-
-    $('.mainmenu').each(function(){
-        if($(this).hasClass('active')){
-          var name = $(this).children('p').text()
-          $("#headtitle").text(name)
-        }
-    })
-})
 
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
 
-    var tex =   $(".category").text()
 
-    // console.log("Cv",tex);
+   $('.categorydropdown').each(function(){
 
+    var length = $(this).children('.categorysname').length-1
+
+      $(this).children('.categorysname').each(function(index){
+
+        if(length == index ){
+
+          $(this).next().remove();
+        }
+
+      })
+    })
 
     $(".category").each(function(i, data){
-
-        // console.log("text",data);
-        
-     if (data.length > 110){
+       
+     if (data.length > 100){
 
        return truncate(data, 58) + "...";
       }
@@ -43,7 +38,6 @@ $(document).ready(async function () {
   
     })
 
-    // $("#spacecategory").text(data) 
 });
 
 function truncate(str, no_words) {
@@ -65,10 +59,12 @@ $("#cancel-btn").on('click', function () {
     $('#spcdes').removeClass('input-group-error');
     $('#grbcat').removeClass('input-group-error')
     $("#catdropdown").removeClass('input-group-error')
+    $("#spacename-error").hide()
+    $("#spacedescription-error").hide()
 })
 
 
-// input box search
+// dropdown filter input box search
 $("#searchcategory").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
     $(".channels-list-row button").each(function (index, element) {
@@ -112,7 +108,7 @@ $(document).on("click","#mediamodalclose",function (){
 // add space
 $("#addspace , #clickadd").click(function () {
     $('form[name="newspace"]').attr("action", "/spaces/createspace");
-    $("#title").text(languagedata.Spaces.newspace)
+    $("#title").text(languagedata?.Spaces?.newspace)
 
     // input values
     $("#spacename").val("")
@@ -120,7 +116,7 @@ $("#addspace , #clickadd").click(function () {
     $("#spimage").val("")
     $("#spimagehide").attr("src", "");
     $("#triggerId").html("")
-    $("#triggerId").text(languagedata.Spaces.slectcatgory)
+    $("#triggerId").text(languagedata?.Spaces?.slectcatgory)
     $("#spacename-error").hide()
     // btns
     $("#uplaodimg").show();
@@ -129,6 +125,8 @@ $("#addspace , #clickadd").click(function () {
     $("#save").show();
     $("#clone").hide();
     $("#update").hide();
+    $("#spacename-error").hide()
+    $("#spacedescription-error").hide()
 
     $(".input-group").removeClass("input-group-error")
 
@@ -145,8 +143,7 @@ $(document).on('click', '#newdd-input', function () {
 
 $('#addnewspaceModal').on('click', function (event) {
     if ($('.dd-c').css('visibility') == 'visible' && !$(event.target).is('#newdd-input') && !$(event.target).is('.dd-c')) {
-        // $('#newdd-input').prop('checked', false)
-        // $('.dd-c').css('display', 'none')
+      
     }
 })
 
@@ -154,6 +151,10 @@ $('#addnewspaceModal').on('click', function (event) {
 $("body").on("click", "#edit", function () {
 
     $(".input-group").removeClass("input-group-error")
+    $("#spacename-error").hide()
+    $("#spacedescription-error").hide()
+
+    // $("#catlist").css("color","#112D55")
 
     $("#uplaodimg").hide()
     $("#browse").hide()
@@ -166,7 +167,7 @@ $("body").on("click", "#edit", function () {
     $("#spaceform").attr("name", "editspace")
     var data = $(this).attr("data-id");
     var id = $(this).attr("data-cid");
-    $("#title").text(languagedata.Spaces.updatespace)
+    $("#title").text(languagedata?.Spaces?.updatespace)
     $("#update").show()
     $("#save").hide()
     $("#clone").hide();
@@ -180,17 +181,19 @@ $("body").on("click", "#edit", function () {
     var spimg = imgdetails.find("img").attr("src")
     var spcat = details.find("#spacecategory").html()
     var spname = details.find("#spacecontentname").text()
-    var spdesc = details.find("#spacecontentdesc").text()
+    var spdesc = details.find("#spacecontent").val()
 
     $("#uplaodimg").show();
         $("#browse").show();
-
+    $('#spimage').val(spimg)
     $("#spimagehide").attr("src", spimg)
     if (spimg != "") {
         $("#uplaodimg").hide();
         $("#browse").hide();
         $("#spacedel-img").show();
 
+    }else{
+        $("#spacedel-img").hide()
     }
     // if ($("#spimagehide").attr("src") === "/public/img/space-default-image.png") {
     //     $("#uplaodimg").hide();
@@ -214,22 +217,9 @@ $("body").on("click", "#edit", function () {
 
     }
 
+    $('#triggerId').children('li').children('a').css('color','#112D55')
+
 });
-
-// $("#rightModal").on('hidden.bs.modal', function () {
-//     $("#myModalLabel2").text(languagedata.Spaces.addnewspace)
-//     $("#save").show()
-//     $("#update").hide()
-//     $("#spacename").val("")
-//     $("#spacedescription").val("")
-//     $("#spimagehide").attr("src", "")
-//     $("#spimage").val("")
-//     $("#catspace").html("")
-//     $("#spacename-error").hide()
-//     $("#spacedescription-error").hide()
-//     $("#spacecategorys-error").hide()
-
-// })
 
 
 // $('#rightModal').on('hidden.bs.modal', function (event) {
@@ -278,13 +268,15 @@ $("body").on("click", "#edit", function () {
 // delete popup 
 $(document).on('click', '#deletespace', function () {
     var id = $(this).attr("data-id");
-    $(".deltitle").text(languagedata.Spaces.deltitle)
-    $('.delname').text($(this).parents('tr').find('td:eq(0)').text())
-    $('#content').text(languagedata.Spaces.delspace);
+    $(".deltitle").text(languagedata?.Spaces?.deltitle)
+    var details = $(this).parents(".spaceCard-btm");
+    var spname = details.find("#spacecontentname").text()
+    $('.delname').text(spname.trim())
+    $('#content').text(languagedata?.Spaces?.delspace);
     $('#delid').show();
     $('#delete').attr('href', '/spaces/deletespace?id=' + id);
     $("a").attr("id", "")
-    $('#btn3').text(languagedata.no);
+    $('#delcancel').text(languagedata.no);
 })
 
 // Clone functionaltiy
@@ -292,14 +284,17 @@ $("body").on("click", "#clonebtn", function () {
 
     $("#spacename-error").hide()
     $("#spacedescription-error").hide()
-    $("#uplaodimg").hide()
-    $("#browse").hide()
+    // $("#uplaodimg").hide()
+    // $("#browse").hide()
+
+    $(".space-path-list").css("color","#112D55")
+
     
     $("#categoryspan").hide()
     $("#spaceform").attr("name", "clonespace")
     var data = $(this).attr("data-id");
     var id = $(this).attr("data-cid")
-    $("#title").text(languagedata.Spaces.clonespace)
+    $("#title").text(languagedata?.Spaces?.clonespace)
     $("#clone").show()
     $("#update").hide()
     $("#save").hide()
@@ -316,11 +311,14 @@ $("body").on("click", "#clonebtn", function () {
     var spdesc = details.find("#spacecontentdesc").text()
 
     $("#spimagehide").attr("src", spimg)
+    $("#spimage").val(spimg)
     if (spimg != "") {
         $("#uplaodimg").hide();
         $("#browse").hide();
         $("#spacedel-img").show();
 
+    }else{
+        $("#spacedel-img").hide()
     }
     // if ($("#spimage").attr("src") === "/public/img/space-default-image.png") {
     //    $("#uplaodimg").hide();
@@ -381,12 +379,23 @@ $(document).on('click', '.fcheck', function () {
 });
 
 
-$('#spacedel-img').click(function () {
+$('.delete-flag').click(function () {
     $('input[name=spaceimagepath]').val("")
     $('#spimagehide').attr('src', '')
-    $(this).siblings('h3,button').show()
-    $(this).hide()
+    $('#spimage').val('')
+    $(this).siblings('h3').show()
+    $('#spacedel-img').hide()
+    
+    $('#browse').show()
+    $('#spimage').val('')
 })
+
+$.validator.addMethod("customLength", function (value, element, params) {
+    var minLength = params[0];
+    var maxLength = params[1];
+    return this.optional(element) || (value.length >= minLength && value.length <= maxLength);
+}, $.validator.format("Please enter between {0} and {1} characters."));
+
 
 $("#save").click(function () {
 
@@ -419,7 +428,8 @@ $("#save").click(function () {
             },
             spacedescription: {
                 required: true,
-                space: true
+                space: true,
+                customLength: [1, 250]
 
             },
             catiddd: {
@@ -435,6 +445,7 @@ $("#save").click(function () {
             spacedescription: {
                 required: "* " + languagedata.Spaces.spacedescvalid,
                 space: "* " + languagedata.Spaces.spacergx,
+                customLength: "*" + languagedata?.Permission?.descriptionchat,
             },
             catiddd: {
                 required: "* " + languagedata.Spaces.spacecategoryvalid,
@@ -454,18 +465,16 @@ $("#save").click(function () {
         })
 
         if ($('#catiddd-error').css('display') !== 'none') {
-            // $('#grbcat').addClass('input-group-error')
-            $("#catdropdown").addClass('input-group-error')
+            $('#grbcat').addClass('input-group-error')
+            // $("#catdropdown").addClass('input-group-error')
 
         }
         else {
-            // $('#grbcat').removeClass('input-group-error')
-            $("#catdropdown").removeClass('input-group-error')
+            $('#grbcat').removeClass('input-group-error')
+            // $("#catdropdown").removeClass('input-group-error')
 
         }
-     
-         
-                          
+                             
     }
 
     return false
@@ -503,7 +512,8 @@ $("#update").click(function () {
             },
             spacedescription: {
                 required: true,
-                space: true
+                space: true,
+                customLength: [1, 250]
 
             },
             spacecategoryvalue: {
@@ -519,6 +529,7 @@ $("#update").click(function () {
             spacedescription: {
                 required: "* " + languagedata.Spaces.spacedescvalid,
                 space: "* " + languagedata.Spaces.spacergx,
+                customLength: "*" + languagedata?.Permission?.descriptionchat,
             },
             spacecategoryvalue: {
                 required: "* " + languagedata.Spaces.spacecategoryvalid,
@@ -555,7 +566,8 @@ $("#clone").click(function () {
     jQuery.validator.addMethod("duplicatename", function (value) {
 
         var result;
-        id = $("#id").val()
+        // id = $("#id").val()
+        id=0
        
         $.ajax({
             url:"/spaces/checkspacename",
@@ -582,7 +594,8 @@ $("#clone").click(function () {
             },
             spacedescription: {
                 required: true,
-                space: true
+                space: true,
+                customLength: [1, 250]
 
             },
             spacecategoryvalue: {
@@ -598,6 +611,7 @@ $("#clone").click(function () {
             spacedescription: {
                 required: "* " + languagedata.Spaces.spacedescvalid,
                 space: "* " + languagedata.Spaces.spacergx,
+                customLength: "*" + languagedata?.Permission?.descriptionchat,
             },
             spacecategoryvalue: {
                 required: "* " + languagedata.Spaces.spacecategoryvalid,
@@ -651,45 +665,10 @@ function checkImage() {
 //     image[image.length - 1].style.display = 'none';
 // });
 
-const imagee = document.querySelectorAll('.space-path-list ');
-imagee.forEach(group => {
-    const image = group.querySelectorAll('img');
-    image[image.length - 1].style.display = 'none';
-});
-
-
-const newckGroups = document.querySelectorAll('.spaceformat');
-newckGroups.forEach(group => {
-    const images = group.querySelectorAll('img');
-    images[images.length - 1].style.display = 'none';
-});
-const images = document.querySelectorAll('.spaceformats');
-
-images.forEach(group => {
-    const image = group.querySelectorAll('img');
-    image[image.length - 1].style.display = 'none';
-});
-
-
-
-
 const spacedes = document.getElementById('spacedescription');
-// const spccat = document.getElementById('categorydropdown')
 const inputGroup = document.querySelectorAll('.input-group');
 const opt = document.querySelectorAll('.select-options')
 
-
-// spccat.addEventListener('click', () => {
-
-//     spccat.closest('.input-group').classList.add('input-group-focused');
-
-// });
-
-// spccat.addEventListener('blur', () => {
-
-//     spccat.closest('.input-group').classList.remove('input-group-focused');
-
-// });
 
 spacedes.addEventListener('click', () => {
 
@@ -700,15 +679,6 @@ spacedes.addEventListener('click', () => {
 spacedes.addEventListener('blur', function () {
     spacedes.closest('.input-group').classList.remove('input-group-focused');
 });
-
-
-
-
-// $(document).on('blur','#newdd-input',function(){
-//     if ($('#spacecategoryid').val()!== '') {
-//         $('#grbcat').removeClass('input-group-error')
-//     }
-// })
 
 
 function Validationcheck() {
@@ -740,26 +710,46 @@ $(document).on('click','.close',function(){
     $('#catiddd-error').hide()
 })
 
-$("#searchrole").keyup(function () {
+// form category search in keyup
+
+$("#searchcatlist").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
-    $(".choose-rel-article .newck-group").each(function (index, element) {
-        var title = $(element).find('p').text().toLowerCase()
+    $(".choose-category button").each(function (index, element) {
+        var title = $(element).text().toLowerCase()
         if (title.includes(keyword)) {
             $(element).show()
+            $("#spacenodatafound").hide()
+
         } else {
             $(element).hide()
+            if($('.choose-category button:visible').length==0){
+                $("#spacenodatafound").show()
+            }
+            
         }
     })
 })
 
-$(document).on('keyup','#spacessearch',function(){
+// search key value empty in dropdown search
 
-    if($('.search').val()===""){
-        window.location.href ="/spaces"
-        
-   }
-  
+$("#triggerId").on("click",function(){
+
+    var keyword = $("#searchcatlist").val()
+    $(".choose-category button").each(function (index, element) {
+        if(keyword != ""){
+        $("#searchcatlist").val("")
+        $("#spacenodatafound").hide()
+        $(element).show()
+      }else{
+        $("#searchcatlist").val()
+        $("#spacenodatafound").hide()
+        $(element).show()
+    
+      }
+    })
+   
 })
+
 
 $(document).on('click','#medcancel',function () {
   $("#addnewimageModal").hide()
@@ -780,12 +770,78 @@ $(document).ready(function(){
 
     })
 
+       
+    $(".searchcategorylist").each(function (index,element){
+   
 
+        var id = $(this).attr('data-id')
+     
+        categorylen= $('#newcat'+id).text()
+     
+        $('#newcat'+id).attr('data-bs-original-title',categorylen)
+     
+      var hidden=$(this).children('.categoryactiveid').val()
+      console.log(hidden,"checkkk")
+         
+         if (id==$('.categoryactiveid').val()){
+     
+             console.log("sddddddd")
+     
+             $(this).addClass('active')
+     
+         }
+     
+     
+         })
+     
+     
+     
+     })
+     
+     $(".txtclr4").click(function(){
+     
+         $('.searchcategorylist').removeClass('active')
+     
+         $(".searchcategorylist").each(function (index,element){
+        
+     
+             var id = $(this).attr('data-id')
+          
+            var hidden=$(this).children('.categoryactiveid').val()
+     
+             
+              if (id==$('.categoryactiveid').val()){
+        
+        
+                  $(this).addClass('active')
+          
+              }
+          
+          
+              })
+
+
+   
 })
 
 var filtercategoryid
 
 $(".searchcategorylist").on("click", function () {
+
+    var id = $(this).attr('data-id')
+
+    $('.categoryactiveid').val(id)
+
+    $('.list-items-select').empty();
+
+    var categoryname =$(this).children('.newcat').text().slice(0,-4)
+           
+    var fcategoryname =$(this).children('.newcat').attr('data-bs-original-title')
+
+   let fcat =fcategoryname.slice(0,-4)
+
+   let  categoryname1 = categoryname.replaceAll('/', '<img src="/public/img/breadcrumb-arrow.svg" style="padding:5px;" alt="">');
+
     var Category = $(this).find('.id')
     $.each(Category, function (index, value) {
 
@@ -802,23 +858,45 @@ $(".searchcategorylist").on("click", function () {
      space_array = getdata.array
 
      space_count = getdata.count
+  
+        $('.selected-list').show()
+
+        $('.list-items-select').html('<p class="pcategory" style="display: flex" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-original-title="" >' + categoryname1 + '</p>')
+
+        $('.pcategory').attr('data-bs-original-title', fcat)
 })
+
 
 
 var keywordname
 
-$("#searchspacename").keyup(function () {
+$("#searchspacename").on("keypress", function () {
 
     keywordname= $(this).val().trim().toLowerCase()
 
     var data = {"keyword":keywordname}
 
-    var getdata = LoadMoreData(data, space_count, space_array)
+    if (event.key === "Enter") {
 
-     space_array = getdata.array
+        event.preventDefault();
+        
+        var getdata = LoadMoreData(data, space_count, space_array)
 
-     space_count = getdata.count
+        space_array = getdata.array
+   
+        space_count = getdata.count
+      }
+
+   
   
+})
+
+/*search redirect home page */
+
+$(document).on('keyup', '#searchspacename', function () {
+    if ($('.search').val() === "") {
+         window.location.href = "/spaces/"
+    }
 })
     
 
@@ -890,7 +968,7 @@ $("#searchspacename").keyup(function () {
       
           success: (result) => {
 
-            console.log("pagnation",result);
+           console.log("pagnation",result);
 
             if (keywordname  !="" || filtercategoryid != "") {
 
@@ -902,16 +980,14 @@ $("#searchspacename").keyup(function () {
 
             if (result.FilterCount == 0){
 
-                var nodatafound = `<div class="noData-foundWrapper">
+                var nodatafound = `<div class="noData-foundWrapper nodatafound">
 
                 <div class="empty-folder">
                     <img src="/public/img/folder-sh.svg" alt="">
                     <img src="/public/img/shadow.svg" alt="">
                 </div>
                 <h1 class="heading"> `+languagedata.oopsnodata +`</h1>
-                <p class="para">
-                `+languagedata.pagesorry +`
-                `+languagedata.gobackhome +`
+                <p class="para">              
                 </p>
                
             </div>`
@@ -946,7 +1022,7 @@ $("#searchspacename").keyup(function () {
                     childs = childs + `<span>` + child.CategoryName+` </span>`
                    }else{
 
-                    childs = childs + `<span>` + child.CategoryName + ` </span> <img src="/public/img/breadcrumb-arrow.svg" class="img"> `
+                    childs = childs + `<span>` + child.CategoryName + ` </span> / `
 
                    }
                  }
@@ -956,35 +1032,45 @@ $("#searchspacename").keyup(function () {
 
             
                 var single_list = `<div class="spaceCard-child">
+                <a href="/spaces/`+space.Id +`" class="spacecard-link"></a>
 
                 <div class="spaceCard-top">
-                   <div class="tbl-img-content flexx">
-                    <div class="tbl-img">
-                        <img src="" alt=""></div>
-                    </div>
+                
+                    <img src="`+space.ImagePath + `"  style="object-fit: fill;width: 100%;height: 100%;border: none;">
+                    
                 </div>
 
                 <div class="spaceCard-btm">
 
-                    <a class="heading-four" href="" id="spacecontentname">
+                    <h3 class="heading-three lms-card-title" href="/spaces/`+space.Id +`" id="spacecontentname">
                      `+space.SpacesName+`
-                    </a>
+                    </h3>
 
                     <div class="card-breadCrumb">
                         <ul class="breadcrumb-container" id="spacecategory">
-                            <li> <a href="" class="para-light space-path-list" style="display: flex;gap: 4px;"> `+childs +` </a></li>
+                            <li> <a href="/spaces/`+space.Id +`" class="para-light space-path-list" style="display: flex;gap: 4px;"> `+childs +` </a></li>
                         </ul>
                     </div>
 
-                    <p class="para-extralight desclist" id="spacecontentdesc" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="`+ space.SpaceFullDescription+`">
+                    <a href="/spaces/`+space.Id +`" class="para-extralight desclist" id="spacecontentdesc"
+                            data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+                            data-bs-placement="top"  title="`+ space.SpaceFullDescription+`">
                        `+space.SpacesDescription+`
-                    </p>
+                       <input type="hidden" value="`+space.SpaceFullDescription +`" name="spacecontent" id="spacecontent">
 
+                    </a>
+
+                    <div class="read-time">
+                           
                     <h6 class="para-extralight">Updated: `+space.ModifiedDate +`</h6>
+                    
+                      </div>
+
+
 
                     <div class="card-buttonOption">
-                        <a href="/spaces/page"> <button class="btn-reg btn-lg primary {{$THEMECOLOR}}">
-                                <img src="/public/img/add.svg" alt="" /> Add Page
+                    <a href="/spaces/`+space.Id+`"> <button class="btn-reg btn-lg primary" id="page${space.Id}">   
+                            <img src="/public/img/add.svg" alt="" /> Add Page
                             </button></a>
 
                         <div class="card-option">
@@ -1018,6 +1104,20 @@ $("#searchspacename").keyup(function () {
               </div> `
       
                 $('.spaceCards').append(single_list)
+
+                if(space.FullSpaceAccess==true){
+                   
+                    $(`#page${space.Id}`).text('Manage Page')
+
+                    $(`.xmintag${space.Id}`).show()
+ 
+                     }else{
+ 
+                         $(`#page${space.Id}`).text('Add Page')
+
+                         $(`.xmintag${space.Id}`).hide()
+ 
+                     }
              }
       
             }
@@ -1027,14 +1127,13 @@ $("#searchspacename").keyup(function () {
         return { "array": array, "count": count }
 }
 
+// dropdown category get id
 
 $(".categorydropdown").click(function(){
-
-    var text = $(this).html()
-    
+  
     var id 
 
-   var Category = $(this).find('.id')
+    var Category = $(this).find('.id')
 
     $.each(Category, function (index, value) {
 
@@ -1045,19 +1144,24 @@ $(".categorydropdown").click(function(){
     })
 
      if (id == 0) {
-            $("#catdropdown").addClass('input-group-error')
+            $("#grbcat").addClass('input-group-error')
 
         }else {
-            $("#catdropdown").removeClass('input-group-error')
+            $("#grbcat").removeClass('input-group-error')
             $("#catiddd-error").css('display', 'none')
-
-
-        }
-    $(this).parent('.dropdown-menu').siblings('a').html($(this).html(text))
-
-
+    }
+    $(this).parents('.dropdown-menu').siblings('a').html($(this).html())
 })
 
+$(document).on('click','#removecategory',function(){
+
+    window.location.href="/spaces/"
+
+  }) 
 
 
-  
+  $(document).on('click','#removecategory',function(){
+
+    window.location.href="/spaces/"
+
+  })

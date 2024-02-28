@@ -2,31 +2,6 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-{{$THEMECOLOR := ""}}
-{{$TEXTCOLOR := ""}}
-{{$BORDERCOLOR := ""}}
-
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
 
 <div class="page-wrapper">
     {{template "membertab" .}}
@@ -46,11 +21,11 @@
             <div class="transitionSearch active">
                 <form action="/memberaccess/" method="get" name="contentaccess-form">
                 <img style="bottom: 5px;" src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" name="keyword" id="" placeholder="{{$Translate.ContentAccessControl.Searchmemberaccess}}" value="{{.Filter.Keyword}}">
+                <input type="text" name="keyword" id="memberrestrictsearch" class="search" placeholder="{{$Translate.ContentAccessControl.Searchmemberaccess}}" value="{{.Filter.Keyword}}">
                 </form>
             </div>
             <a href="/memberaccess/newcontentaccesscontrol">
-                <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" data-bs-toggle="modal" data-bs-target="#rightModal">
+                <button class="btn-reg btn-sm primary " data-bs-toggle="modal" data-bs-target="#rightModal">
                     <img src="/public/img/add.svg" alt="" /> {{$Translate.ContentAccessControl.Contentaccess}}
                 </button>
             </a>
@@ -70,6 +45,8 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{$currentpage := .CurrentPage}}
+
                         {{if .ContentAccess}}
                         {{range .ContentAccess}}
                         <tr>
@@ -78,9 +55,9 @@
                                     <h3 class="heading-three">{{.AccessControlName}}</h3>
                                     
                                     <ul>
-                                        <!-- <li class="para {{$TEXTCOLOR}}">{{$Translate.ContentAccessControl.Space}}</li> -->
+                                        <!-- <li class="para">{{$Translate.ContentAccessControl.Space}}</li> -->
                                         {{range .AccessGrantedModules}}
-                                        <li class="para {{$TEXTCOLOR}}">{{.}}</li>
+                                        <li class="para">{{.}}</li>
                                         {{end}}
                                     </ul>
                                     <p class="para-light">{{$Translate.Updated}}: {{.DateString}}</p>
@@ -107,10 +84,10 @@
                                             <img src="/public/img/blue-option.svg" alt="">
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a href="/memberaccess/copy-accesscontrol/{{.Id}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
+                                            <li><a href="/memberaccess/copy-accesscontrol/{{.Id}}?page={{$currentpage}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
                                                             src="/public/img/copy.svg" alt=""></span> {{$Translate.Copy}} </button></a>
                                             </li>
-                                            <li><a href="/memberaccess/edit-accesscontrol/{{.Id}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
+                                            <li><a href="/memberaccess/edit-accesscontrol/{{.Id}}?page={{$currentpage}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
                                                             src="/public/img/edit.svg" alt=""></span>{{$Translate.Edit}} </button></a>
                                             </li>
                                             <li><button data-id="{{.Id}}" class="dropdown-item delete-access" type="button"> <span><img
@@ -151,7 +128,7 @@
                                         {{$Translate.Pagesorry}}
                                         {{$Translate.Gobackhome}}
                                     </p>
-                                    <a href="/memberaccess/newcontentaccesscontrol" id="clickadd" class="heading-three {{$TEXTCOLOR}}"> {{$Translate.Clickadd}} >> </a>
+                                    <a href="/memberaccess/newcontentaccesscontrol" id="clickadd" class="heading-three"> {{$Translate.Clickadd}} >> </a>
                                 </div>
                             </td>
                         </tr>
@@ -172,7 +149,7 @@
                     {{$currentpage := .CurrentPage}}
                     {{$keyword := .Filter.Keyword}}
                     {{range .Pages}}
-                    <li><a href="/memberaccess/?page={{.}}{{if $keyword}}&keyword={{$keyword}}{{end}}" {{if eq $currentpage .}}class="current {{$BORDERCOLOR}} {{$TEXTCOLOR}}"{{end}}>{{.}}</a></li>
+                    <li><a href="/memberaccess/?page={{.}}{{if $keyword}}&keyword={{$keyword}}{{end}}" {{if eq $currentpage .}}class="current"{{end}}>{{.}}</a></li>
                     {{end}}
                     <li>
                         <a href="/memberaccess/?page={{.Next}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" class="{{if eq .CurrentPage .PageCount}}disabled{{else}}next{{end}}">

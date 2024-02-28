@@ -2,12 +2,14 @@ var languagedata
 /** */
 $(document).ready(async function(){
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
+
+    $("#myfile-error").hide()
 
 })
 
@@ -69,9 +71,18 @@ $(document).on('click','#uptprofile',function(){
         })
         return result.trim()!="true"
     })
-    $.validator.addMethod("mob_validator", function (value) {
-        return /^[6-9]{1}[0-9]{9}$/.test(value);
-    }, '* ' + languagedata.Userss.usrmobnumrgx);
+    // $.validator.addMethod("mob_validator", function (value) {
+    //     return /^[6-9]{1}[0-9]{9}$/.test(value);
+    // }, '* ' + languagedata.Userss.usrmobnumrgx);
+    jQuery.validator.addMethod(
+        "mob_validator",
+        function (value, element) {
+            if (/^[6-9]{1}[0-9]{9}$/.test(value))
+                return true;
+            else return false;
+        },
+        "* " + languagedata.Userss.usrmobnumrgx
+    );
 
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
@@ -201,3 +212,7 @@ $(document).on('click', '#crop-button', function () {
     $(".name-string").hide()
     $('#profpic').show()
 })
+
+$('input[name=user_mob]').keyup(function () {
+    this.value = this.value.replace(/[^0-9\.]/g, '');
+});

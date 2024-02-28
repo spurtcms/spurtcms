@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spurt CMS Email Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap'); 
+        body {
+            font-family: "Lexend", sans-serif;
+            margin: 0;
+            background-color: #F9F9F9;
+        }
+
+        body,
+        td,
+        th,
+        h4,
+        h5,
+        h6,
+        p,
+        h3,
+        h4,
+        span,
+        a {
+            margin: 0;
+            color: #222;
+        }
+
+        ul,
+        ol {
+            list-style-type: none;
+            margin: 0 0 0 0;
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+            color: #000;
+
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .mb-1 {
+            margin-bottom: 2.5rem;
+        }
+
+        .copy-ticket {
+            margin: 3rem auto
+        }
+
+        @media screen and (max-width: 43.4375rem) {
+            body {
+                padding: 0rem .625rem;
+            }
+        }
+
+        @media screen and (max-width: 31.25rem) {
+            .copy-ticket {
+                margin: 1rem auto;
+            }
+
+            .mb-1 {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body style="font-family: 'Lexend', sans-serif;">
+    <table class="copy-ticket" style="max-width: 43.5rem;background-color:#FFFFFF;" cellpadding="0" cellspacing="0">
+        <tbody>
+            {{.Body}}
+        </tbody>
+    </table>
+</body>
+
+</html>

@@ -6,27 +6,7 @@
 {{$TEXTCOLOR := ""}}
 {{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
+
 <!-- <header class="roles-head">
     <h1 class="heading">Personalize</h1>
     <div class="header-rht flexx">
@@ -83,25 +63,35 @@
                     <a class="dark-blue circle-change" id="default-clr">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
                     </a>
-                    <a class="yellow circle-change">
+                    <!-- <a class="yellow circle-change">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
-                    </a>
+                    </a> -->
                     <a class="orange circle-change">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
                     </a>
-                    <a class="light-green circle-change">
+                    <!-- <a class="light-green circle-change">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
-                    </a>
+                    </a> -->
                     <a class="green circle-change">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
                     </a>
                     <a class="black circle-change">
                         <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
                     </a>
+                    
+                    <a class="teal-blue circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    
+                    <a class="brown circle-change">
+                        <span  class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+
                     <input type="hidden" name="color-change" id="color-change"
                         value="{{if .Menu.Personalize.MenuBackgroundColor}}{{.Menu.Personalize.MenuBackgroundColor}}{{else}}rgb(9, 171, 216){{end}}">
                     <input type="hidden" name="csrf" value="{{.csrf}}">
                 </div>
+
             </div>
             <input type="hidden" id="logo-input">
             <div class="personalize-background">
@@ -122,7 +112,7 @@
                 </div>
             </div>
             <div class="personalize-background">
-                <h4 class="heading-four">{{$Translate.Personalize.Logoupload}}</h4>
+                <h4 class="heading-four">{{$Translate.Personalize.Expandlogoupload}}</h4>
                 <p class="para-light" id="expandlogo-insert">{{$Translate.Personalize.Logocontent}}</p>
                 <div class="upload-logo" id="upload-expandlogo">
                     <img src='{{if .Menu.Personalize.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}' alt="">
@@ -140,11 +130,13 @@
             </div>
         </div>
     <div class="configurationContent-btm">
-        <button class="btn-reg btn-lg primary theme-color {{$THEMECOLOR}}" type="submit" id="uptdata">{{$Translate.Update}}</button>
+        <button class="btn-reg btn-lg primary theme-color" type="submit" id="uptdata">{{$Translate.Update}}</button>
     </div>
 </div>
 </form>
 {{template "mediamodal" .}}
+
+{{template "mediadecidemodal" .}}
 
 {{template "cropmodal" .}}
 

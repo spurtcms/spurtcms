@@ -2,30 +2,8 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-{{$THEMECOLOR := ""}}
-{{$TEXTCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} 
-     {{$THEMECOLOR = "bgclr1"}}  {{$TEXTCOLOR = "txtclr1"}}  
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} 
-     {{$THEMECOLOR = "bgclr2"}}   {{$TEXTCOLOR = "txtclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} 
-    {{$THEMECOLOR = "bgclr3"}}   {{$TEXTCOLOR = "txtclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}} 
-    {{$THEMECOLOR = "bgclr4"}}   {{$TEXTCOLOR = "txtclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}} 
-    {{$THEMECOLOR = "bgclr5"}}    {{$TEXTCOLOR = "txtclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}} 
-    {{$THEMECOLOR = "bgclr6"}}    {{$TEXTCOLOR = "txtclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}} 
-    {{$THEMECOLOR = "bgclr7"}}   {{$TEXTCOLOR = "txtclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}} 
-    {{$THEMECOLOR = "bgclr8"}}   {{$TEXTCOLOR = "txtclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}} 
-    {{$THEMECOLOR = "bgclr9"}}  {{$TEXTCOLOR = "txtclr9"}}
-{{else}} 
-    {{$THEMECOLOR = "bgclr-default"}}   {{$TEXTCOLOR = "txtclr-default"}}
-{{end}}
+
 <div class="page-wrapper">
     {{template "cmstab" .}}
     <input type="hidden" name="csrf" value="{{.csrf}}">
@@ -36,9 +14,9 @@
             <div class="leftHeader">
                 <div class="caption-flexx">
                     <p class="para">
-                        <span class="para">{{.count}}</span>
-                        {{if gt .count 1}}{{$Translate.Channell.Channels}}{{else}}{{$Translate.Channell.Channel}}{{end}} {{$Translate.Available}}
-
+                       
+                     {{$Translate.Total}}  {{if gt .count 1}}{{$Translate.Channell.Channels}} :  <span class="para" id="searchcount"> {{.count}} </span>   {{else}} {{$Translate.Channell.Channel}} : <span class="para" id="searchcount"> {{.count}} </span> {{end}} </p>
+                        
                     </p>
                 </div>
             </div>
@@ -50,32 +28,35 @@
                 </form>
             </div>
             <a href="/channels/newchannel">
-                <button class="btn-reg btn-sm primary {{$THEMECOLOR}}">
+                <button class="btn-reg btn-sm primary">
                     <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}} 
                 </button></a>
         </div>
 
 
         <div class="channels-container">
+           
             <div class="channels-cards-container">
-                {{range .channel}}
+                {{if .channel}}
+            {{range .channel}}
                 <div class="channels-card">
                     <div class="channels-card-top">
+                        <a href="/channels/editchannel/{{.Id}}"></a>
                         <div class="card-top-head">
                             <div style="display: flex; justify-content: space-between;">
                                 <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
-                                <h6 class="para-extralight">({{.IsDeleted}} {{$Translate.Channell.Entriesavailable}} )</h6>
+                                <h6 class="para-extralight">({{.EntriesCount}} {{$Translate.Channell.Entriesavailable}} )</h6>
                             </div>
-                            <h3 class="heading-five">{{.ChannelName}}</h3>
+                            <h3 class="heading-five" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{.ChannelName}}" style="cursor: pointer;">{{.ChannelName}}</h3>
                         </div>
-                        <p class="para-extralight" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
-                        title="{{.SlugName}}" style="height: 2.5rem;">{{.ChannelDescription}}
+                        <p class="para-extralight" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+                        title="{{.SlugName}}" style="height: 2.5rem;cursor: pointer;">{{.ChannelDescription}}
                         </p>
                     </div>
 
                     <div class="channels-card-btm">
                         <div class="btn-group action-btn-grp">
-                            <button type="button" class="dropdown-toggle primary {{$THEMECOLOR}}" data-bs-toggle="dropdown"
+                            <button type="button" class="dropdown-toggle primary" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 {{$Translate.Action}}
                                 <img src="/public/img/arrow-white-down.svg" alt="" />
@@ -105,11 +86,62 @@
                     </div>
                 </div>
                 {{end}}
+              
+                {{ else if eq .EntriesCount 0}}
+               
+                        <div class="noData-foundWrapper nodatafound">
+
+                            <div class="empty-folder">
+                                <img src="/public/img/folder-sh.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                            <p class="para">
+                                {{$Translate.Pagesorry}}
+                                {{$Translate.Gobackhome}}
+                            </p>
+                            <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal" data-bs-target="#rightModal"
+                                class="heading-three">{{$Translate.Clickadd}} >></a>
+                        </div>
+                  
+
+                
+               
+                {{else }}
+              
+                        <div class="noData-foundWrapper nodatafound">
+
+                            <div class="empty-folder">
+                                <img src="/public/img/folder-sh.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                            </div>
+                         
+                    {{end}} 
+         
             </div>
         </div>
     </div>
     <!--2-->
 </div>
+
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+
 {{template "footer" .}}
 <script src="/public/js/channels/channellist.js"></script>
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+
 {{template "footerclose" .}}

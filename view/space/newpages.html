@@ -5,35 +5,15 @@
 {{$TEXTCOLOR := ""}}
 {{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
 
+<input type="hidden" name="csrf" value="{{.csrf}}">
+<input type="hidden" id="spid" value="{{.spaceid}}">
 <div class="page-wrapper space-wrapper">
     <div class="tablst br-top br-btm">
         <div class="tab-breadCrumb space-tab-breadCrumb">
             <ul class="breadcrumb-container">
-                <li><a href="/spaces/">{{$Translate.Spaces.Lms}} </a></li>
-                <li><a href="/spaces/">{{$Translate.Spaces.Spacess}} </a></li>
-                <li><a href="">{{$Translate.Spaces.Createpages}}</a></li>
+                <li><a href="/spaces/">{{.SpaceDetail.SpaceName}}</a></li>
+                <li><a href="">Pages</a></li>
             </ul>
         </div>
     </div>
@@ -75,23 +55,32 @@
         <div class="space-edit gridCalc">
 
             <div class="space-head rgt">
-
-<!-- 
-                <div class="space-head-right">
+                <!-- <div  class="space-readtime">
+                    <p>{{$Translate.Spaces.Readingtime}}</p>
+                    <div class="min-toread">
+                      <img src="/public/img/time-icon.svg" alt="" class="in-active">
+                      <img src="/public/img/time-acive.svg" alt="" class="active">
+                      <input type="text" id="readtimetag" oninput="handleInputChange(event)">
+                     
+                      <p class="minclass"></p>
+                    </div>
+                  </div> -->
+              
+              
+                <div class="space-head-right"> 
                     <span class="para">CREATED BY</span>
-                    <p class="para">admin</p>
+                    <p class="para" id="createdusername">---</p>
                 </div>
 
-                <div class="space-head-right">
+                <!-- <div class="space-head-right">
                     <span class="para">CREATED DATE</span>
-
-                    <p class="para">01 Nov 2023 7:45 PM</p>
-                </div>
-
-                <div class="space-head-right">
-                    <span class="para">LAST DATE</span>
-                    <p class="para">02 Nov 2023 11:52 AM</p>
+                    <p class="para">{{.SpaceDetail.CreatedDate}}</p>
                 </div> -->
+
+                <div class="space-head-right" style="display: none;">
+                    <span class="para">LAST UPDATED</span>
+                    <p class="para" id="updatedate"></p>
+                </div>
 
                 <div class="space-head-right">
                     <button class="revision-btn">
@@ -138,7 +127,7 @@
                         <img src="/public/img/ck-img.svg" alt="">
                     </button>
                 </div>
-                <div class="input-grp gridCalc">
+                <div class="input-grp gridCalc">  
                     <!-- <label for="spaceContent">What you wear is how you present yourself to the world,especially today.</label> -->
                     <input type="text" value="" placeholder="{{$Translate.Spaces.Plentertitle}}" id="pagetitle">
                     <textarea placeholder="{{$Translate.Spaces.Pllckeditor}}" name="spaceContent" class="ckEditor1"
@@ -158,17 +147,9 @@
                  
             </div>
             <div class="space-section-rgt-body">
-                <div class="space-rgt-bdy-row">
-                    <div class="space-rgt-bdy-col">
-                        <h3 class="para-light">Admin</h3>
-                        <p class="para-extralight">02 Nov 2023 10:04 AM</p>
-                    </div>
-                    <div class="space-rgt-bdy-col">
-                        <p class="para-extralight status-updated">Updated</p>
-                    </div>
-                </div>
-
-                <div class="space-rgt-bdy-row">
+              
+                
+                <!-- <div class="space-rgt-bdy-row">
                     <div class="space-rgt-bdy-col">
                         <h3 class="para-light">Admin</h3>
                         <p class="para-extralight">02 Nov 2023 10:04 AM</p>
@@ -195,17 +176,17 @@
                     <div class="space-rgt-bdy-col">
                         <p class="para-extralight status-published">Publish</p>
                     </div>
-                </div>
+                </div> -->
         </div>
 
       </div>
 
     </div>
     <div class="configurationContent-btm spaceContent-btm">
-       <a href="/spaces/"><button class="btn-reg btn-lg secondary">{{$Translate.Cancel}}</button></a> 
-        <button class="btn-reg btn-lg primary">{{$Translate.Save}}</button>
+        <button class="btn-reg btn-lg secondary" id="pagecancel" data-bs-toggle="modal" data-bs-target="#centerModal">{{$Translate.Cancel}}</button>
+        <button class="btn-reg btn-lg primary" id="savebtn">{{$Translate.Save}}</button>
 
-        <button class="btn-reg btn-lg primary">{{$Translate.Spaces.Publish}}</button>
+        <button class="btn-reg btn-lg primary" id="publishbtn">{{$Translate.Spaces.Publish}}</button>
     </div>
 </div>
 
@@ -222,14 +203,17 @@
             </div>
             <div class="modal-body">
 
+                <input type="hidden" id="pagedatass" data-id="" data-newid="" data-groupid="">
+                <input type="hidden" id="pgnam">
                 <div class="input-group  user-drop-down">
 
                     <label for="" class="input-label">{{$Translate.Spaces.Movepage}}</label>
 
-                    <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                    <a class="dropdown-toggle choosegroup" type="button" id="triggerId" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         {{$Translate.Spaces.Choosepagegroup}}
                     </a>
+                    <label id="group-error" class="error" for="rolen" style="display: none;">* Please select the Group</label>
                     <input type="hidden" id="rolen" value="" name="user_role">
 
                     <div class="dropdown-menu movegroupdiv" aria-labelledby="triggerId" style="height: auto;">
@@ -244,16 +228,15 @@
 
             <div class="modal-foot">
                 <div class="move-btn-group">
-                    <button class="btn-reg btn-md primary"> {{$Translate.Spaces.Movepage}}</button>
-                    <button class="btn-reg btn-md secondary"> {{$Translate.Cancel}} </button>
+                    <button class="btn-reg btn-md primary" id="movepagetogroup"> {{$Translate.Spaces.Movepage}}</button>
+                    <button class="btn-reg btn-md secondary" id="movecancel" data-bs-dismiss="modal"> {{$Translate.Cancel}} </button>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-
-
+<input type="hidden" id="url" value="{{.URL}}">
 {{template "footer" .}}
 <script src="/public/js/pages/newpages.js"></script>
 {{template "footerclose" .}}

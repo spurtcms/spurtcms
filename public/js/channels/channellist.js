@@ -2,12 +2,12 @@ var languagedata
 /** */
 $(document).ready(async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
-        
-        languagedata = data
-    })
+  var languagepath = $('.language-group>button').attr('data-path')
+  
+  await $.getJSON(languagepath, function (data) {
+      
+      languagedata = data
+  })
   
   })
   
@@ -135,7 +135,7 @@ scrollablediv.addEventListener('scroll', function() {
   
                       <div class="channels-card-btm">
                           <div class="btn-group action-btn-grp">
-                              <button type="button" class="dropdown-toggle primary {{$THEMECOLOR}}" data-bs-toggle="dropdown"
+                              <button type="button" class="dropdown-toggle primary" data-bs-toggle="dropdown"
                                   aria-expanded="false">
                                   Action
                                   <img src="/public/img/arrow-white-down.svg" alt="" />

@@ -16,11 +16,11 @@ var channelEntries = []
 
 var content_access_id
 
-var languagecode = $('.language-group>button').attr('data-code')
+var languagepath = $('.language-group>button').attr('data-path')
 
-$.getJSON("/locales/"+languagecode+".json", function (data) {
-      
-    languagedata = data
+$.getJSON(languagepath, function (data) {
+
+  languagedata = data
 })
 
 /** */
@@ -93,36 +93,53 @@ $(document).ready(function () {
 
             for (let memgrpId of access_granted_memgrps) {
 
-              $('.memgrp-chkboxes').each(function(){
+              $('.memgrp-chkboxes').each(function () {
 
-                if($(this).attr('data-id')==memgrpId){
+                if ($(this).attr('data-id') == memgrpId) {
 
-                  $(this).prop('checked',true)
+                  $(this).prop('checked', true)
 
-                }else{
+                } else {
 
                   isAllMembersChkd = false
                 }
 
               })
 
-              if(isAllMembersChkd){
+              if (isAllMembersChkd) {
 
-                 $('#memgrp-slctall').prop('checked',true)
+                $('#memgrp-slctall').prop('checked', true)
               }
 
             }
 
           }
 
-          if(data.Channels != null){
-            
+          if (data.Channels != null) {
+
             channels = data.Channels
+
+            if ($('#default-mod-chk[type=hidden]').val() == "channel") {
+
+              for (let channelId of channels) {
+
+                $('.channelchkbox[data-id=' + channelId + ']').prop('checked', true)
+              }
+            }
           }
 
-          if(data.ChannelEntries != null){
-            
+          if (data.ChannelEntries != null) {
+
             channelEntries = data.ChannelEntries
+
+            if ($('#default-mod-chk[type=hidden]').val() == "channel") {
+
+              for (let entry of channelEntries) {
+
+                $('.chanEntry-chkbox[data-id=' + entry.id + ']').prop('checked', true)
+              }
+            }
+
           }
 
           console.log("pages", pages, "subpages", subpages, "pagegroups", pagegroups, "spaces", spaces, "memgrp", access_granted_memgrps, "channels", channels, "entries", channelEntries);
@@ -133,6 +150,7 @@ $(document).ready(function () {
     })
 
   }
+
 })
 
 $('.transitionSearch').click(function () {
@@ -150,11 +168,11 @@ $('form[name=contentaccess-form]>img').click(function () {
   }
 })
 
-$('.img-div>img').click(function () {
+$('#space-img-div>img').click(function () {
 
   var spaceid = $(this).attr('data-toggle')
 
-  console.log("spaceid",spaceid);
+  console.log("spaceid", spaceid);
 
   if ($(this).parent().attr('aria-expanded') == 'false' && $('#collapse' + spaceid + '>.accessAccord-child-container').html() == "") {
 
@@ -464,7 +482,7 @@ function GetSubpageHtml(data, spid, spaceChecked, spgChecked) {
 
   return ` <div class="chk-group chk-group-label">
                 ${spg_chkbox} 
-                <label for="chkspg${data.SpgId}" class="para">Topic</label>
+                <label for="chkspg${data.SpgId}" class="para">${data.Name}</label>
              </div>`
 }
 
@@ -576,7 +594,7 @@ $('.spacechkbox').click(function () {
 
     subpages = subpages.filter(obj => obj.spaceId !== space_id)
 
-    pages = pages.filter(obj =>obj.spaceId !== space_id)
+    pages = pages.filter(obj => obj.spaceId !== space_id)
 
     pagegroups = pagegroups.filter(obj => obj.spaceId !== space_id)
 
@@ -596,7 +614,7 @@ $('.spacechkbox').click(function () {
 
     subpages = subpages.filter(obj => obj.spaceId !== space_id)
 
-    pages = pages.filter(obj =>obj.spaceId !== space_id)
+    pages = pages.filter(obj => obj.spaceId !== space_id)
 
     pagegroups = pagegroups.filter(obj => obj.spaceId !== space_id)
 
@@ -625,8 +643,6 @@ $(document).on('click', '.dirpage-chkbox', function () {
 
     pages.push(page)
 
-    $('.PGID' + pg_id).prop('checked', true)
-
   } else {
 
     for (let x in pages) {
@@ -638,33 +654,7 @@ $(document).on('click', '.dirpage-chkbox', function () {
       }
     }
 
-    subpages = subpages.filter(obj => { obj.parentId != pg_id })
-
-    $('.PGID' + pg_id).prop('checked', false)
-
   }
-
-  $('.PGID' + pg_id).each(function () {
-
-    var id = $(this).attr('data-spgid')
-
-    if ($(this).is(':checked')) {
-
-      var new_subpage = {}
-
-      new_subpage.id = id
-
-      new_subpage.parentId = pg_id
-
-      new_subpage.groupId = '0'
-
-      new_subpage.spaceId = spaceid
-
-      subpages.push(new_subpage)
-
-    }
-
-  })
 
   var containerObj = HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups, spaces)
 
@@ -705,16 +695,6 @@ $(document).on('click', '.subpage-chkbox', function () {
 
   } else {
 
-    for (let x in pages) {
-
-      if (pages[x].id == pg_id) {
-
-        pages.splice(x, 1)
-
-      }
-
-    }
-
     for (let x in subpages) {
 
       if (subpages[x].id == spgid) {
@@ -725,24 +705,6 @@ $(document).on('click', '.subpage-chkbox', function () {
     }
 
   }
-
-  $('.PGID' + pg_id).each(function () {
-
-    var id = $(this).attr('data-spgid')
-
-    if ($(this).is(':checked')) {
-
-      $('.dirpage-chkbox[data-pgid=' + pg_id + ']').prop('checked', true)
-
-    } else {
-
-      $('.dirpage-chkbox[data-pgid=' + pg_id + ']').prop('checked', false)
-
-      return false
-
-    }
-
-  })
 
   var containerObj = HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups, spaces);
 
@@ -773,38 +735,7 @@ $(document).on('click', '.pagegroup-chkbox', function () {
 
   if ($(this).is(':checked')) {
 
-    pages = pages.filter(obj => { obj.groupId != pgg_id })
-
-    subpages = subpages.filter(obj => { obj.groupId != pgg_id })
-
-    console.log("chkk",pages, subpages);
-
-    pagegroups.push(pagegroup)
-
-    $('.GRPID' + pgg_id).prop('checked', true)
-
-  } else {
-
-    for (let x in pagegroups) {
-
-      if (pagegroups[x].id == pgg_id) {
-
-        pagegroups.splice(x, 1)
-
-      }
-    }
-
-    pages = pages.filter(obj => { obj.groupId != pgg_id })
-
-    subpages = subpages.filter(obj => { obj.groupId != pgg_id })
-
-    $('.GRPID' + pgg_id).prop('checked', false)
-
-  }
-
-  $('.GRPID' + pgg_id).each(function () {
-
-    if ($(this).is(':checked')) {
+    $('.GRPID' + pgg_id).each(function () {
 
       if ($(this).hasClass('pgunderpgg-chkbox')) {
 
@@ -839,9 +770,29 @@ $(document).on('click', '.pagegroup-chkbox', function () {
         subpages.push(new_subpage)
       }
 
+      $(this).prop('checked',true)
+    })
+
+    pagegroups.push(pagegroup)
+
+  } else {
+
+    for (let x in pagegroups) {
+
+      if (pagegroups[x].id == pgg_id) {
+
+        pagegroups.splice(x, 1)
+
+      }
     }
 
-  })
+    pages = pages.filter(obj => { obj.groupId != pgg_id })
+
+    subpages = subpages.filter(obj => { obj.groupId != pgg_id })
+
+    $('.GRPID' + pgg_id).prop('checked',false)
+
+  }
 
   var containerObj = HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups, spaces)
 
@@ -878,7 +829,22 @@ $(document).on('click', '.pgunderpgg-chkbox', function () {
 
     pages.push(page)
 
-    $('.PGID' + pg_id).prop('checked', true)
+    var isAllPagesChecked = true
+
+    $('.GRPID' + pggid).each(function () {
+
+      if (!$(this).is(':checked')) {
+
+        isAllPagesChecked = false
+
+      }
+
+    })
+
+    if(isAllPagesChecked){
+
+      $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', true)
+    }
 
   } else {
 
@@ -898,80 +864,7 @@ $(document).on('click', '.pgunderpgg-chkbox', function () {
       }
     }
 
-    subpages = subpages.filter(obj => { obj.parentId == pg_id })
-
-    $('.PGID' + pg_id).prop('checked', false)
-
-  }
-
-  var isAllPagesChecked = true
-
-  $('.GRPID' + pggid).each(function () {
-
-    if ($(this).hasClass('pgunderpgg-chkbox') && !$(this).is(':checked')) {
-
-      isAllPagesChecked = false
-    }
-
-    if ($(this).hasClass('pgunderpgg-chkbox') && $(this).is(':checked')) {
-
-      var id = $(this).attr('data-pgid')
-
-      var ispgidExist = pages.some(item => item.id === id);
-
-      var new_page = {}
-
-      new_page.id = id
-
-      new_page.groupId = pggid
-
-      new_page.spaceId = spaceid
-
-      if (!ispgidExist) {
-
-        pages.push(new_page)
-
-      }
-
-      $('.spgunderpgg-chkbox[data-pggid=' + pggid + '][data-pgid=' + id + ']').each(function () {
-
-        if ($(this).hasClass('spgunderpgg-chkbox')) {
-
-          var spgid = $(this).attr('data-spgid')
-
-          var parent_id = $(this).attr('data-pgid')
-
-          var isspgidExist = subpages.some(item => item.id === spgid);
-
-          var new_subpage = {}
-
-          new_subpage.id = spgid
-
-          new_subpage.parentId = parent_id
-
-          new_subpage.groupId = pggid
-
-          new_subpage.spaceId = spaceid
-
-          if (!isspgidExist) {
-
-            subpages.push(new_subpage)
-          }
-
-        }
-      })
-
-    }
-
-  })
-
-  if (isAllPagesChecked) {
-
-    $('.pagegroup-chkbox[data-pggid=' + pggid + '][data-spid=' + spaceid + ']').prop('checked', true)
-
-  } else {
-
-    $('.pagegroup-chkbox[data-pggid=' + pggid + '][data-spid=' + spaceid + ']').prop('checked', false)
+    $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', false)
 
   }
 
@@ -1014,6 +907,23 @@ $(document).on('click', '.spgunderpgg-chkbox', function () {
 
     subpages.push(subpage)
 
+    var isAllPagesChecked = true
+
+    $('.GRPID' + pggid).each(function () {
+
+      if (!$(this).is(':checked')) {
+
+        isAllPagesChecked = false
+
+      }
+
+    })
+
+    if(isAllPagesChecked){
+
+      $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', true)
+    }
+
   } else {
 
     for (let x in subpages) {
@@ -1024,14 +934,6 @@ $(document).on('click', '.spgunderpgg-chkbox', function () {
       }
     }
 
-    for (let x in pages) {
-
-      if (pages[x].id == pg_id) {
-
-        pages.splice(x, 1)
-      }
-    }
-
     for (let x in pagegroups) {
 
       if (pagegroups[x].id == pggid) {
@@ -1041,84 +943,10 @@ $(document).on('click', '.spgunderpgg-chkbox', function () {
 
     }
 
+    $('.pagegroup-chkbox[data-pggid='+pggid+']').prop('checked',false)
+
   }
-
-  var isAllSubpagesChkd = true
-
-  $('.PGID' + pg_id).each(function () {
-
-    if (!$(this).is(':checked')) {
-
-      isAllSubpagesChkd = false
-
-      return false
-    }
-
-  })
-
-  if (isAllSubpagesChkd) {
-
-    var ispgidExist = pages.some(item => item.id === pg_id);
-
-    var new_page = {}
-
-    new_page.id = pg_id
-
-    new_page.groupId = pggid
-
-    new_page.spaceId = spaceid
-
-    if (!ispgidExist) {
-
-      pages.push(new_page)
-
-    }
-
-    $('.pgunderpgg-chkbox[data-pgid=' + pg_id + ']').prop('checked', true)
-
-  } else {
-
-    for (let x in pages) {
-
-      if (pages[x].id == pg_id) {
-
-        pages.splice(x, 1)
-      }
-    }
-
-    $('.pgunderpgg-chkbox[data-pgid=' + pg_id + ']').prop('checked', false)
-  }
-
-  var isAllPagesChecked = true
-
-  $('.GRPID' + pggid).each(function () {
-
-    if (!$(this).is(':checked')) {
-
-      isAllPagesChecked = false
-
-      return false
-
-    }
-  })
-
-  if (isAllPagesChecked) {
-
-    $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', true)
-
-  } else {
-
-    for (let x in pagegroups) {
-
-      if (pagegroups[x].id == pggid) {
-
-        pagegroups.splice(x, 1)
-      }
-    }
-
-    $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', false)
-  }
-
+  
   var containerObj = HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups, spaces)
 
   subpages = containerObj.subpages
@@ -1289,10 +1117,37 @@ function HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups
 
           pgg_chkd.push(id)
         }
+
+      }else{
+
+        $('.pgunderpgg-chkbox[data-spid=' + spaceid + '][data-pggid=' + id + ']').each(function () {
+
+          var pgInPgg_id = $(this).attr('data-pgid')
+
+          if ($(this).is(':checked')) {
+  
+            var isPgIdExist = pages.some(item => item.id === pgInPgg_id);
+  
+            var new_page = {}
+  
+            new_page.id = pgInPgg_id
+  
+            new_page.groupId = id
+  
+            new_page.spaceId = spaceid
+  
+            if (!isPgIdExist) {
+  
+              pages.push(new_page)
+  
+            }
+  
+          }
+ 
+        })
       }
 
     })
-
 
     for (let x of pgg_chkd) {
 
@@ -1596,7 +1451,15 @@ $('.memgrp-chkboxes').each(function (chk_index, chk_element) {
   })
 })
 
+var pageno
+
 $('.configurationContent-btm > button').click(function () {
+
+  var url = window.location.search
+
+  const urlpar = new URLSearchParams(url);
+
+  pageno = urlpar.get('page');
 
   pages = pages.filter(obj => !spaces.includes(obj.spaceId))
 
@@ -1604,7 +1467,7 @@ $('.configurationContent-btm > button').click(function () {
 
   pagegroups = pagegroups.filter(obj => !spaces.includes(obj.spaceId))
 
-  console.log("subpages", subpages, "pages", pages, "pagegroups", pagegroups, "spaces", spaces, "memgrps", access_granted_memgrps, "channels", channels, "channelEntries",channelEntries);
+  console.log("subpages", subpages, "pages", pages, "pagegroups", pagegroups, "spaces", spaces, "memgrps", access_granted_memgrps, "channels", channels, "channelEntries", channelEntries);
 
   if ($('#ca-inpt').val() != "") {
 
@@ -1646,7 +1509,7 @@ $('.configurationContent-btm > button').click(function () {
       //   "csrf":csrf
       // }
 
-      if ((spaces.length > 0 || pages.length > 0 || subpages.length > 0 || pagegroups.length > 0 ||channelEntries.length>0 || channels.length>0) && access_granted_memgrps.length > 0) {
+      if ((spaces.length > 0 || pages.length > 0 || subpages.length > 0 || pagegroups.length > 0 || channelEntries.length > 0 || channels.length > 0) && access_granted_memgrps.length > 0) {
 
         var callUrl
 
@@ -1664,47 +1527,46 @@ $('.configurationContent-btm > button').click(function () {
 
         }
 
-        PassContentAccessGrantedIds(data, callUrl)
+        PassContentAccessGrantedIds(data, callUrl, pageno)
 
       } else {
 
-        if (spaces.length == 0 && pages.length == 0 && subpages.length == 0 && pagegroups.length == 0 && channels.length>0 && channelEntries.length>0) {
+        var message = ''
 
-          var message = languagedata.ContentAccessControl.pleaseselectatleastonepagetograntaccess
+        if ($('#default-mod-chk[type=hidden]').val() == "space" && spaces.length == 0 && pages.length == 0 && subpages.length == 0 && pagegroups.length == 0 && channels.length == 0 && channelEntries.length == 0) {
 
-          notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+          message = languagedata.ContentAccessControl.pagechannelgrantaccess
 
-          $(notify_content).insertBefore(".header-rht");
+        } else if ($('#default-mod-chk[type=hidden]').val() == "channel" && channels.length == 0 && channelEntries.length == 0) {
 
-          setTimeout(function () {
+          message = languagedata.ContentAccessControl.channelgrantaccess
 
-            $('.toast-msg').fadeOut('slow', function () {
+        } else if (access_granted_memgrps.length == 0 && $('#default-mod-chk[type=hidden]').val() == "space") {
 
-              $(this).remove();
+          message = languagedata.ContentAccessControl.spacedefaultmembergroupaccess
 
-            });
+        } else if (access_granted_memgrps.length == 0 && $('#default-mod-chk[type=hidden]').val() == "channel") {
 
-          }, 5000);
-
-        } else if (access_granted_memgrps.length == 0) {
-
-          var message = languagedata.ContentAccessControl.pleasegrantoneormorepageaccessrightstomembergroups
-
-          notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-          $(notify_content).insertBefore(".header-rht");
-
-          setTimeout(function () {
-
-            $('.toast-msg').fadeOut('slow', function () {
-
-              $(this).remove();
-
-            });
-
-          }, 5000);
+          message = languagedata.ContentAccessControl.channeldefaultmembergroupaccess
 
         }
+
+
+        console.log("msg", message);
+
+        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+        $(notify_content).insertBefore(".header-rht");
+
+        setTimeout(function () {
+
+          $('.toast-msg').fadeOut('slow', function () {
+
+            $(this).remove();
+
+          });
+
+        }, 5000);
 
       }
     }
@@ -1730,7 +1592,7 @@ $('#ca-inpt').keyup(function () {
 
 })
 
-function PassContentAccessGrantedIds(data, url) {
+function PassContentAccessGrantedIds(data, url, pageno) {
 
   $.ajax({
 
@@ -1748,13 +1610,20 @@ function PassContentAccessGrantedIds(data, url) {
 
         console.log("data", data);
 
-        window.location.href = "/memberaccess/"
+        if (pageno == null) {
+
+          window.location.href = "/memberaccess/"
+
+        } else {
+          window.location.href = "/memberaccess/?page=" + pageno
+
+        }
 
       } else {
 
         var message = languagedata.Toast.internalserverr
 
-        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
 
         $(notify_content).insertBefore(".header-rht");
 
@@ -1774,11 +1643,19 @@ function PassContentAccessGrantedIds(data, url) {
   })
 }
 
-$('.ava-sel-srch>input').keyup(function (event) {
+$('.ava-sel-srch>input').keyup(function () {
 
   var keyword = $(this).val().trim().toLowerCase()
 
-  PerformSpaceSearch(keyword)
+  if ($(this).hasClass("space-srch-input") && $('.space-row').length > 0) {
+
+    PerformSpaceSearch(keyword)
+
+  } else if ($(this).hasClass("channel-srch-input") && $('.channel-row').length > 0) {
+
+    PerformChannelSearch(keyword)
+
+  }
 
 })
 
@@ -1786,68 +1663,135 @@ $('.ava-sel-srch>img').click(function () {
 
   var keyword = $(this).siblings('input').val().trim().toLowerCase()
 
-  PerformSpaceSearch(keyword)
+  if ($(this).hasClass("space-srch-img") && $('.space-row').length > 0) {
+
+    PerformSpaceSearch(keyword)
+
+  } else if ($(this).hasClass("channel-srch-img") && $('.channel-row').length > 0) {
+
+    PerformChannelSearch(keyword)
+
+  }
 
 })
 
 function PerformSpaceSearch(keyword) {
 
-  if (keyword!==""){
+  if (keyword !== "") {
 
-    $('.accessAccord-row').each(function(){
+    $('.space-row').each(function () {
 
       var regex = new RegExp(keyword, "i"); // "i" makes the search case-insensitive
 
       var spacename = $(this).find('.accessAccord-parent>.chk-group>label').text()
-  
-       if(regex.test(spacename)){
-  
+
+      if (regex.test(spacename)) {
+
         $(this).show()
 
         $('.noData-foundWrapper').remove()
-  
-       }else{
-  
+
+      } else {
+
         $(this).hide()
 
-        if($('.accessAccord-row:visible').length==0){
+        if ($('.space-row:visible').length == 0) {
+
+          var nodata_html = `<div class="noData-foundWrapper">
+                                    <div class="empty-folder">
+                                        <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                   <h1 style="text-align: center;font-size: 10px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
+                                </div>`
+
+          if ($('.noData-foundWrapper').length == 0) {
+
+            $(this).parent().append(nodata_html)
+          }
+
+        } else {
+
+          $('.noData-foundWrapper').remove()
+        }
+
+      }
+    })
+
+  } else {
+
+    $('.noData-foundWrapper').remove()
+
+    $('.space-row').show()
+
+  }
+
+}
+
+function PerformChannelSearch(keyword) {
+
+  if (keyword !== "") {
+
+    $('.channel-row').each(function () {
+
+      var regex = new RegExp(keyword, "i"); // "i" makes the search case-insensitive
+
+      var channelname = $(this).find('.accessAccord-parent>.chk-group>label').text()
+
+      if (regex.test(channelname)) {
+
+        $(this).show()
+
+        $('.noData-foundWrapper').remove()
+
+      } else {
+
+        $(this).hide()
+
+        if ($('.channel-row:visible').length == 0) {
 
           var nodata_html = `<div class="noData-foundWrapper">
                                   <div class="empty-folder">
                                       <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
                                       <img src="/public/img/shadow.svg" alt="">
                                   </div>
-                                 <h1 style="text-align: center;font-size: 10px;" class="heading"> `+languagedata.nodatafound +` </h1>
+                                 <h1 style="text-align: center;font-size: 10px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
                               </div>`
 
-          if($('.noData-foundWrapper').length==0){
+          if ($('.noData-foundWrapper').length == 0) {
 
             $(this).parent().append(nodata_html)
-          }                    
+          }
 
-        }else{
+        } else {
 
           $('.noData-foundWrapper').remove()
         }
 
-       }
+      }
     })
 
-  }else{
+  } else {
 
     $('.noData-foundWrapper').remove()
 
-    $('.accessAccord-row').show()
-    
+    $('.channel-row').show()
+
   }
 
 }
 
-$('.delete-access').click(function(){
+$('.delete-access').click(function () {
+
+  var url = window.location.search;
+
+  const urlpar = new URLSearchParams(url);
+
+  var pageno = urlpar.get('page');
 
   var accessId = $(this).attr("data-id")
 
-  console.log("langid",accessId);
+  console.log("langid", accessId);
 
   $('.deltitle').text(languagedata.ContentAccessControl.deltitle)
 
@@ -1855,146 +1799,191 @@ $('.delete-access').click(function(){
 
   $('.delname').text($(this).parents('tr').find('td:first>.title-cell>h3').text())
 
-  $('button[id=delid]').parent().attr('href',"/memberaccess/delete-accesscontrol/"+accessId)
+  if (pageno == null) {
 
+    $('button[id=delid]').parent().attr('href', "/memberaccess/delete-accesscontrol/" + accessId)
+
+  } else {
+
+    $('button[id=delid]').parent().attr('href', "/memberaccess/delete-accesscontrol/" + accessId + "?page=" + pageno)
+
+  }
   $('#centerModal').modal('show')
+
 })
 
-$(document).on('click','#channel-access',function(){
+$(document).on('click', '#channel-access', function () {
+
+  $("#description").text(languagedata?.ContentAccessControl?.channelaccessdesc)
 
   console.log("channel-access clicked");
 
-  if($('.channel-row').length==0){
+  if ($('.channel-row').length == 0) {
 
-    $.ajax({
+    if ($('#default-mod-chk[type=hidden]').val() != "channel") {
 
-      url : '/memberaccess/get-channels',
+      $.ajax({
 
-      dataType : 'json',
+        url: '/memberaccess/get-channels',
 
-      success : function(data){
+        dataType: 'json',
 
-        console.log("channel data",data);
+        success: function (data) {
 
-        if (data.Channels!=null){
+          console.log("channel data", data);
 
-          for(let channel of data.Channels){
+          if (data.Channels != null) {
 
-            var category_html = ""
+            $('.noData-foundWrapper').hide()
 
-            for(let category of channel.Categories){
+            for (let channel of data.Channels) {
 
-              category_html += `<li><a href="javascript:void(0)" class="para-light">${category.CategoryName}</a></li>`
+              var channelEntry_html = ""
 
-            }
+              for (let channelEntry of channel.ChannelEntries) {
 
-            var channelEntry_html = ""
+                var isEntryChkd = false
 
-            if (channel.ChannelEntries.length>0){
-  
-              for(let channelEntry of channel.ChannelEntries){
+                for (let readyEntry of channelEntries) {
 
-                var entry_chkbox = ""
+                  if (readyEntry.id == channelEntry.Id) {
 
-                for(let readyEntry of channelEntries){
-
-                  if(channelEntry.Id == readyEntry.id){
-
-                    entry_chkbox = ` <input type="checkbox" id="ChannelEntry${channelEntry.Id}" class="chanEntry-chkbox" data-id="${channelEntry.Id}" data-chanid="${channel.Id}" checked>`
-
-                  }else{
-
-                    entry_chkbox = ` <input type="checkbox" id="ChannelEntry${channelEntry.Id}" class="chanEntry-chkbox" data-id="${channelEntry.Id}" data-chanid="${channel.Id}">`
+                    isEntryChkd = true
 
                   }
 
                 }
 
+                var entry_chkbox = ""
+
+                if (isEntryChkd) {
+
+                  entry_chkbox = ` <input type="checkbox" id="ChannelEntry${channelEntry.Id}" class="chanEntry-chkbox" data-id="${channelEntry.Id}" data-chanid="${channel.Id}" checked>`
+
+                } else {
+
+                  entry_chkbox = ` <input type="checkbox" id="ChannelEntry${channelEntry.Id}" class="chanEntry-chkbox" data-id="${channelEntry.Id}" data-chanid="${channel.Id}">`
+
+                }
+
                 channelEntry_html += `<div class="accessAccord-child">
-                                             <div class="chk-group">
-                                               ${entry_chkbox}
-                                                <label for="ChannelEntry${channelEntry.Id}"></label>
-                                              </div>
-    
-                                              <button class="accord-collapse">
-                                                 <span class="para">${channelEntry.Title}</span>
-                                               </button>
-                                               </div>`
+                                                 <div class="chk-group">
+                                                 ${entry_chkbox}
+                                                    <label for="ChannelEntry${channelEntry.Id}"></label>
+                                                  </div>
+        
+                                                  <button class="accord-collapse">
+                                                     <span class="para">${channelEntry.Title}</span>
+                                                   </button>
+                                                   </div>`
+
               }
-  
-            }
 
-            var channelEntryDiv = ""
+              var channelEntryDiv = ""
 
-            if(channelEntry_html!=""){
+              if (channelEntry_html != "") {
 
-             channelEntryDiv = `<div id="channel${channel.Id}" class="accordion-collapse collapse  accessAccord-parent-content" data-toggle="${channel.Id}" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                               <div class="accessAccord-child-container channel-childrow">${channelEntry_html}</div>
-                               <div>`
+                channelEntryDiv = `<div id="channel${channel.Id}" class="accordion-collapse collapse  accessAccord-parent-content" data-toggle="${channel.Id}" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                 <div class="accessAccord-child-container channel-childrow">${channelEntry_html}</div>
+                                 <div>`
 
-            }else{
+              } else {
 
-              channelEntryDiv = ''
+                channelEntryDiv = ''
 
-            }
+              }
 
-            var channel_chkbox = ""
+              var channel_chkbox = ""
 
-            for(let channelid of channels){
+              if (channels.length > 0) {
 
-              if(channelid == channel.Id){
+                for (let channelid of channels) {
 
-                 channel_chkbox = `<input type="checkbox" id="channel${channel.Id}" class="channelchkbox" data-id="${channel.Id}" checked>`
+                  if (channelid == channel.Id) {
 
-              }else{
+                    channel_chkbox = `<input type="checkbox" id="channel${channel.Id}" class="channelchkbox" data-id="${channel.Id}" checked>`
+
+                  } else {
+
+                    channel_chkbox = `<input type="checkbox" id="channel${channel.Id}" class="channelchkbox" data-id="${channel.Id}">`
+
+                  }
+
+                }
+
+              } else {
 
                 channel_chkbox = `<input type="checkbox" id="channel${channel.Id}" class="channelchkbox" data-id="${channel.Id}">`
 
               }
 
-            }
+              var channelBindHtml = `<div class="accessAccord-row channel-row">
   
-            var channelBindHtml = `<div class="accessAccord-row channel-row">
+              <div class="accessAccord-parent">
+  
+                    <div class="chk-group chk-group-label">
+                          ${channel_chkbox}
+                          <label for="channel${channel.Id}" class="para">${channel.ChannelName}</label>
+                    </div>
+      
+                    <div class="accessAccord-parent-end">
+      
+                       <div class="card-breadCrumb">
+                           <ul class="breadcrumb-container"></ul>
+                       </div>
+  
+                       <a href="javascript:void(0)" class="img-div accord-collapse" data-bs-toggle="collapse" data-bs-target="#channel${channel.Id}" aria-expanded="false" aria-controls="channel${channel.Id}">
+                        <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="${channel.Id}">
+                      </a>
+      
+                   </div>
+              </div>
+              ${channelEntryDiv}
+            </div>`
 
-            <div class="accessAccord-parent">
+              $('.configurationContent-section-lft>.accessAccord-container').append(channelBindHtml)
 
-                  <div class="chk-group chk-group-label">
-                        ${channel_chkbox}
-                        <label for="channel${channel.Id}" class="para">${channel.ChannelName}</label>
-                  </div>
-    
-                  <div class="accessAccord-parent-end">
-    
-                     <div class="card-breadCrumb">
-                         <ul class="breadcrumb-container">
-                              ${category_html}
-                          </ul>
-                     </div>
+            }
 
-                     <a href="javascript:void(0)" class="img-div accord-collapse" data-bs-toggle="collapse" data-bs-target="#channel${channel.Id}" aria-expanded="false" aria-controls="channel${channel.Id}">
-                      <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="${channel.Id}">
-                    </a>
-    
-                 </div>
-            </div>
-            ${channelEntryDiv}
-          </div>`
+          } else {
 
-          $('.configurationContent-section-lft>.accessAccord-container').append(channelBindHtml)
+            if ($('.channel-row').length == 0) {
+
+              var nodata_html = `<div class="noData-foundWrapper">
+                                  <div class="empty-folder">
+                                       <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
+                                       <img src="/public/img/shadow.svg" alt="">
+                                  </div>
+                                  <h1 style="text-align: center;font-size: 10px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
+                                </div>`
+
+              if ($('.noData-foundWrapper').length == 0) {
+
+                $('accessAccord-container').append(nodata_html)
+
+              } else {
+
+                $('.noData-foundWrapper').show()
+              }
+            }
 
           }
 
         }
 
-      }
+      })
 
-  })
+    }
+
+  } else if ($('.channel-row').length > 1) {
+
+    $('.noData-foundWrapper').hide()
 
   }
 
-  $('.space-childrow').each(function(){
+  $('.space-childrow').each(function () {
 
-    if($(this).parent().css('display')=='block'){
+    if ($(this).parent().css('display') == 'block') {
 
       $(this).parent().hide()
 
@@ -2010,7 +1999,9 @@ $(document).on('click','#channel-access',function(){
 
   $('.accessHead-rgt-start>div>h3').text('Channels')
 
-  $('.ava-sel-srch>input').attr('placeholder','Search Channels')
+  $('.ava-sel-srch>img').removeClass('space-srch-img').addClass('channel-srch-img')
+
+  $('.ava-sel-srch>input').attr('placeholder', 'Search Channels').removeClass('space-srch-input').addClass('channel-srch-input').val("")
 
   $('.configurationContent-section-lft>.accessAccord-container .space-row').hide()
 
@@ -2018,21 +2009,11 @@ $(document).on('click','#channel-access',function(){
 
 })
 
-$(document).on('click','#space-access',function(){
+$(document).on('click', '#space-access', function () {
 
   console.log("space-access clicked");
 
-  $('.channel-childrow').each(function(){
-
-    if($(this).parent().css('display')=='block'){
-
-      $(this).parent().removeClass('show')
-
-      $(this).parents('.channel-row').find('.accessAccord-parent-end>a').addClass('collapsed').attr('aria-expanded','false')
-
-    }
-
-  })
+  $("#description").text(languagedata?.ContentAccessControl?.spacedesc)
 
   $(this).addClass('active')
 
@@ -2040,25 +2021,63 @@ $(document).on('click','#space-access',function(){
 
   $('.accessHead-rgt-start>div>h3').text('Spaces')
 
-  $('.ava-sel-srch>input').attr('placeholder','Search Spaces')
+  $('.ava-sel-srch>img').removeClass('channel-srch-img').addClass('space-srch-img')
+
+  $('.ava-sel-srch>input').attr('placeholder', 'Search Spaces').removeClass('channel-srch-input').addClass('space-srch-input').val("")
 
   $('.configurationContent-section-lft>.accessAccord-container .channel-row').hide()
 
   $('.configurationContent-section-lft>.accessAccord-container .space-row').show()
 
+  if ($('.space-row').length > 0) {
+
+    $('.noData-foundWrapper').hide()
+
+    $('.channel-childrow').each(function () {
+
+      if ($(this).parent().css('display') == 'block') {
+
+        $(this).parent().removeClass('show')
+
+        $(this).parents('.channel-row').find('.accessAccord-parent-end>a').addClass('collapsed').attr('aria-expanded', 'false')
+
+      }
+
+    })
+
+  } else if ($('.space-row').length == 0) {
+
+    var nodata_html = `<div class="noData-foundWrapper">
+                        <div class="empty-folder">
+                             <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
+                             <img src="/public/img/shadow.svg" alt="">
+                        </div>
+                        <h1 style="text-align: center;font-size: 10px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
+                      </div>`
+
+    if ($('.noData-foundWrapper').length == 0) {
+
+      $('accessAccord-container').append(nodata_html)
+
+    } else {
+
+      $('.noData-foundWrapper').show()
+    }
+  }
+
 })
 
-$(document).on('click','.channelchkbox',function(){
+$(document).on('click', '.channelchkbox', function () {
 
   var channelId = $(this).attr('data-id')
 
-  if($(this).is(':checked')){
+  if ($(this).is(':checked')) {
 
     channels.push(channelId)
 
-    $(this).prop('checked',true)
+    $(this).prop('checked', true)
 
-    $('.chanEntry-chkbox[data-chanid='+channelId+']').each(function(){
+    $('.chanEntry-chkbox[data-chanid=' + channelId + ']').each(function () {
 
       var entryId = $(this).attr('data-id')
 
@@ -2070,40 +2089,40 @@ $(document).on('click','.channelchkbox',function(){
 
       channelEntries.push(entry)
 
-      $(this).prop('checked',true)
+      $(this).prop('checked', true)
 
     })
 
-  }else{
+  } else {
 
-    for(let x in channels){
+    for (let x in channels) {
 
-      if(channels[x]==channelId){
+      if (channels[x] == channelId) {
 
-        channels.splice(x,1)
+        channels.splice(x, 1)
       }
 
     }
 
-    channelEntries = channelEntries.filter(obj=>{obj.channelId!=channelId})
+    channelEntries = channelEntries.filter(obj => { obj.channelId != channelId })
 
-    $('.chanEntry-chkbox[data-chanid='+channelId+']').prop('checked',false)
+    $('.chanEntry-chkbox[data-chanid=' + channelId + ']').prop('checked', false)
 
-    $(this).prop('checked',false)
+    $(this).prop('checked', false)
 
   }
 
-  console.log("chk channel",channels,channelEntries);
+  console.log("chk channel", channels, channelEntries);
 
 })
 
-$(document).on('click','.chanEntry-chkbox',function(){
+$(document).on('click', '.chanEntry-chkbox', function () {
 
   var channelId = $(this).attr('data-chanid')
 
   var entryId = $(this).attr('data-id')
 
-  if($(this).is(':checked')){
+  if ($(this).is(':checked')) {
 
     var entry = {}
 
@@ -2113,31 +2132,31 @@ $(document).on('click','.chanEntry-chkbox',function(){
 
     channelEntries.push(entry)
 
-    $(this).prop('checked',true)
+    $(this).prop('checked', true)
 
-  }else{
+  } else {
 
-    for(let x in channelEntries){
+    for (let x in channelEntries) {
 
-      if(channelEntries[x].id==entryId){
+      if (channelEntries[x].id == entryId) {
 
-        channelEntries.splice(x,1)
+        channelEntries.splice(x, 1)
       }
 
     }
 
-    $(this).prop('checked',false)
+    $(this).prop('checked', false)
   }
 
   var isAllEntrieschkd
-    
-  $('.chanEntry-chkbox[data-chanid='+channelId+']').each(function(){
 
-    if($(this).is(':checked')){
+  $('.chanEntry-chkbox[data-chanid=' + channelId + ']').each(function () {
+
+    if ($(this).is(':checked')) {
 
       isAllEntrieschkd = true
 
-    }else{
+    } else {
 
       isAllEntrieschkd = false
 
@@ -2146,27 +2165,38 @@ $(document).on('click','.chanEntry-chkbox',function(){
 
   })
 
-  if(isAllEntrieschkd){
+  if (isAllEntrieschkd) {
 
     channels.push(channelId)
 
-    $('.channelchkbox[data-id='+channelId+']').prop('checked',true)
+    $('.channelchkbox[data-id=' + channelId + ']').prop('checked', true)
 
-  }else{
+  } else {
 
-    for(let x in channels){
+    for (let x in channels) {
 
-      if(channels[x]==channelId){
+      if (channels[x] == channelId) {
 
-        channels.splice(x,1)
+        channels.splice(x, 1)
       }
 
     }
 
-    $('.channelchkbox[data-id='+channelId+']').prop('checked',false)
+    $('.channelchkbox[data-id=' + channelId + ']').prop('checked', false)
 
   }
 
-  console.log("chk channel",channels,channelEntries);
+  console.log("chk channel", channels, channelEntries);
+
+})
+
+// Search return to home page
+
+$(document).on('keyup', '#memberrestrictsearch', function () {
+
+  if ($('.search').val() === "") {
+    window.location.href = "/memberaccess"
+
+  }
 
 })

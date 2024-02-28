@@ -15,6 +15,27 @@ $(document).ready(function () {
     
         // Change Image with cropper
         $("#myfile,#file").change(function () {
+
+            $('#crop-container').removeClass('croppie-container').empty().show()
+            
+            if(window.location.href.indexOf("myprofile")!=-1 || window.location.href.indexOf("users")!=-1 || window.location.href.indexOf("member")!=-1){
+
+                if(window.location.href.indexOf("myprofile")!=-1){
+
+                    $('#changepicModal .admin-header >h3').text('Crop Myprofile Image')
+
+                }else if(window.location.href.indexOf("users")!=-1){
+
+                    $('#changepicModal .admin-header >h3').text('Crop User Image')
+
+                }else if(window.location.href.indexOf("member")!=-1){
+
+                    $('#changepicModal .admin-header >h3').text('Crop Member Image')
+
+                }
+
+                $("#myfile-error").hide()
+            }
             var file = this.files[0];
             var filename = $(this).val();
             var ext = filename.split(".").pop().toLowerCase();
@@ -48,6 +69,11 @@ $(document).ready(function () {
                 }
                 reader.readAsDataURL(file);
                 $('#changepicModal').modal('show');
+            }else{
+
+                if(window.location.href.indexOf("myprofile")!=-1 || window.location.href.indexOf("users")!=-1 || window.location.href.indexOf("member")!=-1){
+                    $("#myfile-error").text( languagedata?.Toast?.errmsgupload).show()
+                }
             }
         });
     
@@ -100,9 +126,9 @@ $(document).ready(function () {
 //alert messages
 document.addEventListener("DOMContentLoaded",async function () {
 
-    var languagecode = $('.language-group>button').attr('data-code')
-
-    await $.getJSON("/locales/"+languagecode+".json", function (data) {
+    var languagepath = $('.language-group>button').attr('data-path')
+  
+    await $.getJSON(languagepath, function (data) {
         
         languagedata = data
     })
@@ -271,7 +297,7 @@ $(document).on('click', '.expandbtn', function () {
     $('body').toggleClass('expand')
     if ($('body').hasClass('expand')) {
         $(this).html(`<a href="javascript:void(0)"><img src="/public/img/arrow-long-right.svg" alt=""></a>
-        <a href="javascript:void(0)"><img src="/public/img/arrow-long-left.svg" alt=""> Close </a>`)
+        <a href="javascript:void(0)"><img src="/public/img/arrow-long-left.svg" alt=""> `+languagedata.Toast.close + ` </a>`)
     } else {
         $(this).html(`<a href="javascript:void(0)"><img src="/public/img/arrow-long-right.svg" alt=""></a>`)
     }
@@ -296,10 +322,11 @@ $.validator.addMethod("space", function (value) {
 });
 
 
-/**category search */
+// /**category search */
 $(".parentwithchild").on("keyup", function () {
 
     var value = $(this).val().toLowerCase();
+
 
     $(".forsearch").filter(function () {
 
@@ -307,7 +334,7 @@ $(".parentwithchild").on("keyup", function () {
 
     });
 
-    var count = $('.categorypdiv').length;
+    var count = $('.categorypdiv:visible').length;
 
     if ($(".categorypdiv:visible").length == 0) {
 
@@ -335,19 +362,25 @@ $(document).on('keyup', '#selectcategory', function () {
 
     });
 
+    var count = $('.selectedcategorydiv:visible').length;
+
     if ($(".selectedcategorydiv:visible").length == 0) {
 
         $("#selcategorynodatafound").show();
+
+        $('#selcatcount').text("0");
 
     } else {
 
         $("#selcategorynodatafound").hide();
 
+        $('#selcatcount').text(count);
+
     }
 
 })
 
-/*Available Categories and Selected Categories */
+// // /*Available Categories and Selected Categories */
 var SelectedCategoryId = []
 
 let SelectedCategoryValue = []
@@ -367,7 +400,7 @@ $(document).on('click', '.category-select-btn', function () {
 
         if ($(this).hasClass('categoryname')) {
 
-            pstr += `<h3 class="para categoryname" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</h3>`;
+            pstr += `<h3 class="para categoryname"style="font-weight: 400;" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</h3>`;
         } else {
             pstr += `<h3 class="para">` + $(this).text() + `</h3>`;
         }
@@ -384,11 +417,20 @@ $(document).on('click', '.category-select-btn', function () {
             <img src="/public/img/bin.svg" alt="" />
         </a>
         <p class="forsearches" style="display: none;">`+ $(this).siblings('.choose-cat-list-col')[0].textContent + `</p>
-    </div>`
+    </div>
+    <div class="noData-foundWrapper" id="selcategorynodatafound" style="display: none;">
+    
+    <div class="empty-folder">
+        <img src="/public/img/folder-sh.svg" alt="">
+        <img src="/public/img/shadow.svg" alt="">
+    </div>
+    <h1 class="heading">Oops No Data Found</h1>
+    </div>  
+    `
 
     $('.selected_category').append(div);
 
-    $(this).parents('.categorypdiv').hide();
+    $(this).parents('.categorypdiv').remove();
 
     var idstr = [];
 
@@ -425,9 +467,48 @@ $(document).on('click', '.category-select-btn', function () {
 /*UnSelected */
 $(document).on('click', '.category-unselect-btn', function () {
 
-    $('#category-' + $(this).attr('data-categoryid')).show()
+    // $('#category-' + $(this).attr('data-categoryid')).show()
 
     $(this).parents('.selectedcategorydiv').remove();
+
+    var categoriesid = $(this).attr('data-categoryid')
+
+    var id = $(this).attr('data-id')
+
+    var pstr = ``
+
+    $(this).siblings('.choose-cat-list-col').children('.para').each(function () {
+
+        if ($(this).hasClass('categoryname')) {
+
+            pstr += `<h3 class="para categoryname" style="font-weight: 400;" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</h3>`;
+        } else {
+            pstr += `<h3 class="para">` + $(this).text() + `</h3>`;
+        }
+
+
+    })
+
+    var div =
+        `    <div class="categories-list-child categorypdiv" id="category-` + categoriesid + `">
+        <div class="choose-cat-list-col" style="display: flex;" data-id={{$index}}>
+           
+        `+ pstr + `
+              
+            
+               
+        </div>
+        <a href="javascript:void(0)" class="category-select-btn" data-id="`+id+`" data-categoryid="`+ categoriesid + `">
+            <img src="/public/img/add-category.svg" alt="" />
+        </a>
+        <p class="forsearch" style="display: none;">`+ $(this).siblings('.choose-cat-list-col')[0].textContent + `</p>
+    </div>
+        
+      `
+
+    $('.slist').append(div);
+
+  
 
     var idstr = [];
 
@@ -479,7 +560,7 @@ $(document).ready(function () {
 
             if (TEXT == $(this).text()) {
 
-                $(this).parents('.categorypdiv').hide();
+                $(this).parents('.categorypdiv').remove();
             }
         })
 
@@ -492,30 +573,6 @@ $(document).ready(function () {
 /**DropDown Select */
 $(document).on('click', '.dropdown-item', function () {
 
-//     var text = $(this).html()
-    
-//     var id 
-
-//    var Category = $(this).find('.id')
-
-//     $.each(Category, function (index, value) {
-
-//         if (Category.length - 1) {
-//           id = $(this).attr("id")
-//           $("#catiddd").val(id)
-//         }
-//     })
-
-//      if (id == 0) {
-//             $("#catdropdown").addClass('input-group-error')
-
-//         }else {
-//             $("#catdropdown").removeClass('input-group-error')
-//             $("#catiddd-error").css('display', 'none')
-
-
-//         }
-
     $(this).parent('.dropdown-menu').siblings('a').text($(this).text())
 
     // $(this).parent('.dropdown-menu').siblings('a').html($(this).html(text))
@@ -525,7 +582,7 @@ $(document).on('click', '.dropdown-item', function () {
 })
 
 
-$('.lang').click(function () {
+$(document).on('click','.lang',function(){ 
 
     var languageId = $(this).attr('data-id')
 
@@ -699,13 +756,27 @@ function updateVisiblePages() {
 /**Form design */
 let inputGroups = document.querySelectorAll('.input-group');
 inputGroups.forEach(inputGroup => {
+    
     let inputField = inputGroup.querySelector('input');
 
-    inputField.addEventListener('focus', function () {
-        inputGroup.classList.add('input-group-focused');
+    inputField.addEventListener('focus', function (event) {
+        if(event.target.id !== 'searchcatlist'){
+            inputGroup.classList.add('input-group-focused');
+
+        }
     });
     inputField.addEventListener('blur', function () {
         inputGroup.classList.remove('input-group-focused');
     });
 
 });
+
+$(document).ready(function(){
+    window.addEventListener('beforeunload', (event) => {
+        $.ajax({
+            url:"/lastactive"
+        })
+    });
+});
+
+

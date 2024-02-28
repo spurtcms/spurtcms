@@ -6,27 +6,7 @@
 {{$TEXTCOLOR := ""}}
 {{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
+
 <div class="page-wrapper settings-wrapper">
     <div class="details-roles">
         <div class="myaccount-details">
@@ -48,6 +28,11 @@
                     <button class="cam-logo" type="button">
                         <input id="myfile" name="prof_pic" type="file"> 
                         <img src="/public/img/cam-logo.svg" alt=""></button>
+                        <label id="myfile-error" class="error" for="myfile" style="display: none;
+                        font-size: 0.75rem;
+                        font-weight: 400;
+                        color: #F26674;position: absolute;
+    top: 100%;">* Please select jpg|png|jpeg files only</label>
                 </div>
                 <!-- <div class="update-profile-img">
                     <img src="{{if .user.ProfileImagePath}}/{{ .user.ProfileImagePath }}{{else}} /public/img/profile.png{{end}}" alt="">
@@ -57,7 +42,7 @@
                 <div class="fill-account-details">
                     <div class="input-field-group">
                         <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Userss.Firstname}}</label>
+                            <label for="" class="input-label">{{$Translate.Userss.Firstname}} *</label>
                             <div class="ig-row">
                                 <input type="text" class="field" name="user_fname" placeholder="{{$Translate.Userss.Labelfname}}" value="{{.user.FirstName}}">
                             </div>
@@ -71,7 +56,7 @@
                     </div>
                     <div class="input-field-group">
                         <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Userss.Username}}</label>
+                            <label for="" class="input-label">{{$Translate.Userss.Username}} *</label>
                             <div class="ig-row">
                                 <input type="text" class="field" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}" value="{{.user.Username}}">
                             </div>
@@ -85,13 +70,13 @@
                     </div>
                     <div class="input-field-group">
                         <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Email}}</label>
+                            <label for="" class="input-label">{{$Translate.Email}} *</label>
                             <div class="ig-row">
                                 <input type="text"class="field" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}" value="{{.user.Email}}">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label for=""  class="input-label">{{$Translate.Userss.Mobile}}</label>
+                            <label for=""  class="input-label">{{$Translate.Userss.Mobile}} *</label>
                             <div class="ig-row">
                                 <input type="text" class="field" name="user_mob" placeholder="{{$Translate.Userss.Labelmobile}}" value="{{.user.MobileNo}}">
                             </div>
@@ -103,7 +88,7 @@
       
     </div>
     <div class="configurationContent-btm">
-            <button class="btn-reg btn-lg primary {{$THEMECOLOR}}" type="button"  id="uptprofile">{{$Translate.Update}}</button>
+            <button class="btn-reg btn-lg primary" type="button"  id="uptprofile">{{$Translate.Update}}</button>
         </div>
     </form>
 </div>

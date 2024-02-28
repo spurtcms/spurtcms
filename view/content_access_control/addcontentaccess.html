@@ -2,41 +2,19 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-{{$THEMECOLOR := ""}}
-{{$TEXTCOLOR := ""}}
-{{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
 
 <div class="page-wrapper">
     {{template "membertab" .}}
     <div class="tablst access-top ">
         <input type="hidden" id="csrf-input" value="{{.csrf}}">
         <input type="hidden" id="route-type" value="{{.Button}}">
+        <input type="hidden" id="default-mod-chk" value="{{.SpaceDefault}}">
         <div class="ig-row">
-            <input id="ca-inpt" type="text" placeholder="{{$Translate.ContentAccessControl.Memberaccesstitle}}" value="{{.AccessControl.AccessControlName}}">
+            <input id="ca-inpt" type="text" placeholder="{{$Translate.ContentAccessControl.Memberaccesstitle}}"
+                value="{{.AccessControl.AccessControlName}}">
         </div>
-        <label  id="ca-inpt-error">{{$Translate.ContentAccessControl.Titlevailderr}}</label>
+        <label id="ca-inpt-error">{{$Translate.ContentAccessControl.Titlevailderr}}</label>
     </div>
 
     <div class="all-tab-content memberAccess-container" id="channelconfiguration">
@@ -44,23 +22,28 @@
             <div class="access-contentHead">
                 <div class="access-contentHead-lft">
                     <h3 class="heading-three">{{$Translate.ContentAccessControl.Content}}</h3>
-                    <p class="para-light">Lorem ipsum dolor sit amet Lorem ipsum</p>
+                    <p class="para-light"> {{$Translate.ContentAccessControl.Contentdesc}} </p>
                 </div>
                 <div class="access-contentHead-rgt">
                     <div class="accessHead-rgt-start">
                         <div>
-                            <h3 class="heading-three">{{$Translate.ContentAccessControl.Spaces}}</h3>
-                            <p class="para-light">Lorem ipsum dolor sit amet Lorem ipsum</p>
+                            <h3 class="heading-three">{{if eq .SpaceDefault
+                                `space`}}{{$Translate.ContentAccessControl.Spaces}}{{else}}Channels{{end}}</h3>
+                            <p class="para-light" id="description">{{$Translate.ContentAccessControl.Spacedesc}} </p>
                         </div>
-                        
+
                         <div class="ig-row ava-sel-srch">
-                            <img src="/public/img/Magnifying-Glass.svg" alt="">
-                            <input type="text" placeholder="Search Spaces" class="para">
+                            <img class="space-srch-img" src="/public/img/Magnifying-Glass.svg" alt="">
+                            <input
+                                class="{{if eq .SpaceDefault `space`}}space-srch-input{{else}}channel-srch-input{{end}}"
+                                type="text"
+                                placeholder="{{$Translate.Search}} {{if eq .SpaceDefault `space`}}{{$Translate.Spaces.Spacess}}{{else}}{{$Translate.ContentAccessControl.Channels}}{{end}}"
+                                class="para">
                         </div>
                     </div>
                     <div class="accessHead-rgt-end">
                         <h3 class="heading-three">{{$Translate.ContentAccessControl.Accesstomembergroups}}</h3>
-                        <p class="para-light">Lorem ipsum dolor sit amet Lorem ipsum</p>
+                        <p class="para-light"> {{$Translate.ContentAccessControl.Memberdesc}} </p>
                     </div>
                 </div>
             </div>
@@ -69,23 +52,30 @@
                 <div class="configurationContent-aside-lft">
 
                     <div class="accessAside-lft-body">
-
+                        {{if eq .SpaceDefault "space"}}
                         <a href="javascript:void(0)" class="field-tab active" id="space-access">
                             <div>
                                 <h3 class="heading-three">{{$Translate.ContentAccessControl.Space}}</h3>
                                 <!-- <p class="para-light">{{$Translate.ContentAccessControl.Totalrecordsavailable}}</p> -->
-                                <p class="para-light">{{.SpaceCount}} {{if gt .SpaceCount 1}}Spaces{{else}}Space{{end}} Available</p>
+                                <p class="para-light"> {{$Translate.Total}} {{if gt .SpaceCount 1}} 
+                                    {{$Translate.Spaces.Spacess}} : {{else}}
+                                    {{$Translate.Spaces.Space}} :  {{end}} {{.SpaceCount}} </p>
                             </div>
                             <div class="img-div">
                                 <img src="/public/img/arrow-rgt.svg" alt="" />
                             </div>
                         </a>
+                        {{end}}
 
-                        <a href="javascript:void(0)" class="field-tab" id="channel-access">
+                        <a href="javascript:void(0)" class="field-tab {{if eq .SpaceDefault `channel`}}active{{end}}"
+                            id="channel-access">
                             <div>
                                 <h3 class="heading-three">{{$Translate.ContentAccessControl.Channels}}</h3>
                                 <!-- <p class="para-light">{{$Translate.ContentAccessControl.Totalrecordsavailable}}</p> -->
-                                <p class="para-light">{{.ChannelCount}} {{if gt .ChannelCount 1}}Channels{{else}}Channel{{end}} Available</p>
+                                <p class="para-light"> {{$Translate.Total}} {{ if gt .ChannelCount 1}} 
+                                    {{$Translate.ContentAccessControl.Channels}} : {{else}}
+                                    {{$Translate.Channell.Channel}} :  {{end}} {{.ChannelCount}}
+                                </p>
                             </div>
                             <div class="img-div">
                                 <img src="/public/img/arrow-rgt.svg" alt="" />
@@ -99,14 +89,16 @@
                         <div class="configurationContent-section-lft verticalScroll">
 
                             <div class="accessAccord-container">
+                                {{if eq .SpaceDefault "space"}}
                                 {{if .SpaceDetails}}
                                 {{range .SpaceDetails}}
-                                <div class="accessAccord-row">
+                                <div class="accessAccord-row space-row">
 
-                                    <div class="accessAccord-parent space-row">
+                                    <div class="accessAccord-parent">
 
                                         <div class="chk-group chk-group-label">
-                                            <input type="checkbox" id="space{{.SpacesId}}" class="spacechkbox" data-id="{{.SpacesId}}" >
+                                            <input type="checkbox" id="space{{.SpacesId}}" class="spacechkbox"
+                                                data-id="{{.SpacesId}}">
                                             <label for="space{{.SpacesId}}" class="para">{{.SpacesName}}</label>
                                         </div>
 
@@ -121,15 +113,18 @@
                                                 </ul>
                                             </div>
 
-                                            <a href="javascript:void(0)" aria-expanded="false" class="img-div accord-collapse">
-                                              <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="{{.SpacesId}}">
-                                           </a>
+
+                                            <a href="javascript:void(0)" aria-expanded="false" id="space-img-div"
+                                                class="img-div accord-collapse">
+                                                <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="{{.SpacesId}}">
+                                            </a>
 
                                         </div>
                                     </div>
 
-                                    <div id="collapse{{.SpacesId}}" 
-                                        class="accordion-collapse collapse  accessAccord-parent-content space-collapse" data-toggle="{{.SpacesId}}">
+                                    <div id="collapse{{.SpacesId}}"
+                                        class="accordion-collapse collapse  accessAccord-parent-content space-collapse"
+                                        data-toggle="{{.SpacesId}}">
                                         <div class="accessAccord-child-container space-childrow"></div>
                                     </div>
                                 </div>
@@ -141,9 +136,74 @@
                                         <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
                                         <img src="/public/img/shadow.svg" alt="">
                                     </div>
-                                    <h1 style="text-align: center;font-size: 10px;" class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        {{$Translate.Oopsnodata}}</h1>
+
                                 </div>
+                                {{end}}
+                                {{else}}
+                                {{if .ChannelDetails}}
+                                {{range .ChannelDetails}}
+                                <div class="accessAccord-row channel-row">
+
+                                    <div class="accessAccord-parent">
+
+                                        <div class="chk-group chk-group-label">
+                                            <input type="checkbox" id="channel{{.Id}}" class="channelchkbox"
+                                                data-id="{{.Id}}">
+                                            <label for="channel{{.Id}}" class="para">{{.ChannelName}}</label>
+                                        </div>
+
+                                        <div class="accessAccord-parent-end">
+
+                                            <div class="card-breadCrumb">
+                                                <ul class="breadcrumb-container"></ul>
+                                            </div>
+
+                                            <a href="javascript:void(0)" id="channel-img-div"
+                                                class="img-div accord-collapse" data-bs-toggle="collapse"
+                                                data-bs-target="#channel{{.Id}}" aria-expanded="false"
+                                                aria-controls="channel{{.Id}}">
+                                                <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="{{.Id}}">
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    {{$ChannelId := .Id}}
+                                    <div id="channel{{.Id}}"
+                                        class="accordion-collapse collapse  accessAccord-parent-content"
+                                        data-toggle="{{.Id}}" aria-labelledby="headingOne"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accessAccord-child-container channel-childrow">
+                                            {{range .ChannelEntries}}
+                                            <div class="accessAccord-child">
+                                                <div class="chk-group">
+                                                    <input type="checkbox" id="ChannelEntry{{.Id}}"
+                                                        class="chanEntry-chkbox" data-id="{{.Id}}"
+                                                        data-chanid="{{$ChannelId}}">
+                                                    <label for="ChannelEntry{{.Id}}"></label>
+                                                </div>
+                                                <button class="accord-collapse">
+                                                    <span class="para">{{.Title}}</span>
+                                                </button>
+                                            </div>
+                                            {{end}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{end}}
+                                {{else}}
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        {{$Translate.Oopsnodata}}</h1>
+
+                                </div>
+                                {{end}}
                                 {{end}}
                             </div>
                         </div>
@@ -160,19 +220,20 @@
                                     </div>
 
                                 </div>
-                               
+
                                 {{range .Membergroup}}
                                 <div class="access-section-rgt-cell">
                                     <h3 class="heading-three">{{.Name}}</h3>
 
                                     <div class="toggle">
-                                        <input class="tgl tgl-light memgrp-chkboxes" id="ckb{{.Id}}" type="checkbox" data-id="{{.Id}}">
+                                        <input class="tgl tgl-light memgrp-chkboxes" id="ckb{{.Id}}" type="checkbox"
+                                            data-id="{{.Id}}">
                                         <label class="tgl-btn" for="ckb{{.Id}}"></label>
                                     </div>
 
                                 </div>
                                 {{end}}
-                               
+
                             </div>
                             {{else}}
                             <div class="noData-foundWrapper">
@@ -181,17 +242,22 @@
                                     <img style="max-width: 35px;" src="/public/img/folder-sh.svg" alt="">
                                     <img src="/public/img/shadow.svg" alt="">
                                 </div>
-                                <h1 style="text-align: center;font-size: 10px;" class="heading">{{$Translate.Oopsnodata}}</h1>
+                                <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                    {{$Translate.Oopsnodata}}</h1>
                             </div>
                             {{end}}
 
                         </div>
                     </div>
-
                     <!--btm-->
                     <div class="configurationContent-btm">
-                        <a href="/memberaccess/"><button class="btn-reg btn-lg secondary"> {{$Translate.Cancel}}</button></a>
-                        <button class="btn-reg btn-lg primary {{$THEMECOLOR}} {{if or (eq .SpaceLength 0) (eq .MembergroupLength 0) }}btn-disable{{end}}"  {{if or (eq .SpaceLength 0) (eq .MembergroupLength 0) }}disabled{{end}}>
+                        <a href="/memberaccess/"><button class="btn-reg btn-lg secondary">
+                                {{$Translate.Cancel}}</button></a>
+                        <button id="save-btn"
+                            class="btn-reg btn-lg primary {{if eq .SpaceDefault `space`}}{{if or (eq .SpaceLength 0) (eq .MembergroupLength 0) }}btn-disable{{end}}{{else}}{{if or (eq .ChannelLength 0) (eq .MembergroupLength 0) }}btn-disable{{end}}{{end}}"
+                            {{if eq .SpaceDefault `space`}}{{if or (eq .SpaceLength 0) (eq .MembergroupLength 0)
+                            }}disabled{{end}}{{else}}{{if or (eq .ChannelLength 0) (eq .MembergroupLength 0)
+                            }}disabled{{end}}{{end}}>
                             {{if eq .Button "Save"}}
                             {{$Translate.Save}}
                             {{else if eq .Button "Copy"}}

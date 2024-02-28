@@ -6,27 +6,7 @@
 {{$TEXTCOLOR := ""}}
 {{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
+
 
 <div class="page-wrapper">
 
@@ -36,20 +16,20 @@
         <!--1-->
 
         <div class="tablePagination-wrapper member-tablePagination-wrapper">
-            <div class="table-responsive entries-table">
-                <table class="table">
-                    <caption class="table-caption">
+            <div class="table-responsive entries-table memgrp-page-scroll mempagescrolldesign">
+                <table class="table memgrp-table">
+                    <caption class="table-caption memgrp-page-scroll-design" style="padding-left: 0px;">
                         <div class="caption-flexx">
                            
                             <p class="para">
-                                <span class="para">{{.Count}}</span>
-                                {{if gt .Count 1}}{{$Translate.MembersGroup.Groups}}{{else}}{{$Translate.MembersGroup.Group}}{{end}} {{$Translate.Available}}
+                              
+                              {{$Translate.Total}} {{if gt .Count 1}} {{$Translate.MembersGroup.Groups}} :  {{else}} {{$Translate.MembersGroup.Group}} : {{end}} <span class="para"> {{.Count}} </span> 
                             </p>
                                                   
                             <div class="transitionSearch active">
                                 <form action="/membersgroup/" method="get" class="filterform" autocomplete="off">
                                 <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
-                                <input type="text" name="keyword" id="" placeholder="{{$Translate.MembersGroup.Searchgrpname}}" value="{{.Filter.Keyword}}">
+                                <input type="text" name="keyword" id="searchmemgroup" class="search" placeholder="{{$Translate.MembersGroup.Searchgrpname}}" value="{{.Filter.Keyword}}">
                                </form>
                             </div>
                             {{$MENU := .Menu}}
@@ -60,7 +40,7 @@
                             {{if eq .ModuleName "Members Group"}}
                             {{range .Routes}}
                             {{if eq .DisplayName "Create"}}
-                            <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" id="add-btn" data-bs-toggle="modal"
+                            <button class="btn-reg btn-sm primary " id="add-btn" data-bs-toggle="modal"
                                 data-bs-target="#rightModal">
                                 <img src="/public/img/add.svg" alt="" /> {{$Translate.MembersGroup.Addmembergrp}}
                             </button>
@@ -73,7 +53,7 @@
                         </div>
                     </caption>
 
-                    <thead>
+                    <thead class="memgrp-thead">
                         <tr>
                             <th>{{$Translate.MembersGroup.Group}}</th>
                             <th>{{$Translate.Description}}</th>
@@ -90,21 +70,26 @@
                             <td width="35%">{{.Description}}</td>
                             <td class="date"> {{.DateString}} </td>
                             <td>
+                                {{if ne .Name "Default Group"}}
                                 <div class="toggle">
                                     <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox" value="{{.IsActive}}" data-id="{{.Id}}" onclick="MemberStatus('{{.Id}}')" {{if eq .IsActive 1}}checked{{end}}/>
                                     <label class="tgl-btn" for="cb{{.Id}}"></label>
                                 </div>
+                                {{end}}
                             </td>
 
                             <td {{range $MENU.TblModule}} {{if eq .ModuleName "Members"}} {{range .SubModule}}{{if eq .ModuleName "Members Group"}} {{if ne .Action true}} style="display: none;" {{end}} {{end}}{{end}}{{end}}{{end}}>
                                 <div class="btn-group language-group">
+                                    {{if ne  .Name "Default Group"}}
+
                                     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="" />
                                     </button>
+                                    {{end}}
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         {{$Id := .Id}}
-                                        
+                                       
                                         {{range $MENU.TblModule}}
                                         {{if eq .ModuleName "Members"}}
                                         {{range .SubModule}}
@@ -119,6 +104,7 @@
                                             </button>
                                         </li>
                                         {{end}}
+
                                         {{if eq .DisplayName "Delete"}}
                                         <li>
                                             <button class="dropdown-item" id="delete-btn" data-id="{{$Id}}" type="button"
@@ -128,11 +114,13 @@
                                             </button>
                                         </li>
                                         {{end}}
+                                      
                                         {{end}}
                                         {{end}}
                                         {{end}}
                                         {{end}}
                                         {{end}}
+                                        
                                     </ul>
                                 </div>
                             </td>
@@ -166,7 +154,7 @@
                                         {{$Translate.Pagesorry}}
                                         {{$Translate.Gobackhome}}
                                     </p>
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd" data-bs-target="#rightModal" class="heading-three {{$TEXTCOLOR}}">{{$Translate.Clickadd}} >></a>
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd" data-bs-target="#rightModal" class="heading-three ">{{$Translate.Clickadd}} >></a>
                                 </div>
                             </td>
                         </tr>
@@ -186,7 +174,7 @@
                         </a>
                     </li>
                     {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current {{$TEXTCOLOR}} {{$BORDERCOLOR}}" {{end}}>{{.}} </a></li>
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current" {{end}}>{{.}} </a></li>
                     {{end}}
                     <li>
                         <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
@@ -225,7 +213,7 @@
                     <input type="hidden" name="memgrbpageno" id="memgrbpageno" value="">
 
                     <div class="input-group" id="grpname">
-                        <label for=""  class="input-label">{{$Translate.MembersGroup.Membergrpname}}</label>
+                        <label for=""  class="input-label">{{$Translate.MembersGroup.Membergrpname}} *</label>
                         <div class="ig-row">
                             <input type="text" class="field" name="membergroup_name" id="membergroup_name"
                                 placeholder="{{$Translate.MembersGroup.Plmembergrpname}}" />
@@ -233,7 +221,7 @@
                     </div>
 
                     <div class="input-group" id="grpdesc">
-                        <label for=""  class="input-label">{{$Translate.MembersGroup.Membergrpdesc}}</label>
+                        <label for=""  class="input-label">{{$Translate.MembersGroup.Membergrpdesc}} *</label>
                         <div class="ig-row">
                             <textarea id="membergroup_desc" class="field" name="membergroup_desc"
                                 placeholder="{{$Translate.MembersGroup.Plmembergrpdesc}}"></textarea>
@@ -243,8 +231,8 @@
                 
                   <div class="button-col flexx">
 
-                   <button class="btn-reg btn-lg primary btn-submit  {{$THEMECOLOR}}" type="button" id="save">  {{$Translate.Submit}}</button>
-                   <button class="btn-reg btn-lg primary btn-submit  {{$THEMECOLOR}}"  type="button" id="update" style="display: none;">{{$Translate.Update}}</button>
+                   <button class="btn-reg btn-lg primary btn-submit" type="button" id="save">  {{$Translate.Save}}</button>
+                   <button class="btn-reg btn-lg primary btn-submit"  type="button" id="update" style="display: none;">{{$Translate.Update}}</button>
                    <button class="btn-reg btn-lg secondary" id="cancel" data-bs-dismiss="modal">  {{$Translate.Cancel}} </button>
 
                   </div>

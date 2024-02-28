@@ -34,12 +34,14 @@
         <div class="tablePagination-wrapper">
             <div class="table-responsive entries-table categories-entries-table">
                 <table class="table">
-                    <caption class="table-caption">
+                    <caption class="table-caption caption-sticky" style="padding-left: 0px;">
                         <div class="caption-flexx">
                             <p class="para">
-                                <span class="para">{{.Count}}</span>
-                                {{if gt .Count 1}}{{$Translate.Categoryy.Categorys}}{{else}}{{$Translate.Categoryy.Category}}{{end}}
-                                {{$Translate.Available}}
+                                {{$Translate.Total}} {{if gt .Count 1}}{{$Translate.Categoryy.Categorys}} : <span
+                                    class="para" id="searchcount"> {{.Count}} </span> {{else}}
+                                {{$Translate.Categoryy.Category}} : <span class="para" id="searchcount"> {{.Count}}
+                                </span> {{end}} </p>
+
                             </p>
 
                             <div class="transitionSearch active">
@@ -54,12 +56,12 @@
                             {{$MENU := .Menu}}
 
                             {{range .Menu.TblModule}}
-                            {{if eq .ModuleName "CMS"}}
+                            {{if eq .ModuleName "Channels"}}
                             {{range .SubModule}}
                             {{if eq .ModuleName "Categories Group"}}
                             {{range .Routes}}
                             {{if eq .DisplayName "Create"}}
-                            <button class="btn-reg btn-sm primary {{$THEMECOLOR}}" data-bs-toggle="modal" id="add-btn"
+                            <button class="btn-reg btn-sm primary" data-bs-toggle="modal" id="add-btn"
                                 data-bs-target="#rightModal">
                                 <img src="/public/img/add.svg" alt="" /> {{$Translate.Categoryy.Newgroup}}
                             </button>
@@ -72,13 +74,13 @@
                         </div>
                     </caption>
 
-                    <thead>
+                    <thead class="sticky-head">
                         <tr>
                             <th>{{$Translate.Categoryy.Categorygrp}}</th>
                             <th>{{$Translate.Description}} </th>
                             <th>{{$Translate.Categoryy.Lastupdatedon}} </th>
                             <th></th>
-                            <th {{range $MENU.TblModule}} {{if eq .ModuleName "CMS" }} {{range .SubModule}}{{if eq
+                            <th {{range $MENU.TblModule}} {{if eq .ModuleName "Channels" }} {{range .SubModule}}{{if eq
                                 .ModuleName "Categories Group" }} {{if ne .Action true}} style="display: none;" {{end}}
                                 {{end}}{{end}}{{end}}{{end}}> {{$Translate.Actions}} </th>
                         </tr>
@@ -93,15 +95,17 @@
 
                             <td>{{.DateString}}</td>
                             {{$Id := .Id}}
-                            {{range $MENU.TblModule}}{{if eq .ModuleName "CMS"}} {{range .SubModule}}
-                            {{if eq .ModuleName "Categories"}} {{range .Routes}} {{if eq .DisplayName "View"}}
-                            <td style="width: 80px;"><a href="/categories/addcategory/{{$Id}}"><button
-                                        class="btn-reg btn-sm btn-outline {{$TEXTCOLOR}} {{$BORDERCOLOR}}">
+                            <td style="width: 80px;">{{range $MENU.TblModule}}{{if eq .ModuleName "Channels"}} {{range
+                                .SubModule}}
+                                {{if eq .ModuleName "Categories"}} {{range .Routes}} {{if eq .DisplayName "View"}}<a
+                                    href="/categories/addcategory/{{$Id}}"><button
+                                        class="btn-reg btn-sm btn-outline">
                                         <img src="/public/img/add-icon.svg" alt="">
-                                        {{$Translate.Categoryy.Category}} </button></a></td>
-                            {{end}}{{end}}{{end}}{{end}}{{end}}{{end}}
+                                        {{$Translate.Categoryy.Category}}
+                                    </button></a>{{end}}{{end}}{{end}}{{end}}{{end}}{{end}}</td>
 
-                            <td {{range $MENU.TblModule}} {{if eq .ModuleName "CMS" }} {{range .SubModule}}{{if eq
+
+                            <td {{range $MENU.TblModule}} {{if eq .ModuleName "Channels" }} {{range .SubModule}}{{if eq
                                 .ModuleName "Categories Group" }} {{if ne .Action true}} style="display: none;" {{end}}
                                 {{end}}{{end}}{{end}}{{end}}>
 
@@ -115,7 +119,7 @@
                                         {{$Id := .Id}}
 
                                         {{range $MENU.TblModule}}
-                                        {{if eq .ModuleName "CMS"}}
+                                        {{if eq .ModuleName "Channels"}}
                                         {{range .SubModule}}
                                         {{if eq .ModuleName "Categories Group"}}
                                         {{range .Routes}}
@@ -166,12 +170,10 @@
                                     </p>
                                     <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal"
                                         data-bs-target="#rightModal"
-                                        class="heading-three {{$TEXTCOLOR}}">{{$Translate.Clickadd}} >></a>
+                                        class="heading-three">{{$Translate.Clickadd}} >></a>
                                 </div>
                             </td>
                         </tr>
-
-
 
                         {{else }}
                         <tr>
@@ -205,7 +207,7 @@
                         </a>
                     </li>
                     {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current {{$TEXTCOLOR}} {{$BORDERCOLOR}}"
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current"
                             {{end}}>{{.}} </a></li>
                     {{end}}
                     <li>
@@ -270,7 +272,7 @@
                     <input type="hidden" name="category_id" id="category_id" value="">
                     <input type="hidden" name="catpageno" id="catpageno" value="">
                     <div class="input-group" id="catname">
-                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpname}}</label>
+                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpname}} *</label>
                         <div class="ig-row">
                             <input type="text" class="field" name="category_name" id="category_name"
                                 placeholder="{{$Translate.Categoryy.Entercategoryname}}" />
@@ -278,7 +280,7 @@
                     </div>
 
                     <div class="input-group" id="catdesc">
-                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpdescription}}</label>
+                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpdescription}} *</label>
                         <div class="ig-row">
                             <textarea class="field" name="category_desc" id="category_desc"
                                 placeholder="{{$Translate.Categoryy.Entercategorydescription}}"></textarea>
@@ -288,10 +290,10 @@
 
                 <div class="button-col flexx">
 
-                    <button class="btn-reg btn-md primary btn-submit  {{$THEMECOLOR}}" type="button"
-                        id="save">{{$Translate.Submit}}</button>
+                    <button class="btn-reg btn-md primary btn-submit" type="button"
+                        id="save">{{$Translate.Save}}</button>
 
-                    <button class="btn-reg btn-md primary btn-submit  {{$THEMECOLOR}}" type="button" id="update-btn"
+                    <button class="btn-reg btn-md primary btn-submit" type="button" id="update-btn"
                         style="display: none;">{{$Translate.Update}}</button>
 
                     <button class="btn-reg btn-md secondary" id="cancel" data-bs-dismiss="modal"> {{$Translate.Cancel}}
