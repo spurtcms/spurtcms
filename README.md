@@ -95,14 +95,14 @@ You can find our extended documentation on our [https://spurtcms.com/documentati
 
 - Read [Technology](https://www.spurtcms.com/opensource-ecommerce-multivendor-nodejs-react-angular) to learn about our vision and what's in the box.
 
-- Our [Discard](https://discord.gg/ccC9Uk3V) Questions, Live Discussions [spurtcms Support](https://picco.support).
+- Our [Discard](https://discord.com/invite/9TNgqUY24N) Questions, Live Discussions [spurtcms Support](https://picco.support).
 
 - Some [Video](https://www.youtube.com/@spurtcms/videos) Video Tutorials 
 - Every [Release](https://github.com/spurtcms/spurtcms-admin/releases) is documented on the Github Releases page.
 
 🐞 If you spot a bug, please [submit a detailed issue](https://github.com/spurtcms/spurtcms-admin/issues/new), and wait for assistance.
 
-🤔 If you have a question or feature request, please [start a new discussion](https://github.com/orgs/spurtcms/discussions/new/choose). 
+
 
 
 ## ❯ Maintainers
