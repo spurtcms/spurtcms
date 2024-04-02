@@ -1,0 +1,81 @@
+
+
+:root {
+    --clr-primary-color: #09ABD9;
+    --clr-dropdown-hover: #E8FAFF;
+    --clr-tags-bg-color: #DDF8FF;
+    
+    --clr-text-dark-color: #152027;
+    --clr-text-light-color: #B6B6B7;
+    --clr-sidebar-menu-hover: rgba(0, 0, 0, 0.24);
+    --clr-border: #B1EBFF;
+    --clr-channel-previous: url('../img/channel-previous.svg');
+}
+
+.red {
+    --clr-primary-color: #E16661;
+    --clr-dropdown-hover: #FFEDED;
+    --clr-tags-bg-color: #FFE6E6;
+    --clr-channel-previous: url('../img/channel-previous-red.svg');
+}
+
+.purple {
+    --clr-primary-color: #8060B9;
+    --clr-dropdown-hover: #F1ECF8;
+    --clr-tags-bg-color: #F0E6FF;
+    --clr-channel-previous: url('../img/channel-previous-purple.svg');
+}
+
+.blue {
+    --clr-primary-color: #3981EA;
+    --clr-dropdown-hover: #EAF1FD;
+    --clr-tags-bg-color: #E2ECFF;
+    --clr-channel-previous: url('../img/channel-previous-blue.svg');
+}
+
+/* .yellow {
+    --clr-primary-color: #FFDE76;
+    --clr-dropdown-hover: #FFF9E5;
+    --clr-tags-bg-color: #FFF7DE;
+} */
+
+.brown {
+    --clr-primary-color: #6D4D40;
+    --clr-dropdown-hover: #F0E9E7;
+    --clr-tags-bg-color: #EDDED8;
+    --clr-channel-previous: url('../img/channel-previous-brown.svg');
+}
+
+.orange {
+    --clr-primary-color: #F38507;
+    --clr-dropdown-hover: #FEF2E5;
+    --clr-tags-bg-color: #FFEED9;
+    --clr-channel-previous: url('../img/channel-previous-orange.svg');
+}
+
+/* .light-green {
+    --clr-primary-color: #B5E08C;
+    --clr-dropdown-hover: #EFFFE0;
+    --clr-tags-bg-color: #E3FFC9;
+} */
+
+.green {
+    --clr-primary-color: #4BA34A;
+    --clr-dropdown-hover: #E9F6E8;
+    --clr-tags-bg-color: #E1F4DF;
+    --clr-channel-previous: url('../img/channel-previous-green.svg');
+}
+
+.teal-blue {
+    --clr-primary-color: #008C8C;
+    --clr-dropdown-hover: #DBF4F4;
+    --clr-tags-bg-color: #C5F0F0;
+    --clr-channel-previous: url('../img/channel-previous-teal-blue.svg');
+}
+
+.black {
+    --clr-primary-color: #152027;
+    --clr-dropdown-hover: #F1F2F2;
+    --clr-tags-bg-color: #E7E8E9;
+    --clr-channel-previous: url('../img/channel-previous-black.svg');
+}
