@@ -1,0 +1,375 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$IMAGEPATH := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
+ {{$IMAGEPATH = "/public/img/filter-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
+ {{$IMAGEPATH = "/public/img/filter-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
+ {{$IMAGEPATH = "/public/img/filter-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
+ {{$IMAGEPATH = "/public/img/filter.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
+ {{$IMAGEPATH = "/public/img/filter-brown.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
+ {{$IMAGEPATH = "/public/img/filter-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
+ {{$IMAGEPATH = "/public/img/filter-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
+ {{$IMAGEPATH = "/public/img/filter-teal-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+ {{$IMAGEPATH = "/public/img/filter-black.svg"}}
+{{else}}
+ {{$IMAGEPATH = "/public/img/filter.svg"}}
+{{end}}
+<div class="page-wrapper">
+
+    {{template "cmstab" .}}
+
+    <div class="all-tab-content" id="entriesContent">
+        <!--1-->
+
+        <div class="topOptions">
+            <div class="leftHeader ">
+                <div class="caption-flexx">
+                 
+                           
+                    {{if eq .filterflag false}}
+
+                    <div class="selected-list">
+                        <div class="list-items-select"><p class="pcategory" style="display: flex" >   Clear Filter   </div>
+                        <button id="removecategory"><img src="/public/img/quit-img.svg" alt=""></button>
+                    </div>
+                    {{end}}
+                         </div>
+                <!-- <h1 class="para heading m-lft" style="font-size: 1.125rem;" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+                data-bs-placement="top" title="{{.channelname}}" >{{.channelname}}</h1> -->
+            </div>
+                    
+            <div class="transitionSearch active">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <form action="">
+                <img src="/public/img/Magnifying-Glass.svg" alt="" />
+                <input type="text" name="keyword" id="searchkey" class="search" value="{{.filter.Keyword}}" placeholder="{{$Translate.Channell.Searchentries}}" >
+            </form>
+                
+               
+            </div>
+            <div class="dropdown filter-dropdown">
+                <button class="btn-reg btn-sm btn-outline  " data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{$IMAGEPATH}}" alt="" /> {{$Translate.Channell.Filter}}  
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end filter-dropdown-menu">
+                    <form action="" name="filterform" id="filterform">
+                    <div class="input-div">
+                        <label for="" class="para-light"  {{ if .channelname }}  style="opacity: 0.5;" {{end}}>{{$Translate.Channell.Channelname}} </label>
+                        <input type="text" value="{{.filter.ChannelName}}" name="ChannelName" class="para-extralight"   {{ if .channelname }} disabled style="opacity: 0.5;" {{end}}/>
+                    </div>
+                    <div class="input-div">
+                        <label for="" class="para-light">{{$Translate.Channell.Entriestitle}}</label>
+                        <input type="text" value="{{.filter.Title}}" name="Title" class="para-extralight" />
+                    </div>
+                    <div class="input-div">
+                        <label for="" class="para-light">{{$Translate.Channell.Status}} </label>
+                     
+                          <div class="input-group  user-drop-down">
+                           
+                            <input class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" value="Status"  style="font-size: x-small;">
+                               
+                              <input type="hidden" value="{{.filter.Status}}" id="statusid" name="Status" class="para-extralight" />
+                           
+                            <div class="dropdown-menu" style="height: 85px;" aria-labelledby="triggerId">
+                              
+                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Draft}} </button>
+                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Published}} </button>
+                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Unpublished}} </button>
+                               
+                            </div>
+
+
+                        </div>
+                       
+                    </div>
+
+               
+                   
+
+                    <div class="button-col">
+                        <button class="btn-reg btn-xs primary theme-color ">{{$Translate.Channell.Applyfilters}}</button>
+                        <button class="btn-reg btn-xs btn-outline  " type="button" id="filtercancel">{{$Translate.Cancel}} </button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            <div class="dropdown avaliable-dropdown">
+               
+                <button class="availablesIndicator btn-reg btn-sm" data-bs-toggle="dropdown" aria-expanded="false"
+                    data-bs-auto-close="outside">
+                    <p class="para channeltitle1"   data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+                    data-bs-placement="top" title="{{.channelname}}" >{{.channelname}}</p>
+                    <p class="para-extralight" style="margin-right: 5px;">
+                        {{$Translate.Total}}  {{if gt .entrycount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.entrycount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.entrycount}} </span> {{end}} </p>
+                        
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end avaliable-dropdown-menu">
+                    <div class="drop-item-wrapper">
+                        {{$ChannelId := .chnid}}
+                        {{range .channellist}}
+                        <a href="/channel/entrylist/{{.Id}}">
+                        <div class="avaliable-dropdown-item {{if eq $ChannelId .Id}} active {{end}}">
+                            <div class="avaliable-dropdown-itemLeft">
+                                <p class="heading-second" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+                                data-bs-placement="top" title="{{.ChannelName}}" style="font-size: 0.75rem; font-weight: 400">{{.ChannelName}}</p>
+                                 <p class="para" style="font-weight: 300;     font-size: 0.625rem;">
+                                    {{$Translate.Total}}  {{if gt .EntriesCount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.EntriesCount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.EntriesCount}} </span> {{end}} </p>
+                                   
+                        </p>
+                            </div>
+
+                            <div class="avaliable-dropdown-itemRight">
+                                <input class="check-circle searchentry"  type="checkbox" name="avaliableRadio" id="{{.Id}}" {{if eq $ChannelId .Id}} checked {{end}} />
+
+                                <div class="check-image">
+                                    <img src="/public/img/unchecked-circle.svg" alt="" />
+                                    <img src="/public/img/checked-circle.svg" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                        {{end}}
+                    </div>   
+                    <a href="/channels/newchannel">
+                        <button class="createChannel">
+                            <span class="heading-three"> + {{$Translate.Channell.Createchannel}} </span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <a href="/channel/newentry"> 
+                <button class="btn-reg btn-sm primary theme-color  " >
+                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newentry}} 
+                </button> 
+            </a>
+        </div>
+
+        <div class="tablePagination-wrapper">
+            <div class="table-responsive entries-table">
+                <table class="table">
+                    <caption class="table-caption">
+              
+                        <div class="caption-flexx">
+                            <p class="para"> 
+                                {{$Translate.Total}}  {{if gt .chentrycount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.chentrycount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.chentrycount}} </span> {{end}} </p>
+                                 
+                            </p>
+        </div>  
+                      </caption>
+                    <thead>
+                        <tr>
+                            <th>{{$Translate.Channell.Id}}</th>
+                            <th>{{$Translate.Channell.Channelname}}</th>
+                            <th>{{$Translate.Channell.Entriestitle}}</th>
+                            <th>{{$Translate.Channell.Createddatetime}}</th>
+                            <th>{{$Translate.Createdby}} </th>
+                            <th>{{$Translate.Lastupdatedon}} </th>
+                            <th>{{$Translate.Channell.Status}}</th>
+                            <th>{{$Translate.Actions}} </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{if .ChanEntrtlist}}
+                        {{$Pageno := .CurrentPage}}
+                        {{range .ChanEntrtlist}}
+
+                        <tr>
+                            <td>{{.Cno}}</td>
+                            <td style="width: 11%;">{{.ChannelName}}</td>
+                            <td style="width: 25%;" {{if eq .Feature 1}} class="featured-title" {{end}} >{{.Title}}</td>
+                            <td style="width: 15%;">{{.CreatedDate}}</td>
+                            <td>{{.Username}}</td>
+                            <td style="width: 13%;">{{.ModifiedDate}}</td>
+                            <td>
+                                {{if eq .Status 0}}
+                                <span class="status draft" id="statusname-{{.Id}}">{{$Translate.Channell.Draft}} </span>
+                                {{else if eq .Status 1}}
+                                <span class="status published" id="statusname-{{.Id}}"> {{$Translate.Channell.Published}} </span>
+                                {{else if eq .Status 2}}
+                                <span class="status unpublished" id="statusname-{{.Id}}"> {{$Translate.Channell.Unpublished}} </span>
+                                {{end}}
+                                
+                            </td>
+
+                            <td>
+                                <div class="btn-group language-group">
+                                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="" />
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        {{if eq .Status 1}}
+                                        {{if eq .Feature 0}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="feature" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal2" >
+                                                <span><img src="/public/img/feature.svg" alt="" /></span>
+                                                Feature     
+                                            </button>
+                                        </li>
+                                        {{else}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="Unfeature" data-channelname="{{.ChannelName}}" data-status="0"  data-bs-toggle="modal" data-bs-target="#centerModal2" >
+                                                <span><img src="/public/img/feature.svg" alt="" /></span>
+                                                Unfeature     
+                                            </button>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
+                                        {{if eq .Status 0}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="publish" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal" >
+                                                <span><img src="/public/img/published.svg" alt="" /></span>
+                                                {{$Translate.Channell.Publish}}     
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish" data-channelname="{{.ChannelName}}" data-status="2"  data-bs-toggle="modal" data-bs-target="#centerModal">
+                                                <span><img src="/public/img/eye_off.svg" alt="" /></span>
+                                                {{$Translate.Channell.Unpublish}}     
+                                            </button>
+                                        </li>
+                                        {{else if eq .Status 1}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish" data-channelname="{{.ChannelName}}" data-status="2"  data-bs-toggle="modal" data-bs-target="#centerModal">
+                                                <span><img src="/public/img/eye_off.svg" alt="" /></span>
+                                                {{$Translate.Channell.Unpublish}}     
+                                            </button>
+                                        </li>
+                                        {{else if eq .Status 2}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="publish" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal" >
+                                                <span><img src="/public/img/published.svg" alt="" /></span>
+                                                {{$Translate.Channell.Publish}}     
+                                            </button>
+                                        </li>
+                                        {{end}}
+
+                                        <li>
+                                            <a href="/channel/copyentry/{{.Id}}">
+                                            <button class="dropdown-item" type="button">
+                                                <span><img src="/public/img/copy.svg" alt="" /></span>
+                                                {{$Translate.Copy}}       
+                                            </button>
+                                        </a>
+                                        </li>
+                                        <li>
+
+                                                <a href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}">
+                                                   
+                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="editbtn">
+                                                <span><img src="/public/img/edit.svg" alt=""  /></span>
+                                                {{$Translate.Edit}}    
+                                            </button>
+                                        </a>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item deleteentry"  type="button" data-bs-toggle="modal"
+                                            data-bs-target="#centerModal" data-page="{{$Pageno}}" data-id="{{.Id}}" data-name="{{.ChannelName}}">
+                                                <span><img src="/public/img/delete.svg" alt="" /></span>
+                                                {{$Translate.Delete}}      
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {{end}}
+                        {{ else if eq .chcount1 0}}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center; border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <img src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                    <p class="para">
+                                        {{$Translate.Pagesorry}}
+                                        {{$Translate.Gobackhome}}
+                                    </p>
+                                    <a href="/channel/newentry" 
+                                        class="heading-three ">{{$Translate.Clickadd}} >></a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        
+                       
+                        {{else }}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center; border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+    
+                                    <div class="empty-folder">
+                                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
+                                        <img src="/public/img/nodatafilter.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                    </div>
+                                    </td>
+                          </tr>                      
+                            {{end}}                  
+                    </tbody>
+                </table>
+            </div>
+            <div class="pogination flexx pagenation-padding">
+                {{if .Page}}
+                <ul class="flexx">
+                    <li>
+                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    {{range .Page}}
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  " {{end}}>{{.}} </a></li>
+                    {{end}}
+                    <li>
+                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                </ul>
+                {{end}}
+                <p> {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}</p>
+            </div>
+            <!-- <div class="pogination flexx pagenation-padding">
+                <ul class="flexx">
+                    <li>
+                        <a href="javascript:void(0)" class="disabled">
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    <li><a href="javascript:void(0)" class="current"> 1 </a></li>
+                    <li><a href="javascript:void(0)"> 2 </a></li>
+                    <li><a href="javascript:void(0)"> ... </a></li>
+                    <li><a href="javascript:void(0)"> 5 </a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="next">
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                </ul>
+                <p>Items Per Page: 10 and 1 – 10 of 10</p>
+            </div> -->
+        </div>
+    </div>
+    <!--2-->
+</div>
+{{template "footer" .}}
+<script src="/public/js/entries/entry.js"></script>
+{{template "footerclose" .}}

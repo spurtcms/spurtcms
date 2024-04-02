@@ -1,0 +1,137 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+<!-- <header class="roles-head">
+    <h1 class="heading">Personalize</h1>
+    <div class="header-rht flexx">
+        <div class="btn-group language-group">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/public/img/world.svg" alt=""> English <img src="/public/img/arrow-down.svg" alt=""
+                    class="drop-arrow">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a href="/settings/myprofile"><button class="dropdown-item" type="button">My
+                            Profile</button></a></li>
+                <li><a href="/"><button class="dropdown-item" type="button">Login</button></a> </li>
+                <li><a href="/"><button class="dropdown-item" type="button">Logout</button></a></li>
+            </ul>
+        </div>
+        <button> <img src="/public/img/notify.svg" alt=""> </button>
+        <a href="/settings/"><button> <img src="/public/img/settings.svg" alt=""> </button></a>
+        <div class="btn-group">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/public/img/profile.png" alt="">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <div class='profile-name-detail'>
+                    <span><img src="/public/img/profile.png" alt=""></span>
+                    <div class='pnd'>
+                        <h4>Hello, {{.Menu.Name}}</h4>
+                        <p>{{.Menu.RoleName}}</p>
+                    </div>
+                </div>
+                <li><a href="/settings/myprofile"><button class="dropdown-item" type="button">My
+                            Profile</button></a></li>
+                <li><a href="/"><button class="dropdown-item" type="button">Login</button></a> </li>
+                <li><a href="/logout"><button class="dropdown-item" type="button">Logout</button></a></li>
+            </ul>
+        </div>
+    </div>
+</header> -->
+<form action="/settings/personalize/update" method="post" id="uptform" name="uptform">
+    <div class="page-wrapper settings-wrapper">
+        <div class="personalize-full">
+            <div class="personalize-background">
+                <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Themebackground}}</h4>
+                <p class="para-light">{{$Translate.Personalize.Themecontent}}</p>
+                <div class="back-colors">
+                    <a class="red circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="purple circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="blue circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="dark-blue circle-change" id="default-clr">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <!-- <a class="yellow circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a> -->
+                    <a class="brown circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="orange circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <!-- <a class="light-green circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a> -->
+                    <a class="green circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="teal-blue circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <a class="black circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a>
+                    <input type="hidden" name="color-change" id="color-change"
+                        value="{{if .Menu.Personalize.MenuBackgroundColor}}{{.Menu.Personalize.MenuBackgroundColor}}{{else}}rgb(9, 171, 216){{end}}">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                </div>
+            </div>
+            <input type="hidden" id="logo-input">
+            <div class="personalize-background">
+                <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Logoupload}}</h4>
+                <p class="para-light" id="logo-insert">{{$Translate.Personalize.Logocontent}}</p>
+                <div class="upload-logo" id="upload-logo">
+                    <img src='{{if .Menu.Personalize.LogoPath}}{{.Menu.Personalize.LogoPath}}{{else}}/public/img/logo.svg{{end}}' alt="">
+                    <input type="hidden" id="logo-input" name="logo_imgpath"
+                        value="{{if .Menu.Personalize.LogoPath}}{{.Menu.Personalize.LogoPath}}{{else}}/public/img/logo.svg{{end}}">
+                    <!-- <p class="para">Drag your file or choose from directory</p>
+                    <div class="upload-button">
+                        <button class="btn-reg btn-xs primary theme-color"> Browse </button>
+                        <input type="file">
+                    </div> -->
+                    <button class="delete-flag" id="delete-logo"><img src="/public/img/delete-white-icon.svg" alt=""></button>
+                    <div class="hover-delete-img"></div>
+
+                </div>
+            </div>
+            <div class="personalize-background">
+                <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Expandlogoupload}}</h4>
+                <p class="para-light" id="expandlogo-insert">{{$Translate.Personalize.Logocontent}}</p>
+                <div class="upload-logo" id="upload-expandlogo">
+                    <img src='{{if .Menu.Personalize.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}' alt="">
+                    <input type="hidden" id="expandlogo-input" name="expandlogo_imgpath"
+                        value="{{if .Menu.Personalize.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}">
+                    <!-- <p class="para">Drag your file or choose from directory</p>
+                    <div class="upload-button">
+                        <button class="btn-reg btn-xs primary theme-color"> Browse </button>
+                        <input type="file">
+                    </div> -->
+                    <button class="delete-flag" id="delete-expandlogo"><img src="/public/img/delete-white-icon.svg" alt=""></button>
+                    <div class="hover-delete-img"></div>
+
+                </div>
+            </div>
+        </div>
+    <div class="configurationContent-btm">
+        <button class="btn-reg btn-lg primary theme-color " type="submit" id="uptdata">{{$Translate.Update}}</button>
+    </div>
+</div>
+</form>
+{{template "mediamodal" .}}
+
+{{template "mediadecidemodal" .}}
+
+{{template "cropmodal" .}}
+
+{{template "footer" .}}
+<script src="/public/js/settings/personalize/personalize.js"></script>
+<script src="/public/js/media/media.js"></script>
+{{template "footerclose" .}}

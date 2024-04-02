@@ -1,0 +1,55 @@
+{{define "mainmenu"}}
+{{$Translate := .translate}}
+<aside class="{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} bgclr1 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} bgclr2 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} bgclr3 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}} bgclr4 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}} bgclr5 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}} bgclr6 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}} bgclr7 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}} bgclr8 {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}} bgclr9 {{else}} bgclr-default {{end}}">
+    <input type="hidden" name="color-val" id="color-val"
+        value="{{if .Menu.Personalize.MenuBackgroundColor}}{{.Menu.Personalize.MenuBackgroundColor}}{{else}}rgb(9, 171, 216){{end}}">
+        <a href='javascript:void(0)' class='logo'>
+            <img src='{{if .Menu.Personalize.LogoPath}}{{.Menu.Personalize.LogoPath}}{{else}}/public/img/logo.svg{{end}}' />
+            <img src="{{if .Menu.Personalize.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}" alt="" class="logo-expand">
+        </a>
+        {{$Dashboardmenu := .Dashboardmenu}}
+        {{$Cmsmenu := .Cmsmenu}}
+        {{$Membermenu := .Membermenu}}
+        {{$Lmsmenu := .Lmsmenu}}
+        {{$Mediamenu := .Mediamenu}}
+        {{$Ecommercemenu := .Ecommercemenu}}
+        {{$Categoriesmenu := .Categoriesmenu}}
+        <div class='aside-nav'>
+
+            {{range .Menu.TblModule}}
+            {{if ne .ModuleName "Settings"}}
+            <a href='{{.Route}}' class="mainmenu">
+                <!-- <img src='/public/img/cms.svg' />  -->
+                <img src='{{.IconPath}}' />
+                <span>{{.ModuleName}}</span>
+                <p>{{.ModuleName}}</p>
+            </a>
+            {{end}}
+            {{end}}
+        
+        </div>
+        <div  class="{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}} bgclr1 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}} bgclr2 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}} bgclr3 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}} bgclr4 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}} bgclr5 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}} bgclr6 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}} bgclr7 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}} bgclr8 aside-btm expandbtn{{else if eq
+            .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}} bgclr9 aside-btm expandbtn{{else}} bgclr-default aside-btm expandbtn{{end}}">
+            <a href="javascript:void(0)" class="expandtag"><img src="/public/img/right-arrow.svg" alt=""></a>
+            {{$Mainmenu := .Menu.Expand}}
+            {{if eq $Mainmenu true}}
+            <a href="javascript:void(0)"><img src="/public/img/left-arrow.svg" alt=""> {{$Translate.Spaces.Close}} </a>
+            {{end}}
+        </div>
+    </aside>
+    {{end}}

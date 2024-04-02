@@ -1,0 +1,29 @@
+<!-- Center Modal -->
+{{define "mediadecidemodal"}}
+{{$Translate := .translate}}
+<div class="modal fade delete-modal" id="mediaDecideModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <input type="hidden" id="imgsrc-input" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Image Usabilty Confirmation</h3>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            <img id="mediadecidemodal-close" src="/public/img/modal-close.svg" alt="">
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h2 class="heading-second">Do you want to use this image?</h2>
+        <p class="heading-three">Crop this image to suit your vision or use it as full context</p>
+        <a href="javascript:void(0)" class="heading-three imgname"></a>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn-reg btn-md primary" id="crop-img" >Crop Image</button>
+          <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="assign-img">Direct Use</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}

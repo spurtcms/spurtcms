@@ -1,0 +1,306 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$IMAGEPATH := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
+{{$IMAGEPATH = "/public/img/add-icon-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
+{{$IMAGEPATH = "/public/img/add-icon-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
+{{$IMAGEPATH = "/public/img/add-icon-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
+{{$IMAGEPATH = "/public/img/add-icon.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
+{{$IMAGEPATH = "/public/img/add-icon-brown.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
+{{$IMAGEPATH = "/public/img/add-icon-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
+{{$IMAGEPATH = "/public/img/add-icon-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
+{{$IMAGEPATH = "/public/img/add-icon-teal-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$IMAGEPATH = "/public/img/add-icon-black.svg"}}
+{{else}}
+ {{$IMAGEPATH ="/public/img/add-icon.svg"}}
+{{end}}
+<div class="page-wrapper">
+    
+    <div class="all-tab-content" id="groupsContent">
+        <!--1-->
+        <div class="tablePagination-wrapper">
+            <div class="table-responsive entries-table categories-entries-table">
+                <table class="table">
+                    <caption class="table-caption caption-sticky" style="padding-left: 0px;">
+                        <div class="caption-flexx">
+                            <p class="para">
+                                {{$Translate.Total}} {{if gt .Count 1}}{{$Translate.Categoryy.Categorys}} : <span
+                                    class="para" id="searchcount"> {{.Count}} </span> {{else}}
+                                {{$Translate.Categoryy.Category}} : <span class="para" id="searchcount"> {{.Count}}
+                                </span> {{end}} </p>
+
+                            </p>
+
+                            <div class="transitionSearch active">
+                                <form action="/categories/" method="get" class="filterform" autocomplete="off">
+
+                                    <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
+                                    <input type="text" class="search" name="keyword"
+                                        placeholder="{{$Translate.Categoryy.Searchcategoryname}} "
+                                        value="{{.Filter.Keyword}}">
+                                </form>
+                            </div>
+                            {{$MENU := .Menu}}
+
+                            {{range .Menu.TblModule}}
+                           
+                          
+                            {{if eq .ModuleName "Categories Group"}}
+                            {{range .Routes}}
+                            {{if eq .DisplayName "Create"}}
+                            <button class="btn-reg btn-sm primary " data-bs-toggle="modal" id="add-btn"
+                                data-bs-target="#rightModal">
+                                <img src="/public/img/add.svg" alt="" /> {{$Translate.Categoryy.Newgroup}}
+                            </button>
+                           
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                          
+                        </div>
+                    </caption>
+
+                    <thead class="sticky-head">
+                        <tr>
+                            <th>{{$Translate.Categoryy.Categorygrp}}</th>
+                            <th>{{$Translate.Description}} </th>
+                            <th>{{$Translate.Categoryy.Lastupdatedon}} </th>
+                            <th></th>
+                            <th {{range $MENU.TblModule}} {{if eq
+                                .ModuleName "Categories Group" }} {{if ne .Action true}} style="display: none;" {{end}}
+                                {{end}}{{end}}> {{$Translate.Actions}} </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{if .categorylist}}
+                        {{range .categorylist}}
+                        <tr>
+                            <td>{{.CategoryName}}</td>
+
+                            <td width="35%">{{.Description}}</td>
+
+                            <td>{{.DateString}}</td>
+                            {{$Id := .Id}}
+                            <td style="width: 80px;">{{range $MENU.TblModule}}
+                                {{if eq .ModuleName "Categories"}} {{range .Routes}} {{if eq .DisplayName "View"}}<a
+                                    href="/categories/addcategory/{{$Id}}"><button
+                                        class="btn-reg btn-sm btn-outline  ">
+                                        <img src="{{$IMAGEPATH}}" alt="">
+                                        {{$Translate.Categoryy.Category}}
+                                    </button></a>{{end}}{{end}}{{end}}{{end}}</td>
+
+
+                            <td {{range $MENU.TblModule}} {{if eq
+                                .ModuleName "Categories Group" }} {{if ne .Action true}} style="display: none;" {{end}}
+                                {{end}}{{end}}>
+
+
+                                <div class="btn-group language-group">
+                                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="" />
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        {{$Id := .Id}}
+
+                                        {{range $MENU.TblModule}}
+                                        {{if eq .ModuleName "Categories Group"}}
+                                        {{range .Routes}}
+                                        {{if eq .DisplayName "Update"}}
+
+                                        <li>
+                                            <button class="dropdown-item" type="button" data-id="{{$Id}}" id="edit"
+                                                data-bs-toggle="modal" data-bs-target="#rightModal">
+                                                <span><img src="/public/img/edit.svg" alt="" /></span>
+                                                {{$Translate.Edit}}
+                                            </button>
+                                        </li>
+                                        {{end}}
+                                        {{if eq .DisplayName "Delete"}}
+                                        <li>
+                                            <button class="dropdown-item" type="button" id="delete-btn"
+                                                data-bs-toggle="modal" data-id="{{$Id}}" data-bs-target="#centerModal" {{if eq $Id 1}} style="opacity: 0.6;" disabled {{end}}>
+                                                <span><img src="/public/img/delete.svg" alt="" /></span>
+                                                {{$Translate.Delete}}
+                                            </button>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {{end}}
+
+                        {{ else if eq .lencategory 0}}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center; border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <img src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                    <p class="para">
+                                        {{$Translate.Pagesorry}}
+                                        {{$Translate.Gobackhome}}
+                                    </p>
+                                    <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal"
+                                        data-bs-target="#rightModal"
+                                        class="heading-three ">{{$Translate.Clickadd}} >></a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{else }}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center; border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
+                                        <img src="/public/img/nodatafilter.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                </div>
+                            </td>
+                        </tr>
+                        {{end}}
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <input type="hidden" value="{{.Limit}}" id="limit">
+            <input type="hidden" value="{{.Count}}" id="count">
+
+            <div class="pogination flexx pagenation-padding">
+                {{if .Page}}
+                <ul class="flexx">
+                    <li>
+                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    {{range .Page}}
+                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  "
+                            {{end}}>{{.}} </a></li>
+                    {{end}}
+                    <li>
+                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}}
+                            class="next" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                </ul>
+                {{end}}
+                <p> {{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+            </div>
+
+            <!-- <div class="pogination flexx pagenation-padding">
+                <ul class="flexx pagination">
+                    <li class="page-item previous-page disable">
+                        <a href="#" class="disable page-link" >
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+                    <li class="page-item current-page active">
+                        <a href="#" class="page-link">1</a>
+                    </li>
+
+                    <li class="page-item dots">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+
+                    <li class="page-item current-page">
+                        <a class="page-link" href="#">5</a>
+                    </li>
+
+                    <li class="page-item next-page">
+                        <a href="#"  class="disabled page-link">
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a>
+                    </li>
+
+                </ul>
+                <p>Items Per Page: {{.Count}} and {{.Paginationstartcount}} – {{.Paginationendcount}} of{{.Count}}</p>
+            </div> -->
+        </div>
+    </div>
+    <!--2-->
+</div>
+
+<!-- Right Modal -->
+<div class="modal fade right member-modal" id="rightModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="title"> {{$Translate.Categoryy.Addnewcategorygrp}}</h3>
+                <button class="close" data-bs-dismiss="modal">
+                    <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form action="/categories/newcategory" name="createcategory" method="POST" id="category_form">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="category_id" id="category_id" value="">
+                    <input type="hidden" name="catpageno" id="catpageno" value="">
+                    <div class="input-group" id="catname">
+                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpname}} *</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" name="category_name" id="category_name"
+                                placeholder="{{$Translate.Categoryy.Entercategoryname}}" />
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="catdesc">
+                        <label for="" class="input-label">{{$Translate.Categoryy.Categorygrpdescription}} *</label>
+                        <div class="ig-row">
+                            <textarea class="field" name="category_desc" id="category_desc"
+                                placeholder="{{$Translate.Categoryy.Entercategorydescription}}"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="button-col flexx">
+
+                    <button class="btn-reg btn-md primary btn-submit  " type="button"
+                        id="save">{{$Translate.Save}}</button>
+
+                    <button class="btn-reg btn-md primary btn-submit  " type="button" id="update-btn"
+                        style="display: none;">{{$Translate.Update}}</button>
+
+                    <button class="btn-reg btn-md secondary" id="cancel" data-bs-dismiss="modal"> {{$Translate.Cancel}}
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{{template "footer" .}}
+<script src="/public/js/categories/categorygroup.js"></script>
+{{template "footerclose" .}}

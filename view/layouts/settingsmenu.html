@@ -1,0 +1,97 @@
+{{define "settingsmenu"}}
+{{$Translate := .translate}}
+<div class="role-side-bar">
+    <div class="roles-heading">
+        <h1 class="heading">{{$Translate.Settings}}</h1>
+    </div>
+    <div class="side-profile">
+        <h3>
+            {{$Translate.Profile}}
+        </h3>
+        <a href="/settings/myprofile" class="settingsmenu myprofmenu {{if eq .Myprofmenu true}}active{{end}}">
+            <img src="/public/img/profile.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Setting.Myaccount}}</h4>
+        </a>
+        <a href="/settings/personalize/" class="settingsmenu personalizemenu {{if eq .Personalizemenu true}}active{{end}}">
+            <img src="/public/img/personalize.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Setting.Personalize}}</h4>
+        </a>
+        <a href="/settings/changepassword" class="settingsmenu changepassmenu {{if eq .Changepassmenu true}}active{{end}}">
+            <img src="/public/img/security.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Setting.Security}}</h4>
+        </a>
+        <div class="side-sep"></div>
+    </div>
+
+    <div class="side-profile">
+        {{$Rolesmenu := .Rolesmenu}}
+        {{$Teamsmenu := .Teamsmenu}}
+        <h3>
+            {{$Translate.Permission.Permissions}}
+        </h3>
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Roles & Permissions"}}
+        {{if .Routes}}
+        <a href="/settings/roles/" class="settingsmenu rolesmenu {{if eq $Rolesmenu true}}active{{end}}">
+            <img src="/public/img/roles-permision.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Roles}} & {{$Translate.Permission.Permissions}}</h4>
+        </a>
+        {{end}}
+        {{end}}
+        {{if eq .ModuleName "Team"}}
+        {{if .Routes}}
+        <a href="/settings/users" class="settingsmenu usersmenu {{if eq $Teamsmenu true}}active{{end}}">
+            <img src="/public/img/team.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Setting.Teams}}</h4>
+        </a>
+        {{end}}
+        {{end}}
+
+        {{end}}
+        {{end}}
+        {{end}}
+        <!-- <a href="#">
+            <img src="/public/img/team.svg" alt="">
+            <h4 class="heading-four">Team</h4>
+        </a> -->
+        <div class="side-sep"></div>
+    </div>
+    <div class="side-profile">
+        {{$Langmenu := .Langmenu}}
+        {{$Emailsmenu := .Emailsmenu}}
+        {{$Datamenu := .Datamenu}}
+        <h3>
+            {{$Translate.Setting.System}}
+        </h3>
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Languages"}}
+        {{if .Routes}}
+        <a href="/settings/languages/" class="settingsmenu langmenu {{if eq $Langmenu true}}active{{end}}">
+            <img src="/public/img/language.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Languages.Language}}</h4>
+        </a>
+        {{end}}
+        {{end}}
+        {{if eq .ModuleName "Email Templates"}}
+        {{if .Routes}}
+        <a href="/settings/emails/" class="settingsmenu emailsmenu {{if eq $Emailsmenu true}}active{{end}}">
+            <img src="/public/img/email.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Setting.Emailtemplates}}</h4>
+        </a>
+        {{end}}
+        {{end}}
+
+        {{end}}
+        {{end}}
+        {{end}}
+        <a href="/settings/data/" class="settingsmenu emailsmenu {{if eq $Datamenu true}}active{{end}}">
+            <img src="/public/img/data.svg" alt="">
+            <h4 class="heading-four">{{$Translate.Data}}</h4>
+        </a>
+    </div>
+</div>
+{{end}}

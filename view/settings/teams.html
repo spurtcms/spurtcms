@@ -1,0 +1,376 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{$Translate := .translate}}
+{{template "head" .}}
+
+
+{{$IMAGEPATH := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
+{{$IMAGEPATH = "/public/img/add-icon-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
+{{$IMAGEPATH = "/public/img/add-icon-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
+{{$IMAGEPATH = "/public/img/add-icon-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
+{{$IMAGEPATH = "/public/img/add-icon.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
+{{$IMAGEPATH = "/public/img/add-icon-brown.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
+{{$IMAGEPATH = "/public/img/add-icon-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
+{{$IMAGEPATH = "/public/img/add-icon-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
+{{$IMAGEPATH = "/public/img/add-icon-teal-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$IMAGEPATH = "/public/img/add-icon-black.svg"}}
+{{else}}
+ {{$IMAGEPATH ="/public/img/add-icon.svg"}}
+{{end}}
+<div class="page-wrapper settings-wrapper">
+    <div class="details-roles roles-permission setting-teamm">
+        <div class="search-role">
+
+            <form action="/settings/users/" class="filterform" method="get" autocomplete="off"
+                style="position: relative;">
+                <a type="button" class="searchbtn" id="filterformsubmit"><img src="/public/img/search.svg"></a>
+                <div>
+                    <input type="text" id="searchroles" class="search" name="keyword" value="{{ .Filter.Keyword }}"
+                        placeholder="{{$Translate.Userss.Searchusers}}">
+                </div>
+            </form>
+
+            <a href="javascript:void(0)" id="adduser" class="primary-link decor-none" data-bs-toggle="modal"
+                data-bs-target="#userModal">
+                <div class="add-new"><img src="{{$IMAGEPATH}}" alt="">
+                    <p class="primary-link decor-none">{{$Translate.Userss.Newuser}}</p>
+                </div>
+            </a>
+        </div>
+        <div class="table-responsive page-ponit">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{{$Translate.Name}}</th>
+                        <th>{{$Translate.Role}}</th>
+                        <th>{{$Translate.Userss.Username}}</th>
+                        <th>{{$Translate.Memberss.Createdon}}</th>
+                        <th class="text-center">{{$Translate.Userss.Accesspermission}}</th>
+                        <th>{{$Translate.Actions}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if .user}}
+                    {{ range .user }}
+
+                    <tr>
+                        <td>
+                            <div class="tbl-img-content flexx member-detail">
+                                {{if .ProfileImagePath}}
+                                <div class="tbl-img"><img
+                                        src="{{if .ProfileImagePath}}/{{.ProfileImagePath}}{{else}}/public/img/defauit profile.svg{{end}}"
+                                        alt=""></div>
+                                {{else}}
+                                <div class="profile-name"><span>{{.NameString}}</span></div>
+                                {{end}}
+                                <h4 id="username"> {{.FirstName}} {{.LastName}}</h4>
+
+                            </div>
+                        </td>
+                        <td class="role-desc">{{.RoleName}}</td>
+                        <td class="role-desc">{{.Username}}</td>
+                        <td class="role-desc">
+                            {{.ModuleName}}
+                        </td>
+                        <td class="text-center">
+                            <span class="status published">{{if eq .DataAccess 0}}All Users{{else}}User's
+                                Only{{end}}</span>
+                        </td>
+                        <td>
+                            {{if ne .RoleId 1}}
+                            <div class="btn-group language-group">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li><button class="dropdown-item" type="button" data-bs-target="#userModal"
+                                            data-bs-toggle="modal" data-id="{{ .Id }}" id="edit-btn"> <span><img
+                                                    src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
+                                        </button></li>
+                                    <li><button class="dropdown-item" type="button" data-id="{{ .Id }}" id="del-btn"
+                                            data-bs-toggle="modal" data-bs-target="#centerModal"> <span><img
+                                                    src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}}
+                                        </button></li>
+                                </ul>
+                            </div>
+                            {{end}}
+                        </td>
+                    </tr>
+                    {{ end }}
+                    {{else}}
+                    {{if .Filter.Keyword}}
+                    <tr class="no-dataHvr">
+                        <td style="text-align: center; border-bottom: none;" colspan="8">
+                            <div class="noData-foundWrapper">
+
+                                <div class="empty-folder">
+                                    <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
+                                    <img src="/public/img/nodatafilter.svg" alt="">
+                                </div>
+                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr class="no-dataHvr">
+                        <td style="text-align: center; border-bottom: none;" colspan="8">
+                            <div class="noData-foundWrapper">
+
+                                <div class="empty-folder">
+                                    <img src="/public/img/folder-sh.svg" alt="">
+                                    <img src="/public/img/shadow.svg" alt="">
+                                </div>
+                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                <p class="para">
+                                    {{$Translate.Pagesorry}}
+                                    {{$Translate.Gobackhome}}
+                                </p>
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#userModal"
+                                    id="clickadd" class="heading-three">{{$Translate.Clickadd}}
+                                    &gt;&gt;</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{if .user}}
+        <div class="pogination flexx pagenation-padding sticky-pagination">
+            {{if .Page}}
+            <ul class="flexx">
+                <li>
+                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a>
+                </li>
+                {{range .Page}}
+                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current"
+                        {{end}}>{{.}} </a></li>
+                {{end}}
+                <li>
+                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
+                        {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a>
+                </li>
+            </ul>
+            {{end}}
+            <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+
+<!-- Center Modal -->
+<div class="modal fade" id="userModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="heading">{{$Translate.Userss.Addnewuser}}</h3>
+                <button class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/settings/users/createuser " method="post" id="userform" name="userform">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="userid" value="" id="userid">
+                    <input type="hidden" name="pageno" value="" id="pageno">
+                    <input type="hidden" name="crop_data">
+                    <h1 class="heading">{{$Translate.Memberss.Basicinfo}}</h1>
+                    <div class="update-account">
+                        <input type="hidden" id="prof-crop">
+                        <div class="update-profile-img">
+                            <img src="" alt="" id="profpic" name="prof_pic">
+                            <div class="name-string" style="display: none;"></div>
+                            <div class="profile-info profile-crop"></div>
+                            <button class="cam-logo" type="button">
+                                <input id="myfile" name="prof_pic" type="file">
+                                <img src="/public/img/cam-logo.svg" alt=""></button>
+                            <label id="myfile-error" class="error" for="myfile" style="display: none;
+                                font-size: 0.75rem;
+                                font-weight: 400;
+                                color: #F26674;position: absolute;top: 100%;">* Please select jpg|png|jpeg files
+                                only</label>
+                        </div>
+                        <div class="fill-account-details">
+                            <div class="input-field-group">
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Userss.Firstname}} *</label>
+                                    <div class="ig-row">
+                                        <input class="field" id="user_fname" name="user_fname" type="text"
+                                            placeholder="{{$Translate.Userss.Labelfname}}">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Userss.Lastname}}</label>
+                                    <div class="ig-row">
+                                        <input class="field" id="user_lname" name="user_lname" type="text"
+                                            placeholder="{{$Translate.Userss.Labellname}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field-group">
+                                <div class="input-group" id="emailgrp">
+                                    <label for="" class="input-label">{{$Translate.Email}} *</label>
+                                    <div class="ig-row">
+                                        <input class="field" id="user_email" name="user_email" type="text"
+                                            placeholder="{{$Translate.Userss.Labelemail}}">
+                                        <label id="user_email-error" class="error" for="user_email"
+                                            style="display: none;">* Please enter the emailId</label>
+                                    </div>
+                                </div>
+                                <div class="input-group" id="mobilegrp">
+                                    <label for="" class="input-label">{{$Translate.Userss.Mobile}} *</label>
+                                    <div class="ig-row">
+                                        <input type="text" class="field" id="user_mob" name="user_mob"
+                                            placeholder="{{$Translate.Userss.Entermobilelabel}}" maxlength="10">
+                                        <label id="user_mob-error" class="error" for="user_mob" style="display: none;">*
+                                            Please enter the mobile number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field-group">
+                                <div class="input-group" id="usergrp">
+                                    <label for="" class="input-label">{{$Translate.Userss.Username}} *</label>
+                                    <div class="ig-row">
+                                        <input class="field" id="user_name" name="user_name" type="text"
+                                            placeholder="{{$Translate.Userss.Labeluname}}">
+                                        <label id="user_name-error" class="error" for="user_name"
+                                            style="display: none;">* Please enter the username</label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="" class="input-label">{{$Translate.Userss.Password}} *</label>
+                                    <div class="ig-row">
+                                        <input type="password" class="field" id="user_pass" name="user_pass"
+                                            placeholder="{{$Translate.Userss.Enterpassword}}" autocomplete="off">
+                                        <button class="eye" id="eye" type="button">
+                                            <img src="/public/img/eye-closed.svg" alt="" />
+                                        </button>
+                                        <!-- <button type="button" class="eye"><img src="/public/img/eye-closed.svg" alt=""></button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field-group">
+
+
+                                <div class="input-group  user-drop-down ">
+
+                                    <label for="" class="input-label">{{$Translate.Role}} *</label>
+
+                                    <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        {{$Translate.Userss.Selectrole}}
+                                    </a>
+                                    <input type="hidden" id="rolen" value="" name="user_role">
+
+                                    <div class="dropdown-menu dropdown-role" aria-labelledby="triggerId">
+
+                                        <div class="ig-row ig-channel-input">
+
+                                            <input type="text" id="searchdropdownrole" class="search" name="keyword"
+                                                placeholder="Search Role" value="">
+                                        </div>
+
+                                        <div class="dropdown-filter-roles">
+                                            {{range .Roles}}
+                                            {{if ne .Id 1}}
+                                            <button type="button" data-id="{{.Id}}"
+                                                class="dropdown-item">{{.Name}}</button>
+                                            {{end}}
+                                            {{end}}
+
+                                        </div>
+
+                                        <div class="noData-foundWrapper" id="nodatafounddesign"
+                                            style="margin-top: -40px;display: none;">
+
+                                            <div class="empty-folder">
+                                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                                <img src="/public/img/shadow.svg" alt="">
+                                            </div>
+                                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                {{$Translate.Oopsnodata}}</h1>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="active-toggle">
+                                    <div class="active-content">
+                                        <h4 class="heading-four">{{$Translate.Userss.Active}}</h4>
+                                        <p class="para-light">{{$Translate.Userss.Activecontent}}</p>
+                                    </div>
+                                    <div class="toggle">
+                                        <!-- <input class="tgl tgl-light" id="cb1" name="cb1" type="checkbox" />
+                                        <label class="tgl-btn" for="cb1"></label> -->
+                                        <input class="tgl tgl-light" name="mem_activestat" id="cb1" type="checkbox"
+                                            value="{{ .User.IsActive }}" {{if eq .User.IsActive 1}} checked
+                                            {{else}}{{end}} />
+                                        <label class="tgl-btn" for="cb1"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="user-permission">
+                        <div class="user-permission-acess">
+                            <h2 class="heading-second">{{$Translate.Userss.Permission}}</h2>
+                        </div>
+                        <div class="permission-modal">
+                            <div class="permission-content">
+                                <h4 class="heading-four">{{$Translate.Userss.Accesspermission}}</h4>
+                                <p class="para-light">{{$Translate.Userss.Onlyaccessdata}}</p>
+                            </div>
+                            <div class="chk-group">
+                                <!-- <input type="checkbox" id="Check">
+                                <label for="Check"></label> -->
+                                <input type="checkbox" name="mem_data_access" id="chk1" value="{{ .User.DataAccess }}"
+                                    {{if eq .User.DataAccess 1}} checked {{else}}{{end}}>
+                                <label class="chk1" for="chk1"></label>
+                            </div>
+                        </div>
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-save">
+                    <button id="saveuser" type="button" class="btn-reg btn-md primary ">
+                        {{$Translate.Save}} </button>
+                    <button id="updateuser" class="btn-reg btn-md primary"> {{$Translate.Update}}
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{template "footer" .}}
+
+<script src="/public/js/settings/users/users.js"></script>
+
+{{template "cropmodal" .}}
+
+{{template "footerclose" .}}

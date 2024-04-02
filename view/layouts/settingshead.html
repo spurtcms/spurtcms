@@ -1,0 +1,58 @@
+{{define "settingshead"}}
+{{$Translate := .translate}}
+<header class="roles-head">
+    <h1 class="heading">{{.HeadTitle}}</h1>
+    <!-- <div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>update</span></div> -->
+    <div class="header-rht flexx">
+        <div class="btn-group language-group langdata">
+            {{$CurrentLanguage := .Menu.CurrentLanguage}}
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-path="/{{$CurrentLanguage.JsonPath}}" data-id="{{$CurrentLanguage.Id}}">
+                <img id="current-langflag" src="{{$CurrentLanguage.ImagePath}}" alt=""> {{$CurrentLanguage.LanguageName}} <img src="/public/img/arrow-down.svg" alt=""
+                    class="drop-arrow">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                {{range .Menu.Languages}}
+                {{if and (eq .IsStatus 1) (ne $CurrentLanguage.Id .Id)}}
+                <!-- <li><a href="/"><button class="dropdown-item" type="button">Login</button></a> </li> -->
+                <li class="lang" data-code="{{.LanguageCode}}" data-id="{{.Id}}">
+                    <button class="dropdown-item" type="button"> <img src="{{.ImagePath}}" alt=""> {{.LanguageName}}</button>                    
+                </li>
+                {{end}}
+                {{end}}
+            </ul>
+        </div>
+        <button> <img src="/public/img/notify.svg" alt=""> </button>
+        <a href="/settings/"><button> <img src="/public/img/settings.svg" alt=""> </button></a>
+        <div class="btn-group">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                {{if .Menu.ProfileImagePath}}
+                    <img src="/{{ .Menu.ProfileImagePath }}"
+                        alt="" style="border-radius: 50%;">
+                        {{else}}
+                        <span class="Profile-NameString">{{.Menu.NameString}}</span>
+                        {{end}}
+                </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <div class='profile-name-detail'>
+                    {{if .Menu.ProfileImagePath}}
+                    <span><img
+                        src="/{{ .Menu.ProfileImagePath }}"
+                        alt="" style="border-radius: 50%;"></span>
+                {{else}}
+                <span>{{.Menu.NameString}}</span>
+                {{end}}
+                    <div class='pnd'>
+                        <h4>{{$Translate.Hello}}, {{.Menu.Name}}</h4>
+                        <p>{{.Menu.RoleName}}</p>
+                    </div>
+                </div>
+                <li><a href="/settings/myprofile">
+                    <button class="dropdown-item" type="button"> <img src="/public/img/profile-icon.svg" alt=""> {{$Translate.Myprofile}}</button></a></li>
+                <!-- <li><a href="/"><button class="dropdown-item" type="button">Login</button></a> </li> -->
+                <li><a href="/logout" id="logout"><button class="dropdown-item" type="button"> <img src="/public/img/logout.svg" alt=""> {{$Translate.Logout}}</button></a></li>
+            </ul>
+        </div>
+    </div>
+
+</header>
+{{end}}

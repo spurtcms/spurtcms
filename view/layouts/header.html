@@ -1,0 +1,40 @@
+{{define "header"}}
+<!doctype html>
+<html lang="en" class="{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}} red {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)" }} purple {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)" }} blue {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)" }} default-blue {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)" }} brown {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)" }} orange {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)" }} green {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)" }} teal-blue {{else if eq
+    .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)" }} black {{end}}">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Spurt CMS | {{.title}} </title>
+    <link rel="icon" href="/public/img/logo.svg">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/global.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/responsive.css">
+    <link rel="stylesheet" href="/public/css/newstyle.css">
+    <link rel="stylesheet" href="/public/css/bootstrap-material-datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
+    <!-- cropper -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+    <!-- rememberme js -->
+    <script src="/public/js/rememberme.js"></script>
+
+</head>
+{{$Mainmenu := .Menu.Expand}}
+ <body {{if eq $Mainmenu true}} class="expand" {{end}}>
+ {{template "mainmenu" .}}
+
+
+ {{end}}

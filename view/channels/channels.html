@@ -1,0 +1,145 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+<div class="page-wrapper">
+    {{template "cmstab" .}}
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <div class="all-tab-content" id="entriesContent">
+        <!--1-->
+
+        <div class="topOptions">
+            <div class="leftHeader">
+                <div class="caption-flexx">
+                    <p class="para">
+                       
+                     {{$Translate.Total}}  {{if gt .count 1}}{{$Translate.Channell.Channels}} :  <span class="para" id="searchcount"> {{.count}} </span>   {{else}} {{$Translate.Channell.Channel}} : <span class="para" id="searchcount"> {{.count}} </span> {{end}} </p>
+                        
+                    </p>
+                </div>
+            </div>
+          
+            <div class="transitionSearch active {{if .filter}}active{{end}}">
+                <form action="/channels/" method="get" class="filterform" autocomplete="off">
+                    <img src="/public/img/Magnifying-Glass.svg" alt="" />
+                    <input type="text" class="search" name="keyword" id="" placeholder="{{$Translate.Channell.Searchchannelname}}" value="{{if .filter}}{{.filter}}{{end}}" />
+                </form>
+            </div>
+            <a href="/channels/newchannel">
+                <button class="btn-reg btn-sm primary ">
+                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}} 
+                </button></a>
+        </div>
+
+
+        <div class="channels-container">
+           
+            <div class="channels-cards-container">
+                {{if .channel}}
+            {{range .channel}}
+                <div class="channels-card">
+                    <div class="channels-card-top">
+                        <a href="/channels/editchannel/{{.Id}}"></a>
+                        <div class="card-top-head">
+                            <div style="display: flex; justify-content: space-between;">
+                                <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
+                                <h6 class="para-extralight">({{.EntriesCount}} {{$Translate.Channell.Entriesavailable}} )</h6>
+                            </div>
+                            <h3 class="heading-five" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{.ChannelName}}" style="cursor: pointer;">{{.ChannelName}}</h3>
+                        </div>
+                        <p class="para-extralight" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+                        title="{{.SlugName}}" style="height: 2.5rem;cursor: pointer;">{{.ChannelDescription}}
+                        </p>
+                    </div>
+
+                    <div class="channels-card-btm">
+                        <div class="btn-group action-btn-grp">
+                            <button type="button" class="dropdown-toggle primary " data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                {{$Translate.Action}}
+                                <img src="/public/img/arrow-white-down.svg" alt="" />
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="/channels/editchannel/{{.Id}}">
+                                        <button class="dropdown-item" type="button">
+                                            <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
+                                            {{$Translate.Configuration}}
+                                        </button></a>
+                                </li>
+                                <li >
+                                    <button class="dropdown-item channeldelete" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#centerModal" data-id="{{.Id}}"  {{if eq .Id 1}} style="opacity: 0.5;" disabled  {{end}}>
+                                        <span><img src="/public/img/delete.svg" alt="" /></span> {{$Translate.Delete}} 
+                                    </button>
+                                </li>
+                               
+                            </ul>
+                        </div>
+
+                        <div class="toggle">
+                            <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox"
+                                onclick="ChannelStatus('{{.Id}}')" {{if eq .IsActive 1}} checked {{end}} />
+                            <label class="tgl-btn" for="cb{{.Id}}"></label>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+              
+                {{ else if eq .EntriesCount 0}}
+               
+                        <div class="noData-foundWrapper nodatafound">
+
+                            <div class="empty-folder">
+                                <img src="/public/img/folder-sh.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                            <p class="para">
+                                {{$Translate.Pagesorry}}
+                                {{$Translate.Gobackhome}}
+                            </p>
+                            <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal" data-bs-target="#rightModal"
+                                class="heading-three ">{{$Translate.Clickadd}} >></a>
+                        </div>
+                  
+
+                
+               
+                     {{else }}
+              
+                        <div class="noData-foundWrapper nodatafound">
+
+                            <div class="empty-folder">
+                                <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
+                                <img src="/public/img/nodatafilter.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                            </div>
+                         
+                    {{end}} 
+         
+            </div>
+        </div>
+    </div>
+    <!--2-->
+</div>
+
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+
+{{template "footer" .}}
+<script src="/public/js/channels/channellist.js"></script>
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+
+{{template "footerclose" .}}

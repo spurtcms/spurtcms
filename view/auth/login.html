@@ -1,0 +1,80 @@
+{{template "authheader" .}}
+<div class="admin-login-container">
+    <div class="admin-login-body">
+        <div class="left-portion">
+            <a href="javascript:void(0)"><img src="/public/img/login-logo.svg" alt=""></a>
+            <div class="left-content">
+                <h2>
+                    Highlights of spurtCMS!
+                </h2>
+                <div class="left-point">
+                    <img src="/public/img/round-active.svg" alt="">
+                    <p>Effortlessly craft and manage engaging content with spurtCMS's intuitive content creation features.</p>
+                </div>
+                <div class="left-point">
+                    <img src="/public/img/round-active.svg" alt="">
+                    <p>Streamline member registrations, access detailed member profiles, and efficiently manage permissions and roles to create a personalized and secure content consumption experience.</p>
+                </div>
+                <div class="left-point">
+                    <img src="/public/img/round-active.svg" alt="">
+                    <p>Empower collaboration by establishing content management teams, assigning roles, and overseeing access levels. From content creation to administrative tasks, spurtCMS empowers your teams for efficient and collaborative content management.</p>
+                </div>
+            </div>
+        </div>
+         <div class="admin-form">
+        <h1 class="login-heading">Sign In</h1>
+        <h3 class="heading">Welcome to spurtCMS!</h3>
+        <p class="para">Please enter your login details here.</p>
+
+        <form action="/" method="post" name="loginform" id="loginform">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="input-container">
+
+                <div class="input-group" id="usergrp">
+                    <label for="" class="input-label">User Name</label>
+                    <div class="ig-row">
+                        <input type="text" class="field" placeholder="Enter User Name" name="username" class="field"
+                            id="usrid"  autocomplete="off"/>
+                        <p id="em-error" class="error logScr" style="display: none;">
+                            *
+                            You are not registered with us!</p>
+                    </div>
+                </div>
+
+
+                <div class="input-group" id="passgrp">
+                    <label for="" class="input-label">Password</label>
+                    <div class="ig-row">
+                        <input name="pass" class="field" type="password" placeholder="Enter Password" class="field"
+                            id="passid" autocomplete="off"/>
+                        <button class="eye" id="eye" type="button">
+                            <img src="/public/img/eye-closed.svg" alt="" />
+                        </button>
+                        <p id="pas-error" class="error logScr" style="display: none;">
+                            *
+                            Invalid Password</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="form-flexx">
+                <div class="chk-group chk-group-label">
+                    <input type="checkbox" name="rememberme" id="Check2" value="0" />
+                    <label for="Check2" class="para">Remember me</label>
+                </div>
+                <a href="/forgot" class="primary-link txtclr-default">Forgot Password ?</a>
+            </div>
+
+
+            <button class="btn-reg btn-lg primary w-100 bgclr-default" type="submit" id="loginf"> Login  <span class="spinner-border spinner-border-sm" style="display: none;" role="status" aria-hidden="true"></span></button>
+        </form>
+    </div>
+
+    </div>
+    <div class="foot-login">
+        <p>Copyrights © 2021, Piccosoft Software labs India Private Limited.All Rights Reserved.</p>
+    </div>
+</div>
+{{template "authfooter" .}}

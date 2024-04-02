@@ -1,0 +1,181 @@
+{{define "mediamodal"}}
+{{$Translate := .translate}}
+
+{{$IMAGEPATH := ""}}
+{{$IMAGEPATH2 := ""}}
+
+{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
+{{$IMAGEPATH = "/public/img/add-icon-red.svg"}}{{$IMAGEPATH2 = "/public/img/reload-red.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
+{{$IMAGEPATH = "/public/img/add-icon-purple.svg"}}{{$IMAGEPATH2 = "/public/img/reload-purple.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
+{{$IMAGEPATH = "/public/img/add-icon-blue.svg"}}{{$IMAGEPATH2 = "/public/img/reload-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
+{{$IMAGEPATH = "/public/img/add-icon.svg"}}{{$IMAGEPATH2 = "/public/img/reload.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
+{{$IMAGEPATH = "/public/img/add-icon-brown.svg"}}{{$IMAGEPATH2 = "/public/img/reload-brown.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
+{{$IMAGEPATH = "/public/img/add-icon-orange.svg"}}{{$IMAGEPATH2 = "/public/img/reload-orange.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
+{{$IMAGEPATH = "/public/img/add-icon-green.svg"}}{{$IMAGEPATH2 = "/public/img/reload-green.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
+{{$IMAGEPATH = "/public/img/add-icon-teal-blue.svg"}}{{$IMAGEPATH2 = "/public/img/reload-teal-blue.svg"}}
+{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
+{{$IMAGEPATH = "/public/img/add-icon-black.svg"}}{{$IMAGEPATH2 = "/public/img/reload-black.svg"}}
+{{else}}
+ {{$IMAGEPATH ="/public/img/add-icon.svg"}}{{$IMAGEPATH2 = "/public/img/reload.svg"}}
+{{end}}
+
+<!-- Modal -->
+
+<div class="modal fade right member-modal media-modal" id="addnewimageModal" data-bs-backdrop="static" data-bs-keyboard="false"
+tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">                
+                <h3 id="title">{{$Translate.Mediaa.Medialibray}}</h3>
+                <button type="button" class="close" data-bs-dismiss="modal" id="mediamodalclose" aria-label="Close"> <img id="mediamodal-close"
+                    src="/public/img/modal-close.svg" alt=""> </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="media-library-filter flexx">                    
+                    <div class="transitionSearch active">
+                            <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
+                            <!-- <input type="text" class="search" name="keyword" id="mediasearch" placeholder="{{$Translate.Mediaa.SearchImg}} " value=""> -->
+                            <input type="text" class="search" name="keyword" id="mediasearch" placeholder="Search Media Files" value="">
+                    </div>                  
+                    <button class="btn-reg btn-sm btn-outline   " id="Refreshdiv"> <img src="{{$IMAGEPATH2}}" alt="" style="width: 13px;">
+                        {{$Translate.Mediaa.Refresh}}   
+                    </button>
+                    <button class="btn-reg btn-sm btn-outline  " id="addfolder"> <img src="{{$IMAGEPATH}}" alt="">
+                        {{$Translate.Mediaa.Folder}} 
+                    </button>
+                    <!-- <button class="disabled"> <img src="/public/img/trash-lg.svg" alt="">
+                        <p>Trash</p>
+                    </button> -->
+                    <form id="imageForm" enctype="multipart/form-data">
+                    <button class="btn-reg btn-sm primary " type="button"  id="upload">
+                        <img src="/public/img/upload-ico.svg" > {{$Translate.Mediaa.Upload}}
+                    </button>
+                    <input type="file" id="imgupload" style="display: none;" />                    
+                    </form>
+                </div>
+                <div class="media-select-del flexx">
+                     <a href="javascript:void(0)" class="primary-link " id="selectall">{{$Translate.Selectall}}</a>
+                     <a href="javascript:void(0)" class="primary-link " id="unselectall" style="display: none;">{{$Translate.Mediaa.Unselectall}}</a>
+
+                    <a href="javascript:void(0)" class="primary-link disabled " id="media-del-btn">{{$Translate.Delete}}</a>
+                </div>
+
+                <!-- <div class="mediabreadcrumb">
+          <ul style="list-style: none;">
+            <li><a href="javascript:void(0)" data-id="/" >Media</a></li>
+            <li><img src="/public/img/caret-right.svg" alt=""></li> 
+          </ul>
+         </div> -->
+
+                <div class="media-library-row">
+
+                    <div class="media-library-header flexx" id="addfoldervalues" style="display: none;">
+                        <h4 id="path"><span></span></h4>
+                        <div class="input-group" id="namecheck">
+                            <div class="ig-row media-btn">
+                                <input type="text" name="foldername" class="field" id="foldername" placeholder="{{$Translate.Mediaa.Plenterfolder}}">
+                                <button class="button-reg secondary" id="newfileadd">{{$Translate.Add}}</button>
+                            </div>
+                            <label id="foldername-error" class="error" for="foldername" style="display: none;margin-left: 50%;">*{{$Translate.Mediaa.Vailderr}} </label>
+                        </div>
+                    </div>
+
+                    <div class="media-library-header flexx mediabreadcrumb tab-breadCrumb">
+                        <ul class="media-innr-breadcrumbs flexx breadcrumb-container" style="list-style: none;">
+                            <li><a href="javascript:void(0)" class="" data-id="/">{{$Translate.Mediaa.Medialibrary}}</a></li>
+                            <!-- <li>/</li> -->
+                        </ul>
+                    </div>
+
+                 
+        
+                    <div id="errorhtml" class="media-error-design">
+                        {{ if .Media }}
+
+                        {{else}}
+                        <div class="noData-foundWrapper">
+        
+                            <div class="empty-folder">
+                                <img src="/public/img/folder-sh.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                           
+                        </div>
+                    {{end}}
+                    </div>
+        
+                   
+                    
+                    <div class="media-library-list" id="drivelist">
+                        {{if .Media }}
+                        {{range .Media}}
+                        {{if eq .File true}}
+                        <div class="upload-folders  folderdiv">
+                            <p class="forsearch" style="display: none;">{{.Name}}</p>
+        
+                            <div class="chk-group chk-group-box">
+                                <input type="checkbox" class="ckbox" id="{{.Name}}" data-id="{{.Name}}" >
+                                <label for="{{.Name}}"></label>
+                            </div>
+                            <div class="upload-folder-img folder">
+                                <img src="/public/img/folder-media.svg" alt="">
+                            </div>
+                            <div class="file-detail">
+                                {{if ge (len .Name) 20}}
+                                <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
+                                title={{.Name}}>{{.Name}}</h3>
+                                {{else}}
+                                <h3>{{.Name}}</h3>
+                                {{end}}
+                                <p>{{if gt .TotalSubMedia 1}}{{.TotalSubMedia}} Files{{else}}{{.TotalSubMedia}} File{{end}}</p>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="upload-folders filediv">
+                            <p class="forsearch" style="display: none;">{{.Name}}</p>
+        
+                            <div class="chk-group chk-group-box">
+                                <input type="checkbox" class="ckbox" id="{{.Name}}" data-id="{{.Name}}" >
+                                <label for="{{.Name}}"></label>
+                            </div>
+                            <div class="upload-folder-img file">
+                                <img src="/{{.Path}}{{.Name}}" alt="">
+                            </div>
+                            <div class="file-detail">
+                                {{if ge (len .Name) 20}}
+                                <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
+                                title={{.Name}}>{{.Name}}</h3>
+                                {{else}}
+                                <h3>{{.Name}}</h3>
+                                {{end}}
+                                <!-- <p></p> -->
+                            </div>
+                        </div>
+                        {{end}}
+                        {{end}}
+                        {{end}}
+                    </div>
+                </div>
+
+                <!-- <div class="category-modal-btn flexx">
+                    <button class="button-reg save btn-md " id="mid">Save</button>
+                    <button  id="medcancel" class="button-reg cancel btn-md" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#rightModal">Cancel</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{{end}}
+

@@ -1,0 +1,20 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<div class="page-wrapper">
+    <section class="cms404-wrapper">
+        <div class="cms404-img">
+            <img src="/public/img/cms404-img.svg" alt="">
+        </div>
+        <h1 class="cms404-heading">Page not found</h1>
+        <p class="heading-second">The page you are looking for might have been removed had its name changed or is
+            temporarily unavailable.</p>
+        <a href="/dashboard" class="btn-reg btn-lg primary">Back to Home</a>
+    </section>
+
+</div>
+
+{{template "footer" .}}
+
+{{template "footerclose" .}}
