@@ -41,6 +41,12 @@ $(document).ready(async function () {
 
 });
 
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+  });
+
 function truncate(str, no_words) {
     return str.split(" ").splice(0, no_words).join(" ");
   }
@@ -936,9 +942,15 @@ $("#searchspacename").on("keypress", function () {
 /*search redirect home page */
 
 $(document).on('keyup', '#searchspacename', function () {
+
+    if (event.key === 'Backspace') {
+
     if ($('.search').val() === "") {
+
          window.location.href = "/spaces/"
     }
+
+}
 })
     
 

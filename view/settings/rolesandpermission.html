@@ -31,11 +31,12 @@
         <div class="search-role">
             <form action="/settings/roles/" class="filterform" method="get" autocomplete="off"
                 style="position: relative;">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
                 <!-- <input type="text" name="" id="" class="search" placeholder="Search Roles"> -->
                 <a type="button" class="searchbtn" id="filterformsubmit"><img src="/public/img/search.svg"></a>
                 <div>
                     <input type="text" id="searchroles" class="search" name="keyword" value="{{.keyword}}"
-                        placeholder="{{$Translate.Permission.Searchroles}}">
+                        placeholder="{{$Translate.Csearch}}">
                 </div>
             </form>
             <a href="javascript:void(0)" class="primary-link decor-none" data-bs-toggle="modal"
@@ -45,17 +46,23 @@
                 </div>
             </a>
         </div>
-        <div class="table-responsive page-ponit role-pg">
+        <div class="table-responsive page-ponit role-pg entries-table">
             <table class="table">
                 <thead>
                     <tr>
 
+                        <th style="width: 0; padding-right: 0;"> 
+                            <div class="chk-group">
+                              <input type="checkbox" id="Check">
+                              <label for="Check"></label>
+                            </div>
+                          </th>
                         <th>{{$Translate.Role}}</th>
                         <th width="50%">{{$Translate.Description}}</th>
                         <th>{{$Translate.Rolecontent.Lastmodifiedon}}</th>
                         <th class="text-center">{{$Translate.Channell.Status}}</th>
                         <th class="text-center">{{$Translate.Configuration}}</th>
-                        <th>{{$Translate.Actions}}</th>
+                        <th style="text-align: end;padding-right: 60px;">{{$Translate.Actions}}</th>
 
                     </tr>
                 </thead>
@@ -63,21 +70,28 @@
                     {{if .roles}}
                     {{range .roles}}
                     <tr>
+                        <td style="padding-right: 0;"> 
+                            {{if ne .Id 1}}
+                             <div class="d-flex  gap-4 align-items-center">
+                            <div class="chk-group">
+                              <input type="checkbox" class="selectcheckbox" id="Checkbox{{.Id}}" data-id="{{.Id}}">
+                              <label for="Checkbox{{.Id}}"></label>
+                            </div>
+                          </div>
+                          {{end}}
+                        </td>
                         <td>{{.Name}}</td>
                         <td class="role-desc">{{.Description}}</td>
                         <td class="role-desc role-date">{{.CreatedDate}}</td>
                         <td class="text-center">
-                            {{if ne .Id 1}}
                             <div class="toggle">
                                 <input class="tgl tgl-light" id="cb{{.Id}}" data-id="{{.Id}}"
                                     onclick="RoleStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
                                     {{end}} />
-                                <label class="tgl-btn" for="cb{{.Id}}"></label>
+                                <label class="tgl-btn  {{if eq .Id 1}} roldisabled{{end}}" for="cb{{.Id}}" ></label>
                             </div>
-                            {{end}}
                         </td>
                         <td class="text-center">
-                            {{if ne .Id 1}}
                             {{if eq .Slug "Yettoconf"}}
                             <a href="javascript:void(0)" class="primary-link" id="configure"
                                 data-bs-toggle="modal" data-bs-target="#roles-permissionModal"
@@ -87,27 +101,26 @@
                                 data-bs-target="#roles-permissionModal"
                                 data-id="{{.Id}}">{{$Translate.Rolecontent.Manage}}</a>
                             {{end}}
-                            {{end}}
                         </td>
-                        <td>
-                            {{if ne .Id 1}}
+                        <td style="text-align: end;padding-right: 60px;">
+                    
                             <div class="btn-group language-group">
                                 <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><button class="dropdown-item roledit" type="button" data-bs-toggle="modal"
+                                    <li><a class="dropdown-item roledit" type="button" data-bs-toggle="modal"
                                             data-bs-target="#roles-permissionModal" data-id="{{.Id}}"> <span><img
                                                     src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
-                                        </button></li>
-                                    <li><button class="dropdown-item roldel" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#centerModal" data-id="{{.Id}}"> <span><img
+                                        </a></li>
+                                    <li><a class="dropdown-item roldel {{if eq .Id 1}} roldisabled{{end}}"  {{if eq .Id 1}} disabled {{else}} type="button" data-bs-toggle="modal"
+                                            data-bs-target="#centerModal" data-id="{{.Id}}" {{end}}> <span><img
                                                     src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}}
-                                        </button></li>
+                                        </a></li>
                                 </ul>
                             </div>
-                            {{end}}
+                            
                         </td>
                     </tr>
                     {{end}}
@@ -153,29 +166,64 @@
         </div>
         {{if .roles}}
         <div class="pogination flexx pagenation-padding sticky-pagination">
-            {{if .Page}}
             <ul class="flexx">
-                <li>
-                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a>
-                </li>
-                {{range .Page}}
-                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current "
-                        {{end}}>{{.}} </a></li>
+                {{if gt .Count .Limit}}
+            
+                <li>  <a href="?page={{.Pagination.PreviousPage}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                    <img src="/public/img/carat-right.svg" alt="" />
+                </a></li>
+                {{if gt .CurrentPage 3}}
+                <li><a href="?page=1" >1</a></li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li><a href="?page=2">2</a></li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li><a href="?page={{.Pagination.TwoBelow}}">{{.Pagination.TwoBelow}}</a></li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li><a href="?page={{.Pagination.PreviousPage}}">{{.Pagination.PreviousPage}}</a></li>
+                {{end}}
+                <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li><a href="?page={{.Pagination.NextPage}}">{{.Pagination.NextPage}}</a></li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a href="?page={{.Pagination.TwoAfter}}">{{.Pagination.TwoAfter}}</a></li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a href="?page={{.Pagination.TotalPages}}">{{.Pagination.TotalPages}}</a></li>
                 {{end}}
                 <li>
-                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
-                        {{end}}>
+                    <a href="?page={{.Pagination.NextPage}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                         <img src="/public/img/carat-right.svg" alt="" />
                     </a>
                 </li>
+               
+               {{end}}
             </ul>
-            {{end}}
             <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
         </div>
         {{end}}
+   
+             <!--------selected----------->
+ <div class="selected-numbers leftalign" style="display: none;">
+    <p class="heading-three text-white checkboxlength"> </p>
+    <div class="d-flex">
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
+      data-bs-target="#centerModal">
+        <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
     </div>
+    <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
+  </div>
+</div>
 </div>
 
 <!-- Center Modal -->
@@ -190,6 +238,7 @@
             </div>
             <div class="modal-body">
                 <form action="" id="roleform" method="post">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
                     <input type="hidden" name="pageno" value="" id="pageno">
                     <input type="hidden" id="url">
                     <input type="hidden" id="rolid">

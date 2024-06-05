@@ -3,7 +3,23 @@
 {{$Translate := .translate}}
 
 <div class="page-wrapper">
-    {{template "membertab" .}}
+
+   
+        <div class="bread-crump">
+
+            <a href="/member/" class="">{{$Translate.Memberss.Members}}</a>
+            <img src="/public/img/right-light-arrow.svg" alt="">
+            <a href="/memberaccess/">{{.HeadTitle}}</a>
+            {{if .Accesscontent}}
+            <img src="/public/img/right-light-arrow.svg" alt="">
+            <a href="{{.broute}}" class="current-page">{{.Accesscontent}}</a>
+            {{end}}
+            {{ if .AccessControl.AccessControlName}}
+            <img src="/public/img/right-light-arrow.svg" alt="">
+            <a href="" class="current-page">{{.AccessControl.AccessControlName}}</a>
+            {{end}}
+        </div>
+    <!-- {{template "membertab" .}} -->
     <div class="tablst access-top ">
         <input type="hidden" id="csrf-input" value="{{.csrf}}">
         <input type="hidden" id="route-type" value="{{.Button}}">
@@ -27,8 +43,7 @@
                 <div class="access-contentHead-rgt">
                     <div class="accessHead-rgt-start">
                         <div>
-                            <h3 class="heading-three">{{if eq .SpaceDefault
-                                `space`}}{{$Translate.ContentAccessControl.Spaces}}{{else}}Channels{{end}}</h3>
+                            <h3 class="heading-three">Channels</h3>
                             <p class="para-light" id="description">{{$Translate.ContentAccessControl.Spacedesc}} </p>
                         </div>
 
@@ -52,20 +67,6 @@
                 <div class="configurationContent-aside-lft">
 
                     <div class="accessAside-lft-body">
-                        {{if eq .SpaceDefault "space"}}
-                        <a href="javascript:void(0)" class="field-tab active" id="space-access">
-                            <div>
-                                <h3 class="heading-three">{{$Translate.ContentAccessControl.Space}}</h3>
-                                <!-- <p class="para-light">{{$Translate.ContentAccessControl.Totalrecordsavailable}}</p> -->
-                                <p class="para-light"> {{$Translate.Total}} {{if gt .SpaceCount 1}} 
-                                    {{$Translate.Spaces.Spacess}} : {{else}}
-                                    {{$Translate.Spaces.Space}} :  {{end}} {{.SpaceCount}} </p>
-                            </div>
-                            <div class="img-div">
-                                <img src="/public/img/arrow-rgt.svg" alt="" />
-                            </div>
-                        </a>
-                        {{end}}
 
                         <a href="javascript:void(0)" class="field-tab {{if eq .SpaceDefault `channel`}}active{{end}}"
                             id="channel-access">

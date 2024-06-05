@@ -1,4 +1,5 @@
 var languagedata
+var selectedcheckboxarr=[]
 /** */
 $(document).ready(async function () {
 
@@ -54,6 +55,12 @@ $(document).ready(async function () {
 
 })
 
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+});
+
 $("#add-btn ,#clickadd").click( function(){
     $("#title").text(languagedata.Categoryy.addnewcategorygrp)
     $(".input-group").removeClass("input-group-error")
@@ -83,8 +90,8 @@ $("body").on("click", "#edit", function () {
     var data = $(this).attr("data-id");
     edit = $(this).closest("tr");
     $("#category_form").attr("name", "editcategory").attr("action", "/categories/updatecategory")
-    var name = edit.find("td:eq(0)").text();
-    var desc = edit.find("td:eq(1)").text();
+    var name = edit.find("td:eq(1)").text();
+    var desc = edit.find("td:eq(2)").text();
     $("input[name=category_name]").val(name.trim());
     $("textarea[name=category_desc]").text(desc.trim());
     $("input[name=category_id]").val(data);
@@ -452,9 +459,189 @@ $(document).on('click', '#back',function(){
 // Search return home page
 $(document).on('keyup','.search',function(){
 
+    if (event.key === 'Backspace') {
+
     if($('.search').val()===""){
+        
         window.location.href ="/categories"
         
     }
 
+}
+})
+
+
+$(document).on('click','.selectcheckbox',function(){
+
+    categorygrbid =$(this).attr('data-id')
+
+
+   if ($(this).prop('checked')){
+
+       selectedcheckboxarr.push(categorygrbid)
+   
+   }else{
+
+       const index = selectedcheckboxarr.indexOf(categorygrbid);
+   
+       if (index !== -1) {
+
+           console.log(index,"sssss")
+           selectedcheckboxarr.splice(index, 1);
+       }
+      
+       $('#Check').prop('checked',false)
+
+   }
+
+  
+   if (selectedcheckboxarr.length !=0){
+
+       $('.selected-numbers').show()
+
+      
+       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+           $('.unbulishslt').html("")
+       
+   }else{
+
+       $('.selected-numbers').hide()
+   }
+
+       var allChecked = true;
+
+        $('.selectcheckbox').each(function() {
+
+            if (!$(this).prop('checked')) {
+
+            allChecked = false;
+
+           return false; 
+        }
+   });
+
+         $('#Check').prop('checked', allChecked);
+
+    console.log(selectedcheckboxarr,"checkkkk")
+})
+
+//ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+    selectedcheckboxarr=[]
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked){
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selectcheckbox').each(function(){
+    
+           categorygrbid= $(this).attr('data-id')
+
+           selectedcheckboxarr.push(categorygrbid)
+        })
+
+        $('.selected-numbers').show()
+
+       
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    
+    }else{
+
+
+        selectedcheckboxarr=[]
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selected-numbers').hide()
+    }
+
+    if (selectedcheckboxarr.length ==0){
+
+        $('.selected-numbers').hide()
+    }
+})
+$(document).on('click','#seleccheckboxdelete',function(){
+
+    if (selectedcheckboxarr.length>1){
+         
+    $('.deltitle').text("Delete CategoryGroups?")
+
+    $('#content').text('Are you sure want to delete selected CategoryGroups?')
+
+    }else {
+
+         $('.deltitle').text("Delete CategoryGroup?")
+
+         $('#content').text('Are you sure want to delete selected CategoryGroup?')
+    }
+
+
+    $('#delete').addClass('checkboxdelete')
+})
+//MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+  
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/categories/multiselectcategorygrbdelete',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "categorygrbids": selectedcheckboxarr,
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Category Group Deleted Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.selectcheckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    selectedcheckboxarr=[]
+
+    $('.selected-numbers').hide()
+    
 })

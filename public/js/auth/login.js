@@ -13,6 +13,7 @@ $("#Check2").click(function () {
 $(document).on('click', '#loginf', function () {
     $('#pas-error').hide();
     $('#em-error').hide();
+    $('#em-error1').hide();
     $("form[name='loginform']").validate({
         rules: {
             username: {
@@ -77,11 +78,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var content = getCookie("pass-toast");
     var username = getCookie("username");
 
-    console.log("fsrzg", username);
+    console.log("fsrzg", Cookie);
 
-    if (Cookie != "") {
-
+    if (Cookie == "You+are+not+registered+with+us") {
         $('#em-error').show();
+        $('#usergrp').addClass('input-group-error');
+    }else if (Cookie == "This+account+is+inactive+please+contact+the+admin"){
+        $('#em-error1').show();
         $('#usergrp').addClass('input-group-error');
     } else if (content != "") {
         $("#usrid").val(username)
@@ -114,6 +117,7 @@ $(document).on('click', '#eye', function () {
 
 $(document).on('keyup', ".field", function () {
     $('#em-error').hide();
+    $('#em-error1').hide();
     $('#pas-error').hide();
     $('#passgrp').removeClass('input-group-error');
     $('#usergrp').removeClass('input-group-error');
@@ -185,4 +189,18 @@ inputGroups.forEach(inputGroup => {
         inputGroup.classList.remove('input-group-focused');
     });
 
+});
+
+$(document).ready(function() {
+    $('#usrid').keypress(function(event) {
+        if (event.which === 32 && $(this).val().length === 0) {
+            event.preventDefault();
+        }
+    });
+
+    $('#passid').keypress(function(event) {
+        if (event.which === 32 && $(this).val().length === 0) {
+            event.preventDefault();
+        }
+    });
 });

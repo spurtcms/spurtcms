@@ -1,0 +1,29 @@
+{{define "categorytab"}}
+{{$Translate := .translate}}
+<div class="tablst br-btm">
+    <ul class="nav entries-tab" id="myTab" role="tablist">
+
+        {{$Title := .title}}
+        {{$Tabmenu := .Tabmenu}}
+
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName $Title}}
+        {{range .SubModule}}
+        {{if gt (len .Routes) 0}}
+        {{$Routname := index .Routes 0}}
+        {{if ne $Routname.RouteName "/categories/addcategory/"}}
+        <li class="nav-itm" role="presentation">
+            <a class="nav-lnk heading-three {{if eq .ModuleName $Tabmenu}} active {{end}}"  href="{{$Routname.RouteName}}">
+                <img src="{{.IconPath}}" alt="" />
+                <span class="heading-three">{{.ModuleName}}</span>
+            </a>
+        </li>
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+
+    </ul>
+</div>
+{{end}}

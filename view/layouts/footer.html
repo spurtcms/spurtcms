@@ -135,5 +135,12 @@
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
   })
+
+  
+</script>
+
+<script>
+  const tooltipTriggerList1 = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList2 = [...tooltipTriggerList1].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
 {{end}}

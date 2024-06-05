@@ -4,6 +4,13 @@
 
 <div class="page-wrapper">
 
+    <div class="bread-crump">
+        <a href="/categories/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="" class="current-page">{{.Tabmenu}}</a>
+    </div>
+    {{template "categorytab" .}}
+
     <div class="all-tab-content" id="groupsContent">
         <!--1-->
         <div class="tablePagination-wrapper">
@@ -25,44 +32,48 @@
                                     autocomplete="off">
                                     <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;">
                                     <input type="text" class="search" id="searchsubcategory" name="keyword"
-                                        placeholder="{{$Translate.Categoryy.Searchcategories}}"
+                                        placeholder="{{$Translate.Csearch}}"
                                         value="{{.Filter.Keyword}}">
                                 </form>
                             </div>
                             {{$MENU := .Menu}}
-                            {{range .Menu.TblModule}}
-                            {{if eq .ModuleName "Channels"}}
-                            {{range .SubModule}}
-                            {{if eq .ModuleName "Categories"}}
-                            {{range .Routes}}
-                            {{if eq .DisplayName "Create"}}
+                        
                             <button class="btn-reg btn-sm primary " data-bs-toggle="modal"
                                 data-bs-target="#categoryModal" id="caddbtn">
                                 <img src="/public/img/add.svg" alt="" />{{$Translate.Categoryy.Category}}
                             </button>
-                            {{end}}
-                            {{end}}
-                            {{end}}
-                            {{end}}
-                            {{end}}
-                            {{end}}
+                           
                         </div>
                     </caption>
 
                     <thead>
                         <tr>
+                            <th style="width: 0; padding-right: 0;"> 
+                                <div class="chk-group">
+                                  <input type="checkbox" id="Check">
+                                  <label for="Check"></label>
+                                </div>
+                              </th>
                             <th>{{$Translate.Categoryy.Categories}} </th>
                             <th>{{$Translate.Categoryy.Parentcategory}} </th>
                             <th>{{$Translate.Lastupdatedon}} </th>
-                            <th {{range $MENU.TblModule}} {{if eq .ModuleName `Channels`}} {{range .SubModule}}{{if eq
-                                .ModuleName "Categories" }} {{if ne .Action true}} style="display: none;" {{end}}
-                                {{end}}{{end}}{{end}}{{end}}>{{$Translate.Actions}} </th>
+                            <th style ="text-align: end;padding-right: 60px;">{{$Translate.Actions}} </th>
                         </tr>
                     </thead>
                     <tbody>
                         {{if .CategoryList}}
                         {{range .CategoryList}}
                         <tr>
+                            <td style="padding-right: 0;"> 
+                                
+                                <div class="d-flex  gap-4 align-items-center">
+                                <div class="chk-group">
+                                  <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
+                                  <label for="Check{{.Id}}"></label>
+                                </div>
+                              </div>
+                              
+                            </td>
                             <td> {{.CategoryName}} </td>
 
                             <td>
@@ -73,9 +84,7 @@
                             </td>
                             <td>{{.DateString}} </td>
 
-                            <td {{range $MENU.TblModule}} {{if eq .ModuleName `Channels`}} {{range .SubModule}}{{if eq
-                                .ModuleName "Categories" }} {{if ne .Action true}} style="display: none;" {{end}}
-                                {{end}}{{end}}{{end}}{{end}}>
+                            <td style="text-align: end;padding-right: 60px;">
                                 <div class="btn-group language-group">
                                     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -84,34 +93,23 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         {{$Id := .Id}}
 
-                                        {{range $MENU.TblModule}}
-                                        {{if eq .ModuleName "Channels"}}
-                                        {{range .SubModule}}
-                                        {{if eq .ModuleName "Categories"}}
-                                        {{range .Routes}}
-                                        {{if eq .DisplayName "Update"}}
+
                                         <li>
-                                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                            <a class="dropdown-item" type="button" data-bs-toggle="modal"
                                                 data-bs-target="#categoryModal" data-id="{{$Id}}" id="edit">
                                                 <span><img src="/public/img/edit.svg" alt="" /></span>
                                                 {{$Translate.Edit}}
-                                            </button>
+                                            </a>
                                         </li>
-                                        {{end}}
-                                        {{if eq .DisplayName "Delete"}}
+
                                         <li>
-                                            <button class="dropdown-item" type="button" id="delete-btn"
-                                                data-id="{{$Id}}" data-bs-toggle="modal" data-bs-target="#centerModal">
+                                            <a class="dropdown-item" type="button" id="delete-btn" data-id="{{$Id}}"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/delete.svg" alt="" /></span>
                                                 {{$Translate.Delete}}
-                                            </button>
+                                            </a>
                                         </li>
-                                        {{end}}
-                                        {{end}}
-                                        {{end}}
-                                        {{end}}
-                                        {{end}}
-                                        {{end}}
+
                                     </ul>
                                 </div>
                             </td>
@@ -157,25 +155,48 @@
             </div>
 
             <div class="pogination flexx pagenation-padding">
-                {{if .Page}}
                 <ul class="flexx">
-                    <li>
-                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                    {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  "
-                            {{end}}>{{.}} </a></li>
+                    {{if gt .Count .Limit}}
+                
+                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a></li>
+                    {{if gt .CurrentPage 3}}
+                    <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
+                    {{end}}
+                    {{if eq .CurrentPage 5}}
+                    <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 5}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 2}}
+                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 1}}
+                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
+                    {{end}}
+                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                    {{if lt .CurrentPage .Pagination.TotalPages}}
+                    <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
+                    {{end}}
+                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
                     {{end}}
                     <li>
-                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}}
-                            class="next" {{end}}>
+                        <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
                         </a>
                     </li>
+                   
+                   {{end}}
                 </ul>
-                {{end}}
                 <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
             </div>
 
@@ -210,6 +231,17 @@
         </div>
     </div>
     <!--2-->
+         <!--------selected----------->
+ <div class="selected-numbers" style="display: none;">
+    <p class="heading-three text-white checkboxlength"> </p>
+    <div class="d-flex">
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2  border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
+      data-bs-target="#centerModal">
+        <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
+    </div>
+    <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
+  </div>
 </div>
 
 

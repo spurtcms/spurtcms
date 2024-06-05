@@ -1,0 +1,207 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+    <div class="page-wrapper">
+    <form action="/member/settings/update" method="post" id="membersettingform">
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <input type="hidden" name="templatestatus" id="templatestatus" value="">
+
+        <div class="bread-crump">
+            <a href="/member/">{{.HeadTitle}}</a>
+            <img src="/public/img/right-light-arrow.svg" alt="">
+            <a href="/member/settings" class="current-page">{{.Tabmenu}}</a>
+        </div>
+        
+        {{template "cmstab" .}}
+     
+
+        <div class="all-tab-content" id="entriesContent">
+            <!--settings-->
+            <div class="setting-container">
+
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">{{$Translate.Memberss.Allowereg}}</h4>
+                        <p class="para color-light">{{$Translate.Memberss.Alloweregcont}}
+                        </p>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center justify-content-start">
+                        {{if .Membersettings}}
+                        {{range .Membersettings}}
+                        <input type="hidden" id="multiselectuser" name="multiselectuser" value="{{.NotificationUsers}}">
+                        <div class="flexx">
+                            <div class="toggle">
+                                <input type="hidden" name="membersettingid" class="membersettingid" value="{{.Id}}">
+                                <input type="hidden" name="allowregistration" class="allowregistration" value="{{.AllowRegistration}}">
+                                <input class="tgl tgl-light allowregis" id="cb{{.Id}}"  type="checkbox" {{if eq .AllowRegistration 1}} checked {{end}}>
+                                <label class="tgl-btn" for="cb{{.Id}}"></label>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+
+            
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">{{$Translate.Memberss.Optionmeberlogin}}</h4>
+                        <p class="para color-light">{{$Translate.Memberss.Optioncont}}
+                        </p>
+                    </div>
+                    <div class="d-grid gap-4">
+
+                        <div class="d-grid gap-4">
+                            <input type="hidden" name="memberlogin" class="memberlogin" value="{{.MemberLogin}}">
+                            <h4 class="heading-four">{{$Translate.Memberss.Optionmeberlogin}}</h4>
+                            <div class="radio radio-label">
+                                <input id="radio-1" name="radio" type="radio" {{if eq .MemberLogin "otp" }} checked {{end}}>
+                                <label for="radio-1" class="radio-label para cursor-pointer">OTP</label>
+                            </div>
+                            <div class="radio radio-label">
+                                <input id="radio-2" name="radio" type="radio"  {{if eq .MemberLogin "password" }} checked {{end}}>
+                                <label for="radio-2" class="radio-label para cursor-pointer">Password</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{end}}
+                {{end}}
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">{{$Translate.Memberss.Receivenot}}</h4>
+                        <p class="para color-light">{{$Translate.Memberss.Reveivecont}}
+                        </p>
+                    </div>
+                    <div class="d-grid gap-4">
+
+
+                        <div class="input-group  user-drop-down " style="width: 50%;">
+
+                            <label for="" class="input-label">{{$Translate.Users}} </label>
+
+                            <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                {{$Translate.Memberss.Selectusers}}
+                            </a>
+                            <input type="hidden" id="rolen" value="" name="user_role">
+
+                            <div class="dropdown-menu dropdown-role memberdropdown" aria-labelledby="triggerId">
+
+                                <div class="ig-row ig-channel-input">
+                                    <button class="closemember" type="button" style="display: none;"><img src="/public/img/close-1234.svg"></button>
+                                    <input type="text" id="searchdropdownrole" class="search" name="keyword"
+                                        placeholder="{{$Translate.Memberss.Selectusers}}" value="">
+                                </div>
+
+                                <div class="dropdown-filter-roles">
+                                    {{range .Adminmembers}}
+                                    <div class="chk-group chk-group-label checkboxdiv {{if eq .Id 1}} roldisabled{{end}}">
+                                        <input type="checkbox" class="checkboxid" id="checkboxid{{.Id}}" data-id="{{.Id}}" {{if eq .Id 1}} checked{{end}}>
+                                        <label for="checkboxid{{.Id}}" class="checkboxcls" style="font-weight: 300;">{{.FirstName}} {{.LastName}}</label>
+                                      
+                                    </div>
+                                    {{end}}
+                                  
+                                    <div class="noData-foundWrapper" id="nodatafounddesign"
+                                    style="margin-top: -40px;display: none;">
+
+                                    <div class="empty-folder">
+                                        <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        {{$Translate.Oopsnodata}}</h1>
+
+                                </div>
+
+                                </div>
+
+                               
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+           
+                <!-- <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">E-mail Template</h4>
+                        <p class="para color-light">Create and Maintain Email Templates that are to be sent to users in different scenarios.
+                        </p>
+                    </div> -->
+<!-- 
+                    <div class="d-grid border-t">
+                        {{range .Templatelist}}
+                        <div class="d-flex gap-4 align-items-start justify-content-start border-space">
+
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light templatecb" id="cbox{{.Id}}" data-id="{{.Id}}" type="checkbox" {{if eq .IsActive 1}} checked {{end}}>
+                                    <label class="tgl-btn" for="cbox{{.Id}}"></label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="para color-light">{{.TemplateDescription}}
+                                </p>
+                            </div>
+                            <a class="open-modal open-emailtemp" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal">Edit</a>
+                        </div>
+                  {{end}}
+                    </div>
+
+                    
+                </div> -->
+                <div class="full-email-temp">
+                    <h1 class="heading-second"> {{$Translate.Setting.Emailtemplates}}</h1>
+                    {{range .Templatelist}}
+                    <div class="settings-grid center">
+                        <div class="left-cms">
+                            <h2 class="heading-second" style="font-size: 0.875rem;">{{.TemplateName}}</h1>
+                          
+                        </div>
+                        <div class="settings-select">
+                            <div class="toogle-content">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light templatecb" id="cbox{{.Id}}" data-id="{{.Id}}" type="checkbox" {{if eq .IsActive 1}} checked {{end}}>
+                                    <label class="tgl-btn" for="cbox{{.Id}}"></label>
+                                </div>
+                                <p class="para color-light" style="width: 580px;">{{.TemplateDescription}}
+                                </p>
+                            </div>
+                            <a class="open-modal open-emailtemp" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal" style="padding-left: 20px;">{{$Translate.Edit}}</a>
+                        </div>
+                       
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+
+            
+        </div>
+       
+    </form>
+    <div class="configurationContent-btm">
+        <button class="btn-reg btn-lg secondary" id="cancel" type="button"> {{$Translate.Cancel}} </button>
+        <button class="btn-reg btn-lg primary" type="button" id="update"> {{$Translate.Save}}</button>
+
+    </div>
+    </div>
+
+ 
+
+{{template "emailmodal" .}}
+    {{template "footer" .}}
+    
+    <script src="/public/js/member/membersettings.js"></script>
+ 
+       
+       
+        {{template "footerclose" .}}

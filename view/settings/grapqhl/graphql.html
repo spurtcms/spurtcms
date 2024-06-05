@@ -1,0 +1,193 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+<div class="page-wrapper settings-wrapper">
+    <div class="email-temp-tabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                    role="tab" aria-controls="home" aria-selected="true">
+                    API Setup
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button"
+                    role="tab" aria-controls="home2" aria-selected="false">
+                    Document
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="records-email">
+                    <p class="para">
+                        10
+                        <span>Records Available</span>
+                    </p>
+                    <a href="/settings/graphql/create">
+                        <button>
+                            <img src="/public/img/add.svg" />
+                            Create New API Token
+                        </button>
+                    </a>
+                </div>
+                <div class="table-responsive email-tab">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="chk-group chk-group-label">
+                                        <input type="checkbox" id="Check2" />
+                                        <label for="Check2" class="para">Name</label>
+                                    </div>
+                                </th>
+                                <th>Description</th>
+                                <th>Token Duration</th>
+                                <th>Last Updated on</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="chk-group chk-group-label">
+                                        <input type="checkbox" id="Check2" />
+                                        <label for="Check2" class="para">API Token 1</label>
+                                    </div>
+                                </td>
+                                <td class="role-desc">
+                                    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
+                                    amet.
+                                </td>
+                                <td class="role-desc">
+                                    Unlimited
+                                </td>
+                                <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                                <td>
+                                    <div class="btn-group language-group">
+                                        <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Action <img src="img/arrow-down.svg" alt="">
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/published.svg" alt=""></span>
+                                                    Published</button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/eye_off.svg" alt=""></span> Unpublished
+                                                </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/copy.svg" alt=""></span> Copy </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/edit.svg" alt=""></span> Edit </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/delete.svg" alt=""></span> Delete </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="chk-group chk-group-label">
+                                        <input type="checkbox" id="Check2" />
+                                        <label for="Check2" class="para">API Token 1</label>
+                                    </div>
+                                </td>
+                                <td class="role-desc">
+                                    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
+                                    amet.
+                                </td>
+                                <td class="role-desc">
+                                    Unlimited
+                                </td>
+                                <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                                <td>
+                                    <div class="btn-group language-group">
+                                        <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Action <img src="img/arrow-down.svg" alt="">
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/published.svg" alt=""></span>
+                                                    Published</button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/eye_off.svg" alt=""></span> Unpublished
+                                                </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/copy.svg" alt=""></span> Copy </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/edit.svg" alt=""></span> Edit </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/delete.svg" alt=""></span> Delete </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="chk-group chk-group-label">
+                                        <input type="checkbox" id="Check2" />
+                                        <label for="Check2" class="para">API Token 1</label>
+                                    </div>
+                                </td>
+                                <td class="role-desc">
+                                    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
+                                    amet.
+                                </td>
+                                <td class="role-desc">
+                                    Unlimited
+                                </td>
+                                <td class="role-desc">31 Oct 23, 6:15 pm</td>
+
+                                <td>
+                                    <div class="btn-group language-group">
+                                        <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Action <img src="img/arrow-down.svg" alt="">
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/published.svg" alt=""></span>
+                                                    Published</button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/eye_off.svg" alt=""></span> Unpublished
+                                                </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/copy.svg" alt=""></span> Copy </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/edit.svg" alt=""></span> Edit </button></li>
+                                            <li><button class="dropdown-item" type="button"> <span><img
+                                                            src="img/delete.svg" alt=""></span> Delete </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="tab-pane" id="home2" role="tabpanel" aria-labelledby="home-tab2">
+                document....
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{template "mediamodal" .}}
+
+{{template "mediadecidemodal" .}}
+
+{{template "cropmodal" .}}
+
+{{template "footer" .}}
+{{template "footerclose" .}}

@@ -12,6 +12,15 @@ let default_cropper, logoexpand_cropper, portrait_cropper, square_cropper;
 
 var breadcrumbLength
 
+var S3GetRouteName = "/image-resize/?name="
+
+var ParentRoute = "media"
+
+var StorageType = ""
+
+var LocalStorageRoot = "storage"
+var LocalStoragePath = "storage/media"
+
 /** */
 $(document).ready(async function () {
 
@@ -24,7 +33,16 @@ $(document).ready(async function () {
         languagedata = data
     })
 
+    StorageType = $("#storagetype").val();
+
+    console.log("type");
 })
+
+$(document).keydown(function (event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+});
 
 $(document).on('click', '.upload-folder-img>img', function () {
 
@@ -91,6 +109,46 @@ $(document).on('click', '.upload-folder-img>img', function () {
             });
 
             dimension = '500*250'
+
+        } else if (window.location.href.indexOf("product") != -1) {
+
+            $('#changepicModal .admin-header >h3').text('Crop Product Image')
+
+            $('.admincropimg-row').addClass("grid-row")
+
+            $('.admincropimg-wrap').removeClass('profile-cropimg')
+
+            $('.admincropimg-btns-rht').show()
+
+            $('.admincropimg-btns-rht .active').removeClass('active')
+
+            $('.landscape-btn').addClass('active')
+
+            $('#crop-container').removeClass('croppie-container').empty().show()
+
+            $('#crop-container1').removeClass('croppie-container').empty().hide()
+
+            default_cropper = $('#crop-container').croppie({
+
+                enableExif: true,
+
+                enableResize: false,
+
+                enableOrientation: true,
+
+                viewport: {
+
+                    width: 680,
+
+                    height: 340,
+                },
+
+                showZoomer: false,
+
+                // fit: true,
+            });
+
+            dimension = '680*340'
 
         } else if (window.location.href.indexOf("entry") != -1) {
 
@@ -192,7 +250,7 @@ $(document).on('click', '.upload-folder-img>img', function () {
             });
             dimension = '500*250'
 
-        } else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1") {
+        } else if (window.location.href.indexOf("general-settings") != -1 && $('#logo-input').val() == "1") {
 
             $('#changepicModal .admin-header >h3').text('Crop Expand Logo Image')
 
@@ -221,7 +279,7 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
             dimension = '500*250'
 
-        } else if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() != "1") {
+        } else if (window.location.href.indexOf("general-settings") != -1 && $('#logo-input').val() != "1") {
 
             $('#changepicModal .admin-header >h3').text('Crop Logo Image')
 
@@ -272,14 +330,14 @@ $(document).on('click', '.upload-folder-img>img', function () {
 
         // $('#changepicModal').modal({backdrop: 'static', keyboard: false}) 
 
-        if(window.location.href.indexOf("categories")==-1){
+        if (window.location.href.indexOf("categories") == -1) {
 
             $('#changepicModal').modal('show')
- 
-         }else{
- 
-             BindCropImageInCategory(html_imgurl)
-         }
+
+        } else {
+
+            BindCropImageInCategory(html_imgurl)
+        }
 
     }
 
@@ -318,13 +376,17 @@ function IntegrateMediaImages(src) {
 
         BindCropImageInEntry(src)
 
-    } else if (window.location.href.indexOf("personalize") != -1) {
+    } else if (window.location.href.indexOf("general-settings") != -1) {
 
         BindCropImageInPersonalize(src)
 
     } else if (window.location.href.indexOf("addcategory") != -1) {
 
         BindCropImageInCategory(src)
+
+    } else if (window.location.href.indexOf("product") != -1) {
+
+        BindCropImageInProduct(src)
 
     } else if (window.location.href.indexOf("") != -1) {
 
@@ -336,38 +398,42 @@ function IntegrateMediaImages(src) {
 
 $('#changepicModal').on('shown.bs.modal', function () {
 
-    canvas = document.querySelector('canvas[class=cr-image]');
+    if ($('#logo-input').val() != "2") {
 
-    ctx = canvas.getContext('2d');
+        canvas = document.querySelector('canvas[class=cr-image]');
 
-    let common_cropper
+        console.log(canvas, "canvas")
 
-    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1") {
+        ctx = canvas.getContext('2d');
 
-        common_cropper = logoexpand_cropper
+        let common_cropper
 
-    } else {
+        if (window.location.href.indexOf("general-settings") != -1 && $('#logo-input').val() == "1") {
 
-        common_cropper = default_cropper
+            common_cropper = logoexpand_cropper
+
+        } else {
+
+            common_cropper = default_cropper
+        }
+
+        console.log("cropper src", html_imgurl);
+
+        common_cropper.croppie('bind', {
+
+            url: html_imgurl,
+
+            orientation: 0,
+
+            zoom: 0
+
+        }).then(function () {
+
+            // cropper.croppie('setZoom',0)
+
+            console.log("cropper initialized!");
+        })
     }
-
-    console.log("cropper src", html_imgurl);
-
-    common_cropper.croppie('bind', {
-
-        url: html_imgurl,
-
-        orientation: 0,
-
-        zoom: 0
-
-    }).then(function () {
-
-        // cropper.croppie('setZoom',0)
-
-        console.log("cropper initialized!");
-    })
-
 });
 
 $('#rotateSlider').on('input', function () {
@@ -391,109 +457,137 @@ $('#rotateSlider').on('input', function () {
 
 $('#crop-button').click(function () {
 
-    let common_cropper
+    if ($('#logo-input').val() != "2") {
 
-    if (window.location.href.indexOf("personalize") != -1 && $('#logo-input').val() == "1" && $('.admincropimg-btns-rht:visible').length == 0) {
+        let common_cropper
 
-        common_cropper = logoexpand_cropper
+        if (window.location.href.indexOf("general-settings") != -1 && $('#logo-input').val() == "1" && $('.admincropimg-btns-rht:visible').length == 0) {
 
-    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.portrait-btn').hasClass('active')) {
+            common_cropper = logoexpand_cropper
 
-        common_cropper = portrait_cropper
+        } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.portrait-btn').hasClass('active')) {
 
-    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.square-btn').hasClass('active')) {
+            common_cropper = portrait_cropper
 
-        common_cropper = square_cropper
+        } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.square-btn').hasClass('active')) {
 
-    } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.landscape-btn').hasClass('active')) {
+            common_cropper = square_cropper
 
-        common_cropper = default_cropper
+        } else if ($('.admincropimg-btns-rht:visible').length == 1 && $('.landscape-btn').hasClass('active')) {
 
-    } else {
+            common_cropper = default_cropper
 
-        common_cropper = default_cropper
+        } else {
 
+            common_cropper = default_cropper
+
+        }
+
+        common_cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg' }).then(function (dataUrl) {
+
+            var imgData = ""
+
+            console.log("storagetype", StorageType);
+
+            if (StorageType == "aws") {
+
+                imgData = GetImageNameS3(html_imgurl)
+
+                console.log("chk--", imgData);
+
+            } else if (StorageType == "local") {
+
+                imgData = GetImageProcessData(html_imgurl)
+            }
+
+            console.log("chk", imgData);
+
+            var final_imgName = ''
+
+            const currentTimestamp = new Date().toISOString();
+
+            if (imgData[0].indexOf(`(${dimension})`) == -1) {
+
+                console.log("if--");
+
+                final_imgName = "IMG-" + "(" + dimension + ")(" + currentTimestamp + ").jpg"
+
+            } else {
+
+                console.log("else--");
+
+                final_imgName = imgData[0].split(dimension)[0] + dimension + ")(" + currentTimestamp + ").jpg"
+
+            }
+
+            console.log("final_name", final_imgName);
+
+            if (imgData[0] != "" && imgData[1] != "" && dimension != "") {
+
+                var formData = new FormData()
+
+                formData.append('csrf', $("input[name='csrf']").val())
+
+                formData.append('file', dataUrl)
+
+                console.log("---", html_imgurl);
+
+                formData.append('path', html_imgurl.split('/')[1] + "/" + html_imgurl.split('/')[2])
+
+                formData.append('name', final_imgName)
+
+                $.ajax({
+
+                    type: "post",
+
+                    url: "/media/uploadimage",
+
+                    data: formData,
+
+                    datatype: "json",
+
+                    cache: false,
+
+                    processData: false,
+
+                    contentType: false,
+
+                    success: function (result) {
+
+                        html_imgurl = ""
+
+                        parsed_obj = JSON.parse(result)
+
+                        if (StorageType == "local") {
+
+                            IntegrateMediaImages(parsed_obj.Path)
+
+                        } else if (StorageType == "aws") {
+
+                            IntegrateMediaImages(S3GetRouteName + ParentRoute + parsed_obj.Path)
+                        }
+
+                        $("#rightModal").modal('show')
+
+                        $('#changepicModal').modal('hide')
+
+                        $('#crop-container').removeClass('croppie-container').empty().show()
+
+                        $('#crop-container1').removeClass('croppie-container').empty().hide()
+
+                        $('#addnewimageModal').modal('hide')
+                    }
+
+                })
+
+            } else {
+
+                console.log("imgdata", imgData[0], imgData[1], dimension);
+
+            }
+
+        });
     }
-
-    common_cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg' }).then(function (dataUrl) {
-
-        imgData = GetImageProcessData(html_imgurl)
-
-        console.log("chk", imgData);
-
-        var final_imgName = ''
-
-        const currentTimestamp = new Date().toISOString();
-
-        if (imgData[0].indexOf(`(${dimension})`) == -1) {
-
-            final_imgName = imgData[0] + "(" + dimension + ")(" + currentTimestamp + ")." + imgData[1]
-
-        } else {
-
-            final_imgName = imgData[0].split(dimension)[0] + dimension + ")(" + currentTimestamp + ")." + imgData[1]
-
-        }
-
-        console.log("final_name", final_imgName);
-
-        if (imgData[0] != "" && imgData[1] != "" && dimension != "") {
-
-            var formData = new FormData()
-
-            formData.append('csrf', $("input[name='csrf']").val())
-
-            formData.append('file', dataUrl)
-
-            formData.append('path', html_imgurl.split('/')[1] + "/" + html_imgurl.split('/')[2])
-
-            formData.append('name', final_imgName)
-
-            $.ajax({
-
-                type: "post",
-
-                url: "/media/uploadimage",
-
-                data: formData,
-
-                datatype: "json",
-
-                cache: false,
-
-                processData: false,
-
-                contentType: false,
-
-                success: function (result) {
-
-                    html_imgurl = ""
-
-                    parsed_obj = JSON.parse(result)
-
-                    IntegrateMediaImages(parsed_obj.Path)
-
-                    $("#rightModal").modal('show')
-
-                    $('#changepicModal').modal('hide')
-
-                    $('#crop-container').removeClass('croppie-container').empty().show()
-
-                    $('#crop-container1').removeClass('croppie-container').empty().hide()
-
-                    $('#addnewimageModal').modal('hide')
-                }
-
-            })
-
-        } else {
-
-            console.log("imgdata", imgData[0], imgData[1], dimension);
-
-        }
-
-    });
-
 });
 
 $('#close,#crop-cancel').click(function () {
@@ -567,6 +661,16 @@ function GetImageProcessData(html_imgurl) {
     return [imgName, ext]
 }
 
+function GetImageNameS3(html_imgurl) {
+
+    console.log("raw", html_imgurl);
+
+    var imagename = html_imgurl.split("?name=")[1]
+
+    return imagename
+
+}
+
 function BindCropImageInSpace(src) {
 
     $("#spimage").val(src)
@@ -623,6 +727,8 @@ function BindCropImageInEntry(src) {
 
 function BindCropImageInPersonalize(src) {
 
+    console.log(src);
+
     var logo_select = $("#logo-input").val();
 
     if (logo_select == '1') {
@@ -631,7 +737,7 @@ function BindCropImageInPersonalize(src) {
 
         var html = `<div class="upload-logo" id="upload-expandlogo"><img src="` + src + `" alt=""><input type="hidden" id="expandlogo-input" name="expandlogo_imgpath" value="` + src + `"><button class="delete-flag" id="delete-expandlogo"><img src="/public/img/delete-white-icon.svg" alt=""></button><div class="hover-delete-img"></div>`
 
-        $(html).insertAfter('#expandlogo-insert')
+        $(html).insertAfter('.expandlogodiv')
 
         $("#addnewimageModal").hide()
 
@@ -643,7 +749,7 @@ function BindCropImageInPersonalize(src) {
 
         var html = `<div class="upload-logo" id="upload-logo"><img src="` + src + `" alt=""><input type="hidden" id="logo-input" name="logo_imgpath" value="` + src + `"><button class="delete-flag" id="delete-logo"><img src="/public/img/delete-white-icon.svg" alt=""></button><div class="hover-delete-img"></div>`
 
-        $(html).insertAfter('#logo-insert')
+        $(html).insertAfter('.myprouploaddiv')
 
         $("#addnewimageModal").hide()
 
@@ -702,79 +808,103 @@ function BindCropImageInLanguage(src) {
 
 }
 
+function BindCropImageInProduct(src) {
+
+    $('#imgerr').hide()
+
+    var img_uploadHtml = `<div class="hover-lay add-img">
+
+            <input type="hidden" class="product-imgpath" value="`+ src + `">
+
+            <img src="`+ src + `" />
+
+            <div class="black-layout"></div>
+
+            <button type="button" class="del-imgpath"><img src="/public/img/delete-round.svg" alt=""></button>
+
+            </div>`
+
+    $(".productimages").append(img_uploadHtml)
+
+    $("#addnewimageModal").modal('hide')
+
+}
+
 /*Add Folder Button hide and show*/
 $(document).on("click", "#addfolder", function () {
 
-    var inputdiv = document.querySelector('#addfoldervalues')
+    $('.input-fixed').addClass('active')
 
-    var inputfield = document.getElementById("foldername")
+    // var inputdiv = document.querySelector('#addfoldervalues')
 
-    if (window.location.href.indexOf("media") != -1) {
+    // var inputfield = document.getElementById("foldername")
 
-        var mediaDiv = document.querySelector('.media-upload')
+    // if (window.location.href.indexOf("media") != -1) {
 
-        if (mediaDiv.scrollHeight > mediaDiv.clientHeight) {
+    //     var mediaDiv = document.querySelector('.media-upload')
 
-            var offset = inputdiv.offsetTop - mediaDiv.offsetTop;
+    //     if (mediaDiv.scrollHeight > mediaDiv.clientHeight) {
 
-            if (mediaDiv.scrollTop <= offset || mediaDiv.scrollTop < offset + 8.75 && $(inputdiv).css('display') != 'none') {
+    //         var offset = inputdiv.offsetTop - mediaDiv.offsetTop;
 
-                $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+    //         if (mediaDiv.scrollTop <= offset || mediaDiv.scrollTop < offset + 8.75 && $(inputdiv).css('display') != 'none') {
 
-                $(inputdiv).hide()
+    //             $('#foldername-error').parents('.input-group').removeClass("input-group-error")
 
-            } else {
+    //             $(inputdiv).hide()
 
-                $(inputdiv).show()
+    //         } else {
 
-                // Scroll the div to make the input visible
-                mediaDiv.scrollTo({ top: offset, behavior: 'smooth' });
+    //             $(inputdiv).show()
 
-                $(inputfield).focus()
+    //             // Scroll the div to make the input visible
+    //             mediaDiv.scrollTo({ top: offset, behavior: 'smooth' });
 
-            }
+    //             $(inputfield).focus()
 
-        } else {
+    //         }
 
-            if ($(inputdiv).css('display') == 'none') {
+    //     } else {
 
-                $(inputdiv).show();
+    //         if ($(inputdiv).css('display') == 'none') {
 
-                $(inputfield).focus()
+    //             $(inputdiv).show();
 
-            } else {
+    //             $(inputfield).focus()
 
-                $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+    //         } else {
 
-                $(inputdiv).hide();
+    //             $('#foldername-error').parents('.input-group').removeClass("input-group-error")
 
-            }
+    //             $(inputdiv).hide();
 
-        }
+    //         }
 
-    } else {
+    //     }
 
-        var mediaDiv = document.querySelector('.media-library-list')
+    // } else {
 
-        if ($(inputdiv).css('display') == 'none') {
+    //     var mediaDiv = document.querySelector('.media-library-list')
 
-            $(inputdiv).show();
+    //     if ($(inputdiv).css('display') == 'none') {
 
-            $(inputfield).focus()
+    //         $(inputdiv).show();
 
-        } else {
+    //         $(inputfield).focus()
 
-            $('#foldername-error').parents('.input-group').removeClass("input-group-error")
+    //     } else {
 
-            $(inputdiv).hide();
+    //         $('#foldername-error').parents('.input-group').removeClass("input-group-error")
 
-        }
+    //         $(inputdiv).hide();
 
-    }
+    //     }
+
+    // }
 
     $('#foldername-error').hide()
 
-    $(inputfield).val('');
+    // $(inputfield).val('');
 
 })
 
@@ -786,27 +916,59 @@ $("#foldername").keyup(function () {
 
     $("#foldername-error").hide()
 
+    $('#folderspec-error').hide()
+
 })
 
-$('#foldername[type=text]').keypress(function(event){
+$('#foldername[type=text]').keypress(function (event) {
 
-    if(event.which==13){
+    if (event.which == 13) {
 
         $('#newfileadd').click()
     }
 })
 
 /*Add Folder function */
-$(document).on('click', '#newfileadd', function () {
+function addfolder() {
 
     var name = $("#foldername").val().trim();
 
-    var folderpath = ""
+    var folderpath
+
+    if (StorageType == "local") {
+
+        folderpath = ""
+
+    } else if (StorageType == "aws") {
+
+        folderpath = ParentRoute
+
+    }
+
+    if (MediaBreadcrumbRoot.length == 0) {
+
+        folderpath += "/"
+    }
 
     for (let x of MediaBreadcrumbRoot) {
 
-        folderpath += x + "/"
+        folderpath += "/" + x + "/"
 
+    }
+
+    var specialCharsRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+    var check = true
+
+    if (specialCharsRegex.test(name)) {
+
+        $('#folderspec-error').show()
+
+        check = false
+
+    } else {
+
+        $('#folderspec-error').hide()
     }
 
     if (name == "") {
@@ -814,6 +976,8 @@ $(document).on('click', '#newfileadd', function () {
         $('#foldername-error').show();
 
         $("#namecheck").addClass('input-group-error')
+
+        check = false
 
 
     } else {
@@ -823,102 +987,132 @@ $(document).on('click', '#newfileadd', function () {
         $("#foldername-error").hide()
 
         $("#errorhtml").html('')
-
-        $.ajax({
-
-            type: "post",
-
-            url: "/media/createfolder",
-
-            datatype: "json",
-
-            data: {
-
-                foldername: name,
-
-                path: folderpath,
-
-                csrf: $("input[name='csrf']").val()
-
-            },
-
-            success: function (response) {
-
-                if (response) {
-
-                    $('#foldername-error').hide();
-
-                    $("#addfoldervalues").hide();
-
-                    $('#Refreshdiv').trigger('click');
-
-                    var message = languagedata?.Toast?.foldercreated
-
-                    if (window.location.href.indexOf("media") != -1) {
-
-                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                        $(notify_content).insertBefore(".header-rht");
-
-                    } else {
-
-                        notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                        $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
-                    }
-
-                    setTimeout(function () {
-
-                        $('.toast-msg').fadeOut('slow', function () {
-
-                            $(this).remove();
-
-                        });
-
-                    }, 5000);
-
-
-                } else {
-
-                    var message = languagedata?.Toast?.foldercreateerrmsg
-
-                    if (window.location.href.indexOf("media") != -1) {
-
-                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                        $(notify_content).insertBefore(".header-rht");
-
-                    } else {
-
-                        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
-                        $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
-
-                    }
-
-                    setTimeout(function () {
-
-                        $('.toast-msg').fadeOut('slow', function () {
-
-                            $(this).remove();
-
-                        });
-
-                    }, 5000);
-
-                }
-            }
-        })
-
     }
 
-})
+    if (check == true) {
+
+
+        console.log(folderpath);
+
+        if (name == "") {
+
+            $('#foldername-error').show();
+
+            $("#namecheck").addClass('input-group-error')
+
+
+        } else {
+
+            $("#namecheck").removeClass('input-group-error')
+
+            $("#foldername-error").hide()
+
+            $("#errorhtml").html('')
+
+            $.ajax({
+
+                type: "post",
+
+                url: "/media/createfolder",
+
+                datatype: "json",
+
+                data: {
+
+                    foldername: name,
+
+                    path: folderpath,
+
+                    csrf: $("input[name='csrf']").val()
+
+                },
+
+                success: function (response) {
+
+                    if (response) {
+
+                        $('.input-fixed').removeClass('active')
+
+                        $('#foldername').val('');
+
+                        $('#folderspec-error').hide();
+
+                        $('#foldername-error').hide();
+
+                        // $("#addfoldervalues").hide();
+
+                        $('#Refreshdiv').trigger('click');
+
+                        var message = languagedata?.Toast?.foldercreated
+
+                        if (window.location.href.indexOf("media") != -1) {
+
+                            notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                            $(notify_content).insertBefore(".header-rht");
+
+                        } else {
+
+                            notify_content = '<div style="top:2px;" class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                            $(notify_content).insertBefore('#addnewimageModal .modal-dialog')
+                        }
+
+                        setTimeout(function () {
+
+                            $('.toast-msg').fadeOut('slow', function () {
+
+                                $(this).remove();
+
+                            });
+
+                        }, 5000);
+
+
+                    } else {
+
+                        var message = languagedata?.Toast?.foldercreateerrmsg
+
+                        if (window.location.href.indexOf("media") != -1) {
+
+                            notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                            $(notify_content).insertBefore(".header-rht");
+
+                        } else {
+
+                            notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
+
+                            $(notify_content).insertBefore("#addnewimageModal .modal-dialog");
+
+                        }
+
+                        setTimeout(function () {
+
+                            $('.toast-msg').fadeOut('slow', function () {
+
+                                $(this).remove();
+
+                            });
+
+                        }, 5000);
+
+                    }
+                }
+            })
+
+        }
+
+    }
+}
 
 
 /*ckbox*/
 $(document).on('click', '.ckbox', function () {
 
-    var name = $(this).parent().siblings('.file-detail').find('h3').text();
+    // var name = $(this).parent().siblings('.file-detail').find('h3').text();
+
+    var name = $(this).attr('data-id');
 
     var isAllChecked
 
@@ -954,7 +1148,11 @@ $(document).on('click', '.ckbox', function () {
 
         DeleteListArray.push(name)
 
+        $(this).parents('.chk-group-box ').addClass('select-all')
+
     } else {
+
+        $(this).parents('.chk-group-box ').removeClass('select-all')
 
         DeleteListArray = jQuery.grep(DeleteListArray, function (value) {
 
@@ -1078,7 +1276,22 @@ $(document).on('click', "#delete", function () {
 
         $('.toast-msg').remove()
 
-        var folderpath = ""
+        var folderpath
+
+        if (StorageType == "local") {
+
+            folderpath = ""
+
+        } else if (StorageType == "aws") {
+
+            folderpath = ParentRoute
+
+        }
+
+        if (MediaBreadcrumbRoot.length == 0) {
+
+            folderpath += "/"
+        }
 
         for (let x of MediaBreadcrumbRoot) {
 
@@ -1179,19 +1392,41 @@ $(document).on('click', "#delete", function () {
 /*Upload file*/
 $(document).on('change', '#imgupload', function () {
 
-    var folderpath = ""
+    var folderpath
 
-    for (let x of MediaBreadcrumbRoot) {
+    if (StorageType == "local") {
 
-        folderpath += x + "/"
+        folderpath = ""
 
+        for (let x of MediaBreadcrumbRoot) {
+
+            folderpath += x + "/"
+
+        }
+
+    } else if (StorageType == "aws") {
+
+        folderpath = ParentRoute
+
+        for (let x of MediaBreadcrumbRoot) {
+
+            folderpath += "/" + x + "/"
+
+        }
     }
+
+
+    if (MediaBreadcrumbRoot.length == 0) {
+
+        folderpath += "/"
+    }
+
 
     var filename = $(this).val();
 
     var ext = filename.split(".").pop().toLowerCase();
 
-    if (($.inArray(ext, ["jpg", "png", "jpeg"]) != -1)) {
+    if (($.inArray(ext, ["jpg", "png", "jpeg", 'svg']) != -1)) {
 
         var formdata = new FormData();
 
@@ -1362,30 +1597,47 @@ $(document).on('click', '#imgupload', function () {
 /*Refresh */
 $(document).on('click', '#Refreshdiv', function () {
 
-    var folderpath = ""
+    var folderpath
+
+    if (StorageType == "local") {
+
+        folderpath = ""
+
+    } else if (StorageType == "aws") {
+
+        folderpath = ParentRoute
+    }
 
     var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata?.Mediaa?.medialibrary + `</a></li>`
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if (MediaBreadcrumbRoot.length == 1) {
+        if (StorageType == "local") {
 
-            folderpath += MediaBreadcrumbRoot[x]
-
-        } else {
-
-            if (x == 0) {
-
-                folderpath += MediaBreadcrumbRoot[x] + "/"
-
-            } else if (x == MediaBreadcrumbRoot.length - 1) {
+            if (MediaBreadcrumbRoot.length == 1) {
 
                 folderpath += MediaBreadcrumbRoot[x]
 
             } else {
 
-                folderpath += MediaBreadcrumbRoot[x] + "/"
+                if (x == 0) {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+
+                } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                    folderpath += MediaBreadcrumbRoot[x]
+
+                } else {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+                }
             }
+
+
+        } else if (StorageType == "aws") {
+
+            folderpath += "/" + MediaBreadcrumbRoot[x]
         }
 
         bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
@@ -1442,7 +1694,11 @@ $(document).on('click', '#Refreshdiv', function () {
 
             if (res.Media != null) {
 
-                $('.media-select-del').children().not('#unselectall').show()
+                $('#unselectall').hide()
+
+                $('#selectall').show()
+
+                $('#media-del-btn').show()
 
                 for (let x of res.Media) {
 
@@ -1468,44 +1724,54 @@ $(document).on('click', '#Refreshdiv', function () {
 
                         }
 
-                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
+                        subMediaHtml = '<p>' + totalSubMedia + '</p>'
 
                     } else {
 
                         mediaClass = 'filediv'
 
-                        if (MediaBreadcrumbRoot.length >= 1) {
-
-                            src = "/" + x.Path + "/" + x.Name
-
-                        } else {
+                        if (StorageType == "local") {
 
                             src = "/" + x.Path + x.Name
+
+                        } else if (StorageType == "aws") {
+
+                            if (MediaBreadcrumbRoot.length >= 1) {
+
+                                src = S3GetRouteName + "/" + x.Path + "/" + x.Name
+
+                            } else {
+
+                                src = S3GetRouteName + "/" + x.Path + x.Name
+                            }
+
                         }
 
                         fileType = 'file'
 
                     }
 
-                    if(x.Name.length>=20){
+                    var Name = x.Name.replace("/", "")
 
-                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
+                    if (x.Name.length >= 20) {
 
-                    }else{
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${Name}">${Name}</h3>`
 
-                        mediaNameHtml = `<h3>${x.Name}</h3>`
+                    } else {
+
+                        mediaNameHtml = `<h3>${Name}</h3>`
 
                     }
 
                     str += `<div class="upload-folders ${mediaClass}">
 
-                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                                <p class="forsearch" style="display: none;">`+ x.AliaseName + `</p>
 
                                 <div class="chk-group chk-group-box">
 
-                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                                    <input type="checkbox" class="ckbox" id="`+ x.AliaseName + `" data-id="` + x.AliaseName + `"  for="` + x.AliaseName + `">
 
-                                    <label for="`+ x.Name + `"></label>
+                                    <label for="`+ x.AliaseName + `"></label>
 
                                 </div>
   
@@ -1568,30 +1834,47 @@ $(document).on('click', '.folder', function () {
 
     MediaBreadcrumbRoot.push(foldername)
 
-    var folderpath = ""
+    var folderpath
+
+    if (StorageType == "local") {
+
+        folderpath = ""
+
+    } else if (StorageType == "aws") {
+
+        folderpath = ParentRoute
+    }
 
     var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata.Mediaa.medialibrary + `</a></li>`
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if (MediaBreadcrumbRoot.length == 1) {
+        if (StorageType == "local") {
 
-            folderpath += MediaBreadcrumbRoot[x]
-
-        } else {
-
-            if (x == 0) {
-
-                folderpath += MediaBreadcrumbRoot[x] + "/"
-
-            } else if (x == MediaBreadcrumbRoot.length - 1) {
+            if (MediaBreadcrumbRoot.length == 1) {
 
                 folderpath += MediaBreadcrumbRoot[x]
 
             } else {
 
-                folderpath += MediaBreadcrumbRoot[x] + "/"
+                if (x == 0) {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+
+                } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                    folderpath += MediaBreadcrumbRoot[x]
+
+                } else {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+                }
             }
+
+
+        } else if (StorageType == "aws") {
+
+            folderpath += "/" + MediaBreadcrumbRoot[x]
         }
 
         bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
@@ -1674,44 +1957,53 @@ $(document).on('click', '.folder', function () {
 
                         }
 
-                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
+                        subMediaHtml = '<p>' + totalSubMedia + '</p>'
 
                     } else {
 
                         mediaClass = 'filediv'
 
-                        if (MediaBreadcrumbRoot.length >= 1) {
+                        if (StorageType == "local") {
 
                             src = "/" + x.Path + "/" + x.Name
 
-                        } else {
+                        } else if (StorageType == "aws") {
 
-                            src = "/" + x.Path + x.Name
+                            if (MediaBreadcrumbRoot.length >= 1) {
+
+                                src = S3GetRouteName + "/" + x.Path + "/" + x.Name
+
+                            } else {
+
+                                src = S3GetRouteName + "/" + x.Path + x.Name
+                            }
+
                         }
-
                         fileType = 'file'
 
                     }
 
-                    if(x.Name.length>=20){
+                    var Name = x.Name.replace("/", "")
 
-                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
+                    if (x.Name.length >= 20) {
 
-                    }else{
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${Name}">${Name}</h3>`
 
-                        mediaNameHtml = `<h3>${x.Name}</h3>`
+                    } else {
+
+                        mediaNameHtml = `<h3>${Name}</h3>`
 
                     }
 
                     str += `<div class="upload-folders ${mediaClass}">
 
-                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                                <p class="forsearch" style="display: none;">`+ x.AliaseName + `</p>
 
                                 <div class="chk-group chk-group-box">
 
-                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                                    <input type="checkbox" class="ckbox" id="`+ x.AliaseName + `" data-id="` + x.AliaseName + `"  for="` + x.AliaseName + `">
 
-                                    <label for="`+ x.Name + `"></label>
+                                    <label for="`+ x.AliaseName + `"></label>
 
                                 </div>
   
@@ -1772,30 +2064,47 @@ $(document).on('click', '.bclick', function () {
 
     MediaBreadcrumbRoot.splice(index + 1, MediaBreadcrumbRoot.length);
 
-    var folderpath = ""
+    var folderpath
+
+    if (StorageType == "local") {
+
+        folderpath = ""
+
+    } else if (StorageType == "aws") {
+
+        folderpath = ParentRoute
+    }
 
     var bcrumb = ` <li><a href="javascript:void(0)" data-id="/" class="bclick">` + languagedata.Mediaa.medialibrary + `</a></li>`
 
     for (let x in MediaBreadcrumbRoot) {
 
-        if (MediaBreadcrumbRoot.length == 1) {
+        if (StorageType == "local") {
 
-            folderpath += MediaBreadcrumbRoot[x]
-
-        } else {
-
-            if (x == 0) {
-
-                folderpath += MediaBreadcrumbRoot[x] + "/"
-
-            } else if (x == MediaBreadcrumbRoot.length - 1) {
+            if (MediaBreadcrumbRoot.length == 1) {
 
                 folderpath += MediaBreadcrumbRoot[x]
 
             } else {
 
-                folderpath += MediaBreadcrumbRoot[x] + "/"
+                if (x == 0) {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+
+                } else if (x == MediaBreadcrumbRoot.length - 1) {
+
+                    folderpath += MediaBreadcrumbRoot[x]
+
+                } else {
+
+                    folderpath += MediaBreadcrumbRoot[x] + "/"
+                }
             }
+
+
+        } else if (StorageType == "aws") {
+
+            folderpath += "/" + MediaBreadcrumbRoot[x]
         }
 
         bcrumb += `<li><a href="javascript:void(0)" data-id="` + MediaBreadcrumbRoot[x] + `" class="bclick">` + MediaBreadcrumbRoot[x] + `</a></li>`
@@ -1878,44 +2187,54 @@ $(document).on('click', '.bclick', function () {
 
                         }
 
-                        subMediaHtml = '<p>'+totalSubMedia+'</p>'
+                        subMediaHtml = '<p>' + totalSubMedia + '</p>'
 
                     } else {
 
                         mediaClass = 'filediv'
 
-                        if (MediaBreadcrumbRoot.length >= 1) {
+                        if (StorageType == "local") {
 
                             src = "/" + x.Path + "/" + x.Name
 
-                        } else {
+                        } else if (StorageType == "aws") {
 
-                            src = "/" + x.Path + x.Name
+                            if (MediaBreadcrumbRoot.length >= 1) {
+
+                                src = S3GetRouteName + "/" + x.Path + "/" + x.Name
+
+                            } else {
+
+                                src = S3GetRouteName + "/" + x.Path + x.Name
+                            }
+
                         }
 
                         fileType = 'file'
 
                     }
 
-                    if(x.Name.length>=20){
+                    var Name = x.Name.replace("/", "")
 
-                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${x.Name}">${x.Name}</h3>`
+                    if (x.Name.length >= 20) {
 
-                    }else{
+                        mediaNameHtml = `<h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="${Name}">${Name}</h3>`
 
-                        mediaNameHtml = `<h3>${x.Name}</h3>`
+                    } else {
+
+                        mediaNameHtml = `<h3>${Name}</h3>`
 
                     }
 
                     str += `<div class="upload-folders ${mediaClass}">
 
-                                <p class="forsearch" style="display: none;">`+ x.Name + `</p>
+                                <p class="forsearch" style="display: none;">`+ x.AliaseName + `</p>
 
                                 <div class="chk-group chk-group-box">
 
-                                    <input type="checkbox" class="ckbox" id="`+ x.Name + `" data-id="` + x.Name + `"  for="` + x.Name + `">
+                                    <input type="checkbox" class="ckbox" id="`+ x.AliaseName + `" data-id="` + x.AliaseName + `"  for="` + x.AliaseName + `">
 
-                                    <label for="`+ x.Name + `"></label>
+                                    <label for="`+ x.AliaseName + `"></label>
 
                                 </div>
   
@@ -1976,6 +2295,8 @@ $("#selectall").click(function () {
 
             DeleteListArray.push(name)
 
+            $(this).parents('.chk-group-box ').addClass('select-all')
+
             $(this).prop('checked', true)
 
         }
@@ -2003,6 +2324,11 @@ $("#unselectall").click(function () {
     $(this).hide()
 
     $("#selectall").show()
+
+    $('.chk-group-box').each(function(){
+
+        $(this).removeClass('select-all')
+    })
 
     console.log("media delete array", DeleteListArray);
 
@@ -2385,3 +2711,21 @@ function CrossCheckCount() {
     $('.leftHeader>.caption-flexx>p').html(count_text)
 
 }
+
+$('body').on('click', function () {
+
+    $('#foldername').on('click', function () {
+
+        return false
+    })
+
+    $('#newfileadd').on('click', function () {
+
+        addfolder()
+
+        return false
+    })
+
+    $('.input-fixed').removeClass('active');
+
+});

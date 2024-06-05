@@ -1,4 +1,6 @@
 var languagedata
+var selectedcheckboxarr =[]
+
 /** */
 $(document).ready(async function () {
 
@@ -9,6 +11,12 @@ $(document).ready(async function () {
         languagedata = data
     })
 })
+
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $("#searchmember").focus().select();
+    }
+});
 
 
 $("#addmember , #clickadd").click(function () {
@@ -33,7 +41,6 @@ $("#addmember , #clickadd").click(function () {
     $("#mem_name-error").hide()
     $("#mem_lname-error").hide()
     $("#mem_email-error").hide()
-    $("#mem_mobile-error").hide()
     $("#mem_usrname-error").hide()
     $("#myfile-error").css("display", "none")
     // $("#mem_activestat-error").hide()
@@ -83,7 +90,6 @@ $(document).on('click', '#editmem', function () {
     $("#mem_name-error").hide()
     $("#mem_lname-error").hide()
     $("#mem_email-error").hide()
-    $("#mem_mobile-error").hide()
     $("#mem_usrname-error").hide()
     $("#membergroupvalue-error").hide()
     $("#memberimg-error").hide()
@@ -93,8 +99,7 @@ $(document).on('click', '#editmem', function () {
 
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
-    pageno = urlpar.get('page')
-
+    pageno = urlpar.get('page')   
     $("#memgrbpageno").val(pageno)
 
     var data = $(this).attr("data-id");
@@ -232,7 +237,15 @@ $(document).on('click', '#update', function () {
     }, "* " + languagedata.Memberss.mempswdrgx
     );
 
+$.validator.addMethod("noSpaceStart", function(value, element) {
+    return this.optional(element) || value.trim() === value;
+}, "The first letter cannot be a space.");
 
+$.validator.addMethod("customLength", function (value, element, params) {
+    var minLength = params[0];
+    var maxLength = params[1];
+    return this.optional(element) || (value.length >= minLength && value.length <= maxLength);
+}, $.validator.format("Please enter between {0} and {1} characters."));
 
     $("form[name='updatemember']").validate({
         ignore: [],
@@ -264,17 +277,49 @@ $(document).on('click', '#update', function () {
                 space: true,
                 duplicatename: true
             },
+            companyname:{
+                noSpaceStart: true,
+            },
+            profilename:{
+                noSpaceStart: true,
+            },
+            companylocation:{
+                noSpaceStart: true,
+            },
+            aboutcompany:{
+                noSpaceStart: true,
+            },
+            linkedin:{
+                noSpaceStart: true,
+            },
+            twitter:{
+                noSpaceStart: true,
+            },
+            website:{
+                noSpaceStart: true,
+            },
+            metaTitle:{
+                customLength: [1, 60],
+                noSpaceStart: true,
+            },
+            metaKeyword:{
+                noSpaceStart: true,
+            },
+            metaDescription:{
+                customLength: [1, 150],
+                noSpaceStart: true,
+            }
             // mem_pass: {
             //     // required: true,
             //     pass_validator: true,
             // },
-            mem_mobile: {
-                required: true,
-                mob_validator: true,
-                duplicatenumber: true
-                // number: true,
+            // mem_mobile: {
+            //     required: true,
+            //     mob_validator: true,
+            //     duplicatenumber: true
+            //     // number: true,
 
-            },
+            // },
             // mem_activestat: {
             //     required: true,
             // }
@@ -305,13 +350,46 @@ $(document).on('click', '#update', function () {
                 space: "* " + languagedata.spacergx,
                 duplicatename: "*" + languagedata.Memberss.membernamevaild
             },
+            companyname:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            profilename:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+         
+            companylocation:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            aboutcompany:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            linkedin:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            twitter:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            website:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            metaTitle:{
+                customLength: "*" + languagedata?.Channell?.metatitlemsg,
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            metaKeyword:{
+                noSpaceStart: "* " + languagedata.spacergx,
+            },
+            metaDescription:{
+                customLength: "*" + languagedata?.Channell?.metadescmsg,
+                noSpaceStart: "* " + languagedata.spacergx,
+            }
             // mem_pass: {
             //     required: "* "+languagedata.Userss.usrpswd
             // },
-            mem_mobile: {
-                required: "* " + languagedata.Memberss.memmobnum,
-                duplicatenumber: "* " + languagedata.Memberss.memmobnumexist
-            },
+            // mem_mobile: {
+            //     required: "* " + languagedata.Memberss.memmobnum,
+            //     duplicatenumber: "* " + languagedata.Memberss.memmobnumexist
+            // },
             // mem_activestat: {
             //     required: "* Please checkin the active toggle button",
             // }
@@ -321,10 +399,10 @@ $(document).on('click', '#update', function () {
     var profileflg 
 
     $.ajax({
-        url: "/member/checkprofilenameinmember",
+        url: "/member/checkprofilesluginmember",
         type: "POST",
         async:false,
-        data: { "name": $("input[name='profilename']").val(), "id":  $("#mem_id").val(), csrf: $("input[name='csrf']").val() },
+        data: { "name": $("input[name='profilepage']").val(), "id":  $("#mem_id").val(), csrf: $("input[name='csrf']").val() },
         datatype: "json",
         caches: false,
         success: function (data) {
@@ -350,16 +428,60 @@ $(document).on('click', '#update', function () {
     if (formcheck == true) {
         $('#memberform')[0].submit();
     } else {
+
+        $('.input-field-group').each(function () {
+
+            $(this).children('.input-group').each(function(){
+                var inputField = $(this).find('input');
+    
+                if (  !inputField.valid()) {
+                    $(this).addClass('input-group-error');
+        
+                } else {
+                    $(this).removeClass('input-group-error');
+                }
+
+            })
+            if($('#aboutcompany').hasClass('error')){
+
+                    $('#aboutgrb').addClass('input-group-error')
+                }
+                if($('#aboutcompany').hasClass('valid')){
+        
+                    $('#aboutgrb').removeClass('input-group-error')
+                }
+                   if($('#metadesc').hasClass('error')){
+
+                        $('#descgrbmeta').addClass('input-group-error')
+                    }
+                    if($('#metadesc').hasClass('valid')){
+            
+                        $('#descgrbmeta').removeClass('input-group-error')
+                    }
+        
+        });
+
+    
         $(document).on('keyup', ".field", function () {
+
+               if ( $(this).hasClass('valid')){
+
+                $(this).parents('.input-group').removeClass('input-group-error')
+               }
+
+               if ( $(this).hasClass('error')){
+
+                $(this).parents('.input-group').addClass('input-group-error')
+               }
+           
+
             Validationcheck()
+
+            
+            
         })
+
         Validationcheck()
-        // $('.input-group').each(function () {
-        //     var inputField = $(this).find('input');
-        //     if (!inputField.valid() || inputField.val() === "") {
-        //         $(this).addClass('validate');
-        //     }
-        // });
     }
 
     return false
@@ -485,13 +607,14 @@ $("#save").click(function () {
                 required: true,
                 pass_validator: true,
             },
-            mem_mobile: {
-                required: true,
-                mob_validator: true,
-                duplicatenumber: true
-                // number: true,
+           
+            // mem_mobile: {
+            //     required: true,
+            //     mob_validator: true,
+            //     duplicatenumber: true
+            //     // number: true,
 
-            },
+            // },
             // mem_activestat: {
             //     required: true,
             // }
@@ -525,10 +648,12 @@ $("#save").click(function () {
             mem_pass: {
                 required: "* " + languagedata.Memberss.mempswd
             },
-            mem_mobile: {
-                required: "* " + languagedata.Memberss.memmobnum,
-                duplicatenumber: "* " + languagedata.Memberss.memmobnumexist
-            },
+         
+
+            // mem_mobile: {
+            //     required: "* " + languagedata.Memberss.memmobnum,
+            //     duplicatenumber: "* " + languagedata.Memberss.memmobnumexist
+            // },
             // mem_activestat: {
             //     required: "* Please checkin the active toggle button",
             // }
@@ -538,6 +663,7 @@ $("#save").click(function () {
     var formcheck = $("#memberform").valid();
     if (formcheck == true) {
         $('#memberform')[0].submit();
+        $('#save').prop('disabled', true);
     }
     else {
 
@@ -592,7 +718,14 @@ $("input[name=com_activestat]").click(function () {
         $(this).removeAttr("value")
     }
 })
-
+// Email status
+$("input[name=mem_emailactive]").click(function () {
+    if ($(this).prop('checked') == true) {
+        $(this).attr("value", "1")
+    } else {
+        $(this).removeAttr("value")
+    }
+})
 /*search */
 $(document).on("submit", "#filterformsubmit", function () {
     var key = $(this).siblings().children(".search").val();
@@ -634,7 +767,7 @@ function Validationcheck() {
     let inputGro = document.querySelectorAll('.input-group');
     inputGro.forEach(inputGroup => {
         let inputField = inputGroup.querySelector('input:not([name="membergroupvalue"])');
-        var inputName = inputField.getAttribute('name');
+      
 
         if (inputField.classList.contains('error')) {
             inputGroup.classList.add('input-group-error');
@@ -648,6 +781,8 @@ function Validationcheck() {
             $('#memgrp').removeClass('input-group-error')
         }
     });
+
+  
 }
 
 $(document).on("click", "#editmembergroup", function () {
@@ -683,11 +818,20 @@ function refreshdiv() {
 /*search redirect home page */
 
 $(document).on('keyup', '#searchmember', function () {
-    if ($('.search').val() === "") {
-        window.location.href = "/member/"
+
+    if (event.key === 'Backspace') {
+       
+        if ($('.search').val() === "") {
+        
+            window.location.href = "/member/";
+        }
     }
 })
+$(document).on('click','.closemember',function(){
 
+
+    window.location.href="/member/"
+})
 // pasword show and close
 
 $(document).on('click', '#eye', function () {
@@ -799,8 +943,7 @@ $("#triggerId").on("click",function(){
     $("#prof-crop").val("2")
  })
 
-
-// async function profilenamevalidator(){
+ // async function profilenamevalidator(){
 
 //     $.ajax({
 //         url: "/member/checkprofilenameinmember",
@@ -817,3 +960,384 @@ $("#triggerId").on("click",function(){
 //     })
 
 //  }
+function MemberStatus(id) {
+    $('#cbox' + id).on('change', function () {
+         this.value = this.checked ? 1 : 0;
+    }).change();
+    var isactive = $('#cbox' + id).val();
+
+    console.log("check",isactive,id)
+
+      $.ajax({
+         url: '/member/memberisactive',
+         type: 'POST',
+         async: false,
+         data: {"id": id,"isactive": isactive,csrf: $("input[name='csrf']").val()},
+         dataType: 'json',
+         cache: false,
+         success: function (result) { 
+             if (result) {
+
+                   notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>Member Status Updated Successfully</span></div>';
+                   $(notify_content).insertBefore(".header-rht");
+                   setTimeout(function () {
+                        $('.toast-msg').fadeOut('slow', function () {
+                             $(this).remove();
+                        });
+                   }, 5000); // 5000 milliseconds = 5 seconds
+
+              } else {
+                   
+                   notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.internalserverr + '</span></div>';
+                   $(notify_content).insertBefore(".breadcrumbs");
+                   setTimeout(function () {
+                        $('.toast-msg').fadeOut('slow', function () {
+                             $(this).remove();
+                        });
+                   }, 5000); // 5000 milliseconds = 5 seconds
+
+              }
+         }
+    });
+}
+$(document).on('click','.selectcheckbox',function(){
+
+    memberid =$(this).attr('data-id')
+
+    var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
+
+    console.log(status,"status")
+
+
+   if ($(this).prop('checked')){
+
+       selectedcheckboxarr.push({"memberid":memberid,"status":status})
+   
+   }else{
+
+       const index = selectedcheckboxarr.findIndex(item => item.memberid === memberid);
+   
+       if (index !== -1) {
+
+           console.log(index,"sssss")
+           selectedcheckboxarr.splice(index, 1);
+       }
+      
+       $('#Check').prop('checked',false)
+
+   }
+
+  
+   if (selectedcheckboxarr.length !=0){
+
+       $('.selected-numbers').show()
+
+       var allSame = selectedcheckboxarr.every(function(item) {
+           return item.status === selectedcheckboxarr[0].status;
+       });
+       
+       var setstatus
+       var img;
+
+          if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+
+          var htmlContent = '';
+
+            if (allSame) {
+
+             htmlContent = '<img src="' + img + '">' + setstatus;
+
+             } else {
+
+               htmlContent = '';
+
+             }
+
+           $('#unbulishslt').html(htmlContent);
+      
+       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+       if(!allSame){
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+           $('.unbulishslt').html("")
+       }else{
+
+           $('#seleccheckboxdelete').addClass('border-end')
+       }
+
+      
+   }else{
+
+       $('.selected-numbers').hide()
+   }
+
+       var allChecked = true;
+
+        $('.selectcheckbox').each(function() {
+
+            if (!$(this).prop('checked')) {
+
+            allChecked = false;
+
+           return false; 
+        }
+   });
+
+         $('#Check').prop('checked', allChecked);
+
+    console.log(selectedcheckboxarr,"checkkkk")
+})
+
+//ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+    selectedcheckboxarr=[]
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked){
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selectcheckbox').each(function(){
+    
+           memberid= $(this).attr('data-id')
+
+           var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
+    
+           selectedcheckboxarr.push({"memberid":memberid,"status":status})
+        })
+
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+
+        var img
+
+
+        if (selectedcheckboxarr.length !=0){
+    
+        if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+
+        }
+        var htmlContent = '';
+
+        if (allSame) {
+
+         htmlContent = '<img src="' + img + '">' + setstatus;
+
+         $('#seleccheckboxdelete').addClass('border-end')
+
+         } else {
+
+           htmlContent = '';
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+         }
+
+       $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    
+    }else{
+
+
+        selectedcheckboxarr=[]
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selected-numbers').hide()
+    }
+    if (selectedcheckboxarr.length ==0){
+
+        $('.selected-numbers').hide()
+    }
+
+})
+
+$(document).on('click','#seleccheckboxdelete',function(){
+
+    if (selectedcheckboxarr.length>1){
+         
+    $('.deltitle').text("Delete Members?")
+
+    $('#content').text('Are you sure want to delete selected Members?')
+
+    }else {
+
+         $('.deltitle').text("Delete Member?")
+
+         $('#content').text('Are you sure want to delete selected Member?')
+    }
+
+
+    $('#delete').addClass('checkboxdelete')
+})
+
+$(document).on('click','#unbulishslt',function(){
+
+    if (selectedcheckboxarr.length>1){
+
+         $('.deltitle').text( $(this).text()+" "+"Members?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Members?")
+    }else{
+
+         $('.deltitle').text( $(this).text()+" "+"Member?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Member?")
+    }
+
+    $('#delete').addClass('selectedunpublish')
+
+})
+
+//MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/member/deleteselectedmember',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "memberids": JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Member Deleted Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.selectcheckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    selectedcheckboxarr=[]
+
+    $('.selected-numbers').hide()
+    
+})
+
+//multi select active and deactive function//
+
+$(document).on('click','.selectedunpublish',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/member/multiselectmemberstatus',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "memberids":JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "memstatusnotify")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+
+$('#profile-slugData').on('input', function(event){
+
+    var inputvalue = $(this).val()
+
+    var smallcase = inputvalue.toLowerCase()
+
+    var modifiedText = smallcase.replace(/ /g, '-');
+
+    $(this).val(modifiedText)
+})

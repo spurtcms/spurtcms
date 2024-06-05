@@ -1,0 +1,276 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+    <div class="page-wrapper">
+
+        <div class="bread-crump">
+            <a href="/categories/">{{.HeadTitle}}</a>
+            <img src="/public/img/right-light-arrow.svg" alt="">
+            <a href="/categories/settings" class="current-page">{{.Tabmenu}}</a>
+        </div>
+        
+        {{template "categorytab" .}}
+     
+
+        <div class="all-tab-content" id="entriesContent">
+            <!--settings-->
+            <div class="setting-container">
+
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">Basic Info</h4>
+                        <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-4">
+                        <div class="input-group">
+                            <label for="" class="input-label">First Name</label>
+                            <div class="ig-row">
+                                <select name="" id="">
+                                    <option value="">Enter Name</option>
+                                    <option value="">Option 2</option>
+                                    <option value="">Option 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="" class="input-label">Last Name</label>
+                            <div class="ig-row">
+                                <select name="" id="">
+                                    <option value="">Enter Name</option>
+                                    <option value="">Option 2</option>
+                                    <option value="">Option 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">Basic Info</h4>
+                        <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-4">
+
+                        <div class="d-grid gap-4">
+                            <h4 class="heading-four">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</h4>
+                            <div class="radio radio-label">
+                                <input id="radio-1" name="radio" type="radio">
+                                <label for="radio-1" class="radio-label para cursor-pointer">Lorem ipsum dolor</label>
+                            </div>
+                            <div class="radio radio-label">
+                                <input id="radio-2" name="radio" type="radio">
+                                <label for="radio-2" class="radio-label para cursor-pointer">Lorem ipsum dolor</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-4">
+                            <h4 class="heading-four">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</h4>
+                            <div class="radio radio-label">
+                                <input id="radio-3" name="radio1" type="radio">
+                                <label for="radio-3" class="radio-label para cursor-pointer">Lorem ipsum dolor</label>
+                            </div>
+                            <div class="radio radio-label">
+                                <input id="radio-4" name="radio1" type="radio">
+                                <label for="radio-4" class="radio-label para cursor-pointer">Lorem ipsum dolor</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">Basic Info</h4>
+                        <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-4">
+
+                        <div class="d-flex gap-3 align-items-center justify-content-start">
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb1" type="checkbox">
+                                    <label class="tgl-btn" for="cb1"></label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center justify-content-start">
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb2" type="checkbox">
+                                    <label class="tgl-btn" for="cb2"></label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center justify-content-start">
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb3" type="checkbox">
+                                    <label class="tgl-btn" for="cb3"></label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">Basic Info</h4>
+                        <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-4">
+                        <div class="d-flex gap-3 align-items-start justify-content-start">
+                            <div class="chk-group">
+                                <input type="checkbox" id="Check">
+                                <label for="Check"></label>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-start justify-content-start">
+                            <div class="chk-group">
+                                <input type="checkbox" id="Check">
+                                <label for="Check"></label>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-start justify-content-start">
+                            <div class="chk-group">
+                                <input type="checkbox" id="Check">
+                                <label for="Check"></label>
+                            </div>
+
+                            <div>
+                                <h4 class="heading-four">Markdowno</h4>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grd-1-2fr myprofile-brd">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-three">E-mail Template</h4>
+                        <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+
+                    <div class="d-grid border-t">
+                        <div class="d-flex gap-4 align-items-start justify-content-start border-space">
+                            <a class="open-modal" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal"
+                                data-bs-target="#centerModal">Forgot password</a>
+
+                            <div>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb2" type="checkbox">
+                                    <label class="tgl-btn" for="cb2"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-4 align-items-start justify-content-start border-space">
+                            <a class="open-modal" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal"
+                                data-bs-target="#centerModal">Owndesk</a>
+
+                            <div>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb2" type="checkbox">
+                                    <label class="tgl-btn" for="cb2"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-4 align-items-start justify-content-start border-space">
+                            <a class="open-modal" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal"
+                                data-bs-target="#centerModal">OTP Generate</a>
+
+                            <div>
+                                <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem
+                                    ipsum dolor sit amet.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.Lorem
+                                    ipsum dolor sit amet
+                                </p>
+                            </div>
+                            <div class="flexx">
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cb2" type="checkbox">
+                                    <label class="tgl-btn" for="cb2"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {{template "footer" .}}
+    
+   
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+        {{template "footerclose" .}}

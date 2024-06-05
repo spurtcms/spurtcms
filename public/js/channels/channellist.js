@@ -10,7 +10,11 @@ $(document).ready(async function () {
   })
   
   })
-  
+  $(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+});
 /**Channellist delete */
 $(document).on('click','.channeldelete',function(){
 
@@ -182,11 +186,13 @@ $('.channels-cards-container').append(channelstr);
   // Search functionality get back to list
   $(document).on('keyup','.search',function(){
 
+    if (event.key === 'Backspace') {
+
     if($('.search').val()===""){
-        console.log("check")
+      
         window.location.href ="/channels/"
         
     }
-  
+    }
   })
 

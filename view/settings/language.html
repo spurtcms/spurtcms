@@ -32,7 +32,7 @@
             <form action="/settings/languages/" method="get">
                 <div class="search-grp ">
                     <a type="button"><img src="/public/img/search.svg"></a>
-                    <input type="text" name="keyword" class="search" id="languagesearch" placeholder="{{$Translate.Languages.Searchlanguages}}"
+                    <input type="text" name="keyword" class="search" id="languagesearch" placeholder="{{$Translate.Csearch}}"
                         value="{{ .Filter.Keyword }}">
                 </div>
             </form>
@@ -43,15 +43,21 @@
                 </div>
             </a>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive entries-table">
             <table class="table">
                 <thead>
                     <tr>
+                        <th style="width: 0; padding-right: 0;"> 
+                            <div class="chk-group">
+                              <input type="checkbox" id="Check">
+                              <label for="Check"></label>
+                            </div>
+                          </th>
                         <th>{{$Translate.Languages.Languagename}}</th>
                         <th class="text-center">{{$Translate.Languages.Languagecode}}</th>
                         <th>{{$Translate.Languages.Lastupdatedon}}</th>
                         <th class="text-center">{{$Translate.Languages.Status}}</th>
-                        <th>{{$Translate.Actions}}</th>
+                        <th style="text-align: end;padding-right: 60px;">{{$Translate.Actions}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,6 +66,16 @@
                     {{range .Languages}}
                     
                     <tr>
+                        <td style="padding-right: 0;"> 
+                            {{if ne .Id 1}}
+                             <div class="d-flex  gap-4 align-items-center">
+                            <div class="chk-group">
+                              <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
+                              <label for="Check{{.Id}}"></label>
+                            </div>
+                          </div>
+                          {{end}}
+                        </td>
                         <td>
                             <div class="tbl-img-content flexx">
                                 <div class="tbl-img lang-img"><img src="{{.ImagePath}}" alt=""></div>
@@ -79,7 +95,7 @@
                                 <label class="tgl-btn" for="language{{.Id}}"></label>
                             </div>
                         </td>
-                        <td>
+                        <td style="text-align: end;padding-right: 60px;">
                             <div class="btn-group language-group">
                                 <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -96,12 +112,12 @@
                                                 class="dropdown-item" type="button"> <span><img
                                                         src="/public/img/copy.svg" alt=""></span>
                                                 {{$Translate.Download}} </button></a></li>
-                                    <li><button class="dropdown-item edit-language" type="button" data-id="{{.Id}}">
+                                    <li><a class="dropdown-item edit-language" type="button" data-id="{{.Id}}">
                                             <span><img src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
-                                        </button></li>
-                                    <li><button class="dropdown-item delete-language" type="button" data-id="{{.Id}}">
+                                        </a></li>
+                                    <li><a class="dropdown-item delete-language" type="button" data-id="{{.Id}}">
                                             <span><img src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}}
-                                        </button></li>
+                                        </a></li>
                                 </ul>
                             </div>
                         </td>
@@ -147,28 +163,63 @@
         </div>
         {{if .Languages}}
         <div class="pogination flexx pagenation-padding sticky-pagination">
-            {{if .Page}}
             <ul class="flexx">
-                <li>
-                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a>
-                </li>
-                {{range .Page}}
-                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  " {{end}}>{{.}} </a></li>
+                {{if gt .Count .Limit}}
+            
+                <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                    <img src="/public/img/carat-right.svg" alt="" />
+                </a></li>
+                {{if gt .CurrentPage 3}}
+                <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
+                {{end}}
+                <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
                 {{end}}
                 <li>
-                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
-                        {{end}}>
+                    <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                         <img src="/public/img/carat-right.svg" alt="" />
                     </a>
                 </li>
+               
+               {{end}}
             </ul>
-            {{end}}
             <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
         </div>
         {{end}}
     </div>
+     <!--------selected----------->
+ <div class="selected-numbers leftalign" style="display: none;">
+    <p class="heading-three text-white checkboxlength"> </p>
+    <div class="d-flex">
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
+      data-bs-target="#centerModal">
+        <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
+    </div>
+    <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
+  </div>
 </div>
 
 <!-- Center Modal -->

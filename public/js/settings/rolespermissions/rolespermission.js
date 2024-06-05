@@ -1,4 +1,6 @@
 var languagedata
+
+var selectedcheckboxarr=[]
 /**This if for Language json file */
 $(document).ready(async function () {
 
@@ -10,10 +12,16 @@ $(document).ready(async function () {
     })
 });
 
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+  });
+
 /**Save & Update Btn*/
 $(document).on('click', '.saverolperm', function () {
     setTimeout(function () {
-        $('.input-group-error')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // $('.input-group-error')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 500);
     $("#roleform").validate({
         rules: {
@@ -152,9 +160,14 @@ $(document).on('click', '.add-new', function () {
 
     $('.modal-header').children('h3').text(languagedata.Rolecontent.addnewrole +' & '+languagedata.Rolecontent.setpermisson)
 
-    $('#url').val('/settings/roles/createrole')
+    $('#url').val('/settings/roles/createrole');
+
+    $('.saverolperm').removeClass('roldisabled');
+
+    $('.saverolperm').attr('disabled',false);
 })
 
+//public/js/settings/users
 /** Delete Role & Permission */
 $(document).on('click', '.roldel', function () {
 
@@ -169,9 +182,10 @@ $(document).on('click', '.roldel', function () {
     $('.delname').text(name)
 
     var url = window.location.search;
-     const urlpar = new URLSearchParams(url);
-     pageno = urlpar.get('page');
 
+    const urlpar = new URLSearchParams(url);
+    
+    pageno = urlpar.get('page');
 
     $('#delete').attr('href', '/settings/roles/deleterole?id=' + id +"&page=" +pageno)
 
@@ -180,10 +194,15 @@ $(document).on('click', '.roldel', function () {
 /**Search clear */
 $(document).on('keyup', '#searchroles', function () {
 
+    if (event.key === 'Backspace') {
+
     if ($('.search').val() === "") {
+
         window.location.href = "/settings/roles/"
 
     }
+
+}
 
 })
 
@@ -292,11 +311,26 @@ function Editrole(id,languagedata) {
             console.log("ss", result, jsonrole);
             $('#rolename').val(jsonrole.role.Name)
             $('#roledesc').text(jsonrole.role.Description)
+           
+
+            if(jsonrole.role.Id==1){
+
+                $('.roleperm').attr('checked',true);
+                $('.saverolperm').attr('disabled',true);
+                $('.saverolperm').addClass('roldisabled');
+
+            }else{
+                $('.roleperm').attr('checked',false);
+                $('.saverolperm').attr('disabled',false);
+                $('.saverolperm').removeClass('roldisabled');
+            }
+
             if (jsonrole.permissionid != null) {
                 for (let x of jsonrole.permissionid) {
                     $("#Check" + x).attr('checked', true)
                 }
             }
+
             $('.modal-header').children('h3').text(languagedata.updaterole+' / '+languagedata.Setting.managepermissions)
         }
     })
@@ -309,4 +343,356 @@ function Editrole(id,languagedata) {
 
 $("#roles-permissionModal").on("show.bs.modal",function(){
     $(this).css("background-color","rgba(30,41,44,0.80")
+})
+
+$(document).on('click','.selectcheckbox',function(){
+
+    roldid =$(this).attr('data-id')
+
+    console.log(roldid,"roleid")
+
+    var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+    var sstatus
+
+    if (status ==true){
+
+        sstatus= '1'
+
+    }else{
+
+        sstatus= '0'
+    }
+
+
+   if ($(this).prop('checked')){
+
+       selectedcheckboxarr.push({"roleid":roldid,"status":sstatus})
+   
+   }else{
+
+       const index = selectedcheckboxarr.findIndex(item => item.roleid === roldid);
+   
+       if (index !== -1) {
+
+           console.log(index,"sssss")
+           selectedcheckboxarr.splice(index, 1);
+       }
+      
+       $('#Check').prop('checked',false)
+
+   }
+
+  
+   if (selectedcheckboxarr.length !=0){
+
+       $('.selected-numbers').show()
+
+       var allSame = selectedcheckboxarr.every(function(item) {
+           return item.status === selectedcheckboxarr[0].status;
+       });
+       
+       var setstatus
+       var img;
+
+          if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+
+          var htmlContent = '';
+
+            if (allSame) {
+
+             htmlContent = '<img src="' + img + '">' + setstatus;
+
+             } else {
+
+               htmlContent = '';
+
+             }
+
+           $('#unbulishslt').html(htmlContent);
+      
+       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+       if(!allSame){
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+           $('.unbulishslt').html("")
+       }else{
+
+           $('#seleccheckboxdelete').addClass('border-end')
+       }
+
+
+      
+   }else{
+
+       $('.selected-numbers').hide()
+   }
+
+       var allChecked = true;
+
+        $('.selectcheckbox').each(function() {
+
+            if (!$(this).prop('checked')) {
+
+            allChecked = false;
+
+           return false; 
+        }
+   });
+
+         $('#Check').prop('checked', allChecked);
+
+})
+
+//ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+    selectedcheckboxarr=[]
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked){
+            
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selectcheckbox').each(function(){
+     
+           roldid= $(this).attr('data-id')
+
+           var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+           var sstatus
+
+           if (status ==true){
+       
+               sstatus= '1'
+       
+           }else{
+       
+               sstatus= '0'
+           }
+    
+           selectedcheckboxarr.push({"roleid":roldid,"status":sstatus})
+        
+        })
+    
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+
+        var img
+    
+        if (selectedcheckboxarr.length !=0){
+
+        if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+        }
+
+        var htmlContent = '';
+
+        if (allSame) {
+
+         htmlContent = '<img src="' + img + '">' + setstatus;
+
+         $('#seleccheckboxdelete').addClass('border-end')
+
+         } else {
+
+           htmlContent = '';
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+         }
+
+       $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    
+    }else{
+
+
+        selectedcheckboxarr=[]
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selected-numbers').hide()
+    }
+
+    if (selectedcheckboxarr.length ==0){
+
+        $('.selected-numbers').hide()
+    }
+
+})
+
+$(document).on('click','#seleccheckboxdelete',function(){
+
+    if (selectedcheckboxarr.length>1){
+         
+    $('.deltitle').text("Delete Roles?")
+
+    $('#content').text('Are you sure want to delete selected Roles?')
+
+    }else {
+
+         $('.deltitle').text("Delete Role?")
+
+         $('#content').text('Are you sure want to delete selected Role?')
+    }
+
+
+    $('#delete').addClass('checkboxdelete')
+})
+
+$(document).on('click','#unbulishslt',function(){
+
+    if (selectedcheckboxarr.length>1){
+
+         $('.deltitle').text( $(this).text()+" "+"Roles?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Roles?")
+    }else{
+
+         $('.deltitle').text( $(this).text()+" "+"Role?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Role?")
+    }
+
+    $('#delete').addClass('selectedunpublish')
+
+})
+
+//MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/settings/roles/multiselectroledelete',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "roleids": JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Role Deleted Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.selectcheckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    selectedcheckboxarr=[]
+
+    $('.selected-numbers').hide()
+    
+})
+
+//multi select active and deactive function//
+
+$(document).on('click','.selectedunpublish',function(){
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/settings/roles/multiselectrolestatus',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "roleids":JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Role Updated Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+
 })

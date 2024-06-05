@@ -5,6 +5,12 @@
 
 <div class="page-wrapper">
 
+    <div class="bread-crump">
+        <a href="/member/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="/member/" class="current-page">{{.Tabmenu}}</a>
+    </div>
+
     {{template "membertab" .}}
 
     <div class="all-tab-content" id="groupsContent">
@@ -13,19 +19,21 @@
         <div class="tablePagination-wrapper member-tablePagination-wrapper">
             <div class="table-responsive entries-table">
                 <table class="table">
-                    <caption class="table-caption" style="padding-left: 0px;">
+                    <caption class="table-caption caption-sticky">
                         <div class="caption-flexx">
                             <p class="para">
 
-                                {{$Translate.Total}} {{ if gt .Count 1}}   {{$Translate.Memberss.Members}} : {{else}} {{$Translate.Memberss.Member}} :  {{end}} <span class="para">{{.Count}}</span>
-                                
+                                {{$Translate.Total}} {{ if gt .Count 1}} {{$Translate.Memberss.Members}} : {{else}}
+                                {{$Translate.Memberss.Member}} : {{end}} <span class="para">{{.Count}}</span>
+
                             </p>
 
                             <div class="transitionSearch active">
                                 <form action="/member/" class="filterform" method="get" autocomplete="off">
+
                                     <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;" />
                                     <input type="text" name="keyword" class="search" id="searchmember"
-                                        placeholder="{{$Translate.Memberss.Searchmembers}}" value="{{.Filter.Keyword}}">
+                                        placeholder="{{$Translate.Csearch}}" value="{{.Filter.Keyword}}">
                                 </form>
                             </div>
                             {{$MENU := .Menu}}
@@ -51,29 +59,54 @@
 
                     <thead>
                         <tr>
-                            <th style="width: 40%;">{{$Translate.Memberss.Name}}</th>
+                            <th style="width: 0; padding-right: 0;">
+                                <div class="chk-group">
+                                    <input type="checkbox" id="Check">
+                                    <label for="Check"></label>
+                                </div>
+                            </th>
+                            <th style="width: 25%;">{{$Translate.Memberss.Name}}</th>
+                            <th style="width: 25%;">Company name</th>
                             <th>{{$Translate.Memberss.Group}}</th>
-                            <th>{{$Translate.Memberss.Createdon}}</th>
                             <th>{{$Translate.Memberss.Updatedon}}</th>
+
                             {{range $MENU.TblModule}}
                             {{if eq .ModuleName "Members"}}
                             {{range .SubModule}}
                             {{if eq .ModuleName "Member"}}
-                            {{if eq .Action true}}
-                            <th style="width:100px ;">{{$Translate.Actions}}</th>
+                            {{range .Routes}}
+                            {{if eq .DisplayName "Update"}}
+
+                            <th>{{$Translate.MembersGroup.Status}}</th>
+
+                            {{end}}
                             {{end}}
                             {{end}}
                             {{end}}
                             {{end}}
                             {{end}}
 
+                            <th style="width:100px ; text-align: end;padding-right: 60px;">{{$Translate.Actions}}</th>
+
                         </tr>
                     </thead>
                     <tbody>
+                        {{$Url := .Url}}
+                        {{$CurrentPage := .CurrentPage}}
                         {{if .Member}}
                         {{range .Member}}
                         <tr>
+                            <td style="padding-right: 0;">
+                                <div class="d-flex  gap-4 align-items-center">
+                                    <div class="chk-group">
+                                        <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}"
+                                            data-id="{{.Id}}">
+                                        <label for="Check{{.Id}}"></label>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
+
                                 <div class="tbl-img-content member-detail">
                                     {{if .ProfileImagePath}}
                                     <div class="tbl-img">
@@ -86,15 +119,37 @@
                                     {{end}}
                                     <h4 id="membername"> {{.FirstName}} {{.LastName}}</h4>
                             </td>
+                            <td> {{.ProfileImage}} </td>
                             <td> {{.GroupName}} </td>
-                            <td> {{.CreatedDate}} </td>
-
                             <td class="date"> {{.ModifiedDate}} </td>
 
                             {{$Id := .Id}}
-                            <td {{range $MENU.TblModule}} {{if eq .ModuleName "Members" }} {{range .SubModule}}{{if eq
-                                .ModuleName "Member" }} {{if ne .Action true}} style="display: none;" {{end}}
-                                {{end}}{{end}}{{end}}{{end}}>
+                            {{$IsActive := .IsActive}}
+
+                            {{range $MENU.TblModule}}
+                            {{if eq .ModuleName "Members"}}
+                            {{range .SubModule}}
+                            {{if eq .ModuleName "Member"}}
+                            {{range .Routes}}
+                            {{if eq .DisplayName "Update"}}
+                            <td>
+                                <div class="toggle">
+                                    <input class="tgl tgl-light" id="cbox{{$Id}}" type="checkbox" value="{{$IsActive}}"
+                                        data-id="{{$Id}}" onclick="MemberStatus('{{$Id}}')" {{if eq $IsActive
+                                        1}}checked{{end}} />
+                                    <label class="tgl-btn" for="cbox{{$Id}}"></label>
+                                </div>
+                            </td>
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+
+
+
+                            <td style="text-align: end;padding-right: 60px;">
                                 <div class="btn-group language-group">
                                     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -108,20 +163,31 @@
                                         {{range .Routes}}
                                         {{if eq .DisplayName "Update"}}
                                         <li>
-                                           <a href="/member/updatemember?id={{$Id}}"><button class="dropdown-item" type="button" id="editmem" data-id="{{$Id}}">
+                                            <a href="/member/updatemember/{{$Id}}?page={{$CurrentPage}}" class="dropdown-item" id="editmem"
+                                                data-id="{{$Id}}">
                                                 <span><img src="/public/img/edit.svg" alt="" /></span>
                                                 {{$Translate.Edit}}
-                                            </button></a> 
+                                            </a>
                                         </li>
                                         {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+
+                                        {{range $MENU.TblModule}}
+                                        {{if eq .ModuleName "Members"}}
+                                        {{range .SubModule}}
+                                        {{if eq .ModuleName "Member"}}
+                                        {{range .Routes}}
                                         {{if eq .DisplayName "Delete"}}
                                         <li>
-                                            <button class="dropdown-item" type="button" id="del" data-id="{{$Id}}"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
+                                            <a class="dropdown-item" id="del" data-id="{{$Id}}" data-bs-toggle="modal"
+                                                data-bs-target="#centerModal">
                                                 <span><img src="/public/img/delete.svg" alt="" /></span>
                                                 {{$Translate.Delete}}
-
-                                            </button>
+                                            </a>
                                         </li>
                                         {{end}}
                                         {{end}}
@@ -129,6 +195,13 @@
                                         {{end}}
                                         {{end}}
                                         {{end}}
+                                        <li>
+                                            <a href="{{$Url}}?token={{.Token}}" class="dropdown-item" target="_blank">
+                                                <span><img src="/public/img/member.svg" alt="" /></span>
+                                                {{$Translate.Memberss.Companyprofile}}
+                                            </a>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </td>
@@ -162,8 +235,7 @@
                                         {{$Translate.Gobackhome}}
                                     </p>
                                     <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd"
-                                        data-bs-target="#memModal"
-                                        class="heading-three">{{$Translate.Clickadd}} >></a>
+                                        data-bs-target="#memModal" class="heading-three">{{$Translate.Clickadd}} >></a>
                                 </div>
                             </td>
                         </tr>
@@ -175,30 +247,78 @@
             </div>
 
             <div class="pogination flexx pagenation-padding">
-                {{if .Page}}
                 <ul class="flexx">
-                    <li>
-                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                    {{if gt .Count .Limit}}
+
+                    <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                            {{if eq .CurrentPage 1}} class="disabled" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
+                        </a></li>
+                    {{if gt .CurrentPage 3}}
+                    <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">1</a></li>
+                    {{end}}
+                    {{if eq .CurrentPage 5}}
+                    <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 5}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 2}}
+                    <li><a
+                            href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a>
                     </li>
-                    {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current"
-                            {{end}}>{{.}} </a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 1}}
+                    <li><a
+                            href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a>
+                    </li>
+                    {{end}}
+                    <li><a href="" {{if .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                    {{if lt .CurrentPage .Pagination.TotalPages}}
+                    <li><a
+                            href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a>
+                    </li>
+                    {{end}}
+                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a
+                            href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a>
+                    </li>
+                    {{end}}
+                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a
+                            href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a>
+                    </li>
                     {{end}}
                     <li>
-                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}}
-                            class="next" {{end}}>
+                        <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                            {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
                         </a>
                     </li>
+
+                    {{end}}
                 </ul>
-                {{end}}
                 <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
             </div>
         </div>
     </div>
     <!--2-->
+    <!--------selected----------->
+    <div class="selected-numbers" style="display: none;">
+        <p class="heading-three text-white checkboxlength"> </p>
+        <div class="d-flex">
+            <a href="javascript:void(0)"
+                class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray "
+                id="seleccheckboxdelete" data-bs-toggle="modal" data-bs-target="#centerModal">
+                <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+            <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 "
+                id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
+        </div>
+        <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
+    </div>
 </div>
 <!-- Center Modal -->
 <div class="modal fade" id="memModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -265,7 +385,7 @@
                                     </div>
                                 </div>
                                 <div class="input-group">
-                                    <label for="" class="input-label">{{$Translate.Memberss.Mobile}} *</label>
+                                    <label for="" class="input-label">{{$Translate.Memberss.Mobile}}</label>
                                     <div class="ig-row">
                                         <input type="text" class="field"
                                             placeholder="{{$Translate.Memberss.Entermemmobnum}}" id="mem_mobile"
@@ -311,8 +431,9 @@
                                     <div class="dropdown-menu filter-dropdown-menu" aria-labelledby="triggerId">
                                         {{if .Group}}
                                         <div class="ig-row ig-channel-input">
-                                            <input type="text" id="searchmembergrp" class="search" name="keyword" placeholder="{{$Translate.MembersGroup.Searchgrpname}}" value="">
-                    
+                                            <input type="text" id="searchmembergrp" class="search" name="keyword"
+                                                placeholder="{{$Translate.MembersGroup.Searchgrpname}}" value="">
+
                                         </div>
                                         <div class="membergrp-list-row">
 
@@ -336,10 +457,11 @@
 
                                         {{end}}
 
-                                        <div class="noData-foundWrapper" id="nodatafoundtext" style="margin-top: -50px;display: none;">
+                                        <div class="noData-foundWrapper" id="nodatafoundtext"
+                                            style="margin-top: -50px;display: none;">
 
                                             <div class="empty-folder">
-                                                    <img  style="max-width: 20px;" src="/public/img/nodatafilter.svg" alt="">
+                                                <img style="max-width: 20px;" src="/public/img/nodatafilter.svg" alt="">
                                             </div>
                                             <h1 style="text-align: center;font-size: 10px;" class="heading">
                                                 {{$Translate.Oopsnodata}}</h1>
@@ -385,6 +507,7 @@
             </form>
         </div>
     </div>
+
 </div>
 {{template "footer" .}}
 <script src="/public/js/member/member.js"></script>

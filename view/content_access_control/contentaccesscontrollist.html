@@ -5,6 +5,12 @@
 
 
 <div class="page-wrapper">
+
+    <div class="bread-crump">
+        <a href="/member/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="/memberaccess/" class="current-page">{{.Tabmenu}}</a>
+    </div>
     {{template "membertab" .}}
     <div class="all-tab-content list-container" id="entriesContent">
         <!--1-->
@@ -22,7 +28,7 @@
             <div class="transitionSearch active">
                 <form action="/memberaccess/" method="get" name="contentaccess-form">
                 <img style="bottom: 5px;" src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" name="keyword" id="memberrestrictsearch" class="search" placeholder="{{$Translate.ContentAccessControl.Searchmemberaccess}}" value="{{.Filter.Keyword}}">
+                <input type="text" name="keyword" id="memberrestrictsearch" class="search" placeholder="{{$Translate.Csearch}}" value="{{.Filter.Keyword}}">
                 </form>
             </div>
             <a href="/memberaccess/newcontentaccesscontrol">
@@ -140,25 +146,48 @@
             </div>
             {{if .ContentAccess}}
             <div class="pogination flexx pagenation-padding">
-                {{if .Pages}}
                 <ul class="flexx">
-                    <li>
-                        <a href="/memberaccess/?page={{.Previous}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .Previous 0}}class="disabled"{{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                    {{$currentpage := .CurrentPage}}
-                    {{$keyword := .Filter.Keyword}}
-                    {{range .Pages}}
-                    <li><a href="/memberaccess/?page={{.}}{{if $keyword}}&keyword={{$keyword}}{{end}}" {{if eq $currentpage .}}class="current  "{{end}}>{{.}}</a></li>
+                    {{if gt .Count .Limit}}
+                
+                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a></li>
+                    {{if gt .CurrentPage 3}}
+                    <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
+                    {{end}}
+                    {{if eq .CurrentPage 5}}
+                    <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 5}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 2}}
+                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 1}}
+                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
+                    {{end}}
+                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                    {{if lt .CurrentPage .Pagination.TotalPages}}
+                    <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
+                    {{end}}
+                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
                     {{end}}
                     <li>
-                        <a href="/memberaccess/?page={{.Next}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" class="{{if eq .CurrentPage .PageCount}}disabled{{else}}next{{end}}">
+                        <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
                         </a>
                     </li>
+                   
+                   {{end}}
                 </ul>
-                {{end}}
                 <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
             </div>
             {{end}}

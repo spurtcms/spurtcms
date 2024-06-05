@@ -27,19 +27,25 @@
 {{else}}
 {{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
 {{end}}
+<form action="/settings/updateprofile" method="post" id="userform" name="userform" >
 <div class="page-wrapper settings-wrapper">
-    <div class="details-roles">
-        <div class="myaccount-details">
-            <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Languages.Basicinfo}}</h4>
-            <p class="para-light">{{$Translate.Myprofilequotes}} </p>
-            <form action="/settings/updateprofile" method="post" id="userform" name="userform" >
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <input type="hidden" value="{{.user.Id}}" name="id" id="id">
-                <input type="hidden" name="crop_data">
-            <div class="update-account">
-                <input type="hidden" id="prof-crop">
-                <div class="update-profile-img">
-                    {{if .user.ProfileImagePath}}
+    <div class="mx-3 ">
+        <div class="details-roles h-auto m-0 ">
+            <h2 class="heading mb-4">{{$Translate.Myprofile}}</h2>
+            <div class="myaccount-details profile-details myprofile-brd">
+                <div class="grd-1-2fr">
+                    <div class="update-profile-cont">
+                        <h4 class="heading-four">{{$Translate.Languages.Basicinfo}}</h4>
+                        <p class="para-light">{{$Translate.Myprofilequotes}}
+                        </p>
+                    </div>
+                   
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+                        <input type="hidden" value="{{.user.Id}}" name="id" id="id">
+                        <input type="hidden" name="crop_data">
+                    <div class="update-profile-img ">
+                        <input type="hidden" id="prof-crop">
+                        {{if .user.ProfileImagePath}}
                     <img src="/{{ .user.ProfileImagePath }}" alt="" id="profpic" name="prof_pic">
                     {{else}}
                     <img src="/{{ .user.ProfileImagePath }}" alt="" id="profpic" name="prof_pic" style="display: none;">
@@ -53,64 +59,128 @@
                         font-size: 0.75rem;
                         font-weight: 400;
                         color: #F26674;position: absolute;
-    top: 100%;">* Please select jpg|png|jpeg files only</label>
+    top: 100%;width: 500px;">* Please select jpg|png|jpeg files only</label>
+                        <!-- <img src="img/profile1.svg" alt="">
+                        <div class="profile-info"></div>
+                        <button class="cam-logo"><img src="img/cam-logo.svg" alt=""></button> -->
+                    </div>
                 </div>
-                <div class="fill-account-details">
-                    <div class="input-field-group">
-                        <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Userss.Firstname}} *</label>
-                            <div class="ig-row">
-                                <input type="text" class="field" name="user_fname" placeholder="{{$Translate.Userss.Labelfname}}" value="{{.user.FirstName}}">
+                <div class="update-account1">
+
+                    <div class="fill-account-details">
+                        <div class="input-field-group">
+                            <div class="input-group">
+                                <label for="" class="input-label">{{$Translate.Userss.Firstname}} *</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" name="user_fname" placeholder="{{$Translate.Userss.Labelfname}}" value="{{.user.FirstName}}">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for=""  class="input-label">{{$Translate.Userss.Lastname}}</label>
+                                <div class="ig-row">
+                                    <input type="text"  name="user_lname" placeholder="{{$Translate.Userss.Labellname}}" value="{{.user.LastName}}">
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label for=""  class="input-label">{{$Translate.Userss.Lastname}}</label>
-                            <div class="ig-row">
-                                <input type="text"  name="user_lname" placeholder="{{$Translate.Userss.Labellname}}" value="{{.user.LastName}}">
+                        <div class="input-field-group">
+                            <div class="input-group">
+                                <label for="" class="input-label">{{$Translate.Userss.Username}} *</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}" value="{{.user.Username}}">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="" class="input-label">{{$Translate.Role}}</label>
+                                <div class="ig-row">
+                                    <input type="text" name="user_role" style="color: #d2d2d2; " disabled placeholder="role" value="{{.rolename}}">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="input-field-group">
-                        <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Userss.Username}} *</label>
-                            <div class="ig-row">
-                                <input type="text" class="field" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}" value="{{.user.Username}}">
+                        <div class="input-field-group">
+                            <div class="input-group">
+                                <label for="" class="input-label">{{$Translate.Email}} *</label>
+                                <div class="ig-row">
+                                    <input type="text"class="field" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}" value="{{.user.Email}}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Role}}</label>
-                            <div class="ig-row">
-                                <input type="text" name="user_role" style="color: #d2d2d2; " disabled placeholder="role" value="{{.rolename}}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-field-group">
-                        <div class="input-group">
-                            <label for="" class="input-label">{{$Translate.Email}} *</label>
-                            <div class="ig-row">
-                                <input type="text"class="field" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}" value="{{.user.Email}}">
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label for=""  class="input-label">{{$Translate.Userss.Mobile}} *</label>
-                            <div class="ig-row">
-                                <input type="text" class="field" name="user_mob" placeholder="{{$Translate.Userss.Labelmobile}}" value="{{.user.MobileNo}}">
+                            <div class="input-group">
+                                <label for=""  class="input-label">{{$Translate.Userss.Mobile}} *</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" name="user_mob" placeholder="{{$Translate.Userss.Labelmobile}}" value="{{.user.MobileNo}}">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="grd-1-2fr myprofile-brd">
+                <div class="update-profile-cont">
+                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Themebackground}}</h4>
+                    <p class="para-light">{{$Translate.Personalize.Themecontent}}</p>
+                </div>
+                <div class="back-colors">
+                    <a class="red circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="purple circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="blue circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="dark-blue circle-change" id="default-clr">
+                      <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <!-- <a class="yellow circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a> -->
+                    <a class="brown circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="orange circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <!-- <a class="light-green circle-change">
+                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
+                    </a> -->
+                    <a class="green circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="teal-blue circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <a class="black circle-change">
+                        <img src="/public/img/theme.check.svg" alt="">
+                    </a>
+                    <input type="hidden" name="color-change" id="color-change"
+                        value="{{if .Menu.Personalize.MenuBackgroundColor}}{{.Menu.Personalize.MenuBackgroundColor}}{{else}}rgb(9, 171, 216){{end}}">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                </div>
+            </div>
+
+            
+
         </div>
-      
+        <div class="configurationContent-btm">
+            <button class="btn-reg btn-lg secondary" type="button" id="back">Cancel </button>
+            <button class="btn-reg btn-lg primary theme-color " type="button" id="uptprofile">{{$Translate.Update}}</button>
+        </div>
+
     </div>
-    <div class="configurationContent-btm">
-            <button class="btn-reg btn-lg primary " type="button"  id="uptprofile">{{$Translate.Update}}</button>
-        </div>
-    </form>
+
 </div>
+</form>
+{{template "mediamodal" .}}
+
+{{template "mediadecidemodal" .}}
+
+
+{{template "cropmodal" .}}
 
 {{template "footer" .}}
 <script src="/public/js/settings/myprofile/myprofile.js"></script>
+<script src="/public/js/settings/personalize/personalize.js"></script>
+<!-- <script src="/public/js/media/media.js"></script> -->
 
-{{template "cropmodal" .}}
 {{template "footerclose" .}}

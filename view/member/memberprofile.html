@@ -4,12 +4,19 @@
 
 <div class="page-wrapper">
 
-    {{template "membertab" .}}
+    <div class="bread-crump">
+        <a href="/member/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="" class="current-page">{{$Translate.Memberss.Updatemember}}</a>
+    </div>
+
+    <!-- {{template "membertab" .}} -->
     <form action="/member/updatemember" id="memberform" name="updatemember" method="post">
         <div class="all-tab-content" id="groupsContent">
             <!--1-->
             <input type="hidden" name="csrf" value="{{.csrf}}">
             <input type="hidden" name="mem_id" value="{{.Member.Id}}" id="mem_id">
+            <input type="hidden" name="memgrbpageno" id="memgrbpageno" value="{{.CurrentPage}}">
             <div class="update-member">
                 <div class="update-title">
                     <h4>Update Member</h4>
@@ -177,6 +184,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="input-field-group">
+                                    <div class="input-group">
+                                        <div class="chk-group chk-group-label">
+                                            <input type="checkbox" name="mem_emailactive" id="Check2">
+                                            <label for="Check2">Send Email</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,7 +203,7 @@
                                 <img src="{{if .MemberProfile.CompanyLogo}} /{{.MemberProfile.CompanyLogo}}  {{end}}"
                                     name="profpic2" id="profpic2" alt="">
                                 {{if .MemberProfile.CompanyLogo}} {{else}}
-                                <div class="name-string" id="cname-string"> <span>{{.MemberProfile.ProfileSlug}}</span>
+                                <div class="name-string" id="cname-string"> <span>{{.NameString}}</span>
                                 </div>
                                 {{end}}
                                 <div class="profile-info companylogo-crop">
@@ -208,41 +223,41 @@
                                     <div class="input-group">
                                         <label for="" class="input-label">Company Name</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Company Name" name="companyname"
+                                            <input type="text" placeholder="Company Name" class="field" name="companyname" id="companyname"
                                                 value="{{.MemberProfile.CompanyName}}">
                                         </div>
                                     </div>
                                     <div class="input-group">
                                         <label for="" class="input-label">Profile Name</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Profile Name" name="profilename"
+                                            <input type="text" placeholder="Profile Name" class="field" name="profilename" id="profilename"
                                                 id="profilename" value="{{.MemberProfile.ProfileName}}">
-                                            <label id="profilename-error" class="custom-err" for="profilename"
-                                                style="display: none;">* Profile Name Already Exists</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-field-group">
                                     <div class="input-group">
-                                        <label for="" class="input-label">Profile Page</label>
+                                        <label for="" class="input-label">Profile Slug</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Profile Page" name="profilepage"
-                                                value="{{.MemberProfile.ProfilePage}}">
+                                            <input type="text" id="profile-slugData"  placeholder="Profile Page" name="profilepage" id="profilepage"
+                                                value="{{.MemberProfile.ProfileSlug}}">
+                                                <label id="profilename-error" class="custom-err" for="profilepage"
+                                                style="display: none;">* Profile Slug Already Exists</label>
                                         </div>
                                     </div>
                                     <div class="input-group">
                                         <label for="" class="input-label">Company Location</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Company Location" name="companylocation"
+                                            <input type="text" placeholder="Company Location" class="field" name="companylocation" id="companylocation"
                                                 value="{{.MemberProfile.CompanyLocation}}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-text-field-group">
-                                    <div class="input-group">
+                                    <div class="input-group" id="aboutgrb">
                                         <label for="" class="input-label">About</label>
                                         <div class="ig-row">
-                                            <textarea type="text" class="d-block" placeholder="About..."
+                                            <textarea type="text" class="d-block field" placeholder="About..." id="aboutcompany"
                                                 name="aboutcompany">{{.MemberProfile.About}}</textarea>
                                         </div>
                                     </div>
@@ -251,14 +266,14 @@
                                     <div class="input-group">
                                         <label for="" class="input-label">LinkedIn</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="LinkedIn..." name="linkedin"
+                                            <input type="text" placeholder="LinkedIn..." class="field" name="linkedin" id="linkedin"
                                                 value="{{.MemberProfile.Linkedin}}">
                                         </div>
                                     </div>
                                     <div class="input-group">
                                         <label for="" class="input-label">Twitter</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Twitter..." name="twitter"
+                                            <input type="text" class="field" placeholder="Twitter..." name="twitter"
                                                 value="{{.MemberProfile.Twitter}}">
                                         </div>
                                     </div>
@@ -267,7 +282,7 @@
                                     <div class="input-group">
                                         <label for="" class="input-label">Website</label>
                                         <div class="ig-row">
-                                            <input type="text" placeholder="Website..." name="website"
+                                            <input type="text" class="field" placeholder="Website..." name="website"
                                                 value="{{.MemberProfile.Website}}">
                                         </div>
                                     </div>
@@ -288,11 +303,46 @@
                             </div>
                         </div>
                     </div>
+                    <div class="myaccount-details">
+                        <h4 class="heading">Meta Info</h4>
+                        <div class="update-account">
+                            <div></div>
+                            <div class="fill-account-details">
+                                
+                                <div class="input-field-group">
+                                    <div class="input-group">
+                                        <label for="" class="input-label">Meta Tag Title</label>
+                                        <div class="ig-row">
+                                            <input type="text" class="field" placeholder="Meta Tag Title..." name="metaTitle"
+                                                value="{{.MemberProfile.SeoTitle }}">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="" class="input-label">Meta Tag Keyword</label>
+                                        <div class="ig-row">
+                                            <input type="text" class="field" placeholder="Meta Tag Keyword..." name="metaKeyword"
+                                                value="{{.MemberProfile.SeoKeyword}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-text-field-group">
+                                    <div class="input-group" id="descgrbmeta">
+                                        <label for="" class="input-label">Meta Tag Description</label>
+                                        <div class="ig-row">
+                                            <textarea type="text" class="d-block field" id="metadesc" placeholder="Meta Tag Description..."
+                                                name="metaDescription">{{.MemberProfile.SeoDescription}}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="configurationContent-btm">
-            <a href="/member/"><button class="btn-reg btn-lg secondary"> Cancel </button></a>
+            <button class="btn-reg btn-lg secondary" id="cancel" type="button"> {{$Translate.Cancel}} </button>
             <button class="btn-reg btn-lg primary" type="button" id="update"> {{$Translate.Update}}</button>
 
         </div>

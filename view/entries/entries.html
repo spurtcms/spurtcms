@@ -27,6 +27,12 @@
 {{end}}
 <div class="page-wrapper">
 
+    <div class="bread-crump">
+        <a href="/channel/entrylist/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="/channel/entrylist/" class="current-page">{{.Tabmenu}}</a>
+    </div>
+
     {{template "cmstab" .}}
 
     <div class="all-tab-content" id="entriesContent">
@@ -53,7 +59,7 @@
                 <input type="hidden" name="csrf" value="{{.csrf}}">
                 <form action="">
                 <img src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" name="keyword" id="searchkey" class="search" value="{{.filter.Keyword}}" placeholder="{{$Translate.Channell.Searchentries}}" >
+                <input type="text" name="keyword" id="searchkey" class="search" value="{{.filter.Keyword}}" placeholder={{$Translate.Csearch}} >
             </form>
                 
                
@@ -67,11 +73,11 @@
                     <form action="" name="filterform" id="filterform">
                     <div class="input-div">
                         <label for="" class="para-light"  {{ if .channelname }}  style="opacity: 0.5;" {{end}}>{{$Translate.Channell.Channelname}} </label>
-                        <input type="text" value="{{.filter.ChannelName}}" name="ChannelName" class="para-extralight"   {{ if .channelname }} disabled style="opacity: 0.5;" {{end}}/>
+                        <input type="text" value="{{.filter.ChannelName}}" name="ChannelName" class="para-extralight"   {{ if .channelname }} disabled style="opacity: 0.5;" {{end}} placeholder="Enter Channel Name"/>
                     </div>
                     <div class="input-div">
                         <label for="" class="para-light">{{$Translate.Channell.Entriestitle}}</label>
-                        <input type="text" value="{{.filter.Title}}" name="Title" class="para-extralight" />
+                        <input type="text" value="{{.filter.Title}}" name="Title" class="para-extralight" placeholder="Enter Entries Title"/>
                     </div>
                     <div class="input-div">
                         <label for="" class="para-light">{{$Translate.Channell.Status}} </label>
@@ -172,6 +178,12 @@
                       </caption>
                     <thead>
                         <tr>
+                            <th style="width: 0; padding-right: 0;"> 
+                                <div class="chk-group">
+                                  <input type="checkbox" id="Check">
+                                  <label for="Check"></label>
+                                </div>
+                              </th>
                             <th>{{$Translate.Channell.Id}}</th>
                             <th>{{$Translate.Channell.Channelname}}</th>
                             <th>{{$Translate.Channell.Entriestitle}}</th>
@@ -179,7 +191,7 @@
                             <th>{{$Translate.Createdby}} </th>
                             <th>{{$Translate.Lastupdatedon}} </th>
                             <th>{{$Translate.Channell.Status}}</th>
-                            <th>{{$Translate.Actions}} </th>
+                            <th style="text-align: end; padding-right: 60px;">{{$Translate.Actions}} </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -187,7 +199,17 @@
                         {{$Pageno := .CurrentPage}}
                         {{range .ChanEntrtlist}}
 
-                        <tr>
+                        <tr {{if eq .Feature 1}} class="featured" {{end}}>
+                            <td style="padding-right: 0;">
+                                {{if eq .Feature 1}}
+                                <div  class="featured-label" ><img src="/public/img/featured.svg" alt=""></div>{{end}}
+                                <div class="d-flex  gap-4 align-items-center">
+                                  <div class="chk-group">
+                                    <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
+                                    <label for="Check{{.Id}}"></label>
+                                  </div>
+                                </div>
+                              </td>
                             <td>{{.Cno}}</td>
                             <td style="width: 11%;">{{.ChannelName}}</td>
                             <td style="width: 25%;" {{if eq .Feature 1}} class="featured-title" {{end}} >{{.Title}}</td>
@@ -205,7 +227,7 @@
                                 
                             </td>
 
-                            <td>
+                            <td style="text-align: end; padding-right: 60px;">
                                 <div class="btn-group language-group">
                                     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -215,82 +237,118 @@
                                         {{if eq .Status 1}}
                                         {{if eq .Feature 0}}
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="feature" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal2" >
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="feature"
+                                                data-channelname="{{.ChannelName}}" data-status="1"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal2">
                                                 <span><img src="/public/img/feature.svg" alt="" /></span>
-                                                Feature     
-                                            </button>
+                                                Feature
+                                            </a>
                                         </li>
                                         {{else}}
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="Unfeature" data-channelname="{{.ChannelName}}" data-status="0"  data-bs-toggle="modal" data-bs-target="#centerModal2" >
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="Unfeature"
+                                                data-channelname="{{.ChannelName}}" data-status="0"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal2">
                                                 <span><img src="/public/img/feature.svg" alt="" /></span>
-                                                Unfeature     
-                                            </button>
+                                                Unfeature
+                                            </a>
                                         </li>
                                         {{end}}
                                         {{end}}
                                         {{if eq .Status 0}}
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="publish" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal" >
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="publish"
+                                                data-channelname="{{.ChannelName}}" data-status="1"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/published.svg" alt="" /></span>
-                                                {{$Translate.Channell.Publish}}     
-                                            </button>
+                                                {{$Translate.Channell.Publish}}
+                                            </a>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish" data-channelname="{{.ChannelName}}" data-status="2"  data-bs-toggle="modal" data-bs-target="#centerModal">
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish"
+                                                data-channelname="{{.ChannelName}}" data-status="2"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/eye_off.svg" alt="" /></span>
-                                                {{$Translate.Channell.Unpublish}}     
-                                            </button>
+                                                {{$Translate.Channell.Unpublish}}
+                                            </a>
                                         </li>
                                         {{else if eq .Status 1}}
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish" data-channelname="{{.ChannelName}}" data-status="2"  data-bs-toggle="modal" data-bs-target="#centerModal">
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish"
+                                                data-channelname="{{.ChannelName}}" data-status="2"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/eye_off.svg" alt="" /></span>
-                                                {{$Translate.Channell.Unpublish}}     
-                                            </button>
+                                                {{$Translate.Channell.Unpublish}}
+                                            </a>
                                         </li>
                                         {{else if eq .Status 2}}
                                         <li>
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="publish" data-channelname="{{.ChannelName}}" data-status="1"  data-bs-toggle="modal" data-bs-target="#centerModal" >
+                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="publish"
+                                                data-channelname="{{.ChannelName}}" data-status="1"
+                                                data-bs-toggle="modal" data-bs-target="#centerModal">
                                                 <span><img src="/public/img/published.svg" alt="" /></span>
-                                                {{$Translate.Channell.Publish}}     
-                                            </button>
+                                                {{$Translate.Channell.Publish}}
+                                            </a>
                                         </li>
                                         {{end}}
 
                                         <li>
-                                            <a href="/channel/copyentry/{{.Id}}">
-                                            <button class="dropdown-item" type="button">
-                                                <span><img src="/public/img/copy.svg" alt="" /></span>
-                                                {{$Translate.Copy}}       
-                                            </button>
-                                        </a>
-                                        </li>
-                                        <li>
 
-                                                <a href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}">
-                                                   
-                                            <button class="dropdown-item" type="button" data-id="{{.Id}}" id="editbtn">
-                                                <span><img src="/public/img/edit.svg" alt=""  /></span>
-                                                {{$Translate.Edit}}    
-                                            </button>
-                                        </a>
+                                            <a href="/channel/copyentry/{{.Id}}" class="dropdown-item" type="button">
+                                                <span><img src="/public/img/copy.svg" alt="" /></span>
+                                                {{$Translate.Copy}}
+                                            </a>
+
                                         </li>
                                         <li>
-                                            <button class="dropdown-item deleteentry"  type="button" data-bs-toggle="modal"
-                                            data-bs-target="#centerModal" data-page="{{$Pageno}}" data-id="{{.Id}}" data-name="{{.ChannelName}}">
+                                            <a href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
+                                                class="dropdown-item" type="button" data-id="{{.Id}}" id="editbtn">
+                                                <span><img src="/public/img/edit.svg" alt="" /></span>
+                                                {{$Translate.Edit}}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item deleteentry" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#centerModal" data-page="{{$Pageno}}" data-id="{{.Id}}"
+                                                data-name="{{.ChannelName}}">
                                                 <span><img src="/public/img/delete.svg" alt="" /></span>
-                                                {{$Translate.Delete}}      
-                                            </button>
+                                                {{$Translate.Delete}}
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
                             </td>
                         </tr>
                         {{end}}
-                        {{ else if eq .chcount1 0}}
+                        {{else}}
+                        {{if .filter.Keyword}}
+
                         <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
+                            <td style="text-align: center;border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <img src="/public/img/nodatafilter.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                </div>
+                            </td>
+                        </tr>
+                        {{else if eq .filterflag false}}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center;border-bottom: none;" colspan="8">
+                                <div class="noData-foundWrapper">
+
+                                    <div class="empty-folder">
+                                        <img src="/public/img/nodatafilter.svg" alt="">
+                                    </div>
+                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                                </div>
+                            </td>
+                        </tr>
+                        {{else}}
+                        <tr class="no-dataHvr">
+                            <td style="text-align: center;border-bottom: none;" colspan="8">
                                 <div class="noData-foundWrapper">
 
                                     <div class="empty-folder">
@@ -302,74 +360,81 @@
                                         {{$Translate.Pagesorry}}
                                         {{$Translate.Gobackhome}}
                                     </p>
-                                    <a href="/channel/newentry" 
-                                        class="heading-three ">{{$Translate.Clickadd}} >></a>
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd"
+                                        data-bs-target="#memModal"
+                                        class="heading-three">{{$Translate.Clickadd}} >></a>
                                 </div>
                             </td>
                         </tr>
-
-                        
-                       
-                        {{else }}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
-    
-                                    <div class="empty-folder">
-                                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
-                                        <img src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    </div>
-                                    </td>
-                          </tr>                      
-                            {{end}}                  
+                        {{end}}
+                        {{end}}                  
                     </tbody>
                 </table>
             </div>
             <div class="pogination flexx pagenation-padding">
-                {{if .Page}}
                 <ul class="flexx">
-                    <li>
-                        <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                    {{range .Page}}
-                    <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  " {{end}}>{{.}} </a></li>
+                    {{if gt .chentrycount .limit}}
+                   
+                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                        <img src="/public/img/carat-right.svg" alt="" />
+                    </a></li>
+                    {{if gt .CurrentPage 3}}
+                    {{$keyword := .filter.Keyword}}
+                    <li><a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" >1</a></li>
+                    {{end}}
+                    {{if eq .CurrentPage 5}}
+                    <li><a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">2</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 5}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 2}}
+                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
+                    {{end}}
+                    {{if gt .CurrentPage 1}}
+                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
+                    {{end}}
+                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                    {{if lt .CurrentPage .Pagination.TotalPages}}
+                    <li><a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
+                    {{end}}
+                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                    <li><a href="">...</a></li>
+                    {{end}}
+                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li><a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
                     {{end}}
                     <li>
-                        <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
+                        <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                             <img src="/public/img/carat-right.svg" alt="" />
                         </a>
                     </li>
+                   
+                   {{end}}
                 </ul>
-                {{end}}
+               
                 <p> {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}</p>
             </div>
-            <!-- <div class="pogination flexx pagenation-padding">
-                <ul class="flexx">
-                    <li>
-                        <a href="javascript:void(0)" class="disabled">
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                    <li><a href="javascript:void(0)" class="current"> 1 </a></li>
-                    <li><a href="javascript:void(0)"> 2 </a></li>
-                    <li><a href="javascript:void(0)"> ... </a></li>
-                    <li><a href="javascript:void(0)"> 5 </a></li>
-                    <li>
-                        <a href="javascript:void(0)" class="next">
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                </ul>
-                <p>Items Per Page: 10 and 1 – 10 of 10</p>
-            </div> -->
+          
         </div>
     </div>
     <!--2-->
+    <!--------selected----------->
+    <div class="selected-numbers" style="display: none;">
+        <p class="heading-three text-white checkboxlength"> </p>
+        <div class="d-flex">
+          <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
+          data-bs-target="#centerModal">
+            <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+          <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
+        </div>
+        <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
+      </div>
 </div>
 {{template "footer" .}}
 <script src="/public/js/entries/entry.js"></script>
+
 {{template "footerclose" .}}

@@ -2,126 +2,261 @@
 {{template "settingsmenu" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
+
 <div class="page-wrapper settings-wrapper">
-    <div class="details-roles emailtemp-details roles-permission">
+    <div class="email-temp-tabs">
         <input type="hidden" name="csrf" value="{{.csrf}}">
-        <!-- <input type="hidden" name="userid" value="" id="userid"> -->
-        <div class="search-role">
-
-            <form action="/settings/emails/" class="filterform" method="get" autocomplete="off">
-                <a type="button" class="searchbtn" id="filterformsubmit" style="padding-top: 10px;"><img
-                        src="/public/img/search.svg"></a>
-                <div>
-                    <input type="text" id="searchemails" class="search" name="keyword" value="{{ .Filter.Keyword }}"
-                        placeholder="{{$Translate.Emailtemplate.Searchtemplates}}">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                    type="button" role="tab" aria-controls="home" aria-selected="true" onclick="setroute()">
+                    {{$Translate.Setting.Emailtemplates}}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button"
+                    role="tab" aria-controls="home2" aria-selected="false" onclick="setroute1()">
+                    {{$Translate.Setting.Emailconfig}}
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="records-email">
+                    <p class="para">
+                        {{.Count}}
+                        <span>Records Available</span>
+                    </p>
+                    <form action="/settings/emails/" class="filterform" method="get" autocomplete="off">
+                    <div class="email-search">
+                        <!-- <img src="img/Magnifying-Glass.svg" alt="" /> -->
+                        <a type="button" class="searchbtn" id="filterformsubmit" style="padding-top: 9px; padding-left: 14px;"><img
+                            src="/public/img/Magnifying-Glass.svg"></a>
+                        <input type="text" id="searchemails" class="search" name="keyword" value="{{ .Filter.Keyword }}"
+                        placeholder="{{$Translate.Csearch}}">
+                    </div>
+                </form>
+                  
+                      
+        
                 </div>
-            </form>
-
-        </div>
-        <div class="table-responsive page-ponit">
-            <table class="table">
-                <thead>
-                    <tr>
-
-                        <th>{{$Translate.Emailtemplate.Templatename}}</th>
-                        <th>{{$Translate.Lastupdatedon}}</th>
-                        <th class="text-center">{{$Translate.Channell.Status}}</th>
-                        <th>{{$Translate.Actions}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{if .Template}}
-                    {{ range .Template }}
-                    <tr>
-
-                        <td>{{.TemplateName}}</td>
-                        <td class="role-desc">{{.DateString}}</td>
-
-                        <td class="text-center">
-                            <div class="toggle">
-                                <input class="tgl tgl-light" id="cb1{{.Id}}" data-id="{{.Id}}"
-                                    onclick="TempStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
-                                    {{end}} />
-                                <label class="tgl-btn" for="cb1{{.Id}}"></label>
-                            </div>
-                        </td>
-
-                        <td>
-                            <div class="btn-group language-group">
-                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-
-                                    <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#email-templateModal" data-id="{{ .Id }}" id="edit-btn">
-                                            <span><img src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}} </button></li>
-
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    {{end}}
-                    {{else}}
-                    {{if .Filter.Keyword}}
-                    <tr class="no-dataHvr">
-                        <td style="text-align: center; border-bottom: none;" colspan="8">
-                            <div class="noData-foundWrapper">
-
-                                <div class="empty-folder">
-                                    <img src="/public/img/nodatafilter.svg" alt="">
-                                </div>
-                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-
-                            </div>
-                        </td>
-                    </tr>
-                    {{else}}
+                <div class="table-responsive page-ponit">
+                    <table class="table">
+                        <thead>
+                            <tr>
+        
+                                <th>{{$Translate.Emailtemplate.Templatename}}</th>
+                                <th>{{$Translate.Lastupdatedon}}</th>
+                                <th class="text-center">{{$Translate.Channell.Status}}</th>
+                                <th>{{$Translate.Actions}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{if .Template}}
+                            {{ range .Template }}
+                            <tr>
+        
+                                <td>{{.TemplateName}}</td>
+                                <td class="role-desc">{{.DateString}}</td>
+        
+                                <td class="text-center">
+                                    <div class="toggle">
+                                        <input class="tgl tgl-light" id="cb1{{.Id}}" data-id="{{.Id}}"
+                                            onclick="TempStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
+                                            {{end}} />
+                                        <label class="tgl-btn" for="cb1{{.Id}}"></label>
+                                    </div>
+                                </td>
+        
+                                <td>
+                                    <div class="btn-group language-group">
+                                        <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+        
+                                            <li><a class="dropdown-item open-emailtemp" type="button" 
+                                                data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal" data-id="{{ .Id }}" id="edit-btn">
+                                                    <span><img src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
+                                                </a></li>
+        
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{end}}
+                            {{else}}
+                            {{if .Filter.Keyword}}
+                            <tr class="no-dataHvr">
+                                <td style="text-align: center; border-bottom: none;" colspan="8">
+                                    <div class="noData-foundWrapper">
+        
+                                        <div class="empty-folder">
+                                            <img src="/public/img/nodatafilter.svg" alt="">
+                                        </div>
+                                        <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+        
+                                    </div>
+                                </td>
+                            </tr>
+                            {{else}}
+                            
+                            <tr class="no-dataHvr">
+                                <td style="text-align: center; border-bottom: none;" colspan="8">
+                                    <div class="noData-foundWrapper">
+        
+                                        <div class="empty-folder">
+                                            <img src="/public/img/folder-sh.svg" alt="">
+                                            <img src="/public/img/shadow.svg" alt="">
+                                        </div>
+                                        <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+        
+                                    </div>
+                                </td>
+                            </tr>
+                            {{end}}
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+                {{if .Template}}
+                <div class="pogination flexx pagenation-padding sticky-pagination">
+                    <ul class="flexx">
+                        {{if gt .Count .Limit}}
                     
-                    <tr class="no-dataHvr">
-                        <td style="text-align: center; border-bottom: none;" colspan="8">
-                            <div class="noData-foundWrapper">
-
-                                <div class="empty-folder">
-                                    <img src="/public/img/folder-sh.svg" alt="">
-                                    <img src="/public/img/shadow.svg" alt="">
-                                </div>
-                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-
-                            </div>
-                        </td>
-                    </tr>
-                    {{end}}
-                    {{end}}
-                </tbody>
-            </table>
-        </div>
-        {{if .Template}}
-        <div class="pogination flexx pagenation-padding sticky-pagination">
-            {{if .Page}}
-            <ul class="flexx">
-                <li>
-                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a>
-                </li>
-                {{range .Page}}
-                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current  "
-                        {{end}}>{{.}} </a></li>
+                        <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                            <img src="/public/img/carat-right.svg" alt="" />
+                        </a></li>
+                        {{if gt .CurrentPage 3}}
+                        <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
+                        {{end}}
+                        {{if eq .CurrentPage 5}}
+                        <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                        {{end}}
+                        {{if gt .CurrentPage 5}}
+                        <li><a href="">...</a></li>
+                        {{end}}
+                        {{if gt .CurrentPage 2}}
+                        <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
+                        {{end}}
+                        {{if gt .CurrentPage 1}}
+                        <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
+                        {{end}}
+                        <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                        {{if lt .CurrentPage .Pagination.TotalPages}}
+                        <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
+                        {{end}}
+                        {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                        <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
+                        {{end}}
+                        {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                        <li><a href="">...</a></li>
+                        {{end}}
+                        {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                        <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
+                        {{end}}
+                        <li>
+                            <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
+                                <img src="/public/img/carat-right.svg" alt="" />
+                            </a>
+                        </li>
+                       
+                       {{end}}
+                    </ul>
+                    <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+                </div>
                 {{end}}
-                <li>
-                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
-                        {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a>
-                </li>
-            </ul>
-            {{end}}
-            <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
+            </div>
+            <div class="tab-pane" id="home2" role="tabpanel" aria-labelledby="home-tab2">
+                <div class="email-config">
+                    <div class="grd-2-fr">
+                        <div class="left-cms">
+                            <h1 class="heading" style="font-size: 16px;">E-Mail Configuration</h1>
+                            <p class="para color-light">  You can set up the Sender's email address from which emails are sent to application users in various scenarios.
+                            </p>
+                        </div>
+                        <div class="channel-edit new-temp">
+                            <div class="radio radio-label" id="smtpmail">
+                                <input id="radiosmtp" name="smtpradio" {{if eq .Smtpdiv false}}  {{else if eq .Maildetails.SelectedType `smtp`}} checked  {{end}} value="" type="radio">
+                                <label for="radiosmtp" class="radio-label">
+                                    <div class="to-select-cms">
+                                        <img src="/public/img/email-temp-new1.svg" />
+                                        <p>SMTP</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio radio-label" id="environmentmail">
+                                <input id="radioenv" name="envradio" {{if eq .Maildetails.SelectedType `environment`}}checked {{else if eq .Smtpdiv false}} checked {{end}} value="" type="radio">
+                                <label for="radioenv" class="radio-label">
+                                    <div class="to-select-cms">
+                                        <img src="/public/img/email-temp-new2.svg" />
+                                        <p>Environment</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cms-sep"></div>
+                 
+                    <div class="grd-2-fr" id="emailconfigdiv" {{if eq .Smtpdiv false}} style="display: none;" {{else if eq .Maildetails.SelectedType `environment`}} style="display: none;" {{end}}>
+                
+                        <div class="left-cms">
+                            <div class="selected-cms">
+                                <img src="/public/img/email-temp-new1.svg" />  
+                                    <div>
+                                    <h1 class="heading-three">SMTP</h1>
+                                    <p class="para color-light"> Allows manual configuration of the Sender's Email Id.
+                                    </p>
+                                </div>
+                            </div>
+                         </div>
+                         <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
+                            <input type="hidden" name="csrf" value="{{.csrf}}">
+                            <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
+                           <input type="hidden" name="seltype" id="emailseltype" value="Environment">
+        
+                         <div class="channel-input">
+                            <div class="input-group" id="config_email">
+                                <label for="" class="input-label">Sender Email *</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field"   value="{{.Email.Mail}}"   name="email" id="emailaddress" placeholder="enter the stmp email ...">
+                                    
+                                </div>
+                            </div>
+                            <div class="input-group" id="config_password">
+                                <label for="" class="input-label">Email Password*</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" value="{{.Email.Password}}" name="password" id="mailpassword" placeholder="enter the stmp email password...">
+                                </div>
+                            </div>
+                            <div class="input-group" id="config_host">
+                                <label for="" class="input-label">SMTP Host*</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" value="{{.Email.Host}}" name="host" id="mailhost" placeholder="enter the stmp email host...">
+                                </div>
+                            </div>
+                            <div class="input-group" id="config_port">
+                                <label for="" class="input-label">SMTP Port*</label>
+                                <div class="ig-row">
+                                    <input type="text" class="field" value="{{.Email.Port}}" name="port" id="mailport" placeholder="enter the stmp email port...">
+                                </div>
+                            </div>
+                        </div>
+                             
+                    </div>
+                         
+                </div>
+                <div class="configure-btn-grp" id="emailfooter">
+                    <button class="btn-reg btn-lg secondary" type="button" id="emailback">Cancel </button>
+                        <button class="btn-reg btn-lg primary theme-color " type="button" id="addemailconfig">{{$Translate.Update}}</button>
+                </div>
+                </div>
+            </div>
         </div>
-        {{end}}
     </div>
+  
+    </form>
 </div>
 
 <!-- Center Modal -->
@@ -147,7 +282,7 @@
                                 id="tempname" readonly>
                         </div>
                     </div>
-                    <div class="input-group" id="subgrb">
+                    <div class="input-group" id="">
                         <label for="" class="input-label">{{$Translate.Emailtemplate.Templatesubject}} *</label>
                         <div class="ig-row">
                             <input type="text" class="field" name="tempsub" placeholder="{{$Translate.Emailtemplate.Entertemplatesubject}}"
@@ -171,7 +306,7 @@
         </div>
     </div>
 </div>
-
+{{template "emailmodal" .}}
 {{template "footer" .}}
 <script>
     // Initialize tooltips
@@ -181,4 +316,5 @@
     })
 </script>
 <script src="/public/js/settings/emailtemplate/emailtemplate.js"></script>
+<!-- <script src="/public/js/settings/emailconfig/emailconfig.js"></script> -->
 {{template "footerclose" .}}

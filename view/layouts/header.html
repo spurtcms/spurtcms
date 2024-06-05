@@ -29,12 +29,13 @@
     <!-- cropper -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
     <!-- rememberme js -->
-    <script src="/public/js/rememberme.js"></script>
+    <!-- <script src="/public/js/rememberme.js"></script> -->
 
 </head>
 {{$Mainmenu := .Menu.Expand}}
- <body {{if eq $Mainmenu true}} class="expand" {{end}}>
- {{template "mainmenu" .}}
+
+<body {{if eq $Mainmenu true}} class="expand" {{end}}>
+    {{template "mainmenu" .}}
 
 
- {{end}}
+    {{end}}

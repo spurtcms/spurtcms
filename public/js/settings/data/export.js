@@ -194,6 +194,11 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $("#searchentryname").focus().select();
+    }
+});
 /*search redirect home page */
 
 $(document).on('keyup', '#searchentryname', function () {
@@ -471,6 +476,7 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                             </div>
                         </td>
                      </tr>`
+                     $("#download").prop("disabled",true)
 
                      $(".entries-list").append(nodata_html)
 
@@ -487,6 +493,7 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                             </div>
                         </td>
                      </tr>`
+                     $("#download").prop("disabled",true)
 
                      $(".entries-list").append(nodata_html)
 

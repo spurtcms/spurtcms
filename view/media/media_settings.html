@@ -1,0 +1,211 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+<div class="page-wrapper space-wrapper cms-wrapper">
+
+    <div class="bread-crump">
+        <a href="/media/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="/media/settings" class="current-page">{{.Tabmenu}}</a>
+    </div>
+    {{template "cmstab" .}}
+
+    <div class="setting-container cms-container">
+
+
+        <div class="grd-2-fr">
+            <div class="left-cms">
+                <h1 class="heading">{{$Translate.Mediaa.Storageprovider}}</h1>
+                <p class="para color-light">{{$Translate.Mediaa.Storagecont}}
+                </p>
+            </div>
+            <div class="channel-edit">
+                <div class="radio radio-label">
+                    <input id="radio-1" name="radio" type="radio" {{if eq .Storage.SelectedType "local" }} checked
+                        {{end}} data-select="local">
+                    <label for="radio-1" class="radio-label">
+                        <div class="to-select-cms">
+                            <img src="/public/img/cms-setting4.svg" />
+                            <p>Local Storage</p>
+                        </div>
+                    </label>
+                </div>
+                <div class="radio radio-label">
+                    <input id="radio-2" name="radio" type="radio" {{if eq .Storage.SelectedType "aws" }} checked {{end}}
+                        data-select="aws">
+                    <label for="radio-2" class="radio-label">
+                        <div class="to-select-cms">
+                            <img src="/public/img/cms-setting3.svg" />
+                            <p>Amazon S3</p>
+                        </div>
+                    </label>
+                </div>
+                <div class="radio radio-label"  style="opacity: 0.5;">
+                    <input id="radio-3" name="radio" type="radio" {{if eq .Storage.SelectedType "azure" }} checked
+                        {{end}} data-select="azure" disabled>
+                    <label for="radio-3" class="radio-label">
+                        <div class="to-select-cms">
+                            <img src="/public/img/cms-setting1.svg" />
+                            <p>Azure</p>
+                        </div>
+                    </label>
+                </div>
+                <div class="radio radio-label"  style="opacity: 0.5;">
+                    <input id="radio-4" name="radio" type="radio" {{if eq .Storage.SelectedType "drive" }} checked
+                        {{end}} data-select="drive" disabled>
+                    <label for="radio-4" class="radio-label">
+                        <div class="to-select-cms">
+                            <img src="/public/img/cms-setting2.svg" />
+                            <p>Google Drive</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="cms-sep"></div>
+
+        <div class="grd-2-fr localstoragesetting" {{if ne .Storage.SelectedType "local" }} style="display: none;"
+            {{end}}>
+            <div class="left-cms">
+                <div class="selected-cms">
+                    <img src="/public/img/cms-setting4.svg" />
+                    <div>
+                        <h1 class="heading-three">{{$Translate.Mediaa.Localstorage}}</h1>
+                        <p class="para color-light">{{$Translate.Mediaa.Localstoragecont}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form action="/media/settings/update" method="post" id="localsettingform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="type" value="local">
+                <div class="channel-input">
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Mediaa.Foldername}}*</label>
+                        <div class="ig-row">
+                            <input type="text" name="local" placeholder="{{$Translate.Mediaa.Enterfoldername}} " value="{{.local}}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="grd-2-fr amazonsetting" {{if ne .Storage.SelectedType "aws" }} style="display: none;" {{end}}>
+            <div class="left-cms">
+                <div class="selected-cms">
+                    <img src="/public/img/cms-setting3.svg" />
+                    <div>
+                        <h1 class="heading-three">{{$Translate.Mediaa.Amazon}}</h1>
+                        <p class="para color-light">{{$Translate.Mediaa.Amazoncont}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form action="/media/settings/update" method="post" id="s3settingform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="type" value="aws">
+                <div class="channel-input">
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Mediaa.Acckeyid}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="awsvalid" name="awsid" placeholder="{{$Translate.Mediaa.Accidplcholder}}..." value="{{.aws.AccessId}}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Mediaa.Accesskey}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="awsvalid" name="awskey" placeholder="{{$Translate.Mediaa.Acckeyplcholder}}..." value="{{.aws.AccessKey}}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Mediaa.Region}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="awsvalid" name="awsregion" placeholder="{{$Translate.Mediaa.Regionplcholder}}.."
+                                value="{{.aws.Region}}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Mediaa.Buckername}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="awsvalid" name="awsbucketname" placeholder="{{$Translate.Mediaa.Bucketnameplcholder}}..."
+                                value="{{.aws.BucketName}}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="grd-2-fr azuresetting" style="display: none;">
+            <div class="left-cms">
+                <div class="selected-cms">
+                    <img src="/public/img/cms-setting1.svg" />
+                    <div>
+                        <h1 class="heading-three">Azure</h1>
+                        <p class="para color-light">Manage your files with Azure Storage, a reliable and scalable cloud storage solution by Microsoft. Easily access and organize your media files in a secure environment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form action="/media/settings/update" method="post" id="azuresettingform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="type" value="azure">
+                <div class="channel-input azure">
+                    <div class="input-group">
+                        <label for="" class="input-label">Azure Account Name</label>
+                        <div class="ig-row">
+                            <input type="text" name="azureacc" placeholder="enter the id..." value="{{.azure.StorageAccount}}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="" class="input-label">Azure Storage Key</label>
+                        <div class="ig-row">
+                            <input type="text" name="azurekey" placeholder="enter the key..." value="{{.azure.AccountKey}}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="" class="input-label">Container Name</label>
+                        <div class="ig-row">
+                            <input type="text" name="azurecontainer" placeholder="enter the region.." value="{{.azure.ContainerName}}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="grd-2-fr drivesetting" style="display: none;" >
+            <div class="left-cms">
+                <div class="selected-cms">
+                    <img src="/public/img/cms-setting1.svg" />
+                    <div>
+                        <h1 class="heading-three">Google Drive</h1>
+                        <p class="para color-light">Integrate and manage your files stored on Google Drive with easy access and sharing capabilities for all your media files.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form action="/media/settings/update" method="post" id="azuresettingform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="type" value="drive">
+                <div class="channel-input azure">
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="configure-btn-grp">
+        <button class="btn-reg btn-lg secondary" id="typecancel">{{$Translate.Cancel}}</button>
+        <button class="btn-reg btn-lg primary" type="button" id="savetype">{{$Translate.Save}}</button>
+    </div>
+</div>
+
+
+
+
+{{template "footer" .}}
+
+<script src="/public/js/media/media_setting.js"></script>
+
+{{template "footerclose" .}}

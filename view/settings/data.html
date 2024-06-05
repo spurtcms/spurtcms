@@ -6,37 +6,58 @@
 
 {{$IMAGEPATH := ""}}
 {{$IMAGEFILTER := ""}}
+{{$IMAGEDOWNLOAD := ""}}
+
 {{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-red.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-red.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-red.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-purple.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-purple.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-purple.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-blue.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-blue.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-blue.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img.svg"}}
 {{$IMAGEFILTER = "/public/img/filter.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-brown.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-brown.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-brown.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-orange.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-orange.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-orange.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-green.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-green.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-green.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-teal-blue.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-teal-blue.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-teal-blue.svg"}}
+
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
 {{$IMAGEPATH = "/public/img/blogUpload-img-black.svg"}}
 {{$IMAGEFILTER = "/public/img/filter-black.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download-black.svg"}}
 
 {{else}}
 {{$IMAGEPATH ="/public/img/blogUpload-img.svg"}}
 {{$IMAGEFILTER = "/public/img/filter.svg"}}
+{{$IMAGEDOWNLOAD = "/public/img/data-download.svg"}}
+
 
 {{end}}
 <div class="page-wrapper settings-wrapper">
@@ -270,7 +291,54 @@
                     </div>
 
                     <div class="data-head-txt flexx">
-                        <h3 class="heading" id="channel-name"></h3>
+                        <!-- <h3 class="heading" id="channel-name"></h3> -->
+                        <div class="blogTop-left" style="margin-right: auto;">
+             
+                            <div class="dropdown avaliable-dropdown">
+                            
+                             <input type="hidden" id="chanid">
+                             <div class="blogDropdown import-map-list dp-fs-18" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex;">
+                              <p type="button" class="blogDropdown1 " id="chn-name" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title=""></p>
+                                       
+                             <img src="/public/img/blog-drop.svg" alt=""  class="blogimg"/>
+                             </div>
+              
+                                <div class="dropdown-menu dropdown-menu-end avaliable-dropdown-menu">
+                                  <div class="drop-item-wrapper channel-list-dropdown">
+                                    <input type="hidden" value="" id="chan-id" name="chan-id">
+
+                                    {{range .Channellist}}
+                                    
+                                      <div class="avaliable-dropdown-item import-map" data-name="{{.ChannelName}}" data-id="{{.Id}}">
+                                        <input type="hidden" data-id="{{.Id}}" >
+                                            <div class="avaliable-dropdown-itemLeft">
+                                              <p class="para" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="{{.ChannelName}}">{{.ChannelName}}</p>
+                                              <p class="para-extralight" data-id="" id="encount" >
+                                                {{$Translate.Total}} {{if gt .EntriesCount
+                                                    1}}{{$Translate.Entries}} : {{.EntriesCount}} {{else}}
+                                                    {{$Translate.Channell.Entry}} : {{.EntriesCount}} {{end}}
+                                                  
+                                            </div>
+
+                                            <div class="avaliable-dropdown-itemRight">
+                                                <input class="check-circle searchentry"  type="checkbox" name="avaliableRadio" id="{{.Id}}" />
+                
+                                                <div class="check-image">
+                                                    <img src="/public/img/unchecked-circle.svg" alt="" />
+                                                    <img src="/public/img/checked-circle.svg" alt="" />
+                                                </div>
+                                            </div>
+                                       
+                                       </div>
+                                
+                                      {{end}}
+                                  </div>
+                                 
+                              </div>
+                            </div>
+                            <span class="para-extralight" id="blogcount" ></span>
+                            <label id="channelslct-error" class="error" style="display: inline-flex; display: none; color: #F26674;  font-size: 0.75rem;font-weight: 400;"> *{{$Translate.Channell.Channelselect}}</label>
+                          </div>
 
                     </div>
 
@@ -340,7 +408,7 @@
                     <div class="data-migration-container">
                         <div class="migration-top">
                             <div class="migration-img">
-                                <img src="/public/img/migration-status.svg" alt="">
+                                <img src="/public/img/Group-2488.svg" alt="">
                             </div>
                             <p class="para">{{$Translate.Datas.Successmsg}}</p>
                             <a href="#" id="err-xldata"><button
@@ -463,7 +531,7 @@
                 <!-- exportstep2 -->
                 <div id="data-export2">
 
-                    <div class="data-head-txt flexx">
+                    <div class="data-head-txt bordered-block flexx">
 
                         <!-- <h2 class="heading leftHeader" id="chennalname"> </h2> -->
                         <div class="blogTop-left" style="margin-right: auto;">
@@ -471,7 +539,7 @@
                             <div class="dropdown avaliable-dropdown">
                             
                              <input type="hidden" id="chanid">
-                             <div class="blogDropdown channel-select-list" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex;">
+                             <div class="blogDropdown channel-select-list dp-fs-18" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex;">
                               <p type="button" class="blogDropdown1 " id="channelname" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top" title="">{{$Translate.Channell.Selectchannel}}</p>
                                        
                              <img src="/public/img/blog-drop.svg" alt=""  class="blogimg"/>
@@ -586,21 +654,21 @@
                         <div class="transitionSearch active">
                             <img src="/public/img/Magnifying-Glass.svg" alt="">
                             <input type="text" name="keyword" id="searchentryname"
-                                placeholder="{{$Translate.Datas.Plsearch}}" value="{{.filter.Keyword}}"
+                                placeholder="{{$Translate.Csearch}}" value="{{.filter.Keyword}}"
                                 class="para search">
                         </div>
 
 
                     </div>
 
-                    <div class="data-head-txt flexx">
+                    <div class="data-head-txt bordered-bottom flexx">
                         <form action="/settings/data/export" method="get">
                             <input type="hidden" value="" name="exportidarr" id="exportidarr">
                             <input type="hidden" value="" name="exportchannelid" id="exportchannelid">
                             <input type="hidden" value="" name="getchannelid" id="getchannelid">
 
                             <button id="download" class="data-download heading-three" disabled>
-                                <img src="/public/img/data-download.svg" alt="">
+                                <img src="{{$IMAGEDOWNLOAD}}" alt="">
                                 Download
                             </button>
                         </form>

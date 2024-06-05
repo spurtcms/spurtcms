@@ -25,8 +25,10 @@
 {{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
 {{$IMAGEPATH = "/public/img/add-icon-black.svg"}}
 {{else}}
- {{$IMAGEPATH ="/public/img/add-icon.svg"}}
+{{$IMAGEPATH ="/public/img/add-icon.svg"}}
 {{end}}
+
+{{$LoggedUser := .loggedinuser}}
 <div class="page-wrapper settings-wrapper">
     <div class="details-roles roles-permission setting-teamm">
         <div class="search-role">
@@ -36,7 +38,7 @@
                 <a type="button" class="searchbtn" id="filterformsubmit"><img src="/public/img/search.svg"></a>
                 <div>
                     <input type="text" id="searchroles" class="search" name="keyword" value="{{ .Filter.Keyword }}"
-                        placeholder="{{$Translate.Userss.Searchusers}}">
+                        placeholder="{{$Translate.Csearch}}">
                 </div>
             </form>
 
@@ -47,16 +49,23 @@
                 </div>
             </a>
         </div>
-        <div class="table-responsive page-ponit">
+        <div class="table-responsive page-ponit entries-table">
             <table class="table">
                 <thead>
                     <tr>
+                        <th style="width: 0;padding-right: 0;">
+                            <div class="chk-group">
+                                <input type="checkbox" id="Check">
+                                <label for="Check"></label>
+                            </div>
+                        </th>
                         <th>{{$Translate.Name}}</th>
                         <th>{{$Translate.Role}}</th>
                         <th>{{$Translate.Userss.Username}}</th>
                         <th>{{$Translate.Memberss.Createdon}}</th>
+                        <th>{{$Translate.Channell.Status}}</th>
                         <th class="text-center">{{$Translate.Userss.Accesspermission}}</th>
-                        <th>{{$Translate.Actions}}</th>
+                        <th style="text-align: end;padding-right: 60px;">{{$Translate.Actions}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +73,16 @@
                     {{ range .user }}
 
                     <tr>
+                        <td style="padding-right: 0;">
+                            {{if ne .RoleId 1}}
+                            <div class="d-flex  gap-4 align-items-center {{if eq .RoleId 1}} roldisabled{{end}}">
+                                <div class="chk-group">
+                                    <input type="checkbox" class="{{if ne .RoleId 1}} roldisabled{{end}} selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
+                                    <label for="Check{{.Id}}"></label>
+                                </div>
+                            </div>
+                            {{end}}
+                        </td>
                         <td>
                             <div class="tbl-img-content flexx member-detail">
                                 {{if .ProfileImagePath}}
@@ -79,15 +98,23 @@
                         </td>
                         <td class="role-desc">{{.RoleName}}</td>
                         <td class="role-desc">{{.Username}}</td>
-                        <td class="role-desc">
-                            {{.ModuleName}}
+                        <td class="role-desc">{{.ModuleName}}</td>
+
+                        <td>
+                          
+                            <input class="tgl tgl-light" id="cbox{{.Id}}" type="checkbox" value="{{.IsActive}}"
+                                data-id="{{.Id}}" onclick="UserStatus('{{.Id}}')" {{if eq .IsActive 1}}checked{{end}} />
+                            <label class="tgl-btn {{if eq .RoleId 1}} roldisabled{{end}}" for="cbox{{.Id}}"></label>
+                           
                         </td>
+
                         <td class="text-center">
-                            <span class="status published">{{if eq .DataAccess 0}}All Users{{else}}User's
+                            {{if eq .DataAccess 0}}<span class="status published">All Users</span>{{else}}<span
+                                class="status draft">User's
                                 Only{{end}}</span>
                         </td>
-                        <td>
-                            {{if ne .RoleId 1}}
+                        <td style="text-align: end;padding-right: 60px;">
+                    
                             <div class="btn-group language-group">
                                 <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -95,17 +122,17 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
 
-                                    <li><button class="dropdown-item" type="button" data-bs-target="#userModal"
-                                            data-bs-toggle="modal" data-id="{{ .Id }}" id="edit-btn"> <span><img
+                                    <li><a class="dropdown-item" {{if eq $LoggedUser .Id}} href="/settings/myprofile/" {{else}} type="button" data-bs-target="#userModal"
+                                        data-bs-toggle="modal" data-id="{{ .Id }}" id="edit-btn" {{end}}  >  <span><img
                                                     src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
-                                        </button></li>
-                                    <li><button class="dropdown-item" type="button" data-id="{{ .Id }}" id="del-btn"
-                                            data-bs-toggle="modal" data-bs-target="#centerModal"> <span><img
+                                        </a></li>
+                                    <li><a class="dropdown-item {{if eq .RoleId 1}} roldisabled{{end}}" type="button" data-id="{{ .Id }}" id="del-btn"
+                                        data-bs-toggle="modal" data-bs-target="#centerModal"> <span><img
                                                     src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}}
-                                        </button></li>
+                                        </a></li>
                                 </ul>
                             </div>
-                            {{end}}
+                       
                         </td>
                     </tr>
                     {{ end }}
@@ -151,28 +178,83 @@
         </div>
         {{if .user}}
         <div class="pogination flexx pagenation-padding sticky-pagination">
-            {{if .Page}}
             <ul class="flexx">
-                <li>
-                    <a href="?page={{.Previous}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
+                {{if gt .Count .Limit}}
+
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                        {{if eq .CurrentPage 1}} class="disabled" {{end}}>
                         <img src="/public/img/carat-right.svg" alt="" />
-                    </a>
+                    </a></li>
+                {{if gt .CurrentPage 3}}
+                <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">1</a></li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li><a
+                        href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a>
                 </li>
-                {{range .Page}}
-                <li><a href="?page={{.}}" {{if eq $.CurrentPage .}} class="current"
-                        {{end}}>{{.}} </a></li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li><a
+                        href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a>
+                </li>
+                {{end}}
+                <li><a href="" {{if .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li><a
+                        href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a>
+                </li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a
+                        href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a>
+                </li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li><a href="">...</a></li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li><a
+                        href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a>
+                </li>
                 {{end}}
                 <li>
-                    <a href="?page={{.Next}}" {{if eq .CurrentPage .PageCount}} class="disabled " {{else}} class="next"
-                        {{end}}>
+                    <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                        {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
                         <img src="/public/img/carat-right.svg" alt="" />
                     </a>
                 </li>
+
+                {{end}}
             </ul>
-            {{end}}
             <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
         </div>
         {{end}}
+    </div>
+    <!--------selected----------->
+    <div class="selected-numbers leftalign" style="display: none;">
+        <p class="heading-three text-white checkboxlength"> </p>
+        <div class="d-flex">
+            <a href="javascript:void(0)"
+                class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray "
+                id="seleccheckboxdelete" data-bs-toggle="modal" data-bs-target="#centerModal">
+                <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
+            <a href="javascript:void(0)"
+                class="heading-three text-white d-flex align-items-center gap-2  pe-2 border-gray" id="unbulishslt"
+                data-bs-toggle="modal" data-bs-target="#centerModal">
+            </a>
+
+            <!-- <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2  mx-2 "
+                id="activeStatus" data-bs-toggle="modal" data-bs-target="#centerModal">
+            </a> -->
+
+        </div>
+        <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
     </div>
 </div>
 
@@ -326,8 +408,7 @@
                                         <!-- <input class="tgl tgl-light" id="cb1" name="cb1" type="checkbox" />
                                         <label class="tgl-btn" for="cb1"></label> -->
                                         <input class="tgl tgl-light" name="mem_activestat" id="cb1" type="checkbox"
-                                            value="{{ .User.IsActive }}" {{if eq .User.IsActive 1}} checked
-                                            {{else}}{{end}} />
+                                            value="{{.User.IsActive}}" {{if eq .User.IsActive 1}} checked{{end}} />
                                         <label class="tgl-btn" for="cb1"></label>
                                     </div>
                                 </div>

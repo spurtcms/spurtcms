@@ -1,9 +1,32 @@
 let searchParams = new URLSearchParams(window.location.search)
 var languagedata
 
+//set modulename cookie
+// $(document).on('click','.mainmenu',function(){
+//     setCookie("modulename",$(this).children('span').text(),3600)
+//     delete_cookie("tabname")
+//     window.location.href = $(this).attr('data-route')
+//     setCookie("tabroute",$(this).attr('data-route'))
+// })
+
+// $(document).on('click','.nav li a',function(){
+//     setCookie("tabname",$(this).children('span').text(),3600)
+// })
+
+// $(document).on('click','.list-1',function(){
+//     // setCookie("modulename",'Channels',3600)
+//     window.location.href = $(this).attr('data-route')
+// })
+
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+});
+
 $(document).ready(function () {
 
-    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
+    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
 
         var imgurl, img, canvas, ctx;
         let cropper;
@@ -20,9 +43,14 @@ $(document).ready(function () {
 
             $('#crop-container').removeClass('croppie-container').empty().show()
 
-            if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
+            if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
+
 
                 if (window.location.href.indexOf("myprofile") != -1) {
+
+                    $("#logo-input").val("2")
+
+                    $("#prof-crop").val("1")
 
                     $('#changepicModal .admin-header >h3').text('Crop Myprofile Image')
 
@@ -33,6 +61,14 @@ $(document).ready(function () {
                 } else if (window.location.href.indexOf("member") != -1) {
 
                     $('#changepicModal .admin-header >h3').text('Crop Member Image')
+
+                }else if(window.location.href.indexOf("customers") !=-1){
+
+                    $('#changepicModal .admin-header >h3').text('Crop Customer Image')
+
+                }else if(window.location.href.indexOf("applicants") !=-1){
+
+                    $('#changepicModal .admin-header >h3').text('Crop Applicant Image')
 
                 }
 
@@ -50,7 +86,7 @@ $(document).ready(function () {
             var file = this.files[0];
             var filename = $(this).val();
             var ext = filename.split(".").pop().toLowerCase();
-            if (($.inArray(ext, ["jpg", "png", "jpeg"]) != -1)) {
+            if (($.inArray(ext, ["jpg", "png", "jpeg","svg"]) != -1)) {
                 var reader = new FileReader();
                 reader.onload = function (event) {
                     imgurl = event.target.result
@@ -82,7 +118,7 @@ $(document).ready(function () {
                 $('#changepicModal').modal('show');
             } else {
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
                     $("#myfile-error").text(languagedata?.Toast?.errmsgupload).show()
                 }
             }
@@ -381,14 +417,20 @@ $(document).ready(function () {
 $(document).on('click', '.expandbtn', function () {
 
     $('body').toggleClass('expand')
+   
     if ($('body').hasClass('expand')) {
-        $(this).html(`<a href="javascript:void(0)"><img src="/public/img/right-arrow.svg" alt=""></a>
-        <a href="javascript:void(0)"><img src="/public/img/left-arrow.svg" alt=""> `+languagedata.Toast.close + ` </a>`)
+        $('.sidebar').addClass('open')
+        $(this).html(`
+    
+          <p>v1.0</p> <img src="/public/img/right-arrow1.svg" class="right" />
+        
+        `)
         setCookie("mainmenu","true")
    
     } else {
-        $(this).html(`<a href="javascript:void(0)"><img src="/public/img/right-arrow.svg" alt=""></a>`)
+        $(this).html(` <img src="/public/img/right-arrow1.svg" alt=""><p>v1.0</p>`)
         delete_cookie("mainmenu")
+        $('.sidebar').removeClass('open')
     }
    
 })
@@ -889,22 +931,6 @@ inputGroups.forEach(inputGroup => {
 
 });
 
-inputGroups.forEach(inputGroup => {
-
-    let inputField = inputGroup.querySelector('#select_channel');
-
-    inputField.addEventListener('focus', function (event) {
-        if (event.target.id !== 'searchcatlist') {
-            inputGroup.classList.add('input-group-focused');
-
-        }
-    });
-    inputField.addEventListener('blur', function () {
-        inputGroup.classList.remove('input-group-focused');
-    });
-
-});
-
 $(document).ready(function () {
     window.addEventListener('beforeunload', (event) => {
         $.ajax({
@@ -920,5 +946,43 @@ $("#logout").click(function(){
     localStorage.removeItem("rememberme");
 })
 
+window.onload = function () {
+    const sidebar = document.querySelector(".sidebar");
+    const closeBtn = document.querySelector("#btn");
+    const searchBtn = document.querySelector(".bx-search")
 
+    closeBtn.addEventListener("click", function () {
+        sidebar.classList.toggle("open")
+        menuBtnChange()
+    })
+
+    searchBtn.addEventListener("click", function () {
+        sidebar.classList.toggle("open")
+        menuBtnChange()
+    })
+
+    function menuBtnChange() {
+        if (sidebar.classList.contains("open")) {
+            closeBtn.classList.replace("right", "left")
+        } else {
+            closeBtn.classList.replace("left", "right")
+        }
+    }
+}
+
+inputGroups.forEach(inputGroup => {
+
+    let inputField = inputGroup.querySelector('#select_channel');
+
+    inputField.addEventListener('focus', function (event) {
+        if (event.target.id !== 'searchcatlist') {
+            inputGroup.classList.add('input-group-focused');
+
+        }
+    });
+    inputField.addEventListener('blur', function () {
+        inputGroup.classList.remove('input-group-focused');
+    });
+
+});
 

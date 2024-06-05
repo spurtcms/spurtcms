@@ -307,13 +307,6 @@ $(document).ready(function () {
 /** */
 $(document).ready(function () {
   //main menu
-  $('.mainmenu').removeClass('active');
-  $('.cmsmenu').addClass('active');
-
-  //tab menu
-  $('.incmsmenu').removeClass('active');
-  $('.channelsmenu').addClass('active');
-
   Sort()
 
 })

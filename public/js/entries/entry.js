@@ -11,7 +11,7 @@ var Channelid
 var flagg = false
 var result1 = []
 var newchanneldata = []
-
+var membername
 var authername
 var createtime
 var publishtime
@@ -19,9 +19,14 @@ var readingtime
 var sortorder
 var tagname
 var extxt
+var selectedcheckboxarr =[]
 
 
-console.log(channeldata, 'channeldata')
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $("#searchkey").focus().select();
+    }
+});
 // Return to entries list function //
 $(".searchentry").click(function () {
 
@@ -39,6 +44,14 @@ $(".searchentry").click(function () {
 $(document).on('click', '#removecategory', function () {
 
     window.location.href = "/channel/entrylist/"
+
+})
+
+$(document).on("keyup", "#article", function () {
+
+    console.log("sssss");
+
+    $("#sort-error").hide()
 
 })
 
@@ -134,6 +147,9 @@ $(document).ready(async function () {
                     $("#spacedel-img").show();
                     $('#spimagehide').attr('src', result.Entries.CoverImage)
                 }
+                var currentDate = new Date();
+                var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+                $('#current-time-input').val(formattedDate);
 
                 $('#titleid').val(result.Entries.Title)
                 // $('#text').val(result.Description)
@@ -144,20 +160,50 @@ $(document).ready(async function () {
                 $('#metadesc').val(result.Entries.MetaDescription)
                 $('#metakey').val(result.Entries.Keyword)
                 $('#metaslug').val(result.Entries.Slug)
+                $("#imgtag").val(result.Entries.ImageAltTag)
                 $('#seosavebtn').text(languagedata?.update)
                 $('#categorysave').text(languagedata?.update)
-                $("#authername").val(result.Entries.Author)
-                $("#cdtime").val(result.Entries.CreateDate)
-                $("#publishtime").val(result.Entries.PublishedTime)
-                $("#readingtime").val(result.Entries.ReadingTime)
+                if (result.Entries.Author != "") {
+
+                    $("#author").val(result.Entries.Author)
+                    $("#cn-user").show()
+                }
+                if (result.Createtime != "") {
+
+                    $("#cdtime").val(result.Createtime)
+
+                } else {
+
+                    $("#cdtime").val(formattedDate)
+
+                }
+
+                if (result.Publishedtime != "") {
+
+                    $("#publishtime").val(result.Publishedtime)
+
+
+                } else {
+
+                    $("#publishtime").val(formattedDate)
+
+                }
+
+                if (result.Entries.ReadingTime != 0) {
+
+                    $("#readingtime").val(result.Entries.ReadingTime)
+
+                }
                 if (result.Entries.SortOrder != 0) {
+
                     $("#article").val(result.Entries.SortOrder)
                 }
                 $("#tagname").val(result.Entries.Tags)
                 $("#extxt").val(result.Entries.Excerpt)
+                membername = result.Memberlist
                 // $('#configbtn').attr('href', '/channels/editchannel/' + result.Entries.ChannelId)
 
-                seodetails = { title: result.Entries.MetaTitle, desc: result.Entries.MetaDescription, keyword: result.Entries.Keyword, slug: result.Entries.Slug }
+                seodetails = { title: result.Entries.MetaTitle, desc: result.Entries.MetaDescription, keyword: result.Entries.Keyword, slug: result.Entries.Slug, imgtag: result.Entries.ImageAltTag }
                 console.log("seodetails", seodetails)
 
                 //dropdown item click//
@@ -258,7 +304,7 @@ $(document).ready(async function () {
                 if (result.Section != null) {
                     result.Section.forEach(function (section) {
 
-                        $('.secid').append(`<div style="margin-bottom:10px" id="${section.SectionId}"><h6 style="margin-bottom:10px" class="sechead">${section.SectionName}</h6></div>`)
+                        $('.secid').append(`<div style="margin-bottom:10px" id="section${section.SectionId}"><h6 style="margin-bottom:10px" class="sechead">${section.SectionName}</h6></div>`)
 
                     })
                     if (result.FieldValue != null) {
@@ -268,13 +314,13 @@ $(document).ready(async function () {
 
                             if (fieldValue.MasterFieldId == 14 && fieldValue.Mandatory == 1) {
 
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
 
                                 <div class="input-group  user-drop-down getvalue" id="checkdrop" data-id=""  style="margin-bottom: 20px">
          
                                          <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
          
-                                         <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                         <a class="dropdown-toggle " type="button" id="triggerId" data-bs-toggle="dropdown"
                                              aria-haspopup="true" aria-expanded="false">
                                          Select Members
                                          </a>
@@ -306,44 +352,24 @@ $(document).ready(async function () {
                             }
                             if (fieldValue.MasterFieldId == 14) {
 
-                                $(`#${fieldValue.SectionId}`).append(` 
-
-                                <div class="input-group  user-drop-down getvalue " id="dropoption"  style="margin-bottom: 20px">
-        
-                                        <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
-        
-                                        <a class="dropdown-toggle triggerId1" type="button" id="triggerId1${fieldValue.FieldId}" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                        Option
-                                        </a>
-                                        <input type="hidden" data-id="" class="fieldid1" id="${fieldValue.FieldId}"   value=""  >
-        
-                                        <div class="dropdown-menu"id="drop${fieldValue.FieldId}" aria-labelledby="triggerId">
-                                        <div class="ig-row ig-channel-input">
-
-                                        <input type="text" id="searchdropdownrole" class="search" name="keyword"
-                                            placeholder="Search Members" value="">
-                                    </div>
-                                    <div class="noData-foundWrapper" id="nodatafounddesign"
-                                    style="margin-top: -40px;display: none;">
-
-                                    <div class="empty-folder">
-                                        <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
-                                    </div>
-                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                   ` + languagedata.oopsnodata + `</h1>
-
-                                </div>
-                                        </div>
-                                        <label class="error manerr" id="opterr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
-        
-                                    </div>
+                                $(`#section${fieldValue.SectionId}`).append(` 
+                                <div class="input-group getvalue" data-id="" data-char="">
+                                <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
+                                <input type="hidden" data-id="" class="fieldid1" id="${fieldValue.FieldId}"  value=""  >
+                                <div class="ig-row">
+                                <button class="closemember" style="display: none"><img src="/public/img/close-1234.svg" /></button>
+                                  <input type="text" class="searchval"  id="searchdropdownrole" placeholder="Search Members"  />
+                                  <div class="drop-menu memberlistdiv" style="display:none">
+                                 
+                              </div>
+                              </div>
+                               
+                              </div>
 
                                 `)
                             }
                             if (fieldValue.MasterFieldId == 4) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
                     <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
                     <div class="ig-row date-input">
@@ -356,12 +382,12 @@ $(document).ready(async function () {
                             }
 
                             if (fieldValue.MasterFieldId == 5) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
             <div class="input-group  user-drop-down getvalue " id="dropoption" data-id="${fieldValue.Mandatory}" style="margin-bottom: 20px">
         
                                         <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
         
-                                        <a class="dropdown-toggle" type="button" id="triggerId${fieldValue.FieldId}" data-bs-toggle="dropdown"
+                                        <a class="dropdown-toggle atag${fieldValue.FieldId}" type="button" id="triggerId${fieldValue.FieldId}" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                         Option
                                         </a>
@@ -377,7 +403,7 @@ $(document).ready(async function () {
                 `);
                             }
                             if (fieldValue.MasterFieldId == 6) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
                     <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
@@ -391,7 +417,7 @@ $(document).ready(async function () {
                 `);
                             }
                             if (fieldValue.MasterFieldId == 9) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
 
                 <div class="input-group getvalue" id="radiogrb" data-id="${fieldValue.Mandatory}">
                 <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
@@ -409,7 +435,7 @@ $(document).ready(async function () {
                 `);
                             }
                             if (fieldValue.MasterFieldId == 8) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}" >
                 <label  class="input-label"  data-id="${fieldValue.FieldId}" id="textarealabel" for="">${fieldValue.FieldName}</label>
              
@@ -422,7 +448,7 @@ $(document).ready(async function () {
                 `);
                             }
                             if (fieldValue.MasterFieldId == 2) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
@@ -434,7 +460,7 @@ $(document).ready(async function () {
                 `);
                             }
                             if (fieldValue.MasterFieldId == 7) {
-                                $(`#${fieldValue.SectionId}`).append(` 
+                                $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
@@ -447,12 +473,12 @@ $(document).ready(async function () {
                             }
 
                             if (fieldValue.MasterFieldId == 10) {
-                                $(`#${fieldValue.SectionId}`).append(`
+                                $(`#section${fieldValue.SectionId}`).append(`
                 <div class="input-group  user-drop-down getvalue" id="checkdrop" data-id="${fieldValue.Mandatory}"  style="margin-bottom: 20px">
          
                                          <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
          
-                                         <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                         <a class="dropdown-toggle " type="button" id="triggerId" data-bs-toggle="dropdown"
                                              aria-haspopup="true" aria-expanded="false">
                                          Option
                                          </a>
@@ -481,12 +507,11 @@ $(document).ready(async function () {
 
                                     $(`#triggerId${field.FieldId}`).text(field.FieldValue)
 
-
-
-
+                                    // $(`.memberinput${field.FieldId}`).val(field.FieldValue)
 
                                 })
                             }
+                            $(".searchval").val(result.Memberlist)
 
                             if (fieldValue.OptionValue !== null) {
                                 fieldValue.OptionValue.forEach(function (option) {
@@ -525,89 +550,73 @@ $(document).ready(async function () {
                         });
 
                     }
-                    if (result.Memberlist != null) {
-
-                        result.Memberlist.forEach(function (member) {
-
-                            if (result.FieldValue != null) {
-                                result.FieldValue.forEach(function (fieldValue) {
-
-                                    if (fieldValue.MasterFieldId == 14 && fieldValue.Mandatory == 1) {
-
-                                        $(`#check${fieldValue.FieldId}`).append(`
-                                <div class="chk-group chk-group-label checkboxdiv">
-                                <input type="checkbox" class="checkboxid1" data-id=${member.Id} id="Check${member.Id}">
-                                <label for="Check${member.Id}" class="checkboxcls">${member.FirstName}</label>
-                            </div>
-                              
-          `);
-                                    }
-
-                                    if (fieldValue.MasterFieldId == 14) {
-
-                                        $(`#drop${fieldValue.FieldId}`).append(`
-            <button type="button" id="optionsid1" class="dropdown-item optionsid1" data-id=${member.Id} >${member.FirstName}</button>
-            `)
-                                    }
-                                })
-                            }
-                        })
-                    }
 
 
-                    $('.optionsid1').each(function () {
 
 
-                        if ($(this).attr('data-id') == $('.fieldid1').val()) {
 
-                            $(`.triggerId1`).text($(this).text())
-
-                        }
-
-                    })
                 }
 
                 // dropdown filter input box search
-                $("#searchdropdownrole").keyup(function () {
 
+                $("#searchdropdownrole").keyup(function () {
 
                     var keyword = $(this).val().trim().toLowerCase()
 
-                    $(".checkboxcls").each(function (index, element) {
-                        var title = $(element).text().toLowerCase()
 
+                    if (keyword == "") {
 
-                        if (title.includes(keyword)) {
-                            $(element).show()
-                            $("#nodatafounddesign").hide()
+                        $('.memberlistdiv').hide()
+                        $('.closemember').hide()
+                        $('.fieldid1').val('')
+                    } else {
 
-                        } else {
-                            $(element).hide()
-                            if ($('.checkboxcls:visible').length == 0) {
+                        $('.memberlistdiv').show()
+                        $('.closemember').show()
+                    }
 
-                                $("#nodatafounddesign").show()
-
-                            }
-                        }
+                    fetch(`/channel/memberdetails/?keyword=${keyword}`, {
+                        method: "GET"
                     })
-                    $(".dropdown-item").each(function (index, element) {
-                        var title = $(element).text().toLowerCase()
-
-                        if (title.includes(keyword)) {
-                            $(element).show()
-                            $("#nodatafounddesign").hide()
-
-                        } else {
-                            $(element).hide()
-                            if ($('.dropdown-item:visible').length == 0) {
-
-                                $("#nodatafounddesign").show()
-
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
                             }
-                        }
-                    })
+                            return response.json();
+                        })
+                        .then(data => {
+
+                            $('.memberlistdiv').empty();
+                            if (data == null) {
+
+                                $('.memberlistdiv').append(` <div class="noData-foundWrapper" id="nodatafounddesign"
+                                    style="margin-top: -40px;display: none;">
+        
+                                    <div class="empty-folder">
+                                        <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                    ` + languagedata.oopsnodata + `</h1>
+                                    </div>
+                                     `)
+                                $("#nodatafounddesign").show()
+                            }
+                            if (data != null) {
+                                $("#nodatafounddesign").hide()
+                                for (let x of data) {
+                                    $('.memberlistdiv').append(` <button type="button" id="optionsid1" class="dropdown-item optionsid1" data-id=${x.Id} >${x.FirstName}</button>`)
+
+                                }
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with your fetch operation:', error);
+                        });
+
+
                 })
-
 
 
                 $('.getvalue').each(function () {
@@ -705,11 +714,15 @@ $(document).ready(function () {
 })
 $(document).on('keyup', '#searchkey', function () {
 
+    if (event.key === 'Backspace') {
+
     if ($('.search').val() === "") {
-        console.log("check")
+       
         window.location.href = "/channel/entrylist/"
 
     }
+
+}
 
 })
 
@@ -869,7 +882,7 @@ $(document).on("click", "#delid2", function () {
 })
 
 $(document).on("click", "#delid", function () {
-    if (window.location.href.includes('/channel/entrylist/')) {
+    if (window.location.href.includes('/channel/entrylist')) {
 
         $.ajax({
             url: "/channel/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
@@ -1038,7 +1051,17 @@ $('#draftbtn').click(function () {
 
 
 
-    } else if (data === '') {
+    } else if (title === '') {
+
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>Please Enter The Title</span></div>';
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.toast-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
+    }
+    else if (data === '') {
 
         notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descriptionentry + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
@@ -1069,6 +1092,15 @@ $('#draftbtn').click(function () {
         var flag1 = categoryvalidation()
     }
     if (title && data != '' && img != '' && (flag == true) && (flag1 == true)) {
+
+        authername = $("#author").val()
+        createtime = $("#cdtime").val()
+        publishtime = $("#publishtime").val()
+        readingtime = $("#readingtime").val()
+        sortorder = $("#article").val()
+        tagname = $("#tagname").val()
+        extxt = $("#extxt").val()
+
         $.ajax({
             url: drafturl,
             type: "POST",
@@ -1219,7 +1251,18 @@ $('#publishbtn').click(function () {
                 $(this).remove();
             });
         }, 5000); // 5000 milliseconds = 5 seconds
-    } else if (data === '') {
+    }else if (title === '') {
+
+        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>Please Enter The Title</span></div>';
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.toast-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
+    }
+
+     else if (data === '') {
 
         notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata?.Channell?.descriptionentry + '</span></div>';
         $(notify_content).insertBefore(".header-rht");
@@ -1254,6 +1297,14 @@ $('#publishbtn').click(function () {
 
     if (title != '' && data != '' && img != '' && (flag == true) && (flag1 == true)) {
 
+        authername = $("#author").val()
+        createtime = $("#cdtime").val()
+        publishtime = $("#publishtime").val()
+        readingtime = $("#readingtime").val()
+        sortorder = $("#article").val()
+        tagname = $("#tagname").val()
+        extxt = $("#extxt").val()
+
         $.ajax({
             url: "/channel/publishentry/" + eid,
             type: "POST",
@@ -1269,7 +1320,339 @@ $('#publishbtn').click(function () {
 
 
 })
+//ENTRY SELECTED FUNCTION//
 
+$(document).on('click','.selectcheckbox',function(){
+
+    entryid =$(this).attr('data-id')
+
+    var status = $(this).parents('td').siblings('td').find('span.status').text().trim();
+
+    if ($(this).prop('checked')){
+
+        selectedcheckboxarr.push({"entryid":entryid,"status":status})
+    
+    }else{
+
+        const index = selectedcheckboxarr.findIndex(item => item.entryid === entryid);
+    
+        if (index !== -1) {
+
+            console.log(index,"sssss")
+            selectedcheckboxarr.splice(index, 1);
+        }
+       
+        $('#Check').prop('checked',false)
+
+    }
+
+   
+    if (selectedcheckboxarr.length !=0){
+
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+        var img;
+
+           if (selectedcheckboxarr[0].status === "Unpublished") {
+  
+             setstatus = "Published";
+ 
+              img = "/public/img/publish.svg";
+
+        } else if (selectedcheckboxarr[0].status === "Published") {
+
+               setstatus = "Unpublished";
+
+               img = "/public/img/unpublish-select.svg";
+
+          } else if (selectedcheckboxarr[0].status === "Draft") {
+
+               setstatus = "Published";
+
+               img = "/public/img/publish.svg";
+       }
+
+           var htmlContent = '';
+
+             if (allSame) {
+
+              htmlContent = '<img src="' + img + '">' + setstatus;
+
+              } else {
+
+                htmlContent = '';
+
+              }
+
+            $('#unbulishslt').html(htmlContent);
+       
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+        if(!allSame){
+
+            $('#seleccheckboxdelete').removeClass('border-end')
+
+            $('.unbulishslt').html("")
+        }else{
+
+            $('#seleccheckboxdelete').addClass('border-end')
+        }
+
+       
+    }else{
+
+        $('.selected-numbers').hide()
+    }
+
+    var allChecked = true;
+
+         $('.selectcheckbox').each(function() {
+
+             if (!$(this).prop('checked')) {
+
+             allChecked = false;
+
+            return false; 
+         }
+    });
+
+          $('#Check').prop('checked', allChecked);
+
+})
+//ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+    selectedcheckboxarr=[]
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked){
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selectcheckbox').each(function(){
+    
+           entryid= $(this).attr('data-id')
+
+           var status = $(this).parents('td').siblings('td').find('span.status').text().trim();
+    
+           selectedcheckboxarr.push({"entryid":entryid,"status":status})
+
+           console.log(selectedcheckboxarr,"checkboxarray")
+        })
+
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+
+        var img
+
+        if (selectedcheckboxarr.length !=0){
+    
+        if( selectedcheckboxarr[0].status=="Unpublished"){
+    
+            setstatus ="Published"
+
+            img ="/public/img/publish.svg"
+
+        }else if(selectedcheckboxarr[0].status=="Published"){
+    
+            setstatus ="Unpublished"
+
+            img = "/public/img/unpublish-select.svg";
+
+
+        }else if(selectedcheckboxarr[0].status=="Draft"){
+
+            console.log("check23")
+    
+            setstatus ="Published"
+
+            img = "/public/img/publish.svg";
+        }
+     }
+        var htmlContent = '';
+
+        if (allSame) {
+
+         htmlContent = '<img src="' + img + '">' + setstatus;
+
+         $('#seleccheckboxdelete').addClass('border-end')
+
+         } else {
+
+           htmlContent = '';
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+         }
+
+       $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    
+    }else{
+
+
+        selectedcheckboxarr=[]
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selected-numbers').hide()
+    }
+
+    if (selectedcheckboxarr.length ==0){
+
+        $('.selected-numbers').hide()
+    }
+})
+
+$(document).on('click','#seleccheckboxdelete',function(){
+
+    $('.deltitle').text("Delete Entries?")
+
+    $('#content').text('Are you sure want to delete selected Entries?')
+
+    $('#delete').addClass('checkboxdelete')
+})
+
+$(document).on('click','#unbulishslt',function(){
+
+    $('.deltitle').text( $(this).text()+" "+"Entries?")
+
+    $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Entries?")
+
+    $('#delete').addClass('selectedunpublish')
+
+})
+//MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/channel/deleteselectedentry',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "entryids": JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Entry Deleted Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.selectcheckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    selectedcheckboxarr=[]
+
+    $('.selected-numbers').hide()
+    
+})
+
+//multi select unpublish function//
+
+$(document).on('click','.selectedunpublish',function(){
+
+    var url = window.location.href;
+
+    console.log("url", url)
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/channel/unpublishselectedentry',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "entryids":JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            var datastatus
+
+            if (data.status==2){
+
+                datastatus ="Unpublished"
+            }else if(data.status==1){
+
+                datastatus ="Published"
+            }else if (data.status==0){
+
+                datastatus="Draft"
+            }
+            if (data.value==true){
+
+                setCookie("get-toast", "Entry " + datastatus + " Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+
+})
 //EDIT FUNCTION IN ENTRY PAGE//
 $(document).on('click', '#editbtn', function () {
 
@@ -1513,10 +1896,11 @@ $(document).on('click', '#seosavebtn', function () {
         desc = $('#metadesc').val()
         keyword = $('#metakey').val()
         slug = $('#metaslug').val()
+        imgtag = $("#imgtag").val()
 
         if (title !== '' || desc !== '' || keyword !== '' || slug !== '') {
             // seodetails.push({ title: title, desc: desc, keyword: keyword, slug: slug });
-            seodetails = { title: title, desc: desc, keyword: keyword, slug: slug }
+            seodetails = { title: title, desc: desc, keyword: keyword, slug: slug, imgtag: imgtag }
         }
 
 
@@ -1634,6 +2018,7 @@ $(document).on('click', '#seocancelbtn', function () {
     $('#metadesc').val('')
     $('#metakey').val('')
     $('#metaslug').val('')
+    $('#imgtag').val('')
     $('#metatitle-error').hide()
     $('.input-group').removeClass('input-group-error')
     $('#prefixerr').hide()
@@ -1793,15 +2178,16 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
             if (result.Section != null) {
                 result.Section.forEach(function (section) {
 
-                    $('.secid').append(`<div style="margin-bottom:10px" id="${section.SectionId}"><h6 class="sechead" style="margin-bottom:10px">${section.SectionName}</h6></div>`)
+                    $('.secid').append(`<div style="margin-bottom:10px" id="section${section.SectionId}"><h6 class="sechead" style="margin-bottom:10px">${section.SectionName}</h6></div>`)
 
                 })
                 if (result.FieldValue != null) {
                     result.FieldValue.forEach(function (fieldValue) {
-
+                        console.log("sdfjjjjjjjjj")
 
                         if (fieldValue.MasterFieldId == 4) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            console.log("jjjjjjj")
+                            $(`#section${fieldValue.SectionId}`).append(` 
                     <div class="input-group getvalue" data-id="${fieldValue.Mandatory}">
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
@@ -1816,13 +2202,13 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                         }
 
                         if (fieldValue.MasterFieldId == 5) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            $(`#section${fieldValue.SectionId}`).append(` 
             
             <div class="input-group  user-drop-down getvalue" data-id="${fieldValue.Mandatory}"  id="dropoption" style="margin-bottom: 20px">
         
                                         <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
         
-                                        <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                        <a class="dropdown-toggle atag${fieldValue.FieldId}" type="button" id="triggerId" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                         Option
                                         </a>
@@ -1841,7 +2227,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                         }
 
                         if (fieldValue.MasterFieldId == 6) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            $(`#section${fieldValue.SectionId}`).append(` 
                     <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" >
                  
                     <label class="input-label" id="datelabel"  data-id="${fieldValue.FieldId}" for="">${fieldValue.FieldName}</label>
@@ -1855,7 +2241,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 `);
                         }
                         if (fieldValue.MasterFieldId == 9) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" id="radiogrb" data-id="${fieldValue.Mandatory}" >
                 <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
                 <div class="ig-row">
@@ -1871,7 +2257,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 `);
                         }
                         if (fieldValue.MasterFieldId == 8) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}" >
                 <label  class="input-label"  data-id="${fieldValue.FieldId}" id="textarealabel" for="">${fieldValue.FieldName}</label>
              
@@ -1884,7 +2270,10 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 `);
                         }
                         if (fieldValue.MasterFieldId == 2) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            console.log("qqqqqqqqqqqq")
+
+                            console.log(fieldValue.SectionId, "qqqqqqqqqqqqqq")
+                            $(`#section${fieldValue.SectionId}`).append(` 
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}"  data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
@@ -1897,7 +2286,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 `);
                         }
                         if (fieldValue.MasterFieldId == 7) {
-                            $(`#${fieldValue.SectionId}`).append(`  
+                            $(`#section${fieldValue.SectionId}`).append(`  
                 <div class="input-group getvalue" data-id="${fieldValue.Mandatory}" data-char="${fieldValue.CharacterAllowed}">
                       <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
                       <div class="ig-row">
@@ -1910,7 +2299,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                         }
 
                         if (fieldValue.MasterFieldId == 10) {
-                            $(`#${fieldValue.SectionId}`).append(`
+                            $(`#section${fieldValue.SectionId}`).append(`
                <div class="input-group  user-drop-down getvalue" id="checkdrop" data-id="${fieldValue.Mandatory}"  style="margin-bottom: 20px">
         
                                         <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
@@ -1935,7 +2324,7 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
                         }
                         if (fieldValue.MasterFieldId == 14 && fieldValue.Mandatory == 1) {
-                            $(`#${fieldValue.SectionId}`).append(` 
+                            $(`#section${fieldValue.SectionId}`).append(` 
 
                             <div class="input-group  user-drop-down getvalue" id="checkdrop"   style="margin-bottom: 20px">
         
@@ -1975,42 +2364,23 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
                 `);
 
                         }
+
                         if (fieldValue.MasterFieldId == 14) {
-                            $(`#${fieldValue.SectionId}`).append(` 
-                            <div class="input-group  user-drop-down getvalue"   id="dropoption" style="margin-bottom: 20px">
-        
-                            <label for="" class="input-label"  data-id="${fieldValue.FieldId}" id="slabel">${fieldValue.FieldName}</label>
 
-                            <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            Choose Member
-                            </a>
-                            <div class="ig-row">
+                            $(`#section${fieldValue.SectionId}`).append(` 
+                            <div class="input-group getvalue" data-id="" data-char="">
+                            <label for="" class="input-label"   data-id="${fieldValue.FieldId}" id="textboxlabel">${fieldValue.FieldName}</label>
                             <input type="hidden" class="fieldid1" id="${fieldValue.FieldId}"  value=""  >
-                            </div>
-                            <label class="error manerr" id="opterr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
-
-                            <div class="dropdown-menu" id="drop${fieldValue.FieldId}" aria-labelledby="triggerId">
-                            <div class="ig-row ig-channel-input">
-
-                            <input type="text" id="searchdropdownrole" class="search" name="keyword"
-                                placeholder="Search Members" value="">
-                                <div class="noData-foundWrapper" id="nodatafounddesign"
-                                style="margin-top: -40px;display: none;">
-
-                                <div class="empty-folder">
-                                    <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
-                                    <img src="/public/img/shadow.svg" alt="">
-                                </div>
-                                <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                ` + languagedata.oopsnodata + `</h1>
-
-                            </div>
-                        </div>
-                                
-                            </div>
+                            <div class="ig-row">
+                            <button class="closemember" style="display: none""><img src="/public/img/close-1234.svg" /></button>
                           
-                        </div>
+                            <input type="text" id="searchdropdownrole" placeholder="Search Members"  /> 
+                              <div class="drop-menu memberlistdiv" style="display:none">
+                             
+                              </div>
+                            </div>
+                           
+                          </div>
                             `)
                         }
                         if (fieldValue.OptionValue !== null) {
@@ -2067,11 +2437,6 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
       `);
                                 }
 
-                                if (fieldValue.MasterFieldId == 14) {
-                                    $(`#drop${fieldValue.FieldId}`).append(`
-                            <button type="button" id="optionsid1" class="dropdown-item optionsid1" data-id=${member.Id} >${member.FirstName}</button>
-                            `)
-                                }
                             })
                         }
                     })
@@ -2080,45 +2445,61 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
             // dropdown filter input box search
             $("#searchdropdownrole").keyup(function () {
 
-
                 var keyword = $(this).val().trim().toLowerCase()
+                if (keyword == "") {
 
-                $(".checkboxcls").each(function (index, element) {
-                    var title = $(element).text().toLowerCase()
+                    $('.memberlistdiv').hide()
+                    $('.closemember').hide()
+                    $('.fieldid1').val('')
+                } else {
 
-
-                    if (title.includes(keyword)) {
-                        $(element).show()
-                        $("#nodatafounddesign").hide()
-
-                    } else {
-                        $(element).hide()
-                        if ($('.checkboxcls:visible').length == 0) {
-
-                            console.log("visible")
-
-                            $("#nodatafounddesign").show()
-
-                        }
-                    }
+                    $('.memberlistdiv').show()
+                    $('.closemember').show()
+                }
+                fetch(`/channel/memberdetails/?keyword=${keyword}`, {
+                    method: "GET"
                 })
-                $(".dropdown-item").each(function (index, element) {
-                    var title = $(element).text().toLowerCase()
-
-
-                    if (title.includes(keyword)) {
-                        $(element).show()
-                        $("#nodatafounddesign").hide()
-
-                    } else {
-                        $(element).hide()
-                        if ($('.dropdown-item:visible').length == 0) {
-
-                            $("#nodatafounddesign").show()
-
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
                         }
-                    }
-                })
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle the data received from the API
+                        console.log(data, "resultofeditdetails");
+                        $('.memberlistdiv').empty();
+
+                        if (data == null) {
+                            $('.memberlistdiv').append(` <div class="noData-foundWrapper" id="nodatafounddesign"
+                            style="margin-top: -40px;display: none;">
+
+                            <div class="empty-folder">
+                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                            ` + languagedata.oopsnodata + `</h1>
+                            </div>
+                             `)
+                            console.log("ssssssssssssssssssss")
+                            $("#nodatafounddesign").show()
+                        }
+                        if (data != null) {
+                            $("#nodatafounddesign").hide()
+                            for (let x of data) {
+                                $('.memberlistdiv').append(` <button type="button" id="optionsid1" class="dropdown-item optionsid1" data-id=${x.Id} >${x.FirstName}</button>`)
+
+                            }
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with your fetch operation:', error);
+                    });
+
+
+
             })
 
         }
@@ -2126,10 +2507,12 @@ $(document).on('click', '.avaliable-dropdown-item ', function () {
 
 })
 
+
+
 $(document).on('click', '#channelfieldsave', function () {
 
-    // channeldata = [];
-    authername = $("#authername").val()
+    channeldata = [];
+    authername = $("#author").val()
     createtime = $("#cdtime").val()
     publishtime = $("#publishtime").val()
     readingtime = $("#readingtime").val()
@@ -2137,12 +2520,46 @@ $(document).on('click', '#channelfieldsave', function () {
     tagname = $("#tagname").val()
     extxt = $("#extxt").val()
 
-    console.log("aaaaaaa", authername);
+
 
     var flag = channelfieldvalidation()
 
     channelfieldkeyup()
+    if (sortorder != "") {
 
+        var url = window.location.href;
+
+        if (url.includes('editentry')) {
+            var urlvalue = url.split('?')[0]
+            var eid = urlvalue.split('/').pop()
+
+        }
+
+        $.ajax({
+            url: "/channel/checkentriesorder",
+            type: "POST",
+            async: false,
+            data: { "chid": $("#chanid").val(), csrf: $("input[name='csrf']").val(), "order": sortorder, "eid": eid },
+            success: function (data) {
+
+                console.log("result", data.value, data.value == true);
+
+                if (data.value == true) {
+
+                    $("#sort-error").show()
+
+                    flag = false
+
+                } else {
+
+                    $("#sort-error").hide()
+
+                    flag = true
+
+                }
+            }
+        })
+    }
     $('.getvalue').each(function () {
         obj = {}
         obj = {
@@ -2158,23 +2575,15 @@ $(document).on('click', '#channelfieldsave', function () {
             obj.fieldid = '0'
 
         }
-        if ((obj.value != '') && (obj.value != undefined)) {
+        // if ((obj.value != '') && (obj.value != undefined)) {
             channeldata.push(obj)
-        }
+        // }
 
 
         console.log("channeldata", channeldata)
     })
 
-    if ((channeldata.length !== 0) && (flag == true)) {
-
-        // notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span> ' + languagedata?.Channell?.saveerr + ' </span></div>';
-        // $(notify_content).insertBefore(".header-rht");
-        // setTimeout(function () {
-        //     $('.toast-msg').fadeOut('slow', function () {
-        //         $(this).remove();
-        //     });
-        // }, 5000); // 5000 milliseconds = 5 seconds
+    if ((flag == true)) {
 
         if (flagg == false) {
             $('#draftbtn').click()
@@ -2239,6 +2648,10 @@ $(document).on('click', '#addcategory', function () {
 
 $(document).on('click', '#channelfield', function () {
 
+    console.log(newchanneldata, "channeldata")
+
+    var radval = $('.radioval').val()
+    console.log(radval, "radiovalue")
 
     if (newchanneldata != '') {
         bindchanneldata()
@@ -2542,14 +2955,17 @@ $(document).on('click', '#optionsid1', function () {
     option = $(this).attr('data-id')
     console.log("dropdown", option)
     $('.fieldid1').val(option)
+    test = $(this).text()
+    $('#searchdropdownrole').val(test)
+    $('.memberlistdiv').hide()
 
-    if (($('.fieldid1').val()) !== '') {
+    // if (($('.fieldid1').val()) !== '') {
 
-        console.log("yyyy")
+    //     console.log("yyyy")
 
-        $('#dropoption').removeClass('input-group-error')
-        $('#opterr').css('display', 'none');
-    }
+    //     $('#dropoption').removeClass('input-group-error')
+    //     $('#opterr').css('display', 'none');
+    // }
 
 })
 //seo validation//
@@ -2639,16 +3055,16 @@ $(document).on('click', '.checkboxid', function () {
     }
 
 
-    if ($('.checkfieldid').val() != '') {
+    // if ($('.checkfieldid').val() != '') {
 
-        $('#opterrr').hide()
-        $('#checkdrop').removeClass('input-group-error')
+    //     $('#opterrr').hide()
+    //     $('#checkdrop').removeClass('input-group-error')
 
-    } else {
-        $('#opterrr').show()
-        $('#checkdrop').addClass('input-group-error')
+    // } else {
+    //     $('#opterrr').show()
+    //     $('#checkdrop').addClass('input-group-error')
 
-    }
+    // }
 })
 
 $(document).on('click', '.checkboxid1', function () {
@@ -3079,7 +3495,7 @@ $(document).on('click', ".propdrop", function () {
 
 
 function bindchanneldata() {
-    console.log(result1, "log")
+
 
     $('.getvalue').each(function () {
 
@@ -3091,15 +3507,29 @@ function bindchanneldata() {
 
         })
 
-        console.log(newchanneldata[changedataindex], newchanneldata);
+        console.log(newchanneldata[changedataindex], newchanneldata, "kkkkkkkkkkkk");
+
 
         if (changedataindex >= 0) {
 
 
             $(this).find('.input-label').siblings('.ig-row').children('input').val(newchanneldata[changedataindex].value)
+
+            $(this).find('.input-label').siblings('.ig-row').children('textarea').val(newchanneldata[changedataindex].value)
+            $(this).find('.input-label').siblings('.atag' + newchanneldata[changedataindex].fid).text(newchanneldata[changedataindex].value)
         }
 
     })
+
+    $('#searchdropdownrole').val(membername)
+    if ($('#searchdropdownrole').val() != "") {
+
+        $('.closemember').show()
+    } else {
+
+        $('.closemember').hide()
+    }
+
 
 }
 function FieldValidation1() {
@@ -3244,13 +3674,16 @@ $(document).on("click", "#triggerId", function () {
 
 
     var keyword = $("#searchdropdownrole").val()
-    $(".dropdown-menu  button").each(function (index, element) {
+    $(".memberlistdiv  button").each(function (index, element) {
+
 
         if (keyword != "") {
             $("#searchdropdownrole").val("")
+            $(".memberlistdiv").empty()
             $("#nodatafounddesign").hide()
             $(element).show()
         } else {
+
             $("#searchdropdownrole").val()
             $("#nodatafounddesign").hide()
             $(element).show()
@@ -3260,26 +3693,114 @@ $(document).on("click", "#triggerId", function () {
 
 })
 
-$(document).on('focus', '.dateinfo', function () {
+// $(document).on('focus', '.dateinfo', function () {
 
-    var dateformat = $(this).attr('data-date');
+//     var dateformat = $(this).attr('data-date');
 
-    // var timeformat = $(this).attr('data-time');
+//     // var timeformat = $(this).attr('data-time');
 
-    if (dateformat != "") {
+//     if (dateformat != "") {
 
-        $('#' + $(this).attr('id')).bootstrapMaterialDatePicker({ setMaxDate: moment(), weekStart: 0, shortTime: false, time: false, format: dateformat, maxDate: new Date() });
+//         $('#' + $(this).attr('id')).bootstrapMaterialDatePicker({ setMaxDate: moment(), weekStart: 0, shortTime: false, time: false, format: dateformat, maxDate: new Date() });
 
-    }
+//     }
+
+// })
+
+// $(document).on('focus', '.timeinfo', function () {
+
+
+//     // var timeformat = $(this).attr('data-time');
+
+//     $('#' + $(this).attr('id')).bootstrapMaterialDatePicker({ setMaxDate: moment(), weekStart: 0, shortTime: false, time: true, format: "HH:mm:ss", maxDate: new Date(), date: false });
+
+// })
+
+$(document).on("keyup", "#author", function () {
+
+    // dropdown filter input box search
+    $("#author").keyup(function () {
+
+        var keyword = $(this).val().trim().toLowerCase()
+
+
+        if (keyword != "") {
+
+            $("#cn-user").show()
+
+            fetch(`/channel/userdetails/?keyword=${keyword}`, {
+                method: "GET"
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the data received from the API
+
+                    $('.userlistdiv').empty();
+
+                    if (data == null) {
+
+                        $(".nodata-userlistdiv").show()
+
+                    }
+                    if (data != null) {
+
+                        $(".nodata-userlistdiv").hide()
+
+                        $(".userlistdiv").show()
+
+                        for (let x of data) {
+
+                            $('.userlistdiv').append(` <button type="button" id="optionsid2" class="dropdown-item" data-id=${x.Id} >${x.FirstName}</button>`)
+
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+        } else {
+
+            $(".userlistdiv").hide()
+
+            $("#cn-user").hide()
+
+            $(".nodata-userlistdiv").hide()
+        }
+    })
 
 })
 
-$(document).on('focus', '.timeinfo', function () {
+$(document).on('click', '#optionsid2', function () {
 
 
-    // var timeformat = $(this).attr('data-time');
+    test = $(this).text()
 
-    $('#' + $(this).attr('id')).bootstrapMaterialDatePicker({ setMaxDate: moment(), weekStart: 0, shortTime: false, time: true, format: "HH:mm:ss", maxDate: new Date(), date: false });
+    $('#author').val(test)
 
+    $(".userlistdiv").hide()
+
+    $("#cn-user").show()
+
+})
+$(document).on('click', '#cn-user', function () {
+
+    $('#author').val("")
+
+    $("#cn-user").hide()
+
+})
+
+$(document).on('click', '.closemember', function () {
+
+    $('#searchdropdownrole').val('')
+    $('.memberlistdiv').hide()
+    $(this).hide()
+    $('.fieldid1').val('')
 })
 

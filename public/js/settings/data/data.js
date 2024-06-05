@@ -8,6 +8,12 @@ var page = 1
 
 var Mappedfields
 
+var Header
+
+var allData
+
+var fileName
+
 $(document).on('click', '.export-next', function () {
 
     $("#data-export1").hide()
@@ -48,7 +54,7 @@ $(document).on('click', '.im-channel', function () {
 
     $("#select_channel").text(C_name).attr("data-id", C_id)
 
-    $("#channel-name").text(C_name).attr("data-id", C_id)
+    $("#chn-name").text(C_name).attr("data-id", C_id)
 
     $("#channel-field").attr("data-id", C_id)
 
@@ -70,10 +76,6 @@ $(document).on('click', '.del-xlsx-file', function () {
 })
 
 // Xlsx file validation //
-var Header
-var allData
-var fileName
-
 $(document).ready(function () {
 
     $('#fileInput').on('change', function (event) {
@@ -225,10 +227,11 @@ $(document).on('click', '#nextstep', function () {
                     <div class="fields-blog">
                         <div class="dropdown">
                         <input type="hidden" class="input-field" id="input-file`+ index + `">
-                            <button class="dropdown-toggle para fields" field="`+ index + `" id="select-flds" importfield-id="0" r-field="" data-bs-toggle="dropdown"
+                            <button class="dropdown-toggle para fields position-relative grid align-items-center" field="`+ index + `" id="select-flds" importfield-id="0" r-field="" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Select Fields To Import
-                            </button>
+                               <span>Select Fields To Import</span>
+                                <div class="remove-fld position-absolute border-0 end-0  p-1 bg-white" id="cn-user" style="display:none;"><img src="/public/img/close-1234.svg" alt="clear"></div></button>
+                               
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
                                     <form action="">
@@ -240,19 +243,19 @@ $(document).on('click', '#nextstep', function () {
                                 </li>
     
                                 <li>
-                                    <button class="para-light ch-fld"  field-id="1" r-field="1" field="`+ index + `">
+                                    <button class="para-light ch-fld ch-fld-dd flt" field-id="1" r-field="1" field="`+ index + `">
                                         Title <span class="data-required">*</span>
                                     </button>
                                 </li>
     
                                 <li>
-                                    <button class="para-light ch-fld"  field-id="2" r-field="2" field="`+ index + `">
+                                    <button class="para-light ch-fld ch-fld-dd fld"  field-id="2" r-field="2" field="`+ index + `">
                                         Description <span class="data-required">*</span>
                                     </button>
                                 </li>
     
                                 <li>
-                                    <button class="para-light ch-fld"  field-id="3" field="`+ index + `">
+                                    <button class="para-light ch-fld ch-fld-dd flm"  field-id="3"  field="`+ index + `">
                                         Image <span class="data-required">*</span>
                                     </button>
                                 </li>
@@ -291,7 +294,7 @@ $(document).on('click', '#nextstep', function () {
 
             obj.xlname = $(this).find(".fields-file>p").text()
 
-            obj.fieldname = $(this).find(".fields-blog>.dropdown>.fields").text().trim(" ").split(" ")[0]
+            obj.fieldname = $(this).find(".fields-blog>.dropdown>.fields>span").text().trim(" ").split(" ")[0]
 
             if (obj.fieldname == "Title") {
 
@@ -348,6 +351,7 @@ $(document).on('click', '#nextstep', function () {
             console.log("ewda", Mappedfields, fieldData.length);
 
             Data.push(matchedObj)
+
 
         })
 
@@ -454,6 +458,8 @@ $(document).on('click', '.ch-fld', function () {
 
     $(".field-srh").val("")
 
+    var fid = $(this).attr("field-id")
+
     var fieldname = $(this).text()
 
     field_id = $(this).attr('field-id')
@@ -471,10 +477,24 @@ $(document).on('click', '.ch-fld', function () {
 
         // $(this).addClass("mapped-field")
 
-        $(this).parents(".fields-blog>.dropdown").find('.fields').addClass('select_channel').text(fieldname).attr("importfield-id", field_id)
+        $(this).parents(".fields-blog>.dropdown").find('.fields>span').addClass('select_channel').text(fieldname).attr("importfield-id", field_id)
+
+        $(this).parents(".fields-blog>.dropdown").find('.fields>.remove-fld').show()
 
         $(this).parents(".fields-blog>.dropdown").find('.input-field').val(field_id)
 
+        if (fid == 1) {
+
+            $(".flt").removeClass("ch-fld-dd")
+        }
+        if (fid == 2) {
+
+            $(".fld").removeClass("ch-fld-dd")
+        }
+        if (fid == 3) {
+
+            $(".flm").removeClass("ch-fld-dd")
+        }
         importfields = []
 
         $('.input-field').each(function () {
@@ -490,10 +510,13 @@ $(document).on("click", "#mp-reset", function () {
 
     importfields = []
 
+    $(".ch-fld").addClass("ch-fld-dd")
 
     $('.field-data').each(function () {
 
-        $(this).find(".fields-blog>.dropdown>.fields").removeClass('select_channel').text("Select fields to import").attr("importfield-id", '')
+        $(this).find(".fields-blog>.dropdown>.fields>span").removeClass('select_channel').text("Select fields to import").attr("importfield-id", '')
+
+        $(this).find(".fields-blog>.dropdown>.fields>.remove-fld").hide()
 
         $(this).find(".fields-blog>.dropdown>.input-field").val("")
 
@@ -504,6 +527,8 @@ $(document).on("click", "#mp-reset", function () {
 $(document).on("click", "#auto-mapping", function () {
 
     importfields = []
+
+    $(".ch-fld").removeClass("ch-fld-dd")
 
     $('.field-data').each(function (index, _) {
 
@@ -519,8 +544,8 @@ $(document).on("click", "#auto-mapping", function () {
 
                 // $(this).addClass("mapped-field")
 
-                $(This).find(".fields-blog>.dropdown>.fields").addClass('select_channel').text($(this).text()).attr("importfield-id", $(this).attr('field-id'))
-
+                $(This).find(".fields-blog>.dropdown>.fields>span").addClass('select_channel').text($(this).text()).attr("importfield-id", $(this).attr('field-id'))
+                $(This).find(".fields-blog>.dropdown>.fields>.remove-fld").show()
                 $(This).find(".fields-blog>.dropdown").find('.input-field').val($(this).attr('field-id'))
 
 
@@ -683,4 +708,63 @@ $(document).on("click", "#select-flds", function () {
 
     $("li").show();
 
+})
+
+$(".import-map-list").click(function () {
+
+    var chlid
+
+    var C_id = $(this).find('#chn-name').attr('data-id')
+
+    $(".import-map").each(function () {
+        $(this).removeClass("active")
+        $(this).find(".check-circle").prop("checked", false)
+        chlid = $(this).attr("data-id")
+
+        if (chlid == C_id) {
+            $(this).addClass("active")
+            $(this).find(".check-circle").prop("checked", true)
+        }
+    })
+
+})
+$(document).on("click", ".import-map", function () {
+
+    channelid = $(this).attr("data-id")
+    channelname = $(this).attr("data-name")
+
+    $("#select_channel").text(channelname).attr("data-id", channelid)
+    $("#chn-name").text(channelname).attr("data-id", channelid)
+
+})
+
+$(document).on("click", ".remove-fld", function () {
+
+    var fid = $(this).parents(".fields-blog>.dropdown").find('.input-field').val()
+
+    $(this).parents(".fields-blog>.dropdown").find('.fields>span').removeClass('select_channel').text("Select Fields To Import").attr("importfield-id", '')
+
+    $(this).hide()
+
+    $(this).parents(".fields-blog>.dropdown").find('.input-field').val("")
+
+    if (fid == 1) {
+
+        $(".flt").addClass("ch-fld-dd")
+    }
+    if (fid == 2) {
+
+        $(".fld").addClass("ch-fld-dd")
+    }
+    if (fid == 3) {
+
+        $(".flm").addClass("ch-fld-dd")
+    }
+    importfields = []
+
+    $('.input-field').each(function () {
+
+        importfields.push($(this).val())
+
+    })
 })

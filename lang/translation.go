@@ -134,6 +134,8 @@ type Translation struct {
 	Membergroups           string `json:"membergroups"`
 	Memberrestrict         string `json:"memberrestrict"`
 	Memberaccess           string `json:"memberaccess"`
+	Csearch                string `json:"csearch"`
+	Deselectall            string `json:"deselectall"`
 
 	Permission struct {
 		Searchroles       string `json:"searchroles"`
@@ -192,6 +194,32 @@ type Translation struct {
 		Emailtooltip          string `json:"emailtooltip"`
 		Showpassword          string `json:"showpassword"`
 		Hidepassword          string `json:"hidepassword"`
+		Businessname          string `json:"businessname"`
+		Choosecompany         string `json:"choosecompany"`
+		Chooselang            string `json:"chooselang"`
+		Choosedefault         string `json:"choosedefault"`
+		Datetimeformet        string `json:"datetimeformet"`
+		Choosedateformat      string `json:"choosedateformat"`
+		Setyourdate           string `json:"setyourdate"`
+		Setyourtime           string `json:"setyourtime"`
+		Timezone              string `json:"timezone"`
+		Choosetimezone        string `json:"choosetimezone"`
+		Selecttimezone        string `json:"selecttimezone"`
+		Searchtimezone        string `json:"searchtimezone"`
+		Notimezone            string `json:"notimezone"`
+		Companyplcholder      string `json:"companyplcholder"`
+		Generalsettings       string `json:"generalsettings"`
+		Emailconfig           string `json:"emailconfig"`
+		Emailconfcontent      string `json:"emailconfcontent"`
+		Smtpcontent           string `json:"smtpcontent"`
+		Senderemail           string `json:"senderemail"`
+		Emailpass             string `json:"emailpass"`
+		Smtphost              string `json:"smtphost"`
+		Smtpport              string `json:"smtpport"`
+		Smtpplcholder         string `json:"smtpplcholder"`
+		Smtpemailplcholder    string `json:"smtpemailplcholder"`
+		Smtphostplcholder     string `json:"smtphostplcholder"`
+		Smtpportplcholder     string `json:"smtpportplcholder"`
 	} `json:"Setting"`
 
 	Emailtemplate struct {
@@ -360,6 +388,7 @@ type Translation struct {
 		Configtooltip          string `json:"configtooltip"`
 		Editchannel            string `json:"editchannel"`
 		Backtoprevious         string `json:"backtoprevious"`
+		Descriptionentry       string `json:"descriptionentry"`
 	} `json:"Channell"`
 
 	Userss struct {
@@ -422,32 +451,42 @@ type Translation struct {
 	} `json:"Security"`
 
 	Memberss struct {
-		Addmember      string `json:"addmember"`
-		Searchmembers  string `json:"searchmembers"`
-		Entermemname   string `json:"entermemname"`
-		Entermememail  string `json:"entermememail"`
-		Entermemmobnum string `json:"entermemmobnum"`
-		Enterusername  string `json:"enterusrname"`
-		Enterlastname  string `json:"enterlstname"`
-		Enterpswd      string `json:"enterpswd"`
-		Choosegroup    string `json:"choosegroup"`
-		Member         string `json:"member"`
-		Members        string `json:"members"`
-		Name           string `json:"name"`
-		Group          string `json:"group"`
-		Createdon      string `json:"createdon"`
-		Updatedon      string `json:"updatedon"`
-		Basicinfo      string `json:"basicinfo"`
-		Firstname      string `json:"firstname"`
-		Lastname       string `json:"lastname"`
-		Email          string `json:"email"`
-		Mobile         string `json:"mobile"`
-		Username       string `json:"username"`
-		Password       string `json:"password"`
-		Membergroup    string `json:"membergroup"`
-		Active         string `json:"active"`
-		Activetoggle   string `json:"activetoggle"`
-		Selectmemerr   string `json:"memselerr"`
+		Addmember        string `json:"addmember"`
+		Searchmembers    string `json:"searchmembers"`
+		Entermemname     string `json:"entermemname"`
+		Entermememail    string `json:"entermememail"`
+		Entermemmobnum   string `json:"entermemmobnum"`
+		Enterusername    string `json:"enterusrname"`
+		Enterlastname    string `json:"enterlstname"`
+		Enterpswd        string `json:"enterpswd"`
+		Choosegroup      string `json:"choosegroup"`
+		Member           string `json:"member"`
+		Members          string `json:"members"`
+		Name             string `json:"name"`
+		Group            string `json:"group"`
+		Createdon        string `json:"createdon"`
+		Updatedon        string `json:"updatedon"`
+		Basicinfo        string `json:"basicinfo"`
+		Firstname        string `json:"firstname"`
+		Lastname         string `json:"lastname"`
+		Email            string `json:"email"`
+		Mobile           string `json:"mobile"`
+		Username         string `json:"username"`
+		Password         string `json:"password"`
+		Membergroup      string `json:"membergroup"`
+		Active           string `json:"active"`
+		Activetoggle     string `json:"activetoggle"`
+		Selectmemerr     string `json:"memselerr"`
+		Companyprofile   string `json:"companyprofile"`
+		Editmember       string `json:"editmember"`
+		Updatemember     string `json:"uptmember"`
+		Allowereg        string `json:"allowereg"`
+		Alloweregcont    string `json:"alloweregcont"`
+		Optionmeberlogin string `json:"optionmeberlogin"`
+		Optioncont       string `json:"optioncont"`
+		Receivenot       string `json:"receivenot"`
+		Reveivecont      string `json:"reveivecont"`
+		Selectusers      string `json:"selectusers"`
 	} `json:"Memberss"`
 
 	MembersGroup struct {
@@ -491,24 +530,46 @@ type Translation struct {
 	} `json:"Categoryy"`
 
 	Mediaa struct {
-		Medialibrary    string `json:"medialibrary"`
-		Searchmedianame string `json:"searchmedianame"`
-		Refresh         string `json:"refresh"`
-		Addfolder       string `json:"addfolder"`
-		Trash           string `json:"trash"`
-		Upload          string `json:"upload"`
-		Library         string `json:"library"`
-		Enterfoldername string `json:"enterfoldername"`
-		Image           string `json:"image"`
-		Images          string `json:"images"`
-		SearchImg       string `json:"searchimg"`
-		Unselectall     string `json:"unselectall"`
-		Plenterfolder   string `json:"plenterfolder"`
-		Vailderr        string `json:"vailderr"`
-		Folder          string `json:"folder"`
-		Medialibray     string `json:"medialibray"`
-		Mediafile       string `json:"mediafileavailable"`
-		Mediafiles      string `json:"mediafilesavailable"`
+		Medialibrary        string `json:"medialibrary"`
+		Searchmedianame     string `json:"searchmedianame"`
+		Refresh             string `json:"refresh"`
+		Addfolder           string `json:"addfolder"`
+		Trash               string `json:"trash"`
+		Upload              string `json:"upload"`
+		Library             string `json:"library"`
+		Enterfoldername     string `json:"enterfoldername"`
+		Image               string `json:"image"`
+		Images              string `json:"images"`
+		SearchImg           string `json:"searchimg"`
+		Unselectall         string `json:"unselectall"`
+		Plenterfolder       string `json:"plenterfolder"`
+		Vailderr            string `json:"vailderr"`
+		Folder              string `json:"folder"`
+		Medialibray         string `json:"medialibray"`
+		Mediafile           string `json:"mediafileavailable"`
+		Mediafiles          string `json:"mediafilesavailable"`
+		MediaSettingUp      string `json:"mediasettingupdate"`
+		Storageprovider     string `json:"storageprovider"`
+		Storagecont         string `json:"storagecont"`
+		Localstorage        string `json:"localstorage"`
+		Localstoragecont    string `json:"localstoragecont"`
+		Foldername          string `json:"foldername"`
+		Amazon              string `json:"amozon"`
+		Amazoncont          string `json:"amazoncont"`
+		Acckeyid            string `json:"acckeyid"`
+		Accidplcholder      string `json:"accidplcholder"`
+		Acckeyplcholder     string `json:"acckeyplcholder"`
+		Accesskey           string `json:"accesskey"`
+		Region              string `json:"region"`
+		Regionplcholder     string `json:"regionplcholder"`
+		Buckername          string `json:"buckername"`
+		Bucketnameplcholder string `json:"bucketnameplcholder"`
+		Azure               string `json:"azure"`
+		Azurecont           string `json:"azurecont"`
+		Azureaccname        string `json:"azureaccname"`
+		Azurestoragekey     string `json:"azurestoragekey"`
+		Containername       string `json:"containername"`
+		Containerplcholder  string `json:"containerplcholder"`
 	} `json:"Mediaa"`
 
 	Roless struct {
@@ -605,6 +666,7 @@ type Translation struct {
 		Contentdesc               string `json:"contentdesc"`
 		Spacedesc                 string `json:"spacedesc"`
 		Memberdesc                string `json:"memberdesc"`
+		Creatememberacc           string `json:"creatememberacc"`
 	} `json:"ContentAccessControl"`
 
 	DashBoard struct {
@@ -677,11 +739,114 @@ type Translation struct {
 	} `json:"Datas"`
 
 	Ecommerce struct {
-		Orderid        string `json:"orderid"`
-		Customername   string `json:"customername"`
-		Price          string `json:"price"`
-		Orderedcreated string `json:"orderedcreated"`
-		Orderedupdated string `json:"orderedupdated"`
+		Ecommerce           string `json:"ecommerce"`
+		Orderid             string `json:"orderid"`
+		Customername        string `json:"customername"`
+		Price               string `json:"price"`
+		Orderedcreated      string `json:"orderedcreated"`
+		Orderedupdated      string `json:"orderedupdated"`
+		Memberid            string `json:"memberid"`
+		Emailid             string `json:"emailid"`
+		Ordercount          string `json:"ordercount"`
+		Status              string `json:"status"`
+		Customers           string `json:"customers"`
+		TotalCustomer       string `json:"totalcustomer"`
+		Info                string `json:"info"`
+		CustomerInfo        string `json:"customerinfo"`
+		Addressinfo         string `json:"addressinfo"`
+		Addcustomer         string `json:"Addcustomer"`
+		FirstName           string `json:"firstname"`
+		Lastname            string `json:"lastname"`
+		Email               string `json:"email"`
+		Mobile              string `json:"mobile"`
+		Username            string `json:"username"`
+		Password            string `json:"password"`
+		Streetadd           string `json:"streetaddress"`
+		City                string `json:"city"`
+		State               string `json:"state"`
+		Country             string `json:"country"`
+		Zipcode             string `json:"zipcode"`
+		Active              string `json:"active"`
+		StatusContent       string `json:"statuscontent"`
+		Firstnameerr        string `json:"firstnameerr"`
+		Emailerr            string `json:"emailerr"`
+		Mobileerr           string `json:"mobileerr"`
+		Usernameerr         string `json:"usernameerr"`
+		Passerr             string `json:"passerr"`
+		Updatecustomer      string `json:"updatecustomer"`
+		Customerinformation string `json:"customerinformation"`
+		Orderitems          string `json:"orderitems"`
+		Orderdate           string `json:"orderdate"`
+		Customer            string `json:"customer"`
+		Billingadd          string `json:"billingadd"`
+		Shippingadd         string `json:"shippingadd"`
+		Itemsordered        string `json:"itemsordered"`
+		Item                string `json:"item"`
+		Items               string `json:"items"`
+		Quantity            string `json:"quantity"`
+		Total               string `json:"total"`
+		Subtotal            string `json:"subtotal"`
+		Salestax            string `json:"salestax"`
+		Grandtotal          string `json:"grandtotal"`
+		Orderstatus         string `json:"orderstatus"`
+		Orderconfirmed      string `json:"orderconfirmed"`
+		Shipped             string `json:"shipped"`
+		Outofdelivery       string `json:"outofdelivery"`
+		Delivered           string `json:"delivered"`
+		Invoice             string `json:"invoice"`
+		Addplaceholder      string `json:"addplaceholder"`
+		Cityplaceholder     string `json:"cityplaceholder"`
+		Stateplaceholder    string `json:"stateplaceholder"`
+		Countryplaceholder  string `json:"countryplaceholder"`
+		Zipplaceholder      string `json:"zipplaceholder"`
+		Inactive            string `json:"inactive"`
+		Address             string `json:"address"`
+		Orders              string `json:"orders"`
+		Order               string `json:"order"`
+		Products            string `json:"products"`
+		Product             string `json:"product"`
+		Productname         string `json:"productname"`
+		Addproduct          string `json:"addproduct"`
+		Generalinfo         string `json:"generalinfo"`
+		Productnameplch     string `json:"productnameplch"`
+		Sku                 string `json:"sku"`
+		Skuplcholder        string `json:"skuplcholder"`
+		Skuerr              string `json:"skuerr"`
+		Skuexistserr        string `json:"skuexistserr"`
+		Selectstatus        string `json:"selectstatus"`
+		Moreinformation     string `json:"moreinformation"`
+		Pricing             string `json:"pricing"`
+		Videos              string `json:"videos"`
+		Productcost         string `json:"productcost"`
+		Enteramount         string `json:"enteramount"`
+		Productamterr       string `json:"productamterr"`
+		Tax                 string `json:"tax"`
+		Totalcost           string `json:"totalcost"`
+		Discount            string `json:"discount"`
+		Priceerr            string `json:"priceerr"`
+		Priority            string `json:"priority"`
+		Priorityerr         string `json:"priorityerr"`
+		Startdate           string `json:"startdate"`
+		Startdateerr        string `json:"startdateerr"`
+		Enddate             string `json:"enddate"`
+		Enddateerr          string `json:"enddateerr"`
+		Special             string `json:"special"`
+		Productimgerr       string `json:"productimgerr"`
+		Youtubeurl          string `json:"youtubeurl"`
+		Urlplcholder        string `json:"urlplcholder"`
+		Vimeourl            string `json:"vimeourl"`
+		Editproduct         string `json:"editproduct"`
+		Qty                 string `json:"qty"`
+		Orderinfo           string `json:"orderinfo"`
+		Catelogue           string `json:"catelogue"`
+		StoreInfo           string `json:"storeinfo"`
+		CurrencyInfo        string `json:"currencyinfo"`
+		PaymentInfo         string `json:"paymentinfo"`
+		StatusInfo          string `json:"statusinfo"`
+		Stock               string `json:"stock"`
+		DisplayStock        string `json:"displaystock"`
+		Warning             string `json:"warning"`
+		Checkout            string `json:"checkout"`
 	} `json:"Ecommerce"`
 }
 
@@ -708,15 +873,17 @@ func LoadTranslation(filepath string) (Translation, error) {
 
 func TranslateHandler(c *gin.Context) {
 
-	userid := c.GetInt("userid")
+	// userid := c.GetInt("userid")
 
 	json_folder := os.Getenv("LOCAL_LANGUAGE_PATH")
 
 	lan, _ := c.Cookie("lang")
 
+	tblgeneralsetting, _ := models.GetGeneralSettings()
+
 	var default_lang models.TblLanguage
 
-	err := models.GetDefaultLanguage(&default_lang, userid)
+	err := models.GetLanguageById(&default_lang, tblgeneralsetting.LanguageId)
 
 	if err != nil {
 

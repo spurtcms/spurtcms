@@ -2,6 +2,11 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 <div class="page-wrapper">
+    <div class="bread-crump">
+        <a href="/channel/entrylist/">{{.HeadTitle}}</a>
+        <img src="/public/img/right-light-arrow.svg" alt="">
+        <a href="/channel/" class="current-page">{{.Tabmenu}}</a>
+    </div>
     {{template "cmstab" .}}
     <input type="hidden" name="csrf" value="{{.csrf}}">
     <div class="all-tab-content" id="entriesContent">
@@ -11,44 +16,57 @@
             <div class="leftHeader">
                 <div class="caption-flexx">
                     <p class="para">
-                       
-                     {{$Translate.Total}}  {{if gt .count 1}}{{$Translate.Channell.Channels}} :  <span class="para" id="searchcount"> {{.count}} </span>   {{else}} {{$Translate.Channell.Channel}} : <span class="para" id="searchcount"> {{.count}} </span> {{end}} </p>
-                        
+
+                        {{$Translate.Total}} {{if gt .count 1}}{{$Translate.Channell.Channels}} : <span class="para"
+                            id="searchcount"> {{.count}} </span> {{else}} {{$Translate.Channell.Channel}} : <span
+                            class="para" id="searchcount"> {{.count}} </span> {{end}} </p>
+
                     </p>
                 </div>
             </div>
-          
+
             <div class="transitionSearch active {{if .filter}}active{{end}}">
                 <form action="/channels/" method="get" class="filterform" autocomplete="off">
                     <img src="/public/img/Magnifying-Glass.svg" alt="" />
-                    <input type="text" class="search" name="keyword" id="" placeholder="{{$Translate.Channell.Searchchannelname}}" value="{{if .filter}}{{.filter}}{{end}}" />
+                    <input type="text" class="search" name="keyword" id="" placeholder="{{$Translate.Csearch}}"
+                        value="{{if .filter}}{{.filter}}{{end}}" />
                 </form>
             </div>
             <a href="/channels/newchannel">
                 <button class="btn-reg btn-sm primary ">
-                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}} 
+                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}}
                 </button></a>
         </div>
 
 
         <div class="channels-container">
-           
+
             <div class="channels-cards-container">
                 {{if .channel}}
-            {{range .channel}}
+                {{range .channel}}
                 <div class="channels-card">
                     <div class="channels-card-top">
                         <a href="/channels/editchannel/{{.Id}}"></a>
                         <div class="card-top-head">
                             <div style="display: flex; justify-content: space-between;">
-                                <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
-                                <h6 class="para-extralight">({{.EntriesCount}} {{$Translate.Channell.Entriesavailable}} )</h6>
+                                <h6 class="para-extralight">CreatedBy : <span class="username-highligt">{{.Username}}</span></h6>
+
+                                <h6 class="para-extralight">({{.EntriesCount}} {{$Translate.Channell.Entriesavailable}}
+                                    )</h6>
                             </div>
-                            <h3 class="heading-five" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="{{.ChannelName}}" style="cursor: pointer;">{{.ChannelName}}</h3>
+                            <h3 class="heading-five" data-bs-toggle="tooltip" data-bs-html="true"
+                                data-bs-placement="top" title="{{.ChannelName}}" style="cursor: pointer;">
+                                {{.ChannelName}}</h3>
                         </div>
-                        <p class="para-extralight" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
-                        title="{{.SlugName}}" style="height: 2.5rem;cursor: pointer;">{{.ChannelDescription}}
+                        <p class="para-extralight" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip"
+                            data-bs-html="true" data-bs-placement="top" title="{{.SlugName}}"
+                            style="height: 2.5rem;cursor: pointer;">{{.ChannelDescription}}
                         </p>
+                        <div class="card-top-head">
+                            <div style="display: flex; justify-content: space-between;">
+                                <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="channels-card-btm">
@@ -60,19 +78,20 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a href="/channels/editchannel/{{.Id}}">
-                                        <button class="dropdown-item" type="button">
-                                            <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
-                                            {{$Translate.Configuration}}
-                                        </button></a>
+
+                                    <a href="/channels/editchannel/{{.Id}}" class=" dropdown-item" type="button">
+                                        <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
+                                        {{$Translate.Configuration}}
+                                    </a>
                                 </li>
-                                <li >
-                                    <button class="dropdown-item channeldelete" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#centerModal" data-id="{{.Id}}"  {{if eq .Id 1}} style="opacity: 0.5;" disabled  {{end}}>
-                                        <span><img src="/public/img/delete.svg" alt="" /></span> {{$Translate.Delete}} 
-                                    </button>
+                                <li>
+                                    <a class="dropdown-item channeldelete" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#centerModal" data-id="{{.Id}}" {{if eq .Id 1}}
+                                        style="opacity: 0.5;" disabled {{end}}>
+                                        <span><img src="/public/img/delete.svg" alt="" /></span> {{$Translate.Delete}}
+                                    </a>
                                 </li>
-                               
+
                             </ul>
                         </div>
 
@@ -84,40 +103,40 @@
                     </div>
                 </div>
                 {{end}}
-              
+
                 {{ else if eq .EntriesCount 0}}
-               
-                        <div class="noData-foundWrapper nodatafound">
 
-                            <div class="empty-folder">
-                                <img src="/public/img/folder-sh.svg" alt="">
-                                <img src="/public/img/shadow.svg" alt="">
-                            </div>
-                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                            <p class="para">
-                                {{$Translate.Pagesorry}}
-                                {{$Translate.Gobackhome}}
-                            </p>
-                            <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal" data-bs-target="#rightModal"
-                                class="heading-three ">{{$Translate.Clickadd}} >></a>
-                        </div>
-                  
+                <div class="noData-foundWrapper nodatafound">
 
-                
-               
-                     {{else }}
-              
-                        <div class="noData-foundWrapper nodatafound">
+                    <div class="empty-folder">
+                        <img src="/public/img/folder-sh.svg" alt="">
+                        <img src="/public/img/shadow.svg" alt="">
+                    </div>
+                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                    <p class="para">
+                        {{$Translate.Pagesorry}}
+                        {{$Translate.Gobackhome}}
+                    </p>
+                    <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal" data-bs-target="#rightModal"
+                        class="heading-three ">{{$Translate.Clickadd}} >></a>
+                </div>
 
-                            <div class="empty-folder">
-                                <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
-                                <img src="/public/img/nodatafilter.svg" alt="">
-                            </div>
-                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                            </div>
-                         
-                    {{end}} 
-         
+
+
+
+                {{else }}
+
+                <div class="noData-foundWrapper nodatafound">
+
+                    <div class="empty-folder">
+                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
+                        <img src="/public/img/nodatafilter.svg" alt="">
+                    </div>
+                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+                </div>
+
+                {{end}}
+
             </div>
         </div>
     </div>
@@ -128,7 +147,7 @@
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 </script>
 
@@ -138,7 +157,7 @@
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 </script>
 

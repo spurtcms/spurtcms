@@ -1,0 +1,49 @@
+{{define "emailmodal"}}
+<div class="modal fade" id="emailtemplateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <form id="mailtemplate_form" method="post" name="emailtemplateform" action="/settings/emails/update-temp" novalidate="novalidate">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <input type="hidden" id="input-pagefind" name="pathname" value="">
+        <input type="hidden" id="input-tempid" name="userid" value="">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input type="hidden" id="input-tempname" name="tempname" value="">
+                    <h3 id="emailtemp-name">Owndesk</h3>
+                    <button type="button" class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="input-group" id="subgrb">
+                            <label for="" class="input-label">Email Subject</label>
+                            <div class="ig-row">
+                                <input type="text" class="field" name="tempsub" id="emailsub" placeholder="enter the email subject..">
+                            </div>
+                        </div>
+                        <div class="input-group" id="desgrb">
+                            <label for="" class="input-label">Email Description</label>
+                            <div class="ig-row">
+                                <textarea  name="tempdesc" class="field" id="emaildesc" placeholder="enter the email description.."></textarea>
+                            </div>
+                        </div>
+                        <div class="input-group" id="contgrb">
+                            <input type="hidden" id="ckeditor-data" name="temcont" value="">
+                            <label for="" class="input-label">Email Content</label>
+                            <div class="ig-row channel-editor">
+                                <textarea class="text" id="text" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="flexx justify-content-end">
+                        <button type="button" id="update-templatebtn" class="btn-reg btn-lg primary"> Update </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{{end}}

@@ -1,4 +1,6 @@
 var languagedata
+
+var selectedcheckboxarr=[]
 /** */
 $(document).ready(async function () {
 
@@ -12,7 +14,11 @@ $(document).ready(async function () {
     })
 
 })
-
+$(document).keydown(function(event) {
+    if (event.ctrlKey && event.key === '/') {
+        $("#languagesearch").focus().select();
+    }
+});
 $(document).ready(function () {
 
    
@@ -123,9 +129,14 @@ $(document).on('click','.search-grp>a',function(){
 /*search redirect home page */
 
 $(document).on('keyup', '#languagesearch', function () {
+
+    if (event.key === 'Backspace') {
+
     if ($('.search').val() === "") {
+
          window.location.href = "/settings/languages/"
     }
+}
 })
 
 $(document).on('click','input[name=lang_status][type=checkbox]',function(){
@@ -314,9 +325,15 @@ $(document).on('click', '.edit-language', function () {
 
             if (data.Language.IsStatus == 1) {
                 $('#ckb1[name=lang_status]').val("1").prop('checked', 'true')
+            }else{
+                $('#ckb1[name=lang_status]').val("0").prop('checked', 'false')
             }
-            if (data.Language.DefaultLanguageId != 0) {
-                $('#ckb2[name=lang_default]').val("1").prop('checked', "true")
+
+            if (data.Language.DefaultLanguageId != 0 && data.Language.DefaultLanguageId == data.Language.Id) {
+                $('#ckb2[name=lang_default]').val("1").attr('checked', true)
+            }else{
+                console.log("elseif");
+                $('#ckb2[name=lang_default]').val("0").attr("checked", false)
             }
 
             $('.full-upload >.upload-json:first>.file-upload').remove()
@@ -538,5 +555,354 @@ $("#searchlanguagecode").keyup(function () {
            
         }
     })
+
+})
+
+$(document).on('click','.selectcheckbox',function(){
+
+    languageid =$(this).attr('data-id')
+
+    var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+    console.log(status,"status")
+
+    var sstatus
+
+ 
+    if (status ==true){
+       
+        sstatus= '1'
+
+        }else{
+
+        sstatus= '0'
+        
+        }
+
+   if ($(this).prop('checked')){
+
+       selectedcheckboxarr.push({"languageid":languageid,"status":sstatus})
+   
+   }else{
+
+       const index = selectedcheckboxarr.findIndex(item => item.languageid === languageid);
+   
+       if (index !== -1) {
+
+           console.log(index,"sssss")
+           selectedcheckboxarr.splice(index, 1);
+       }
+      
+       $('#Check').prop('checked',false)
+
+   }
+
+  
+   if (selectedcheckboxarr.length !=0){
+
+       $('.selected-numbers').show()
+
+       var allSame = selectedcheckboxarr.every(function(item) {
+           return item.status === selectedcheckboxarr[0].status;
+       });
+       
+       var setstatus
+       var img;
+
+          if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+
+          var htmlContent = '';
+
+            if (allSame) {
+
+             htmlContent = '<img src="' + img + '">' + setstatus;
+
+             } else {
+
+               htmlContent = '';
+
+             }
+
+           $('#unbulishslt').html(htmlContent);
+      
+       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+       if(!allSame){
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+           $('.unbulishslt').html("")
+       }else{
+
+           $('#seleccheckboxdelete').addClass('border-end')
+       }
+
+      
+   }else{
+
+       $('.selected-numbers').hide()
+   }
+
+       var allChecked = true;
+
+        $('.selectcheckbox').each(function() {
+
+            if (!$(this).prop('checked')) {
+
+            allChecked = false;
+
+           return false; 
+        }
+   });
+
+         $('#Check').prop('checked', allChecked);
+
+    console.log(selectedcheckboxarr,"checkkkk")
+})
+
+//ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+    selectedcheckboxarr=[]
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked){
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selectcheckbox').each(function(){
+    
+           languageid= $(this).attr('data-id')
+
+           var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+           var sstatus
+
+           if (status ==true){
+       
+            sstatus= '1'
+    
+            }else{
+    
+            sstatus= '0'
+
+            }
+ 
+    
+           selectedcheckboxarr.push({"languageid":languageid,"status":sstatus})
+        })
+
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+
+        var img
+    
+
+        if (selectedcheckboxarr.length !=0){
+
+        if (selectedcheckboxarr[0].status === '1') {
+ 
+            setstatus = "Deactive";
+
+             img = "/public/img/In-Active (1).svg";
+
+       } else if (selectedcheckboxarr[0].status === '0') {
+
+              setstatus = "Active";
+
+              img = "/public/img/Active (1).svg";
+
+         } 
+        }
+
+        var htmlContent = '';
+
+        if (allSame) {
+
+         htmlContent = '<img src="' + img + '">' + setstatus;
+
+         $('#seleccheckboxdelete').addClass('border-end')
+
+         } else {
+
+           htmlContent = '';
+
+           $('#seleccheckboxdelete').removeClass('border-end')
+
+         }
+
+       $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    
+    }else{
+
+
+        selectedcheckboxarr=[]
+
+        $('.selectcheckbox').prop('checked', isChecked);
+
+        $('.selected-numbers').hide()
+    }
+
+    if (selectedcheckboxarr.length ==0){
+
+        $('.selected-numbers').hide()
+    }
+})
+
+$(document).on('click','#seleccheckboxdelete',function(){
+
+    if (selectedcheckboxarr.length>1){
+         
+    $('.deltitle').text("Delete Languages?")
+
+    $('#content').text('Are you sure want to delete selected Languages?')
+
+    }else {
+
+         $('.deltitle').text("Delete Language?")
+
+         $('#content').text('Are you sure want to delete selected Language?')
+    }
+
+
+    $('#delete').addClass('checkboxdelete')
+})
+
+$(document).on('click','#unbulishslt',function(){
+
+    if (selectedcheckboxarr.length>1){
+
+         $('.deltitle').text( $(this).text()+" "+"Languages?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Languages?")
+    }else{
+
+         $('.deltitle').text( $(this).text()+" "+"Language?")
+
+         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Language?")
+    }
+
+    $('#delete').addClass('selectedunpublish')
+
+})
+
+//MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/settings/languages/multiselectlanguagedelete',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "languageids": JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "Language Deleted Successfully")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
+})
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.selectcheckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    selectedcheckboxarr=[]
+
+    $('.selected-numbers').hide()
+    
+})
+
+//multi select active and deactive function//
+
+$(document).on('click','.selectedunpublish',function(){
+
+    var pageurl = window.location.search
+
+    const urlpar = new URLSearchParams(pageurl)
+
+    pageno = urlpar.get('page')
+
+    $('.selected-numbers').hide()
+    $.ajax({
+        url: '/settings/languages/multiselectlanguagestatus',
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        data: {
+            "languageids":JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+            "page":pageno
+
+            
+        },
+        success: function (data) {
+
+            console.log(data,"result")
+
+            if (data.value==true){
+
+                setCookie("get-toast", "languageupdated")
+
+                window.location.href=data.url
+            }else{
+
+                setCookie("Alert-msg", "Internal Server Error")
+
+            }
+
+        }
+    })
+
 
 })

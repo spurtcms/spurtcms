@@ -159,6 +159,7 @@ $("form[name='userform']").validate({
     }
 })
     var formcheck = $("#userform").valid();
+    
 if (formcheck == true) {
   $('#userform')[0].submit();
 } else {
@@ -217,6 +218,11 @@ $('input[name=user_mob]').keyup(function () {
     this.value = this.value.replace(/[^0-9\.]/g, '');
 });
 
-$(document).on('click', '#myfile', function () {
-   $("#prof-crop").val("1")
+// $(document).on('change', '#myfile', function () {
+//    $("#prof-crop").val("2")
+// })
+
+$(document).on('click','#back',function(){
+
+    window.location.href="/settings/myprofile"
 })

@@ -45,14 +45,26 @@
   <input type="hidden" id="urlid" value="{{.URL}}">
   <input type="hidden" name="csrf" value="{{.csrf}}">
 
-  <div class="tablst channel-tabList br-btm">
+  <div class="bread-crump">
+    <a href="/channel/entrylist/">{{.HeadTitle}}</a>
+    {{if .entryaction}}
+    <img src="/public/img/right-light-arrow.svg" alt="">
+    <a href="" class="current-page">{{.entryaction}}</a>
+    {{end}}
+    {{if .entryname}}
+    <img src="/public/img/right-light-arrow.svg" alt="" class="breadcimg" >
+    <a href="" class="current-page" id="breadcname">{{.entryname}}</a>
+    {{end}}
+</div>
+
+  <!-- <div class="tablst channel-tabList br-btm">
     <div class="tab-breadCrumb breadcrumb-secondary">
       <ul class="breadcrumb-container">
         <li><a href="/channel/entrylist/">{{$Translate.Entries}} </a></li>
         <li><a href="">{{$Translate.Channell.Createentry}}</a></li>
       </ul>
     </div>
-  </div>
+  </div> -->
 
   <div class="tab-content" id="myTabContent">
     <div class="all-tab-content tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="home-tab"
@@ -166,7 +178,7 @@
                     </button>
                   </li>
                 </div>
-               
+
               </ul>
             </div>
 
@@ -460,71 +472,90 @@
               </div>
 
               <div class="channel-rgt">
+                <div class="input-group getuservalue" data-id="" data-char="">
+                  <label for="" class="input-label" data-id=""
+                    id="textboxlabel">Author</label>
+                  <div class="ig-row d-grid align-items-center">
+                    <input type="text" id="author" placeholder="Select Author Name" name="author" class="pe-4" />
+                   
+                    <button class="bg-transparent position-absolute border-0 end-0  p-2 " id="cn-user" style="display: none;"><img src="/public/img/close-1234.svg" alt="clear"></button>
+                    <div class="drop-menu userlistdiv" id="userlistdiv" style="display: none;">
+                      
+                    </div>
+
+                    <div class="drop-menu nodata-userlistdiv" style="display: none;">
+                      <div class="noData-foundWrapper" id="ueser-nodatafounddesign" style="margin-top: -40px;">
+
+                        <div class="empty-folder">
+                          <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                          <img src="/public/img/shadow.svg" alt="">
+                        </div>
+                        <h1 style="text-align: center;font-size: 10px;" class="heading">
+                          OOPS! No Data Found</h1>
+  
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+               
+                <div class="input-group">
+                  <label for="" class="input-label">Created On</label>
+                  <div class="ig-row date-input">
+                    <input type="datetime-local" placeholder="Enter Date" value="{{.currentdate}}" data-date="MM/DD/YYYY" name="cdtime"
+                      id="cdtime">
+                    <!-- <button>
+                      <img src="/public/img/channel-calender.svg" alt="">
+                    </button> -->
+                  </div>
+                </div>
+
 
                 <div class="input-group">
-                  <label for="" class="input-label">Author</label>
-                  <div class="ig-row">
-                    <input type="text" placeholder="Enter Author Name" id="authername" name="authername">
-                  </div>
-                </div>
-  
-                <div class="input-group">
-                  <label for="" class="input-label">Created Date</label>
-                  <div class="ig-row date-input">
-                    <input type="text" placeholder="Enter Date" class="dateinfo" data-date="MM/DD/YYYY" name="cdtime" id="cdtime">
-                    <button>
-                      <img src="/public/img/channel-calender.svg" alt="">
-                    </button>
-                  </div>
-                </div>
-  
-  
-                <div class="input-group">
-                  <label for="" class="input-label">Published Time</label>
+                  <label for="" class="input-label">Published On</label>
                   <div class="ig-row time-input">
-                    <input type="text" placeholder="Enter Time" id="publishtime" class="timeinfo" name="publishtime">
-                    <button><img src="/public/img/channel-clock.svg" alt=""></button>
+                    <input type="datetime-local" placeholder="Enter Time" value="{{.currentdate}}" id="publishtime" name="publishtime">
                   </div>
                 </div>
-  
+
                 <div class="input-group">
                   <label for="" class="input-label">Reading Time</label>
                   <div class="ig-row time-input">
-                    <input type="text" placeholder="Enter Time" id="readingtime" class="timeinfo" name="readingtime">
-                    <button><img src="/public/img/channel-clock.svg" alt=""></button>
+                    <input type="number" placeholder="Enter Time" id="readingtime" class="r-time" name="readingtime">
                   </div>
                 </div>
-  
-  
-  
-  
+
+
+
+
                 <div class="input-group">
                   <label for="" class="input-label">Article Sorting</label>
                   <div class="ig-row">
-                    <input type="text" placeholder="Enter number" id="article" name="article">
+                    <input type="number" placeholder="Enter number" id="article" name="article">
                   </div>
+                  <label for="" class="error" id="sort-error" style="display: none;">* Sort-order already exists</label>
                 </div>
-  
-  
-  
+
+
+
                 <div class="input-group">
                   <label for="" class="input-label">Tags</label>
                   <div class="ig-row">
                     <input type="text" placeholder="Enter Tag" name="tagname" id="tagname">
                   </div>
                 </div>
-  
-  
+
+
                 <div class="input-group">
                   <label for="" class="input-label">Excerpt</label>
                   <div class="ig-row">
                     <textarea placeholder="Enter your text" id="extxt" name="extxt"></textarea>
                   </div>
                 </div>
-  
-  
-  
-  
+
+
+
+
               </div>
 
             </div>
@@ -609,6 +640,18 @@
                   <div class="ig-row">
                     <input type="text" name="metaslug" class="field" placeholder="{{$Translate.Channell.Plslug}}"
                       id="metaslug">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <div class="tooltipdiv">
+                    <label for="" class="input-label">Image alt-tag</label>
+                    <img class="tooltip-icon" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip"
+                      data-bs-html="true" data-bs-placement="top" title=""
+                      src="/public/img/info.svg">
+                  </div>
+                  <div class="ig-row">
+                    <input type="text" name="imgtag" class="field" placeholder="{{$Translate.Channell.Plslug}}"
+                      id="imgtag">
                   </div>
                 </div>
               </form>

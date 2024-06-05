@@ -1,0 +1,111 @@
+
+
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+    <div class="page-wrapper settings-wrapper">
+        <div class="email-temp-tabs">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link " id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                        type="button" role="tab" aria-controls="home" aria-selected="true"onclick="setroute()" >
+                        {{$Translate.Setting.Emailtemplates}}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button"
+                        role="tab" aria-controls="home2" aria-selected="false" onclick="setroute1()">
+                        {{$Translate.Setting.Emailconfig}}
+                    </button>
+                </li>
+            </ul>
+            <div class="email-config">
+            <div class="grd-2-fr">
+                <div class="left-cms">
+                    <h1 class="heading" style="font-size: 16px;">{{$Translate.Setting.Emailconfig}}</h1>
+                    <p class="para color-light">  {{$Translate.Setting.Emailconfcontent}}
+                    </p>
+                </div>
+                <div class="channel-edit new-temp">
+                    <div class="radio radio-label" id="smtpmail">
+                        <input id="radiosmtp" name="smtpradio" {{if eq .Maildetails.SelectedType `smtp`}} checked  {{end}} value="" type="radio">
+                        <label for="radiosmtp" class="radio-label">
+                            <div class="to-select-cms">
+                                <img src="/public/img/email-temp-new1.svg" />
+                                <p>SMTP</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="radio radio-label" id="environmentmail">
+                        <input id="radioenv" name="envradio" {{if eq .Maildetails.SelectedType `environment`}}checked {{end}} value="" type="radio">
+                        <label for="radioenv" class="radio-label">
+                            <div class="to-select-cms">
+                                <img src="/public/img/email-temp-new2.svg" />
+                                <p>Environment</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="cms-sep"></div>
+            <div class="grd-2-fr" id="emailconfigdiv" {{if eq .Maildetails.SelectedType `environment`}} style="display: none;" {{end}}>
+                
+                <div class="left-cms">
+                    <div class="selected-cms">
+                        <img src="/public/img/email-temp-new1.svg" />  
+                            <div>
+                            <h1 class="heading-three">SMTP</h1>
+                            <p class="para color-light"> {{$Translate.Setting.Smtpcontent}}
+                            </p>
+                        </div>
+                    </div>
+                 </div>
+                 <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
+                   <input type="hidden" name="seltype" id="emailseltype" value="Environment">
+
+                 <div class="channel-input">
+                    <div class="input-group" id="config_email">
+                        <label for="" class="input-label">{{$Translate.Setting.Senderemail}} *</label>
+                        <div class="ig-row">
+                            <input type="text" class="field"   value="{{.Email.Mail}}"   name="email" id="emailaddress" placeholder="{{$Translate.Setting.Smtpplcholder}} ...">
+                            
+                        </div>
+                    </div>
+                    <div class="input-group" id="config_password">
+                        <label for="" class="input-label">{{$Translate.Setting.Emailpass}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" value="{{.Email.Password}}" name="password" id="mailpassword" placeholder="{{$Translate.Setting.Smtpemailplcholder}}...">
+                        </div>
+                    </div>
+                    <div class="input-group" id="config_host">
+                        <label for="" class="input-label">{{$Translate.Setting.Smtphost}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" value="{{.Email.Host}}" name="host" id="mailhost" placeholder="{{$Translate.Setting.Smtphostplcholder}}...">
+                        </div>
+                    </div>
+                    <div class="input-group" id="config_port">
+                        <label for="" class="input-label">{{$Translate.Setting.Smtpport}}*</label>
+                        <div class="ig-row">
+                            <input type="text" class="field" value="{{.Email.Port}}" name="port" id="mailport" placeholder="{{$Translate.Setting.Smtpportplcholder}}...">
+                        </div>
+                    </div>
+                </div>
+                     
+            </div>
+            
+        </div>
+        </div>
+        <div class="configurationContent-btm" id="emailfooter">
+            <button class="btn-reg btn-lg secondary" type="button" id="emailback">{{$Translate.Cancel}} </button>
+            <button class="btn-reg btn-lg primary theme-color " type="button" id="addemailconfig">{{$Translate.Update}}</button>
+        </div>
+    </form>
+    </div>
+
+    {{template "footer" .}}
+    <script src="/public/js/settings/emailconfig/emailconfig.js"></script>
+
+{{template "footerclose" .}}

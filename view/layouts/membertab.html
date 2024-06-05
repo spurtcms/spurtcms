@@ -2,52 +2,27 @@
 {{$Translate := .translate}}
 <div class="tablst br-btm">
     <ul class="nav entries-tab" id="myTab" role="tablist">
-        {{$membermenu := .membermenu}}
-        {{$Groupmenu := .Groupmenu}}
-        {{$Restrictmenu := .Restrictmenu}}
+
+        {{$Title := .title}}
+        {{$Tabmenu := .Tabmenu}}
+
         {{range .Menu.TblModule}}
-        {{if eq .ModuleName "Members"}}
+        {{if eq .ModuleName $Title}}
         {{range .SubModule}}
-        {{if eq .ModuleName "Member"}}
-        {{if .Routes}}
+        {{if gt (len .Routes) 0}}
+        {{$Routname := index .Routes 0}}
         <li class="nav-itm" role="presentation">
-            <a class="nav-lnk heading-three inmemmenu inmembermenu{{if eq $membermenu true}} active{{end}}" href="/member/">
-                <img src="/public/img/member.svg" alt="" />
-                <span class="heading-three">{{$Translate.Memberss.Member}}</span>
-            </a>
-        </li>
-        {{end}}
-        {{end}}
-        {{if eq .ModuleName "Members Group"}}
-        {{if .Routes}}
-        <li class="nav-itm" role="presentation">
-            <a class="nav-lnk heading-three inmemmenu ingrpmenu{{if eq $Groupmenu true}} active{{end}}" href="/membersgroup">
-                <img src="/public/img/group.svg" alt="" />
-                <span class="heading-three">{{$Translate.Membergroups}}</span>
-            </a>
-        </li>
-        {{end}}
-        {{end}}
-        {{if eq .ModuleName "Member Restrict"}}
-        {{if .Routes}}
-        <li class="nav-itm" role="presentation">
-            <a class="nav-lnk heading-three inmemmenu inmemacc {{if eq $Restrictmenu true}} active{{end}}" href="/memberaccess/">
-                <img src="/public/img/memberAccess.png" alt="" />
-                <span class="heading-three">{{$Translate.Memberrestrict}}</span>
+            <a class="nav-lnk heading-three {{if eq .ModuleName $Tabmenu}} active {{end}}" href="{{$Routname.RouteName}}">
+                <img src="{{.IconPath}}" alt="" />
+                <span class="heading-three">{{.ModuleName}}</span>
             </a>
         </li>
         {{end}}
         {{end}}
         {{end}}
         {{end}}
-        {{end}}
-       
-        <!-- <li class="nav-itm" role="presentation">
-            <a class="nav-lnk heading-three inmemmenu inmemsettings">
-                <img src="/public/img/setting.png" alt="" />
-                <span class="heading-three">Settings</span>
-            </a>
-        </li> -->
+
+
     </ul>
 </div>
 {{end}}

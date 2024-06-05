@@ -2194,9 +2194,12 @@ $(document).on('click', '.chanEntry-chkbox', function () {
 
 $(document).on('keyup', '#memberrestrictsearch', function () {
 
+  if (event.key === 'Backspace') {
+
   if ($('.search').val() === "") {
     window.location.href = "/memberaccess"
 
   }
+}
 
 })

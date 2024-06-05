@@ -1,0 +1,242 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<form action="/settings/general-settings/update" method="post" id="uptform" name="uptform">
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <div class="page-wrapper settings-wrapper">
+        <div class="setting-container cms-new-containers">
+            <div class="settings-grid">
+                <div class="left-cms">
+                    <h1 class="heading">{{$Translate.Setting.Businessname}}</h1>
+                    <p class="para color-light">{{$Translate.Setting.Choosecompany}}
+                    </p>
+                </div>
+                <div class="channel-edit new-temp">
+                    <div class="input-group">
+                        <label for="" class="input-label">{{$Translate.Setting.Businessname}}</label>
+                        <div class="ig-row">
+                            <input type="text" name="companyname" placeholder="{{$Translate.Setting.Companyplcholder}}" value="{{.GeneralSetting.CompanyName}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-grid myprofile-brd ">
+                <div class="update-profile-cont myprouploaddiv">
+                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Logoupload}}</h4>
+                    <p class="para-light" id="logo-insert">{{$Translate.Personalize.Logocontent}}</p>
+                </div>
+
+                <div class="upload-logo" id="upload-logo">
+                    <img class="logosrc"
+                        src='{{if .Menu.LogoPath}}{{.Menu.LogoPath}}{{else}}/public/img/logo.svg{{end}}'
+                        alt="">
+                    <input type="hidden" name="logo_imgpath"
+                        value="{{if .Menu.LogoPath}}{{.Menu.LogoPath}}{{else}}/public/img/logo.svg{{end}}">
+                    <input type="hidden" id="logo-input">
+                    <!-- <p class="para" >Drag your file or choose from directory</p>
+                    <div class="upload-button" style="display: none;">
+                        <button class="btn-reg btn-xs primary theme-color" > Browse </button>
+                        <input type="file">
+                    </div> -->
+                    <button class="delete-flag" type="button" id="delete-logo"><img
+                            src="/public/img/delete-white-icon.svg" alt=""></button>
+                    <div class="hover-delete-img"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid myprofile-brd">
+                <div class="update-profile-cont expandlogodiv">
+                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Expandlogoupload}}</h4>
+                    <p class="para-light" id="expandlogo-insert">{{$Translate.Personalize.Logocontent}}</p>
+                </div>
+
+                <div class="upload-logo" id="upload-expandlogo">
+                    <img src='{{if .Menu.ExpandLogoPath}}{{.Menu.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}'
+                        alt="">
+                    <input type="hidden" id="expandlogo-input" name="expandlogo_imgpath"
+                        value="{{if .Menu.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}">
+                    <!-- <p class="para">Drag your file or choose from directory</p>
+                    <div class="upload-button">
+                        <button class="btn-reg btn-xs primary theme-color"> Browse </button>
+                        <input type="file">
+                    </div> -->
+                    <button class="delete-flag" type="button" id="delete-expandlogo"><img
+                            src="/public/img/delete-white-icon.svg" alt=""></button>
+                    <div class="hover-delete-img"></div>
+
+                </div>
+
+            </div>
+            <div class="settings-grid">
+                <div class="left-cms">
+                    <h1 class="heading">{{$Translate.Language}}</h1>
+                    <p class="para color-light">{{$Translate.Setting.Chooselang}}
+                    </p>
+                </div>
+                <div class="channel-edit">
+                    <h3>{{$Translate.Setting.Choosedefault}}</h3>
+                    {{$DEFAULT_ID := .GeneralSetting.LanguageId}}
+                    {{range .Langugage}}
+                    {{if eq .IsStatus 1}}
+                    <div class="radio radio-label">
+                        <input id="radio-{{.Id}}" name="language" type="radio" {{if eq .Id $DEFAULT_ID}} checked {{end}} value="{{.Id}}">
+                        <label for="radio-{{.Id}}" class="radio-label">
+                            <p>{{.LanguageName}}</p>
+                        </label>
+                    </div>
+                    {{end}}
+                    {{end}}
+                </div>
+            </div>
+            <div class="settings-grid">
+                <div class="left-cms">
+                    <h1 class="heading">{{$Translate.Setting.Datetimeformet}}</h1>
+                    <p class="para color-light">{{$Translate.Setting.Choosedateformat}}
+                    </p>
+                </div>
+                <div class="list-settings-radio">
+                    <div class="channel-edit">
+                        <h3>{{$Translate.Setting.Setyourdate}}</h3>
+                        <div class="radio radio-label">
+                            <input id="radio-6" name="dateformat" type="radio" value="mm/dd/yyyy" {{if eq .GeneralSetting.DateFormat `mm/dd/yyyy` }} checked {{end}}>
+                            <label for="radio-6" class="radio-label">
+                                <p>MM/DD/YYYY</p>
+                            </label>
+                        </div>
+                        <div class="radio radio-label">
+                            <input id="radio-7" name="dateformat" type="radio" value="dd/mm/yyyy" {{if eq .GeneralSetting.DateFormat `dd/mm/yyyy` }} checked {{end}}>
+                            <label for="radio-7" class="radio-label">
+                                <p>DD/MM/YYYY</p>
+                            </label>
+                        </div>
+                        <div class="radio radio-label">
+                            <input id="radio-8" name="dateformat" type="radio" value="dd-mm-yyyy" {{if eq .GeneralSetting.DateFormat `dd-mm-yyyy` }} checked {{end}}>
+                            <label for="radio-8" class="radio-label">
+                                <p>DD-MM-YYYY</p>
+                            </label>
+                        </div>
+                        <div class="radio radio-label">
+                            <input id="radio-9" name="dateformat" type="radio" value="yyyy-mm-dd" {{if eq .GeneralSetting.DateFormat `yyyy-mm-dd` }} checked {{end}}>
+                            <label for="radio-9" class="radio-label">
+                                <p>YYYY-MM-DD</p>
+                            </label>
+                        </div>
+                        <div class="radio radio-label">
+                            <input id="radio-14" name="dateformat" type="radio" value="dd mmm yyyy" {{if eq .GeneralSetting.DateFormat `dd mmm yyyy` }} checked {{end}}>
+                            <label for="radio-14" class="radio-label">
+                                <p>DD MMM YYYY</p>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="channel-edit">
+                        <h3>{{$Translate.Setting.Setyourtime}}</h3>
+                        <div class="radio radio-label">
+                            <input id="radio-10" name="timeformat" type="radio" {{if eq .GeneralSetting.TimeFormat `12` }} checked {{end}} value="12">
+                            <label for="radio-10" class="radio-label">
+                                <p>12-hours with AM/PM</p>
+                            </label>
+                        </div>
+                        <div class="radio radio-label">
+                            <input id="radio-11" name="timeformat" type="radio" {{if eq .GeneralSetting.TimeFormat `24` }} checked {{end}} value="24">
+                            <label for="radio-11" class="radio-label">
+                                <p>24-hours</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-grid">
+                <div class="left-cms">
+                    <h1 class="heading">{{$Translate.Setting.Timezone}}</h1>
+                    <p class="para color-light">{{$Translate.Setting.Choosetimezone}}
+                    </p>
+                </div>
+                <div class="settings-select">
+
+                    <div class="input-group  user-drop-down ">
+
+                        <label for="" class="input-label">{{$Translate.Setting.Selecttimezone}}</label>
+
+                        <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                           {{.GeneralSetting.TimeZone}}
+                        </a>
+                        <input type="hidden" id="timezone" value="{{.GeneralSetting.TimeZone}}" name="timezon">
+
+                        <div class="dropdown-menu dropdown-role" aria-labelledby="triggerId" style="height: 150px !important;">
+
+                            <div class="ig-row ig-channel-input">
+
+                                <input type="text" id="searchdropdownrole" class="search" name="keyword"
+                                    placeholder="{{$Translate.Setting.Searchtimezone}}" value="">
+                            </div>
+
+                            <div class="dropdown-filter-roles">
+                                {{range .TimeZone}}
+                                <button type="button" data-id="" class="dropdown-item drop-timezone">{{.}}</button>
+                                {{end}}
+
+                                <div class="noData-foundWrapper" id="nodatafounddesign"
+                                            style="margin-top: -40px;display: none;">
+
+                                            <div class="empty-folder">
+                                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
+                                                <img src="/public/img/shadow.svg" alt="">
+                                            </div>
+                                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                {{$Translate.Oopsnodata}}</h1>
+
+                                        </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- <div class="settings-grid center">
+                <div class="left-cms">
+                    <h1 class="heading">Email Templates</h1>
+                    <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet um dolor sit
+                        amet.Lorem ipsum dolor sit amet
+                    </p>
+                </div>
+                <div class="settings-select">
+                    <div class="toggle">
+                        <input class="tgl tgl-light" name="mem_activestat" id="cb1" value="1"
+                            type="checkbox">
+                        <label class="tgl-btn" for="cb1"></label>
+                    </div>
+                    <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet um dolor sit
+                        amet.Lorem ipsum dolor sit amet
+                    </p>
+                    <a href="#">
+                        Edit
+                    </a>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="configurationContent-btm">
+        <a href="/settings"><button class="btn-reg btn-lg secondary" type="button" id="back">{{$Translate.Cancel}}</button></a>
+        <button class="btn-reg btn-lg primary theme-color " id="uptprofile">{{$Translate.Update}}</button>
+    </div>
+</form>
+{{template "mediamodal" .}}
+
+{{template "mediadecidemodal" .}}
+
+{{template "cropmodal" .}}
+
+{{template "footer" .}}
+<script src="/public/js/media/media.js"></script>
+<script src="/public/js/settings/general-settings.js"></script>
+{{template "footerclose" .}}

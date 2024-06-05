@@ -1,4 +1,6 @@
 var languagedata
+
+var selectedcheckboxarr=[]
 /** */
 $(document).ready(async function () {
 
@@ -12,8 +14,13 @@ $(document).ready(async function () {
     })
 
 
+    if ($('.selectcheckbox').length === 0) {
+
+        $('.headingcheck').hide();
+   }
 })
 
+ 
 //**description focus function */
 const Desc = document.getElementById('membergroup_desc');
 const inputgroup = document.querySelectorAll('.input-group');
@@ -41,8 +48,8 @@ $("body").on("click", "#editmembergroup", function () {
      var data = $(this).attr("data-id");
      edit = $(this).closest("tr");
      $("#membergroup_form").attr("action", "/membersgroup/updategroup")
-     var name = edit.find("td:eq(0)").text();
-     var desc = edit.find("td:eq(1)").text();
+     var name = edit.find("td:eq(1)").text();
+     var desc = edit.find("td:eq(2)").text();
      $("#membergroup_name").val(name);
      $("#membergroup_desc").val(desc);
      $("#membergroup_id").val(data);
@@ -104,29 +111,20 @@ $(document).on('click', '#delete-btn', function () {
      const urlpar = new URLSearchParams(url);
      pageno = urlpar.get('page');
 
-     $.ajax({
-          url: "/membersgroup/memberpopup",
-          type: "post",
-          dataType: "json",
-          data: { "id": MemberGroupId, csrf: $("input[name='csrf']").val() },
-          success: function (results) {
-               $('#content').text(languagedata.Members_Group.delmemgrp);
-               $(".deltitle").text(languagedata.Members_Group.delmembergrp)
-               $('.delname').text(del.find('td:eq(0)').text())
-               $('#delid').show();
-               $('#delcancel').text(languagedata.no);
+     $('#content').text(languagedata.Members_Group.delmemgrp);
+     $(".deltitle").text(languagedata.Members_Group.delmembergrp)
+     $('.delname').text(del.find('td:eq(0)').text())
+     $('#delid').show();
+     $('#delcancel').text(languagedata.no);
 
-               if (pageno == null) {
-                    $('#delid').parent('#delete').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId);
+     if (pageno == null) {
+          $('#delid').parent('#delete').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId);
 
-               } else {
-                    $('#delid').parent('#delete').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
+     } else {
+          $('#delid').parent('#delete').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
 
-               }
+     }         
 
-
-          }
-     });
 });
 
 function MemberStatus(id) {
@@ -353,12 +351,25 @@ $(document).on('click', '#back', function () {
 
 /*search redirect home page */
 
-$(document).on('keyup', '#searchmemgroup', function () {
-     if ($('.search').val() === "") {
-          window.location.href = "/membersgroup/"
-     }
-})
 
+$(document).on('keyup', '#searchmemgroup', function (event) {
+    
+     if (event.key === 'Backspace') {
+       
+         if ($('.search').val() === "") {
+         
+             window.location.href = "/membersgroup/";
+         }
+     }
+ });
+ 
+ $(document).keydown(function(event) {
+
+     if (event.ctrlKey && event.key === '/') {
+
+         $("#searchmemgroup").focus().select();
+     }
+ });
 
 $('form[class=filterform]>img').click(function () {
 
@@ -369,3 +380,333 @@ $('form[class=filterform]>img').click(function () {
           window.location.href = "/member/?keyword=" + keyword
      }
 })
+
+$(document).on('click','.selectcheckbox',function(){
+
+     memberid =$(this).attr('data-id')
+
+     var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
+
+     console.log(status,"status")
+
+ 
+    if ($(this).prop('checked')){
+
+        selectedcheckboxarr.push({"memberid":memberid,"status":status})
+    
+    }else{
+
+        const index = selectedcheckboxarr.findIndex(item => item.memberid === memberid);
+    
+        if (index !== -1) {
+
+            console.log(index,"sssss")
+            selectedcheckboxarr.splice(index, 1);
+        }
+       
+        $('#Check').prop('checked',false)
+
+    }
+
+   
+    if (selectedcheckboxarr.length !=0){
+
+        $('.selected-numbers').show()
+
+        var allSame = selectedcheckboxarr.every(function(item) {
+            return item.status === selectedcheckboxarr[0].status;
+        });
+        
+        var setstatus
+        var img;
+
+           if (selectedcheckboxarr[0].status === '1') {
+  
+             setstatus = "Deactive";
+ 
+              img = "/public/img/In-Active (1).svg";
+
+        } else if (selectedcheckboxarr[0].status === '0') {
+
+               setstatus = "Active";
+
+               img = "/public/img/Active (1).svg";
+
+          } 
+
+           var htmlContent = '';
+
+             if (allSame) {
+
+              htmlContent = '<img src="' + img + '">' + setstatus;
+
+              } else {
+
+                htmlContent = '';
+
+              }
+
+            $('#unbulishslt').html(htmlContent);
+       
+        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+
+        if(!allSame){
+
+            $('#seleccheckboxdelete').removeClass('border-end')
+
+            $('.unbulishslt').html("")
+        }else{
+
+            $('#seleccheckboxdelete').addClass('border-end')
+        }
+
+       
+    }else{
+
+        $('.selected-numbers').hide()
+    }
+
+        var allChecked = true;
+
+         $('.selectcheckbox').each(function() {
+
+             if (!$(this).prop('checked')) {
+
+             allChecked = false;
+
+            return false; 
+         }
+    });
+
+          $('#Check').prop('checked', allChecked);
+
+     console.log(selectedcheckboxarr,"checkkkk")
+ })
+
+ //ALL CHECKBOX CHECKED FUNCTION//
+
+$(document).on('click','#Check',function(){
+
+     selectedcheckboxarr=[]
+ 
+     var isChecked = $(this).prop('checked');
+ 
+     if (isChecked){
+ 
+         $('.selectcheckbox').prop('checked', isChecked);
+ 
+         $('.selectcheckbox').each(function(){
+     
+            memberid= $(this).attr('data-id')
+ 
+            var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
+     
+            selectedcheckboxarr.push({"memberid":memberid,"status":status})
+         })
+ 
+         $('.selected-numbers').show()
+ 
+         var allSame = selectedcheckboxarr.every(function(item) {
+
+             return item.status === selectedcheckboxarr[0].status;
+         });
+         
+         var setstatus
+ 
+         var img
+
+         if (selectedcheckboxarr.length !=0){
+         if (selectedcheckboxarr[0].status === '1') {
+ 
+          setstatus = "Deactive";
+
+           img = "/public/img/In-Active (1).svg";
+
+     } else if (selectedcheckboxarr[0].status === '0') {
+
+            setstatus = "Active";
+
+            img = "/public/img/Active (1).svg";
+
+       } 
+
+     }
+         var htmlContent = '';
+ 
+         if (allSame) {
+ 
+          htmlContent = '<img src="' + img + '">' + setstatus;
+ 
+          $('#seleccheckboxdelete').addClass('border-end')
+ 
+          } else {
+ 
+            htmlContent = '';
+ 
+            $('#seleccheckboxdelete').removeClass('border-end')
+ 
+          }
+ 
+        $('#unbulishslt').html(htmlContent);
+ 
+         $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+     
+     }else{
+ 
+ 
+         selectedcheckboxarr=[]
+ 
+         $('.selectcheckbox').prop('checked', isChecked);
+ 
+         $('.selected-numbers').hide()
+     }
+     if (selectedcheckboxarr.length ==0){
+
+          $('.selected-numbers').hide()
+      }
+ 
+ })
+ 
+ $(document).on('click','#seleccheckboxdelete',function(){
+
+     if (selectedcheckboxarr.length>1){
+          
+     $('.deltitle').text("Delete Membergroups?")
+ 
+     $('#content').text('Are you sure want to delete selected Membergroups?')
+
+     }else {
+
+          $('.deltitle').text("Delete Membergroup?")
+ 
+          $('#content').text('Are you sure want to delete selected Membergroup?')
+     }
+ 
+ 
+     $('#delete').addClass('checkboxdelete')
+ })
+ 
+ $(document).on('click','#unbulishslt',function(){
+
+     if (selectedcheckboxarr.length>1){
+
+          $('.deltitle').text( $(this).text()+" "+"Membergroups?")
+ 
+          $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Membergroups?")
+     }else{
+
+          $('.deltitle').text( $(this).text()+" "+"Membergroup?")
+ 
+          $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Membergroup?")
+     }
+ 
+     $('#delete').addClass('selectedunpublish')
+ 
+ })
+
+ //MULTI SELECT DELETE FUNCTION//
+$(document).on('click','.checkboxdelete',function(){
+
+     var url = window.location.href;
+ 
+     console.log("url", url)
+ 
+     var pageurl = window.location.search
+ 
+     const urlpar = new URLSearchParams(pageurl)
+ 
+     pageno = urlpar.get('page')
+ 
+     $('.selected-numbers').hide()
+     $.ajax({
+         url: '/membersgroup/deleteselectedmembergroup',
+         type: 'post',
+         dataType: 'json',
+         async: false,
+         data: {
+             "memberids": JSON.stringify(selectedcheckboxarr),
+             csrf: $("input[name='csrf']").val(),
+             "page":pageno
+ 
+             
+         },
+         success: function (data) {
+ 
+             console.log(data,"result")
+ 
+             if (data.value==true){
+ 
+                 setCookie("get-toast", "Member Group Deleted Successfully")
+ 
+                 window.location.href=data.url
+             }else{
+ 
+                 setCookie("Alert-msg", "Internal Server Error")
+ 
+             }
+ 
+         }
+     })
+ 
+ })
+ //Deselectall function//
+ 
+ $(document).on('click','#deselectid',function(){
+ 
+     $('.selectcheckbox').prop('checked',false)
+ 
+     $('#Check').prop('checked',false)
+ 
+     selectedcheckboxarr=[]
+ 
+     $('.selected-numbers').hide()
+     
+ })
+ 
+ //multi select active and deactive function//
+ 
+ $(document).on('click','.selectedunpublish',function(){
+ 
+     var url = window.location.href;
+ 
+     console.log("url", url)
+ 
+     var pageurl = window.location.search
+ 
+     const urlpar = new URLSearchParams(pageurl)
+ 
+     pageno = urlpar.get('page')
+ 
+     $('.selected-numbers').hide()
+     $.ajax({
+         url: '/membersgroup/multiselectmembergroup',
+         type: 'post',
+         dataType: 'json',
+         async: false,
+         data: {
+             "memberids":JSON.stringify(selectedcheckboxarr),
+             csrf: $("input[name='csrf']").val(),
+             "page":pageno
+ 
+             
+         },
+         success: function (data) {
+ 
+             console.log(data,"result")
+
+             if (data.value==true){
+ 
+                 setCookie("get-toast", "memgrpstatusnotify")
+ 
+                 window.location.href=data.url
+             }else{
+ 
+                 setCookie("Alert-msg", "Internal Server Error")
+ 
+             }
+ 
+         }
+     })
+ 
+ 
+ })

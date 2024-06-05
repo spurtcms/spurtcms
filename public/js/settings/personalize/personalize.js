@@ -17,33 +17,40 @@ $(document).ready(function(){
     $(".circle-change").each(function () {
         console.log($(this).css("background-color") == theme_clr, theme_clr, $(this).css("background-color"));
         if ($(this).css("background-color") == theme_clr) {
-            $(this).find(".clr").show();
+            // $(this).find(".clr").show();
+            $(this).addClass('active')
         }
     })
 })
 
 $(document).on('click', '.circle-change', function () {
-    $(".clr").hide()
-    $(this).find(".clr").show();
+  $(".circle-change").each(function(){
+
+    $(".circle-change").removeClass('active')
+  })
+    $(this).addClass('active')
     var color = $(this).css("background-color")
     console.log("clr", color);
     $("#color-change").val(color)
 })
 
 $(document).on('click', '#delete-logo', function () {
+    
     $("#upload-logo").remove()
     var html = '<div class="upload-logo" id="upload-logo"><img src="" alt=""><input type="hidden" id="logo-input" name="logo_imgpath" value="/public/img/logo.svg"><p class="para">'+languagedata.Personalize.browsecontent+'</p><div class="upload-button"><button class="btn-reg btn-xs primary theme-color browse-btn" type="button" data-bs-toggle="modal" data-bs-target="#addnewimageModal"> '+languagedata.browse+' </button><input type="hidden"></div></div>'
-    $(html).insertAfter('#logo-insert')
+    $(html).insertAfter('.myprouploaddiv')
 })
 
 $(document).on('click', '#delete-expandlogo', function () {
     $("#upload-expandlogo").remove()
     var html = '<div class="upload-logo" id="upload-expandlogo"><img src="" alt=""><input type="hidden" id="expandlogo-input" name="expandlogo_imgpath" value="/public/img/logo-bg.svg"><p class="para">'+languagedata.Personalize.browsecontent+'</p><div class="upload-button"><button class="btn-reg btn-xs primary theme-color browse-btn" type="button" data-bs-toggle="modal" data-logo="1" data-bs-target="#addnewimageModal"> '+languagedata.browse+' </button><input type="hidden"></div></div>'
 
-    $(html).insertAfter('#expandlogo-insert')
+    $(html).insertAfter('.expandlogodiv')
 })
 
 $(document).on('click', '#upload-expandlogo>.upload-button>.browse-btn', function () {
+
+    console.log($(this).attr('data-logo'),"value")
     $("#logo-input").val($(this).attr('data-logo'))
 })
 

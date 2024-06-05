@@ -1,45 +1,23 @@
 {{define "ecommenu"}}
 {{$Translate := .translate}}
 <ul class="nav entries-tab" id="myTab" role="tablist">
-    {{$Customermenu := .Customermenu}}
-    {{$Productmenu := .Productmenu}}
-    {{$Ordermenu:= .Ordermenu}}
+    {{$Title := .title}}
+    {{$Tabmenu := .Tabmenu}}
+    {{range .Menu.TblModule}}
+    {{if eq .ModuleName $Title}}
+    {{range .SubModule}}
+    {{if gt (len .Routes) 0}}
+
+    {{$Routname := index .Routes 0}}
     <li class="nav-itm" role="presentation">
-        <a href="/ecommerce/products/" class="nav-lnk heading-three {{if eq $Productmenu true}} active{{end}} ">
-            <img src="/public/img/catalogue.svg">
-            <span class="heading-three">Catalogue</span>
+        <a class="nav-lnk incmsmenu entriesmenu {{if eq .ModuleName $Tabmenu}} active {{end}} " href="{{$Routname.RouteName}}">
+            <img src="{{.IconPath}}" alt="" />
+            <span class="heading-three">{{.ModuleName}}</span>
         </a>
     </li>
-    <li class="nav-itm" role="presentation">
-        <a href="/ecommerce/customers/" class="nav-lnk heading-three   {{if eq $Customermenu true}} active{{end}}">
-            <img src="/public/img/customer.svg">
-            <span class="heading-three">Customers</span>
-        </a>
-    </li>
-    <li class="nav-itm" role="presentation">
-        <a href="/ecommerce/orders/" class="nav-lnk heading-three {{if eq $Ordermenu true}} active{{end}}">
-            <img src="/public/img/order.svg">
-            <span class="heading-three">Orders</span>
-        </a>
-    </li>
-    <li class="nav-itm" role="presentation">
-        <a href="#" class="nav-lnk heading-three">
-            <img src="/public/img/report.svg">
-            <span class="heading-three">Reports</span>
-        </a>
-    </li>
-    <li class="nav-itm" role="presentation">
-        <a href="#" class="nav-lnk heading-three">
-            <img src="/public/img/categories-group.svg">
-            <span class="heading-three">Categories Group</span>
-        </a>
-    </li>
-    <li class="nav-itm" role="presentation">
-        <a href="#" class="nav-lnk heading-three">
-            <img src="/public/img/settings-tab.svg">
-            <span class="heading-three">Settings</span>
-        </a>
-    </li>
-</ul>
+    {{end}}
+    {{end}}
+    {{end}}
+    {{end}}
 
 {{end}}
