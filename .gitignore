@@ -1,2 +1,2 @@
-# Ignore all env except .env.example
+# Ignore all env except .env
 .env.*

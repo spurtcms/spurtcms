@@ -1,0 +1,1 @@
+ERROR 2024/07/20 16:46:22 general-settings.go:20: Getting data from general settings Error: ERROR: relation "tbl_general_settings" does not exist (SQLSTATE 42P01)
