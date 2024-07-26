@@ -37,10 +37,10 @@ This is the official repository of Spurtcms. Using these Build , you can easily 
 
 ### Step 1: Download the source files:
 
-Clone the Git repository that contains spurtCMS Admin project files, PostgreSQL dump file and .env file from the path https://github.com/spurtcms-admin.git using the “git clone” command.
+Clone the Git repository that contains spurtCMS Admin project files, PostgreSQL dump file and .env file from the path https://github.com/spurtcms/spurtcms-admin.git using the “git clone” command.
 
 ```
-https://github.com/spurtcms/spurtcms-admin.git
+git clone https://github.com/spurtcms/spurtcms-admin.git
 ```
 After successful git clone, you should see a folder “spurtcms-admin” with folders locales, view, storage, public and files such as binary file, spurtCMS-admin.sql file and  .env, file.
 
