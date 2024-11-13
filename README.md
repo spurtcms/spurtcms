@@ -51,11 +51,12 @@ After successful git clone, you should see a folder “spurtcms-admin” with fo
 
 Utilize the "Restore" feature in PgAdmin to populate the database with the necessary content from the database dump spurtCMS-admin.sql cloned in the above step.
 
-Locate the .env file inside the project folder “spurtcms-admin-app” and configure it with the details of newly created database such as database name, user name, password etc
+Locate the .env file inside the project folder “spurtcms-admin-app” and configure it with the details of newly created database such as database type,name, user name, password etc
 
-#### PostgreSQL Database Configuration
+#### PostgreSQL/mysql Database Configuration
 
 ```
+DATABASE_TYPE = "postgres/mysql"
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=your_database_name
