@@ -31,6 +31,8 @@ spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful
 </p>
 <br />
 
+![GIF](https://dev.spurtcms.com/public/img/animated-gif-maker.gif)
+
 ## ❯  🚀 Easy to Deploy Spurtcms Admin Panel on your server
 
 This is the official repository of Spurtcms. Using these Build , you can easily deploy spurtcms in your local server.
