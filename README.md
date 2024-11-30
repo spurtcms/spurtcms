@@ -24,7 +24,7 @@
 <br />
 
 > [!IMPORTANT]
-> 🎉 <strong>Spurtcms 1.0 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.
+> 🎉 <strong>Spurtcms 1.2 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.
 <br />
 <p>
 spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful tools for content creation, management, and defining CMS workspaces. Administrators have precise control over member access, ensuring streamlined member management. Dynamic channel management allows effective content structuring, enhancing the overall user experience. Administrators effortlessly create and manage channels and spaces, providing a comprehensive, user-centric content management solution for personalized and organized web environments.
@@ -33,47 +33,71 @@ spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful
 
 ![GIF](https://dev.spurtcms.com/public/img/animated-gif-maker.gif)
 
+
 ## ❯  🚀 Easy to Deploy Spurtcms Admin Panel on your server
 
-This is the official repository of Spurtcms. Using these Build , you can easily deploy spurtcms in your local server.
+This is the official repository of Spurtcms.You can easily deploy spurtcms in your local server.
 
 ### Step 1: Download the source files:
 
-Clone the Git repository that contains spurtCMS Admin project files, PostgreSQL dump file and .env file from the path https://github.com/spurtcms/spurtcms-admin.git using the “git clone” command.
+Clone the Git repository that contains spurtCMS Admin project files, and .env file from the path https://github.com/spurtcms/spurtcms using the “git clone” command.
 
 ```
-git clone https://github.com/spurtcms/spurtcms-admin.git
+git clone https://github.com/spurtcms/spurtcms
 ```
-After successful git clone, you should see a folder “spurtcms-admin” with folders locales, view, storage, public and files such as binary file, spurtCMS-admin.sql file and  .env, file.
+After successful git clone, you should see a folder “spurtcms-admin” with folders locales, view, storage, public and  .env, file.
 
 
 ### Step 2: Database Setup
 
-Utilize the "Restore" feature in PgAdmin to populate the database with the necessary content from the database dump spurtCMS-admin.sql cloned in the above step.
+spurtCMS supports PostgreSQL and MySQL. You need to configure the following environment variables in your .env file:
 
-Locate the .env file inside the project folder “spurtcms-admin-app” and configure it with the details of newly created database such as database type,name, user name, password etc
+Locate the .env file inside the project folder “spurtcms-admin-app” and configure it with the details of newly created database to use either PostgreSQL or MySQL such as database type,name, user name, password etc
 
-#### PostgreSQL/mysql Database Configuration
+
+
+
+
+### Database Configuration
 
 ```
-DATABASE_TYPE = "postgres/mysql"
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=your_database_name
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
+DATABASE_TYPE=postgres          # Use 'postgres' for PostgreSQL or 'mysql' for MySQL
+DB_HOST=localhost               # Database host
+DB_PORT=5432                    # Port for PostgreSQL (use 3306 for MySQL)
+DB_DATABASE=your_database_name  # Name of your database
+DB_USERNAME=your_username       # Database username
+DB_PASSWORD=your_password       # Database password
 DB_SSL_MODE=disable
+
 ```
+
+
+
+
+
 
 Successful completion of this step completes the database configuration for spurtCMS Admin application.
 
+### Step 3: Environment Variables for AWS S3
 
-### Step 3: Running the Project
-
-Open the terminal within the project / cloned folder “spurtcms-admin-app”, note down the binary file name and execute the following command:
+spurtCMS application uses AWS S3 for file storage. You need to configure the following environment variables in your .env file:
 
 ```
-./{binary-file-name}
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+AWS_DEFAULT_REGION=your-region
+AWS_BUCKET_NAME=your-bucket-name
+
+```
+
+
+### Step 4: Running the Project
+
+Open the terminal within the project / cloned folder “spurtcms-admin”, and execute the following command:
+
+```
+go run main.go
+
 ```
 This command initiates the spurtCMS Admin application, allowing you to begin your journey with this powerful content management system.
 
@@ -85,7 +109,7 @@ By following the steps outlined in this article, you have successfully set up sp
 live demo of our intuitive Admin Panel .
 
 ```
-Username : Admin
+Username : spurtcmsAdmin
 Password : Admin@123
 ```
 
