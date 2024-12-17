@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="https://www.spurtcms.com/#gh-light-mode-only">
-    <img src="https://www.spurtcms.com/spurtcms.png" width="318px" alt="Spurtcms logo" />
+      <img src="https://www.spurtcms.com/public/img/v2-logo.png" width="318px" alt="Spurtcms logo" />
   </a>
    
 </p>
