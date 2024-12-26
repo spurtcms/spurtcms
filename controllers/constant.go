@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"spurt-cms/config"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -31,6 +33,12 @@ var (
 	OwndeskUrl         = os.Getenv("OWNDESK_URL")
 	CompanyProfilePath = os.Getenv("COMPANY_PROFILE_PATH")
 )
+
+var TenantId int
+
+func Tenant_Id(c *gin.Context) {
+	TenantId = c.GetInt("tenant_id")
+}
 
 func RemoveSpecialCharacter(str string) string {
 

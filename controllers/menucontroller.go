@@ -40,20 +40,36 @@ type MenuMod struct {
 	EmptyCheck bool //this is flg for mainmenu hide if submodule is empty
 }
 
+type TablePageType struct {
+	Id         int
+	Title      string
+	Slug       string
+	CreatedBy  int
+	CreatedOn  time.Time
+	ModifiedBy int
+	ModifiedOn time.Time
+	DeletedBy  int
+	DeletedOn  time.Time
+	IsDeleted  int
+}
+
 type USR struct {
-	TblModule        []MenuMod
-	Name             string
-	RoleName         string
-	ProfileImagePath string
-	Languages        []models.TblLanguage
-	DefaultLanguage  models.TblLanguage
-	CurrentLanguage  models.TblLanguage
-	Personalize      models.TblUserPersonalize
-	Footer           string
-	NameString       string
-	Expand           bool
-	LogoPath         string
-	ExpandLogoPath   string
+	TblModule         []MenuMod
+	Name              string
+	NameLength        int
+	LimitedLengthName string
+	RoleName          string
+	ProfileImagePath  string
+	Languages         []models.TblLanguage
+	DefaultLanguage   models.TblLanguage
+	CurrentLanguage   models.TblLanguage
+	Personalize       models.TblUserPersonalize
+	Footer            string
+	NameString        string
+	Expand            bool
+	LogoPath          string
+	ExpandLogoPath    string
+	TblPageTypes      []TablePageType
 }
 
 type TblModulePermission struct {
@@ -110,7 +126,7 @@ func GetLanguageList() []models.TblLanguage {
 
 	var languagelist []models.TblLanguage
 
-	err := models.FetchAllLanguage(&languagelist)
+	err := models.FetchAllLanguage(&languagelist, TenantId)
 	if err != nil {
 		ErrorLog.Printf("Fectch all language error: %s", err)
 		return []models.TblLanguage{}
@@ -138,6 +154,16 @@ func MainMenu() []TblModule {
 
 }
 
+func GetPageType() []TablePageType {
+
+	var pagetypes []TablePageType
+
+	GetDefaultPagetypes(&pagetypes) //get parent default main module only
+
+	return pagetypes
+
+}
+
 func TabMenu(parentid int) []TblModule {
 
 	var subModules []TblModule
@@ -162,11 +188,11 @@ func NewMenuController(c *gin.Context) USR {
 		currentLanguage  models.TblLanguage
 	)
 
-	User.Authority = &AUTH
-
-	user, _ := User.GetUserDetails(userid)
+	user, _, _ := NewTeamWP.GetUserById(userid, []int{})
 
 	rolepermission, err := GetPermissionIDS(user.RoleId)
+
+	pagetype := GetPageType()
 
 	if err != nil {
 
@@ -191,7 +217,7 @@ func NewMenuController(c *gin.Context) USR {
 
 		var Suball []SubModule
 
-		if user.RoleId != 1 { //not admin users
+		if user.RoleId != 1 && user.RoleId != 2 { //not admin users
 			for _, tab := range TabManu {
 
 				var sub SubModule
@@ -219,6 +245,10 @@ func NewMenuController(c *gin.Context) USR {
 						if url.RouteName != "/channel/entrylist" {
 
 							var urll URL
+							if strings.Contains(url.RouteName, "/channel/entrylist/") {
+
+								url.RouteName = "/channel/entrylist"
+							}
 							urll.Id = url.Id
 							urll.DisplayName = url.DisplayName
 							urll.RouteName = url.RouteName
@@ -303,7 +333,7 @@ func NewMenuController(c *gin.Context) USR {
 	// 	fmt.Println()
 	// }
 
-	models.GetPersonalize(&personalize_data, userid)
+	models.GetPersonalize(&personalize_data, userid, TenantId)
 
 	var first = user.FirstName
 	var last = user.LastName
@@ -315,9 +345,31 @@ func NewMenuController(c *gin.Context) USR {
 		lastn = strings.ToUpper(last[:1])
 	}
 
+	var nameLength = len(user.FirstName) + len(user.LastName)
+
+	user.NameLength = nameLength
+
+	if nameLength > 18 {
+		if len(first) > 6 {
+			user.LimitedLengthName = first[:5] + "..."
+
+		} else {
+			user.LimitedLengthName = first[:len(first)] + "..."
+		}
+
+	}
+
 	var Name = firstn + lastn
 
 	user.NameString = Name
+
+	if user.ProfileImagePath != "" {
+		if user.StorageType == "local" {
+			user.ProfileImagePath = "/" + user.ProfileImagePath
+		} else if user.StorageType == "aws" {
+			user.ProfileImagePath = "/image-resize?name=" + user.ProfileImagePath
+		}
+	}
 
 	if interfaceValue, exists := c.Get("currentLanguage"); exists {
 		if structValue, ok := interfaceValue.(models.TblLanguage); ok {
@@ -333,12 +385,36 @@ func NewMenuController(c *gin.Context) USR {
 		expandflg = false
 	}
 
+	tblGeneralSettings, _ := models.GetGeneralSettings(TenantId)
+
+	if !strings.Contains(tblGeneralSettings.LogoPath, "/public/img") {
+
+		if tblGeneralSettings.StorageType == "aws" {
+
+			LogoPath = "/image-resize?name=" + tblGeneralSettings.LogoPath
+			ExpantLogoPath = "/image-resize?name=" + tblGeneralSettings.ExpandLogoPath
+
+		} else if tblGeneralSettings.StorageType == "local" {
+
+			LogoPath = "Storage/" + tblGeneralSettings.LogoPath
+			ExpantLogoPath = "Storage/" + tblGeneralSettings.ExpandLogoPath
+
+		}
+
+	} else {
+
+		LogoPath = tblGeneralSettings.LogoPath
+
+	}
+
 	Mod := USR{
-		TblModule:        Final,
-		Name:             user.FirstName + " " + user.LastName,
-		RoleName:         user.RoleName,
-		ProfileImagePath: user.ProfileImagePath,
-		Languages:        GetLanguageList(),
+		TblModule:         Final,
+		Name:              user.FirstName + " " + user.LastName,
+		NameLength:        user.NameLength,
+		LimitedLengthName: user.LimitedLengthName,
+		RoleName:          user.RoleName,
+		ProfileImagePath:  user.ProfileImagePath,
+		Languages:         GetLanguageList(),
 		// DefaultLanguage:  GetDefaultLanguageDetails(userid),
 		Personalize:     personalize_data,
 		CurrentLanguage: currentLanguage,
@@ -347,6 +423,7 @@ func NewMenuController(c *gin.Context) USR {
 		Expand:          expandflg,
 		LogoPath:        LogoPath,
 		ExpandLogoPath:  ExpantLogoPath,
+		TblPageTypes:    pagetype,
 	}
 
 	return Mod
@@ -374,7 +451,7 @@ var db = config.SetupDB()
 /**/
 func GetAllParentModule(modules *[]TblModule) error {
 
-	if err := db.Table("tbl_modules").Where("default_module = 0 and parent_id = 0").Order("tbl_modules.id asc").Find(&modules).
+	if err := db.Table("tbl_modules").Where("default_module = 0 and parent_id = 0").Order("tbl_modules.order_index asc").Find(&modules).
 		Error; err != nil {
 
 		return err
@@ -444,7 +521,18 @@ func GetPermissionId(perm *[]TblRolePermission, roleid int) error {
 /**/
 func GetAllParentModules1(mod *[]TblModule) (err error) {
 
-	if err := DB.Model(TblModule{}).Where("parent_id=0").Find(&mod).Error; err != nil {
+	if err := DB.Model(TblModule{}).Where("parent_id=0 and (tenant_id is NULL or tenant_id = ?)", TenantId).Order("order_index asc").Find(&mod).Error; err != nil {
+
+		return err
+	}
+
+	return nil
+}
+
+/**/
+func GetDefaultPagetypes(mod *[]TablePageType) (err error) {
+
+	if err := DB.Table("tbl_page_types").Where("is_deleted=0").Find(&mod).Error; err != nil {
 
 		return err
 	}
@@ -455,8 +543,8 @@ func GetAllParentModules1(mod *[]TblModule) (err error) {
 /**/
 func GetAllSubModules1(mod *[]TblModule, ids []int) (err error) {
 
-	if err := DB.Model(TblModule{}).Where("(tbl_modules.parent_id in (?) or id in(?)) and tbl_modules.assign_permission=0", ids, ids).Order("order_index").Preload("TblModulePermission", func(db *gorm.DB) *gorm.DB {
-		return db.Where("assign_permission =1").Order("order_index asc")
+	if err := DB.Debug().Model(TblModule{}).Where("(tbl_modules.parent_id in (?) or id in(?)) and tbl_modules.assign_permission=0 and (tenant_id is NULL or tenant_id = ?)", ids, ids, TenantId).Order("order_index").Preload("TblModulePermission", func(db *gorm.DB) *gorm.DB {
+		return db.Where("assign_permission =1 and tenant_id is NULL or tenant_id = ?", TenantId).Order("order_index asc")
 	}).Find(&mod).Error; err != nil {
 
 		return err
@@ -468,10 +556,10 @@ func GetAllSubModules1(mod *[]TblModule, ids []int) (err error) {
 func Permissions() []TblModule {
 
 	var (
-		allmodule []TblModule
+		allmodule  []TblModule
 		allmodules []TblModule
-		parentid []int //all parentid
-		submod []TblModule
+		parentid   []int //all parentid
+		submod     []TblModule
 	)
 
 	GetAllParentModules1(&allmodule)

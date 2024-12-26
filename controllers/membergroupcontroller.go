@@ -3,14 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spurtcms/auth"
 	mem "github.com/spurtcms/member"
-	"github.com/spurtcms/pkgcore/member"
 	csrf "github.com/utrack/gin-csrf"
 )
 
@@ -36,6 +34,14 @@ func MemberGroupList(c *gin.Context) {
 	limit := c.Query("limit")
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+
+	var filterflag bool
+	if filter.Keyword != "" {
+		filterflag = true
+	} else {
+		filterflag = false
+	}
+
 	if limit == "" {
 		limt = Limit
 	} else {
@@ -45,12 +51,25 @@ func MemberGroupList(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
-	permisison, _ := NewAuth.IsGranted("Members Group", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Read, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Member group list authorization error: %s", perr)
+	}
+
+	if perr != nil {
+		ErrorLog.Printf("MemberGroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
 		// get member group list
 		var membergrouplist []mem.Tblmembergroup
-		membergrouplists, _, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Limit: limt, Offset: offset, Keyword: filter.Keyword})
+		MemberConfig.DataAccess = c.GetInt("dataaccess")
+		MemberConfig.UserId = c.GetInt("userid")
+		membergrouplists, _, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Limit: limt, Offset: offset, Keyword: filter.Keyword}, TenantId)
 		if err != nil {
 			ErrorLog.Printf("membergroup list details error: %s", err)
 		}
@@ -64,7 +83,7 @@ func MemberGroupList(c *gin.Context) {
 			membergrouplist = append(membergrouplist, membergroupvalue)
 		}
 
-		_, Total_members, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Keyword: filter.Keyword})
+		_, Total_members, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Keyword: filter.Keyword}, TenantId)
 		if err != nil {
 			ErrorLog.Printf("membergroup list details error: %s", err)
 		}
@@ -75,6 +94,11 @@ func MemberGroupList(c *gin.Context) {
 		menu := NewMenuController(c)
 		ModuleName, TabName, _ := ModuleRouteName(c)
 		translate, _ := TranslateHandler(c)
+
+		uper, _ := NewAuth.IsGranted("Members Group", auth.Update, TenantId)
+
+		dper, _ := NewAuth.IsGranted("Members Group", auth.Delete, TenantId)
+
 		c.HTML(200, "groups.html", gin.H{"csrf": csrf.GetToken(c), "Pagination": PaginationData{
 			NextPage:     pageno + 1,
 			PreviousPage: pageno - 1,
@@ -82,11 +106,8 @@ func MemberGroupList(c *gin.Context) {
 			TwoAfter:     pageno + 2,
 			TwoBelow:     pageno - 2,
 			ThreeAfter:   pageno + 3,
-		}, "title": ModuleName, "translate": translate, "Menu": menu, "Limit": limt, "MemberGroupList": membergrouplist, "Count": Total_members, "Previous": Previous, "Page": Page, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "HeadTitle": translate.Memberss.Members, "Filter": filter, "Membermenu": true, "Groupmenu": true, "Tabmenu": TabName})
+		}, "title": ModuleName, "translate": translate, "Searchtrue": filterflag, "linktitle": "Member Group", "Menu": menu, "Limit": limt, "MemberGroupList": membergrouplist, "Count": Total_members, "Previous": Previous, "Page": Page, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "HeadTitle": translate.Memberss.Members, "Filter": filter, "Membermenu": true, "Groupmenu": true, "Tabmenu": TabName, "permission": uper, "dpermission": dper})
 
-	} else {
-
-		c.Redirect(301, "/403-page")
 	}
 }
 
@@ -101,16 +122,27 @@ func CreateNewMemberGroup(c *gin.Context) {
 		CreatedBy:   userid,
 	}
 
-	permisison, _ := NewAuth.IsGranted("Members Group", auth.Create)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Create, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Member Group List authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := MemberConfig.CreateMemberGroup(MemberGroup) //Create member group
+		err := MemberConfig.CreateMemberGroup(MemberGroup, TenantId) //Create member group
 		if err != nil {
 			if err != nil {
 				ErrorLog.Printf("create membergroup error: %s", err)
 			}
 		}
-		
+
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
 			c.Redirect(301, "/membersgroup/")
@@ -154,10 +186,21 @@ func UpdateMemberGroup(c *gin.Context) {
 		ModifiedBy:  userid,
 	}
 
-	permisison, _ := NewAuth.IsGranted("Members Group", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Update, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Member Group List authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := MemberConfig.UpdateMemberGroup(MemberGroup, id) //update member group
+		err := MemberConfig.UpdateMemberGroup(MemberGroup, id, TenantId) //update member group
 		if err != nil {
 			ErrorLog.Printf("membergroup update error: %s", err)
 		}
@@ -177,8 +220,6 @@ func UpdateMemberGroup(c *gin.Context) {
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(301, url)
 
-	} else {
-		c.Redirect(301, "/403-page")
 	}
 
 }
@@ -198,14 +239,44 @@ func DeleteMemberGroup(c *gin.Context) {
 	}
 	userid := c.GetInt("userid")
 
-	permisison, _ := NewAuth.IsGranted("Members Group", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Delete, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Member Group List authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := MemberConfig.DeleteMemberGroup(MemberGroupId, userid) //delete member group
+		err := MemberConfig.DeleteMemberGroup(MemberGroupId, userid, TenantId) //delete member group
 		if err != nil {
 			ErrorLog.Printf("membergroup delete error: %s", err)
 		}
 
+		_, Total_membergrp, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Keyword:""}, TenantId)
+		if err != nil {
+			ErrorLog.Printf("membergroup list details error: %s", err)
+		}
+
+
+	recordsPerPage := Limit
+	totalPages := (int(Total_membergrp) + recordsPerPage - 1) / recordsPerPage
+
+	currentPage := 1
+	if pageno != "" {
+		currentPage, _ = strconv.Atoi(pageno)
+	}
+
+	if currentPage > totalPages && totalPages > 0 {
+		url = "/membersgroup?page=" + strconv.Itoa(totalPages)
+	} 
+
+	fmt.Println("url",url)
 		if err != nil {
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
@@ -217,9 +288,6 @@ func DeleteMemberGroup(c *gin.Context) {
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(301, url)
 
-	} else {
-
-		c.Redirect(301, "/403-page")
 	}
 
 }
@@ -232,10 +300,21 @@ func MemberIsActive(c *gin.Context) {
 	val, _ := strconv.Atoi(c.Request.PostFormValue("isactive"))
 	userid := c.GetInt("userid")
 
-	permisison, _ := NewAuth.IsGranted("Members Group", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Update, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Member Group List authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		flg, err := MemberConfig.MemberGroupIsActive(id, val, userid) //update member group status
+		flg, err := MemberConfig.MemberGroupIsActive(id, val, userid, TenantId) //update member group status
 		if err != nil {
 			ErrorLog.Printf("membergroup status update error: %s", err)
 			json.NewEncoder(c.Writer).Encode(flg)
@@ -245,30 +324,6 @@ func MemberIsActive(c *gin.Context) {
 			json.NewEncoder(c.Writer).Encode(flg)
 		}
 
-	} else {
-
-		c.Redirect(301, "/403-page")
-	}
-
-}
-
-func MemberGroupPopup(c *gin.Context) {
-
-	auth := member.Memberauth{Authority: &AUTH}
-
-	var id, _ = strconv.Atoi(c.PostForm("id"))
-
-	membergroup, err := auth.MemberDeletePopup(id)
-
-	if err != nil {
-
-		log.Println(err)
-
-		json.NewEncoder(c.Writer).Encode("false")
-
-	} else {
-
-		json.NewEncoder(c.Writer).Encode(membergroup)
 	}
 
 }
@@ -279,13 +334,20 @@ func CheckNameInMemberGroup(c *gin.Context) {
 
 	name := c.PostForm("membergroup_name")
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Read, TenantId)
+
 	if perr != nil {
 		ErrorLog.Printf("multi group delete authorization error :%s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
-		flg, err := MemberConfig.CheckNameInMemberGroup(id, name)
+		flg, err := MemberConfig.CheckNameInMemberGroup(id, name, TenantId)
 		if err != nil {
 			ErrorLog.Printf("check name in member error :%s", perr)
 			json.NewEncoder(c.Writer).Encode(false)
@@ -293,9 +355,6 @@ func CheckNameInMemberGroup(c *gin.Context) {
 		}
 		json.NewEncoder(c.Writer).Encode(flg)
 
-	} else {
-
-		c.Redirect(301, "/403-page")
 	}
 
 }
@@ -326,25 +385,46 @@ func MultiSelectDeleteMembergroup(c *gin.Context) {
 
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("multi group delete authorization error :%s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.JSON(200, gin.H{"value": false, "url": "/403-page"})
+		return
+	}
+
 	if permisison {
 
-		_, err := MemberConfig.MultiSelectedMemberDeletegroup(Memberids, userid)
+		_, err := MemberConfig.MultiSelectedMemberDeletegroup(Memberids, userid, TenantId)
 		if err != nil {
 			ErrorLog.Printf("multi group delete error :%s", perr)
 			c.JSON(200, gin.H{"value": false})
 			return
 		}
 
+		_, Total_membergrp, err := MemberConfig.ListMemberGroup(mem.MemberGroupListReq{Keyword:""}, TenantId)
+		if err != nil {
+			ErrorLog.Printf("membergroup list details error: %s", err)
+		}
+
+
+	recordsPerPage := Limit
+	totalPages := (int(Total_membergrp) + recordsPerPage - 1) / recordsPerPage
+
+	currentPage := 1
+	if pageno != "" {
+		currentPage, _ = strconv.Atoi(pageno)
+	}
+
+	if currentPage > totalPages && totalPages > 0 {
+		url = "/membersgroup?page=" + strconv.Itoa(totalPages)
+	} 
+
 		c.JSON(200, gin.H{"value": true, "url": url})
 
-	} else {
-
-		c.Redirect(301, "/403-page")
 	}
 
 }
@@ -389,14 +469,20 @@ func MultiSelectMembersgroupStatus(c *gin.Context) {
 
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Members Group", auth.Update, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("multi group status authorization error :%s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("Membergroup authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		_, err := MemberConfig.MultiSelectMembersgroupStatus(memberids, status, userid)
+		_, err := MemberConfig.MultiSelectMembersgroupStatus(memberids, status, userid, TenantId)
 
 		if err != nil {
 			ErrorLog.Printf("multi group delete authorization error :%s", err)
@@ -406,9 +492,34 @@ func MultiSelectMembersgroupStatus(c *gin.Context) {
 
 		c.JSON(200, gin.H{"value": true, "status": status, "url": url})
 
-	} else {
-
-		c.Redirect(301, "/403-page")
 	}
+
+}
+
+func Chkmemgrphavemember(c *gin.Context) {
+
+	var (
+		membergrpdata []map[string]string
+		Membergrpids  []int
+	)
+	memgrp_id, _ := strconv.Atoi(c.PostForm("id"))
+
+
+	if err := json.Unmarshal([]byte(c.Request.PostFormValue("membergrpids")), &membergrpdata); err != nil {
+		fmt.Println(err)
+	}
+	for _, val := range membergrpdata {
+		memberid, _ := strconv.Atoi(val["memberid"])
+		Membergrpids = append(Membergrpids, memberid)
+	}
+
+	_, err := MemberConfig.Membergroupcheckmember(memgrp_id,Membergrpids, TenantId)
+
+	if err != nil {
+		ErrorLog.Printf("Member group check hane Error :%s", err)
+		c.JSON(200, gin.H{"value": false})
+		return
+	}
+	c.JSON(200, gin.H{"value": true})
 
 }

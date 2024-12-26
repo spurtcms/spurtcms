@@ -2,17 +2,18 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
+	"spurt-cms/models"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spurtcms/auth"
 	chn "github.com/spurtcms/channels"
-	"github.com/spurtcms/pkgcontent/channels"
 	csrf "github.com/utrack/gin-csrf"
 )
 
-var channelAuth channels.Channel
+var CurrentPage int
 
 /*Channel List*/
 func ChannelList(c *gin.Context) {
@@ -27,6 +28,13 @@ func ChannelList(c *gin.Context) {
 	keyword := strings.TrimSpace(c.DefaultQuery("keyword", ""))
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
+	var filterflag bool
+	if keyword != "" {
+		filterflag = true
+	} else {
+		filterflag = false
+	}
+
 	if limit == "" {
 		limt = Limit
 	} else {
@@ -37,66 +45,83 @@ func ChannelList(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("channellist authorization error: %s", perr)
 	}
 
-	if permisison {
-
-		channelslist, channelcount, err := ChannelConfig.ListChannel(Limit, offset, chn.Filter{Keyword: keyword}, false, true)
-
-		var Finalchannelslist []chn.Tblchannel
-
-		for _, val := range channelslist {
-			list := val
-			if val.ModifiedOn.IsZero() {
-				list.DateString = val.CreatedOn.In(TZONE).Format(Datelayout)
-			} else {
-				list.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
-			}
-			Finalchannelslist = append(Finalchannelslist, list)
-		}
-
-		if err != nil {
-			ErrorLog.Printf("channellist error :%s", err)
-		}
-
-		menu := NewMenuController(c)
-		translate, _ := TranslateHandler(c)
-		ModuleName, TabName, _ := ModuleRouteName(c)
-
-		c.HTML(200, "channels.html", gin.H{"Menu": menu, "csrf": csrf.GetToken(c), "channel": Finalchannelslist, "count": channelcount, "HeadTitle": translate.Channell.Channels, "filter": keyword, "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "title": ModuleName, "Tabmenu": TabName})
-
+	if !permisison { //check permission if permission false redirect to 403 page
+		c.Redirect(301, "/403-page")
 		return
-
 	}
 
-	c.Redirect(301, "/403-page")
+	ChannelConfig.DataAccess = c.GetInt("dataaccess")
+	ChannelConfig.Userid = c.GetInt("userid")
+
+	channelslist, channelcount, err := ChannelConfig.ListChannel(chn.Channels{Limit: Limit, Offset: offset, Keyword: keyword, IsActive: false, CreateOnly: true, TenantId: TenantId, Count: true})
+	var Finalchannelslist []chn.Tblchannel
+
+	for _, val := range channelslist {
+
+		_, entrcount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: val.Id, Limit: 0, Offset: 0}, TenantId)
+		val.EntriesCount = int(entrcount)
+
+		list := val
+		if val.ModifiedOn.IsZero() {
+			list.DateString = val.CreatedOn.In(TZONE).Format(Datelayout)
+		} else {
+			list.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
+		}
+		Finalchannelslist = append(Finalchannelslist, list)
+	}
+
+	if err != nil {
+		ErrorLog.Printf("channellist error :%s", err)
+	}
+
+	//pagination calc
+	paginationendcount := len(channelslist) + offset
+	paginationstartcount := offset + 1
+	Previous, Next, PageCount, Page := Pagination(pageno, int(channelcount), limt)
+
+	menu := NewMenuController(c)
+	translate, _ := TranslateHandler(c)
+	ModuleName, TabName, _ := ModuleRouteName(c)
+	CurrentPage = pageno
+
+	c.HTML(200, "channels.html", gin.H{"Pagination": PaginationData{
+		NextPage:     pageno + 1,
+		PreviousPage: pageno - 1,
+		TotalPages:   PageCount,
+		TwoAfter:     pageno + 2,
+		TwoBelow:     pageno - 2,
+		ThreeAfter:   pageno + 3,
+	}, "Menu": menu, "csrf": csrf.GetToken(c), "channel": Finalchannelslist, "Searchtrue": filterflag, "count": channelcount, "HeadTitle": translate.Channell.Channels, "filter": keyword, "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "title": ModuleName, "Tabmenu": TabName, "linktitle": ModuleName, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Paginationstartcount": paginationstartcount, "Limit": limt})
 
 }
 
 /*Create Channel*/
 func CreateChannelPage(c *gin.Context) {
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("createchannel authorization error: %s", perr)
 	}
 
 	if permisison {
 
-		field, err := ChannelConfig.GetAllMasterFieldType()
+		field, err := ChannelConfig.GetAllMasterFieldType(TenantId)
 		if err != nil {
 			ErrorLog.Printf("get allmasterfield error: %s", err)
 		}
 
-		AllCategorieswithSubCategories, _ := CategoryConfig.AllCategoriesWithSubList()
+		AllCategorieswithSubCategories, _ := CategoryConfig.AllCategoriesWithSubList(TenantId)
 
 		menu := NewMenuController(c)
+		ModuleName, _, _ := ModuleRouteName(c)
 		translate, _ := TranslateHandler(c)
 
-		c.HTML(200, "newaddchannel.html", gin.H{"Menu": menu, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Save", "AllCategories": AllCategorieswithSubCategories, "Title": "Create Channel", "Back": "/settings/channels/channellist", "HeadTitle": "Create Channel", "translate": translate, "Channelsmenu": true, "Cmsmenu": true})
+		c.HTML(200, "addchannel.html", gin.H{"Menu": menu, "linktitle": "Create Channel", "title": ModuleName, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Save", "AllCategories": AllCategorieswithSubCategories, "Title": "Create Channel", "Back": "/settings/channels/channellist", "HeadTitle": "Create Channel", "translate": translate, "Channelsmenu": true, "Cmsmenu": true})
 
 		return
 
@@ -143,7 +168,7 @@ func CreateChannel(c *gin.Context) {
 		return
 	}
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("channelcreate authorization error: %s", perr)
 	}
@@ -176,6 +201,7 @@ func CreateChannel(c *gin.Context) {
 			fieldval.SectionNewId = val.SectionNewId
 			fieldval.TimeFormat = val.TimeFormat
 			fieldval.Url = val.Url
+			fieldval.Mandatory=val.Mandatory
 
 			var choptions []chn.OptionValues
 			for _, opt := range val.OptionValue {
@@ -185,6 +211,7 @@ func CreateChannel(c *gin.Context) {
 				optss.NewFieldId = opt.NewFieldId
 				optss.NewId = opt.NewId
 				optss.Value = opt.Value
+				optss.OrderIndex = opt.OrderIndex
 				choptions = append(choptions, optss)
 			}
 
@@ -193,13 +220,19 @@ func CreateChannel(c *gin.Context) {
 
 		}
 
-		newchannel, cerr := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: channelname, ChannelDescription: channeldesc, CategoryIds: categoryvalue, CreatedBy: userid})
+		Entry := "Entries"
+		moduleid, err := models.Entryid(Entry, TenantId)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		newchannel, cerr := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: channelname, ChannelDescription: channeldesc, CategoryIds: categoryvalue, CreatedBy: userid}, moduleid, TenantId)
 
 		if cerr != nil {
 			ErrorLog.Printf("channelcreate error: %s", cerr)
 		}
 
-		ferr := ChannelConfig.CreateAdditionalFields(chn.ChannelAddtionalField{Sections: sectionss, FieldValues: FieldValuesss, CreatedBy: userid}, newchannel.Id)
+		ferr := ChannelConfig.CreateAdditionalFields(chn.ChannelAddtionalField{Sections: sectionss, FieldValues: FieldValuesss, CreatedBy: userid}, newchannel.Id, TenantId)
 
 		if ferr != nil {
 			ErrorLog.Printf("channelcreate additional field error: %s", ferr)
@@ -224,32 +257,34 @@ func EditChannel(c *gin.Context) {
 	page := c.Query("page")
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("editchannel authorization error: %s", perr)
 	}
 
+	pageno := CurrentPage
+
 	if permisison {
 
-		chndata, FinalSelectedCategories, cerr := ChannelConfig.GetChannelsById(id)
+		chndata, FinalSelectedCategories, cerr := ChannelConfig.GetChannelsById(id, TenantId)
 		if cerr != nil {
 			ErrorLog.Printf("editchannel getchanneldata error: %s", perr)
 		}
 
 		channelname := chndata.ChannelName
 
-		field, err := ChannelConfig.GetAllMasterFieldType()
+		field, err := ChannelConfig.GetAllMasterFieldType(TenantId)
 		if err != nil {
 			ErrorLog.Printf("editchannel get all master field  error: %s", perr)
 		}
 
-		AllCategorieswithSubCategories, _ := CategoryConfig.AllCategoriesWithSubList()
+		AllCategorieswithSubCategories, _ := CategoryConfig.AllCategoriesWithSubList(TenantId)
 
 		menu := NewMenuController(c)
 		translate, _ := TranslateHandler(c)
-		ModuleName, _ := c.Cookie("modulename")
+		ModuleName, _, _ := ModuleRouteName(c)
 
-		c.HTML(200, "newaddchannel.html", gin.H{"Menu": menu, "Channelname": channelname, "translate": translate, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Update", "channel": chndata, "AllCategories": AllCategorieswithSubCategories, "title": ModuleName, "Back": "/settings/channels/channellist", "Page": page, "HeadTitle": translate.Channell.Channels, "ChannelId": id, "SelectedCategories": FinalSelectedCategories, "Channelsmenu": true, "Cmsmenu": true, "Title": "Edit Channel"})
+		c.HTML(200, "addchannel.html", gin.H{"Menu": menu, "Channelname": channelname, "translate": translate, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Update", "channel": chndata, "AllCategories": AllCategorieswithSubCategories, "title": ModuleName, "linktitle": "Edit Channel", "Back": "/settings/channels/channellist", "Page": page, "HeadTitle": translate.Channell.Channels, "ChannelId": id, "SelectedCategories": FinalSelectedCategories, "Channelsmenu": true, "Cmsmenu": true, "Title": "Edit Channel", "CurrentPage": pageno})
 
 		return
 
@@ -263,20 +298,20 @@ func GetFieldDataByChannelId(c *gin.Context) {
 
 	var id, _ = strconv.Atoi(c.Request.PostFormValue("id"))
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("getfieldata authorization error: %s", perr)
 	}
 
 	if permisison {
 
-		Section, Fieldvalue, ferr := ChannelConfig.GetChannelsFieldsById(id)
+		Section, Fieldvalue, ferr := ChannelConfig.GetChannelsFieldsById(id, TenantId)
 
 		if ferr != nil {
 			ErrorLog.Printf("getfieldata error: %s", perr)
 		}
 
-		_, FinalSelectedCategories, cerr := ChannelConfig.GetChannelsById(id)
+		_, FinalSelectedCategories, cerr := ChannelConfig.GetChannelsById(id, TenantId)
 
 		if cerr != nil {
 			ErrorLog.Printf("getchannel error: %s", perr)
@@ -372,7 +407,7 @@ func UpdateChannel(c *gin.Context) {
 		ErrorLog.Printf("Updatechannel unmarshal delete option error: %s", deloper)
 	}
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("updatechannel authorization error: %s", perr)
 	}
@@ -416,6 +451,7 @@ func UpdateChannel(c *gin.Context) {
 				optss.NewFieldId = opt.NewFieldId
 				optss.NewId = opt.NewId
 				optss.Value = opt.Value
+				optss.OrderIndex = opt.OrderIndex
 				choptions = append(choptions, optss)
 			}
 
@@ -476,17 +512,17 @@ func UpdateChannel(c *gin.Context) {
 			DeleteOptionsvalues = append(DeleteOptionsvalues, DeleteOptionsvalue)
 
 		}
-
-		if cerr := ChannelConfig.EditChannel(channelname, channeldesc, userid, channelid, categoryvalue); cerr != nil {
+		if cerr := ChannelConfig.EditChannel(channelname, channeldesc, userid, channelid, categoryvalue, TenantId); cerr != nil {
 			ErrorLog.Printf("edit channel error: %s", cerr)
 		}
 
-		ferr := ChannelConfig.UpdateChannelField(chn.ChannelUpdate{Sections: Sectionss, FieldValues: FieldValuess, Deletesections: DeleteSectionss, DeleteFields: DeleteFieldValuess, DeleteOptionsvalue: DeleteOptionsvalues, CategoryIds: categoryvalue, ModifiedBy: userid}, channelid)
+		ferr := ChannelConfig.UpdateChannelField(chn.ChannelUpdate{Sections: Sectionss, FieldValues: FieldValuess, Deletesections: DeleteSectionss, DeleteFields: DeleteFieldValuess, DeleteOptionsvalue: DeleteOptionsvalues, CategoryIds: categoryvalue, ModifiedBy: userid}, channelid, TenantId)
 
 		if ferr != nil {
 			ErrorLog.Printf("edit channel additional field error: %s", ferr)
 		}
-
+		c.SetCookie("get-toast", "Channel Updated Successfully", 3600, "", "", false, false)
+		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		json.NewEncoder(c.Writer).Encode(true)
 		return
 
@@ -501,32 +537,46 @@ func DeleteChannel(c *gin.Context) {
 
 	channelid, _ := strconv.Atoi(c.Query("id"))
 	userid := c.GetInt("userid")
+	pageno := c.Query("page")
 
-	if channelid == 1 {
-		ErrorLog.Println("trying to delete default channel error")
-		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
-		c.Redirect(301, "/channels/")
-		return
+	var url string
+	if pageno != "" {
+		url = "/channels/?page=" + pageno
+	} else {
+		url = "/channels/"
+
 	}
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	// if channelid == 1 {
+	// 	ErrorLog.Println("trying to delete default channel error")
+	// 	c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+	// 	c.Redirect(301, "/channels/")
+	// 	return
+	// }
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("delete channel authorization error: %s", perr)
 	}
 
 	if permisison {
 
-		err := ChannelConfig.DeleteChannel(channelid, userid)
+		ModuleName := strconv.Itoa(channelid)
+
+		routename := "/channel/entrylist/" + ModuleName
+
+		err := ChannelConfig.DeleteChannel(channelid, userid, routename, TenantId)
+
 		if err != nil {
 			ErrorLog.Printf("delete channel error: %s", perr)
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
-			c.Redirect(301, "/channels/")
+			c.Redirect(301, url)
 			return
 		}
 
 		c.SetCookie("get-toast", "Channel Deleted Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-		c.Redirect(301, "/channels/")
+		c.Redirect(301, url)
 		return
 
 	}
@@ -543,13 +593,13 @@ func ChannelIsActiveStatus(c *gin.Context) {
 	val, _ := strconv.Atoi(c.Request.PostFormValue("isactive"))
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("channel status authorization error: %s", perr)
 	}
 
 	if permisison {
-		flg, err := ChannelConfig.ChangeChannelStatus(id, val, userid)
+		flg, err := ChannelConfig.ChangeChannelStatus(id, val, userid, TenantId)
 		if err != nil {
 			ErrorLog.Printf("channel status error: %s", perr)
 			json.NewEncoder(c.Writer).Encode(flg)
@@ -574,7 +624,7 @@ func PaginationList(c *gin.Context) {
 
 	flag := false
 
-	channelslist, _, err := ChannelConfig.ListChannel(Limit, loffset, chn.Filter{}, flag, true)
+	channelslist, _, err := ChannelConfig.ListChannel(chn.Channels{Limit: Limit, Offset: loffset, IsActive: flag, TenantId: TenantId})
 
 	for _, val := range channelslist {
 		list := val
@@ -594,4 +644,34 @@ func PaginationList(c *gin.Context) {
 
 	json.NewEncoder(c.Writer).Encode(Finalchannelslist)
 
+}
+
+func ChannelType(c *gin.Context) {
+	Id, _ := strconv.Atoi(c.Query("id"))
+	ChannelType := c.Query("channelType")
+	userid := c.GetInt("userid")
+
+	var Channels chn.Tblchannel
+	if ChannelType == "mychannels" {
+		Channels = chn.Tblchannel{
+			Id:          Id,
+			ChannelType: "others",
+			ModifiedBy:  userid,
+		}
+	} else {
+		Channels = chn.Tblchannel{
+			Id:          Id,
+			ChannelType: "mychannels",
+			ModifiedBy:  userid,
+		}
+	}
+	err := ChannelConfig.ChannelType(Channels)
+
+	if err != nil {
+
+		ErrorLog.Printf("channel Type error: %s", err)
+	}
+	c.SetCookie("get-toast", "ChannelType Changed Successfully", 3600, "", "", false, false)
+	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
+	c.Redirect(301, "/channels/")
 }

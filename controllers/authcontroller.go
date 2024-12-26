@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"spurt-cms/logger"
-	"spurt-cms/models"
 	"strconv"
 	"strings"
 	"sync"
@@ -13,13 +12,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
-	spurtcore "github.com/spurtcms/pkgcore"
-	"github.com/spurtcms/pkgcore/auth"
 	csrf "github.com/utrack/gin-csrf"
 	"gorm.io/gorm"
 )
-
-var AUTH auth.Authorization
 
 var Store = sessions.NewCookieStore([]byte("!@#$%"))
 
@@ -27,11 +22,11 @@ var Store1 = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY1")))
 
 func init() {
 
-	ErrorLog = logger.ErrorLOG()
+	ErrorLog = logger.ErrorLog()
 
-	WarnLog = logger.WarnLOG()
+	WarnLog = logger.WarnLog()
 
-	SetInitialGeneralValues()
+	// SetInitialGeneralValues()
 }
 
 /*login page view*/
@@ -41,7 +36,12 @@ func Login(c *gin.Context) {
 
 /*forgetpassword page view*/
 func ForgetPassword(c *gin.Context) {
-	c.HTML(200, "forgotpassword.html", gin.H{"csrf": csrf.GetToken(c)})
+	c.HTML(200, "forgot.html", gin.H{"csrf": csrf.GetToken(c)})
+}
+
+func WebsiteLogin(c *gin.Context) {
+
+	c.HTML(200, "index.html", gin.H{"csrf": csrf.GetToken(c), "Menu": NewMenuController(c)})
 }
 
 func NewPassword(c *gin.Context) {
@@ -50,7 +50,7 @@ func NewPassword(c *gin.Context) {
 
 	Claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, Claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("ACCESS_SECRET")), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 
 	if err != nil {
@@ -62,7 +62,7 @@ func NewPassword(c *gin.Context) {
 
 	userid := Claims["user_id"]
 
-	c.HTML(200, "changepassword.html", gin.H{"csrf": csrf.GetToken(c), "userid": userid})
+	c.HTML(200, "changepass.html", gin.H{"csrf": csrf.GetToken(c), "userid": userid})
 
 }
 
@@ -70,7 +70,7 @@ func SendLinkForForgotPass(c *gin.Context) {
 
 	email := c.PostForm("emailid")
 
-	user, _, err := NewTeam.CheckEmail(email, 0)
+	user, _, err := NewTeam.CheckEmail(email, 0, TenantId)
 
 	id := user.Id
 	token, _ := CreateTokenWithExpireTime(id)
@@ -83,17 +83,30 @@ func SendLinkForForgotPass(c *gin.Context) {
 	}
 
 	var url_prefix = os.Getenv("BASE_URL")
+	linkedin := os.Getenv("LINKEDIN")
+	facebook := os.Getenv("FACEBOOK")
+	twitter := os.Getenv("TWITTER")
+	youtube := os.Getenv("YOUTUBE")
+	insta := os.Getenv("INSTAGRAM")
 
 	data := map[string]interface{}{
-		"uname":         user.Username,
+		"fname":         user.Username,
 		"resetpassword": url_prefix + "change-password?token=" + token,
 		"restpassurl":   url_prefix + "change-password",
-		"admin_logo":    url_prefix + "public/img/spurtcms.png",
-		"fb_logo":       url_prefix + "public/img/facebook.png",
-		"linkedin_logo": url_prefix + "public/img/linkedin.png",
-		"twitter_logo":  url_prefix + "public/img/twitter.png",
+		"admin_logo":    url_prefix + "public/img/SpurtCMSlogo.png",
+		"fb_logo":       url_prefix + "public/img/email-icons/facebook.png",
+		"linkedin_logo": url_prefix + "public/img/email-icons/linkedin.png",
+		"twitter_logo":  url_prefix + "public/img/email-icons/x.png",
+		"youtube_logo":  url_prefix + "public/img/email-icons/youtube.png",
+		"insta_log":     url_prefix + "public/img/email-icons/instagram.png",
+		"facebook":      facebook,
+		"instagram":     insta,
+		"youtube":       youtube,
+		"linkedin":      linkedin,
+		"twitter":       twitter,
 	}
 
+	fmt.Println(user.Username, "isernameee")
 	var wg sync.WaitGroup
 
 	wg.Add(1)
@@ -115,21 +128,19 @@ func SetNewPassword(c *gin.Context) {
 	newPassword := c.PostForm("pass")
 	confirmPassword := c.PostForm("cpass")
 
-	var user models.TblUser
-	user.Id, _ = strconv.Atoi(c.PostForm("userId"))
+	userid, _ := strconv.Atoi(c.PostForm("userId"))
 
 	if newPassword == confirmPassword {
 
-		User.Authority = &AUTH
-
-		_, err := User.ChangeYourPassword(newPassword)
+		_, err := NewTeamWP.ChangeYourPassword(newPassword, userid, TenantId)
 		if err != nil {
 			ErrorLog.Printf("set new password error: %s", err)
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 			return
 		}
 
-		c.SetCookie("get-toast", "Password Updated Successfully", 3600, "", "", false, false)
+		fmt.Println("checkstatus")
+		c.SetCookie("pass-change", "Password Updated Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(301, "/")
 	}
@@ -142,7 +153,7 @@ func CheckLogin(c *gin.Context) {
 	uname := c.PostForm("username")
 	remember := c.PostForm("rememberme")
 
-	token, userid, err := NewAuth.Checklogin(uname, c.Request.PostFormValue("pass"))
+	token, userid, err := NewAuth.Checklogin(uname, c.Request.PostFormValue("pass"), TenantId)
 
 	if err != nil {
 		ErrorLog.Printf("CheckLogin error: %s", err)
@@ -156,10 +167,10 @@ func CheckLogin(c *gin.Context) {
 		return
 	}
 
-	userdata, _ := NewTeam.GetUserById(userid)
+	userdata, _, _ := NewTeam.GetUserById(userid, []int{})
 
 	if !userdata.LastLogin.IsZero() {
-		Lastactive := userdata.LastLogin.In(TZONE).Format("02 Jan 2006 03:04 PM")
+		Lastactive := userdata.LastLogin.In(TZONE).Format(Datelayout)
 		Lastlogin[userdata.Id] = Lastactive
 	} else {
 		Lastlogin[userdata.Id] = "--"
@@ -169,8 +180,6 @@ func CheckLogin(c *gin.Context) {
 		c.Redirect(301, "/")
 		return
 	}
-
-	AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	if gorm.ErrRecordNotFound == err {
 		c.SetCookie("log-toast", "You are not registered with us", 3600, "", "", false, false)
@@ -202,9 +211,11 @@ func CheckLogin(c *gin.Context) {
 // logout and clear the sessions
 func Logout(c *gin.Context) {
 
-	User.Authority = &AUTH
+	userid := c.GetInt("userid")
 
-	User.LastLoginActivity()
+	// models.LastLoginActivity(userid, TenantId)
+
+	NewTeamWP.LastLoginActivity(userid, TenantId)
 
 	session, err := Store.Get(c.Request, os.Getenv("SESSION_KEY"))
 	if err != nil {
@@ -225,8 +236,8 @@ func Logout(c *gin.Context) {
 }
 
 func LastActive(c *gin.Context) {
-	User.Authority = &AUTH
-	User.LastLoginActivity()
+	userid := c.GetInt("userid")
+	NewTeamWP.LastLoginActivity(userid, TenantId)
 }
 
 /*update password*/
@@ -243,7 +254,7 @@ func CreateTokenWithExpireTime(userid int) (string, error) {
 	atClaims["user_id"] = userid
 	atClaims["exp"] = time.Now().Add(time.Second * 300).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	token, err := at.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", err
 	}

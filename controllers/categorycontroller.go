@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	storagecontroller "spurt-cms/storage-controller"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spurtcms/auth"
 	cat "github.com/spurtcms/categories"
-	"github.com/spurtcms/pkgcontent/categories"
 	csrf "github.com/utrack/gin-csrf"
 )
 
-var category categories.Category
+var CategoriesImagepath string
 
 type CategoriesFilter struct {
 	Keyword  string
@@ -38,6 +38,13 @@ func CategoryGroupList(c *gin.Context) {
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
 
+	var filterflag bool
+	if filter.Keyword != "" {
+		filterflag = true
+	} else {
+		filterflag = false
+	}
+
 	if limit == "" {
 		limt = Limit
 	} else {
@@ -50,14 +57,23 @@ func CategoryGroupList(c *gin.Context) {
 
 	var FinalCategoriesList []cat.TblCategories
 
-	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Read, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("categorygrouplist authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		categorylist, Total_categories, err := CategoryConfig.CategoryGroupList(limt, offset, cat.Filter(filter))
+		CategoryConfig.DataAccess = c.GetInt("dataaccess")
+		CategoryConfig.UserId = c.GetInt("userid")
+
+		categorylist, Total_categories, err := CategoryConfig.CategoryGroupList(limt, offset, cat.Filter(filter), TenantId)
 		if err != nil {
 			ErrorLog.Printf("category group list  error: %s", err)
 		}
@@ -85,6 +101,10 @@ func CategoryGroupList(c *gin.Context) {
 
 		ModuleName, TabName, _ := ModuleRouteName(c)
 
+		uper, _ := NewAuth.IsGranted("Categories Group", auth.Update, TenantId)
+
+		dper, _ := NewAuth.IsGranted("Categories Group", auth.Delete, TenantId)
+
 		c.HTML(200, "categorygroup.html", gin.H{"Pagination": PaginationData{
 			NextPage:     pageno + 1,
 			PreviousPage: pageno - 1,
@@ -92,13 +112,9 @@ func CategoryGroupList(c *gin.Context) {
 			TwoAfter:     pageno + 2,
 			TwoBelow:     pageno - 2,
 			ThreeAfter:   pageno + 3,
-		}, "Menu": menu, "translate": translate, "lencategory": Total_categories, "csrf": csrf.GetToken(c), "categorylist": FinalCategoriesList, "Count": Total_categories, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Filter": filter, "Paginationstartcount": paginationstartcount, "HeadTitle": translate.Categories, "Categoriesmenu": true, "title": ModuleName, "Limit": limt, "Tabmenu": TabName})
-
-		return
+		}, "Menu": menu, "translate": translate, "Searchtrue": filterflag, "lencategory": Total_categories, "csrf": csrf.GetToken(c), "categorylist": FinalCategoriesList, "Count": Total_categories, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Filter": filter, "Paginationstartcount": paginationstartcount, "HeadTitle": translate.Categories, "Categoriesmenu": true, "title": ModuleName, "linktitle": ModuleName, "Limit": limt, "Tabmenu": TabName, "permission": uper, "dpermission": dper})
 
 	}
-
-	c.Redirect(301, "/403-page")
 
 }
 
@@ -111,11 +127,18 @@ func CreateCategoryGroup(c *gin.Context) {
 		CategoryName: c.PostForm("category_name"),
 		Description:  c.PostForm("category_desc"),
 		CreatedBy:    userid,
+		TenantId:     TenantId,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Create)
+	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Create, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("createcategorygroup authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
 	}
 
 	if permisison {
@@ -138,11 +161,8 @@ func CreateCategoryGroup(c *gin.Context) {
 		c.SetCookie("get-toast", "Category Group Created Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(http.StatusMovedPermanently, "/categories/")
-		return
+
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 // Category Group Update
@@ -168,14 +188,20 @@ func UpdateCategoryGroup(c *gin.Context) {
 		ModifiedBy:   userid,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Update, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("updatecategorygroup authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := CategoryConfig.UpdateCategoryGroup(categorygroup)
+		err := CategoryConfig.UpdateCategoryGroup(categorygroup, TenantId)
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			ErrorLog.Printf("updatecategorygroup mandatory field error: %s", perr)
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
@@ -193,11 +219,8 @@ func UpdateCategoryGroup(c *gin.Context) {
 		c.SetCookie("get-toast", "Category Group Updated Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(http.StatusMovedPermanently, url)
-		return
+
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 // Delete Category Group
@@ -215,14 +238,21 @@ func DeleteCategoryGroup(c *gin.Context) {
 
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("deletecategorygroup authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := CategoryConfig.DeleteCategoryGroup(categoryId, userid)
+		err := CategoryConfig.DeleteCategoryGroup(categoryId, userid, TenantId)
+
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			ErrorLog.Printf("deletecategorygroup mandatory field error: %s", perr)
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
@@ -240,11 +270,8 @@ func DeleteCategoryGroup(c *gin.Context) {
 		c.SetCookie("get-toast", "Category Group Deleted Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(301, url)
-		return
 
 	}
-
-	c.Redirect(301, "/403-page")
 
 }
 
@@ -264,6 +291,13 @@ func AddCategory(c *gin.Context) {
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
 
+	var filterflag bool
+	if filter.Keyword != "" {
+		filterflag = true
+	} else {
+		filterflag = false
+	}
+
 	if limit == "" {
 		limt = Limit
 	} else {
@@ -274,72 +308,71 @@ func AddCategory(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Read, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("Addcategory authorization error: %s", perr)
 	}
 
-	if permisison {
-
-		_, _, _, Total_categories, err := CategoryConfig.ListCategory(0, 0, cat.Filter(filter), parent_id)
-		categorylist, _, _, _, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter(filter), parent_id)
-		if err != nil {
-			ErrorLog.Printf("categorylist error: %s", err)
-		}
-
-		for _, val := range categorylist {
-			if !val.ModifiedOn.IsZero() {
-				val.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
-			} else {
-				val.DateString = val.CreatedOn.In(TZONE).Format(Datelayout)
-			}
-			FinalCategoriesList = append(FinalCategoriesList, val)
-		}
-
-		_, _, _, catcount, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id)
-		_, _, categorys, _, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id)
-		_, FinalModalCategoriesList, _, _, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id)
-
-		//pagination calc
-		paginationendcount := len(categorylist) + offset
-		paginationstartcount := offset + 1
-		Previous, Next, PageCount, Page := Pagination(pageno, int(Total_categories), limt)
-
-		translate, _ := TranslateHandler(c)
-
-		menu := NewMenuController(c)
-
-		Folder, File, Media, err := GetMedia()
-		if err != nil {
-			ErrorLog.Printf("Getmedia error in addcategory error: %s", err)
-		}
-
-		ModuleName, TabName, _ := ModuleRouteName(c)
-
-		if TabName == "Categories" {
-			TabName = "Categories Group"
-		}
-
-		if c.Request.Method == "POST" {
-			c.JSON(200, gin.H{"CategoryList": FinalCategoriesList, "Count": Total_categories, "translate": translate})
-			return
-		}
-
-		selectedtype, _ := GetSelectedType()
-		c.HTML(200, "category.html", gin.H{"Pagination": PaginationData{
-			NextPage:     pageno + 1,
-			PreviousPage: pageno - 1,
-			TotalPages:   PageCount,
-			TwoAfter:     pageno + 2,
-			TwoBelow:     pageno - 2,
-			ThreeAfter:   pageno + 3,
-		}, "Menu": menu, "translate": translate, "catcount": catcount, "csrf": csrf.GetToken(c), "HeadTitle": translate.Categories, "Category": categorys, "Previous": Previous, "Next": Next, "PageCount": PageCount, "Page": Page, "CurrentPage": pageno, "categoryid": parent_id, "ParentCategoryName": categorys.CategoryName, "CategoryList": FinalCategoriesList, "Count": Total_categories, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "Filter": filter, "title": ModuleName, "FinalModalCategoriesList": FinalModalCategoriesList, "heading": categorys.CategoryName, "Back": "/categories", "Folder": Folder, "File": File, "Media": Media, "Categoriesmenu": true, "Limit": limt, "Tabmenu": TabName, "ModuleName": ModuleName, "StorageType": selectedtype.SelectedType})
-
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
 		return
+	}
+	uper, _ := NewAuth.IsGranted("Categories", auth.Update, TenantId)
 
+	dper, _ := NewAuth.IsGranted("Categories", auth.Delete, TenantId)
+	_, _, _, Total_categories, err := CategoryConfig.ListCategory(0, 0, cat.Filter(filter), parent_id, TenantId)
+	categorylist, _, _, _, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter(filter), parent_id, TenantId)
+	if err != nil {
+		ErrorLog.Printf("categorylist error: %s", err)
 	}
 
-	c.Redirect(301, "/403-page")
+	for _, val := range categorylist {
+		if !val.ModifiedOn.IsZero() {
+			val.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
+		} else {
+			val.DateString = val.CreatedOn.In(TZONE).Format(Datelayout)
+		}
+		FinalCategoriesList = append(FinalCategoriesList, val)
+	}
+
+	// _, _, _, catcount, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id)
+	_, FinalModalCategoriesList, categorys, catcount, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id, TenantId)
+	// _, FinalModalCategoriesList, _, _, _ := CategoryConfig.ListCategory(offset, limt, cat.Filter{}, parent_id)
+
+	//pagination calc
+	paginationendcount := len(categorylist) + offset
+	paginationstartcount := offset + 1
+	Previous, Next, PageCount, Page := Pagination(pageno, int(Total_categories), limt)
+
+	translate, _ := TranslateHandler(c)
+
+	menu := NewMenuController(c)
+
+	if err != nil {
+		ErrorLog.Printf("Getmedia error in addcategory error: %s", err)
+	}
+
+	ModuleName, TabName, _ := ModuleRouteName(c)
+
+	if TabName == "Categories" {
+		TabName = "Categories Group"
+	}
+
+	if c.Request.Method == "POST" {
+		c.JSON(200, gin.H{"CategoryList": FinalCategoriesList, "Count": Total_categories, "translate": translate})
+		return
+	}
+
+	selectedtype, _ := GetSelectedType()
+	c.HTML(200, "category.html", gin.H{"Pagination": PaginationData{
+		NextPage:     pageno + 1,
+		PreviousPage: pageno - 1,
+		TotalPages:   PageCount,
+		TwoAfter:     pageno + 2,
+		TwoBelow:     pageno - 2,
+		ThreeAfter:   pageno + 3,
+	}, "Menu": menu, "translate": translate, "Searchtrue": filterflag, "catcount": catcount, "csrf": csrf.GetToken(c), "HeadTitle": translate.Categories, "Category": categorys, "Previous": Previous, "Next": Next, "PageCount": PageCount, "Page": Page, "CurrentPage": pageno, "categoryid": parent_id, "ParentCategoryName": categorys.CategoryName, "CategoryList": FinalCategoriesList, "Count": Total_categories, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "Filter": filter, "title": "Categories", "linktitle": "Categories", "FinalModalCategoriesList": FinalModalCategoriesList, "heading": categorys.CategoryName, "Back": "/categories", "Categoriesmenu": true, "Limit": limt, "Tabmenu": TabName, "ModuleName": ModuleName, "StorageType": selectedtype.SelectedType, "permission": uper, "dpermission": dper})
 
 }
 
@@ -348,21 +381,73 @@ func AddSubCategory(c *gin.Context) {
 
 	//get value from html form data
 	id := (c.PostForm("categoryid"))
-	imagedata := c.PostForm("categoryimage")
+	imagedata := c.PostForm("categoryimages")
 	userid := c.GetInt("userid")
 	var ParentId, _ = strconv.Atoi(c.PostForm("subcategoryid"))
+
+	var imageName, imagePath string
+
+	storagetype, err := GetSelectedType()
+
+	if err != nil {
+		ErrorLog.Printf("error get storage type error: %s", err)
+	}
+
+	if storagetype.SelectedType == "local" {
+
+		if imagedata != "" {
+
+			_, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/categories/addcategory", "/"))
+
+			if err != nil {
+				ErrorLog.Printf("error get storage type error: %s", err)
+			}
+		}
+
+	} else if storagetype.SelectedType == "aws" {
+
+		tenantDetails, err := NewTeam.GetTenantDetails(TenantId)
+		if err != nil {
+			ErrorLog.Printf("error get storage type error: %s", err)
+		}
+
+		var imageByte []byte
+
+		if imagedata != "" {
+			imageName, imagePath, imageByte, err = ConvertBase64toByte(imagedata, "categories/addcategory")
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			imagePath = tenantDetails.S3FolderName + imagePath
+
+			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
+			if uerr != nil {
+				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
+				c.Redirect(301, "/categories/")
+				return
+			}
+		}
+	}
 
 	subcategory := cat.CategoryCreate{
 		CategoryName: c.PostForm("cname"),
 		Description:  c.PostForm("cdesc"),
-		ImagePath:    imagedata,
+		ImagePath:    imagePath,
 		ParentId:     ParentId,
 		CreatedBy:    userid,
+		TenantId:     TenantId,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Create)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Create, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("Addsubcategory authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
 	}
 
 	if permisison {
@@ -385,12 +470,8 @@ func AddSubCategory(c *gin.Context) {
 		c.SetCookie("get-toast", "Category Created Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		c.Redirect(301, "/categories/addcategory/"+id)
-		return
 
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 // Edit Sub Category
@@ -398,21 +479,26 @@ func EditSubCategory(c *gin.Context) {
 
 	var id, _ = strconv.Atoi(c.Query("id"))
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Read, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("editsubcategory authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
-		categorys, err := CategoryConfig.GetSubCategoryDetails(id)
+		categorys, err := CategoryConfig.GetSubCategoryDetails(id, TenantId)
 		if err != nil {
 			ErrorLog.Printf("editsubcategory error :%s", err)
 		}
 		c.JSON(200, categorys)
-		return
-	}
+		CategoriesImagepath = categorys.ImagePath
 
-	c.Redirect(301, "/403-page")
+	}
 
 }
 
@@ -425,23 +511,75 @@ func UpdateSubCategory(c *gin.Context) {
 	userid := c.GetInt("userid")
 	Categoryid, _ := strconv.Atoi(c.PostForm("id"))
 
+	var imageName, imagePath string
+
+	storagetype, err := GetSelectedType()
+	if err != nil {
+		ErrorLog.Printf("error get storage type error: %s", err)
+	}
+
+	if storagetype.SelectedType == "local" {
+		if CategoriesImagepath != imagedata {
+			_, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/categories/addcategory", "/"))
+
+			if err != nil {
+				ErrorLog.Printf("error get storage type error: %s", err)
+			}
+		} else {
+			imagePath = imagedata
+		}
+
+	} else if storagetype.SelectedType == "aws" {
+
+		tenantDetails, err := NewTeam.GetTenantDetails(TenantId)
+		if err != nil {
+			ErrorLog.Printf("error get storage type error: %s", err)
+		}
+
+		var imageByte []byte
+
+		if CategoriesImagepath != imagedata {
+			imageName, imagePath, imageByte, err = ConvertBase64toByte(imagedata, "categories/addcategory")
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			imagePath = tenantDetails.S3FolderName + imagePath
+
+			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
+			if uerr != nil {
+				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
+				c.Redirect(301, "/categories/")
+				return
+			}
+		} else {
+			imagePath = imagedata
+		}
+	}
+
 	subcategory := cat.CategoryCreate{
 		Id:           Categoryid,
 		CategoryName: c.PostForm("cname"),
 		Description:  c.PostForm("cdesc"),
-		ImagePath:    imagedata,
+		ImagePath:    imagePath,
 		ParentId:     ParentId,
 		ModifiedBy:   userid,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Update)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Update, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("updatesubcategory authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.JSON(200, gin.H{"value": false, "url": "/403-page"})
+		return
+	}
+
 	if permisison {
 
-		err := CategoryConfig.UpdateSubCategory(subcategory) // update category
+		err := CategoryConfig.UpdateSubCategory(subcategory, TenantId) // update category
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			ErrorLog.Printf("updatesubcategory mandatory field error: %s", perr)
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
@@ -452,18 +590,15 @@ func UpdateSubCategory(c *gin.Context) {
 		if err != nil {
 			ErrorLog.Printf("updatesubcategory error: %s", perr)
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
-			c.JSON(200, false)
+			c.JSON(200, gin.H{"value": false})
 			return
 		}
 
 		c.SetCookie("get-toast", "Category Updated Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-		c.JSON(200, true)
-		return
+		c.JSON(200, gin.H{"value": true})
+
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 // Delete Children Category
@@ -483,14 +618,20 @@ func DeleteSubCategory(c *gin.Context) {
 
 	}
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("deletesubcategory authorization error: %s", perr)
 	}
 
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
 
-		err := CategoryConfig.DeleteSubCategory(categoryid, userid) // delete subcategory
+		err := CategoryConfig.DeleteSubCategory(categoryid, userid, TenantId) // delete subcategory
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			ErrorLog.Printf("deletesubcategory mandatory error:")
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
@@ -507,27 +648,8 @@ func DeleteSubCategory(c *gin.Context) {
 		}
 
 		c.Redirect(301, url)
-		return
 	}
 
-	c.Redirect(301, "/403-page")
-
-}
-
-// Children Category Delete Id Passing
-func CategoryPopup(c *gin.Context) {
-
-	category = categories.Category{Authority: &AUTH}
-
-	var id, _ = strconv.Atoi(c.Query("id"))
-
-	category, err := category.DeletePopup(id)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	c.JSON(200, category)
 }
 
 // To Check Group Name id Already Exists
@@ -537,13 +659,19 @@ func CheckCategoryGroupName(c *gin.Context) {
 	category_id, _ := strconv.Atoi(c.PostForm("category_id"))
 	category_name := c.PostForm("category_name")
 
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Read, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("checkcategorygroupname authorization error: %s", perr)
 	}
+
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
 	if permisison {
 
-		flg, err := CategoryConfig.CheckCategroyGroupName(category_id, category_name)
+		flg, err := CategoryConfig.CheckCategroyGroupName(category_id, category_name, TenantId)
 		if err != nil {
 			ErrorLog.Printf("checkcategorygroupname  error: %s", err)
 			json.NewEncoder(c.Writer).Encode(false)
@@ -551,12 +679,7 @@ func CheckCategoryGroupName(c *gin.Context) {
 		}
 
 		json.NewEncoder(c.Writer).Encode(flg)
-		return
-
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 // SubCategory name check
@@ -564,12 +687,19 @@ func CheckSubCategoryName(c *gin.Context) {
 
 	//get value from html form data
 	category_id, _ := strconv.Atoi(c.PostForm("parentid"))
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Read)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Read, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("CheckSubCategoryName authorization error: %s", perr)
 	}
+
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
 	if permisison {
-		categorylistinchk, _, _, _, err := CategoryConfig.ListCategory(0, Limit, cat.Filter{}, category_id)
+		categorylistinchk, _, _, _, err := CategoryConfig.ListCategory(0, Limit, cat.Filter{}, category_id, TenantId)
 		if err != nil {
 			ErrorLog.Printf("checkcategorygroupname authorization error: %s", err)
 		}
@@ -582,7 +712,7 @@ func CheckSubCategoryName(c *gin.Context) {
 
 		category_name := c.PostForm("cname")
 		categoryid, _ := strconv.Atoi(c.PostForm("categoryid"))
-		flg, err := CategoryConfig.CheckSubCategroyName(catid, categoryid, category_name)
+		flg, err := CategoryConfig.CheckSubCategroyName(catid, categoryid, category_name, TenantId)
 
 		if err != nil {
 			ErrorLog.Printf("CheckSubCategoryName error: %s", err)
@@ -591,12 +721,7 @@ func CheckSubCategoryName(c *gin.Context) {
 		}
 
 		json.NewEncoder(c.Writer).Encode(flg)
-		return
-
 	}
-
-	c.Redirect(301, "/403-page")
-
 }
 
 func MultiSelectCategoryGroupDelete(c *gin.Context) {
@@ -606,16 +731,18 @@ func MultiSelectCategoryGroupDelete(c *gin.Context) {
 	pageno := c.PostForm("page")
 	userid := c.GetInt("userid")
 	var url string
-	if pageno != "" {
-		url = "/categories?page=" + pageno
-	} else {
-		url = "/categories/"
 
-	}
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Categories Group", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("CheckSubCategoryName authorization error: %s", perr)
 	}
+
+	if !permisison {
+		ErrorLog.Printf("categorygroup authorization error")
+		c.JSON(200, gin.H{"value": false, "url": "/403-page"})
+		return
+	}
+
 	if permisison {
 		categoryIntIds := make([]int, len(categoryId))
 		for i, id := range categoryId {
@@ -623,17 +750,34 @@ func MultiSelectCategoryGroupDelete(c *gin.Context) {
 			categoryIntIds[i] = intId
 		}
 
-		err := CategoryConfig.MultiSelectDeleteCategoryGroup(categoryIntIds, userid) //delete selected category group
+		err := CategoryConfig.MultiSelectDeleteCategoryGroup(categoryIntIds, userid, TenantId) //delete selected category group
 		if err != nil {
 			ErrorLog.Printf("MultiSelectCategoryGroupDelete error: %s", err)
 			c.JSON(200, gin.H{"value": false})
 			return
 		}
 
+		_, Total_categories, _ := CategoryConfig.CategoryGroupList(0, 0, cat.Filter{}, TenantId)
+
+		if pageno != "" {
+			page, _ := strconv.Atoi(pageno)
+			page = page - 1
+			multi := page * 10
+			multiInt64 := int64(multi)
+			if Total_categories > multiInt64 {
+				url = "/categories?page=" + pageno
+			} else {
+				pagee, _ := strconv.Atoi(pageno)
+				_page := pagee - 1
+				pages := strconv.Itoa(_page)
+				url = "/categories?page=" + pages
+			}
+		} else {
+			url = "/categories/"
+		}
 		c.JSON(200, gin.H{"value": true, "url": url})
-		return
 	}
-	c.Redirect(301, "/403-page")
+
 }
 
 func MultiSelectCategoryDelete(c *gin.Context) {
@@ -641,19 +785,19 @@ func MultiSelectCategoryDelete(c *gin.Context) {
 	//get value from html form data
 	categoryId := c.PostFormArray("categoryids[]")
 	parent_id := (c.PostForm("parentid"))
+	Parentid, _ := strconv.Atoi(parent_id)
 	pageno := c.PostForm("page")
 	userid := c.GetInt("userid")
 	var url string
-	if pageno != "" {
-		url = "/categories/addcategory/" + parent_id + "?page=" + pageno
-	} else {
-		url = "/categories/addcategory/" + parent_id
 
-	}
-
-	permisison, perr := NewAuth.IsGranted("Categories", auth.Delete)
+	permisison, perr := NewAuth.IsGranted("Categories", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("CheckSubCategoryName authorization error: %s", perr)
+	}
+	if !permisison {
+		ErrorLog.Printf("category authorization error")
+		c.JSON(200, gin.H{"value": false, "url": "/403-page"})
+		return
 	}
 	if permisison {
 		categoryIntIds := make([]int, len(categoryId))
@@ -662,15 +806,34 @@ func MultiSelectCategoryDelete(c *gin.Context) {
 			categoryIntIds[i] = intId
 		}
 
-		err := CategoryConfig.MultiselectSubCategoryDelete(categoryIntIds, userid) //delete selected categories
+		err := CategoryConfig.MultiselectSubCategoryDelete(categoryIntIds, userid, TenantId) //delete selected categories
 		if err != nil {
 			ErrorLog.Printf("MultiSelectCategoriesDelete error: %s", err)
 			c.JSON(200, gin.H{"value": false})
 			return
 		}
 
+		_, _, _, Total_categories, err := CategoryConfig.ListCategory(0, 0, cat.Filter{}, Parentid, TenantId)
+
+		if pageno != "" {
+			abc, _ := strconv.Atoi(pageno)
+			abc = abc - 1
+			multi := abc * 10
+			multiInt64 := int64(multi)
+			if Total_categories > multiInt64 {
+				url = "/categories/addcategory/" + parent_id + "?page=" + pageno
+			} else {
+				abcd, _ := strconv.Atoi(pageno)
+				_page := abcd - 1
+				pages := strconv.Itoa(_page)
+				url = "/categories/addcategory/" + parent_id + "?page=" + pages
+			}
+		} else {
+			url = "/categories/addcategory/" + parent_id
+
+		}
+
 		c.JSON(200, gin.H{"value": true, "url": url})
-		return
 	}
-	c.Redirect(301, "/403-page")
+
 }

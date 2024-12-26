@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"os"
-	"sync"
 
 	newauth "github.com/spurtcms/auth"
 	cat "github.com/spurtcms/categories"
@@ -15,173 +13,172 @@ import (
 )
 
 var (
-	NewAuth        *newauth.Auth
-	NewTeam        *team.Teams
-	NewRole        *role.PermissionConfig
-	ChannelConfig  *chn.Channel
-	CategoryConfig *cat.Categories
-	MemberConfig   *mem.Member
-)
+	NewAuth            *newauth.Auth
+	NewTeam            *team.Teams
+	NewTeamWP          *team.Teams
+	NewRole            *role.PermissionConfig
+	NewRoleWP          *role.PermissionConfig
+	ChannelConfig      *chn.Channel
+	ChannelConfigWP    *chn.Channel
+	CategoryConfig     *cat.Categories
+	MemberConfig       *mem.Member
+	MemberConfigWP     *mem.Member
+	MemberaccessConfig *memaccess.AccessControl
 
-var lock = &sync.Mutex{}
+)
 
 // AuthCofing
 func AuthConfig() *newauth.Auth {
-	if NewAuth == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if NewAuth == nil {
-			fmt.Println("Creating Auth instance now.")
-			NewAuth = newauth.AuthSetup(newauth.Config{
-				SecretKey: os.Getenv("JWT_SECRET"),
-				DB:        DB,
-			})
-		} else {
-			fmt.Println("Single Auth already created.")
-		}
-	} else {
-		fmt.Println("Single Auth already created.")
-	}
+
+	NewAuth = newauth.AuthSetup(newauth.Config{
+		SecretKey: os.Getenv("JWT_SECRET"),
+		DB:        DB,
+		// DataBaseType: os.Getenv("DATABASE_TYPE"),
+	})
 
 	return NewAuth
 }
 
 // TeamConfig
 func GetTeamInstance() *team.Teams {
-	if NewTeam == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if NewTeam == nil {
-			fmt.Println("Creating Teams instance now.")
-			NewTeam = team.TeamSetup(team.Config{
-				DB:               DB,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Auth:             NewAuth,
-			})
-		} else {
-			fmt.Println("Teams instance already created.")
-		}
-	} else {
-		fmt.Println("Teams instance already created.")
-	}
+
+	NewTeam = team.TeamSetup(team.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
 	return NewTeam
+}
+
+// TeamConfig
+func GetTeamInstanceWithoutPermission() *team.Teams {
+
+	NewTeamWP = team.TeamSetup(team.Config{
+		DB:               DB,
+		AuthEnable:       false,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
+	return NewTeamWP
 }
 
 // roles and permissions config
 func GetRoleInstance() *role.PermissionConfig {
-	if NewRole == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if NewRole == nil {
-			fmt.Println("Creating Roles instance now.")
-			NewRole = role.RoleSetup(role.Config{
-				DB:               DB,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Authenticate:     NewAuth,
-			})
-		} else {
-			fmt.Println("Roles instance already created.")
-		}
-	} else {
-		fmt.Println("Roles instance already created.")
-	}
+
+	NewAuth.AuthFlg = true
+	NewAuth.PermissionFlg = true
+
+	NewRole = role.RoleSetup(role.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Authenticate:     NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
 	return NewRole
+}
+
+// roles and permissions without permission config
+func GetRoleInstanceWithoutPermission() *role.PermissionConfig {
+
+	NewRoleWP = role.RoleSetup(role.Config{
+		DB:               DB,
+		AuthEnable:       false,
+		PermissionEnable: false,
+		Authenticate:     NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
+	return NewRoleWP
 }
 
 // channel config
 func GetChannelInstance() *chn.Channel {
-	AuthConfig()
-	if ChannelConfig == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if ChannelConfig == nil {
-			fmt.Println("Creating Channel instance now.")
-			ChannelConfig = chn.ChannelSetup(chn.Config{
-				DB:               DB,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Auth:             NewAuth,
-			})
-		} else {
-			fmt.Println("Channel instance already created.")
-		}
-	} else {
-		fmt.Println("Channel instance already created.")
-	}
+
+	ChannelConfig = chn.ChannelSetup(chn.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
 	return ChannelConfig
+}
+
+// channel config without permission
+func GetChannelInstanceWithoutPermission() *chn.Channel {
+
+	ChannelConfigWP = chn.ChannelSetup(chn.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
+	return ChannelConfigWP
 }
 
 // Categoryconfig
 func GetCategoryInstance() *cat.Categories {
-	AuthConfig()
-	if CategoryConfig == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if CategoryConfig == nil {
-			fmt.Println("Creating category instance now.")
-			CategoryConfig = cat.CategoriesSetup(cat.Config{
-				DB:               db,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Auth:             NewAuth,
-			})
-		} else {
-			fmt.Println("category instance already created.")
-		}
-	} else {
-		fmt.Println("category instance already created.")
-	}
+
+	CategoryConfig = cat.CategoriesSetup(cat.Config{
+		DB:               db,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
 
 	return CategoryConfig
 }
 
 // member config
 func GetMemberInstance() *mem.Member {
-	AuthConfig()
-	if MemberConfig == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if MemberConfig == nil {
-			fmt.Println("Creating Member instance now.")
-			MemberConfig = mem.MemberSetup(mem.Config{
-				DB:               db,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Auth:             NewAuth,
-			})
-		} else {
-			fmt.Println("Member instance already created.")
-		}
-	} else {
-		fmt.Println("Member instance already created.")
-	}
+
+	MemberConfig = mem.MemberSetup(mem.Config{
+		DB:               db,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
 	return MemberConfig
 }
 
-var MemberaccessConfig *memaccess.AccessControl
+// member config without permission
+func GetMemberInstanceWithoutPermission() *mem.Member {
+
+	MemberConfigWP = mem.MemberSetup(mem.Config{
+		DB:               db,
+		AuthEnable:       true,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
+	return MemberConfigWP
+}
 
 /*content access Config*/
 func GetMemberaccessInstance() *memaccess.AccessControl {
-	AuthConfig()
-	if MemberaccessConfig == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if MemberaccessConfig == nil {
-			fmt.Println("Creating Member instance now.")
-			MemberaccessConfig = memaccess.AccessSetup(memaccess.Config{
-				DB:               db,
-				AuthEnable:       true,
-				PermissionEnable: true,
-				Auth:             NewAuth,
-			})
-		} else {
-			fmt.Println("Member instance already created.")
-		}
-	} else {
-		fmt.Println("Member instance already created.")
-	}
+
+	MemberaccessConfig = memaccess.AccessSetup(memaccess.Config{
+		DB:               db,
+		AuthEnable:       true,
+		PermissionEnable: true,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
 	return MemberaccessConfig
 }
 
@@ -193,4 +190,8 @@ func PackageInitialize() {
 	GetCategoryInstance()
 	GetMemberInstance()
 	GetMemberaccessInstance()
+	GetTeamInstanceWithoutPermission()
+	GetRoleInstanceWithoutPermission()
+	GetMemberInstanceWithoutPermission()
+	GetChannelInstanceWithoutPermission()
 }

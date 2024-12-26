@@ -39,7 +39,7 @@ func SetupDB() *gorm.DB {
 		db, err = gorm.Open(postgres.Open(dbUri), &gorm.Config{})
 
 	case "mysql":
-		dsn := USERNAME + ":" + PASSWORD + "@tcp(" + HOST + ":" + PORT + ")/" + DBNAME + "?charset=utf8mb4&parseTime=True&loc=Local"
+		dsn := USERNAME + ":" + PASSWORD + "@tcp(" + HOST + ":" + PORT + ")/" + DBNAME + "?charset=utf8mb4&parseTime=True&loc=UTC"
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	default:

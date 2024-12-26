@@ -15,7 +15,7 @@ func MediaSettings(c *gin.Context) {
 
 	ModuleName, TabName, _ := ModuleRouteName(c)
 
-	Storagetype, err := models.GetStorageValue()
+	Storagetype, err := models.GetStorageValue(TenantId)
 
 	if err != nil {
 		fmt.Println(err)
@@ -65,7 +65,7 @@ func MediaStorageUpdate(c *gin.Context) {
 	Stype.Azure = datatypes.JSONMap{"AzureAccount": azureacc, "AzureKey": azurekey, "AzureContainer": azurecontainer}
 	Stype.SelectedType = selectedtype
 
-	_, err := models.UpdateStorageType(Stype)
+	_, err := models.UpdateStorageType(Stype, TenantId)
 
 	if err != nil {
 		fmt.Println(err)

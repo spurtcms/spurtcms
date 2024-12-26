@@ -24,7 +24,8 @@ import (
 	// "github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/gin-gonic/gin"
-	"github.com/spurtcms/pkgcontent/channels"
+	"github.com/spurtcms/auth"
+	chn "github.com/spurtcms/channels"
 	csrf "github.com/utrack/gin-csrf"
 	"golang.org/x/net/html"
 )
@@ -61,25 +62,110 @@ var (
 
 func Data(c *gin.Context) {
 
-	Channel := channels.Channel{Authority: &AUTH}
-
 	menu := NewMenuController(c)
 
 	translate, _ := TranslateHandler(c)
 
-	var flag = true
-
-	channelslist, _, _ := Channel.GetChannels(0, 0, channels.Filter{}, flag)
-
-	flag1 := true
-
-	channelist, _, err := Channel.GetPermissionChannels(100, 0, channels.Filter{}, flag1)
-
-	if err != nil {
-		log.Println(err)
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("permissison authorization error: %s", perr)
 	}
 
-	c.HTML(200, "data.html", gin.H{"Menu": menu, "title": "Data", "csrf": csrf.GetToken(c), "Channellist": channelist, "channelslist": channelslist, "HeadTitle": "Data", "translate": translate, "SettingsHead": true, "Datamenu": true, "Tooltiptitle": "You may import and export data as and when needed"})
+	if !permisison {
+		ErrorLog.Printf("Permissison authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	if permisison {
+
+		var flag = true
+		channelslist, _, err := ChannelConfig.ListChannel(chn.Channels{Limit: 0, Offset: 0, IsActive: flag, TenantId: TenantId})
+		if err != nil {
+			ErrorLog.Printf("getchannellist error: %s", err)
+		}
+
+		c.HTML(200, "data.html", gin.H{"Menu": menu, "linktitle": "Data", "title": "Data", "csrf": csrf.GetToken(c), "Channellist": channelslist, "channelslist": channelslist, "HeadTitle": "Data", "translate": translate, "SettingsHead": true, "Datamenu": true, "Tooltiptitle": "You may import and export data as and when needed"})
+	}
+
+}
+
+func ImportPageTwo(c *gin.Context) {
+	menu := NewMenuController(c)
+
+	translate, _ := TranslateHandler(c)
+
+	// permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	// if perr != nil {
+	// 	ErrorLog.Printf("permissison authorization error: %s", perr)
+	// }
+
+	// if !permisison {
+	// 	ErrorLog.Printf("Permissison authorization error")
+	// 	c.Redirect(301, "/403-page")
+	// 	return
+	// }
+
+	// if permisison {
+
+	// 	v
+	// }
+
+	c.HTML(200, "data-import-2.html", gin.H{"Menu": menu, "title": "Data", "csrf": csrf.GetToken(c), "translate": translate})
+
+}
+
+func ImportPageThree(c *gin.Context) {
+	menu := NewMenuController(c)
+
+	translate, _ := TranslateHandler(c)
+
+	// permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	// if perr != nil {
+	// 	ErrorLog.Printf("permissison authorization error: %s", perr)
+	// }
+
+	// if !permisison {
+	// 	ErrorLog.Printf("Permissison authorization error")
+	// 	c.Redirect(301, "/403-page")
+	// 	return
+	// }
+
+	// if permisison {
+
+	// 	v
+	// }
+
+	c.HTML(200, "data-import-3.html", gin.H{"Menu": menu, "title": "Data", "csrf": csrf.GetToken(c), "translate": translate})
+
+}
+
+func ExportPage(c *gin.Context) {
+	menu := NewMenuController(c)
+
+	translate, _ := TranslateHandler(c)
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("permissison authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Permissison authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	if permisison {
+
+		var flag = true
+		channelslist, _, err := ChannelConfig.ListChannel(chn.Channels{Limit: 0, Offset: 0, IsActive: flag, TenantId: TenantId})
+		if err != nil {
+			ErrorLog.Printf("getchannellist error: %s", err)
+		}
+
+		c.HTML(200, "data-export.html", gin.H{"Menu": menu,"Channellist":channelslist, "title": "Data", "csrf": csrf.GetToken(c), "translate": translate})
+	}
 
 }
 
@@ -215,12 +301,10 @@ func ImportData(c *gin.Context) {
 
 func Entrieslist(c *gin.Context) {
 
-	Channel.Authority = &AUTH
-
 	var (
 		limt    int
 		offset  int
-		filters channels.EntriesFilter
+		filters EntriesFilter
 	)
 
 	id, _ := strconv.Atoi(c.Query("id"))
@@ -246,87 +330,91 @@ func Entrieslist(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
-	chnanem, _, _, _, err := Channel.GetChannelsById(id)
+	chnanem, _, err := ChannelConfig.GetChannelsById(id, TenantId)
 	if err != nil {
 		log.Println(err)
 
 	}
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("editchannel authorization error: %s", perr)
+	}
+	if !permisison {
+		ErrorLog.Printf("Permissison authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+	if permisison {
+		flag := true
+		channelist, _, _ := ChannelConfig.ListChannel(chn.Channels{Limit: 100, Offset: 0, IsActive: flag, TenantId: TenantId})
 
-	flag := true
+		/*list*/
 
-	channelist, _, _ := Channel.GetPermissionChannels(100, 0, channels.Filter{}, flag)
+		query.DataAccess = c.GetInt("dataaccess")
 
-	/*list*/
+		query.UserId = c.GetInt("userid")
 
-	query.DataAccess = c.GetInt("dataaccess")
+		chnentry, _, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: limt, Offset: offset, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: filters.Status}, TenantId)
 
-	query.UserId = c.GetInt("userid")
+		_, filtercount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: 0, Offset: 0, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: filters.Status}, TenantId)
 
-	chnentry, _, _, _ := Channel.GetAllChannelEntriesList(id, limt, offset, filters)
+		_, entrcount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: 0, Offset: 0}, TenantId)
 
-	_, filtercount, _, _ := Channel.GetAllChannelEntriesList(id, 0, 0, filters)
+		var allchnentry []chn.Tblchannelentries
 
-	_, entrcount, _, _ := Channel.GetAllChannelEntriesList(id, 0, 0, channels.EntriesFilter{})
+		for index, entry := range chnentry {
 
-	var allchnentry []channels.TblChannelEntries
+			entry.Cno = strconv.Itoa((offset + index) + 1)
 
-	for index, entry := range chnentry {
+			entry.CreatedDate = entry.CreatedOn.In(TZONE).Format(Datelayout)
 
-		entry.Cno = strconv.Itoa((offset + index) + 1)
+			if !entry.ModifiedOn.IsZero() {
 
-		entry.CreatedDate = entry.CreatedOn.In(TZONE).Format(Datelayout)
+				entry.ModifiedDate = entry.ModifiedOn.In(TZONE).Format(Datelayout)
 
-		if !entry.ModifiedOn.IsZero() {
+			} else {
 
-			entry.ModifiedDate = entry.ModifiedOn.In(TZONE).Format(Datelayout)
+				entry.ModifiedDate = entry.CreatedOn.In(TZONE).Format(Datelayout)
 
-		} else {
+			}
 
-			entry.ModifiedDate = entry.CreatedOn.In(TZONE).Format(Datelayout)
+			allchnentry = append(allchnentry, entry)
 
 		}
 
-		allchnentry = append(allchnentry, entry)
+		paginationendcount := len(chnentry) + offset
+
+		paginationstartcount := offset + 1
+
+		Previous, Next, PageCount, Page := Pagination(pageno, int(filtercount), limt)
+
+		// Breadcrumbs := BreadCrumbs(c.Request.URL.Path)
+
+		translate, _ := TranslateHandler(c)
+
+		c.JSON(200, gin.H{"Pagination": PaginationData{
+			CurrectPage:  pageno,
+			NextPage:     pageno + 1,
+			PreviousPage: pageno - 1,
+			TotalPages:   PageCount,
+			TwoAfter:     pageno + 2,
+			TwoBelow:     pageno - 2,
+			ThreeAfter:   pageno + 3,
+		}, "chcount1": entrcount, "csrf": csrf.GetToken(c), "channelname": chnanem.ChannelName, "chnid": id, "ChanEntrtlist": allchnentry, "entrycount": entrcount, "Next": Next, "Previous": Previous, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "title": "Entries", "heading": chnanem.ChannelName, "translate": translate, "channellist": channelist, "Page": Page, "HeadTitle": "Channels", "chentrycount": filtercount, "Cmsmenu": true, "Entriestab": true})
 
 	}
-
-	paginationendcount := len(chnentry) + offset
-
-	paginationstartcount := offset + 1
-
-	Previous, Next, PageCount, Page := Pagination(pageno, int(filtercount), limt)
-
-	// Breadcrumbs := BreadCrumbs(c.Request.URL.Path)
-
-	translate, _ := TranslateHandler(c)
-
-	c.JSON(200, gin.H{"Pagination": PaginationData{
-		CurrectPage:  pageno,
-		NextPage:     pageno + 1,
-		PreviousPage: pageno - 1,
-		TotalPages:   PageCount,
-		TwoAfter:     pageno + 2,
-		TwoBelow:     pageno - 2,
-		ThreeAfter:   pageno + 3,
-	}, "chcount1": entrcount, "csrf": csrf.GetToken(c), "channelname": chnanem.ChannelName, "chnid": id, "ChanEntrtlist": allchnentry, "entrycount": entrcount, "Next": Next, "Previous": Previous, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "title": "Entries", "heading": chnanem.ChannelName, "translate": translate, "channellist": channelist, "Page": Page, "HeadTitle": "Channels", "chentrycount": filtercount, "Cmsmenu": true, "Entriestab": true})
 
 }
 
 func Export(c *gin.Context) {
 
-	channelAuth.Authority = &AUTH
-
-	Channel := channels.Channel{Authority: &AUTH}
-
-	Channel.Authority = &AUTH
-
 	var (
-		exportid int
-		exportids []int
-		get_data []channels.TblChannelEntries
-		get_all_data []channels.TblChannelEntries
+		exportid        int
+		exportids       []int
+		get_data        []chn.Tblchannelentries
+		get_all_data    []chn.Tblchannelentries
 		Filechannelname string
-		exportentry []channels.TblChannelEntries
+		exportentry     []chn.Tblchannelentries
 	)
 
 	Categories := ""
@@ -337,7 +425,7 @@ func Export(c *gin.Context) {
 	// download entries id
 
 	id := c.Query("exportidarr")
-	
+
 	exid := strings.Split(id, ",")
 	for _, ids := range exid {
 		exportid, _ = strconv.Atoi(ids)
@@ -346,390 +434,407 @@ func Export(c *gin.Context) {
 
 	channelid, _ := strconv.Atoi(c.Query("getchannelid"))
 
-	_, _, _, FinalSelectedCategories, _ := channelAuth.GetChannelsById(channelid)
-
-	for _, val := range FinalSelectedCategories {
-		for index, category := range val.Categories {
-			if index == len(val.Categories)-1 {
-				Categories += category.Category
-			} else {
-				Categories += category.Category + ","
-			}
-		}
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("permission authorization error: %s", perr)
 	}
+	if !permisison {
+		ErrorLog.Printf("Permissison authorization error")
+		c.Redirect(301, "/403-page")
+		return
+	}
+	if permisison {
 
-	exportchannelid, _ := strconv.Atoi(c.Query("exportchannelid"))
-	if exportchannelid != 0 {
-
-		channelallentrylist, _, _, _ := channelAuth.GetAllChannelEntriesList(exportchannelid, 0, 0, channels.EntriesFilter{})
-
-		for _, val := range channelallentrylist {
-
-			var chlentry channels.TblChannelEntries
-			for index, field := range val.TblChannelEntryField {
-				if index == len(val.TblChannelEntryField)-1 {
-					Additionaldata += field.FieldValue
+		_, FinalSelectedCategories, err := ChannelConfig.GetChannelsById(channelid, TenantId)
+		if err != nil {
+			ErrorLog.Printf("getchannel error: %s", err)
+		}
+		for _, val := range FinalSelectedCategories {
+			for index, category := range val.Categories {
+				if index == len(val.Categories)-1 {
+					Categories += category.Category
 				} else {
-					Additionaldata += field.FieldValue + ","
+					Categories += category.Category + ","
 				}
-				chlentry.AdditionalData = Additionaldata
 			}
-
-			var (
-				Changestatus string
-				Exportdescription string
-			)
-
-			r := regexp.MustCompile(Template)
-			originaldesc := val.Description
-
-			Exportdescription = r.ReplaceAllString(originaldesc, "")
-
-			chlentry.Title = val.Title
-			chlentry.Username = val.Username
-			chlentry.CreatedOn = val.CreatedOn
-
-			if val.Status == 0 {
-				Changestatus = "Draft"
-			} else if val.Status == 1 {
-				Changestatus = "Published"
-			} else {
-				Changestatus = "Unpublished"
-			}
-
-			Filechannelname = val.ChannelName
-			chlentry.EntryStatus = Changestatus
-			chlentry.Description = Exportdescription
-			chlentry.CoverImage = val.CoverImage
-			chlentry.ChannelName = val.ChannelName
-			chlentry.MetaTitle = val.MetaTitle
-			chlentry.Keyword = val.Keyword
-			chlentry.Slug = val.Slug
-			chlentry.MetaDescription = val.MetaDescription
-			chlentry.CategoryGroup = Categories
-
-			get_all_data = append(get_all_data, chlentry)
-
 		}
 
-	}
+		exportchannelid, _ := strconv.Atoi(c.Query("exportchannelid"))
+		if exportchannelid != 0 {
 
-	if len(exportids) != 0 {
+			channelallentrylist, _, _, cerr := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: exportchannelid}, TenantId)
+			if cerr != nil {
+				ErrorLog.Printf("getchannellist error: %s", cerr)
+			}
+			for _, val := range channelallentrylist {
 
-		models.Exportentriesdata(&exportentry, exportids)
+				var chlentry chn.Tblchannelentries
+				for index, field := range val.TblChannelEntryField {
+					if index == len(val.TblChannelEntryField)-1 {
+						Additionaldata += field.FieldValue
+					} else {
+						Additionaldata += field.FieldValue + ","
+					}
+					chlentry.AdditionalData = Additionaldata
+				}
 
-		for _, val := range exportentry {
+				var (
+					Changestatus      string
+					Exportdescription string
+				)
 
-			var result channels.TblChannelEntries
-			for index, field := range val.TblChannelEntryField {
-				if index == len(val.TblChannelEntryField)-1 {
-					Additionaldata += field.FieldValue
+				r := regexp.MustCompile(Template)
+				originaldesc := val.Description
+
+				Exportdescription = r.ReplaceAllString(originaldesc, "")
+
+				chlentry.Title = val.Title
+				chlentry.Username = val.Username
+				chlentry.CreatedOn = val.CreatedOn
+
+				if val.Status == 0 {
+					Changestatus = "Draft"
+				} else if val.Status == 1 {
+					Changestatus = "Published"
 				} else {
-					Additionaldata += field.FieldValue + ","
+					Changestatus = "Unpublished"
 				}
-				result.AdditionalData = Additionaldata
+
+				Filechannelname = val.ChannelName
+				chlentry.EntryStatus = Changestatus
+				chlentry.Description = Exportdescription
+				chlentry.CoverImage = val.CoverImage
+				chlentry.ChannelName = val.ChannelName
+				chlentry.MetaTitle = val.MetaTitle
+				chlentry.Keyword = val.Keyword
+				chlentry.Slug = val.Slug
+				chlentry.MetaDescription = val.MetaDescription
+				chlentry.CategoryGroup = Categories
+
+				get_all_data = append(get_all_data, chlentry)
+
 			}
 
-			var (
-				Changestatus string
-				Exportdescription string
-			)
+		}
 
-			r := regexp.MustCompile(Template)
+		if len(exportids) != 0 {
 
-			originaldesc := val.Description
-			Exportdescription = r.ReplaceAllString(originaldesc, "")
-			result.Title = val.Title
-			result.Username = val.Username
-			result.CreatedOn = val.CreatedOn
+			models.Exportentriesdata(&exportentry, exportids, TenantId)
 
-			if val.Status == 0 {
-				Changestatus = "Draft"
-			} else if val.Status == 1 {
-				Changestatus = "Published"
-			} else {
-				Changestatus = "Unpublished"
+			for _, val := range exportentry {
+
+				var result chn.Tblchannelentries
+				for index, field := range val.TblChannelEntryField {
+					if index == len(val.TblChannelEntryField)-1 {
+						Additionaldata += field.FieldValue
+					} else {
+						Additionaldata += field.FieldValue + ","
+					}
+					result.AdditionalData = Additionaldata
+				}
+
+				var (
+					Changestatus      string
+					Exportdescription string
+				)
+
+				r := regexp.MustCompile(Template)
+
+				originaldesc := val.Description
+				Exportdescription = r.ReplaceAllString(originaldesc, "")
+				result.Title = val.Title
+				result.Username = val.Username
+				result.CreatedOn = val.CreatedOn
+
+				if val.Status == 0 {
+					Changestatus = "Draft"
+				} else if val.Status == 1 {
+					Changestatus = "Published"
+				} else {
+					Changestatus = "Unpublished"
+				}
+
+				Filechannelname = val.ChannelName
+				result.EntryStatus = Changestatus
+				result.Description = Exportdescription
+				result.CoverImage = val.CoverImage
+				result.ChannelName = val.ChannelName
+				result.MetaTitle = val.MetaTitle
+				result.Keyword = val.Keyword
+				result.Slug = val.Slug
+				result.MetaDescription = val.MetaDescription
+				result.CategoryGroup = Categories
+
+				get_data = append(get_data, result)
+
 			}
 
-			Filechannelname = val.ChannelName
-			result.EntryStatus = Changestatus
-			result.Description = Exportdescription
-			result.CoverImage = val.CoverImage
-			result.ChannelName = val.ChannelName
-			result.MetaTitle = val.MetaTitle
-			result.Keyword = val.Keyword
-			result.Slug = val.Slug
-			result.MetaDescription = val.MetaDescription
-			result.CategoryGroup = Categories
-
-			get_data = append(get_data, result)
-
 		}
 
-	}
+		file1 := excelize.NewFile()
+		var head_row = map[string]string{"A1": "Entry Title", "B1": "Description", "C1": "ChannelName", "D1": "Status", "E1": "CreateBy", "F1": "Meta Title", "G1": "Meta Description", "H1": "Keyword", "I1": "Slug", "J1": "Categories", "K1": "Additional Data", "L1": "CoverImage", "M1": "CreatedDate"}
 
-	file1 := excelize.NewFile()
-	var head_row = map[string]string{"A1": "Entry Title", "B1": "Description", "C1": "ChannelName", "D1": "Status", "E1": "CreateBy", "F1": "Meta Title", "G1": "Meta Description", "H1": "Keyword", "I1": "Slug", "J1": "Categories", "K1": "Additional Data", "L1": "CoverImage", "M1": "CreatedDate"}
+		for x, y := range head_row {
 
-	for x, y := range head_row {
+			file1.SetCellValue("Sheet1", x, y)
+			file1.SetColWidth("Sheet1", "A", "M", 50)
+			file1.SetSheetName("Sheet1", "Export Entries")
 
-		file1.SetCellValue("Sheet1", x, y)
-		file1.SetColWidth("Sheet1", "A", "M", 50)
-		file1.SetSheetName("Sheet1", "Export Entries")
+		}
+		var count = 2
 
-	}
-	var count = 2
+		var url_prefix = os.Getenv("DOMAIN_URL")
 
-	var url_prefix = os.Getenv("DOMAIN_URL")
+		url_prefix = url_prefix[:len(url_prefix)-1]
 
-	url_prefix = url_prefix[:len(url_prefix)-1]
+		var coverImages = []string{}
 
-	var coverImages = []string{}
+		for x := range get_data {
 
-	for x := range get_data {
+			file1.SetCellValue("Sheet1", "A"+strconv.Itoa(count), get_data[x].Title)
+			file1.SetCellValue("Sheet1", "B"+strconv.Itoa(count), get_data[x].Description)
+			file1.SetCellValue("Sheet1", "C"+strconv.Itoa(count), get_data[x].ChannelName)
+			file1.SetCellValue("Sheet1", "D"+strconv.Itoa(count), get_data[x].EntryStatus)
+			file1.SetCellValue("Sheet1", "E"+strconv.Itoa(count), get_data[x].Username)
+			file1.SetCellValue("Sheet1", "F"+strconv.Itoa(count), get_data[x].MetaTitle)
+			file1.SetCellValue("Sheet1", "G"+strconv.Itoa(count), get_data[x].MetaDescription)
+			file1.SetCellValue("Sheet1", "H"+strconv.Itoa(count), get_data[x].Keyword)
+			file1.SetCellValue("Sheet1", "I"+strconv.Itoa(count), get_data[x].Slug)
+			file1.SetCellValue("Sheet1", "J"+strconv.Itoa(count), get_data[x].CategoryGroup)
+			file1.SetCellValue("Sheet1", "K"+strconv.Itoa(count), get_data[x].AdditionalData)
+			file1.SetCellValue("Sheet1", "L"+strconv.Itoa(count), get_data[x].CoverImage)
+			file1.SetCellValue("Sheet1", "M"+strconv.Itoa(count), get_data[x].CreatedOn.In(TZONE).Format("02/01/2006"))
 
-		file1.SetCellValue("Sheet1", "A"+strconv.Itoa(count), get_data[x].Title)
-		file1.SetCellValue("Sheet1", "B"+strconv.Itoa(count), get_data[x].Description)
-		file1.SetCellValue("Sheet1", "C"+strconv.Itoa(count), get_data[x].ChannelName)
-		file1.SetCellValue("Sheet1", "D"+strconv.Itoa(count), get_data[x].EntryStatus)
-		file1.SetCellValue("Sheet1", "E"+strconv.Itoa(count), get_data[x].Username)
-		file1.SetCellValue("Sheet1", "F"+strconv.Itoa(count), get_data[x].MetaTitle)
-		file1.SetCellValue("Sheet1", "G"+strconv.Itoa(count), get_data[x].MetaDescription)
-		file1.SetCellValue("Sheet1", "H"+strconv.Itoa(count), get_data[x].Keyword)
-		file1.SetCellValue("Sheet1", "I"+strconv.Itoa(count), get_data[x].Slug)
-		file1.SetCellValue("Sheet1", "J"+strconv.Itoa(count), get_data[x].CategoryGroup)
-		file1.SetCellValue("Sheet1", "K"+strconv.Itoa(count), get_data[x].AdditionalData)
-		file1.SetCellValue("Sheet1", "L"+strconv.Itoa(count), get_data[x].CoverImage)
-		file1.SetCellValue("Sheet1", "M"+strconv.Itoa(count), get_data[x].CreatedOn.In(TZONE).Format("02/01/2006"))
+			coverImageURL := url_prefix + get_data[x].CoverImage
 
-		coverImageURL := url_prefix + get_data[x].CoverImage
+			// Download the cover image and store it in the coverImages slice
+			res, err := http.Get(coverImageURL)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer res.Body.Close()
 
-		// Download the cover image and store it in the coverImages slice
-		res, err := http.Get(coverImageURL)
+			body, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// Create a temporary file to store the cover image
+			sanitizedFileName := strings.ReplaceAll(get_data[x].CoverImage, "/", "-") // Replace '/' with '-'
+
+			// Create a temporary file to store the cover image with the sanitized filename
+			tempFile, err := os.CreateTemp("", sanitizedFileName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer tempFile.Close()
+
+			// Write the cover image to the temporary file
+			if _, err := tempFile.Write(body); err != nil {
+				log.Fatal(err)
+			}
+
+			// Add the temporary file path to the coverImages slice
+			coverImages = append(coverImages, tempFile.Name())
+
+			count++
+		}
+
+		for x := range get_all_data {
+			file1.SetCellValue("Sheet1", "A"+strconv.Itoa(count), get_all_data[x].Title)
+			file1.SetCellValue("Sheet1", "B"+strconv.Itoa(count), get_all_data[x].Description)
+			file1.SetCellValue("Sheet1", "C"+strconv.Itoa(count), get_all_data[x].ChannelName)
+			file1.SetCellValue("Sheet1", "D"+strconv.Itoa(count), get_all_data[x].EntryStatus)
+			file1.SetCellValue("Sheet1", "E"+strconv.Itoa(count), get_all_data[x].Username)
+			file1.SetCellValue("Sheet1", "F"+strconv.Itoa(count), get_all_data[x].MetaTitle)
+			file1.SetCellValue("Sheet1", "G"+strconv.Itoa(count), get_all_data[x].MetaDescription)
+			file1.SetCellValue("Sheet1", "H"+strconv.Itoa(count), get_all_data[x].Keyword)
+			file1.SetCellValue("Sheet1", "I"+strconv.Itoa(count), get_all_data[x].Slug)
+			file1.SetCellValue("Sheet1", "J"+strconv.Itoa(count), get_all_data[x].CategoryGroup)
+			file1.SetCellValue("Sheet1", "K"+strconv.Itoa(count), get_all_data[x].AdditionalData)
+			file1.SetCellValue("Sheet1", "L"+strconv.Itoa(count), get_all_data[x].CoverImage)
+			file1.SetCellValue("Sheet1", "M"+strconv.Itoa(count), get_all_data[x].CreatedOn.In(TZONE).Format("02/01/2006"))
+
+			coverImageURL := url_prefix + get_all_data[x].CoverImage
+
+			// Download the cover image and store it in the coverImages slice
+			res, err := http.Get(coverImageURL)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer res.Body.Close()
+
+			body, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// Create a temporary file to store the cover image
+			sanitizedFileName := strings.ReplaceAll(get_all_data[x].CoverImage, "/", "-") // Replace '/' with '-'
+
+			// Create a temporary file to store the cover image with the sanitized filename
+			tempFile, err := os.CreateTemp("", sanitizedFileName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer tempFile.Close()
+
+			// Write the cover image to the temporary file
+			if _, err := tempFile.Write(body); err != nil {
+				log.Fatal(err)
+			}
+
+			// Add the temporary file path to the coverImages slice
+			coverImages = append(coverImages, tempFile.Name())
+
+			count++
+		}
+		zipFile, err := os.Create(Filechannelname + "images.zip")
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer res.Body.Close()
+		defer zipFile.Close()
 
-		body, err := ioutil.ReadAll(res.Body)
+		// Create a zip writer to write the cover images to the zip file
+		zipWriter := zip.NewWriter(zipFile)
+		defer zipWriter.Close()
+
+		// Iterate over the coverImages slice and add each file to the zip file
+		for _, file := range coverImages {
+			// Open the cover image file
+			coverImageFile, err := os.Open(file)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer coverImageFile.Close()
+
+			coverImageFileInfo, err := coverImageFile.Stat()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// Create a zip header for the cover image file
+			zipHeader, err := zip.FileInfoHeader(coverImageFileInfo)
+			if err != nil {
+				log.Fatal(err)
+			}
+			zipHeader.Name = filepath.Base(file)
+
+			// Add the cover image file to the zip file
+			writer, err := zipWriter.CreateHeader(zipHeader)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// Copy the cover image file to the zip file
+			if _, err := io.Copy(writer, coverImageFile); err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		// Close the zip writer and zip file
+		if err := zipWriter.Close(); err != nil {
+			log.Fatal(err)
+		}
+		if err := zipFile.Close(); err != nil {
+			log.Fatal(err)
+		}
+
+		// Print a success message
+		fmt.Println("Cover images saved as cover_images.zip")
+
+		// Save the Excel file
+		excelFileName := Filechannelname + ".xlsx"
+		errR := file1.SaveAs(excelFileName)
+		if errR != nil {
+			log.Fatal(errR)
+		}
+
+		// Combine Excel file and ZIP files into a single ZIP archive
+		combinedZipFileName := Filechannelname + ".zip"
+		combinedZipFile, err := os.Create(combinedZipFileName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer combinedZipFile.Close()
+
+		zipWriterCombined := zip.NewWriter(combinedZipFile)
+
+		// Add Excel file to the combined ZIP archive
+		excelFile, err := zipWriterCombined.Create(excelFileName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		excelData, err := ioutil.ReadFile(excelFileName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = excelFile.Write(excelData)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Create a temporary file to store the cover image
-		sanitizedFileName := strings.ReplaceAll(get_data[x].CoverImage, "/", "-") // Replace '/' with '-'
-
-		// Create a temporary file to store the cover image with the sanitized filename
-		tempFile, err := os.CreateTemp("", sanitizedFileName)
+		// Open the cover images zip file
+		coverImagesZipFile, err := os.Open(Filechannelname + "images.zip")
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer tempFile.Close()
+		defer coverImagesZipFile.Close()
 
-		// Write the cover image to the temporary file
-		if _, err := tempFile.Write(body); err != nil {
-			log.Fatal(err)
-		}
-
-		// Add the temporary file path to the coverImages slice
-		coverImages = append(coverImages, tempFile.Name())
-
-		count++
-	}
-
-	for x := range get_all_data {
-		file1.SetCellValue("Sheet1", "A"+strconv.Itoa(count), get_all_data[x].Title)
-		file1.SetCellValue("Sheet1", "B"+strconv.Itoa(count), get_all_data[x].Description)
-		file1.SetCellValue("Sheet1", "C"+strconv.Itoa(count), get_all_data[x].ChannelName)
-		file1.SetCellValue("Sheet1", "D"+strconv.Itoa(count), get_all_data[x].EntryStatus)
-		file1.SetCellValue("Sheet1", "E"+strconv.Itoa(count), get_all_data[x].Username)
-		file1.SetCellValue("Sheet1", "F"+strconv.Itoa(count), get_all_data[x].MetaTitle)
-		file1.SetCellValue("Sheet1", "G"+strconv.Itoa(count), get_all_data[x].MetaDescription)
-		file1.SetCellValue("Sheet1", "H"+strconv.Itoa(count), get_all_data[x].Keyword)
-		file1.SetCellValue("Sheet1", "I"+strconv.Itoa(count), get_all_data[x].Slug)
-		file1.SetCellValue("Sheet1", "J"+strconv.Itoa(count), get_all_data[x].CategoryGroup)
-		file1.SetCellValue("Sheet1", "K"+strconv.Itoa(count), get_all_data[x].AdditionalData)
-		file1.SetCellValue("Sheet1", "L"+strconv.Itoa(count), get_all_data[x].CoverImage)
-		file1.SetCellValue("Sheet1", "M"+strconv.Itoa(count), get_all_data[x].CreatedOn.In(TZONE).Format("02/01/2006"))
-
-		coverImageURL := url_prefix + get_all_data[x].CoverImage
-
-		// Download the cover image and store it in the coverImages slice
-		res, err := http.Get(coverImageURL)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer res.Body.Close()
-
-		body, err := ioutil.ReadAll(res.Body)
+		coverImagesZipFileInfo, err := coverImagesZipFile.Stat()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Create a temporary file to store the cover image
-		sanitizedFileName := strings.ReplaceAll(get_all_data[x].CoverImage, "/", "-") // Replace '/' with '-'
-
-		// Create a temporary file to store the cover image with the sanitized filename
-		tempFile, err := os.CreateTemp("", sanitizedFileName)
+		// Create a zip header for the cover images zip file
+		coverImagesZipHeader, err := zip.FileInfoHeader(coverImagesZipFileInfo)
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer tempFile.Close()
+		coverImagesZipHeader.Name = filepath.Base(Filechannelname + "images.zip")
 
-		// Write the cover image to the temporary file
-		if _, err := tempFile.Write(body); err != nil {
-			log.Fatal(err)
-		}
-
-		// Add the temporary file path to the coverImages slice
-		coverImages = append(coverImages, tempFile.Name())
-
-		count++
-	}
-	zipFile, err := os.Create(Filechannelname + "images.zip")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer zipFile.Close()
-
-	// Create a zip writer to write the cover images to the zip file
-	zipWriter := zip.NewWriter(zipFile)
-	defer zipWriter.Close()
-
-	// Iterate over the coverImages slice and add each file to the zip file
-	for _, file := range coverImages {
-		// Open the cover image file
-		coverImageFile, err := os.Open(file)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer coverImageFile.Close()
-
-		coverImageFileInfo, err := coverImageFile.Stat()
+		// Add the cover images zip file to the combined zip file
+		coverImagesWriter, err := zipWriterCombined.CreateHeader(coverImagesZipHeader)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Create a zip header for the cover image file
-		zipHeader, err := zip.FileInfoHeader(coverImageFileInfo)
+		// Copy the cover images zip file to the combined zip file
+		if _, err := io.Copy(coverImagesWriter, coverImagesZipFile); err != nil {
+			log.Fatal(err)
+		}
+
+		err = zipWriterCombined.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
-		zipHeader.Name = filepath.Base(file)
 
-		// Add the cover image file to the zip file
-		writer, err := zipWriter.CreateHeader(zipHeader)
+		c.Header("Content-Disposition", "attachment; filename="+combinedZipFileName+"")
+
+		http.ServeFile(c.Writer, c.Request, combinedZipFileName)
+
+		err = os.Remove(excelFileName)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Copy the cover image file to the zip file
-		if _, err := io.Copy(writer, coverImageFile); err != nil {
+		err = os.Remove(combinedZipFileName)
+		if err != nil {
 			log.Fatal(err)
 		}
-	}
 
-	// Close the zip writer and zip file
-	if err := zipWriter.Close(); err != nil {
-		log.Fatal(err)
-	}
-	if err := zipFile.Close(); err != nil {
-		log.Fatal(err)
-	}
+		err = os.Remove(Filechannelname + "images.zip")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	// Print a success message
-	fmt.Println("Cover images saved as cover_images.zip")
+		err1 := file1.Write(c.Writer)
 
-	// Save the Excel file
-	excelFileName := Filechannelname + ".xlsx"
-	errR := file1.SaveAs(excelFileName)
-	if errR != nil {
-		log.Fatal(errR)
-	}
+		if err1 != nil {
 
-	// Combine Excel file and ZIP files into a single ZIP archive
-	combinedZipFileName := Filechannelname + ".zip"
-	combinedZipFile, err := os.Create(combinedZipFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer combinedZipFile.Close()
+			fmt.Println(err1)
+		}
 
-	zipWriterCombined := zip.NewWriter(combinedZipFile)
-
-	// Add Excel file to the combined ZIP archive
-	excelFile, err := zipWriterCombined.Create(excelFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	excelData, err := ioutil.ReadFile(excelFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = excelFile.Write(excelData)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Open the cover images zip file
-	coverImagesZipFile, err := os.Open(Filechannelname + "images.zip")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer coverImagesZipFile.Close()
-
-	coverImagesZipFileInfo, err := coverImagesZipFile.Stat()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create a zip header for the cover images zip file
-	coverImagesZipHeader, err := zip.FileInfoHeader(coverImagesZipFileInfo)
-	if err != nil {
-		log.Fatal(err)
-	}
-	coverImagesZipHeader.Name = filepath.Base(Filechannelname + "images.zip")
-
-	// Add the cover images zip file to the combined zip file
-	coverImagesWriter, err := zipWriterCombined.CreateHeader(coverImagesZipHeader)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Copy the cover images zip file to the combined zip file
-	if _, err := io.Copy(coverImagesWriter, coverImagesZipFile); err != nil {
-		log.Fatal(err)
-	}
-
-	err = zipWriterCombined.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	c.Header("Content-Disposition", "attachment; filename="+combinedZipFileName+"")
-
-	http.ServeFile(c.Writer, c.Request, combinedZipFileName)
-
-	err = os.Remove(excelFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = os.Remove(combinedZipFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = os.Remove(Filechannelname + "images.zip")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err1 := file1.Write(c.Writer)
-
-	if err1 != nil {
-
-		fmt.Println(err1)
 	}
 
 }
@@ -913,8 +1018,6 @@ func DownloaderrXlsx(c *gin.Context) {
 
 	user_id := c.GetInt("userid")
 
-	Channel := channels.Channel{Authority: &AUTH}
-
 	log.Println("errfilg", errflg)
 
 	if erflg, ok := errflg[user_id]; ok {
@@ -946,106 +1049,119 @@ func DownloaderrXlsx(c *gin.Context) {
 				fmt.Println("Error extracting image sources:", err)
 				return
 			}
+			permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+			if perr != nil {
+				ErrorLog.Printf("editchannel authorization error: %s", perr)
+			}
+			if !permisison {
+				ErrorLog.Printf("Permissison authorization error")
+				c.Redirect(301, "/403-page")
+				return
+			}
+			if permisison {
+				for _, src := range sources {
 
-			for _, src := range sources {
+					sr := strings.ReplaceAll(src, `”`, "")
 
-				sr := strings.ReplaceAll(src, `”`, "")
+					parts := strings.Split(sr, "/")
 
-				parts := strings.Split(sr, "/")
+					filename := parts[len(parts)-1]
 
-				filename := parts[len(parts)-1]
+					if imagepath, ok := imgpath[user_id]; ok {
 
+						for _, path := range imagepath {
+
+							file := strings.Split(path, "/")
+
+							imagename := file[len(file)-1]
+
+							var url string
+
+							if os.Getenv("BASE_URL") == "" {
+
+								url = os.Getenv("DOMAIN_URL")
+
+							} else {
+
+								url = os.Getenv("BASE_URL")
+
+							}
+							if imagename == filename {
+
+								Description, _ = replaceImageSrc(Description, src, url+path)
+
+							}
+
+						}
+					}
+
+				}
 				if imagepath, ok := imgpath[user_id]; ok {
 
 					for _, path := range imagepath {
 
-						file := strings.Split(path, "/")
+						filearray := strings.Split(path, "/")
 
-						imagename := file[len(file)-1]
+						filename := filearray[len(filearray)-1]
 
-						var url string
+						if filename == val.Image {
 
-						if os.Getenv("BASE_URL") == "" {
-
-							url = os.Getenv("DOMAIN_URL")
-
-						} else {
-
-							url = os.Getenv("BASE_URL")
-
-						}
-						if imagename == filename {
-
-							Description, _ = replaceImageSrc(Description, src, url+path)
-
+							matchedpath = "/" + path
 						}
 
 					}
 				}
 
-			}
-			if imagepath, ok := imgpath[user_id]; ok {
+				if chnid, ok := chennalid[user_id]; ok {
 
-				for _, path := range imagepath {
+					entries := chn.EntriesRequired{
 
-					filearray := strings.Split(path, "/")
-
-					filename := filearray[len(filearray)-1]
-
-					if filename == val.Image {
-
-						matchedpath = "/" + path
+						Title:      val.Title,
+						Content:    Description,
+						ChannelId:  chnid,
+						CoverImage: matchedpath,
+						CreatedBy:  user_id,
 					}
+					_, _, errmsg = ChannelConfig.CreateEntry(entries, TenantId)
 
 				}
-			}
 
-			if chnid, ok := chennalid[user_id]; ok {
+				if errmsg == nil {
 
-				entries := channels.EntriesRequired{
+					enlog.Title = val.Title
 
-					Title:      val.Title,
-					Content:    Description,
-					ChannelId:  chnid,
-					CoverImage: matchedpath,
+					enlog.Createdon = time.Now().In(TZONE).Format(Datelayout)
+
+					enlog.Totalfields, _ = strconv.Atoi(c.PostForm("totalfields"))
+
+					enlog.Mappedfields, _ = strconv.Atoi(c.PostForm("mappedfields"))
+
+					enlog.Unmappedfields = enlog.Totalfields - enlog.Mappedfields
+
+					enlog.Status = "Completed"
 				}
-				_, _, errmsg = Channel.CreateEntry(entries)
+				if errmsg != nil {
+
+					enlog.Title = val.Title
+
+					enlog.Createdon = time.Now().In(TZONE).Format(Datelayout)
+
+					enlog.Totalfields, _ = strconv.Atoi(c.PostForm("totalfields"))
+
+					enlog.Mappedfields, _ = strconv.Atoi(c.PostForm("mappedfields"))
+
+					enlog.Unmappedfields = enlog.Totalfields - enlog.Mappedfields
+
+					enlog.Status = "Incompleted"
+
+				}
+
+				enlogs = append(enlogs, enlog)
 
 			}
-
-			if errmsg == nil {
-
-				enlog.Title = val.Title
-
-				enlog.Createdon = time.Now().In(TZONE).Format(Datelayout)
-
-				enlog.Totalfields, _ = strconv.Atoi(c.PostForm("totalfields"))
-
-				enlog.Mappedfields, _ = strconv.Atoi(c.PostForm("mappedfields"))
-
-				enlog.Unmappedfields = enlog.Totalfields - enlog.Mappedfields
-
-				enlog.Status = "Completed"
-			}
-			if errmsg != nil {
-
-				enlog.Title = val.Title
-
-				enlog.Createdon = time.Now().In(TZONE).Format(Datelayout)
-
-				enlog.Totalfields, _ = strconv.Atoi(c.PostForm("totalfields"))
-
-				enlog.Mappedfields, _ = strconv.Atoi(c.PostForm("mappedfields"))
-
-				enlog.Unmappedfields = enlog.Totalfields - enlog.Mappedfields
-
-				enlog.Status = "Incompleted"
-
-			}
-
-			enlogs = append(enlogs, enlog)
-
 		}
+		c.Redirect(301, "/channel/entrylist/")
+
 	}
-	c.Redirect(301, "/channel/entrylist/")
+
 }

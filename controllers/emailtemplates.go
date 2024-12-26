@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"encoding/json"
-	"log"
+	"fmt"
 	"spurt-cms/models"
 	"strconv"
 	"strings"
@@ -16,11 +15,11 @@ func EmailTemplate(c *gin.Context) {
 
 	var (
 		limit, offset int
-		filter models.Filter
-		templates []models.TblEmailTemplate
-		template []models.TblEmailTemplate
+		filter        models.Filter
+		templates     []models.TblEmailTemplate
+		template      []models.TblEmailTemplate
 		templatelists []models.TblEmailTemplate
-	)	
+	)
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
@@ -38,9 +37,9 @@ func EmailTemplate(c *gin.Context) {
 
 	flag := false
 
-	_, Totaltemplates := models.GetTemplateList(&templates, 0, 0, filter, flag)
+	_, Totaltemplates := models.GetTemplateList(&templates, 0, 0, filter, flag, TenantId)
 
-	models.GetTemplateList(&template, limit, offset, filter, flag)
+	models.GetTemplateList(&template, limit, offset, filter, flag, TenantId)
 
 	for _, val := range template {
 		if !val.ModifiedOn.IsZero() {
@@ -65,16 +64,23 @@ func EmailTemplate(c *gin.Context) {
 		TwoAfter:     page + 2,
 		TwoBelow:     page - 2,
 		ThreeAfter:   page + 3,
-	}, "Menu": menu, "HeadTitle": translate.Memberss.Email, "translate": translate, "Page": Page, "Count": Totaltemplates, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": page, "Limit": limit, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "Filter": filter, "Template": templatelists, "csrf": csrf.GetToken(c), "SettingsHead": true, "title": "Email Templates", "Emailsmenu": true, "Tooltiptitle": translate.Setting.Emailtooltip})
+	}, "Menu": menu, "HeadTitle": translate.Memberss.Email, "translate": translate, "Page": Page, "Count": Totaltemplates, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": page, "Limit": limit, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "Filter": filter, "Template": templatelists, "csrf": csrf.GetToken(c), "SettingsHead": true, "title": "Email Templates", "linktitle": "Email Templates", "Emailsmenu": true, "Tooltiptitle": translate.Setting.Emailtooltip})
 }
 
 func EditTemplate(c *gin.Context) {
 
-	var temp models.TblEmailTemplate
+	var (
+		temp models.TblEmailTemplate
+		err  error
+		id   int
+	)
 
-	var id, _ = strconv.Atoi(c.Query("id"))
+	id, err = strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(500, "")
+	}
 
-	models.GetTempdetail(&temp, id)
+	models.GetTempdetail(&temp, id, TenantId)
 
 	c.JSON(200, temp)
 
@@ -90,8 +96,10 @@ func UpdateTemplate(c *gin.Context) {
 
 	var (
 		template models.TblEmailTemplate
-		url string
+		url      string
 	)
+
+	fmt.Println("Test")
 
 	pageno := c.PostForm("pageno")
 	pathname := c.PostForm("pathname")
@@ -112,14 +120,14 @@ func UpdateTemplate(c *gin.Context) {
 	template.Id, _ = strconv.Atoi(c.PostForm("userid"))
 	template.ModifiedOn, _ = time.Parse("2006-01-02 15:04:05", time.Now().In(TZONE).Format("2006-01-02 15:04:05"))
 
-	err := models.UpdateTemplate(&template)
+	err := models.UpdateTemplate(&template, TenantId)
 	if err != nil {
 		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 		c.Redirect(301, url)
 		return
 	}
 
-	c.SetCookie("get-toast", "Template Updated Successfully", 3600, "", "", false, false)
+	c.SetCookie("get-toast", "Templateupdatedsuccessfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 	c.Redirect(301, url)
 
@@ -133,13 +141,11 @@ func TempIsActive(c *gin.Context) {
 
 	userid := c.GetInt("userid")
 
-	err := models.TemplateStatus(id, val, userid)
-
+	err := models.TemplateStatus(id, val, userid, TenantId)
 	if err != nil {
-		log.Println(err)
-		json.NewEncoder(c.Writer).Encode(false)
-	} else {
-		json.NewEncoder(c.Writer).Encode(true)
+		c.JSON(500, gin.H{"status": false})
 	}
+
+	c.JSON(200, gin.H{"status": true})
 
 }

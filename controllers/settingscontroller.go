@@ -5,33 +5,40 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"spurt-cms/models"
+	storagecontroller "spurt-cms/storage-controller"
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spurtcms/pkgcore/teams"
+	"github.com/spurtcms/team"
 	csrf "github.com/utrack/gin-csrf"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var Team teams.TeamAuth
-
 func SettingView(c *gin.Context) {
 
 	menu := NewMenuController(c)
+	// 	fmt.Println("valmenemodule",menu.TblModule)
+
+	// 	for _,val:= range menu.TblModule{
+	// 		if val.ModuleName=="Settings"{
+	// 			for _,val2:=range val.SubModule{
+
+	// fmt.Println("valmenemodule",val2)
+	// 			}
+	// 		}
+	// 	}
 
 	translate, _ := TranslateHandler(c)
 
-	c.HTML(200, "settings.html", gin.H{"Menu": menu, "csrf": csrf.GetToken(c), "translate": translate, "HeadTitle": translate.Settings, "title": "Settings"})
+	c.HTML(200, "settings.html", gin.H{"Menu": menu, "linktitle": "Settings", "csrf": csrf.GetToken(c), "translate": translate, "HeadTitle": translate.Settings, "title": "Settings"})
 
 }
 
 func MyProfile(c *gin.Context) {
 
-	users, err := NewTeam.GetUserById(c.GetInt("userid"))
+	users, _, err := NewTeamWP.GetUserById(c.GetInt("userid"), []int{})
 	if err != nil {
 		ErrorLog.Printf("get myprofile error : %s", err)
 		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
@@ -46,20 +53,30 @@ func MyProfile(c *gin.Context) {
 		lastn = strings.ToUpper(last[:1])
 	}
 
+	if users.ProfileImagePath != "" {
+
+		if users.StorageType == "local" {
+			users.ProfileImagePath = "/" + users.ProfileImagePath
+
+		} else if users.StorageType == "aws" {
+			users.ProfileImagePath = "/image-resize?name=" + users.ProfileImagePath
+		}
+	}
+
 	var Name = firstn + lastn
 	users.NameString = Name
 
-	Role, err := NewRole.GetRoleById(users.RoleId)
+	Role, err := NewRole.GetRoleById(users.RoleId, 0)
 	if err != nil {
 		log.Println(err)
 	}
 
 	translate, _ := TranslateHandler(c)
 	menu := NewMenuController(c)
-	Folder, File, Media, _ := GetMedia()
+	Folder, File, Media, _, _ := GetMedia()
 	selectedtype, _ := GetSelectedType()
 
-	c.HTML(200, "myaccount.html", gin.H{"Menu": menu, "title": "My Account", "csrf": csrf.GetToken(c), "HeadTitle": translate.Myprofile, "translate": translate, "user": users, "rolename": Role.Name, "SettingsHead": true, "Myprofmenu": true, "Tooltiptitle": translate.Setting.Myprofiletooltip, "Folder": Folder, "File": File, "Media": Media, "StorageType": selectedtype.SelectedType})
+	c.HTML(200, "myaccount.html", gin.H{"Menu": menu, "title": "My Account", "linktitle": "My Account", "csrf": csrf.GetToken(c), "HeadTitle": translate.Myprofile, "translate": translate, "user": users, "rolename": Role.Name, "SettingsHead": true, "Myprofmenu": true, "Tooltiptitle": translate.Setting.Myprofiletooltip, "Folder": Folder, "File": File, "Media": Media, "StorageType": selectedtype.SelectedType})
 }
 
 func ChangePassword(c *gin.Context) {
@@ -68,12 +85,10 @@ func ChangePassword(c *gin.Context) {
 
 	menu := NewMenuController(c)
 
-	c.HTML(200, "security.html", gin.H{"Menu": menu, "title": "Security", "csrf": csrf.GetToken(c), "translate": translate, "HeadTitle": translate.Setting.Security, "SettingsHead": true, "Changepassmenu": true, "Tooltiptitle": translate.Setting.Securitytooltip})
+	c.HTML(200, "security.html", gin.H{"Menu": menu, "title": "Security", "linktitle": "Security", "csrf": csrf.GetToken(c), "translate": translate, "HeadTitle": translate.Setting.Security, "SettingsHead": true, "Changepassmenu": true, "Tooltiptitle": translate.Setting.Securitytooltip})
 }
 
 func UpdateProfile(c *gin.Context) {
-
-	User.Authority = &AUTH
 
 	if c.PostForm("user_fname") == "" || c.PostForm("user_email") == "" || c.PostForm("user_mob") == "" || c.PostForm("user_name") == "" {
 		c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
@@ -81,72 +96,96 @@ func UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	imagedata := c.PostForm("crop_data")
-
 	var (
-		cl                   = c.PostForm("color-change")
-		imagePath1           string
-		expandimagePath      string
-		personalize_data     models.TblUserPersonalize
-		imageName, imagePath string
+		imgPath, imgName string
+		err              error
 	)
 
-	if imagedata != "" {
-		imageName, imagePath, _ = ConvertBase64(imagedata, "storage/user")
+	storageType, err := GetSelectedType()
+	if err != nil {
+		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+		c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+		c.Redirect(301, "/settings/myprofile/")
+		return
+	}
+
+	imagedata := c.PostForm("crop_data")
+
+	if strings.Contains(imagedata, "data:image/jpeg;base64") || strings.Contains(imagedata, "data:image/png;base64") || strings.Contains(imagedata, "data:image/svg+xml;base64") {
+
+		tenantDetails, err := NewTeam.GetTenantDetails(TenantId)
+		if err != nil {
+			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+			c.Redirect(301, "/settings/myprofile/")
+			return
+		}
+
+		if storageType.SelectedType == "aws" {
+			var (
+				tempString, imageName string
+				imageByte             []byte
+			)
+
+			imageName, tempString, imageByte, err = ConvertBase64toByte(imagedata, "user")
+			if err != nil {
+				c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+				c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+				c.Redirect(301, "/settings/myprofile/")
+				return
+			}
+
+			tempString = tenantDetails.S3FolderName + tempString
+
+			err = storagecontroller.UploadCropImageS3(imageName, tempString, imageByte)
+			if err != nil {
+
+				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
+				c.Redirect(301, "/settings/myprofile/")
+				return
+	
+			}
+
+			imgPath = tempString
+			imgName = imageName
+
+		} else if storageType.SelectedType == "local" {
+			var tempImgPath, imageName string
+
+			imageName, tempImgPath, err = ConvertBase64(imagedata, "storage/user")
+			if err != nil {
+				c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+				c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+				c.Redirect(301, "/settings/myprofile/")
+				return
+			}
+
+			imgPath = "/" + tempImgPath
+			imgName = imageName
+
+		}
+
+	} else {
+		imgPath = imagedata
 	}
 
 	userid, _ := strconv.Atoi(c.PostForm("id"))
 
-	Newuser := teams.TeamCreate{
+	Newuser := team.TeamCreate{
 
 		FirstName:        c.PostForm("user_fname"),
 		LastName:         c.PostForm("user_lname"),
 		Email:            c.PostForm("user_email"),
 		MobileNo:         c.PostForm("user_mob"),
 		Username:         c.PostForm("user_name"),
-		ProfileImage:     imageName,
-		ProfileImagePath: imagePath,
+		ProfileImage:     imgName,
+		ProfileImagePath: imgPath,
+		StorageType:      storageType.SelectedType,
 	}
 
-	err := User.UpdateMyUser(Newuser)
+	fmt.Println("Dha", Newuser)
 
-	imagePath1 = c.PostForm("logo_imgpath")
-	expandimagePath = c.PostForm("expandlogo_imgpath")
-
-	err1 := models.GetPersonalize(&personalize_data, userid)
-
-	if err1 != nil {
-
-		personalize_data.UserId = userid
-		personalize_data.MenuBackgroundColor = cl
-		personalize_data.LogoPath = imagePath1
-		personalize_data.ExpandLogoPath = expandimagePath
-		personalize_data.CreatedOn, _ = time.Parse("2006-01-02 15:04:05", time.Now().UTC().Format("2006-01-02 15:04:05"))
-
-		err2 := models.CreatePersonalize(&personalize_data)
-		if err2 != nil {
-			ErrorLog.Printf("update profile error : %s", err2)
-		}
-
-	} else {
-
-		personalize_data.MenuBackgroundColor = cl
-		personalize_data.LogoPath = imagePath1
-		personalize_data.ExpandLogoPath = expandimagePath
-		personalize_data.ModifiedOn, _ = time.Parse("2006-01-02 15:04:05", time.Now().UTC().Format("2006-01-02 15:04:05"))
-		err3 := models.UpdatePersonalize(&personalize_data, userid)
-		if err3 != nil {
-			ErrorLog.Printf("update personalize error : %s", err3)
-		}
-
-	}
-
-	if strings.Contains(fmt.Sprint(err), "given some values is empty") {
-		c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
-		c.Redirect(301, "/settings/myprofile/")
-		return
-	}
-
+	err = NewTeamWP.UpdateMyUser(Newuser, userid, TenantId)
 	if err != nil {
 		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
@@ -162,7 +201,9 @@ func UpdateProfile(c *gin.Context) {
 
 func UptPassword(c *gin.Context) {
 
-	Team.Authority = &AUTH
+	fmt.Println("checkpass")
+
+	userid := c.GetInt("userid")
 
 	pswd := c.PostForm("pass")
 
@@ -178,7 +219,7 @@ func UptPassword(c *gin.Context) {
 
 	}
 
-	err, _ := Team.ChangeYourPassword(pswd)
+	err, _ := NewTeamWP.ChangeYourPassword(pswd, userid, TenantId)
 
 	if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 
@@ -199,7 +240,7 @@ func UptPassword(c *gin.Context) {
 	}
 	id := c.GetInt("userid")
 
-	userdet, _ := Team.GetUserDetails(id)
+	userdet, _, _ := NewTeamWP.GetUserById(id, []int{})
 
 	fname := userdet.FirstName
 
@@ -217,13 +258,27 @@ func UptPassword(c *gin.Context) {
 
 	// }
 
+	linkedin := os.Getenv("LINKEDIN")
+	facebook := os.Getenv("FACEBOOK")
+	twitter := os.Getenv("TWITTER")
+	youtube := os.Getenv("YOUTUBE")
+	insta := os.Getenv("INSTAGRAM")
+
 	data := map[string]interface{}{
 
 		"fname":         fname,
-		"admin_logo":    url_prefix + "public/img/spurtcms.png",
-		"fb_logo":       url_prefix + "public/img/facebook.png",
-		"linkedin_logo": url_prefix + "public/img/linkedin.png",
-		"twitter_logo":  url_prefix + "public/img/twitter.png",
+		"admin_logo":    url_prefix + "public/img/SpurtCMSlogo.png",
+		"fb_logo":       url_prefix + "public/img/email-icons/facebook.png",
+		"linkedin_logo": url_prefix + "public/img/email-icons/linkedin.png",
+		"twitter_logo":  url_prefix + "public/img/email-icons/x.png",
+		"youtube_logo":  url_prefix + "public/img/email-icons/youtube.png",
+		"insta_log":     url_prefix + "public/img/email-icons/instagram.png",
+		"facebook":      facebook,
+		"instagram":     insta,
+		"youtube":       youtube,
+		"linkedin":      linkedin,
+		"twitter":       twitter,
+		"password":      cpswd,
 	}
 
 	var wg sync.WaitGroup
@@ -232,22 +287,21 @@ func UptPassword(c *gin.Context) {
 
 	Chan := make(chan string, 1)
 
-	go ChangePasswordEmail(Chan, &wg, data, email, "Changepassword")
+	go ChangePasswordEmail(Chan, &wg, data, email, "changepassword")
 
 	close(Chan)
 
 }
+
 func CheckPassword(c *gin.Context) {
 
 	var Password bool
-
-	Team.Authority = &AUTH
 
 	id := c.GetInt("userid")
 
 	pswd := c.PostForm("pass")
 
-	userdet, _ := Team.GetUserDetails(id)
+	userdet, _, _ := NewTeamWP.GetUserById(id, []int{})
 
 	if strings.Contains(fmt.Sprint(userdet), "given some values is empty") {
 
