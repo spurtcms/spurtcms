@@ -23,27 +23,41 @@ $(document).on('click', '.export-next', function () {
 })
 
 // Select channel // 
-$(document).on('click', '#select_channel', function () {
-
-    $('#channel-error').hide()
-
-    var data_id = $('#select_channel').attr("data-id")
-
-    $('.data-drop-list').each(function () {
-
-
-        if (data_id == $(this).find('.chn-drop').attr("data-id")) {
-
+$(document).on("click", ".data-drop-list", function () {
+    id = $(this).attr("data-id")
+    channelname = $(this).attr("data-name")
+    selct_id= $("#select_channel").attr("data-id", id)
+    $("#select_channel").text(channelname)
+    $(this).each(function(){
+        if (id == selct_id){
             $(this).addClass("active")
-
-            $(this).find('.avaliable-dropdown-itemRight').find('.check-circle').prop('checked', true);
-
-        } else {
+        }else{
             $(this).removeClass("active")
         }
     })
-
 })
+// $(document).on('click', '#select_channel', function () {
+
+//     $('#channel-error').hide()
+
+//     var data_id = $('#select_channel').attr("data-id")
+
+//     $('.data-drop-list').each(function () {
+
+
+//         if (data_id == $(this).find('.chn-drop').attr("data-id")) {
+
+//             $(this).addClass("active")
+
+//             $(this).find('.avaliable-dropdown-itemRight').find('.check-circle').prop('checked', true);
+
+//         } else {
+//             $(this).removeClass("active")
+//         }
+//     })
+
+// })
+
 $(document).on('click', '.im-channel', function () {
 
     $('#channel-error').hide()
@@ -70,6 +84,8 @@ $(document).on('click', '.del-xlsx-file', function () {
     $(this).parent().remove()
 
     $('#xlsx-file').show()
+    $("#uploaddrag").show()
+    $("#uploadtext").show()
 
     $("#fileInput").val("")
 
@@ -140,11 +156,12 @@ $(document).ready(function () {
         if (ext == "xlsx") {
 
             $(this).parents('.upload-file').find('.upload-file-btn').hide()
+            $(this).parents('.upload-file').find('span,p').hide()
 
             var uploaded_html = `<div class="uploaded-xlsxfile">
                     <img src="/public/img/xlsx.svg" alt="">
                     <p class="para">`+ nameExtract + `</p>
-                    <a class="del-xlsx-file"><img src="/public/img/delete-icon.svg" alt=""></a>
+                    <a class="del-xlsx-file"><img src="/public/img/delete.svg" alt=""></a>
                     </div>`
 
             $("#upload-file").append(uploaded_html)
@@ -616,8 +633,9 @@ $('#img-Input').on('change', function (event) {
                 });
             })
         $(this).parents('.upload-file').find('.upload-file-btn').hide()
+        $(this).parents('.upload-file').find('span,p').hide()
         var uploaded_html = `<div class="uploaded-xlsxfile">
-            <img src="/public/img/zip.svg" alt="">
+            
             <p class="para">`+ nameExtract + `</p>
             <a class="del-zip-file"><img src="/public/img/delete-icon.svg" alt=""></a>
             </div>`

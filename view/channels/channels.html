@@ -1,164 +1,372 @@
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
-<div class="page-wrapper">
-    <div class="bread-crump">
-        <a href="/channel/entrylist/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="/channel/" class="current-page">{{.Tabmenu}}</a>
-    </div>
-    {{template "cmstab" .}}
-    <input type="hidden" name="csrf" value="{{.csrf}}">
-    <div class="all-tab-content" id="entriesContent">
-        <!--1-->
 
-        <div class="topOptions">
-            <div class="leftHeader">
-                <div class="caption-flexx">
-                    <p class="para">
 
-                        {{$Translate.Total}} {{if gt .count 1}}{{$Translate.Channell.Channels}} : <span class="para"
-                            id="searchcount"> {{.count}} </span> {{else}} {{$Translate.Channell.Channel}} : <span
-                            class="para" id="searchcount"> {{.count}} </span> {{end}} </p>
 
-                    </p>
-                </div>
-            </div>
-
-            <div class="transitionSearch active {{if .filter}}active{{end}}">
-                <form action="/channels/" method="get" class="filterform" autocomplete="off">
-                    <img src="/public/img/Magnifying-Glass.svg" alt="" />
-                    <input type="text" class="search" name="keyword" id="" placeholder="{{$Translate.Csearch}}"
-                        value="{{if .filter}}{{.filter}}{{end}}" />
-                </form>
-            </div>
-            <a href="/channels/newchannel">
-                <button class="btn-reg btn-sm primary ">
-                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newchannel}}
-                </button></a>
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap"> {{.HeadTitle}}</h2>
         </div>
 
+        <a href="javascript:void(0);"
+            class=" hd-crd-btn [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] min-w-[32px] h-[32px] grid place-content-center   hover:bg-[#F0FFFB] ">
+            <img src="/public/img\bt-show.svg" alt="show" class="hidden" id="show">
+            <img src="/public/img\bt-hide.svg" alt="hide" id="hide">
+        </a>
 
-        <div class="channels-container">
+        <div
+            class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+                class="{{if eq .Searchtrue true}} pointer-events-none {{end}}  srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
+            </a>
+            <form action="/channels/" method="get" class="filterform " autocomplete="off">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="search"
+                    value="{{if .filter}}{{.filter}}{{end}}"
+                    class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                {{if eq .Searchtrue true}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{end}}
 
-            <div class="channels-cards-container">
-                {{if .channel}}
-                {{range .channel}}
-                <div class="channels-card">
-                    <div class="channels-card-top">
-                        <a href="/channels/editchannel/{{.Id}}"></a>
-                        <div class="card-top-head">
-                            <div style="display: flex; justify-content: space-between;">
-                                <h6 class="para-extralight">CreatedBy : <span class="username-highligt">{{.Username}}</span></h6>
+            </form>
+        </div>
 
-                                <h6 class="para-extralight">({{.EntriesCount}} {{$Translate.Channell.Entriesavailable}}
-                                    )</h6>
-                            </div>
-                            <h3 class="heading-five" data-bs-toggle="tooltip" data-bs-html="true"
-                                data-bs-placement="top" title="{{.ChannelName}}" style="cursor: pointer;">
-                                {{.ChannelName}}</h3>
-                        </div>
-                        <p class="para-extralight" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip"
-                            data-bs-html="true" data-bs-placement="top" title="{{.SlugName}}"
-                            style="height: 2.5rem;cursor: pointer;">{{.ChannelDescription}}
+        <a href="/channels/newchannel" id="create-channel-btn"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569]">
+            <span class="hidden max-sm:block text-lg leading-none ">+</span>
+            <span class="max-sm:hidden">
+                {{$Translate.Create}} {{$Translate.Channell.Channel}}
+            </span>
+        </a>
+
+    </header>
+    <div class="px-[16px] py-[11px]" style="padding-bottom: 80px;">
+        <!-- <div class="flex items-center justify-between mb-[24px]">
+            <h2 class="text-[24px] font-medium text-[#252525] leading-[30px]">{{.HeadTitle}}</h2>
+    
+        </div> -->
+
+        <div id="hd-crd"
+            class=" [&.hide]:hidden  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#EBF9F5] rounded-[12px] relative mb-[24px]">
+
+            <a href="javascript:void(0);"
+                class="  hd-crd-btn  absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
+                <img src="/public/img/block-close.svg" alt="close" id="videoclose"></a>
+
+            <div class="relative grid place-items-center">
+                <img src="/public/img/Channel.jpg" alt="video" class="w-full  ">
+                <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                    <img src="/public/img/play-video.svg" alt="play">
+                </a>
+            </div>
+
+
+            <div>
+                <h3 class="mb-[12px] text-base text-[#252525] font-medium leading-[20px]">
+                    {{$Translate.Channell.MyChannels}}</h3>
+                <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
+                    {{$Translate.Blocks.MyCollectionDesc}}
+                </p>
+                <div class="flex items-center space-x-[24px] flex-wrap">
+                    <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img\how-to.svg" alt="How to use">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">{{$Translate.Blocks.HowToUse}}
                         </p>
-                        <div class="card-top-head">
-                            <div style="display: flex; justify-content: space-between;">
-                                <h6 class="para-extralight">{{$Translate.Updated}} : {{.DateString}}</h6>
+                    </a>
+                    <a href="https://github.com/spurtcms/channels" class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
+                            {{$Translate.Blocks.ExploreDocumentation}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="active hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
+                    id="collection-tab" data-bs-toggle="tab" href="#collection"  role="tab"
+                    aria-controls="collection" aria-selected="true">{{$Translate.Channell.MyChannels}}</a>
+            </li>
+            <!-- <li class="nav-item" role="presentation">
+                <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
+                    id="work-tab" data-bs-toggle="tab" href="#work"  role="tab" aria-controls="work"
+                    aria-selected="false" tabindex="-1">{{$Translate.Others}}</a>
+            </li> -->
+
+            <li class="ms-auto">
+                <p class="text-sm text-[#A1A1A1] font-normal max-[400px]:text-xs" id="records"> <span
+                        class="text-[#262626]">{{.count}}
+                    </span>
+                    {{if gt .count 1}}{{$Translate.Channell.Channels}}{{else}} {{$Translate.Channell.Channel}}{{end}}
+                    {{$Translate.Available}}</p>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="tab-pane fade show active" id="collection" role="tabpanel" aria-labelledby="collection-tab">
+                <div class="  grid-cols-[repeat(auto-fill,minmax(282px,1fr))] gap-y-6 gap-x-4 grid">
+                    {{if .channel}}
+                    {{range .channel}}
+                    {{if ne .ChannelType "others"}}
+                    <div class="border border-[#ECECEC] rounded f-chn flex flex-col">
+                        <a href="/channels/editchannel/{{.Id}}" class="group block p-[12px]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-bold-gray text-xs font-light mb-0 ">
+                                    <!-- Created By:<span
+                                    class="text-bold-black">
+                                    {{.AuthorDetails.Username}}</span> -->
+                                </h3>
+                                <p class="text-bold-gray text-11 font-light mb-0">({{.EntriesCount}}
+                                    {{if gt .EntriesCount
+                                    1}}{{$Translate.Channell.Blogavailable}}{{else}}{{$Translate.Channell.Entriesavailable}}{{end}}
+                                    )</p>
+                            </div>
+                            <h3
+                                class="text-base font-normal text-bold-black mb-2 group-hover:underline line-clamp-2 break-words chname">
+                                {{.ChannelName}}</h3>
+                            <p class="text-11 font-light text-bold-gray mb-2 leading-14">{{.ChannelDescription}}</p>
+                            <h5 class="text-xs font-light text-bold-gray mb-0">{{$Translate.Last}}
+                                {{$Translate.Updated}} : {{.DateString}}
+                            </h5>
+                        </a>
+                        <div
+                            class=" mt-auto flex justify-between items-center py-[11px] px-[12px] border-t border-[#ECECEC]">
+                            <label for="cb{{.Id}}"
+                                class="flex items-center cursor-pointer select-none text-dark dark:text-white">
+                                <div class="relative">
+                                    <input id="cb{{.Id}}" type="checkbox" onclick="ChannelStatus('{{.Id}}')" {{if eq
+                                        .IsActive 1}} checked {{end}} class="peer sr-only" />
+                                    <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                    <div
+                                        class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-full peer-checked:bg-primary">
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="dropdown open">
+                                <button class="bg-transparent pa-1 h-4 rounded bg-hover [&.show]:bg-[#F5F5F5]"
+                                    id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="/public/img\dots.svg" />
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end shadow-md border-0 right-0"
+                                    aria-labelledby="triggerId">
+                                    <a class="dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  border-b border-gray-100 text-black-500 text-xs font-normal"
+                                        href="/channels/editchannel/{{.Id}}"> {{$Translate.Configuration}}</a>
+                                    {{if eq .EntriesCount 0}}
+                                    <a id="delete-btn" data-id="{{.Id}}" data-bs-target="#deleteModal"
+                                        data-bs-toggle="modal"
+                                        class="dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  text-black-500 text-xs font-normal channeldelete"
+                                        href="#">
+                                        {{$Translate.Delete}}
+                                    </a>
+                                    {{else}}
+                                    <a id="delete-toast-btn" data-id="{{.Id}}" data-bs-target="#deleteModal"
+                                        data-bs-toggle="modal"
+                                        class="delete-toast-btn dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  text-black-500 text-xs font-normal"
+                                        href="javascript:void(0)">
+                                        {{$Translate.Delete}}
+                                    </a>
+                                    {{end}}
+                                    <!-- <a id="removeFromMyChannel" data-id="{{.Id}}" name="Id"
+                                        class="dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  text-black-500 text-xs font-normal {{if ne .Id 1}} channeldelete {{end}}"
+                                        href="/channels/channeltype?id={{.Id}}&channelType={{.ChannelType}}">
+                                        Remove from My channels
+                                    </a> -->
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="channels-card-btm">
-                        <div class="btn-group action-btn-grp">
-                            <button type="button" class="dropdown-toggle primary " data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                {{$Translate.Action}}
-                                <img src="/public/img/arrow-white-down.svg" alt="" />
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-
-                                    <a href="/channels/editchannel/{{.Id}}" class=" dropdown-item" type="button">
-                                        <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
-                                        {{$Translate.Configuration}}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item channeldelete" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#centerModal" data-id="{{.Id}}" {{if eq .Id 1}}
-                                        style="opacity: 0.5;" disabled {{end}}>
-                                        <span><img src="/public/img/delete.svg" alt="" /></span> {{$Translate.Delete}}
-                                    </a>
-                                </li>
-
-                            </ul>
+                    {{end}}
+                    {{end}}
+                    {{ else if eq .Searchtrue true}}
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noFilter.svg" alt="noFilter">
                         </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Filtersearch}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Filterkeyword}} </p>
 
-                        <div class="toggle">
-                            <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox"
-                                onclick="ChannelStatus('{{.Id}}')" {{if eq .IsActive 1}} checked {{end}} />
-                            <label class="tgl-btn" for="cb{{.Id}}"></label>
+                    </div>
+                    {{ else }}
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-span-full">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noData.svg" alt="nodate">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Oopsnodata}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Pagesorry}}
+                            {{$Translate.Gobackhome}}</p>
+                        <a href="/channels/newchannel"
+                            class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                            {{$Translate.Clickadd}} >></a>
+                    </div>
+                    {{end}}
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="work" role="tabpanel" aria-labelledby="work-tab">
+                <div class="  grid-cols-[repeat(auto-fill,minmax(282px,1fr))] gap-y-6 gap-x-4 grid">
+                    {{if .channel}}
+                    {{range .channel}}
+                    {{if eq .ChannelType "others"}}
+                    <div class="border border-[#ECECEC] rounded f-chn flex flex-col">
+                        <a href="/channels/editchannel/{{.Id}}" class="group block p-[12px]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-bold-gray text-xs font-light mb-0 ">
+                                    <!-- Created By:<span
+                                    class="text-bold-black">
+                                    {{.AuthorDetails.Username}}</span> -->
+                                </h3>
+                                <p class="text-bold-gray text-11 font-light mb-0">({{.EntriesCount}}
+                                    {{$Translate.Channell.Entriesavailable}}
+                                    )</p>
+                            </div>
+                            <h3
+                                class="text-base font-normal text-bold-black mb-2 group-hover:underline line-clamp-2  break-words chname">
+                                {{.ChannelName}}</h3>
+                            <p class="text-11 font-light text-bold-gray mb-2 leading-14">{{.ChannelDescription}}</p>
+                            <h5 class="text-xs font-light text-bold-gray mb-0">{{$Translate.Updated}} : {{.DateString}}
+                            </h5>
+                        </a>
+                        <div
+                            class="mt-auto flex justify-between items-center py-[11px] px-[12px] border-t border-[#ECECEC]">
+                            <label for="cb{{.Id}}"
+                                class="flex items-center cursor-pointer select-none text-dark dark:text-white">
+                                <div class="relative">
+                                    <input id="cb{{.Id}}" type="checkbox" onclick="ChannelStatus('{{.Id}}')" {{if eq
+                                        .IsActive 1}} checked {{end}} class="peer sr-only" />
+                                    <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                    <div
+                                        class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-full peer-checked:bg-primary">
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="dropdown open">
+                                <button class="bg-transparent  pa-1 h-4 rounded bg-hover" id="triggerId"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="/public/img\dots.svg" />
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end shadow-md border-0 right-0"
+                                    aria-labelledby="triggerId">
+                                    <a class="dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  border-b border-gray-100 text-black-500 text-xs font-normal"
+                                        href="/channels/editchannel/{{.Id}}"> {{$Translate.Configuration}}</a>
+                                    <a id="removeFromMyChannel" data-id="{{.Id}}" name="Id"
+                                        class="dropdown-item text-[#152027] hover:text-[#152027] hover:bg-[#F5F5F5]  text-black-500 text-xs font-normal {{if ne .Id 1}} channeldelete {{end}}"
+                                        href="/channels/channeltype?id={{.Id}}&channelType={{.ChannelType}}">
+                                        Add to My channels
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    {{end}}
+                    {{end}}
+                    {{end}}
+
                 </div>
-                {{end}}
-
-                {{ else if eq .EntriesCount 0}}
-
-                <div class="noData-foundWrapper nodatafound">
-
-                    <div class="empty-folder">
-                        <img src="/public/img/folder-sh.svg" alt="">
-                        <img src="/public/img/shadow.svg" alt="">
-                    </div>
-                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                    <p class="para">
-                        {{$Translate.Pagesorry}}
-                        {{$Translate.Gobackhome}}
-                    </p>
-                    <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal" data-bs-target="#rightModal"
-                        class="heading-three ">{{$Translate.Clickadd}} >></a>
-                </div>
-
-
-
-
-                {{else }}
-
-                <div class="noData-foundWrapper nodatafound">
-
-                    <div class="empty-folder">
-                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
-                        <img src="/public/img/nodatafilter.svg" alt="">
-                    </div>
-                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                </div>
-
-                {{end}}
-
             </div>
         </div>
     </div>
-    <!--2-->
-</div>
 
-<script>
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>
 
-{{template "footer" .}}
-<script src="/public/js/channels/channellist.js"></script>
-<script>
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>
+    <!--fullpagination-->
+    <div
+        class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff]">
+        <ul class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex">
+            {{if gt .count .Limit}}
 
-{{template "footerclose" .}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.count}}
+        </p>
+    </div>
+
+
+
+    {{template "footer" .}}
+    <script src="/public/js/channels/channellist.js"></script>
+
+    {{template "footerclose" .}}

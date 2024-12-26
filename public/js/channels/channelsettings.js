@@ -1,4 +1,5 @@
 var ckeditor1;
+var templatestatus=[]
 
 
 $(document).ready(function(){
@@ -194,3 +195,55 @@ $('#update-templatebtn').click(function(event){
 
     $('#mailtemplate_form').submit()
 })
+
+$(document).on('click','#update',function(){
+
+
+    var templateJSON = JSON.stringify(templatestatus)
+
+    $("#templatestatus").val(templateJSON)
+    console.log("templateJSON",templateJSON);
+
+   $('#channelsettingform')[0].submit();
+
+
+})
+
+$(document).on('click','#cancel',function(){
+
+    window.location.href="/channel/settings"
+ })
+
+
+ $(document).on('click','.templatecb',function(){
+
+
+   templateid= $(this).attr('data-id')
+
+   var  status
+
+   if($(this).prop('checked')){
+
+    status = '1'
+   }else{
+
+    status ='0'
+   }
+
+   var existingIndex = templatestatus.findIndex(function(item) {
+
+    return item.templateid === templateid;
+  });
+
+  if (existingIndex === -1) {
+
+    templatestatus.push({ "templateid": templateid, "status": status });
+
+  } else {
+
+    templatestatus[existingIndex].status = status;
+  }
+
+   console.log(templatestatus,"arraycheckk")
+
+ })

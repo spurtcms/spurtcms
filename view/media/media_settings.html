@@ -3,203 +3,185 @@
 {{$Translate := .translate}}
 
 
-<div class="page-wrapper space-wrapper cms-wrapper">
-
-    <div class="bread-crump">
-        <a href="/media/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="/media/settings" class="current-page">{{.Tabmenu}}</a>
+<section
+class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<header
+    class="max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+    <div class="mr-auto flex items-center gap-[6px]">
+        <a href="javascript:void(0);"
+            class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+            <img src="img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
+        <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Media</h2>
     </div>
-    {{template "cmstab" .}}
+    <div class="flex gap-[12px] items-center header-rht">
+        <a href=""
+            class="h-8 flex items-center justify-center px-[12px]  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline" id="typecancel">{{$Translate.Cancel}}</a>
+        <a href="javascript:void(0)"
+            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline" id="savetype">{{$Translate.Save}}</a>
+    </div>
+</header>
 
-    <div class="setting-container cms-container">
 
+<div class="block">
+   
+    {{template "mediatab" .}}
 
-        <div class="grd-2-fr">
-            <div class="left-cms">
-                <h1 class="heading">{{$Translate.Mediaa.Storageprovider}}</h1>
-                <p class="para color-light">{{$Translate.Mediaa.Storagecont}}
-                </p>
+    <div class="p-[32px_48px] max-w-[1920px] mx-auto container max-lg:p-[16px]">
+        <div
+            class=" grid grid-cols-[365px_1fr] max-lg:grid-cols-[1fr_1fr] gap-x-[80px] max-xl:gap-x-[24px] gap-y-0 justify-between max-md:gap-[24px] max-md:grid-cols-1  ">
+
+            <div class="block">
+                <h2 class=" text-[16px] font-[400] leading-[20px] text-[#262626] mb-[6px]
+                ">Storage Provider</h2>
+                <p class="text-[12px] font-[400] leading-[15px] text-[#717171]"> Here, you can manage all
+                    your stored files across various categories. Select one of the
+                    storage options to view, upload, or organize your media files.</p>
             </div>
-            <div class="channel-edit">
-                <div class="radio radio-label">
-                    <input id="radio-1" name="radio" type="radio" {{if eq .Storage.SelectedType "local" }} checked
-                        {{end}} data-select="local">
-                    <label for="radio-1" class="radio-label">
-                        <div class="to-select-cms">
-                            <img src="/public/img/cms-setting4.svg" />
-                            <p>Local Storage</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio radio-label">
-                    <input id="radio-2" name="radio" type="radio" {{if eq .Storage.SelectedType "aws" }} checked {{end}}
-                        data-select="aws">
-                    <label for="radio-2" class="radio-label">
-                        <div class="to-select-cms">
-                            <img src="/public/img/cms-setting3.svg" />
-                            <p>Amazon S3</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio radio-label"  style="opacity: 0.5;">
-                    <input id="radio-3" name="radio" type="radio" {{if eq .Storage.SelectedType "azure" }} checked
-                        {{end}} data-select="azure" disabled>
-                    <label for="radio-3" class="radio-label">
-                        <div class="to-select-cms">
-                            <img src="/public/img/cms-setting1.svg" />
-                            <p>Azure</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio radio-label"  style="opacity: 0.5;">
-                    <input id="radio-4" name="radio" type="radio" {{if eq .Storage.SelectedType "drive" }} checked
-                        {{end}} data-select="drive" disabled>
-                    <label for="radio-4" class="radio-label">
-                        <div class="to-select-cms">
-                            <img src="/public/img/cms-setting2.svg" />
-                            <p>Google Drive</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="cms-sep"></div>
 
-        <div class="grd-2-fr localstoragesetting" {{if ne .Storage.SelectedType "local" }} style="display: none;"
-            {{end}}>
-            <div class="left-cms">
-                <div class="selected-cms">
-                    <img src="/public/img/cms-setting4.svg" />
-                    <div>
-                        <h1 class="heading-three">{{$Translate.Mediaa.Localstorage}}</h1>
-                        <p class="para color-light">{{$Translate.Mediaa.Localstoragecont}}
-                        </p>
+            <div class="flex items-center gap-[32px] flex-wrap max-md:gap-[16px]">
+             
+                <input id="radio-2" name="radio" type="radio" {{if eq .Storage.SelectedType "aws" }} checked {{end}}
+                data-select="aws" class="hidden peer/amazon">
+                <input id="radio-3" name="radio" type="radio" {{if eq .Storage.SelectedType "azure" }} checked
+                {{end}} data-select="azure" class="hidden peer/drive " disabled>
+                <input id="radio-4" name="radio" type="radio" {{if eq .Storage.SelectedType "drive" }} checked
+                {{end}} data-select="drive" class="hidden peer/azure " disabled>
+<!-- 
+                <label for="radio-1"
+                    class=" relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/member:text-[#152027] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/local:before:bg-[url('../public/img/radio-checked.svg')]  ">
+                    <div class="mediasetting-img-dv">
+                        <img src="/public/img\local-storage.svg" alt="local-storage">
                     </div>
+                    Local storage
+                </label> -->
+
+                <label for="radio-2" class="radio-label relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/member:text-[#152027] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                    peer-checked/amazon:before:bg-[url('../public/img/radio-checked.svg')]  ">
+                    <div class="mediasetting-img-dv">
+                        <img src="/public/img/amazonS3.svg" alt="amazon s3">
+                    </div>
+                    Amazon S3
+                </label>
+
+
+
+                <label for="radio-3" class=" relative  flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/member:text-[#152027] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none
+                     peer-checked/drive:before:bg-[url('../public/img/radio-checked.svg')] opacity-50 ">
+                    <div class="mediasetting-img-dv">
+                        <img src="/public/img/google-drive.svg" alt="google drive">
+                    </div>
+                    Google Drive
+                </label>
+
+
+                <label for="radio-4" class=" relative  flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/member:text-[#152027] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                    peer-checked/azure:before:bg-[url('../public/img/radio-checked.svg')] opacity-50 ">
+                    <div class="mediasetting-img-dv">
+                        <img src="/public/img\azure.svg" alt="azure">
+                    </div>
+                    Azure
+                </label>
+
+
+
+
+            </div>
+            <!-- <div class="mb-[16px] flex gap-8 items-center">
+                <input type="radio" name="radio" id="radio4" class="hidden peer/member">
+                <input type="radio" name="radio" id="radio0" class="hidden peer/public">
+
+                <label for="radio4" class=" relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/member:text-[#152027] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/member:before:bg-[url('../img/radio-checked.svg')]  ">
+                    Member Access</label>
+
+                <label for="radio0" class="relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-normal text-[#222222] peer-checked/public:text-[#152027]  tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked.svg')]  ">
+                    Public Access</label>
+            </div> -->
+            <div class="border-b border-[#EDEDED] my-[24px] col-span-full max-md:m-0">
+
+            </div>
+            <!-- <div class=" grid grid-cols-[365px_1fr] max-lg:grid-cols-[1fr_1fr] gap-x-[80px] max-xl:gap-x-[24px] gap-y-0 justify-between max-md:gap-[24px] max-md:grid-cols-1 col-span-full localstoragesetting {{if ne .Storage.SelectedType "local" }} hidden
+            {{end}}"  >
+            <div class="flex items-start gap-[12px] ">
+                <div class="provider-logo">
+                    <img src="/public/img\local-storage.svg" alt="amazonS3" class="w-[32px] min-w-[32px]">
+                </div>
+                <div>
+                    <h4 class="text-[14px] font-[400] leading-[17.5px] text-[#152027] mb-[6px]">{{$Translate.Mediaa.Localstorage}}</h4>
+                    <p class="text-[12px] font-[300] leading-[15px] text-[#525252] text-left">{{$Translate.Mediaa.Localstoragecont}}.</p>
                 </div>
             </div>
             <form action="/media/settings/update" method="post" id="localsettingform">
                 <input type="hidden" name="csrf" value="{{.csrf}}">
                 <input type="hidden" name="type" value="local">
-                <div class="channel-input">
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Mediaa.Foldername}}*</label>
-                        <div class="ig-row">
-                            <input type="text" name="local" placeholder="{{$Translate.Mediaa.Enterfoldername}} " value="{{.local}}">
-                        </div>
-                    </div>
+            <div class="block">
+                <div class="mb-[16px]">
+                    <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Mediaa.Foldername}}</label>
+                    <input type="text" name="local" placeholder="{{$Translate.Mediaa.Enterfoldername}} " value="{{.local}}"
+                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+            </div> -->
 
-        <div class="grd-2-fr amazonsetting" {{if ne .Storage.SelectedType "aws" }} style="display: none;" {{end}}>
-            <div class="left-cms">
-                <div class="selected-cms">
-                    <img src="/public/img/cms-setting3.svg" />
-                    <div>
-                        <h1 class="heading-three">{{$Translate.Mediaa.Amazon}}</h1>
-                        <p class="para color-light">{{$Translate.Mediaa.Amazoncont}}
-                        </p>
-                    </div>
+            <div class=" grid grid-cols-[365px_1fr] max-lg:grid-cols-[1fr_1fr] gap-x-[80px] max-xl:gap-x-[24px] gap-y-0 justify-between max-md:gap-[24px] max-md:grid-cols-1 col-span-full amazonsetting {{if ne .Storage.SelectedType "aws" }} hidden{{end}}"  >
+            <div class="flex items-start gap-[12px] ">
+                <div class="provider-logo">
+                    <img src="/public/img/amazonS3.svg" alt="amazonS3" class="w-[32px] min-w-[32px]">
+                </div>
+                <div>
+                    <h4 class="text-[14px] font-[400] leading-[17.5px] text-[#152027] mb-[6px]">Amazon</h4>
+                    <p class="text-[12px] font-[300] leading-[15px] text-[#525252] text-left">Connect and
+                        manage your files stored on Amazon S3. This cloud storage solution offers
+                        high durability, availability, and scalability for all your media needs.</p>
                 </div>
             </div>
             <form action="/media/settings/update" method="post" id="s3settingform">
                 <input type="hidden" name="csrf" value="{{.csrf}}">
                 <input type="hidden" name="type" value="aws">
-                <div class="channel-input">
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Mediaa.Acckeyid}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="awsvalid" name="awsid" placeholder="{{$Translate.Mediaa.Accidplcholder}}..." value="{{.aws.AccessId}}">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Mediaa.Accesskey}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="awsvalid" name="awskey" placeholder="{{$Translate.Mediaa.Acckeyplcholder}}..." value="{{.aws.AccessKey}}">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Mediaa.Region}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="awsvalid" name="awsregion" placeholder="{{$Translate.Mediaa.Regionplcholder}}.."
-                                value="{{.aws.Region}}">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Mediaa.Buckername}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="awsvalid" name="awsbucketname" placeholder="{{$Translate.Mediaa.Bucketnameplcholder}}..."
-                                value="{{.aws.BucketName}}">
-                        </div>
-                    </div>
+            <div class="block">
+                <div class="mb-[16px]">
+                    <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Mediaa.Acckeyid}}</label>
+                    <input type="text" name="awsid" placeholder="{{$Translate.Mediaa.Accidplcholder}}..." value="{{.aws.AccessId}}"
+                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2] awsvalid">
+                </div>
+                <div class="mb-[16px]">
+                    <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Mediaa.Accesskey}}</label>
+                    <input type="text" name="awskey" placeholder="{{$Translate.Mediaa.Acckeyplcholder}}..." value="{{.aws.AccessKey}}"
+                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2] awsvalid">
+                </div>
+                <div class="mb-[16px]">
+                    <label
+                        class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Mediaa.Region}}</label>
+                    <input type="text" name="awsregion" placeholder="{{$Translate.Mediaa.Regionplcholder}}.."
+                    value="{{.aws.Region}}"
+                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2] awsvalid">
+                </div>
+                <div class="block">
+                    <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Mediaa.Buckername}}</label>
+                    <input type="text"  name="awsbucketname" placeholder="{{$Translate.Mediaa.Bucketnameplcholder}}..."
+                    value="{{.aws.BucketName}}"
+                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2] awsvalid">
                 </div>
             </form>
-        </div>
-
-
-        <div class="grd-2-fr azuresetting" style="display: none;">
-            <div class="left-cms">
-                <div class="selected-cms">
-                    <img src="/public/img/cms-setting1.svg" />
-                    <div>
-                        <h1 class="heading-three">Azure</h1>
-                        <p class="para color-light">Manage your files with Azure Storage, a reliable and scalable cloud storage solution by Microsoft. Easily access and organize your media files in a secure environment.
-                        </p>
-                    </div>
-                </div>
             </div>
-            <form action="/media/settings/update" method="post" id="azuresettingform">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <input type="hidden" name="type" value="azure">
-                <div class="channel-input azure">
-                    <div class="input-group">
-                        <label for="" class="input-label">Azure Account Name</label>
-                        <div class="ig-row">
-                            <input type="text" name="azureacc" placeholder="enter the id..." value="{{.azure.StorageAccount}}">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="" class="input-label">Azure Storage Key</label>
-                        <div class="ig-row">
-                            <input type="text" name="azurekey" placeholder="enter the key..." value="{{.azure.AccountKey}}">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="" class="input-label">Container Name</label>
-                        <div class="ig-row">
-                            <input type="text" name="azurecontainer" placeholder="enter the region.." value="{{.azure.ContainerName}}">
-                        </div>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
 
-        <div class="grd-2-fr drivesetting" style="display: none;" >
-            <div class="left-cms">
-                <div class="selected-cms">
-                    <img src="/public/img/cms-setting1.svg" />
-                    <div>
-                        <h1 class="heading-three">Google Drive</h1>
-                        <p class="para color-light">Integrate and manage your files stored on Google Drive with easy access and sharing capabilities for all your media files.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <form action="/media/settings/update" method="post" id="azuresettingform">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <input type="hidden" name="type" value="drive">
-                <div class="channel-input azure">
-                    
-                </div>
-            </form>
-        </div>
     </div>
-    <div class="configure-btn-grp">
-        <button class="btn-reg btn-lg secondary" id="typecancel">{{$Translate.Cancel}}</button>
-        <button class="btn-reg btn-lg primary" type="button" id="savetype">{{$Translate.Save}}</button>
-    </div>
+
+
 </div>
+
+
+
+
 
 
 

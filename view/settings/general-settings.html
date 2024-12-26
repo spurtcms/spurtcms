@@ -1,240 +1,291 @@
 {{template "header" .}}
-{{template "settingsmenu" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<form action="/settings/general-settings/update" method="post" id="uptform" name="uptform">
-    <input type="hidden" name="csrf" value="{{.csrf}}">
-    <div class="page-wrapper settings-wrapper">
-        <div class="setting-container cms-new-containers">
-            <div class="settings-grid">
-                <div class="left-cms">
-                    <h1 class="heading">{{$Translate.Setting.Businessname}}</h1>
-                    <p class="para color-light">{{$Translate.Setting.Choosecompany}}
+<section
+    class="sectionclass  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    {{$roleId := .RoleId}}
+
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
+                {{$Translate.Setting.Generalsettings}}
+            </h2>
+        </div>
+
+
+        <div class="flex space-x-[12px] header-rht">
+            <a href="{{if or (eq $roleId 2) (eq $roleId 1)}} /settings/general-settings/ {{else}} # {{end}}"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-not-allowed {{end}}"
+                id="genSettingsCancelBtn" data-role-id="{{.RoleId}}">{{$Translate.Cancel}}</a>
+            <a href="#"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-not-allowed {{end}}"
+                id="settingsUpdate"
+                data-status="{{if or (eq $roleId 2) (eq $roleId 1)}}1{{else}}0{{end}}">{{$Translate.Update}}</a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+
+        {{template "settingsmenu" .}}
+
+        <!--rightside-->
+        <div class="p-[24px_16px] @container setConatiner">
+            <div
+                class=" generalContainer @[500px]:grid-cols-2 grid-cols-1 grid  gap-[24px] xl:gap-[80px] items-center pb-[24px] mb-[24px] border-b border-[#D9D9D9]">
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-base mb-[6px]  font-normal">
+                        {{$Translate.Setting.Businessname}}
+                    </h3>
+                    <p class="text-[#262626] text-sm  font-normal leading-[16.41px]">
+                        {{$Translate.Setting.Choosecompany}}
                     </p>
                 </div>
-                <div class="channel-edit new-temp">
-                    <div class="input-group">
-                        <label for="" class="input-label">{{$Translate.Setting.Businessname}}</label>
-                        <div class="ig-row">
-                            <input type="text" name="companyname" placeholder="{{$Translate.Setting.Companyplcholder}}" value="{{.GeneralSetting.CompanyName}}">
-                        </div>
-                    </div>
+                <div>
+                    <label for="companyName"
+                        class="text-[#262626] text-sm  font-normal leading-[16.41px] mb-[6px] font-roboto">
+                    </label>
+                    <input id="companyName" type="text" class="bg-[#F7F7F5] rounded-[4px] w-full block h-[36px] p-[8px] {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-text {{else}} cursor-default 
+                        {{end}}" value="{{.GeneralSetting.CompanyName}}" {{if or (eq $roleId 2) (eq $roleId 1)}}
+                        {{else}} readonly {{end}}>
                 </div>
             </div>
-            <div class="settings-grid myprofile-brd ">
-                <div class="update-profile-cont myprouploaddiv">
-                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Logoupload}}</h4>
-                    <p class="para-light" id="logo-insert">{{$Translate.Personalize.Logocontent}}</p>
+            <div
+                class="grid generalContainer @[500px]:grid-cols-2 grid-cols-1  gap-[24px] xl:gap-[80px] items-start pb-[24px] mb-[24px] border-b border-[#D9D9D9]">
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-base mb-[6px]  font-normal">
+                        {{$Translate.Personalize.Logoupload}}</h3>
+                    <p class="text-[#262626] text-sm  font-normal leading-[16.41px]">
+                        {{$Translate.Personalize.Logocontent}}</p>
                 </div>
+                <div>
 
-                <div class="upload-logo" id="upload-logo">
-                    <img class="logosrc"
-                        src='{{if .Menu.LogoPath}}{{.Menu.LogoPath}}{{else}}/public/img/logo.svg{{end}}'
-                        alt="">
-                    <input type="hidden" name="logo_imgpath"
-                        value="{{if .Menu.LogoPath}}{{.Menu.LogoPath}}{{else}}/public/img/logo.svg{{end}}">
-                    <input type="hidden" id="logo-input">
-                    <!-- <p class="para" >Drag your file or choose from directory</p>
-                    <div class="upload-button" style="display: none;">
-                        <button class="btn-reg btn-xs primary theme-color" > Browse </button>
-                        <input type="file">
-                    </div> -->
-                    <button class="delete-flag" type="button" id="delete-logo"><img
-                            src="/public/img/delete-white-icon.svg" alt=""></button>
-                    <div class="hover-delete-img"></div>
-
+                    <label for="logo" class="bg-[#F7F7F5] w-full h-[180px] rounded-[4px] {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}}" id="logoLabel" data-role-id={{$roleId}}>
+                        <input type="file" id="logo" class="hidden" accept="image/png, image/jpeg,image/jpg,image/svg">
+                        <img src="{{.GeneralSetting.LogoPath}}" alt="" class="w-300 h-[180px] px-[9.5em]" id="prof-crop"
+                            data-id="4">
+                    </label>
+                    <p id="myfile-error" class="text-[12px] text-red-700 hidden" for="profileImage">
+                        Please
+                        choose images with jpg /jpeg / png formats only</p>
                 </div>
-
             </div>
 
-
-            <div class="settings-grid myprofile-brd">
-                <div class="update-profile-cont expandlogodiv">
-                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Expandlogoupload}}</h4>
-                    <p class="para-light" id="expandlogo-insert">{{$Translate.Personalize.Logocontent}}</p>
+            <div
+                class="grid generalContainer @[500px]:grid-cols-2 grid-cols-1  gap-[24px] xl:gap-[80px] items-start pb-[24px] mb-[24px] border-b border-[#D9D9D9]">
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-base mb-[6px]  font-normal">
+                        {{$Translate.Languages.Language}}</h3>
+                    <p class="text-[#262626] text-sm  font-normal leading-[16.41px]">
+                        {{$Translate.Setting.Chooselang}}</p>
                 </div>
 
-                <div class="upload-logo" id="upload-expandlogo">
-                    <img src='{{if .Menu.ExpandLogoPath}}{{.Menu.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}'
-                        alt="">
-                    <input type="hidden" id="expandlogo-input" name="expandlogo_imgpath"
-                        value="{{if .Menu.ExpandLogoPath}}{{.Menu.Personalize.ExpandLogoPath}}{{else}}/public/img/logo-bg.svg{{end}}">
-                    <!-- <p class="para">Drag your file or choose from directory</p>
-                    <div class="upload-button">
-                        <button class="btn-reg btn-xs primary theme-color"> Browse </button>
-                        <input type="file">
-                    </div> -->
-                    <button class="delete-flag" type="button" id="delete-expandlogo"><img
-                            src="/public/img/delete-white-icon.svg" alt=""></button>
-                    <div class="hover-delete-img"></div>
+                <div class="">
+                    <h3 class="mb-[24px] text-[#262626] leading-5 text-base font-normal">
+                        {{$Translate.Setting.Choosedefault}}</h3>
+                    {{$LangId := .GeneralSetting.LanguageId}}
 
-                </div>
-
-            </div>
-            <div class="settings-grid">
-                <div class="left-cms">
-                    <h1 class="heading">{{$Translate.Language}}</h1>
-                    <p class="para color-light">{{$Translate.Setting.Chooselang}}
-                    </p>
-                </div>
-                <div class="channel-edit">
-                    <h3>{{$Translate.Setting.Choosedefault}}</h3>
-                    {{$DEFAULT_ID := .GeneralSetting.LanguageId}}
                     {{range .Langugage}}
                     {{if eq .IsStatus 1}}
-                    <div class="radio radio-label">
-                        <input id="radio-{{.Id}}" name="language" type="radio" {{if eq .Id $DEFAULT_ID}} checked {{end}} value="{{.Id}}">
-                        <label for="radio-{{.Id}}" class="radio-label">
-                            <p>{{.LanguageName}}</p>
+                    <div class="mb-[16px]   last-of-type:mb-0">
+                        <input type="radio" name="lang" id="radio{{.Id}}" value="{{.Id}}" class="hidden peer langInput"
+                            {{if eq $LangId .Id}} checked {{end}}>
+
+                        <label for="radio{{.Id}}"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center  text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                            data-role-id="{{$roleId}}">
+                            {{.LanguageName}}
                         </label>
                     </div>
                     {{end}}
                     {{end}}
                 </div>
+
             </div>
-            <div class="settings-grid">
-                <div class="left-cms">
-                    <h1 class="heading">{{$Translate.Setting.Datetimeformet}}</h1>
-                    <p class="para color-light">{{$Translate.Setting.Choosedateformat}}
-                    </p>
+
+            <div
+                class="grid generalContainer @[500px]:grid-cols-2 grid-cols-1  gap-[24px] xl:gap-[80px] items-start pb-[24px] mb-[24px] border-b border-[#D9D9D9]">
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-base mb-[6px]  font-normal">
+                        {{$Translate.Setting.Datetimeformet}}</h3>
+                    <p class="text-[#262626] text-sm  font-normal leading-[16.41px]">
+                        {{$Translate.Setting.Choosedateformat}}</p>
                 </div>
-                <div class="list-settings-radio">
-                    <div class="channel-edit">
-                        <h3>{{$Translate.Setting.Setyourdate}}</h3>
-                        <div class="radio radio-label">
-                            <input id="radio-6" name="dateformat" type="radio" value="mm/dd/yyyy" {{if eq .GeneralSetting.DateFormat `mm/dd/yyyy` }} checked {{end}}>
-                            <label for="radio-6" class="radio-label">
-                                <p>MM/DD/YYYY</p>
-                            </label>
-                        </div>
-                        <div class="radio radio-label">
-                            <input id="radio-7" name="dateformat" type="radio" value="dd/mm/yyyy" {{if eq .GeneralSetting.DateFormat `dd/mm/yyyy` }} checked {{end}}>
-                            <label for="radio-7" class="radio-label">
-                                <p>DD/MM/YYYY</p>
-                            </label>
-                        </div>
-                        <div class="radio radio-label">
-                            <input id="radio-8" name="dateformat" type="radio" value="dd-mm-yyyy" {{if eq .GeneralSetting.DateFormat `dd-mm-yyyy` }} checked {{end}}>
-                            <label for="radio-8" class="radio-label">
-                                <p>DD-MM-YYYY</p>
-                            </label>
-                        </div>
-                        <div class="radio radio-label">
-                            <input id="radio-9" name="dateformat" type="radio" value="yyyy-mm-dd" {{if eq .GeneralSetting.DateFormat `yyyy-mm-dd` }} checked {{end}}>
-                            <label for="radio-9" class="radio-label">
-                                <p>YYYY-MM-DD</p>
-                            </label>
-                        </div>
-                        <div class="radio radio-label">
-                            <input id="radio-14" name="dateformat" type="radio" value="dd mmm yyyy" {{if eq .GeneralSetting.DateFormat `dd mmm yyyy` }} checked {{end}}>
-                            <label for="radio-14" class="radio-label">
-                                <p>DD MMM YYYY</p>
-                            </label>
-                        </div>
+                <div class="flex space-x-[32px] flex-wrap">
+
+                    <div class="">
+                        <h3 class="mb-[24px] text-[#262626] leading-5 text-base font-normal">
+                            {{$Translate.Setting.Setyourdate}}
+                        </h3>
+                        <input type="radio" name="radio" id="radio8" class="hidden peer/dateFormat1 dateFormat"
+                            value="mm/dd/yyyy" {{if eq .GeneralSetting.DateFormat `mm/dd/yyyy`}} checked {{end}}>
+                        <input type="radio" name="radio" id="radio9" class="hidden peer/dateFormat2 dateFormat"
+                            value="dd/mm/yyyy" {{if eq .GeneralSetting.DateFormat `dd/mm/yyyy`}} checked {{end}}>
+                        <input type="radio" name="radio" id="radio10" class="hidden peer/dateFormat3 dateFormat"
+                            value="dd-mm-yyyy" {{if eq .GeneralSetting.DateFormat `dd-mm-yyyy`}} checked {{end}}>
+                        <input type="radio" name="radio" id="radio11" class="hidden peer/dateFormat4 dateFormat"
+                            value="yyyy-mm-dd" {{if eq .GeneralSetting.DateFormat `yyyy-mm-dd`}} checked {{end}}>
+                        <input type="radio" name="radio" id="radio12" class="hidden peer/dateFormat5 dateFormat"
+                            value="dd mmm yyyy" {{if eq .GeneralSetting.DateFormat `dd mmm yyyy`}} checked {{end}}>
+
+                        <label for="radio8"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]     last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/dateFormat1:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                                    peer-checked/dateFormat1:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            MM/DD/YYYY
+                        </label>
+
+                        <label for="radio9"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]     last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/dateFormat2:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                                    peer-checked/dateFormat2:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            DD/MM/YYYY
+                        </label>
+                        <label for="radio10"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]      last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/dateFormat3:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}}before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                                    peer-checked/dateFormat3:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            DD-MM-YYYY
+                        </label>
+                        <label for="radio11"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]      last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/dateFormat4:text-[#262626] tracking-[0.005em]
+                            before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                            peer-checked/dateFormat4:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            YYYY-MM-DD
+                        </label>
+                        <label for="radio12" class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]      last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/dateFormat5:text-[#262626] tracking-[0.005em]
+                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                    peer-checked/dateFormat5:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            DD MMM YYYY
+                        </label>
+
                     </div>
-                    <div class="channel-edit">
-                        <h3>{{$Translate.Setting.Setyourtime}}</h3>
-                        <div class="radio radio-label">
-                            <input id="radio-10" name="timeformat" type="radio" {{if eq .GeneralSetting.TimeFormat `12` }} checked {{end}} value="12">
-                            <label for="radio-10" class="radio-label">
-                                <p>12-hours with AM/PM</p>
-                            </label>
-                        </div>
-                        <div class="radio radio-label">
-                            <input id="radio-11" name="timeformat" type="radio" {{if eq .GeneralSetting.TimeFormat `24` }} checked {{end}} value="24">
-                            <label for="radio-11" class="radio-label">
-                                <p>24-hours</p>
-                            </label>
-                        </div>
+
+                    <div class="">
+                        <h3 class="mb-[24px] text-[#262626] leading-5 text-base font-normal">
+                            {{$Translate.Setting.Setyourtime}}
+                        </h3>
+                        <input type="radio" name="radio3" id="timeFormat1" class="hidden peer/timeFormat1 timeFormat"
+                            value="12" {{if eq .GeneralSetting.TimeFormat `12`}} checked {{end}}>
+                        <input type="radio" name="radio3" id="timeFormat2" class="hidden peer/timeFormat2 timeFormat"
+                            value="24" {{if eq .GeneralSetting.TimeFormat `24`}} checked {{end}}>
+
+
+                        <label for="timeFormat1"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]     last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/timeFormat1:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/timeFormat1:before:bg-[url('/public/img/radio-checked.svg')] leading-none checkRole"
+                            data-role-id="{{$roleId}}">
+                            12-hours with AM/PM
+                        </label>
+
+                        <label for="timeFormat2"
+                            class=" relative {{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} flex before:mr-[6px] items-center mb-[16px]      last-of-type:mb-0 text-sm font-normal text-[#222222] peer-checked/timeFormat2:text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:{{if or (eq $roleId 2) (eq $roleId 1)}} cursor-pointer {{else}} cursor-default
+                         {{end}} before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none 
+                                    peer-checked/timeFormat2:before:bg-[url('/public/img/radio-checked.svg')] leading-none  checkRole"
+                            data-role-id="{{$roleId}}">
+                            24-hours
+                        </label>
+
                     </div>
                 </div>
+
             </div>
-            <div class="settings-grid">
-                <div class="left-cms">
-                    <h1 class="heading">{{$Translate.Setting.Timezone}}</h1>
-                    <p class="para color-light">{{$Translate.Setting.Choosetimezone}}
-                    </p>
+
+            <div class="grid generalContainer @[500px]:grid-cols-2 grid-cols-1  gap-[24px] xl:gap-[80px] items-start ">
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-base mb-[6px]  font-normal ">
+                        {{$Translate.Setting.Timezone}}
+                    </h3>
+                    <p class="text-[#262626] text-sm  font-normal leading-[16.41px]">
+                        {{$Translate.Setting.Choosetimezone}}</p>
                 </div>
-                <div class="settings-select">
-
-                    <div class="input-group  user-drop-down ">
-
-                        <label for="" class="input-label">{{$Translate.Setting.Selecttimezone}}</label>
-
-                        <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                           {{.GeneralSetting.TimeZone}}
+                <div>
+                    <h3 class="text-[#262626] leading-5 text-sm mb-[6px]  font-normal font-roboto">
+                        {{$Translate.Setting.Selecttimezone}}</h3>
+                    <div class="dropdown open ">
+                        <a href="#"
+                            class="rounded-[4px] p-[12px] h-9 border-light-300 border no-underline w-full flex justify-between items-center "
+                            id="triggerId" {{if or (eq $roleId 2) (eq $roleId 1)}}
+                            data-bs-toggle="dropdown" {{end}} aria-haspopup="true" data-bs-auto-close="outside"
+                            aria-expanded="false">
+                            <span class="text-bold-gray text-sm font-normal"
+                                id="timezoneText">{{.GeneralSetting.TimeZone}}</span>
+                            {{if or (eq $roleId 2) (eq $roleId 1)}} <img src="/public/img/drop-down-img.svg">
+                            {{end}}
                         </a>
-                        <input type="hidden" id="timezone" value="{{.GeneralSetting.TimeZone}}" name="timezon">
-
-                        <div class="dropdown-menu dropdown-role" aria-labelledby="triggerId" style="height: 150px !important;">
-
-                            <div class="ig-row ig-channel-input">
-
-                                <input type="text" id="searchdropdownrole" class="search" name="keyword"
-                                    placeholder="{{$Translate.Setting.Searchtimezone}}" value="">
+                        <div class="dropdown-menu min-w-full w-full border-0 focus:bg-transparent  drop-shadow-4 h-52 overflow-auto scrollbar-thin"
+                            aria-labelledby="triggerId">
+                            <div class="px-[12px] pb-[8px] relative">
+                                <input type="text" placeholder="Search for Timezone"
+                                    class="border border-[#ECECEC] pl-10 text-[#222222] text-xs font-light w-full h-8 rounded-[3px]"
+                                    id="searchdropdownrole">
+                                <img src="/public/img/categories-search.svg" class="absolute top-2 left-6">
                             </div>
 
-                            <div class="dropdown-filter-roles">
-                                {{range .TimeZone}}
-                                <button type="button" data-id="" class="dropdown-item drop-timezone">{{.}}</button>
-                                {{end}}
+                            {{$defaultTimezone := .GeneralSetting.TimeZone}}
+                            {{range .TimeZone}}
+                            <a class="chk-group chk-group-label dropdown-item h-8 lg items-center flex "
+                                id="timezoneDropdown">
+                                <input type="radio" id="Check{{.Id}}" name="timezoneRadio"
+                                    class="hidden peer timezoneInputs" {{if eq .Timezone $defaultTimezone}} checked
+                                    {{end}} value="{{.Timezone}}">
+                                <label for="Check{{.Id}}"
+                                    class=" h-[14px] relative cursor-pointer flex before:mr-[6px] w-fit  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')] timeZone ">
+                                    <p class="text-bold-black text-xs font-normal mb-0  timeZoneVal">{{.Timezone}}</p>
+                                </label>
+                            </a>
+                            {{end}}
+                            <div class="noData-foundWrapper" id="nodatafounddesign" style="display: none;">
 
-                                <div class="noData-foundWrapper" id="nodatafounddesign"
-                                            style="margin-top: -40px;display: none;">
+                                <div class="empty-folder flex flex-col items-center">
+                                    <img src="/public/img/noFilter.svg" alt="">
+                                    <img src="/public/img/shadow.svg" alt="">
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        No data found with current filters</h1>
+                                </div>
 
-                                            <div class="empty-folder">
-                                                <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
-                                                <img src="/public/img/shadow.svg" alt="">
-                                            </div>
-                                            <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                                {{$Translate.Oopsnodata}}</h1>
-
-                                        </div>
 
                             </div>
-
                         </div>
-
-
                     </div>
-
                 </div>
+
+
             </div>
-            <!-- <div class="settings-grid center">
-                <div class="left-cms">
-                    <h1 class="heading">Email Templates</h1>
-                    <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet um dolor sit
-                        amet.Lorem ipsum dolor sit amet
-                    </p>
-                </div>
-                <div class="settings-select">
-                    <div class="toggle">
-                        <input class="tgl tgl-light" name="mem_activestat" id="cb1" value="1"
-                            type="checkbox">
-                        <label class="tgl-btn" for="cb1"></label>
-                    </div>
-                    <p class="para color-light">Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet um dolor sit
-                        amet.Lorem ipsum dolor sit amet
-                    </p>
-                    <a href="#">
-                        Edit
-                    </a>
-                </div>
-            </div> -->
         </div>
     </div>
-    <div class="configurationContent-btm">
-        <a href="/settings"><button class="btn-reg btn-lg secondary" type="button" id="back">{{$Translate.Cancel}}</button></a>
-        <button class="btn-reg btn-lg primary theme-color " id="uptprofile">{{$Translate.Update}}</button>
-    </div>
-</form>
-{{template "mediamodal" .}}
 
-{{template "mediadecidemodal" .}}
-
-{{template "cropmodal" .}}
+</section>
 
 {{template "footer" .}}
 <script src="/public/js/media/media.js"></script>

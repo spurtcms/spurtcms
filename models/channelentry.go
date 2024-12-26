@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/spurtcms/pkgcontent/channels"
+	chn "github.com/spurtcms/channels"
 	"gorm.io/gorm"
 )
 
@@ -88,9 +88,28 @@ type ExportData struct {
 	Status      string
 }
 
-func Exportentriesdata(exportdata *[]channels.TblChannelEntries, id []int) error {
+type TblModule struct {
+	Id                   int
+	ModuleName           string
+	IsActive             int
+	CreatedBy            int
+	CreatedOn            time.Time
+	CreatedDate          string `gorm:"<-:false"`
+	DefaultModule        int
+	ParentId             int
+	IconPath             string
+	OrderIndex           int
+	Description          string
+	DisplayName          string `gorm:"column:display_name;<-:false"`
+	RouteName            string `gorm:"column:route_name;<-:false"`
+	RouteParentId        int    `gorm:"column:parent_id;<-:false"`
+	FullAccessPermission int
+	GroupFlg             int
+}
 
-	if err := db.Table("tbl_channel_entries").Select("tbl_channel_entries.*,tbl_users.username,tbl_channels.channel_name").Joins("inner join tbl_users on tbl_users.id = tbl_channel_entries.created_by").Joins("inner join tbl_channels on tbl_channels.id = tbl_channel_entries.channel_id").Where("tbl_channel_entries.is_deleted=0 and tbl_channel_entries.id IN ?", id).Order("tbl_channel_entries.id desc").Preload("TblChannelEntryField", func(db *gorm.DB) *gorm.DB {
+func Exportentriesdata(exportdata *[]chn.Tblchannelentries, id []int, tenantid int) error {
+
+	if err := DB.Table("tbl_channel_entries").Select("tbl_channel_entries.*,tbl_users.username,tbl_channels.channel_name").Joins("inner join tbl_users on tbl_users.id = tbl_channel_entries.created_by").Joins("inner join tbl_channels on tbl_channels.id = tbl_channel_entries.channel_id").Where("tbl_channel_entries.is_deleted=0 and tbl_channel_entries.id IN ? and (tbl_channel_entries.tenant_id is NULL or tbl_channel_entries.tenant_id = ?)", id, tenantid).Order("tbl_channel_entries.id desc").Preload("TblChannelEntryField", func(db *gorm.DB) *gorm.DB {
 		return db.Select("tbl_channel_entry_fields.*,tbl_fields.field_type_id").Joins("inner join tbl_fields on tbl_fields.Id = tbl_channel_entry_fields.field_id")
 
 	}).Find(&exportdata).Error; err != nil {
@@ -98,4 +117,18 @@ func Exportentriesdata(exportdata *[]channels.TblChannelEntries, id []int) error
 	}
 	return nil
 
+}
+
+func Entryid(entry string, tenantid int) (Id int, err error) {
+
+	var modules TblModule
+
+	if err := DB.Table("tbl_modules").Where("module_name=? and parent_id!=?", entry, 0).First(&modules).Error; err != nil {
+
+		return 0, err
+	}
+
+	id := modules.Id
+
+	return id, nil
 }

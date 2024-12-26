@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Formtitle}}</title>
+    <link rel="stylesheet" href="/public/css/form.css">
+    <link rel="stylesheet" href="/public/css/formstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    {{if .FormData}}
+    <div class="mx-auto" id="page">
+        <input type="hidden" value="{{.FormId}}" id="FormId">
+        <input type="hidden" value="{{.Userid}}" id="Userid">
+        <form-builder mode="fill" content="{{.FormData}}">
+
+        </form-builder>
+    </div>
+    {{else}}
+    <section class="w-full overflow-hidden pt-[48px] min-h-screen">
+
+
+    
+        <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
+            <div class="text-center w-fit mx-auto mb-[32px]">
+                <img src="/public/img/cms404-img.svg" alt="noFilter">
+            </div>
+            <h2 class="text-[24px] font-semibold text-[#262626] mb-[8px] leading-[30px]">
+                PAGE NOT FOUND</h2>
+            <p class="text-[#262626] mb-[24px] text-center text-[16px] font-normal leading-[15px]  ">
+                The page you are looking for might have been removed had its name changed or
+                is temporarily unavailable.</p>
+        </div>
+
+    
+    </section>
+    {{end}}
+
+    <script src="/public/js/form.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('formSubmit', function (event) {
+            if (event.detail.data) {
+
+                // console.log(JSON.stringify(event.detail.data));
+                // console.log(JSON.stringify(event.detail));
+
+                FormId = $("#FormId").val()
+                Userid = $("#Userid").val()
+
+                $.ajax({
+                    url: "{{.URL}}",
+                    type: "POST",
+                    async: false,
+                    data: { "data": JSON.stringify(event.detail.data), "Id": FormId, "UserId": Userid },
+                    datatype: "json",
+                    caches: false,
+                    success: function (data) {
+
+                        console.log(data.message);
+
+                        htmlcontent = '<div class="flex items-center flex-col gap-[12px] mt-5"><div class="w-[42px] h-[42px] rounded-full bg-[#E0FFEC] flex items-center justify-center"><img src="/public/img/vector-tick.svg" alt=""></div><div class="flex flex-col gap-[6px] items-center text-center"><h3 class="text-[#262626] text-base font-medium m-0 text-center">Successfully Registered!</h3><p class="text-[#717171] text-xs font-light m-0 text-center">Thanks you for your Response!</p></div></div>'
+
+
+                        $("#page").html(htmlcontent)
+
+                    }
+                })
+
+            }
+        });
+    </script>
+
+</body>
+
+</html>

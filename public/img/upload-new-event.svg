@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5327" data-name="Rectangle 5327" width="24" height="24" transform="translate(397 555)" stroke="#000001" stroke-width="0.2"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_758" data-name="Mask Group 758" transform="translate(-397 -555)" clip-path="url(#clip-path)">
+    <path id="earth" d="M19.753,4V3.352H17.462A4.816,4.816,0,0,0,13.58,5.325,4.822,4.822,0,0,0,8.923,1.711H6.632v.651a4.822,4.822,0,0,0,4.816,4.816h1.2v4.374h1.093V8.972l8.616,2.154-9.163,3.668L3.674,11.585l7.49-2.22-.317-1.093L1.711,11.005V12.1l11.481,3.86L23.58,11.815v3.193l-10.387,4.16L1.711,15.155v5.533l11.481,4.024,11.481-4.691V18.834L13.192,23.541,2.8,19.911V16.7l10.387,3.641,11.481-4.587V10.579L16.527,8.545A4.822,4.822,0,0,0,19.753,4Zm-2.291.443h1.2a3.729,3.729,0,0,1-3.7,3.28h-1.2a3.729,3.729,0,0,1,3.7-3.28Zm-6.014,1.64a3.729,3.729,0,0,1-3.7-3.28h1.17a3.729,3.729,0,0,1,3.723,3.28Z" transform="translate(395.808 553.789)" stroke="#000001" stroke-width="0.2"/>
+  </g>
+</svg>

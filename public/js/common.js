@@ -1,5 +1,6 @@
 let searchParams = new URLSearchParams(window.location.search)
 var languagedata
+var filename
 
 //set modulename cookie
 // $(document).on('click','.mainmenu',function(){
@@ -17,8 +18,16 @@ var languagedata
 //     // setCookie("modulename",'Channels',3600)
 //     window.location.href = $(this).attr('data-route')
 // })
-
-$(document).keydown(function(event) {
+$(document).keydown(function (event) {
+    if (event.ctrlKey && event.key === 'k') {
+        event.preventDefault();
+            $(".srchBtn-togg").next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
+            $(".srchBtn-togg").next('input').toggleClass('hidden ');
+            $(".srchBtn-togg").parent('div').toggleClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
+        $(".search").focus().select();
+    }
+});
+$(document).keydown(function (event) {
     if (event.ctrlKey && event.key === '/') {
         $(".search").focus().select();
     }
@@ -26,111 +35,276 @@ $(document).keydown(function(event) {
 
 $(document).ready(function () {
 
-    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
+    var imgurl, img, canvas, ctx;
+    let cropper;
 
-        var imgurl, img, canvas, ctx;
-        let cropper;
+
+    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1) {
+
+        console.log("test");
+
 
         // Image Value Empty
-        $("#myfile,#file,#cmpymyfile").click(function () {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#flagFile,#blockimg,#categoryimage").click(function () {
             $(this).val("")
         })
 
-        var viewportType = ""
+        var viewportType
+        var width
+        var height
 
         // Change Image with cropper
-        $("#myfile,#file,#cmpymyfile").change(function () {
-
-            $('#crop-container').removeClass('croppie-container').empty().show()
-
-            if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#logoLabel,#flagFile,#blockimg,#categoryimage").change(function () {
 
 
-                if (window.location.href.indexOf("myprofile") != -1) {
+            var file;
 
-                    $("#logo-input").val("2")
+            if ($(this).attr("id") == 'profileImgLabel') {
 
-                    $("#prof-crop").val("1")
+                // file = $('#profileImage')[0].files[0];
+                // console.log(file, "profileImage");
 
-                    $('#changepicModal .admin-header >h3').text('Crop Myprofile Image')
+                file = $('#profileImgLabel')[0].files[0];
+                console.log(file, "profileImgLabel");
 
-                } else if (window.location.href.indexOf("users") != -1) {
+            } else if ($(this).attr("id") == 'myfile') {
 
-                    $('#changepicModal .admin-header >h3').text('Crop User Image')
+                file = $('#myfile')[0].files[0];
 
-                } else if (window.location.href.indexOf("member") != -1) {
+                console.log(file, "file");
 
-                    $('#changepicModal .admin-header >h3').text('Crop Member Image')
+            } else if ($(this).attr("id") == 'cmpymyfile') {
+                file = $('#cmpymyfile')[0].files[0];
+                console.log(file, "cmpymyfile");
 
-                }else if(window.location.href.indexOf("customers") !=-1){
+            } else if ($(this).attr("id") == 'profileImg') {
 
-                    $('#changepicModal .admin-header >h3').text('Crop Customer Image')
+                file = $('#profileImage')[0].files[0];
+                console.log(file, "profileImage");
+            } else if ($(this).attr("id") == 'logoLabel') {
 
-                }else if(window.location.href.indexOf("applicants") !=-1){
+                file = $('#logo')[0].files[0];
+                console.log(file, "cmpymyfile");
 
-                    $('#changepicModal .admin-header >h3').text('Crop Applicant Image')
+            } else if ($(this).attr("id") == 'flagFile') {
+
+                file = $(this)[0].files[0];
+                console.log(file, "flagFile");
+
+            } else if ($(this).attr("id") == 'blockimg') {
+                file = $("#blockimg")[0].files[0];
+                console.log(file, "BlockFile");
+            } else if ($(this).attr("id") == 'categoryimage') {
+                file = $("#categoryimage")[0].files[0];
+                console.log(file, "categoryimage");
+            }
+
+            filename = file.name;
+            console.log(filename);
+            // $("#blockfilename").text(filename)
+
+            var ext = filename.split(".").pop().toLowerCase();
+
+
+            if (($.inArray(ext, ["jpg", "png", "jpeg"]) != -1)) {
+
+                $("#myfile-error").addClass('hidden')
+
+                console.log("crop is worked");
+
+                $('#imageSpace').removeClass('croppie-container').empty().show()
+
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1) {
+                    console.log("F2");
+
+                    if (window.location.href.indexOf("myprofile") != -1) {
+
+                        // $("#logo-input").val("2")
+
+                        $("#prof-crop").attr('data-id', '5')
+
+                        $('#cricleCropper-head').text('Crop Myprofile Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#myProfileImg').addClass('hidden')
+
+
+                    } else if (window.location.href.indexOf("users") != -1) {
+
+                        $('#cricleCropper-head').text('Crop User Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#userModal').modal('hide')
+
+                    } else if (window.location.href.indexOf("member") != -1) {
+
+                        $('#cricleCropper-head').text('Crop Member Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#modalId2').modal('hide')
+                        $('body').css("overflow", "visible")
+
+
+                    } else if (window.location.href.indexOf("customer") != -1) {
+
+                        $('#changepicModal .admin-header >h3').text('Crop Customer Image')
+
+                    } else if (window.location.href.indexOf("general-settings/") != -1) {
+
+                        $("#prof-crop").attr('data-id', '4')
+
+                        $('#cricleCropper-head').text('Crop Company Logo Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+
+                    } else if (window.location.href.indexOf("languages/") != -1) {
+                        $("#prof-crop").attr('data-id', '7')
+
+                        $('#cricleCropper-head').text('Crop Flag Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#LanguageModal').modal('hide')
+
+                    } else if (window.location.href.indexOf("blocks") != -1) {
+                        $("#prof-crop").attr('data-id', '8')
+
+                        $('#cricleCropper-head').text('Crop Block Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#createModal').modal('hide')
+                        $('body').css("overflow", "visible")
+
+                    } else if (window.location.href.indexOf("categories") != -1) {
+                        $("#prof-crop").attr('data-id', '9')
+
+                        $('#cricleCropper-head').text('Crop Category Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#addCategory').modal('hide')
+
+                    }
 
                 }
 
-                $("#myfile-error").hide()
-            }
+                if ($(this).attr("id") == 'cmpymyfile' || $(this).attr('id') == 'categoryimage') {
 
-            if($(this).attr("id")=='cmpymyfile'){
+                    viewportType = 'square'
+                    $('#extrawidth').show()
+                    
 
-                viewportType = 'square'
+                } else if ($(this).attr('id') == 'logoLabel' || $(this).attr('id') == 'flagFile' || $(this).attr('id') == 'blockimg') {
 
-            }else{
+                    viewportType = 'square'
+                    $('#extrawidth').show()
+                } else {
 
-                viewportType = 'circle'
-            }
-            var file = this.files[0];
-            var filename = $(this).val();
-            var ext = filename.split(".").pop().toLowerCase();
-            if (($.inArray(ext, ["jpg", "png", "jpeg","svg"]) != -1)) {
+                    viewportType = 'circle'
+                    width = 600
+                    height = 600,
+                        $('#extrawidth').hide()
+
+                }
+
+
+
+                console.log(viewportType, "view");
+
                 var reader = new FileReader();
                 reader.onload = function (event) {
                     imgurl = event.target.result
+
                     img = new Image()
                     img.onload = function () {
-                        cropper = $('#crop-container').croppie({
+                        cropper = $('#imageSpace').croppie({
+                            url: imgurl,
                             enableExif: true,
                             enableResize: false,
                             enableOrientation: true,
                             viewport: {
-                                width: 300,
-                                height: 300,
+                                width: width,
+                                height: height,
                                 type: viewportType
                             },
+                            aspectRatio:16/9,
                             showZoomer: false,
                         });
                         $('canvas[class=cr-image]').css('opacity', '0')
                         if ($('.cr-slider-wrap').length > 1) {
                             $('.cr-slider-wrap')[1].remove()
                         }
-                        $('.cr-slider-wrap').appendTo($('#zoom-div'));
+                        $('.cr-slider-wrap').prependTo($('#zoom-div'));
                         $('#rotateSlider').val("0")
                         $('.cr-slider').css('display', 'block')
+                        $('.cr-slider').css('color', '#D6D6D6')
+                        // $('.cr-slider').addClass('bg-[#D6D6D6]')
+                        // $('.cr-slider').css('opacity', '0')
+                        $('.cr-slider').on('input', function () {
+                            var sliderValue = parseFloat($(this).val());
+                            var zoomValue = sliderValue.toFixed(1);
+
+                            cropper.croppie('setZoom', parseFloat(zoomValue));
+
+                            $('#zoomvalue').text(zoomValue);
+                        });
+
+
+                        $(document).ready(function () {
+                            $('.cr-slider').on('input', function () {
+                                var sliderValue = parseFloat($(this).val());
+                                var zoomValue = sliderValue.toFixed(2);
+                                var zoomValueNumber = parseFloat(zoomValue);
+                                cropper.croppie('setZoom', zoomValueNumber);
+                                $('#zoomvalue').text(zoomValue);
+                                var sliderMin = parseFloat($('.cr-slider').attr('min'));
+                                var sliderMax = parseFloat($('.cr-slider').attr('max'));
+                                var sliderWidth = $('.cr-slider').width();
+                                var zoomValueWidth = $('#zoomvalue').outerWidth();
+                                var zoomValuePercent = (sliderValue - sliderMin) / (sliderMax - sliderMin);
+                                var newPosition = zoomValuePercent * (sliderWidth - zoomValueWidth);
+                                $('#zoomvalue').css('transform', 'translateX(' + newPosition + 'px)');
+                            });
+                        });
+
+
+
                     }
+
+
 
                     img.src = imgurl
                 }
                 reader.readAsDataURL(file);
+
                 $('#changepicModal').modal('show');
+
             } else {
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 ||window.location.href.indexOf("customers") != -1 ||window.location.href.indexOf("applicants") != -1) {
-                    $("#myfile-error").text(languagedata?.Toast?.errmsgupload).show()
+
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("languages/") != -1) {
+
+                    $("#myfile-error").removeClass('hidden')
+
+                    if ((window.location.href.indexOf("myprofile") != -1)) {
+                        $('#profPicWarn').addClass('hidden')
+
+                    }
+
+
+
+                    console.log("profie have error");
+                    // $('"#myfile-error').css('display', 'block !important')
                 }
             }
         });
+
 
         // $("#cmpymyfile").change(function () {
 
         //     $('#crop-container').removeClass('croppie-container').empty().show()
 
-        //     if(window.location.href.indexOf("myprofile")!=-1 || window.location.href.indexOf("users")!=-1 || window.location.href.indexOf("member")!=-1){
+        //     if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
 
-        //         if(window.location.href.indexOf("member")!=-1){
+        //         if (window.location.href.indexOf("member") != -1) {
 
         //             $('#changepicModal .admin-header >h3').text('Crop Company Image')
 
@@ -147,20 +321,20 @@ $(document).ready(function () {
         //             imgurl = event.target.result
         //             img = new Image()
         //             img.onload = function () {
-        //                     cropper = $('#crop-container').croppie({
-        //                         enableExif: true,
-        //                         enableResize: false,
-        //                         enableOrientation: true,
-        //                         viewport: {
-        //                             width: 300,
-        //                             height: 300,
-        //                             type: 'circle'
-        //                         },
-        //                         showZoomer: false,
-        //                     });
+        //                 cropper = $('#crop-container').croppie({
+        //                     enableExif: true,
+        //                     enableResize: false,
+        //                     enableOrientation: true,
+        //                     viewport: {
+        //                         width: 300,
+        //                         height: 300,
+        //                         type: 'circle'
+        //                     },
+        //                     showZoomer: false,
+        //                 });
         //                 $('canvas[class=cr-image]').css('opacity', '0')
-        //                 if($('.cr-slider-wrap').length>1){
-        //                    $('.cr-slider-wrap')[1].remove()
+        //                 if ($('.cr-slider-wrap').length > 1) {
+        //                     $('.cr-slider-wrap')[1].remove()
         //                 }
         //                 $('.cr-slider-wrap').appendTo($('#zoom-div'));
         //                 $('#rotateSlider').val("0")
@@ -171,17 +345,35 @@ $(document).ready(function () {
         //         }
         //         reader.readAsDataURL(file);
         //         $('#changepicModal').modal('show');
-        //     }else{
+        //     } else {
 
-        //         if(window.location.href.indexOf("myprofile")!=-1 || window.location.href.indexOf("users")!=-1 || window.location.href.indexOf("member")!=-1){
-        //             $("#cmpymyfile-error").text( languagedata?.Toast?.errmsgupload).show()
+        //         if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
+        //             $("#cmpymyfile-error").text(languagedata?.Toast?.errmsgupload).show()
         //         }
         //     }
         // });
 
-        $('#changepicModal').on('shown.bs.modal', function (event) {
+        // $('#open-cricleCropper').on('shown.bs.modal', function (event) {
+        //     console.log("testsst");
+
+        //     console.log(imgurl);
+
+        //     $('#open-cricleCropper #cropImage').attr('src', imgurl)
+        //     cropper.croppie('bind', {
+        //         url: imgurl
+        //     }).then(function () {
+        //         cropper.croppie('setZoom', 0)
+        //         console.log("cropper initialized!");
+        //     })
+        //     canvas = document.querySelector('canvas[class=cr-image]');
+        //     ctx = canvas.getContext('2d');
+        // });
+
+
+        $('#changepicModal').on('shown.bs.modal', function () {
+
             cropper.croppie('bind', {
-                url: imgurl
+                url: imgurl,
             }).then(function () {
                 cropper.croppie('setZoom', 0)
                 console.log("cropper initialized!");
@@ -191,41 +383,230 @@ $(document).ready(function () {
         });
 
         $('#rotateSlider').on('input', function () {
-            var rotationValue = parseInt($(this).val());
+            var rotationValue = parseInt($(this).val(), 10);
+            $('#rotateValue').text(rotationValue + '°');
+            var canvas = document.querySelector('canvas');
+            var ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save()
+            ctx.save();
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate((rotationValue * Math.PI) / 180);
             ctx.drawImage(img, -canvas.width / 2, -canvas.height / 2);
-            ctx.restore()
+            ctx.restore();
+        });
+        $('#rotateSlider').on('input', function () {
+            var value = $(this).val();
+            $('#rotateValue').css('transform', 'translateX(' + value + 'px)');
         });
 
+        $('#rotateRight').on('click', function () {
+            if (cropper) {
+                cropper.croppie('rotate', 90); // Rotate the image 90 degrees clockwise
+            }
+        })
+
+        $('#rotateLeft').on('click', function () {
+            if (cropper) {
+                cropper.croppie('rotate', -90); // Rotate the image 90 degrees counterclockwise
+            }
+        });
+
+        // $('#rotateRight').on('click', function () {
+        //     var rotationValue = parseInt($('#rotateSlider').val());
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //     ctx.save()
+        //     ctx.translate(canvas.width / 2, canvas.height / 2);
+        //     ctx.rotate(((rotationValue * Math.PI) / 180) + 30);
+        //     ctx.drawImage(img, -canvas.width / 2, -canvas.height / 2);
+        //     ctx.restore()
+        // })
+
+
+
         $('#crop-button').click(function () {
+            console.log("works");
 
-            var in_val = $("#prof-crop").val()
+            var in_val
+            if (window.location.href.indexOf("member") != -1 || window.location.href.indexOf("users") != -1) {
+                in_val = $("#prof-crop").val()
+            } else {
+                in_val = $("#prof-crop").attr('data-id')
+            }
 
+            //Member
             if (in_val == 1) {
                 cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', circle: true, }).then(function (dataUrl) {
 
-                    $('#profpic').attr('src', dataUrl)
-                    $("#name-string").hide()
-                    $('input[name=crop_data]').attr('value', dataUrl)
+                    $('#profpic-mem').attr('src', dataUrl)
+                    // $('#mem-img').attr('src', dataUrl)
+                    // $("#name-string").hide()
+                    $('#memcrop_base64').attr('value', dataUrl)
                     $('canvas[class=cr-image]').css('opacity', '0')
                     $("#changepicModal").modal('hide');
-                    $('#crop-container').removeClass('croppie-container').empty()
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('#myfile-error').addClass('hidden')
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $('#modalId2').modal('show')
                 });
             }
-            if(in_val == 2){
 
-                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'png',}).then(function (dataUrl) {
+
+            if (in_val == 2) {
+                console.log("mem edit");
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'png', }).then(function (dataUrl) {
                     $('#profpic2').attr('src', dataUrl)
                     $("#cname-string").hide()
                     $('input[name=crop_data2]').attr('value', dataUrl)
                     $('canvas[class=cr-image]').css('opacity', '0')
                     $("#changepicModal").modal('hide');
                     $('#crop-container').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
                 });
 
+            }
+            //Member Edit
+            if (in_val == 3) {
+                console.log("mem edit");
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'png', }).then(function (dataUrl) {
+                    $('#profpicture').attr('src', dataUrl)
+                    $("#cname-string").hide()
+                    $('input[name=crop_data]').attr('value', dataUrl)
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#crop-container').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                });
+
+            }
+
+            if (in_val == 5) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', circle: true, }).then(function (dataUrl) {
+                    console.log("mem");
+                    $('#prof-crop').attr('src', dataUrl)
+                    $('#cropData').attr('value', dataUrl)
+                    $('#profPicWarn').addClass('hidden')
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('#myfile-error').addClass('hidden')
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                });
+            }
+            //Member Profile
+            if (in_val == 4) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    $('#prof-crop').addClass('w-full')
+                    $('#prof-crop').addClass('h-[180px]')
+                    $('#prof-crop').attr('src', dataUrl)
+                    $('#cropData').attr('value', dataUrl)
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                });
+            }
+
+
+            if (in_val == 6) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    $('#prof-crop').addClass('w-full')
+                    $('#prof-crop').addClass('h-[180px]')
+                    $('#profpic-user').attr('src', dataUrl)
+                    $('#crop_data').attr('value', dataUrl)
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $('#userModal').modal('show')
+                });
+            }
+
+            if (in_val == 7) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    $('#flagFile-error').css('display', 'none')
+                    $('#flagSpan').addClass('hidden')
+                    $('#flaggFileLabel').addClass('hidden')
+                    $('#flagPara').addClass('hidden')
+                    $('#prof-crop').addClass('h-[180px]')
+                    $('#prof-crop').attr('src', dataUrl)
+                    $('#cropData').attr('value', dataUrl)
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('#flagDiv').append('<div class="hover-delete-img "></div>');
+                    $('#flagDiv').append('<button class="deleteFlag"><img id="deleteFlag" src="/public/img/deleteWhiteIcon.svg" alt=""></button>')
+                    $('#myfile-error').addClass('hidden')
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $('#LanguageModal').modal('show')
+                });
+            }
+            // Block cover Image upload
+            if (in_val == 8) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+
+                    $("#coverimg").val(dataUrl)
+                    $('#categoryimages').val(dataUrl)
+                    $('#blockcoverimg').attr('src', dataUrl)
+                    $('#blockcoverimg').show()
+                    $('#browse').hide()
+                    $('#uploadLine').hide()
+                    $('#uploadFormat').hide()
+                    $('#catdel-img').show()
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $('#addCategory').modal('show')
+                    $("#coverimg-error").hide()
+                    // if (dataUrl != "") {
+
+                    //     html = `  <div class="border border-[#ECECEC] p-[8px] px-[12px] flex items-center gap-[12px] rounded-[5px] ">
+                    //          <span class="w-[24px] min-w-[24px] h-[24px]"><img id="uploadimg" src="` + dataUrl + ` " alt=""></span>
+                    //          <p class="text-[14px] font-normal leading-[17.5px] text-[#252525] text-left" id="blockfilename" > `+ filename + ` </p>
+                    //          <a href="javascript:void(0);" class="min-w-[16px] ml-auto" id="removeimg">
+                    //              <img src="/public/img/removeCover.svg" alt="remove">
+                    //          </a>
+                    //      </div> `
+
+                    //     $(html).insertAfter(".imagediv");
+                    // }
+                    // $('canvas[class=cr-image]').css('opacity', '0')
+                    // $("#changepicModal").modal('hide');
+                    // $('#imageSpace').removeClass('croppie-container').empty()
+                    // $("#coverimg-error").css("display", "none")
+                    // $('.CropperSection').addClass('hidden')
+                    // $('.mainsection').show()
+                    // $('body').css("overflow", "hidden")
+                    // $('#browse').addClass('hidden')
+                    // $('#uploadFormat').hide()
+                });
+            }
+
+            if (in_val == 9) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    $('#categoryimages').val(dataUrl)
+                    $('#ctimagehide').attr('src', dataUrl)
+                    $('#ctimagehide').show()
+                    $('#browse').hide()
+                    $('#uploadLine').hide()
+                    $('#uploadFormat').hide()
+                    $('#catdel-img').show()
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $('#addCategory').modal('show')
+
+                });
             }
 
         });
@@ -242,6 +623,44 @@ $(document).ready(function () {
         })
     }
 
+    $(document).on('click', "#square", function () {
+        $('#square').addClass('active')
+        $('#portrait').removeClass('active')
+        $('#Landscape').removeClass('active')
+        $('.cr-viewport').css("width", "auto");
+        $('.cr-viewport').css("height", "100%");
+        $('.cr-viewport').css("aspect-ratio", "1/1");
+
+    })
+
+    $(document).on('click', "#portrait", function () {
+        $('#square').removeClass('active')
+        $('#portrait').addClass('active')
+        $('#Landscape').removeClass('active')
+        $('.cr-viewport').css("width", "auto");
+        $('.cr-viewport').css("height", "100%");
+        $('.cr-viewport').css("aspect-ratio", "3/4");
+    })
+
+    $(document).on('click', "#Landscape", function () {
+        $('#square').removeClass('active')
+        $('#portrait').removeClass('active')
+        $('#Landscape').addClass('active')
+        $('.cr-viewport').css("width", "auto");
+        $('.cr-viewport').css("height", "75%");
+        $('.cr-viewport').css("aspect-ratio", "16/9");
+    })
+
+})
+
+$(document).on('click', "#crop-cancel", function () {
+    $('.CropperSection').addClass('hidden')
+    $('#addCategory').modal('show')
+    $('#modalId2').modal('show')
+    $('#userModal').modal('show')
+    $('#LanguageModal').modal('show')
+    $('.mainsection').show()
+    $('body').css("overflow", "hidden")
 })
 
 
@@ -249,21 +668,23 @@ $(document).ready(function () {
 document.addEventListener("DOMContentLoaded", async function () {
 
     var languagepath = $('.language-group>button').attr('data-path')
-
     await $.getJSON(languagepath, function (data) {
-
         languagedata = data
     })
 
     var Cookie = getCookie("get-toast");
     var content = Cookie.replaceAll("+", " ")
     var msg = getCookie("Alert-msg");
+    var alertMsg = msg.replaceAll("+", " ")
 
     if (Cookie != '') {
         for (let key in languagedata.Toast) {
+            // console.log("langtoast", key);
+
             if (key == content) {
 
-                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Toast[key] + '</span></div>';
+                // **Important -- to get the toast msg please add a class .header-rht in your header or things that are in right of the header
+                notify_content = `<ul class="toast-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Toast[key] + `</p ></div ></div ></li></ul> `;
                 $(notify_content).insertBefore(".header-rht");
                 setTimeout(function () {
                     $('.toast-msg').fadeOut('slow', function () {
@@ -275,12 +696,18 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
         }
-    } else if (msg != '') {
+    } else if (alertMsg != '') {
+
+        console.log("langudata",languagedata.Toast)
 
         for (let key in languagedata.Toast) {
+            console.log("checkcondition",key,msg)
             if (key == msg) {
 
-                notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast[key] + '</span></div>';
+               
+                notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="toast-msg flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/danger-group-12.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + languagedata.Toast[key] + `</p></div></div> </li></ul>`;
+
+
                 $(notify_content).insertBefore(".header-rht");
                 setTimeout(function () {
                     $('.toast-msg').fadeOut('slow', function () {
@@ -417,7 +844,7 @@ $(document).ready(function () {
 $(document).on('click', '.expandbtn', function () {
 
     $('body').toggleClass('expand')
-   
+
     if ($('body').hasClass('expand')) {
         $('.sidebar').addClass('open')
         $(this).html(`
@@ -425,14 +852,14 @@ $(document).on('click', '.expandbtn', function () {
           <p>v1.0</p> <img src="/public/img/right-arrow1.svg" class="right" />
         
         `)
-        setCookie("mainmenu","true")
-   
+        setCookie("mainmenu", "true")
+
     } else {
         $(this).html(` <img src="/public/img/right-arrow1.svg" alt=""><p>v1.0</p>`)
         delete_cookie("mainmenu")
         $('.sidebar').removeClass('open')
     }
-   
+
 })
 
 // let localexpandFlg = localStorage.getItem("mainmenu");
@@ -451,7 +878,7 @@ $(document).on('click', '.expandbtn', function () {
 //         console.log("if");
 //         $(".expandbtn").html(`<a href="javascript:void(0)"><img src="/public/img/right-arrow.svg" alt=""></a>
 //         <a href="javascript:void(0)"><img src="/public/img/left-arrow.svg" alt=""> `+languagedata?.Toast?.close + ` </a>`)
-               
+
 //     }else{
 //         $('body').removeClass('expand')
 //     }
@@ -497,7 +924,8 @@ $(".parentwithchild").on("keyup", function () {
 
         $('#avacatcount').text("0");
 
-    } else {
+    }
+    if (value == "" || $(".categorypdiv:visible").length != 0) {
 
         $("#categorynodatafound").hide();
 
@@ -525,7 +953,9 @@ $(document).on('keyup', '#selectcategory', function () {
 
         $('#selcatcount').text("0");
 
-    } else {
+    }
+
+    if (value == "" || $(".selectedcategorydiv:visible").length != 0) {
 
         $("#selcategorynodatafound").hide();
 
@@ -551,45 +981,38 @@ $(document).on('click', '.category-select-btn', function () {
 
     var pstr = ``
 
-    $(this).siblings('.choose-cat-list-col').children('.para').each(function () {
+    $(this).siblings('.cal-list').children('.category-list').each(function () {
 
         if ($(this).hasClass('categoryname')) {
 
-            pstr += `<h3 class="para categoryname"style="font-weight: 400;" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</h3>`;
+            pstr += `<p class="text-gray-900 text-xs font-normal mb-0 categoryname category-list" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</p>`;
         } else {
-            pstr += `<h3 class="para">` + $(this).text() + `</h3>`;
+            pstr += `<img src="/public/img/crumps.svg" class="category-list"/>`;
         }
 
 
     })
 
     var div =
-        `<div class="categories-list-child selectedcategorydiv" id="selcategory-` + categoriesid + `">
-        <div class="choose-cat-list-col" style="display: flex;">
+        `<div class="flex justify-between pa-x-4 pa-y-3 items-center border-b border-[#EDEDED] selectedcategorydiv" id="selcategory-` + categoriesid + `">
+        <div class="flex items-center space-x-[6px] cal-list">
             `+ pstr + `
         </div>
-        <a href="javascript:void(0)" class="category-unselect-btn" data-id=`+ id + ` data-categoryid=` + categoriesid + `>
-            <img src="/public/img/bin.svg" alt="" />
-        </a>
-        <p class="forsearches" style="display: none;">`+ $(this).siblings('.choose-cat-list-col')[0].textContent + `</p>
+        <button class="w-4 h-4 flex items-center justify-center add-hover rounded-sm category-unselect-btn" data-id=`+ id + ` data-categoryid=` + categoriesid + `>
+            <img src="/public/img/minus.svg" alt="" />
+        </button>
+        <p class="forsearches" style="display: none;">`+ $(this).siblings('.cal-list')[0].textContent + `</p>
     </div>
-    <div class="noData-foundWrapper" id="selcategorynodatafound" style="display: none;">
-    
-    <div class="empty-folder">
-        <img src="/public/img/folder-sh.svg" alt="">
-        <img src="/public/img/shadow.svg" alt="">
-    </div>
-    <h1 class="heading">Oops No Data Found</h1>
-    </div>  
     `
+    $("#no-data").hide()
 
     $('.selected_category').append(div);
 
-    $(this).parents('.categorypdiv').remove();
+    $(this).parent('.categorypdiv').remove();
 
     var idstr = [];
 
-    $(this).siblings('.choose-cat-list-col').children('.categoryname').each(function () {
+    $(this).siblings('.cal-list').children('.categoryname').each(function () {
 
         var id = $(this).attr('data-id');
 
@@ -599,30 +1022,14 @@ $(document).on('click', '.category-select-btn', function () {
 
     var idstring = idstr.join(",");
 
-
-
     SelectedCategoryValue.push(idstring);
 
-    selectedcatcount = selectedcatcount + 1
-
-    selcount = parseInt($('#selcatcount').text()) + 1
-
-    $('#selcatcount').text(selcount);
-
-    if ($('#caterror').is(':visible') && $('#selcatcount').text(selectedcatcount) != "0") {
-
-        $('#caterror').removeClass('ig-error').css('visibility', 'hidden')
-
-    }
-
-    $('#avacatcount').text(parseInt($('#avacatcount').text()) - 1);
 })
 
 
 /*UnSelected */
 $(document).on('click', '.category-unselect-btn', function () {
 
-    // $('#category-' + $(this).attr('data-categoryid')).show()
 
     $(this).parents('.selectedcategorydiv').remove();
 
@@ -632,42 +1039,42 @@ $(document).on('click', '.category-unselect-btn', function () {
 
     var pstr = ``
 
-    $(this).siblings('.choose-cat-list-col').children('.para').each(function () {
+    $(this).siblings('.cal-list').children('.category-list').each(function () {
 
         if ($(this).hasClass('categoryname')) {
 
-            pstr += `<h3 class="para categoryname" style="font-weight: 400;" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</h3>`;
+            pstr += `<p class="text-gray-900 text-xs font-normal mb-0 categoryname category-list" data-id=` + $(this).attr('data-id') + `>` + $(this).text() + `</p>`;
         } else {
-            pstr += `<h3 class="para">` + $(this).text() + `</h3>`;
+            pstr += `<img src="/public/img/crumps.svg" class="category-list"/>`;
         }
 
 
     })
 
     var div =
-        `    <div class="categories-list-child categorypdiv" id="category-` + categoriesid + `">
-        <div class="choose-cat-list-col" style="display: flex;" data-id={{$index}}>
+        `    <div class="flex justify-between pa-x-4 pa-y-3 items-center border-b border-[#EDEDED] categorypdiv" id="category-` + categoriesid + `">
+        <div class="flex items-center space-x-[6px] cal-list" data-id={{$index}}>
            
         `+ pstr + `
               
             
                
         </div>
-        <a href="javascript:void(0)" class="category-select-btn" data-id="`+ id + `" data-categoryid="` + categoriesid + `">
-            <img src="/public/img/add-category.svg" alt="" />
-        </a>
-        <p class="forsearch" style="display: none;">`+ $(this).siblings('.choose-cat-list-col')[0].textContent + `</p>
+        <button class="w-4 h-4 flex items-center justify-center  add-hover rounded-sm category-select-btn" data-id="`+ id + `" data-categoryid="` + categoriesid + `">
+            <img src="/public/img/add.svg" alt="" />
+        </button>
+        <p class="forsearch" style="display: none;">`+ $(this).siblings('.cal-list')[0].textContent + `</p>
     </div>
         
       `
 
-    $('.slist').append(div);
+    $('.categories-list').append(div);
 
 
 
     var idstr = [];
 
-    $(this).siblings('.choose-cat-list-col').children('.categoryname').each(function () {
+    $(this).siblings('.cal-list').children('.categoryname').each(function () {
 
         var id = $(this).attr('data-id');
 
@@ -689,20 +1096,6 @@ $(document).on('click', '.category-unselect-btn', function () {
         SelectedCategoryValue.splice(index, 1);
 
     }
-
-    selectedcatcount = selectedcatcount - 1
-
-    selcount = parseInt($('#selcatcount').text()) - 1
-
-    $('#selcatcount').text(selcount);
-
-    if ($('#caterror').is(':visible') && $('#selcatcount').text() == "0") {
-
-        $('#caterror').addClass('ig-error').css('visibility', 'visible')
-
-    }
-
-    $('#avacatcount').text(parseInt($('#avacatcount').text()) + 1);
 })
 
 $(document).ready(function () {
@@ -725,16 +1118,16 @@ $(document).ready(function () {
 
 
 
-/**DropDown Select */
-$(document).on('click', '.dropdown-item', function () {
+// /**DropDown Select */
+// $(document).on('click', '.dropdown-item', function () {
 
-    $(this).parent('.dropdown-menu').siblings('a').text($(this).text())
+//     $(this).parent('.dropdown-menu').siblings('a').text($(this).text())
 
-    // $(this).parent('.dropdown-menu').siblings('a').html($(this).html(text))
+//     // $(this).parent('.dropdown-menu').siblings('a').html($(this).html(text))
 
-    $(this).parent('.dropdown-menu').siblings('input[type="hidden"]').val($(this).attr('data-id'))
+//     $(this).parent('.dropdown-menu').siblings('input[type="hidden"]').val($(this).attr('data-id'))
 
-})
+// })
 
 
 $(document).on('click', '.lang', function () {
@@ -914,75 +1307,107 @@ function updateVisiblePages() {
 }
 
 /**Form design */
-let inputGroups = document.querySelectorAll('.input-group');
-inputGroups.forEach(inputGroup => {
+// let inputGroups = document.querySelectorAll('.input-group');
+// inputGroups.forEach(inputGroup => {
 
-    let inputField = inputGroup.querySelector('input');
+//     let inputField = inputGroup.querySelector('input');
 
-    inputField.addEventListener('focus', function (event) {
-        if (event.target.id !== 'searchcatlist') {
-            inputGroup.classList.add('input-group-focused');
+//     inputField.addEventListener('focus', function (event) {
+//         if (event.target.id !== 'searchcatlist') {
+//             inputGroup.classList.add('input-group-focused');
 
-        }
-    });
-    inputField.addEventListener('blur', function () {
-        inputGroup.classList.remove('input-group-focused');
-    });
+//         }
+//     });
+//     inputField.addEventListener('blur', function () {
+//         inputGroup.classList.remove('input-group-focused');
+//     });
 
-});
+// });
 
 $(document).ready(function () {
-    window.addEventListener('beforeunload', (event) => {
-        $.ajax({
-            url: "/lastactive"
-        })
-    });
+    // window.addEventListener('beforeunload', (event) => {
+    //     $.ajax({
+    //         url: "/lastactive"
+    //     })
+    // });
 });
 
 // logout
-$("#logout").click(function(){
-   
-    sessionStorage.removeItem("rememberme");
-    localStorage.removeItem("rememberme");
-})
+// $("#logout").click(function(){
 
-window.onload = function () {
-    const sidebar = document.querySelector(".sidebar");
-    const closeBtn = document.querySelector("#btn");
-    const searchBtn = document.querySelector(".bx-search")
+//     sessionStorage.removeItem("rememberme");
+//     localStorage.removeItem("rememberme");
+// })
 
-    closeBtn.addEventListener("click", function () {
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
+// window.onload = function () {
+//     const sidebar = document.querySelector(".sidebar");
+//     const closeBtn = document.querySelector("#btn");
+//     const searchBtn = document.querySelector(".bx-search")
 
-    searchBtn.addEventListener("click", function () {
-        sidebar.classList.toggle("open")
-        menuBtnChange()
-    })
+//     closeBtn.addEventListener("click", function () {
+//         sidebar.classList.toggle("open")
+//         menuBtnChange()
+//     })
 
-    function menuBtnChange() {
-        if (sidebar.classList.contains("open")) {
-            closeBtn.classList.replace("right", "left")
-        } else {
-            closeBtn.classList.replace("left", "right")
-        }
+//     searchBtn.addEventListener("click", function () {
+//         sidebar.classList.toggle("open")
+//         menuBtnChange()
+//     })
+
+//     function menuBtnChange() {
+//         if (sidebar.classList.contains("open")) {
+//             closeBtn.classList.replace("right", "left")
+//         } else {
+//             closeBtn.classList.replace("left", "right")
+//         }
+//     }
+// }
+
+// inputGroups.forEach(inputGroup => {
+
+//     let inputField = inputGroup.querySelector('#select_channel');
+
+//     inputField.addEventListener('focus', function (event) {
+//         if (event.target.id !== 'searchcatlist') {
+//             inputGroup.classList.add('input-group-focused');
+
+//         }
+//     });
+//     inputField.addEventListener('blur', function () {
+//         inputGroup.classList.remove('input-group-focused');
+//     });
+
+// });
+
+
+//settings menu active menu highlighting code
+$(document).ready(function () {
+
+    if (window.location.href.indexOf('myprofile') != -1) {
+        $('#myProfileLink').addClass('active')
+
+    } else if (window.location.href.indexOf('changepassword') != -1) {
+        $('#changePasswordLink').addClass('active')
+
+    } else if (window.location.href.indexOf('roles') != -1) {
+        $('#rolesLink').addClass('active')
+
+    } else if (window.location.href.indexOf('users') != -1) {
+        $('#usersLink').addClass('active')
+
+    } else if (window.location.href.indexOf('general-settings') != -1) {
+        $('#genSettingsLink').addClass('active')
+
+    } else if (window.location.href.indexOf('languages') != -1) {
+        $('#langPageLink').addClass('active')
+
+    } else if (window.location.href.indexOf('emails') != -1) {
+        $('#emailPageLink').addClass('active')
+
+    } else if (window.location.href.indexOf('data') != -1) {
+        $('#dataPageLink').addClass('active')
+
     }
-}
 
-inputGroups.forEach(inputGroup => {
 
-    let inputField = inputGroup.querySelector('#select_channel');
-
-    inputField.addEventListener('focus', function (event) {
-        if (event.target.id !== 'searchcatlist') {
-            inputGroup.classList.add('input-group-focused');
-
-        }
-    });
-    inputField.addEventListener('blur', function () {
-        inputGroup.classList.remove('input-group-focused');
-    });
-
-});
-
+})

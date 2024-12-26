@@ -1,35 +1,83 @@
 var languagedata
 
-var selectedcheckboxarr=[]
+var selectedcheckboxarr = []
+
 /**This if for Language json file */
+
 $(document).ready(async function () {
 
     var languagepath = $('.language-group>button').attr('data-path')
-  
+
     await $.getJSON(languagepath, function (data) {
-        
+
         languagedata = data
+
     })
+
+    $('#roledesc').on('input', function () {
+
+        let lines = $(this).val().split('\n').length;
+
+        if (lines > 5) {
+
+            let value = $(this).val();
+
+            let linesArray = value.split('\n').slice(0, 5);
+
+            $(this).val(linesArray.join('\n'));
+        }
+    });
+
+    var $textarea = $('#roledesc');
+    var $errorMessage = $('#roledesc-error');
+    var maxLength = 250;
+
+    $textarea.on('input', function () {
+        if ($(this).val().length >= maxLength) {
+            // Show error message
+            $errorMessage.text(languagedata.Permission.descriptionchat);
+        } else {
+            // Clear error message if under the limit
+            $errorMessage.text('');
+        }
+    });
 });
 
-$(document).keydown(function(event) {
+
+// cancel btn function
+
+$("#newroles").on("hide.bs.modal", function () {
+    console.log("calcel btn work");
+
+    $("#rolename-error").hide();
+    $("#roledesc-error").hide();
+    $("#roledesc").val("")
+    $("#rolename").val("")
+})
+
+
+// search input focus function
+
+$(document).keydown(function (event) {
     if (event.ctrlKey && event.key === '/') {
         $(".search").focus().select();
     }
-  });
+});
+
 
 /**Save & Update Btn*/
+
 $(document).on('click', '.saverolperm', function () {
     setTimeout(function () {
-        // $('.input-group-error')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 500);
+
     $("#roleform").validate({
         rules: {
             name: {
                 required: true,
                 space: true,
                 maxlength: 100,
-                // duplicatename: true
+
             },
             description: {
                 required: true,
@@ -41,12 +89,11 @@ $(document).on('click', '.saverolperm', function () {
             name: {
                 required: "* " + languagedata.Roless.rolenamevalid,
                 space: "* " + languagedata.spacergx,
-                maxlength: "* "+languagedata.Permission.rolechat,
-                // duplicatename: "* Role already exits",
+                maxlength: "* " + languagedata.Permission.rolechat,
             },
             description: {
                 required: "* " + languagedata.Roless.roledescvalid,
-                maxlength: "* "+languagedata.Permission.descriptionchat
+                maxlength: "* " + languagedata.Permission.descriptionchat
 
             }
         }
@@ -60,9 +107,9 @@ $(document).on('click', '.saverolperm', function () {
         const urlpar = new URLSearchParams(url);
         pageno = urlpar.get('page');
 
-    if (pageno == null) {
-        pageno = "1";
-    }
+        if (pageno == null) {
+            pageno = "1";
+        }
         $.ajax({
             url: "/settings/roles/checkrole",
             type: "POST",
@@ -73,7 +120,7 @@ $(document).on('click', '.saverolperm', function () {
             success: function (data) {
                 if (data.role == true) {
 
-                    $('#rolename-error').text("* "+languagedata.Permission.roleexist).show();
+                    $('#rolename-error').text("* " + languagedata.Permission.roleexist).show();
                     $('#rolen').addClass('input-group-error');
                 }
                 if (data.role == false) {
@@ -86,6 +133,7 @@ $(document).on('click', '.saverolperm', function () {
                     var roledesc = $('#roledesc').val();
 
                     var roleid = $('#rolid').val();
+                    var roleisactive = $('#roleisactive').val()
 
                     var permissionid = []
 
@@ -98,28 +146,25 @@ $(document).on('click', '.saverolperm', function () {
                         url: url,
                         type: "POST",
                         async: false,
-                        data: { "rolename": rolename, "roledesc": roledesc, "permissionid": permissionid, csrf: $("input[name='csrf']").val(), "roleid": roleid },
+                        data: { "rolename": rolename, "roledesc": roledesc, "permissionid": permissionid, csrf: $("input[name='csrf']").val(), "roleid": roleid, "roleisactive": roleisactive },
                         datatype: "json",
                         caches: false,
                         success: function (data) {
-                            if(data.role == "added"){
-                            setCookie('get-toast','Role Created Successfully',1)
-                            setCookie('Alert-msg','success',1)
-                            window.location.href = "/settings/roles?page="+pageno
-                        }
-                        if(data.role == "updated"){
-                            setCookie('get-toast','Role Updated Successfully',1)
-                            setCookie('Alert-msg','success',1)
-                            window.location.href = "/settings/roles?page="+pageno
-                        }
+                            if (data.role == "added") {
+                                setCookie('get-toast', 'Role Created Successfully', 1)
+                                setCookie('Alert-msg', 'success', 1)
+                                window.location.href = "/settings/roles?page=" + pageno
+                            }
+                            if (data.role == "updated") {
+                                setCookie('get-toast', 'Role Updated Successfully', 1)
+                                setCookie('Alert-msg', 'success', 1)
+                                window.location.href = "/settings/roles?page=" + pageno
+                            }
                         }
                     })
                 }
             }
         })
-
-
-
     }
     else {
         Validationcheck()
@@ -128,17 +173,17 @@ $(document).on('click', '.saverolperm', function () {
         })
 
     }
-
-
-
-
 })
 
+
+
 /**Edit Get Data from backend */
+
 $(document).on('click', '.roledit', function () {
     var id = $(this).attr('data-id');
     $('#rolid').val(id);
-    Editrole(id,languagedata)
+
+    Editrole(id, languagedata)
 
     var url = window.location.search;
     const urlpar = new URLSearchParams(url);
@@ -147,6 +192,9 @@ $(document).on('click', '.roledit', function () {
     $("#pageno").val(pageno)
 
 })
+
+
+// create role (model open) function
 
 $(document).on('click', '.add-new', function () {
 
@@ -158,65 +206,180 @@ $(document).on('click', '.add-new', function () {
 
     $('#roledesc').text("")
 
-    $('.modal-header').children('h3').text(languagedata.Rolecontent.addnewrole +' & '+languagedata.Rolecontent.setpermisson)
+    $('.modal-header').children('h5').text(languagedata.Rolecontent.addnewrole + ' & ' + languagedata.Rolecontent.setpermisson)
 
     $('#url').val('/settings/roles/createrole');
 
     $('.saverolperm').removeClass('roldisabled');
 
-    $('.saverolperm').attr('disabled',false);
+    $('.saverolperm').attr('disabled', false);
+
+
+    //category group restrict
+
+
+    if ($('#Check2').prop('checked')) {
+
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').addClass("pointer-events-none opacity-25");
+    }
+
+    //category restrict
+
+
+    if ($('#Check6').prop('checked')) {
+
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').addClass("pointer-events-none opacity-25");
+    }
+
+    // member group restrict
+
+
+    if ($('#Check11').prop('checked')) {
+
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').addClass("pointer-events-none opacity-25");
+    }
+
+    // member restrict
+
+    if ($('#Check15').prop('checked')) {
+
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').addClass("pointer-events-none opacity-25");
+    }
+
+
+    // category (init) restrict
+
+    if ($('#Check2:checked, #Check3:checked, #Check4:checked, #Check5:checked').length === 4) {
+        $('#headingCategories').removeClass("pointer-events-none opacity-25");
+        $('label[for="Check6"]').removeClass("pointer-events-none opacity-25");
+    } else {
+        $('#headingCategories').addClass("pointer-events-none opacity-25");
+        $('label[for="Check6"]').addClass("pointer-events-none opacity-25");
+    }
+
+
+
 })
+
 
 //public/js/settings/users
 /** Delete Role & Permission */
-$(document).on('click', '.roldel', function () {
+
+$(document).on('click', '#deleterole-btn', function () {
 
     var id = $(this).attr('data-id')
 
-    var name = $(this).parents('tr').children('td:first').text();
+    $.ajax({
+        url: '/settings/roles/chkroleshaveuser',
+        type: 'POST',
+        async: false,
+        data: { "rolesid": id, csrf: $("input[name='csrf']").val() },
+        dataType: 'json',
+        success: function (data) {
+            if (data.value) {
+                console.log("trrrrr", data.value);
 
-    $('.deltitle').text('Delete Role ?')
+                $('#delid').addClass("hidden");
+                $('#dltCancelBtn').text(languagedata.ok);
+                $("#content").text(languagedata.Roless.rolesrestrictmsg)
+            } else {
+                $('#delid').removeClass("hidden")
+                $('#content').text(languagedata.Roless.deleterolecontent);
+                $('#dltCancelBtn').text(languagedata.cancel);
 
-    $('.deldesc').text('Are you sure ! you want to delete this Role?')
+            }
+        }
+    })
+
+    var name = $(this).parents('tr').children('td:eq(1)').text();
+
+    $('.deltitle').text(languagedata.Roless.deleterole)
+
+    // $('.deldesc').text(languagedata.Roless.deleterolecontent)
 
     $('.delname').text(name)
 
     var url = window.location.search;
 
     const urlpar = new URLSearchParams(url);
-    
+
     pageno = urlpar.get('page');
 
-    $('#delete').attr('href', '/settings/roles/deleterole?id=' + id +"&page=" +pageno)
+    $('#delid').attr('href', '/settings/roles/deleterole?id=' + id + "&page=" + pageno)
 
 })
 
-/**Search clear */
-$(document).on('keyup', '#searchroles', function () {
 
-    if (event.key === 'Backspace') {
+// search functions strat //
 
-    if ($('.search').val() === "") {
 
-        window.location.href = "/settings/roles/"
+/*search redirect home page */
 
+$(document).on('keyup', '#searchroles', function (event) {
+    const searchInput = $(this).val();
+
+    if (event.key === 'Backspace' && window.location.href.indexOf("keyword") > -1) {
+
+        if ($(this).val() == "") {
+
+            window.location.href = "/settings/roles/";
+        }
     }
 
-}
+    $('.searchClosebtn').toggleClass('hidden', searchInput === "");
 
 })
 
-/*search */
-$(document).on("click", "#filterformsubmit1", function () {
-    var key = $(this).siblings().children(".search").val();
-    if (key == "") {
-        window.location.href = "/settings/roles/"
-    } else {
-        $('.filterform').submit();
-    }
+
+$(document).on("click", ".Closebtn", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+    $(".srchBtn-togg").removeClass("pointer-events-none")
+
 })
 
-/**Role isactive status */
+$(document).on("click", ".searchClosebtn", function () {
+    $(".search").val('')
+    window.location.href = "/settings/roles/"
+})
+
+$(document).ready(function () {
+
+    $('.search').on('input', function () {
+
+        if ($(this).val().length >= 1) {
+            $(".Closebtn").removeClass("hidden")
+            $(".srchBtn-togg").addClass("pointer-events-none")
+
+        } else {
+            $(".Closebtn").addClass("hidden")
+            $(".srchBtn-togg").removeClass("pointer-events-none")
+
+        }
+    });
+})
+
+$(document).on("click", ".hovericon", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+})
+
+//   end
+
+
+/**Role isactive status function */
 function RoleStatus(id) {
     $('#cb' + id).on('change', function () {
         this.value = this.checked ? 1 : 0;
@@ -234,7 +397,9 @@ function RoleStatus(id) {
         dataType: 'json',
         cache: false,
         success: function (result) {
-            notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>Role is edited successfully</span></div>';
+            console.log(result,);
+            notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px]" > Role Status Updated Successfully </p ></div ></div ></li></ul> `;
+
             $(notify_content).insertBefore(".header-rht");
             setTimeout(function () {
                 $('.toast-msg').fadeOut('slow', function () {
@@ -244,6 +409,7 @@ function RoleStatus(id) {
         }
     });
 }
+
 
 function Validationcheck() {
 
@@ -260,6 +426,7 @@ function Validationcheck() {
     }
 }
 
+
 //**close button function */
 $(document).on('click', '.close', function () {
     $('#roleform')[0].reset();
@@ -268,37 +435,36 @@ $(document).on('click', '.close', function () {
 
 })
 
-//**description focus function */
-const Desc = document.getElementById('roledesc');
-const inputGroup = document.querySelectorAll('.input-group');
 
-Desc.addEventListener('focus', () => {
-
-    Desc.closest('.input-group').classList.add('input-group-focused');
-});
-Desc.addEventListener('blur', () => {
-    Desc.closest('.input-group').classList.remove('input-group-focused');
-});
+// role edit function
 
 $(document).on('click', '#configure', function () {
     var id = $(this).attr('data-id');
     $('#rolid').val(id);
-    Editrole(id,languagedata)
+    Editrole(id, languagedata)
     setTimeout(function () {
         $('.permissionsection')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 500);
 });
+
+
+// role edit function
 
 $(document).on('click', '#manage', function () {
     var id = $(this).attr('data-id');
     $('#rolid').val(id);
-    Editrole(id,languagedata)
-    setTimeout(function () {
-        $('.permissionsection')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 500);
+
+    Editrole(id, languagedata)
+
+    // setTimeout(function () {
+    //     $('.permissionsection')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // }, 500);
 });
 
-function Editrole(id,languagedata) {
+
+// role edit function
+
+function Editrole(id, languagedata) {
     $.ajax({
         url: "/settings/roles/getroledetail",
         type: "POST",
@@ -310,18 +476,18 @@ function Editrole(id,languagedata) {
             let jsonrole = $.parseJSON(result);
             console.log("ss", result, jsonrole);
             $('#rolename').val(jsonrole.role.Name)
-            $('#roledesc').text(jsonrole.role.Description)
-           
+            $('#roledesc').val(jsonrole.role.Description)
 
-            if(jsonrole.role.Id==1){
+            console.log(jsonrole.role.Id, "admin");
+            if (jsonrole.role.Id == 1) {
 
-                $('.roleperm').attr('checked',true);
-                $('.saverolperm').attr('disabled',true);
+                $('.roleperm').attr('checked', true);
+                $('.saverolperm').attr('disabled', true);
                 $('.saverolperm').addClass('roldisabled');
 
-            }else{
-                $('.roleperm').attr('checked',false);
-                $('.saverolperm').attr('disabled',false);
+            } else {
+                $('.roleperm').attr('checked', false);
+                $('.saverolperm').attr('disabled', false);
                 $('.saverolperm').removeClass('roldisabled');
             }
 
@@ -331,7 +497,7 @@ function Editrole(id,languagedata) {
                 }
             }
 
-            $('.modal-header').children('h3').text(languagedata.updaterole+' / '+languagedata.Setting.managepermissions)
+            $('.modal-header').children('h5').text(languagedata.updaterole + ' / ' + languagedata.Setting.managepermissions)
         }
     })
 
@@ -339,267 +505,358 @@ function Editrole(id,languagedata) {
 
     $('.saverolperm').text('Update');
 
-}
 
-$("#roles-permissionModal").on("show.bs.modal",function(){
-    $(this).css("background-color","rgba(30,41,44,0.80")
-})
+    //category group restrict
 
-$(document).on('click','.selectcheckbox',function(){
+    if ($('#Check2').prop('checked')) {
 
-    roldid =$(this).attr('data-id')
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').removeClass("pointer-events-none opacity-25");
+    } else {
 
-    console.log(roldid,"roleid")
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').addClass("pointer-events-none opacity-25");
+    }
 
-    var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+    //category restrict
 
-    var sstatus
 
-    if (status ==true){
+    if ($('#Check6').prop('checked')) {
 
-        sstatus= '1'
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').removeClass("pointer-events-none opacity-25");
+    } else {
 
-    }else{
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').addClass("pointer-events-none opacity-25");
+    }
 
-        sstatus= '0'
+    // member group restrict
+
+
+    if ($('#Check11').prop('checked')) {
+
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').addClass("pointer-events-none opacity-25");
+    }
+
+    // member restrict
+
+    if ($('#Check15').prop('checked')) {
+
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').removeClass("pointer-events-none opacity-25");
+    } else {
+
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').addClass("pointer-events-none opacity-25");
+    }
+
+    // category (init) restrict
+
+    if ($('#Check2:checked, #Check3:checked, #Check4:checked, #Check5:checked').length === 4) {
+        $('#headingCategories').removeClass("pointer-events-none opacity-25");
+        $('label[for="Check6"]').removeClass("pointer-events-none opacity-25");
+    } else {
+        $('#headingCategories').addClass("pointer-events-none opacity-25");
+        $('label[for="Check6"]').addClass("pointer-events-none opacity-25");
     }
 
 
-   if ($(this).prop('checked')){
 
-       selectedcheckboxarr.push({"roleid":roldid,"status":sstatus})
-   
-   }else{
-
-       const index = selectedcheckboxarr.findIndex(item => item.roleid === roldid);
-   
-       if (index !== -1) {
-
-           console.log(index,"sssss")
-           selectedcheckboxarr.splice(index, 1);
-       }
-      
-       $('#Check').prop('checked',false)
-
-   }
-
-  
-   if (selectedcheckboxarr.length !=0){
-
-       $('.selected-numbers').show()
-
-       var allSame = selectedcheckboxarr.every(function(item) {
-           return item.status === selectedcheckboxarr[0].status;
-       });
-       
-       var setstatus
-       var img;
-
-          if (selectedcheckboxarr[0].status === '1') {
- 
-            setstatus = "Deactive";
-
-             img = "/public/img/In-Active (1).svg";
-
-       } else if (selectedcheckboxarr[0].status === '0') {
-
-              setstatus = "Active";
-
-              img = "/public/img/Active (1).svg";
-
-         } 
-
-          var htmlContent = '';
-
-            if (allSame) {
-
-             htmlContent = '<img src="' + img + '">' + setstatus;
-
-             } else {
-
-               htmlContent = '';
-
-             }
-
-           $('#unbulishslt').html(htmlContent);
-      
-       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
-
-       if(!allSame){
-
-           $('#seleccheckboxdelete').removeClass('border-end')
-
-           $('.unbulishslt').html("")
-       }else{
-
-           $('#seleccheckboxdelete').addClass('border-end')
-       }
+}
 
 
-      
-   }else{
+// checkbox select function
 
-       $('.selected-numbers').hide()
-   }
+$(document).on('click', '.selectcheckbox', function () {
 
-       var allChecked = true;
+    $(".multidelete").addClass("responsive-width")
 
-        $('.selectcheckbox').each(function() {
 
-            if (!$(this).prop('checked')) {
+    var roleid = $(this).attr('data-id')
+
+    var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
+
+
+
+    if ($(this).prop('checked')) {
+
+        selectedcheckboxarr.push({ "roleid": roleid, "status": status })
+
+    } else {
+        const index = selectedcheckboxarr.findIndex(item => item.roleid === roleid);
+
+        if (index !== -1) {
+
+            selectedcheckboxarr.splice(index, 1);
+        }
+
+        $('#Check').prop('checked', false)
+
+    }
+
+
+    if (selectedcheckboxarr.length != 0) {
+
+        $('.selected-numbers').removeClass("hidden")
+
+        if (selectedcheckboxarr.length == 1) {
+            $('#deselectid').text(languagedata.deselect)
+        } else if (selectedcheckboxarr.length > 1) {
+            $('#deselectid').text(languagedata.deselectall)
+        }
+
+        var allSame = selectedcheckboxarr.every(function (item) {
+            return item.status === selectedcheckboxarr[0].status;
+        });
+
+        var setstatus
+        var img;
+
+        if (selectedcheckboxarr[0].status === '1') {
+            console.log(img, setstatus, "see");
+
+            setstatus = languagedata.Userss.deactive;
+
+            img = "/public/img/In-Active.svg";
+
+        } else if (selectedcheckboxarr[0].status === '0') {
+
+            setstatus = languagedata.Userss.active;
+
+            img = "/public/img/Active.svg";
+
+        }
+
+
+        var htmlContent = '';
+
+        if (allSame) {
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+            htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">' + setstatus + '</span>';
+
+        } else {
+
+            htmlContent = '';
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+
+        }
+
+        $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
+
+        if (!allSame) {
+
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+            $('.unbulishslt').html("")
+        } else {
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+        }
+
+
+    } else {
+
+        $('.selected-numbers').addClass("hidden")
+    }
+
+    var allChecked = true;
+
+    $('.selectcheckbox').each(function () {
+
+        if (!$(this).prop('checked')) {
 
             allChecked = false;
 
-           return false; 
+            return false;
         }
-   });
+    });
 
-         $('#Check').prop('checked', allChecked);
+    $('#Check').prop('checked', allChecked);
 
+    console.log(selectedcheckboxarr, "checkkkk")
 })
 
-//ALL CHECKBOX CHECKED FUNCTION//
 
-$(document).on('click','#Check',function(){
+// select all checkbox
 
-    selectedcheckboxarr=[]
+$(document).on('click', '#Check', function () {
+
+    $(".multidelete").addClass("responsive-width")
+
+    selectedcheckboxarr = []
 
     var isChecked = $(this).prop('checked');
 
-    if (isChecked){
-            
+    if (isChecked) {
 
         $('.selectcheckbox').prop('checked', isChecked);
 
-        $('.selectcheckbox').each(function(){
-     
-           roldid= $(this).attr('data-id')
+        $('.selectcheckbox').each(function () {
 
-           var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+            roldid = $(this).attr('data-id')
 
-           var sstatus
+            var status = $(this).parents('td').siblings('td').find('.tgl-light').val();
 
-           if (status ==true){
-       
-               sstatus= '1'
-       
-           }else{
-       
-               sstatus= '0'
-           }
-    
-           selectedcheckboxarr.push({"roleid":roldid,"status":sstatus})
-        
+
+            selectedcheckboxarr.push({ "roleid": roldid, "status": status })
         })
-    
-        $('.selected-numbers').show()
 
-        var allSame = selectedcheckboxarr.every(function(item) {
+        if (selectedcheckboxarr.length != 0) {
+            const deselectText = selectedcheckboxarr.length == 1 ? languagedata.deselect : languagedata.deselectall;
+            $('#deselectid').text(deselectText);
+
+            $('.selected-numbers').removeClass("hidden")
+        } else {
+            $('.selected-numbers').addClass("hidden")
+        }
+        var allSame = selectedcheckboxarr.every(function (item) {
 
             return item.status === selectedcheckboxarr[0].status;
         });
-        
+
+
         var setstatus
 
         var img
-    
-        if (selectedcheckboxarr.length !=0){
-
         if (selectedcheckboxarr[0].status === '1') {
- 
-            setstatus = "Deactive";
 
-             img = "/public/img/In-Active (1).svg";
+            setstatus = languagedata.Userss.deactive;
 
-       } else if (selectedcheckboxarr[0].status === '0') {
+            img = "/public/img/In-Active.svg";
 
-              setstatus = "Active";
+        } else if (selectedcheckboxarr[0].status === '0') {
 
-              img = "/public/img/Active (1).svg";
+            setstatus = languagedata.Userss.active;
 
-         } 
+            img = "/public/img/Active.svg";
         }
 
         var htmlContent = '';
 
         if (allSame) {
 
-         htmlContent = '<img src="' + img + '">' + setstatus;
-
-         $('#seleccheckboxdelete').addClass('border-end')
-
-         } else {
-
-           htmlContent = '';
-
-           $('#seleccheckboxdelete').removeClass('border-end')
-
-         }
-
-       $('#unbulishslt').html(htmlContent);
-
-        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
-    
-    }else{
+            htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">' + setstatus + '</span>';
 
 
-        selectedcheckboxarr=[]
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+        } else {
+
+            htmlContent = '';
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+        }
+
+        $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
+
+    } else {
+        $('.selected-numbers').addClass("hidden")
+
+        selectedcheckboxarr = []
 
         $('.selectcheckbox').prop('checked', isChecked);
-
-        $('.selected-numbers').hide()
     }
+})
 
-    if (selectedcheckboxarr.length ==0){
 
-        $('.selected-numbers').hide()
+// delete model content update
+
+$(document).on('click', '#seleccheckboxdelete', function () {
+
+    $.ajax({
+        url: '/settings/roles/chkroleshaveuser',
+        type: 'POST',
+        async: false,
+        data: {
+            "roleids": JSON.stringify(selectedcheckboxarr),
+            csrf: $("input[name='csrf']").val(),
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.value) {
+                $('#delid').addClass("hidden");
+                $('#dltCancelBtn').text(languagedata.ok);
+                if (selectedcheckboxarr.length > 1) {
+
+                    $('.deltitle').text(languagedata.Roless.deleteroles)
+
+                    $('#content').text(languagedata.Roless.rolesrestrictmsgs)
+
+                } else {
+
+                    $('.deltitle').text(languagedata.Roless.deleterole)
+
+                    $('#content').text(languagedata.Roless.rolesrestrictmsg)
+                }
+            } else {
+                $('#delid').removeClass("hidden")
+                $('#dltCancelBtn').text(languagedata.cancel);
+
+                if (selectedcheckboxarr.length > 1) {
+
+                    $('.deltitle').text(languagedata.Roless.deleteroles)
+
+                    $('#content').text(languagedata.Roless.deleterolescontent)
+
+                } else {
+
+                    $('.deltitle').text(languagedata.Roless.deleterole)
+
+                    $('#content').text(languagedata.Roless.deleterolecontent)
+                }
+
+            }
+        }
+    })
+
+
+    $("#delid").text($(this).text());
+
+    $('#delid').addClass('checkboxdelete')
+})
+
+
+// status model content update
+
+$(document).on('click', '#unbulishslt', function () {
+
+    if (selectedcheckboxarr.length > 1) {
+
+        $('.deltitle').text($(this).text() + " " + languagedata.Roless.Roles)
+
+        $('#content').text(languagedata.Roless.statusupdaterole + " " + $(this).text() + " " + languagedata.Roless.selectedroles)
+    } else {
+
+        $('.deltitle').text($(this).text() + " " + languagedata.Roless.Role)
+
+        $('#content').text(languagedata.Roless.statusupdaterole + " " + $(this).text() + " " + languagedata.Roless.selectedrole)
     }
+    $("#delid").text($(this).text());
+
+    $('#delid').addClass('selectedunpublish')
 
 })
 
-$(document).on('click','#seleccheckboxdelete',function(){
+// cancel btn function
 
-    if (selectedcheckboxarr.length>1){
-         
-    $('.deltitle').text("Delete Roles?")
-
-    $('#content').text('Are you sure want to delete selected Roles?')
-
-    }else {
-
-         $('.deltitle').text("Delete Role?")
-
-         $('#content').text('Are you sure want to delete selected Role?')
-    }
-
-
-    $('#delete').addClass('checkboxdelete')
+$("#deleteModal").on("hide.bs.modal", function () {
+    $('#delid').removeClass('checkboxdelete');
+    $('#delid').removeClass('selectedunpublish');
+    $('#delid').attr('href', '');
+    $('.delname').text('')
 })
 
-$(document).on('click','#unbulishslt',function(){
 
-    if (selectedcheckboxarr.length>1){
-
-         $('.deltitle').text( $(this).text()+" "+"Roles?")
-
-         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Roles?")
-    }else{
-
-         $('.deltitle').text( $(this).text()+" "+"Role?")
-
-         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Role?")
-    }
-
-    $('#delete').addClass('selectedunpublish')
-
-})
 
 //MULTI SELECT DELETE FUNCTION//
-$(document).on('click','.checkboxdelete',function(){
+
+$(document).on('click', '.checkboxdelete', function () {
 
     var url = window.location.href;
-
-    console.log("url", url)
 
     var pageurl = window.location.search
 
@@ -616,20 +873,19 @@ $(document).on('click','.checkboxdelete',function(){
         data: {
             "roleids": JSON.stringify(selectedcheckboxarr),
             csrf: $("input[name='csrf']").val(),
-            "page":pageno
+            "page": pageno
 
-            
+
         },
         success: function (data) {
 
-            console.log(data,"result")
 
-            if (data.value==true){
+            if (data.value == true) {
 
                 setCookie("get-toast", "Role Deleted Successfully")
 
-                window.location.href=data.url
-            }else{
+                window.location.href = data.url
+            } else {
 
                 setCookie("Alert-msg", "Internal Server Error")
 
@@ -639,23 +895,26 @@ $(document).on('click','.checkboxdelete',function(){
     })
 
 })
+
+
 //Deselectall function//
 
-$(document).on('click','#deselectid',function(){
+$(document).on('click', '#deselectid', function () {
 
-    $('.selectcheckbox').prop('checked',false)
+    $('.selectcheckbox').prop('checked', false)
 
-    $('#Check').prop('checked',false)
+    $('#Check').prop('checked', false)
 
-    selectedcheckboxarr=[]
+    selectedcheckboxarr = []
 
-    $('.selected-numbers').hide()
-    
+    $('.selected-numbers').addClass("hidden")
+
 })
+
 
 //multi select active and deactive function//
 
-$(document).on('click','.selectedunpublish',function(){
+$(document).on('click', '.selectedunpublish', function () {
 
     var pageurl = window.location.search
 
@@ -663,29 +922,25 @@ $(document).on('click','.selectedunpublish',function(){
 
     pageno = urlpar.get('page')
 
-    $('.selected-numbers').hide()
+    $('.selected-numbers').addClass("hidden")
     $.ajax({
         url: '/settings/roles/multiselectrolestatus',
         type: 'post',
         dataType: 'json',
         async: false,
         data: {
-            "roleids":JSON.stringify(selectedcheckboxarr),
+            "roleids": JSON.stringify(selectedcheckboxarr),
             csrf: $("input[name='csrf']").val(),
-            "page":pageno
-
-            
+            "page": pageno
         },
         success: function (data) {
 
-            console.log(data,"result")
-
-            if (data.value==true){
+            if (data.value == true) {
 
                 setCookie("get-toast", "Role Updated Successfully")
 
-                window.location.href=data.url
-            }else{
+                window.location.href = data.url
+            } else {
 
                 setCookie("Alert-msg", "Internal Server Error")
 
@@ -696,3 +951,99 @@ $(document).on('click','.selectedunpublish',function(){
 
 
 })
+
+
+// Group name limit of 25 char
+
+$(document).on('keyup', '.checklength', function () {
+    var inputVal = $(this).val()
+
+    var inputLength = inputVal.length
+
+    if (inputLength == 25) {
+        $(this).siblings('.lengthErr').removeClass('hidden')
+    } else {
+        $(this).siblings('.lengthErr').addClass('hidden')
+    }
+
+})
+
+
+
+
+$('#Check2, #Check3, #Check4, #Check5').on('change', function () {
+    // Check if exactly four checkboxes are checked
+    if ($('#Check2:checked, #Check3:checked, #Check4:checked, #Check5:checked').length === 4) {
+        $('#headingCategories').removeClass("pointer-events-none opacity-25");
+        $('label[for="Check6"]').removeClass("pointer-events-none opacity-25");
+    } else {
+        $('#Check6,#Check7, #Check8, #Check9').prop('checked', false);
+        $('#headingCategories').addClass("pointer-events-none opacity-25");
+        $('label[for="Check6"], label[for="Check7"], label[for="Check8"], label[for="Check9"]').addClass("pointer-events-none opacity-25");
+        $('#collapseCategories').removeClass('show');
+        $('#headingCategories button').addClass('collapsed');
+
+
+    }
+});
+
+
+//category group
+
+$('#Check2').on('change', function () {
+    if ($(this).prop('checked')) {
+        // Remove the class if #Check15 is checked
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').removeClass("pointer-events-none opacity-25");
+
+    } else {
+        // Add the class if #Check15 is unchecked
+        $('#Check3, #Check4, #Check5').prop('checked', false);
+
+        $('label[for="Check3"], label[for="Check4"], label[for="Check5"]').addClass("pointer-events-none opacity-25");
+
+    }
+});
+
+
+//category
+
+$('#Check6').on('change', function () {
+    if ($(this).prop('checked')) {
+        // Remove the class if #Check15 is checked
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').removeClass("pointer-events-none opacity-25");
+
+    } else {
+        // Add the class if #Check15 is unchecked
+        $('#Check7, #Check8, #Check9').prop('checked', false);
+        $('label[for="Check7"], label[for="Check8"], label[for="Check9"]').addClass("pointer-events-none opacity-25");
+
+    }
+});
+
+
+// member group
+$('#Check11').on('change', function () {
+    if ($(this).prop('checked')) {
+        // Remove the class if #Check15 is checked
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').removeClass("pointer-events-none opacity-25");
+    } else {
+        // Add the class if #Check15 is unchecked
+        $('#Check12, #Check13, #Check14').prop('checked', false);
+        $('label[for="Check12"], label[for="Check13"], label[for="Check14"]').addClass("pointer-events-none opacity-25");
+    }
+});
+
+// member
+
+$('#Check15').on('change', function () {
+    if ($(this).prop('checked')) {
+        // Remove the class if #Check15 is checked
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').removeClass("pointer-events-none opacity-25");
+    } else {
+        // Add the class if #Check15 is unchecked
+        $('#Check16, #Check17, #Check18').prop('checked', false);
+        $('label[for="Check16"], label[for="Check17"], label[for="Check18"]').addClass("pointer-events-none opacity-25");
+    }
+});
+
+

@@ -2,235 +2,320 @@ var languagedata
 /**This if for Language json file */
 $(document).ready(async function () {
 
-  var languagepath = $('.language-group>button').attr('data-path')
-  
+    var languagepath = $('.language-group>button').attr('data-path')
+
     await $.getJSON(languagepath, function (data) {
-        
+
         languagedata = data
     })
 
 });
 
-$(document).keydown(function(event) {
-  if (event.ctrlKey && event.key === '/') {
-      $(".search").focus().select();
-  }
-});
-
-$(document).on('click','#edit-btn',function(){
-      tempid = $(this).attr('data-id')
-      $('#userid').val(tempid)
-      var url = window.location.search;
-      const urlpar = new URLSearchParams(url);
-      pageno = urlpar.get('page');
-      $("#pageno").val(pageno)
-      $.ajax({
-        url: "/settings/emails/edit-template",
-        type: "GET",
-        dataType: "json",
-        data: { "id": tempid },
-        success: function (result) {
-            console.log("result",result)
-
-          if (result.Id != 0) {
-             
-            var name = $("#tempname").val(result.TemplateName);
-            var sub = $("#tempsub").val(result.TemplateSubject);
-            var content = $("#temcont").val(result.TemplateMessage);
-            $("#tempname").text(name);
-            $("#tempsub").text(sub);
-            $("#temcont").text(content)
-  
-          
-         }
-      }
-      })
-
-})
-//**Template isactive status *//
-function TempStatus(id) {
-    $('#cb1' + id).on('change', function () {
-      this.value = this.checked ? 1 : 0;
-    }).change();
-    var isactive = $('#cb1' + id).val();
-    $.ajax({
-      url: '/settings/emails/templateisactive',
-      type: 'POST',
-      async: false,
-      data: {
-        id: id,
-        isactive: isactive,
-        csrf: $("input[name='csrf']").val()
-      },
-      dataType: 'json',
-      cache: false,
-      success: function (result) {
-             notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>Template Updated Successfully</span></div>';
-                $(notify_content).insertBefore(".header-rht");
-                setTimeout(function(){
-                    $('.toast-msg').fadeOut('slow', function(){
-                        $(this).remove();
-                    });
-                }, 5000); // 5000 milliseconds = 5 seconds
-      }
-    });
-}
-//**description focus function */
-const Desc = document.getElementById('temcont');
-const inputGroup = document.querySelectorAll('.input-group');
-
-Desc.addEventListener('focus', () => {
-
-  Desc.closest('.input-group').classList.add('input-group-focused');
-});
-Desc.addEventListener('blur', () => {
-  Desc.closest('.input-group').classList.remove('input-group-focused');
-});
-
-/*search */
-$(document).on("click", "#filterformsubmit", function () {
-  var key = $(this).siblings().children(".search").val();
-  if (key == "") {
-      window.location.href = "/settings/emails/"
-  } else {
-      $('.filterform').submit();
-  }
-})
-
-$(document).on('keyup','#searchemails',function(){
-
-
-    if (event.key === 'Backspace') {
-
-  if($('.search').val()===""){
-    
-      window.location.href ="/settings/emails"
-      
-  }
-    }
-})
-
-$(document).on('click','#update-templatebtn',function(){
-
-console.log("checking")
-
-$("form[name='emailtemplateform']").validate({
-  rules: {
-    
-      tempsub: {
-          required: true,
-          space: true,
-          
-      },
-      tempdesc: {
-        required: true,
-        space: true,
-    },
-      temcont:{
-        required: true,
-        space: true,
-        // maxlength: 250,
-      },
-  },
-  messages: {
-  
-      tempsub: {
-          required: "* Please enter Template Subject" ,
-          space: "* " + languagedata.spacergx,
-         
-      },
-      tempdesc: {
-        required: "* Please enter Template Description" ,
-        space: "* " + languagedata.spacergx,
-        
-    },
-      temcont: {
-        required: "* Please enter templatecontent" ,
-          space: "* " + languagedata.spacergx,
-          // maxlength: "* Maximum 250 character allowed"
-      }
-  }
-});
-
-var formcheck = $("#mailtemplate_form").valid();
-
-
-if (formcheck == true) {
-  $('#mailtemplate_form')[0].submit();
-
-}
-else{
-  Validationcheck()
-  $(document).on('keyup', ".field", function () {
-      Validationcheck()
-  })
-}
-
-})
-
-function Validationcheck(){
-
-    if ($('#emailsub').hasClass('error')){
-
-        console.log("checkkkuuuuuuuuuu")
-        $('#subgrb').addClass('input-group-error');
-    }else{
-        $('#subgrb').removeClass('input-group-error');
-    }
-
-  if ($('#emaildesc').hasClass('error')) {
-    $('#desgrb').addClass('input-group-error');
-}else{
-  $('#desgrb').removeClass('input-group-error');
-}
-
-
-}
-
-$(document).on('click','.close',function(){
-
-  $('label.error').remove()
-  $('.input-group').removeClass('input-group-error')
-
-})
-
+// var quill;
 var ckeditor1;
-var userids =[]
-var templatestatus=[]
+var userids = []
+var templatestatus = []
 
-$(document).ready(function(){
+$(document).ready(function () {
     CKEDITORS()
 })
 
-$(document).on('click','.open-emailtemp',function(){
+$(document).keydown(function (event) {
+    if (event.ctrlKey && event.key === '/') {
+        $(".search").focus().select();
+    }
+});
 
-    console.log("checkclick")
+$(document).on('click', '.emailEditBtn', function () {
     tempid = $(this).attr('data-id')
-    $('#userid').val(tempid)
+
     var url = window.location.search;
     const urlpar = new URLSearchParams(url);
     pageno = urlpar.get('page');
     $("#pageno").val(pageno)
     $.ajax({
-      url: "/settings/emails/edit-template",
-      type: "GET",
-      dataType: "json",
-      data: { "id": tempid },
-      success: function (result) {
-          console.log("result",result)
-        if (result.Id != 0) {
-          var pathname = window.location.pathname
-          $('#input-pagefind').val(pathname)
-          $('#input-tempid').val(tempid)
-          $("#emailtemp-name").text(result.TemplateName);
-          $("#emailsub").val(result.TemplateSubject);
-          $("#emaildesc").val(result.TemplateDescription)
-          ckeditor1.setData(result.TemplateMessage)
-       }
-    }
+        url: "/settings/emails/edit-template",
+        type: "GET",
+        dataType: "json",
+        data: { "id": tempid },
+        success: function (result) {
+            console.log("result", result)
+
+            if (result.Id != 0) {
+
+                var pathname = window.location.pathname
+                $('#input-pagefind').val(pathname)
+                $('#input-tempid').val(tempid)
+                $("#emailtemp-name").text(result.TemplateName);
+                $("#emailname").val(result.TemplateName)
+                $("#emailsub").val(result.TemplateSubject);
+                $("#emaildesc").val(result.TemplateDescription)
+                ckeditor1.setData(result.TemplateMessage)
+                // quill.clipboard.dangerouslyPasteHTML(result.TemplateMessage);
+
+
+            }
+        }
     })
 
 })
+//**Template isactive status *//
+
+$(document).on('click', '.emailStatusBtn', function () {
+    if ($(this).prop('checked')) {
+
+        $(this).attr('value', '1')
+    } else {
+        $(this).attr('value', '0')
+    }
+
+    var lang_id = $(this).attr('data-id')
+
+    var isactive = $(this).val();
+
+
+    $.ajax({
+        url: '/settings/emails/templateisactive',
+        type: 'POST',
+        async: false,
+        data: {
+            id: lang_id,
+            isactive: isactive,
+            csrf: $("input[name='csrf']").val()
+        },
+        dataType: 'json',
+        cache: false,
+        success: function (result) {
+            if (result.status) {
+
+                notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >${languagedata.Toast.EmailStatusUpdatedSuccessfully}</p ></div ></div ></li></ul> `;
+                $(notify_content).insertBefore(".header-rht");
+                setTimeout(function () {
+                    $('.toast-msg').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                }, 5000); // 5000 milliseconds = 5 seconds
+
+            } else {
+
+                notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.internalserverr + '</span></div>';
+                $(notify_content).insertBefore(".header-rht");
+                setTimeout(function () {
+                    $('.toast-msg').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                }, 5000); // 5000 milliseconds = 5 seconds
+
+            }
+
+
+        }
+    });
+})
+
+$(document).on('click', '#emailEditCloseBtn', function () {
+
+    $('#emailsub-error,#emaildesc-error').css('display', 'none')
+    // $('#emaildesc-error"').css('display', 'none')
+})
+
+//**description focus function */
+// const Desc = document.getElementById('temcont');
+// const inputGroup = document.querySelectorAll('.input-group');
+
+// Desc.addEventListener('focus', () => {
+
+//     Desc.closest('.input-group').classList.add('input-group-focused');
+// });
+// Desc.addEventListener('blur', () => {
+//     Desc.closest('.input-group').classList.remove('input-group-focused');
+// });
+
+/*search */
+// $(document).on("click", "#filterformsubmit", function () {
+//     var key = $(this).siblings().children(".search").val();
+//     if (key == "") {
+//         window.location.href = "/settings/emails/"
+//     } else {
+//         $('.filterform').submit();
+//     }
+// })
+
+// $(document).on('keyup', '#searchemails', function () {
+
+
+//     if (event.key === 'Backspace') {
+
+//         if ($('.search').val() === "") {
+
+//             window.location.href = "/settings/emails"
+
+//         }
+//     }
+// })
+
+$(document).on('click', '#update-templatebtn', function () {
+
+    console.log("checking")
+
+    $("form[name='emailtemplateform']").validate({
+        rules: {
+
+            tempsub: {
+                required: true,
+                space: true,
+
+            },
+            tempdesc: {
+                required: true,
+                space: true,
+            },
+            temcont: {
+                required: true,
+                space: true,
+                // maxlength: 250,
+            },
+        },
+        messages: {
+
+            tempsub: {
+                required: "* Please enter Template Subject",
+                space: "* " + languagedata.spacergx,
+
+            },
+            tempdesc: {
+                required: "* Please enter Template Description",
+                space: "* " + languagedata.spacergx,
+
+            },
+            temcont: {
+                required: "* Please enter templatecontent",
+                space: "* " + languagedata.spacergx,
+                // maxlength: "* Maximum 250 character allowed"
+            }
+        }
+    });
+
+    var formcheck = $("#mailtemplate_form").valid();
+
+
+    if (formcheck == true) {
+        $('#mailtemplate_form').attr('action', '/settings/emails/update-temp')
+        $('#mailtemplate_form')[0].submit();
+
+    }
+    else {
+        Validationcheck()
+        $(document).on('keyup', ".field", function () {
+            Validationcheck()
+        })
+    }
+
+})
+
+function Validationcheck() {
+
+    if ($('#emailsub').hasClass('error')) {
+
+        console.log("checkkkuuuuuuuuuu")
+        $('#subgrb').addClass('input-group-error');
+    } else {
+        $('#subgrb').removeClass('input-group-error');
+    }
+
+    if ($('#emaildesc').hasClass('error')) {
+        $('#desgrb').addClass('input-group-error');
+    } else {
+        $('#desgrb').removeClass('input-group-error');
+    }
+
+
+}
+
+$(document).on('click', '.close', function () {
+
+    $('label.error').remove()
+    $('.input-group').removeClass('input-group-error')
+
+})
+
+
+
+
+
+// $(document).on('click', '.open-emailtemp', function () {
+
+//     console.log("checkclick")
+//     tempid = $(this).attr('data-id')
+//     $('#userid').val(tempid)
+//     var url = window.location.search;
+//     const urlpar = new URLSearchParams(url);
+//     pageno = urlpar.get('page');
+//     $("#pageno").val(pageno)
+//     $.ajax({
+//         url: "/settings/emails/edit-template",
+//         type: "GET",
+//         dataType: "json",
+//         data: { "id": tempid },
+//         success: function (result) {
+//             console.log("result", result)
+//             if (result.Id != 0) {
+//                 var pathname = window.location.pathname
+//                 $('#input-pagefind').val(pathname)
+//                 $('#input-tempid').val(tempid)
+//                 $("#emailtemp-name").text(result.TemplateName);
+//                 $("#emailsub").val(result.TemplateSubject);
+//                 $("#emaildesc").val(result.TemplateDescription)
+//                 ckeditor1.setData(result.TemplateMessage)
+//             }
+//         }
+//     })
+
+// })
+
+
+// function Quill() {
+//     const toolbarOptions = [
+//         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+//         [{ 'size': ['small', false, 'large'] }],  // custom dropdown
+
+//         ['bold', 'italic', 'underline'],        // toggled buttons
+
+//         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+//         [{ 'align': [] }],
+
+//         ['link']
+//       ];
+
+//        quill = new Quill('#text', {
+//         modules: {
+//           toolbar: toolbarOptions
+//         },
+//         theme: 'snow'
+//       });
+// }
+
+
+// quill editor update
+
+
+// $('#update-templatebtn').click(function (event) {
+
+//     // var emailtemplate = ckeditor1.getData()
+
+//     // $('#input-tempname').val($("#emailtemp-name").text())
+
+//     var htmlContent = quill.root.innerHTML;
+
+//     var emailtemplate = htmlContent;
+
+//     $('#ckeditor-data').val(emailtemplate)
+
+//     $('#mailtemplate_form').submit()
+// })
+
 
 
 function CKEDITORS() {
@@ -239,7 +324,8 @@ function CKEDITORS() {
 
     CKEDITOR.ClassicEditor.create(document.getElementById("text"), {
         toolbar: {
-            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'horizontalLine', 'link', 'code'],
+            // items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'horizontalLine', 'link', 'code'],
+            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'numberedList', 'bulletedList', 'link'],
             shouldNotGroupWhenFull: true
         },
         list: {
@@ -260,7 +346,7 @@ function CKEDITORS() {
                 { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
             ]
         },
-        placeholder: languagedata?.Channell?.plckeditor,
+        // placeholder: languagedata?.Channell?.plckeditor,
         fontFamily: {
             options: [
                 'default',
@@ -383,7 +469,8 @@ function CKEDITORS() {
 
 }
 
-$('#update-templatebtn').click(function(event){
+
+$('#update-templatebtn').click(function (event) {
 
     var emailtemplate = ckeditor1.getData()
 
@@ -394,12 +481,13 @@ $('#update-templatebtn').click(function(event){
     // $('#mailtemplate_form').submit()
 })
 
-function setroute(){
 
-    window.location.href="/settings/emails/"
+function setroute() {
+
+    window.location.href = "/settings/emails/"
 }
 
-function setroute1(){
+function setroute1() {
 
-    window.location.href="/settings/emails/emailconfig/"
+    window.location.href = "/settings/emails/emailconfig/"
 }

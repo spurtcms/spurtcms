@@ -1,0 +1,24 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Graphql Playground
+            </h2>
+        </div>
+
+    </header>
+    <section>
+        <iframe src="{{.url}}" style="width: 100%;height: calc(100vh - 50px);"></iframe>
+    </section>
+</section>
+
+{{template "footer" .}}
+{{template "footerclose" .}}

@@ -12,240 +12,55 @@ let orderindex = 1        //order index field
 let optionid = 1
 var sectionid = 1
 let RelationalMember = 14
+let RelationalMedia = 15
+let RelationalVideo = 16
 
-// $(document).ready(async function(){
+$(document).ready(async function () {
+  var languagepath = $('.language-group>button').attr('data-path')
 
-var languagepath = $('.language-group>button').attr('data-path')
+  await $.getJSON(languagepath, function (data) {
 
-$.getJSON(languagepath, function (data) {
+    languagedata = data
 
-  languagedata = data
+  })
+
+  $('.drag-btn').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Drag & Drop'
+});
+
+$('.edit-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Edit'
+});
+
+$('.duplicate-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Clone'
+});
+
+$('.remove-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Remove'
+});
+
+$('[data-bs-toggle="tooltip"]').tooltip();
 })
 
-// })
-
-/**STEPS changes body content */
-$(document).ready(function () {
-
-  var channelname = $("#channelname").val()
-
-  var channeldesc = $('#channeldesc').val()
-
-  if (channelname == "" && channeldesc == "") {
-
-    $('.channelstep2').hide();
-
-    $('.channelstep3').hide();
-
-  }
-
-  function CheckPrevioushideandshow() {
-
-    console.log(fiedlvalue, "checkkkkkk")
-
-    if (fiedlvalue == null) {
-
-      console.log("condition1")
-
-      fiedlvalue = []
-    }
-
-    if ($('.channelstep2').is(':visible')) {
-
-      if (fiedlvalue == '') {
-
-        console.log("conditon2")
-        $('.fieldapp').each(function () {
-
-          var obj = CreatePropertiesObjec()
-
-          obj.MasterFieldId = parseInt($(this).attr('data-masterfieldid'))
-
-          obj.NewFieldId = parseInt($(this).attr('data-newfieldid'))
-
-          obj.FieldName = $(this).children('.heading-three').text();
-
-          obj.IconPath = $(this).children('.img-div').children('img').attr('src')
-
-          obj.SectionId = parseInt($(this).parent('.section-fields-content').attr('data-id'));
-
-          obj.SectionNewId = parseInt($(this).parent('.section-fields-content').attr('data-newid'));
-
-          obj.SectionName = $(this).parent('.section-fields-content').children('.section-class').children('input').val();
-
-          fiedlvalue.push(obj)
-
-          console.log(fiedlvalue, "arrayfield")
-        })
-      }
-
-      $('.fieldapp').each(function () {
-
-        const index = fiedlvalue.findIndex(obj => {
-
-          return obj.FieldId == $(this).attr('data-fieldid') && obj.NewFieldId == $(this).attr('data-newfieldid');
-
-        });
-
-        console.log(index, index < 0);
-
-        if (index == -1) {
-
-          var obj = CreatePropertiesObjec()
-
-          obj.MasterFieldId = parseInt($(this).attr('data-masterfieldid'))
-
-          obj.NewFieldId = parseInt($(this).attr('data-newfieldid'))
-
-          obj.FieldName = $(this).children('.heading-three').text();
-
-          obj.IconPath = $(this).children('.img-div').children('img').attr('src')
-
-          obj.SectionNewId = parseInt($(this).parent('.section-fields-content').attr('data-newid'));
-
-          obj.SectionId = parseInt($(this).parent('.section-fields-content').attr('data-id'));
-
-          obj.SectionName = $(this).parent('.section-fields-content').children('.section-class').children('input').val();
-
-          fiedlvalue.push(obj)
-        }
-
-      })
-
-      flg = FieldValidation()
-
-      console.log("flg==", flg);
-
-      if (!flg) {
-
-        return false
-      }
-
-      $('#cr-ch-title').hide();
-
-      $('#backto-prev').show();
-
-      $('#cr-ch-title').hide();
-
-      $('#backto-prev').show();
-
-      $('.channelstep2').hide();
-
-      $('.channelstep3').show();
-
-      $('#step2').addClass('prev');
-
-      $('#nextstep').hide();
-
-      if (window.location.href.indexOf("editchannel") > -1) {
-
-        $('.channelupt').show();
-
-      } else {
-
-        $('.channelsave').show();
-      }
-
-
-      $(".channelIdentifier").removeClass('active');
-
-      $('#step3').addClass('active');
-
-
-    } else {
-
-      $('#cr-ch-title').hide();
-
-      $('#backto-prev').show();
-
-      $(".channelIdentifier").removeClass('active');
-
-      $('#step2').addClass('active');
-
-      $('.channelstep2').show();
-
-      $('.channelstep3').hide();
-
-      $('#nextstep').show();
-
-      if (window.location.href.indexOf("editchannel") > -1) {
-
-        $('.channelupt').hide();
-
-      } else {
-
-        $('.channelsave').hide();
-      }
-
-
-
-    }
-  }
-
-  function Backtoprevious() {
-
-    if ($('.channelstep2').is(':visible')) {
-
-      $('#cr-ch-title').show();
-
-      $('#backto-prev').hide();
-
-      $('.channelstep2').hide();
-
-      $('.channelstep1').show();
-
-      $('#step1').removeClass('prev');
-
-      $('#nextstep').show();
-
-      if (window.location.href.indexOf("editchannel") > -1) {
-
-        $('.channelupt').hide();
-
-      } else {
-
-        $('.channelsave').hide();
-      }
-
-      $(".channelIdentifier").removeClass('active');
-
-      $('#step1').addClass('active');
-
-    } else {
-
-      $('#cr-ch-title').hide();
-
-      $('#backto-prev').show();
-
-      $('.channelstep3').hide();
-
-      $('.channelstep2').show();
-
-      $('#step2').removeClass('prev');
-
-      $('#nextstep').show();
-
-      if (window.location.href.indexOf("editchannel") > -1) {
-
-        $('.channelupt').hide();
-
-      } else {
-
-        $('.channelsave').hide();
-      }
-
-      $(".channelIdentifier").removeClass('active');
-
-      $('#step2').addClass('active');
-
-    }
-
-  }
-
-  $(document).on('click', '#nextstep', function () {
-
-
-    $("form[name='channelform']").validate({
+// Create channel Next btn
+$(document).on('click', '#nextstep', function () {
+  var currentindex = $("#chn-step").val()
+  if (currentindex == 1) {
+
+    $("form[name='channelform']").validate({   // channel name and deiscription validation
       rules: {
         channelname: {
           required: true,
@@ -254,7 +69,7 @@ $(document).ready(function () {
         },
         description: {
           required: true,
-
+          maxlength: 250,
         }
       },
       messages: {
@@ -264,83 +79,676 @@ $(document).ready(function () {
 
         },
         description: {
-          required: "*" + languagedata.Channell.chandescvalid
+          required: "*" + languagedata.Channell.chandescvalid,
+          maxlength: "*" + languagedata.Permission.descriptionchat
         },
       }
     });
 
     $("form[name='channelform']").valid();
 
-    if ($('#channelname').val() == "" || $('#channeldesc').val() == "") {
+    if ($("form[name='channelform']").valid() == true) {
+      $("#chn-step").val(2)
+      $('.channelstep1').hide()
+      $('#tab-s1').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+      $("#stp-lev").text(languagedata.Channell.steps + " 2 " + languagedata.of + " 3")
+      $('.channelstep2').show()
+      $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+    }
+  }
 
-      Validationcheck();
+  if (currentindex == 2) {
+    FieldBasedPropertiesValidation()
+    if (isvalied == false) {
+      $("#chn-step").val(3)
+      $('.channelstep2').hide()
+      $('#tab-s2').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+      $('#tb1-tb2').removeClass("bg-[#10A37F]").addClass("bg-bold-gray");
+      $("#stp-lev").text(languagedata.Channell.steps + " 3 " + languagedata.of + " 3")
+      $('.channelstep3').show()
+      if ($("#channelid").val() == "") {
+        $("#nextstep").text(languagedata.save).addClass("channelsave")
+      } else {
+        $("#nextstep").text(languagedata.update).addClass("channelsave")
+      }
+      $('#tab-s3').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+      $('#tb2-tb3').removeClass("bg-bold-gray").addClass("bg-[#10A37F]");
+    }
+  }
+})
+
+// Previous btn
+$(document).on('click', '#previous-btn', function () {
+  var currentindex = $("#chn-step").val()
+  if (currentindex == 3) {
+    $("#chn-step").val(2)
+    $('.channelstep3').hide()
+    $('#tab-s3').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+    $('#tb2-tb3').removeClass("bg-[#10A37F]").addClass("bg-bold-gray");
+    $("#stp-lev").text(languagedata.Channell.steps + " 2 " + languagedata.of + " 3")
+    $("#nextstep").text(languagedata.next).removeClass("channelsave")
+    $('.channelstep2').show()
+    $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+    $('#tb1-tb2').removeClass("bg-bold-gray").addClass("bg-[#10A37F]");
+    fiedlvalue = []
+  }
+  if (currentindex == 2) {
+    $("#chn-step").val(1)
+    $('.channelstep2').hide()
+    $('#tab-s2').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+    $("#stp-lev").text(languagedata.Channell.steps + " 1 " + languagedata.of + " 3")
+    $('.channelstep1').show()
+    $('#tab-s1').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+  }
+  if (currentindex == 1) {
+    window.location.href = "/channels/"
+  }
+})
+
+// add channel additional fields
+$(document).on('click', '.field-types', function () {
+
+  var msfieldid = $(this).attr("data-id")
+
+  var fieldname = $(this).attr("type-name")
+
+  var imgicon = $(this).find("img").attr("src")
+
+  AddFieldString(msfieldid, "", fieldname, imgicon, "", "", "", "")
+
+})
+
+// additional fields sorting
+document.addEventListener('DOMContentLoaded', function () {
+  var el = document.getElementById('Sortsection');
+  var sortable = Sortable.create(el, {
+    handle: '.drag-btn',                          // drag handel
+    animation: 150,
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
+    filter: ".constant-item",
+    onStart: function (evt) {
+      if (evt.item.classList.contains('constant-item')) {
+        evt.preventDefault();
+      }
+    },
+    onEnd: function (evt) {
+      var items = Array.from(el.children);
+      var constantItem = el.querySelector('.constant-item');
+      el.appendChild(constantItem);
+    }
+  });
+
+  sortable.option('filter', '.constant-item');   // remove the non sortable item
+});
+
+// additional fields remove
+$(document).on('click', '.remove-field', function () {
+  $('.deltitle').text(languagedata.Channell.delsectitle)
+  $('.deldesc').text(languagedata.Channell.delseccontent)
+  $('.delname').text($(this).parents(".sl-fields").find("p").text())
+  $("#delid").attr("data-id", $(this).parents(".sl-fields").attr("data-orderindex"))
+  $("#delid").attr("data-fieldid", $(this).parents(".sl-fields").find('.field-name').attr('field-id'))
+  $(".modal-backdrop").css("display", "block")
+})
+$(document).on('click', '.deleteBtn', function () {
+  delid = $(this).attr("data-id")
+  delfieldid = $(this).attr("data-fieldid")
+  var obj = {}
+  obj.FieldId = parseInt(delfieldid)
+  deletefields.push(obj)
+  $(".new-field" + delid).remove()
+  $("#deleteModal").modal("hide")
+  $(".modal-backdrop").css("display", "none")
+})
+
+// create duplicate fields
+$(document).on('click', '.duplicate-field', function () {
+
+  var msfieldid = $(this).parents(".sl-fields").attr("data-id")
+  var fieldname = $(this).parents(".sl-fields").find(".field-name").text()
+  var imgicon = $(this).parents(".sl-fields").find(".field-icon").attr("src")
+
+  AddFieldString(msfieldid, "", fieldname, imgicon, "", "", "", "")
+})
+
+// field string
+function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, timeformat, mandatoryfd, optval, id) {
+
+
+  var div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
+                            <div class="flex items-center space-x-[8px]">
+                                <img src="`+ imgicon + `" class="field-icon" alt="text">
+                                <p class="text-bold-black text-sm font-normal mb-0 field-name" opt-val="`+ optval + `" dt-format="` + dformat + `" fl-mandatory="` + mandatoryfd + `" tm-format="` + timeformat + `" master-fieldid="` + masterfieldid + `" field-id="` + fieldid + `">` + fieldname + `</p>
+                            </div>
+                            <div class="absolute right-3 flex edit">
+                                <button class="rounded-[4px] h-6 px-1.5 bg-white drag-btn">
+                                    <img src="/public/img/fields-drag.svg">
+                                </button>
+                                <button class="rounded-[4px] h-6 px-1.5 bg-white edit-field">
+                                    <img src="/public/img/fields-edit.svg">
+                                </button>
+                                <button class="rounded-[4px] h-6 px-1.5 bg-white duplicate-field">
+                                    <img src="/public/img/fields-copy.svg">
+                                </button>
+                                <button class="rounded-[4px] h-6 px-1.5 bg-white remove-field">
+                                    <img src="/public/img/fields-delete.svg">
+                                </button>
+                            </div>
+                        </div>`
+
+  $(div).insertBefore("#add-field")
+  // if (id == 1) {
+  //   $('.sl-fields').find('button').attr('disabled', 'true');
+
+  // } else {
+  //   $('.sl-fields').find('button').attr('disabled');
+  // }
+
+  orderindex = orderindex + 1;
+
+
+  $('.drag-btn').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Drag & Drop'
+});
+
+$('.edit-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Edit'
+});
+
+$('.duplicate-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Clone'
+});
+
+$('.remove-field').attr({
+  'data-bs-toggle': 'tooltip',
+  'data-bs-placement': 'bottom',
+  'data-bs-custom-class': 'custom-tooltip',
+  'data-bs-title': 'Remove'
+});
+
+$('[data-bs-toggle="tooltip"]').tooltip();
+}
+
+
+$(document).on('click','.remove-field', function() {
+  $('#deleteModal').modal('show')
+  });
+
+
+
+// edit field options
+$(document).on('click', '.edit-field', function () {
+  $(".opt-delete").parents(".fields-opt").remove()
+  dataid = $(this).parents(".sl-fields").attr("data-id")
+  $("#fl-input").val($(this).parents(".sl-fields").find(".field-name").text())
+  $("#fl-input").attr("msf-id", dataid)
+  $("#fl-input").attr("data-id", $(this).parents(".sl-fields").attr("data-orderindex"))
+  $("#dt-f").text($(this).parents(".sl-fields").find(".field-name").attr("dt-format"))
+  $("#tm-f").text($(this).parents(".sl-fields").find(".field-name").attr("tm-format"))
+  flmandatory = $(this).parents(".sl-fields").find(".field-name").attr("fl-mandatory")
+  if (flmandatory == 1) {
+    $("#Check").prop("checked", true)
+  }
+  $(this).parents(".sl-fields").find(".opt-input").each(function () {
+    var div = ` <div class="flex items-center gap-[12px] fields-opt">
+    <div class=" break-words border border-[#F7F7F5] pd-3 min-h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] fl-opt flex items-center justify-between" data-id="${$(this).attr("data-id")}" field-id="${$(this).attr("field-id")}">${$(this).val()} <a href="javascript:void(0);" class="drag-btn min-w-[14px]"><img src="/public/img/drag.svg" alt="drag"></a></div>
+    <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] min-w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0] opt-delete"><img src="/public/img/delete-options.svg" alt="delete"></a></div>`
+    $(".add-fp").append(div)
+  })
+  FieldBasedProperties(dataid)
+  $("#Id2").modal("show")
+})
+
+// set property field based on field type
+function FieldBasedProperties(id) {
+
+  if (id == "2") {
+
+    $(".fl-name").text("Properties - Text")
+
+    $('#fl-input').attr('maxlength', '30');
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "4") {
+    $(".fl-name").text("Properties - Date & Time")
+
+    $(".dt-field").show()
+    $(".ti-field").show()
+    $(".option-field").hide()
+
+  } else if (id == "5") {
+
+    $(".fl-name").text("Properties - Select")
+
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").show()
+
+  } else if (id == "6") {
+
+    $(".fl-name").text("Properties - Date")
+
+    $(".dt-field").show()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "7") {
+
+    $(".fl-name").text("Properties - TextBox")
+    $('#fl-input').attr('maxlength', '30');
+
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "8") {
+
+    $(".fl-name").text("Properties - TextArea")
+    $('#fl-input').attr('maxlength', '30');
+
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "9") {
+
+
+    $(".fl-name").text("Properties - Radio Button")
+
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").show()
+
+  } else if (id == "10") {
+
+    $(".fl-name").text("Properties - CheckBox")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").show()
+
+  } else if (id == "14") {
+
+    $(".fl-name").text("Properties - Members")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "15") {
+    $(".fl-name").text("Properties - Media Gallery")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  } else if (id == "16") {
+
+    $(".fl-name").text("Properties - Video URL")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+  }
+}
+
+$(document).on("click", ".dt-format", function () {    // set dateformat in property
+
+  $("#dt-f").text($(this).text())
+  $("#dt-f-error").hide()
+
+})
+$(document).on("click", ".tm-format", function () {      // set timeformat in property
+
+  $("#tm-f").text($(this).text())
+  $("#tm-f-error").hide()
+
+})
+
+$(document).on("click", "#add-options", function () {       // add options in property
+  optval = $("#opt-val").val()
+  let exists = false;
+  $('.fl-opt').each(function () {
+    if ($(this).text().trim() == optval) {
+      exists = true
+    }
+  })
+  if ($("#opt-val").val() != "") {
+    if (exists == true) {
+      $("#opt-val-error").text("Option value already exists").show()
+    } else {
+      var div = `<div class="flex items-center gap-[12px] fields-opt">
+  <div class="break-words border border-[#F7F7F5] pd-3 min-h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] fl-opt flex items-center justify-between ">`+ optval + ` <a href="javascript:void(0);" class="drag-btn min-w-[14px]" ><img src="/public/img/drag.svg" alt="drag"></a></div>
+  <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] min-w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0] opt-delete ">
+  <img src="/public/img/delete-options.svg" alt="delete"></a></div>`
+
+      $(".add-fp").append(div)
+      $("#opt-val").val("")
+    }
+  } else {
+    $("#opt-val-error").text("Please enter the option").show()
+  }
+})
+
+// delete property options
+$(document).on("click", ".opt-delete", function () {
+  id = $(this).parents(".fields-opt").find(".fl-opt").attr("data-id")
+  field = $(this).parents(".fields-opt").find(".fl-opt").attr("field-id")
+  if (id != "") {
+    var delopt = {}
+    delopt.Id = parseInt(id)
+    delopt.FieldId = field
+    deleteoption.push(delopt)
+
+  }
+  $(this).parents(".fields-opt").remove()
+
+})
+
+$(document).on('keyup', "#fl-input", function () {   //field name validation
+  if ($("#fl-input") == "") {
+    $("#fl-input-error").show()
+  } else {
+    $("#fl-input-error").hide()
+  }
+})
+$(document).on('keyup', "#opt-val", function () {   //field option validation
+  if ($("#opt-val") == "") {
+    $("#opt-val-error").show()
+
+  } else {
+    $("#opt-val-error").hide()
+
+  }
+})
+// set fields property value
+var isvalied = false
+$(document).on('click', "#flp-save", function () {
+  $('.lengthErr').addClass('hidden')
+  $("#opt-val").val("")
+  if ($("#fl-input").val() == "") {
+    $("#fl-input-error").show()
+    isvalied = true
+  } else {
+    $("#fl-input-error").hide()
+    isvalied = false
+  }
+  if ($("#fl-input").attr("msf-id") == 4 || $("#fl-input").attr("msf-id") == 6) {
+    if ($("#dt-f").text() == "") {
+      $("#dt-f-error").show()
+      isvalied = true
+    } else {
+      $("#dt-f-error").hide()
+      isvalied = false
+    }
+  }
+  if ($("#fl-input").attr("msf-id") == 4) {
+    if ($("#tm-f").text() == "") {
+      $("#tm-f-error").show()
+      isvalied = true
+    } else {
+      $("#tm-f-error").hide()
+      isvalied = false
+    }
+  }
+  if ($("#fl-input").attr("msf-id") == 5 || $("#fl-input").attr("msf-id") == 9 || $("#fl-input").attr("msf-id") == 10) {
+    if ($(".fl-opt").text() == "") {
+      $("#opt-val-error").text("Please enter the option").show()
+      isvalied = true
+    } else {
+      $("#opt-val-error").hide()
+      isvalied = false
+    }
+  }
+  if (isvalied == false) {
+    fieldindex = $("#fl-input").attr("data-id")
+    $(".new-field" + fieldindex).find(".field-name").text($("#fl-input").val())
+    $(".new-field" + fieldindex).find(".field-name").attr("dt-format", $("#dt-f").text())
+    $(".new-field" + fieldindex).find(".field-name").attr("tm-format", $("#tm-f").text())
+    $(".new-field" + fieldindex).find(".field-name").attr("fl-mandatory", $('#Check').is(":checked") == true ? 1 : 0)
+    $('.fl-opt').each(function () {
+      var intext = `<input type="hidden" class="opt-input" data-id="${$(this).attr("data-id")}" field-id="${$(this).attr("field-id")}" value="${$(this).text()}">`
+      $(".new-field" + fieldindex).find(".field-name").attr("opt-val", 1)
+      $(".new-field" + fieldindex).find(".field-name").append(intext)
+    })
+    $("#Check").prop("checked",false)
+    $("#Id2").modal("hide")
+
+  }
+})
+// modal cancel
+$(document).on("click", "#cln-modal", function () {
+  $("#Id2").modal("hide")
+  $("#tm-f").text("")
+  $("#dt-f").text("")
+  $("#opt-val").val("")
+  $(".opt-delete").parents(".fields-opt").remove()
+  $("#Check").prop("checked", false)
+  $("#tm-f-error").hide()
+  $("#dt-f-error").hide()
+  $("#fl-input-error").hide()
+  $("#opt-val-error").hide()
+  $(".lengthErr").addClass('hidden')
+
+})
+
+// chn save and update
+$(document).on('click', '.channelsave', function () {
+  fiedlvalue=[]
+  GetfieldsValue()  //get field value
+  console.log("myfields", fiedlvalue);
+
+  var name = $('#channelname').val();
+  var desc = $('#channeldesc').val();
+  var url = window.location.search
+  const urlpar = new URLSearchParams(url)
+  pageno = urlpar.get('page')
+
+
+
+  if ($("#channelid").val() == "") {
+
+    if (SelectedCategoryValue.length == 0) {
+
+      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
+      $(notify_content).insertBefore(".header-rht");
+      setTimeout(function () {
+        $('.toast-msg').fadeOut('slow', function () {
+          $(this).remove();
+        });
+      }, 5000); // 5000 milliseconds = 5 seconds
 
       return false
-
     }
 
-    $('#step1').addClass('prev');
+    $.ajax({
 
-    $('.channelstep1').hide();
+      url: '/channels/newchannel',
+      type: 'post',
+      dataType: 'json',
+      async: false,
+      data: {
+        "channelname": name,
+        "channeldesc": desc,
+        "sections": JSON.stringify({ sections }),
+        "fiedlvalue": JSON.stringify({ fiedlvalue }),
+        "categoryvalue": SelectedCategoryValue,
+        csrf: $("input[name='csrf']").val()
+      },
+      success: function (data) {
 
-    $('.channelstep3').hide();
+        window.location.href = "/channels/"
 
-    CheckPrevioushideandshow()
+      }
+    })
+  } else {
+    var CurrentPage = $('#CurrentPage').val();
 
-  })
+    if (SelectedCategoryValue.length == 0) {
 
-  $(document).on('click', '#back', function () {
+      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
+      $(notify_content).insertBefore(".header-rht");
+      setTimeout(function () {
+        $('.toast-msg').fadeOut('slow', function () {
+          $(this).remove();
+        });
+      }, 5000); // 5000 milliseconds = 5 seconds
 
-    if ($('#cr-ch-title').is(":visible")) {
-
-      window.location.href = "/channels/"
-
-    } else {
-
-      Backtoprevious()
+      return false
     }
 
-  })
+
+
+    $.ajax({
+
+      url: '/channels/updatechannel',
+      type: 'post',
+      dataType: 'json',
+      async: false,
+      data: {
+        "id": $("#channelid").val(),
+        "channelname": name,
+        "channeldesc": desc,
+        "sections": JSON.stringify({ sections }),
+        "deletesections": JSON.stringify({ deletesecion }),
+        "deletefields": JSON.stringify({ deletefields }),
+        "deleteoptions": JSON.stringify({ deleteoption }),
+        "fiedlvalue": JSON.stringify({ fiedlvalue }),
+        "categoryvalue": SelectedCategoryValue,
+        csrf: $("input[name='csrf']").val()
+      },
+      success: function (data) {
+
+        if (CurrentPage == 1) {
+          window.location.href = "/channels/"
+        } else {
+          window.location.href = "/channels/?page=" + CurrentPage
+        }
+
+      }
+    })
+  }
 
 })
 
-/** */
-$(document).ready(function () {
-  //main menu
-  Sort()
+// Get fields value
+// Get fields value
+function GetfieldsValue() {
 
-})
+  var order = 1
+  $('.sl-fields').each(function () {
 
+    var obj = {}
 
+    obj.MasterFieldId = parseInt($(this).find(".field-name").attr("master-fieldid"))
 
-/** Category select */
-$(document).ready(function () {
+    obj.FieldId = parseInt($(this).find(".field-name").attr("field-id"))
 
-  var count = 0
+    obj.NewFieldId = 0
 
-  $('.categorypdiv').each(function () {
+    obj.SectionId = 0
 
-    if ($(this).css('display') != "none") {
+    obj.SectionNewId = 0
 
-      count = count + 1
+    obj.FieldName = $(this).find(".field-name").text();
 
-    }
+    obj.OrderIndex = order
 
-    var id
+    obj.Url = ""
 
-    $(this).children('.choose-cat-list-col').children('.categoryname').each(function () {
+    obj.Mandatory = parseInt($(this).find(".field-name").attr("fl-mandatory"))
 
-      id = $(this).attr('data-id');
+    obj.IconPath = $(this).find(".field-icon").attr("src")
+
+    obj.CharacterAllowed = ""
+
+    obj.DateFormat = $(this).find(".field-name").attr("dt-format")
+
+    obj.TimeFormat = $(this).find(".field-name").attr("tm-format")
+
+    var opt = []
+
+    var optorder = 1
+
+    $(this).find(".opt-input").each(function () {
+
+      var optionobj = {}
+
+      optionobj.Id = parseInt($(this).attr("data-id"))
+
+      optionobj.NewId = 0
+
+      optionobj.FieldId = obj.FieldId
+
+      optionobj.NewFieldId = 0
+
+      optionobj.Value = $(this).val()
+
+      optionobj.OrderIndex = optorder
+
+      opt.push(optionobj)
+
+      optorder++;
 
     })
 
-    $(this).children('.category-select-btn').attr('data-id', id).attr('id', 'lastcatid-' + id)
+    obj.OptionValue = opt
+
+    fiedlvalue.push(obj)
+
+    order++;
   })
+}
 
-  $('#avacatcount').text(count);
+//field based property validation
+function FieldBasedPropertiesValidation() {
 
-})
+  $('.sl-fields').each(function () {
+    if (($(this).find(".field-name").attr("master-fieldid") == "4") && ($(this).find(".field-name").attr("dt-format") == "" || $(this).find(".field-name").attr("tm-format") == "")) {
 
+      $(this).find(".edit-field").click()
+      if ($(this).find(".field-name").attr("dt-format") == "") {
+        $("#dt-f-error").show()
+        isvalied = true
+      }
+      if ($(this).find(".field-name").attr("tm-format") == "") {
+        $("#tm-f-error").show()
+        isvalied = true
+      }
+    } else if (($(this).find(".field-name").attr("master-fieldid") == "6") && ($(this).find(".field-name").attr("dt-format") == "")) {
+
+      $(this).find(".edit-field").click()
+      if ($(this).find(".field-name").attr("dt-format") == "") {
+        $("#dt-f-error").show()
+        isvalied = true
+      }
+    } else if (($(this).find(".field-name").attr("master-fieldid") == "5") && ($(this).find(".field-name").attr("opt-val") == "")) {
+
+      $(this).find(".edit-field").click()
+      $("#opt-val-error").show()
+      isvalied = true
+    } else if (($(this).find(".field-name").attr("master-fieldid") == "9") && ($(this).find(".field-name").attr("opt-val") == "")) {
+
+      $(this).find(".edit-field").click()
+
+      $("#opt-val-error").show()
+      isvalied = true
+    } else if (($(this).find(".field-name").attr("master-fieldid") == "10") && ($(this).find(".field-name").attr("opt-val") == "")) {
+
+      $(this).find(".edit-field").click()
+      $("#opt-val-error").show()
+      isvalied = true
+    }
+  })
+}
 
 /**Edit URL */
 $(document).ready(function () {
@@ -360,85 +768,26 @@ $(document).ready(function () {
       },
       success: function (data) {
 
-        if (data.Section != null) {
-
-          sections = data.Section
-        }
-
-        if (data.FieldValue != null) {
-
-          fiedlvalue = data.FieldValue
-        }
-
         if (data.SelectedCategory != null) {
 
           SelectedCategoryValue = data.SelectedCategory
         }
 
-        var sectionstr = ``
-
-        for (let x of data.Section) {
-
-          sectionstr += `<div class="section-fields-content drop-able ui-droppable" style="margin-bottom: 10px;" id="section-` + x['SectionId'] + `` + x['SectionNewId'] + `" data-id ="` + x['SectionId'] + `"  data-newid="` + x['SectionNewId'] + `" data-orderindex="` + x['OrderIndex'] + `">
-          <div class="section-class">
-            <input type="text" class="sectionname" placeholder="" style="font-size:0.825rem" value="`+ x['SectionName'] + `">
-            <button class="sectiondel" style="margin-right: 11px;"><img src="/public/img/bin.svg"></button>   
-          </div>
-        </div>`
-
-        }
-
-        $('#Sortsection').append(sectionstr);
-
-        for (let x of data.Section) {
-
-          SortableSection(x['SectionId'], x['SectionNewId'])
-
-        }
-
         for (let [index, x] of data.FieldValue.entries()) {
 
-          $('.section-fields-content').each(function () {
+          AddFieldString(x.MasterFieldId, x.FieldId, x.FieldName, x.IconPath, x.DateFormat, x.TimeFormat, x.Mandatory, 1, id)
 
-            if ($(this).attr('data-id') == x['SectionId'] && $(this).attr('data-newid') == x['SectionNewId']) {
+          if (x.OptionValue != null) {
+            for (let y of x.OptionValue) {
 
-              var fieldstr = `<div class="section-fields-content-child fieldapp" data-masterfieldid=` + x.MasterFieldId + ` data-newfieldid=` + x.NewFieldId + ` data-fieldid=` + x.FieldId + ` data-orderindex=` + x.OrderIndex + ` id=fieldapp` + x.FieldId + `` + x.NewFieldId + `>
-              <input type="hidden" class="orderval" value="">
-                  <div class="img-div">
-                      <img src="`+ x.IconPath + `" alt="">
-                  </div>
-                  <h3 class="heading-three" id=fieldtitle`+ x.FieldId + `` + x.NewFieldId + `>` + x.FieldName + `</h3>
-                  <a href="javascript:void(0)" class="field-delete delete" data-id="`+ id + `">
-                      <img src="/public/img/bin.svg" alt="">
-                  </a>
-              </div> `
+              var intext = `<input type="hidden" class="opt-input" value="${y.Value}" data-id="${y.Id}" field-id="${x.FieldId}">`
 
-              $(this).append(fieldstr);
-
+              $(".new-field" + (orderindex - 1)).find(".field-name").append(intext)
             }
-
-          })
-
-          if (fiedlvalue[index].OptionValue == null) {
-
-            fiedlvalue[index].OptionValue = []
-
           }
-
         }
 
-        const index1 = fiedlvalue.findIndex(obj => {
 
-          return obj.MasterFieldId == RelationalMember
-
-        });
-
-        if (index1 >= 0) {
-
-          $("#relational-member").draggable("disable");
-
-          $("#relational-member").css('opacity', '0.8');
-        }
 
       }
     })
@@ -446,1533 +795,77 @@ $(document).ready(function () {
   }
 })
 
-/** Update Channel */
-$(document).on('click', '.channelupt', function () {
-
-
-  $("form[name='channelform']").validate({
-    rules: {
-      channelname: {
-        required: true,
-        space: true,
-
-      },
-      description: {
-        required: true,
-
-      }
-    },
-    messages: {
-      channelname: {
-        required: "*" + languagedata.Channell.channamevalid,
-        space: "*" + languagedata.spacergx,
-
-      },
-      description: {
-        required: "*" + languagedata.Channell.chandescvalid
-      },
-    }
-  });
-
-  var formcheck = $("form[name='channelform']").valid();
-
-  if (formcheck == true) {
-
-    // $("form[name='channelform']")[0].submit();
-  }
-
-  else {
-
-    Validationcheck()
-
-    $(document).on('keyup', ".field", function () {
-
-      Validationcheck()
-
-    })
-
-    return false
-
-  }
-
-
-  $('.fieldapp').each(function () {
-
-    const index = fiedlvalue.findIndex(obj => {
-
-      return obj.FieldId == $(this).attr('data-fieldid') && obj.NewFieldId == $(this).attr('data-newfieldid');
-
-    });
-
-    if (index < 0) {
-
-      var obj = CreatePropertiesObjec()
-
-      obj.MasterFieldId = parseInt($(this).attr('data-masterfieldid'))
-
-      obj.NewFieldId = parseInt($(this).attr('data-newfieldid'))
-
-      obj.FieldName = $(this).children('.heading-three').text();
-
-      obj.IconPath = $(this).children('.img-div').children('img').attr('src')
-
-      obj.SectionId = parseInt($(this).parent('.section-fields-content').attr('data-id'));
-
-      obj.SectionNewId = parseInt($(this).parent('.section-fields-content').attr('data-newid'));
-
-      obj.SectionName = $(this).parent('.section-fields-content').children('.section-class').children('input').val();
-
-      fiedlvalue.push(obj)
-    }
-
-  })
-
-  SortFieldsandSection()
-
-  flg = FieldValidation()
-  flg1 = CateogryValidation()
-
-  if (!flg || !flg1) {
-
-    console.log(flg, flg1);
-
-    return false
-
-  }
-
-  var name = $('#channelname').val();
-
-  var desc = $('#channeldesc').val();
-
-  $.ajax({
-
-    url: '/channels/updatechannel',
-    type: 'post',
-    dataType: 'json',
-    async: false,
-    data: {
-      "id": $("#channelid").val(),
-      "channelname": name,
-      "channeldesc": desc,
-      "sections": JSON.stringify({ sections }),
-      "deletesections": JSON.stringify({ deletesecion }),
-      "deletefields": JSON.stringify({ deletefields }),
-      "deleteoptions": JSON.stringify({ deleteoption }),
-      "fiedlvalue": JSON.stringify({ fiedlvalue }),
-      "categoryvalue": SelectedCategoryValue,
-      csrf: $("input[name='csrf']").val()
-    },
-    success: function (data) {
-
-      if (data == true) {
-
-        setCookie("get-toast", "Channel Updated Successfully")
-
-        setCookie("Alert-msg", "success", 1)
-      }
-      else {
-
-        setCookie("Alert-msg", "Internal Server Error")
-
-      }
-      window.location.href = "/channels/"
-
-    }
-  })
-
-})
-
-/** if section arry empty create default section */
 $(document).ready(function () {
+  var $textarea = $('#channeldesc');
+  var $errorMessage = $('#error-message');
+  var maxLength = 250;
 
-
-  if (sections.length == 0) {
-
-    var sectionobj = SectionObjectCreate()
-
-    sectionobj.SectionName = "New Section"
-    sections.push(sectionobj)
-
-    //   $(`<div class="section-fields-content drop-able active ui-droppable" style="margin-bottom: 10px;" id="section-0` + sectionid + `" data-newid="` + sectionid + `" data-orderindex="` + orderindex + `">
-    //       <div class="section-class" >
-    //         <input type="text" class="sectionname" placeholder="Enter the Name" style="font-size:0.825rem" value="Section 1"/>
-    //         <button class="sectiondel" data-bs-toggle="modal" data-bs-target="#centerModal"><img src="/public/img/bin.svg"></button>   
-    //       </div>
-    //     </div>
-    // `).insertAfter('#Sortsection')
-
-    $("#Sortsection").append(`<div class="section-fields-content drop-able active ui-droppable" style="margin-bottom: 10px;" id="section-0` + sectionid + `" data-newid=${sectionid} data-id=0 data-orderindex=${orderindex}>
-  <div class="section-class" >
-    <input type="text" class="sectionname" placeholder="" style="font-size:0.825rem" value="New Section"/>
-    <button class="sectiondel" style="margin-right: 11px;" ><img src="/public/img/bin.svg"></button>   
-  </div>
-</div>`)
-
-    sectionid++;
-
-    orderindex++;
-
-  }
-
-
-  // drop
-  $(".drop-able").droppable({
-    tolerance: 'pointer',
-
-    drop: function (ev, ui) {
-
-      console.log("draggggggg")
-      var id = ui.draggable[0]['dataset'].id;
-      var name = ui.draggable.text().trim().split("\n");
-      var img = ui.draggable.find("img").attr("src");
-      var newsection = ui.draggable[0]['id']
-      console.log("newsectiondrop", id, name, img, newsection)
-      if (newsection != "newsection") {
-        $(this).append(`
-            <div class="section-fields-content-child fieldapp" data-masterfieldid=`+ id + ` data-newfieldid=` + newFieldid + ` data-fieldid=` + fielid + ` data-orderindex=` + orderindex + ` id=fieldapp` + fielid + `` + newFieldid + `>
-            <input type="hidden" class="orderval" value="">
-                <div class="img-div">
-                    <img src="`+ img + `" alt="">
-                </div>
-                <h3 class="heading-three" id=fieldtitle`+ fielid + `` + newFieldid + `>` + name[0] + `</h3>
-                <a href="javascript:void(0)" class="field-delete delete" data-id="`+ id + `" >
-                    <img src="/public/img/bin.svg" alt="">
-                </a>
-            </div>    
-        `)
-
-
-        newFieldid = newFieldid + 1;
-        orderindex = orderindex + 1;
-      }
-
-      if (newsection == 'relational-member') {
-
-        $(".fieldapp[data-masterfieldid|='14']").trigger('click');
-
-        var obj = CreatePropertiesObjec()
-
-        fiedlvalue.push(obj)
-
-        console.log(fiedlvalue);
-
-        $("#relational-member").draggable("disable")
-
-        $("#relational-member").css('opacity', '0.6');
-
-      }
-
-    },
+  $textarea.on('input', function () {
+    if ($(this).val().length >= maxLength) {
+      // Show error message
+      $errorMessage.text(languagedata.Permission.descriptionchat);
+    } else {
+      // Clear error message if under the limit
+      $errorMessage.text('');
+    }
   });
 
-  var sortableElement = document.querySelector('.drop-able')
-  // Check if the element exists before creating the Sortable instance
-  if (sortableElement) {
-    var sortable = new Sortable(sortableElement, {
-      animation: 200,
-      filter: '.non-sortable-item',
-      onStart: function (evt) {
-        if (evt.from.classList.contains('non-sortable-item')) {
-          sortable.option("disabled", true);
-        }
-      },
-      onEnd: function (evt) {
-        sortable.option("disabled", false);
-      }
-    });
-  } else {
-    console.error("Sortable container element not found.");
-  }
+});
 
+$(document).ready(function () {
+  $('#channeldesc').on('input', function () {
+
+    let lines = $(this).val().split('\n').length;
+
+    if (lines > 5) {
+
+      let value = $(this).val();
+
+      let linesArray = value.split('\n').slice(0, 5);
+
+      $(this).val(linesArray.join('\n'));
+    }
+  });
+});
+
+$(document).on("click", ".categorypdiv", function () {
+  $(this).find('.category-select-btn').click();
 })
 
-// drag
-$(".drag-able").draggable({
-  appendTo: "body",
-  cursor: "move",
-  helper: "clone",
-  revert: true,
-  revertDuration: 0
-}).disableSelection();
+$(document).on("click", ".selectedcategorydiv", function () {
+  $(this).find('.category-unselect-btn').click();
+})
 
-// drag
-$(".section-drag-able").draggable({
-  appendTo: "body",
-  cursor: "move",
-  helper: "clone",
-  revert: true,
-  revertDuration: 0
-}).disableSelection();
+document.addEventListener('DOMContentLoaded', function () {
+  var el = document.getElementById('Sortsection2');
 
-
-var sortableElement = document.querySelector('.drop-able')
-// Check if the element exists before creating the Sortable instance
-if (sortableElement) {
-  var sortable = new Sortable(sortableElement, {
-    animation: 200,
-    filter: '.non-sortable-item',
-    onStart: function (evt) {
-      if (evt.from.classList.contains('non-sortable-item')) {
-        sortable.option("disabled", true);
-      }
-    },
+  var sortable = Sortable.create(el, {
+    handle: '.drag-btn',             // drag handle
+    animation: 150,
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
+    // Exclude the first element from sorting
     onEnd: function (evt) {
-      sortable.option("disabled", false);
+      var constantItem = el.querySelector('.constant-item');
+      el.insertBefore(constantItem, el.firstChild); // Keep the first item in place after sorting
     }
   });
-} else {
-  console.error("Sortable container element not found.");
-}
-
-// drop
-$(".drop-able").droppable({
-  tolerance: 'pointer',
-  drop: function (ev, ui) {
-
-    var id = ui.draggable[0]['dataset'].id;
-    var name = ui.draggable.text().trim().split("\n");
-    var img = ui.draggable.find("img").attr("src");
-    var newsection = ui.draggable[0]['id']
-    console.log("check")
-
-    if (newsection != "newsection") {
-      $(this).append(`
-            <div class="section-fields-content-child fieldapp" data-masterfieldid=`+ id + ` data-newfieldid=` + newFieldid + ` data-fieldid=` + fielid + ` data-orderindex=` + orderindex + ` id=fieldapp` + fielid + `` + newFieldid + `>
-            <input type="hidden" class="orderval" value="">
-                <div class="img-div">
-                    <img src="`+ img + `" alt="">
-                </div>
-                <h3 class="heading-three" id=fieldtitle`+ fielid + `` + newFieldid + `>` + name[0] + `</h3>
-                <a href="javascript:void(0)" class="field-delete delete" data-id="`+ id + `" >
-                    <img src="/public/img/bin.svg" alt="">
-                </a>
-            </div>    
-        `)
-
-
-      newFieldid = newFieldid + 1;
-      orderindex = orderindex + 1;
-    }
-
-  },
-});
-
-$(".section-drop-able").droppable({
-  tolerance: 'pointer',
-  drop: function (ev, ui) {
-    var draggable = ui.draggable;
-    var id = draggable.data('id');
-    var name = draggable.text().trim().split("\n");
-    var img = draggable.find("img").attr("src");
-    var this_id = draggable.attr("id");
-    var newsection = this_id;
-    if (newsection === "newsection") {
-      createDroppable();
-    }
-  },
-});
-
-// Function to create a new droppable element
-function createDroppable() {
-
-  var droppable = $("<div>", {
-    class: "section-fields-content drop-able newdrop-able",
-    style: "margin-bottom: 10px;",
-    id: "section-0" + sectionid,
-    "data-id": 0,
-    "data-newid": sectionid,
-    "data-orderindex": orderindex,
-    html: `
-      <div class="section-class">
-      <input type="text" class="sectionname" placeholder="" style="font-size:0.825rem" value="New Section"/>
-      <button class="sectiondel" style="margin-right: 11px;" ><img src="/public/img/bin.svg"></button>                              
-      </div>
-    `
-  }).appendTo("#Sortsection");
-
-  orderindex++;
-
-
-  droppable.droppable({
-    drop: function (event, ui) {
-      console.log("sectioncreate")
-      var id = ui.draggable.data('id');
-      var name = ui.draggable.text().trim().split("\n");
-      var img = ui.draggable.find("img").attr("src");
-      if (ui.draggable[0]['id'] !== "newsection") {
-        $(this).append(`
-          <div class="section-fields-content-child fieldapp" data-masterfieldid="${id}" data-newfieldid="${newFieldid}" data-fieldid="${fielid}" data-orderindex="${orderindex}" id="fieldapp${fielid}${newFieldid}">
-            <input type="hidden" class="orderval" value="">
-            <div class="img-div">
-              <img src="${img}" alt="">
-            </div>
-            <h3 class="heading-three" id="fieldtitle${fielid}${newFieldid}">${name[0]}</h3>
-            <a href="javascript:void(0)" class="field-delete delete" data-id="${id}" >
-              <img src="/public/img/bin.svg" alt="">
-            </a>
-          </div>
-        `);
-
-        newFieldid++;
-        orderindex++;
-
-      }
-    }
-  });
-
-
-  var sortableElement = document.getElementById('section-0' + sectionid)
-  console.log(sortableElement, "elemtn")
-  // Check if the element exists before creating the Sortable instance
-  if (sortableElement) {
-    var sortable = new Sortable(sortableElement, {
-      animation: 200,
-      filter: '.non-sortable-item',
-      onStart: function (evt) {
-        if (evt.from.classList.contains('non-sortable-item')) {
-          sortable.option("disabled", true);
-        }
-      },
-      onEnd: function (evt) {
-        sortable.option("disabled", false);
-      }
-    });
-  } else {
-    console.error("Sortable container element not found.");
-  }
-
-  var sectionobj = SectionObjectCreate()
-
-  sectionobj.SectionName = "New Section "
-
-  sections.push(sectionobj)
-
-  sectionid++;
-
-}
-
-function Sort() {
-
-  var sortableElement = document.getElementById('Sortsection')
-  // Check if the element exists before creating the Sortable instance
-  if (sortableElement) {
-    var sortable = new Sortable(sortableElement, {
-      animation: 200,
-      filter: '.non-sortable-item',
-      onStart: function (evt) {
-        if (evt.from.classList.contains('non-sortable-item')) {
-          sortable.option("disabled", true);
-        }
-      },
-      onEnd: function (evt) {
-        sortable.option("disabled", false);
-      }
-    });
-  } else {
-    console.error("Sortable container element not found.");
-  }
-}
-
-
-function SortableSection(id, newid) {
-
-  var sortableElement = document.getElementById('section-' + id.toString() + newid.toString())
-  // Check if the element exists before creating the Sortable instance
-  if (sortableElement) {
-    var sortable = new Sortable(sortableElement, {
-      animation: 200,
-      filter: '.non-sortable-item',
-      onStart: function (evt) {
-        if (evt.from.classList.contains('non-sortable-item')) {
-          sortable.option("disabled", true);
-        }
-      },
-      onEnd: function (evt) {
-        sortable.option("disabled", false);
-      }
-    });
-  } else {
-    console.error("Sortable container element not found.");
-  }
-}
-
-
-function SortFieldsandSection() {
-
-  var count = 1
-
-  $('.section-fields-content').each(function () {
-
-    $(this).attr("data-orderindex", count);
-
-
-    if (sections != null){
-
-      for (let [index, x] of sections.entries()) {
-  
-        if (x.SectionId == $(this).attr('data-id') && x.SectionNewId == $(this).attr('data-newid')) {
-  
-          sections[index].OrderIndex = count
-  
-        }
-  
-      }
-    }
-
-
-    count++
-
-    $(this).children('.fieldapp').each(function () {
-
-      $(this).attr("data-orderindex", count);
-
-
-      if (fiedlvalue != null) {
-
-        for (let x of fiedlvalue) {
-
-          if (x.FieldId == $(this).attr('data-fieldid') && x.NewFieldId == $(this).attr('data-newfieldid')) {
-
-            x.OrderIndex = count
-
-          }
-
-        }
-      }
-      count++
-    });
-
-  })
-
-
-}
-
-
-/**properties empty function */
-function PropertiesEmpty() {
-
-  $('#finitialv').val("");
-
-  $('#fplacehold').val("");
-
-  $('#fdatefor').val("");
-
-  $('#ftimefor').val("");
-
-  $('#date-form').html(languagedata?.Channell?.chosedate);
-
-  $('#time-for').html(languagedata?.Channell?.chosetime);
-
-  $('#furl').val("");
-
-  $('#foptname').val("");
-
-  $("#ftext").val("");
-
-  $("#fdesc").val("");
-
-  $('.options-added').html("");
-
-  $('#triggerId').text(languagedata?.Channell?.dateformat);
-
-  $('#time-format').text(languagedata?.Channell?.timeformat);
-
-  $('#fcharvalue').val(0)
-
-  $('#Check2').prop('checked', false)
-}
-
-/** */
-function FieldBasedProperties(id) {
-
-  $('.prop').hide();
-
-  $('#multi').parent().hide();
-
-  $("#title").css('visibility', 'visible');
-
-  $('#desc').css('display', 'flex');
-
-  $("#distext").css('display', 'flex');
-
-  $('#Check2').parent().show();
-
-  if (id == "2") {
-
-    $("#checkbox").css('display', 'flex');
-
-    $('#fcharallow').css('display', 'flex')
-
-  } else if (id == "3") {
-
-    $("#url").css('display', 'flex');
-
-  } else if (id == "4") {
-
-    $(this).parents('.dd-c').siblings('.newdd-input').prop('checked', false);
-
-    $("#dateform").css('display', 'flex');
-
-    $('#timefor').css('display', 'flex');
-
-  } else if (id == "5") {
-
-    $('#option').css('display', 'grid');
-
-  } else if (id == "6") {
-
-    $("#dateform").css('display', 'flex');
-
-  } else if (id == "7") {
-
-    $('#fcharallow').css('display', 'flex')
-
-  } else if (id == "8") {
-
-    $('#fcharallow').css('display', 'flex')
-
-  } else if (id == "9") {
-
-    $('#option').css('display', 'grid');
-
-  } else if (id == "10") {
-
-    $('#option').css('display', 'grid');
-
-  } else if (id == "11") {
-
-    $('#fcharallow').css('display', 'flex')
-
-  } else if (id == "12") {
-
-    $('#desc').hide();
-
-    $("#distext").css('display', 'flex');
-
-    $("#checkbox").hide();
-
-  } else if (id == "13") {
-
-    $('#desc').hide();
-
-    $("#distext").css('display', 'flex');
-
-    $("#checkbox").hide();
-
-  }else if (id =="14"){
-    
-    $('#desc').hide();
-
-    $("#distext").css('display', 'none');
-
-    $("#checkbox").hide();
-
-    $('#Check2').parent().hide();
-
-    // $('#multi').parent().show();
-
-  }
-}
-
-/*field select on*/
-$(document).on('click', '.fieldapp', function () {
-
-  PropertiesEmpty()
-
-  console.log(fiedlvalue);
-
-  $('#field-properties').show();
-
-  $('.fieldapp').removeClass('active');
-
-  $(this).addClass('active');
-
-  var index = $(this).attr('data-newid');
-
-  var img = $(this).children('.img-div').children('img').attr('src')
-
-  var name = $(this).children('.heading-three').text()
-
-  $("#ftext").val(name);
-
-  $('#title').html(`<div class="img-div"><img src="` + img + `" alt=""></div><h3 class="heading-three">` + name + `</h3>`);
-
-  $('.fcheck').prop("checked", false);
-
-  var id = $(this).attr('data-masterfieldid');
-
-  $('#fieldid').attr('data-fieldid', $(this).attr('data-fieldid')).attr('data-newfieldid', $(this).attr('data-newfieldid'))
-
-  $('#fieldid').attr('data-masterfieldid', $(this).attr('data-masterfieldid'))
-
-  $('#fieldid').attr('data-sectionid', $(this).parents('.section-fields-content').attr('data-id')).attr('data-newsectionid', $(this).parents('.section-fields-content').attr('data-newid')).attr('data-sectionname', $(this).parents('.section-fields-content').children('.section-class').children('input').val())
-
-  FieldBasedProperties(id)
-
-  var fieldid = $(this).attr('data-fieldid');
-
-  var newfldid = $(this).attr('data-newfieldid');
-
-  /**This is for select option empty */
-  if ($('#fieldid').attr('data-fieldid') == fieldid && $('#fieldid').attr('data-newfieldid') == newfldid) {
-
-    optionvalues = [];
-
-  }
-
-  if (fiedlvalue.length > 0) {
-
-    for (let i = 0; i < fiedlvalue.length; i++) {
-
-      if (fiedlvalue[i]['FieldId'] == fieldid && fiedlvalue[i]['NewFieldId'] == newfldid) {
-
-        $("#ftext").val(fiedlvalue[i]['FieldName'].trim());
-
-        $("#fdesc").val(fiedlvalue[i]['Description']);
-
-        fiedlvalue[i]['Mandatory'] == 1 ? $('#Check2').prop("checked", true) : $('#Check2').prop("checked", false);
-
-        $('#finitialv').val(fiedlvalue[i]['InitialValue']);
-
-        $('#fplacehold').val(fiedlvalue[i]['Placeholder']);
-
-        $('#fdatefor').val(fiedlvalue[i]['DateFormat']);
-
-        $('#ftimefor').val(fiedlvalue[i]['TimeFormat']);
-
-        $('#date-form').html(fiedlvalue[i]['DateFormat']);
-
-        $('#time-for').html(fiedlvalue[i]['TimeFormat']);
-
-        $('#furl').val(fiedlvalue[i]['Url']);
-
-        $('#triggerId').text(fiedlvalue[i]['DateFormat'])
-
-        $('#time-format').text(fiedlvalue[i]['TimeFormat'])
-
-        $('#fcharvalue').val(fiedlvalue[i]['CharacterAllowed'])
-
-        optionvalues = fiedlvalue[i]['OptionValue'];
-
-        if (optionvalues !== null && optionvalues.length > 0) {
-
-          for (let j = 0; j < optionvalues.length; j++) {
-
-
-            $('.options-added').append(`<div class="addedOption"><img src="/public/img/addOption-drag.svg" alt="" /> <p class="para">${optionvalues[j].Value}</p><button href="javascript:void(0)" class="option-delete delval" data-id="${optionvalues[j].Id}" data-newid=${optionvalues[j].NewId}> <img src="/public/img/addOption-close.svg" alt="" /></button></div>`)
-          }
-
-        }
-
-        if (fiedlvalue[i]['FieldName'] != "") {
-          $("#fieldname-error").hide();
-          $('#fieldname-error').parents('.input-group').removeClass('input-group-error')
-        }
-
-        if (fiedlvalue[i]['OptionValue'].length != 0) {
-          $('#select-error').hide();
-          $('#select-error').parents('.input-group').removeClass('input-group-error');
-        }
-
-        if ((fiedlvalue[i]['DateFormat']) != "") {
-          $('#date-error').hide();
-          $('#date-error').parents('.input-group').removeClass('input-group-error');
-        }
-
-        if (fiedlvalue[i]['TimeFormat'] != "") {
-          $('#time-error').hide();
-          $('#time-error').parents('.input-group').removeClass('input-group-error');
-        }
-
-      }
-    }
-  }
-
-})
-
-/** Section Object create */
-function SectionObjectCreate() {
-
-  var obj = {}
-
-  obj.SectionId = 0
-
-  obj.SectionNewId = sectionid
-
-  obj.SectionName = ""
-
-  obj.MasterFieldId = parseInt($('#newsection').attr('data-id'))
-
-  return obj
-
-}
-
-/** Properties Object create */
-function CreatePropertiesObjec() {
-
-  var obj = {}
-
-  obj.MasterFieldId = parseInt($('#fieldid').attr('data-masterfieldid'));
-
-  obj.FieldId = 0
-
-  obj.NewFieldId = parseInt($('#fieldid').attr('data-newfieldid'));
-
-  obj.SectionId = parseInt($('#fieldid').attr('data-sectionid'))
-
-  obj.SectionNewId = parseInt($('#fieldid').attr('data-newsectionid'));
-
-  obj.FieldName = $('#ftext').val();
-
-  obj.Url = $('#furl').val();
-
-  obj.Mandatory = $('#Check2').is(":checked") == true ? 1 : 0
-
-  obj.IconPath = $('#title').children('.img-div').children('img').attr('src')
-
-  obj.CharacterAllowed = parseInt($('#fcharvalue').val()) == "" ? 0 : parseInt($('#fcharvalue').val());
-
-  obj.DateFormat = ""
-
-  obj.TimeFormat = ""
-
-  obj.OptionValue = []
-
-  return obj
-}
-
-/** properties keyup obj creation */
-$(document).on('keyup', '.propinput', function () {
-
-  var fieldid = parseInt($('#fieldid').attr('data-fieldid'));
-
-  var newfieldid = parseInt($('#fieldid').attr('data-newfieldid'));
-
-  const index = fiedlvalue.findIndex(obj => {
-
-    return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-  });
-
-  if (fiedlvalue.length == 0 || index < 0) {
-
-    const obj = CreatePropertiesObjec()
-
-    obj.MasterFieldId = parseInt($('#fieldid').attr('data-masterfieldid'));
-
-    fiedlvalue.push(obj)
-
-  } else {
-
-    fiedlvalue[index].FieldName = $('#ftext').val();
-
-    fiedlvalue[index].Url = $('#furl').val();
-
-    fiedlvalue[index].CharacterAllowed = parseInt($('#fcharvalue').val()) == NaN ? 0 : parseInt($('#fcharvalue').val());
-
-  }
-
-  /**center field name change */
-  $('#fieldtitle' + fieldid.toString() + newfieldid.toString()).text($('#ftext').val())
-
-})
-
-/** Properties Dropdown TimeFormat*/
-$(document).on('click', '.dropdown-item', function () {
-
-  var fieldid = parseInt($('#fieldid').attr('data-fieldid'));
-
-  var newfieldid = parseInt($('#fieldid').attr('data-newfieldid'));
-
-  $(this).parents('a').siblings('.fidvalinput').val($(this).attr('data-id'))
-
-  $(this).parents('a').siblings('.error').hide();
-
-  const index = fiedlvalue.findIndex(obj => {
-
-    return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-  });
-
-  if (fiedlvalue.length == 0 || index < 0) {
-
-    const obj = CreatePropertiesObjec()
-
-    obj.MasterFieldId = fieldid;
-
-    obj.NewFieldId = newfieldid
-
-    obj.SectionNewId = parseInt($('#fieldid').attr('data-newsectionid'));
-
-    obj.DateFormat = $('#fdatefor').val()
-
-    obj.TimeFormat = $('#ftimefor').val()
-
-    fiedlvalue.push(obj)
-
-  } else {
-
-    fiedlvalue[index].DateFormat = $('#fdatefor').val()
-
-    fiedlvalue[index].TimeFormat = $('#ftimefor').val()
-
-  }
-
-})
-
-/** Properties Option value */
-$(document).on('click', '#addvalue', function () {
-
-  var optionvalue = $('#foptname').val();
-
-  if (optionvalue == "") {
-
-    $('#select-error1').show();
-
-    $('#select-error1').parents('.input-group').addClass('input-group-error');
-
-    return
-
-  }
-
-  $('#foptname').val("")
-
-  // $('.options-added').append(`<div class="options-added-row flexx">` + optionvalue + `<button class="delval" data-id="0" data-newid=` + optionid + `> <img src="/public/img/trash-style2.svg" alt=""> </button> </div>`)
-
-  $('.options-added').append(`<div class="addedOption"><img src="/public/img/addOption-drag.svg" alt="" /> <p class="para">${optionvalue}</p><button href="javascript:void(0)" class="option-delete delval" data-id="0" data-newid=${optionid}> <img src="/public/img/addOption-close.svg" alt="" /></button></div>`)
-
-  var fieldid = parseInt($('#fieldid').attr('data-fieldid'));
-
-  var newfieldid = parseInt($('#fieldid').attr('data-newfieldid'));
-
-  const index = fiedlvalue.findIndex(obj => {
-
-    return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-  });
-
-  var optionobj = {}
-
-  optionobj.Id = 0
-
-  optionobj.NewId = optionid
-
-  optionobj.FieldId = fieldid
-
-  optionobj.NewFieldId = newfieldid
-
-  optionobj.Value = optionvalue
-
-  optionvalues.push(optionobj)
-
-  optionid = optionid + 1
-
-  if (fiedlvalue.length == 0 || index < 0) {
-
-    const obj = CreatePropertiesObjec()
-
-    obj.MasterFieldId = parseInt($('#fieldid').attr('data-masterfieldid'));
-
-    obj.NewFieldId = newfieldid
-
-    obj.OptionValue = optionvalues
-
-    obj.SectionNewId = parseInt($('#fieldid').attr('data-newsectionid'));
-
-    fiedlvalue.push(obj)
-
-  } else {
-
-    fiedlvalue[index].OptionValue = optionvalues
-  }
-
-  $('#select-error').hide();
-
-  $('#select-error').parents('.input-group').removeClass('input-group-error')
-
-})
-
-/** Delete option value */
-$(document).on('click', '.delval', function () {
-
-  var optionid = $(this).attr('data-id');
-
-  var optionnewid = $(this).attr('data-newid');
-
-  var fieldid = $('#fieldid').attr('data-fieldid');
-
-  var newfieldid = $('#fieldid').attr('data-newfieldid');
-
-  const index = fiedlvalue.findIndex(obj => {
-
-    return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-  });
-
-  if (index >= 0) {
-
-    const optionindex = fiedlvalue[index].OptionValue.findIndex(obj => {
-
-      return obj.Id == optionid && obj.NewId == optionnewid;
-
-    });
-
-    if (fiedlvalue[index].OptionValue[optionindex].Id != 0) {
-
-      deleteoption.push(fiedlvalue[index].OptionValue[optionindex])
-    }
-
-    fiedlvalue[index].OptionValue.splice(optionindex, 1)
-
-  }
-
-  $(this).parents('.addedOption').remove();
-
-})
-
-/** Delete FieldId Confirmation Popup */
-$(document).on('click', '.field-delete', function () {
-
-  $('#centerModal1').modal('show')
-
-  $('.deltitle').text(languagedata?.Channell?.deltitle)
-
-  $('.deldesc').text(languagedata?.Channell?.delcontent)
-
-  $('.delname').text($(this).siblings('.heading-three').text())
-
-  $('#delid1').attr('data-id', $(this).parents('.fieldapp').attr('data-fieldid')).attr('data-newid', $(this).parents('.fieldapp').attr('data-newfieldid'))
-
-  $('#delid1').removeAttr('data-sectionnewid').removeAttr('data-sectionid');
-
-})
-
-/** Delete field */
-$(document).on('click', '#delid1', function () {
-
-  var fieldid = $(this).attr('data-id');
-
-  var newfieldid = $(this).attr('data-newid');
-
-  var sectionid = $(this).attr('data-sectionid') !== undefined ? $(this).attr('data-sectionid') : 0;
-
-  var newsectionid = $(this).attr('data-sectionnewid') !== undefined ? $(this).attr('data-sectionnewid') : 0
-
-  if (sectionid != 0 || newsectionid != 0) {
-
-    const sectionindex = sections.findIndex(obj => {
-
-      return obj.SectionId == sectionid && obj.SectionNewId == newsectionid;
-
-    })
-    console.log(sectionindex, "sectionindex")
-    if (sectionindex >= 0) {
-
-      if (sections[sectionindex].SectionId != 0) {
-
-        deletesecion.push(sections[sectionindex])
-
-      }
-
-      sections.splice(sectionindex, 1)
-
-    }
-
-    for (let x in fiedlvalue) {
-
-      if (fiedlvalue[x].SectionId == sectionid && fiedlvalue[x].SectionNewId == newsectionid) {
-
-        if (fiedlvalue[x].FieldId != 0) {
-
-          console.log(fiedlvalue[x], "sdfdfdfdfd")
-
-          deletefields.push(fiedlvalue[x])
-
-        }
-
-        fiedlvalue.splice(x, 1)
-
-      }
-
-    };
-
-    $('#section-' + sectionid + newsectionid).remove();
-
-  } else {
-
-    const index = fiedlvalue.findIndex(obj => {
-
-      return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-    });
-
-    if (index >= 0) {
-
-      deletefields.push(fiedlvalue[index])
-
-      fiedlvalue.splice(index, 1)
-
-      const index1 = fiedlvalue.findIndex(obj => {
-
-        return obj.MasterFieldId == RelationalMember
-
-      });
-
-      if (index1 == -1) {
-
-        $("#relational-member").draggable("enable");
-
-        $("#relational-member").css('opacity', '1');
-      }
-
-    }
-
-    $('#fieldapp' + fieldid.toString() + newfieldid.toString()).remove();
-
-  }
-
-  $('#delcancel1').trigger('click');
-
-  $('#field-properties').hide();
-
-  console.log(deletefields, "fieldvaluex")
-})
-
-/** Channel Save Ajax */
-$(document).on('click', '.channelsave', function () {
-
-  flg = FieldValidation()
-
-  flg1 = CateogryValidation()
-
-  if (!flg || !flg1) {
-
-    console.log(flg, flg1);
-
-    return false
-
-  }
-
-  var name = $('#channelname').val();
-
-  var desc = $('#channeldesc').val();
-
-  SortFieldsandSection()
-
-  $.ajax({
-
-    url: '/channels/newchannel',
-    type: 'post',
-    dataType: 'json',
-    async: false,
-    data: {
-      "channelname": name,
-      "channeldesc": desc,
-      "sections": JSON.stringify({ sections }),
-      "fiedlvalue": JSON.stringify({ fiedlvalue }),
-      "categoryvalue": SelectedCategoryValue,
-      csrf: $("input[name='csrf']").val()
-    },
-    success: function (data) {
-
-      window.location.href = "/channels/"
-
-    }
-  })
-
-})
-
-/**section select */
-$(document).on('click', '.section-fields-content', function () {
-
-  $('.section-fields-content').removeClass('active');
-
-  $(this).addClass('active');
-})
-
-/** input */
-$(document).on('click', '.section-title', function () {
-
-  $(this).parent().hide();
-
-  $(this).parent().siblings('.sectioninput').show();
-
-})
-
-/**section delete */
-$(document).on('click', '.sectiondel', function () {
-
-  $('#centerModal1').modal('show')
-
-  $('.deltitle').text(languagedata?.Channell?.delsectitle)
-
-  $('.deldesc').text(languagedata?.Channell?.delseccontent)
-
-  $('.delname').text($(this).siblings('input').val());
-
-  $('#delid1').attr('data-sectionnewid', $(this).parents('.section-fields-content').attr('data-newid'))
-
-  $('#delid1').attr('data-sectionid', $(this).parents('.section-fields-content').attr('data-id'))
-
-})
-
-/**section name keyup object save */
-$(document).on('keyup', '.sectionname', function () {
-
-  var sectionnewid = $(this).parents('.section-fields-content').attr('data-newid');
-
-  var sectionid = $(this).parents('.section-fields-content').attr('data-id') == undefined ? 0 : $(this).parents('.section-fields-content').attr('data-id');
-
-  const sectionindex = sections.findIndex(obj => {
-
-    return obj.SectionId == sectionid && obj.SectionNewId == sectionnewid;
-
-  })
-
-  if (sectionindex >= 0) {
-
-    sections[sectionindex]['SectionName'] = $(this).val();
-  }
-
-
-})
-
-$(document).on('keyup', '.chanfield', function () {
-
-  Validationcheck()
-
-})
-
-function Validationcheck() {
-
-  if ($('#channelname').hasClass('error')) {
-
-    $('#cname').addClass('input-group-error');
-
-  } else {
-
-    $('#cname').removeClass('input-group-error');
-  }
-
-  if ($('#channeldesc').hasClass('error')) {
-
-    $('#cdesc').addClass('input-group-error');
-
-  } else {
-
-    $('#cdesc').removeClass('input-group-error');
-  }
-}
-
-//**description focus function */
-var Desc = document.getElementById('channeldesc');
-var inputGroup = document.querySelectorAll('.input-group');
-
-Desc.addEventListener('focus', () => {
-
-  Desc.closest('.input-group').classList.add('input-group-focused');
-});
-Desc.addEventListener('blur', () => {
-  Desc.closest('.input-group').classList.remove('input-group-focused');
 });
 
 
-$('#Sortsection').bind('DOMSubtreeModified', function () {
 
-  SortFieldsandSection()
+// channel fields text limit of 30 char
 
-});
+$(document).on('keyup', '.checklength', function () {
 
+  var inputVal = $(this).val()
 
-function FieldValidation() {
+  var inputLength = inputVal.length
 
-  console.log(fiedlvalue, "validation")
-
-  // if (fiedlvalue.length == 0) {
-
-  //   notify_content = `<div class="toast-msg dang-red" ><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span> ` + languagedata?.Channell?.fieldselcterr + `</span></div>`;
-  //   $(notify_content).insertBefore(".header-rht");
-  //   setTimeout(function () {
-  //     $('.toast-msg').fadeOut('slow', function () {
-  //       $(this).remove();
-  //     });
-  //   }, 5000); // 5000 milliseconds = 5 seconds
-
-  //   return false
-
-  // }
-  if (fiedlvalue != null) {
-    for (let x of fiedlvalue) {
-
-      if (x['FieldName'] == "") {
-
-        $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-        $('#fieldname-error').show();
-
-        $('#fieldname-error').parents('.input-group').addClass('input-group-error')
-
-        console.log("fieldname empty");
-
-        return false
-
-      }
-
-      if (x["MasterFieldId"] == 3) {
-
-        if (x['Url'] == "") {
-
-          $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-          $('#url-error').show();
-
-          $('#url-error').parents('.input-group').addClass('input-group-error')
-
-          console.log("url empty");
-
-          return false
-
-        }
-
-
-
-      } else if (x["MasterFieldId"] == 4) {
-
-        var flg = true
-        var flg2 = true
-
-        if (x['DateFormat'] == "") {
-
-          $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-          $('#date-error').show();
-
-          $('#date-error').parent('.input-group').addClass('input-group-error')
-
-          console.log("dateformat empty");
-
-          flg = false
-
-        }
-
-        if (x['TimeFormat'] == "") {
-
-          $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-          console.log("timeformat empty");
-
-          $('#time-error').show();
-
-          $('#time-error').parents('.input-group').addClass('input-group-error')
-
-          flg2 = false
-        }
-
-        if (!flg || !flg2) {
-
-          console.log("11");
-
-          return false
-
-        }
-
-
-      } else if (x["MasterFieldId"] == 5 || x["MasterFieldId"] == 9 || x["MasterFieldId"] == 10) {
-
-        if (x['OptionValue'].length == 0) {
-
-          $('#select-error').show();
-
-          $('#select-error').parents('.input-group').addClass('input-group-error')
-
-          $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-          console.log("options empty");
-
-          return false
-
-        }
-
-      } else if (x["MasterFieldId"] == 6) {
-
-        if (x['DateFormat'] == "") {
-
-          $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
-
-          $('#date-error').parents('.input-group').addClass('input-group-error')
-
-          $('#date-error').show();
-
-          console.log("dateformat empty");
-
-          return false
-
-        }
-
-      }
-
-    }
-  }
-
-
-  return true
-}
-
-function CateogryValidation() {
-
-  if (SelectedCategoryValue.length == 0) {
-
-    notify_content = `<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span> ` + languagedata?.Channell?.selectcatvalid + ` </span></div>`;
-    $(notify_content).insertBefore(".header-rht");
-    setTimeout(function () {
-      $('.toast-msg').fadeOut('slow', function () {
-        $(this).remove();
-      });
-    }, 5000); // 5000 milliseconds = 5 seconds
-
-    return false
-  }
-
-  return true
-}
-
-$(document).on('keyup', '.fieldinput', function () {
-
-  var value = $(this).val();
-
-  $('#title').children('h3').text(value);
-
-  if (value != "") {
-
-    $(this).parents('.input-group').removeClass('input-group-error')
-
-    $(this).siblings('label').hide();
-
+  if (inputLength == 30) {
+       $(this).siblings('.lengthErr').removeClass('hidden')
   } else {
-
-    $(this).parents('.input-group').addClass('input-group-error')
-
-    $(this).siblings('label').show();
+       $(this).siblings('.lengthErr').addClass('hidden')
   }
 
 })
-
-$(document).on('click', ".propdrop", function () {
-
-  var value = $(this).parents('.dropdown-menu').siblings('.fidvalinput').val()
-
-  if (value != "") {
-
-    $(this).parents('.dropdown-menu').siblings('label.error').hide();
-
-    $(this).parents('.input-group').removeClass('input-group-error');
-
-
-  }
-
-
-})
-
-$(document).ready(function () {
-
-  $('.categorypdiv').each(function () {
-
-    var length = $(this).children('.choose-cat-list-col').children('.categoryname').length - 1
-
-    $(this).children('.choose-cat-list-col').children('.categoryname').each(function (index) {
-
-      if (length == index) {
-
-        $(this).next().remove();
-      }
-
-    })
-
-  })
-
-  $('.selectedcategorydiv').each(function () {
-
-    var length = $(this).children('.choose-cat-list-col').children('.categoryname').length - 1
-
-    $(this).children('.choose-cat-list-col').children('.categoryname').each(function (index) {
-
-      if (length == index) {
-
-        $(this).next().remove();
-      }
-
-    })
-
-  })
-
-})
-
-
-/**Checked */
-$(document).on('click', '#Check2', function () {
-
-  if ($(this).is(':checked')) {
-
-    $(this).prop('checked', true);
-
-  } else {
-
-    $(this).prop('checked', false);
-
-  }
-
-  var fieldid = parseInt($('#fieldid').attr('data-fieldid'));
-
-  var newfieldid = parseInt($('#fieldid').attr('data-newfieldid'));
-
-  const index = fiedlvalue.findIndex(obj => {
-
-    return obj.FieldId == fieldid && obj.NewFieldId == newfieldid;
-
-  });
-
-  console.log(index, $(this).is(':checked'));
-
-  if (fiedlvalue.length == 0 || index < 0) {
-
-    const obj = CreatePropertiesObjec()
-
-    obj.MasterFieldId = parseInt($('#fieldid').attr('data-masterfieldid'));
-
-    fiedlvalue.push(obj)
-
-  } else {
-
-    fiedlvalue[index].Mandatory = $(this).is(':checked') == true ? 1 : 0;
-
-  }
-
-})
-
-$(document).on('keyup', '#foptname', function () {
-
-  $("#select-error").hide();
-
-  if ($(this).val() != "") {
-
-    $("#select-error1").hide();
-
-    $('#select-error1').parents('.input-group').removeClass('input-group-error');
-
-  } else {
-    $("#select-error1").show();
-
-    $('#select-error1').parents('.input-group').addClass('input-group-error');
-  }
-})
-
-$('#channelcreate').on('keyup keypress', function (e) {
-  var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) {
-    e.preventDefault();
-    return false;
-  }
-});
-
-
-// $("#relational-member").draggable("disable");

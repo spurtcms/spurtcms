@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"os"
 	"path/filepath"
 	"spurt-cms/controllers"
@@ -12,6 +13,17 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
+
+func limitRequestBodySize(limit int64) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, limit)
+		if err := c.Request.ParseForm(); err != nil {
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
 
 func SetupRoutes() *gin.Engine {
 
@@ -33,9 +45,21 @@ func SetupRoutes() *gin.Engine {
 
 	r.Static("/locales", "./locales")
 
+	r.Use(middleware.CorsMiddleware())
+
+	r.POST("/gqlSaveLocal", controllers.SaveFileInLocal)
+
+	r.POST("/uploadb64image", controllers.EditroImageSave)
+
+	r.POST("/s3upload", controllers.UploadFilesToS3)
+
+	// r.POST("gqlSaveB64Local", controllers.SaveB64InLocal)
+
 	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
 
 	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY3"), store))
+
+	r.Use(limitRequestBodySize(20 << 20)) // 20 MB
 
 	r.GET("/image-resize", controllers.ResizeImage)
 
@@ -43,15 +67,13 @@ func SetupRoutes() *gin.Engine {
 
 	r.MaxMultipartMemory = 8 << 20
 
-	r.Use(middleware.CorsMiddleware())
-
 	D := r.Group("")
 
 	D.Use(middleware.DashBoardAuth())
 
-	D.GET("/", controllers.Login)
+	D.GET("/", controllers.WebsiteLogin)
 
-	r.POST("/", controllers.CheckLogin)
+	r.POST("/adminlogin", controllers.CheckLogin)
 
 	D.GET("/forgot", controllers.ForgetPassword)
 
@@ -108,6 +130,10 @@ func SetupRoutes() *gin.Engine {
 
 	CE.GET("/editentrydetails/:channelname/:id", controllers.EditDetails)
 
+	CE.GET("/editsentry/:id", controllers.EditEntry)
+
+	CE.GET("/editentrydetail/:id", controllers.EditDetails)
+
 	CE.GET("/copyentry/:id", controllers.EditEntry)
 
 	CE.GET("/channelfields/:id", controllers.ChannelFields)
@@ -128,8 +154,30 @@ func SetupRoutes() *gin.Engine {
 
 	CE.GET("/settings", controllers.ChannelSettingView)
 
+	CE.POST("/settings/update", controllers.ChannelSettingUpdate)
+
+	CE.GET("/checkmandatoryfields/:id", controllers.CheckMandatoryFields)
+
+	CE.GET("/previewdetails/:id", controllers.CheckMandatoryFields)
+
+	CE.GET("/unpublishentries", controllers.AllEntries)
+
+	CE.GET("/draftentries", controllers.AllEntries)
+
+	CE.GET("/unpublishentrieslist/:id", controllers.Entries)
+
+	CE.GET("/draftentrieslist/:id", controllers.Entries)
+
+	CE.POST("/entryisactive", controllers.EntryIsActive)
+
+	CE.POST("/entryparentidupdate/:id", controllers.EntryParentIdUpdate)
+
+	CE.POST("/reorder", controllers.EntryReorder)
+
+	CE.POST("/updatepermissionmembergroupid", controllers.UpdateAccPermissionMembergroupId)
+
 	/*channels module*/
-	CH := C.Group("/channels", middleware.ModulePermissionByUserId())
+	CH := C.Group("/channels")
 
 	CH.GET("/", controllers.ChannelList)
 
@@ -152,6 +200,8 @@ func SetupRoutes() *gin.Engine {
 	CH.POST("/pagination", controllers.PaginationList)
 
 	CH.POST("/Updatechannelfields", controllers.Updatechannelfields)
+
+	CH.GET("/channeltype", controllers.ChannelType)
 
 	/* Category Module*/
 	CS := r.Group("/categories")
@@ -182,20 +232,20 @@ func SetupRoutes() *gin.Engine {
 
 	CS.GET("/removecategory", controllers.DeleteSubCategory)
 
-	CS.GET("/deletepopup", controllers.CategoryPopup)
+	// CS.GET("/deletepopup", controllers.CategoryPopup)
 
 	CS.POST("/checksubcategoryname", controllers.CheckSubCategoryName)
 
 	CS.POST("/multiselectcategorydelete", controllers.MultiSelectCategoryDelete)
 
 	/*content access control module*/
-	CA := C.Group("/memberaccess", middleware.ModulePermissionByUserId())
+	CA := C.Group("/memberaccess")
 
 	CA.GET("/", controllers.ContentAccessControlList)
 
 	CA.GET("/newcontentaccesscontrol", controllers.NewContentAccess)
 
-	CA.GET("/getpages", controllers.GetPages)
+	// CA.GET("/getpages", controllers.GetPages)
 
 	CA.POST("/grant-accesscontrol", controllers.GrantContentAccessControl)
 
@@ -214,15 +264,15 @@ func SetupRoutes() *gin.Engine {
 	/*Member Module*/
 	M := C.Group("/member")
 
-	M.GET("/", middleware.ModulePermissionByUserId(), controllers.MemberList)
+	M.GET("/", controllers.MemberList)
 
-	M.POST("/newmember", middleware.ModulePermissionByUserId(), controllers.CreateMember)
+	M.POST("/newmember", controllers.CreateMember)
 
 	M.GET("/updatemember/:id", controllers.EditMember)
 
-	M.POST("/updatemember", middleware.ModulePermissionByUserId(), controllers.UpdateMember)
+	M.POST("/updatemember", controllers.UpdateMember)
 
-	M.GET("/deletemember", middleware.ModulePermissionByUserId(), controllers.DeleteMember)
+	M.GET("/deletemember", controllers.DeleteMember)
 
 	M.POST("/checkemailinmember", controllers.CheckEmailInMember)
 
@@ -246,16 +296,20 @@ func SetupRoutes() *gin.Engine {
 
 	M.POST("/settings/updatetemplate", controllers.UpdateMemberSettingTemplate)
 
+	M.POST("/updateactivateclaim", controllers.ActivateClaimStatus)
+
+	M.POST("/getmemberdetails", controllers.GetMemberProfileByMemberId)
+
 	/*Member group Module*/
 	MG := C.Group("/membersgroup")
 
-	MG.GET("/", middleware.ModulePermissionByUserId(), controllers.MemberGroupList)
+	MG.GET("/", controllers.MemberGroupList)
 
-	MG.POST("/newgroup", middleware.ModulePermissionByUserId(), controllers.CreateNewMemberGroup)
+	MG.POST("/newgroup", controllers.CreateNewMemberGroup)
 
-	MG.POST("/updategroup", middleware.ModulePermissionByUserId(), controllers.UpdateMemberGroup)
+	MG.POST("/updategroup", controllers.UpdateMemberGroup)
 
-	MG.GET("/deletegroup", middleware.ModulePermissionByUserId(), controllers.DeleteMemberGroup)
+	MG.GET("/deletegroup", controllers.DeleteMemberGroup)
 
 	MG.POST("/groupisactive", controllers.MemberIsActive)
 
@@ -264,6 +318,8 @@ func SetupRoutes() *gin.Engine {
 	MG.POST("/deleteselectedmembergroup", controllers.MultiSelectDeleteMembergroup)
 
 	MG.POST("/multiselectmembergroup", controllers.MultiSelectMembersgroupStatus)
+
+	MG.POST("/chkmemgrphavemember", controllers.Chkmemgrphavemember)
 
 	/*Settings Module*/
 	S := C.Group("/settings")
@@ -289,13 +345,13 @@ func SetupRoutes() *gin.Engine {
 	/*Roles Module*/
 	R := S.Group("/roles")
 
-	R.GET("/",  controllers.RoleView)
+	R.GET("/", controllers.RoleView)
 
 	R.POST("/checkrole", controllers.CheckRoleAlreadyExists)
 
-	R.POST("/createrole",  controllers.RoleCreate)
+	R.POST("/createrole", controllers.RoleCreate)
 
-	R.POST("/updaterole",  controllers.RoleUpdate)
+	R.POST("/updaterole", controllers.RoleUpdate)
 
 	R.POST("/getroledetail", controllers.GetRolePermissionData)
 
@@ -307,28 +363,32 @@ func SetupRoutes() *gin.Engine {
 
 	R.POST("/multiselectrolestatus", controllers.MultiSelectRoleStatus)
 
+	R.POST("/chkroleshaveuser", controllers.Chkroleshaveuser)
+
 	/*Language Module*/
 	L := S.Group("/languages")
 
-	L.GET("/", middleware.ModulePermissionByUserId(), controllers.LanguageList)
+	L.GET("/", controllers.LanguageList)
 
-	L.POST("/addlanguage", middleware.ModulePermissionByUserId(), controllers.AddLanguage)
+	// L.POST("/addlanguage", controllers.AddLanguage)
 
-	L.GET("/editlanguage/:id", controllers.EditLanguage)
+	// L.GET("/editlanguage/:id", controllers.EditLanguage)
 
-	L.POST("/updatelanguage", middleware.ModulePermissionByUserId(), controllers.UpdateLanguage)
+	// L.POST("/updatelanguage", controllers.UpdateLanguage)
 
-	L.GET("/deletelanguage/:id", middleware.ModulePermissionByUserId(), controllers.DeleteLanguage)
+	// L.GET("/deletelanguage/:id", controllers.DeleteLanguage)
 
-	L.GET("/downloadlanguage/:id", controllers.DownloadLanguage)
+	// L.GET("/downloadlanguage/:id", controllers.DownloadLanguage)
 
-	L.POST("/languageisactive", controllers.LanguageStatus)
+	// L.POST("/languageisactive", controllers.LanguageStatus)
 
-	L.POST("/checklanguagename", controllers.CheckLanguageName)
+	// L.POST("/checklanguagename", controllers.CheckLanguageName)
 
-	L.POST("/multiselectlanguagedelete", controllers.MultiselectLanguageDelete)
+	// L.POST("/multiselectlanguagedelete", controllers.MultiselectLanguageDelete)
 
-	L.POST("/multiselectlanguagestatus", controllers.MultiSelectLanguageStatus)
+	// L.POST("/multiselectlanguagestatus", controllers.MultiSelectLanguageStatus)
+
+	L.POST("/setdefaultlanguage", controllers.SetDefaultLanguage)
 
 	/*User Module*/
 	U := S.Group("/users")
@@ -360,7 +420,7 @@ func SetupRoutes() *gin.Engine {
 	U.POST("/selectedUserStatusChange", controllers.SelectedUsersStatusChange)
 
 	/*Email Templates*/
-	ET := S.Group("/emails", middleware.ModulePermissionByUserId())
+	ET := S.Group("/emails")
 
 	ET.GET("/", controllers.EmailTemplate)
 
@@ -375,38 +435,11 @@ func SetupRoutes() *gin.Engine {
 	ET.POST("/update", controllers.CreateEmailConfig)
 
 	/*General Settings*/
-	GS := S.Group("/general-settings", middleware.ModulePermissionByUserId())
+	GS := S.Group("/general-settings")
 
 	GS.GET("/", controllers.GeneralSettings)
 
 	GS.POST("/update", controllers.UpdateGeneralSettings)
-
-	/*Graphql settings*/
-
-	GR := S.Group("/graphql", middleware.ModulePermissionByUserId())
-
-	GR.GET("/", controllers.GraphqlTokenApi)
-
-	GR.GET("/create", controllers.CreateTokenGrapqhl)
-
-	/*Media Library*/
-	ME := r.Group("/media")
-
-	ME.GET("/", controllers.MediaList)
-
-	ME.POST("/createfolder", controllers.AddFolder)
-
-	ME.POST("/uploadimage", controllers.UploadImageMedia)
-
-	ME.POST("/deletefolfile", controllers.DeleteFolderFile)
-
-	ME.POST("/singlefolder", controllers.FolderDetails)
-
-	ME.POST("/upload", controllers.UploadImage)
-
-	ME.GET("/settings", controllers.MediaSettings)
-
-	ME.POST("/settings/update", controllers.MediaStorageUpdate)
 
 	/*System Module*/
 	SS := S.Group("/personalize")
@@ -416,7 +449,7 @@ func SetupRoutes() *gin.Engine {
 	SS.POST("/update", controllers.PersonalizationUpdate)
 
 	/*Data Module*/
-	DT := S.Group("/data", middleware.ModulePermissionByUserId())
+	DT := S.Group("/data")
 
 	DT.GET("/", controllers.Data)
 
@@ -428,11 +461,45 @@ func SetupRoutes() *gin.Engine {
 
 	DT.GET("/err-xlsx-download", controllers.DownloaderrXlsx)
 
-	// ECO := S.Group("/email-config")
+	DT.GET("/secondimportpage", controllers.ImportPageTwo)
 
-	// ECO.GET("/", controllers.EmailConfig)
+	DT.GET("/thirdimportpage", controllers.ImportPageThree)
 
-	// ECO.POST("/update", controllers.CreateEmailConfig)
+	DT.GET("/exportpage", controllers.ExportPage)
+
+	// GR.GET("/", controllers.GraphqlTokenApi)
+
+	// GR.GET("/create", controllers.CreateTokenGrapqhl)
+
+	// GR.POST("/create", controllers.CreateToken)
+
+	// GR.GET("/edit/:id", controllers.UpdateGraphqlApi)
+
+	// GR.POST("/update", controllers.UpdateGraphqlToken)
+
+	// GR.GET("/delete/:id", controllers.DeleteToken)
+
+	// GR.POST("/multideletegraphtoken", controllers.MultiDeleteGraphqlToken)
+
+	G := C.Group("/graphql")
+
+	G.GET("/", controllers.GraphqlTokenApi)
+
+	G.POST("/create", controllers.CreateToken)
+
+	G.GET("/delete/:id", controllers.DeleteToken)
+
+	G.GET("/edit/:id", controllers.UpdateGraphqlApi)
+
+	G.POST("/update", controllers.UpdateGraphqlToken)
+
+	G.POST("/multideletetokens", controllers.MultiDeleteGraphqlToken)
+
+	G.GET("/playground", controllers.PlaygroundView)
+
+	T := C.Group("/templates")
+
+	T.GET("/", controllers.ListTemplates)
 
 	return r
 

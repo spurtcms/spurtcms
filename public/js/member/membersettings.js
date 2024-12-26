@@ -1,3 +1,4 @@
+// var quill;
 var ckeditor1;
 var userids =[]
 var templatestatus=[]
@@ -6,9 +7,10 @@ $(document).ready(function(){
     CKEDITORS()
 })
 
+
 $(document).on('click','.open-emailtemp',function(){
 
-
+console.log("email tem");
     $('#mailtemplate_form').attr('action','/member/settings/updatetemplate')
     console.log("checkclick")
     tempid = $(this).attr('data-id')
@@ -29,9 +31,11 @@ $(document).on('click','.open-emailtemp',function(){
           $('#input-pagefind').val(pathname)
           $('#input-tempid').val(tempid)
           $("#emailtemp-name").text(result.TemplateName);
+          $("#emailname").val(result.TemplateName)
           $("#emailsub").val(result.TemplateSubject);
           $("#emaildesc").val(result.TemplateDescription)
           ckeditor1.setData(result.TemplateMessage)
+        // quill.clipboard.dangerouslyPasteHTML(result.TemplateMessage);
        }
     }
     })
@@ -45,7 +49,8 @@ function CKEDITORS() {
 
     CKEDITOR.ClassicEditor.create(document.getElementById("text"), {
         toolbar: {
-            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'horizontalLine', 'link', 'code'],
+            // items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'blockQuote', 'imageUpload', 'numberedList', 'bulletedList', 'horizontalLine', 'link', 'code'],
+            items: ['heading', 'bold', 'italic', 'alignment', 'underline', 'numberedList', 'bulletedList', 'link'],
             shouldNotGroupWhenFull: true
         },
         list: {
@@ -66,7 +71,7 @@ function CKEDITORS() {
                 { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
             ]
         },
-        placeholder: languagedata?.Channell?.plckeditor,
+        // placeholder: languagedata.Channell.plckeditor,
         fontFamily: {
             options: [
                 'default',
@@ -189,6 +194,7 @@ function CKEDITORS() {
 
 }
 
+
 $('#update-templatebtn').click(function(event){
 
     var emailtemplate = ckeditor1.getData()
@@ -201,7 +207,71 @@ $('#update-templatebtn').click(function(event){
 })
 
 
+
+// function Quill() {
+
+//     // const toolbarOptions = [
+//     //     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+//     //     ['blockquote', 'code-block'],
+//     //     ['link', 'image', 'video', 'formula'],
+
+//     //     [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+//     //     [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+//     //     [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+//     //     [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+//     //     [{ 'direction': 'rtl' }],                         // text direction
+
+//     //     [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+//     //     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+//     //     [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+//     //     [{ 'font': [] }],
+//     //     [{ 'align': [] }],
+
+//     //     ['clean']                                         // remove formatting button
+//     //   ];
+
+//       const toolbarOptions = [
+//         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+//         [{ 'size': ['small', false, 'large'] }],  // custom dropdown
+
+//         ['bold', 'italic', 'underline'],        // toggled buttons
+
+//         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+//         [{ 'align': [] }],
+
+//         ['link']
+//       ];
+
+//        quill = new Quill('#text', {
+//         modules: {
+//           toolbar: toolbarOptions
+//         },
+//         theme: 'snow'
+//       });
+
+// }
+
+
+//  using quill update
+
+// $('#update-templatebtn').click(function(event){
+//     var htmlContent = quill.root.innerHTML;
+
+//     var emailtemplate = htmlContent;
+
+//     // $('#input-tempname').val($("#emailtemp-name").text())
+
+//     $('#ckeditor-data').val(emailtemplate)
+
+//     $('#mailtemplate_form').submit()
+// })
+
+
 $(document).on('click','#update',function(){
+    console.log("log update");
 
      $('#multiselectuser').val(userids)
 
@@ -227,7 +297,8 @@ $(document).on('click','.allowregis',function(){
         $('.allowregistration').val('0')
     }
 })
-$(document).on('click','#radio-1',function(){
+
+$(document).on('click','#check-1',function(){
 
 
    option= $(this).siblings('label').text()
@@ -240,15 +311,15 @@ $(document).on('click','#radio-1',function(){
     }
 })
 
-$(document).on('click','#radio-2',function(){
+$(document).on('click','#check-2',function(){
 
 
     option= $(this).siblings('label').text()
- 
+
     console.log(option,"optionval")
- 
+
      if ($(this).prop('checked')){
- 
+
          $('.memberlogin').val(option)
      }
  })
@@ -273,7 +344,7 @@ $(document).on('click','#radio-2',function(){
    }else{
 
     const index = userids.indexOf(userid);
-   
+
     if (index !== -1) {
 
              userids.splice(index, 1);
@@ -296,16 +367,16 @@ console.log(userids,"useridsss")
 
    if (userid != "") {
 
-    var values = userid.split(','); 
+    var values = userid.split(',');
 
     for (var i = 0; i < values.length; i++) {
 
         if (values[i] !== "1") {
-            
-            userids.push(values[i]); 
+
+            userids.push(values[i]);
         }
 
-       
+
     }
 
     $('.checkboxdiv').each(function () {
@@ -367,15 +438,17 @@ $(document).on('click', '.closemember', function () {
     });
 
     $('#searchdropdownrole').val('')
-   
+
     $(this).hide()
 
    $('.checkboxdiv').show()
 
-   $("#nodatafounddesign").hide()
-    
-  
+   $("#nodatafounddesign").addClass("hidden")
+
+
 })
+
+
 
 // dropdown filter input box search
 $("#searchdropdownrole").keyup(function () {
@@ -383,53 +456,56 @@ $("#searchdropdownrole").keyup(function () {
 
     var keyword = $(this).val().trim().toLowerCase()
 
-  
+
     if (keyword !== "") {
 
         $('.closemember').show()
-        
+
     }else{
 
         $('.closemember').hide()
-
-
     }
-  
-    $(".dropdown-role .dropdown-filter-roles .checkboxdiv ").each(function (index,element) {
 
-        var title = $(this).children('label').text().toLowerCase()
+
+    $(".checkboxdiv").each(function (index,element) {
+
+        var title = $(this).find('p').text().toLowerCase();
 
         if (title.includes(keyword)) {
 
             $(element).show()
+            $("#nodatafounddesign").addClass("hidden")
 
-            $("#nodatafounddesign").hide()
 
         } else {
 
             $(element).hide()
 
-            if ($('.dropdown-filter-roles .checkboxdiv:visible').length == 0) {
-
-                $("#nodatafounddesign").show()
+            if ($('.checkboxdiv:visible').length == 0) {
+                $("#nodatafounddesign").removeClass("hidden")
 
             }
         }
     })
-
 })
+
+
 
 $(document).on('click','#update-templatebtn',function(){
 
     console.log("checking")
-    
+
     $("form[name='emailtemplateform']").validate({
       rules: {
-        
+        tempname:{
+            required: true,
+            space: true,
+        },
+
           tempsub: {
               required: true,
               space: true,
-              
+
           },
           tempdesc: {
             required: true,
@@ -442,31 +518,34 @@ $(document).on('click','#update-templatebtn',function(){
           },
       },
       messages: {
-      
+        tempname:{
+            required: "* Please enter Template Name" ,
+            space: "* " + languagedata.spacergx,
+
+        },
           tempsub: {
               required: "* Please enter Template Subject" ,
               space: "* " + languagedata.spacergx,
-             
+
           },
           tempdesc: {
             required: "* Please enter Template Description" ,
             space: "* " + languagedata.spacergx,
-            
+
         },
           temcont: {
             required: "* Please enter templatecontent" ,
               space: "* " + languagedata.spacergx,
-              // maxlength: "* Maximum 250 character allowed"
           }
       }
     });
-    
+
     var formcheck = $("#mailtemplate_form").valid();
-    
-    
+
+
     if (formcheck == true) {
       $('#mailtemplate_form')[0].submit();
-    
+
     }
     else{
       Validationcheck()
@@ -474,25 +553,40 @@ $(document).on('click','#update-templatebtn',function(){
           Validationcheck()
       })
     }
-    
+
     })
-    
+
     function Validationcheck(){
-    
+
+        if ($('#emailname').hasClass('error')){
+
+            $('#namegrb').addClass('input-group-error');
+        }else{
+            $('#namegrb').removeClass('input-group-error');
+        }
+
         if ($('#emailsub').hasClass('error')){
-    
-            console.log("checkkkuuuuuuuuuu")
+
             $('#subgrb').addClass('input-group-error');
         }else{
             $('#subgrb').removeClass('input-group-error');
         }
-    
+
       if ($('#emaildesc').hasClass('error')) {
         $('#desgrb').addClass('input-group-error');
     }else{
       $('#desgrb').removeClass('input-group-error');
     }
-    
-    
     }
-    
+
+
+
+    $(document).on('click','.close',function(){
+
+      $('.input-group').removeClass('input-group-error')
+
+      $('.field').removeClass('error')
+
+      $('.error').hide()
+
+    })

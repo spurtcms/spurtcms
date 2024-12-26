@@ -7,10 +7,10 @@ import (
 	"gorm.io/datatypes"
 )
 
-type TblRole struct {
+type TblRoles struct {
 	Id          int       `gorm:"primaryKey;auto_increment"`
 	Name        string    `gorm:"type:varchar(255)"`
-	Description string    `gorm:"type:varchar(255)"`
+	Description string    `gorm:"type:LONGTEXT"`
 	Slug        string    `gorm:"type:varchar(255)"`
 	IsActive    int       `gorm:"type:int"`
 	IsDeleted   int       `gorm:"type:int"`
@@ -18,14 +18,15 @@ type TblRole struct {
 	CreatedBy   int       `gorm:"type:int"`
 	ModifiedOn  time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	ModifiedBy  int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId    int       `gorm:"type:int;"`
 }
 
-type TblUser struct {
-	Id                int       `gorm:"primaryKey"`
+type TblUsers struct {
+	Id                int       `gorm:"primaryKey;auto_increment"`
 	Uuid              string    `gorm:"type:varchar(255)"`
 	FirstName         string    `gorm:"type:varchar(255)"`
 	LastName          string    `gorm:"type:varchar(255)"`
-	RoleId            TblRole   `gorm:"type:int;foreignkey:Id"`
+	RoleId            TblRoles  `gorm:"type:int;foreignkey:Id"`
 	Email             string    `gorm:"type:varchar(255)"`
 	Username          string    `gorm:"type:varchar(255)"`
 	Password          string    `gorm:"type:varchar(255)"`
@@ -33,6 +34,7 @@ type TblUser struct {
 	IsActive          int       `gorm:"type:int"`
 	ProfileImage      string    `gorm:"type:varchar(255)"`
 	ProfileImagePath  string    `gorm:"type:varchar(255)"`
+	StorageType       string    `gorm:"type:varchar(255)"`
 	DataAccess        int       `gorm:"type:int"`
 	DefaultLanguageId int       `gorm:"type:int"`
 	CreatedOn         time.Time `gorm:"type:datetime"`
@@ -43,13 +45,17 @@ type TblUser struct {
 	IsDeleted         int       `gorm:"type:int"`
 	DeletedOn         time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy         int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId          int       `gorm:"type:int;"`
+	Otp               int       `gorm:"DEFAULT:NULL;type:int"`
+	OtpExpiry         time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	S3FolderName      string    `gorm:"type:varchar(255)"`
 }
 
 type TblCategories struct {
 	Id           int       `gorm:"primaryKey;auto_increment"`
 	CategoryName string    `gorm:"type:varchar(255)"`
 	CategorySlug string    `gorm:"type:varchar(255)"`
-	Description  string    `gorm:"type:varchar(255)"`
+	Description  string    `gorm:"type:LONGTEXT"`
 	ImagePath    string    `gorm:"type:varchar(255)"`
 	ParentId     int       `gorm:"type:int"`
 	CreatedOn    time.Time `gorm:"type:datetime"`
@@ -59,12 +65,13 @@ type TblCategories struct {
 	IsDeleted    int       `gorm:"type:int"`
 	DeletedOn    time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy    int       `gorm:"type:int;DEFAULT:NULL;type:int"`
+	TenantId     int       `gorm:"type:int;"`
 }
 
-type TblChannel struct {
+type TblChannels struct {
 	Id                 int       `gorm:"primaryKey;auto_increment"`
 	ChannelName        string    `gorm:"type:varchar(255)"`
-	ChannelDescription string    `gorm:"type:varchar(255)"`
+	ChannelDescription string    `gorm:"type:LONGTEXT"`
 	SlugName           string    `gorm:"type:varchar(255)"`
 	FieldGroupId       int       `gorm:"type:int"`
 	IsActive           int       `gorm:"type:int"`
@@ -73,13 +80,15 @@ type TblChannel struct {
 	CreatedBy          int       `gorm:"type:int"`
 	ModifiedOn         time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	ModifiedBy         int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId           int       `gorm:"type:int;"`
+	ChannelType        string    `gorm:"type:varchar(255)"`
 }
 
-type TblMemberGroup struct {
+type TblMemberGroups struct {
 	Id          int       `gorm:"primaryKey;auto_increment"`
 	Name        string    `gorm:"type:varchar(255)"`
 	Slug        string    `gorm:"type:varchar(255)"`
-	Description string    `gorm:"type:varchar(255)"`
+	Description string    `gorm:"type:LONGTEXT"`
 	IsActive    int       `gorm:"type:int"`
 	IsDeleted   int       `gorm:"type:int"`
 	CreatedOn   time.Time `gorm:"type:datetime;DEFAULT:NULL"`
@@ -88,9 +97,10 @@ type TblMemberGroup struct {
 	ModifiedBy  int       `gorm:"DEFAULT:NULL;type:int"`
 	DeletedBy   int       `gorm:"type:int"`
 	DeletedOn   time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId    int       `gorm:"type:int;"`
 }
 
-type TblMember struct {
+type TblMembers struct {
 	Id               int       `gorm:"primaryKey;auto_increment"`
 	Uuid             string    `gorm:"type:varchar(255)"`
 	FirstName        string    `gorm:"type:varchar(255)"`
@@ -114,9 +124,11 @@ type TblMember struct {
 	CreatedBy        int       `gorm:"type:int"`
 	ModifiedOn       time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	ModifiedBy       int       `gorm:"DEFAULT:NULL;type:int"`
+	StorageType      string    `gorm:"type:varchar(255)"`
+	TenantId         int       `gorm:"type:int;"`
 }
 
-type TblAccessControl struct {
+type TblAccessControls struct {
 	Id                int       `gorm:"primaryKey;auto_increment"`
 	AccessControlName string    `gorm:"type:varchar(255)"`
 	AccessControlSlug string    `gorm:"type:varchar(255)"`
@@ -127,6 +139,7 @@ type TblAccessControl struct {
 	IsDeleted         int       `gorm:"type:int"`
 	DeletedOn         time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy         int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId          int       `gorm:"type:int;"`
 }
 
 type TblAccessControlPages struct {
@@ -144,9 +157,10 @@ type TblAccessControlPages struct {
 	DeletedBy                int       `gorm:"DEFAULT:NULL;type:int"`
 	ChannelId                int       `gorm:"type:int"`
 	EntryId                  int       `gorm:"type:int"`
+	TenantId                 int       `gorm:"type:int;"`
 }
 
-type TblAccessControlUserGroup struct {
+type TblAccessControlUserGroups struct {
 	Id              int       `gorm:"primaryKey;auto_increment"`
 	AccessControlId int       `gorm:"type:int"`
 	MemberGroupId   int       `gorm:"type:int"`
@@ -157,14 +171,16 @@ type TblAccessControlUserGroup struct {
 	IsDeleted       int       `gorm:"type:int"`
 	DeletedOn       time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy       int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId        int       `gorm:"type:int;"`
 }
 
-type TblEmailTemplate struct {
+type TblEmailTemplates struct {
 	Id                  int       `gorm:"primaryKey;auto_increment"`
 	TemplateName        string    `gorm:"type:varchar(255)"`
+	TemplateSlug        string    `gorm:"type:varchar(255)"`
 	TemplateSubject     string    `gorm:"type:varchar(255)"`
-	TemplateMessage     string    `gorm:"type:text"`
-	TemplateDescription string    `gorm:"type:text"`
+	TemplateMessage     string    `gorm:"type:LONGTEXT"`
+	TemplateDescription string    `gorm:"type:LONGTEXT"`
 	ModuleId            int       `gorm:"type:int"`
 	CreatedOn           time.Time `gorm:"type:datetime"`
 	CreatedBy           int       `gorm:"type:int"`
@@ -175,12 +191,13 @@ type TblEmailTemplate struct {
 	IsDeleted           int       `gorm:"DEFAULT:0"`
 	IsActive            int       `gorm:"type:int"`
 	IsDefault           int       `gorm:"type:int"`
+	TenantId            int       `gorm:"type:int;"`
 }
 
-type TblField struct {
+type TblFields struct {
 	Id               int       `gorm:"primaryKey;auto_increment"`
 	FieldName        string    `gorm:"type:varchar(255)"`
-	FieldDesc        string    `gorm:"type:varchar(255)"`
+	FieldDesc        string    `gorm:"type:LONGTEXT"`
 	FieldTypeId      int       `gorm:"type:int"`
 	MandatoryField   int       `gorm:"type:int"`
 	OptionExist      int       `gorm:"type:int"`
@@ -200,9 +217,10 @@ type TblField struct {
 	IsDeleted        int       `gorm:"DEFAULT:0"`
 	DeletedOn        time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy        int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId         int       `gorm:"type:int;"`
 }
 
-type TblFieldGroup struct {
+type TblFieldGroups struct {
 	Id         int       `gorm:"primaryKey;auto_increment"`
 	GroupName  string    `gorm:"type:varchar(255)"`
 	CreatedOn  time.Time `gorm:"type:datetime"`
@@ -212,9 +230,10 @@ type TblFieldGroup struct {
 	IsDeleted  int       `gorm:"DEFAULT:0"`
 	DeletedOn  time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy  int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId   int       `gorm:"type:int;"`
 }
 
-type TblFieldOption struct {
+type TblFieldOptions struct {
 	Id          int       `gorm:"primaryKey;auto_increment"`
 	OptionName  string    `gorm:"type:varchar(255)"`
 	OptionValue string    `gorm:"type:varchar(255)"`
@@ -226,9 +245,11 @@ type TblFieldOption struct {
 	IsDeleted   int       `gorm:"DEFAULT:0"`
 	DeletedOn   time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy   int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId    int       `gorm:"type:int;"`
+	OrderIndex  int       `gorm:"DEFAULT:NULL;type:int"`
 }
 
-type TblFieldType struct {
+type TblFieldTypes struct {
 	Id         int       `gorm:"primaryKey;auto_increment"`
 	TypeName   string    `gorm:"type:varchar(255)"`
 	TypeSlug   string    `gorm:"type:varchar(255)"`
@@ -238,13 +259,15 @@ type TblFieldType struct {
 	CreatedOn  time.Time `gorm:"type:datetime"`
 	ModifiedBy int       `gorm:"type:int"`
 	ModifiedOn time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId   int       `gorm:"type:int;"`
 }
 
-type TblLanguage struct {
+type TblLanguages struct {
 	Id           int       `gorm:"primaryKey;auto_increment"`
 	LanguageName string    `gorm:"type:varchar(255)"`
 	LanguageCode string    `gorm:"type:varchar(255)"`
 	ImagePath    string    `gorm:"type:varchar(255)"`
+	StorageType  string    `gorm:"type:varchar(255)"`
 	IsStatus     int       `gorm:"type:int"`
 	IsDefault    int       `gorm:"type:int"`
 	JsonPath     string    `gorm:"type:varchar(255)"`
@@ -255,9 +278,10 @@ type TblLanguage struct {
 	DeletedOn    time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy    int       `gorm:"DEFAULT:NULL;type:int"`
 	IsDeleted    int       `gorm:"DEFAULT:0"`
+	TenantId     int       `gorm:"type:int;"`
 }
 
-type TblModule struct {
+type TblModules struct {
 	Id                   int       `gorm:"primaryKey"`
 	ModuleName           string    `gorm:"type:varchar(255)"`
 	IsActive             int       `gorm:"type:int"`
@@ -272,14 +296,15 @@ type TblModule struct {
 	MenuType             string    `gorm:"type:varchar(255)"`
 	FullAccessPermission int       `gorm:"type:int"`
 	GroupFlg             int       `gorm:"type:int"`
+	TenantId             int       `gorm:"type:int;"`
 }
 
-type TblModulePermission struct {
+type TblModulePermissions struct {
 	Id                   int       `gorm:"primaryKey"`
 	RouteName            string    `gorm:"type:varchar(255)"`
 	DisplayName          string    `gorm:"type:varchar(255)"`
 	SlugName             string    `gorm:"type:varchar(255)"`
-	Description          string    `gorm:"type:varchar(255)"`
+	Description          string    `gorm:"type:LONGTEXT"`
 	ModuleId             int       `gorm:"type:int"`
 	FullAccessPermission int       `gorm:"type:int"`
 	ParentId             int       `gorm:"type:int"`
@@ -290,31 +315,35 @@ type TblModulePermission struct {
 	CreatedOn            time.Time `gorm:"type:datetime"`
 	ModifiedBy           int       `gorm:"DEFAULT:NULL;type:int"`
 	ModifiedOn           time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId             int       `gorm:"type:int;"`
 }
 
-type TblRolePermission struct {
+type TblRolePermissions struct {
 	Id           int       `gorm:"primaryKey;auto_increment"`
 	RoleId       int       `gorm:"type:int"`
 	PermissionId int       `gorm:"type:int"`
 	CreatedBy    int       `gorm:"type:int"`
 	CreatedOn    time.Time `gorm:"type:datetime"`
+	TenantId     int       `gorm:"type:int;"`
 }
 
-type TblChannelCategorie struct {
+type TblChannelCategories struct {
 	Id         int       `gorm:"primaryKey;auto_increment"`
 	ChannelId  int       `gorm:"type:int"`
 	CategoryId string    `gorm:"type:varchar(255)"`
 	CreatedAt  int       `gorm:"type:int"`
 	CreatedOn  time.Time `gorm:"type:datetime"`
+	TenantId   int       `gorm:"type:int;"`
 }
 
-type TblGroupField struct {
+type TblGroupFields struct {
 	Id        int `gorm:"primaryKey;auto_increment"`
 	ChannelId int `gorm:"type:int"`
 	FieldId   int `gorm:"type:int"`
+	TenantId  int `gorm:"type:int;"`
 }
 
-type TblUserPersonalize struct {
+type TblUserPersonalizes struct {
 	Id                  int       `gorm:"primaryKey;auto_increment"`
 	UserId              int       `gorm:"type:int"`
 	MenuBackgroundColor string    `gorm:"type:varchar(255)"`
@@ -324,9 +353,10 @@ type TblUserPersonalize struct {
 	ExpandLogoPath      string    `gorm:"type:varchar(255)"`
 	CreatedOn           time.Time `gorm:"type:datetime"`
 	ModifiedOn          time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId            int       `gorm:"type:int;"`
 }
 
-type TblRoleUser struct {
+type TblRoleUsers struct {
 	Id         int       `gorm:"primaryKey;auto_increment"`
 	RoleId     int       `gorm:"type:int"`
 	UserId     int       `gorm:"type:int"`
@@ -334,13 +364,14 @@ type TblRoleUser struct {
 	CreatedOn  time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	ModifiedBy int       `gorm:"DEFAULT:NULL;type:int"`
 	ModifiedOn time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId   int       `gorm:"type:int;"`
 }
 
-type TblChannelEntrie struct {
+type TblChannelEntries struct {
 	Id              int       `gorm:"primaryKey;auto_increment"`
 	Title           string    `gorm:"type:varchar(255)"`
 	Slug            string    `gorm:"type:varchar(255)"`
-	Description     string    `gorm:"type:varchar(255)"`
+	Description     string    `gorm:"LONGTEXT"`
 	UserId          int       `gorm:"type:int"`
 	ChannelId       int       `gorm:"type:int"`
 	Status          int       `gorm:"type:int"` //0-draft 1-publish 2-unpublish
@@ -369,9 +400,14 @@ type TblChannelEntrie struct {
 	IsDeleted       int       `gorm:"DEFAULT:0"`
 	DeletedOn       time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	DeletedBy       int       `gorm:"DEFAULT:NULL;type:int"`
+	TenantId        int       `gorm:"type:int;"`
+	Uuid            string    `gorm:"type:varchar(255)"`
+	ParentId        int       `gorm:"type:int;"`
+	OrderIndex      int       `gorm:"type:int;"`
+	MembergroupId   string    `gorm:"type:varchar(255)"`
 }
 
-type TblChannelEntryField struct {
+type TblChannelEntryFields struct {
 	Id             int       `gorm:"primaryKey;auto_increment"`
 	FieldName      string    `gorm:"type:varchar(255)"`
 	FieldValue     string    `gorm:"type:varchar(255)"`
@@ -383,9 +419,10 @@ type TblChannelEntryField struct {
 	ModifiedBy     int       `gorm:"DEFAULT:NULL;type:int"`
 	DeletedBy      int       `gorm:"DEFAULT:NULL;type:int"`
 	DeletedOn      time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId       int       `gorm:"type:int;"`
 }
 
-type TblMemberProfile struct {
+type TblMemberProfiles struct {
 	Id              int               `gorm:"primaryKey;auto_increment"`
 	MemberId        int               `gorm:"type:int"`
 	ProfilePage     string            `gorm:"type:varchar(255)"`
@@ -410,6 +447,9 @@ type TblMemberProfile struct {
 	IsDeleted       int               `gorm:"DEFAULT:0"`
 	DeletedBy       int               `gorm:"DEFAULT:NULL;type:int"`
 	DeletedOn       time.Time         `gorm:"type:datetime;DEFAULT:NULL"`
+	StorageType     string            `gorm:"type:varchar(255)"`
+	ClaimDate       time.Time         `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId        int               `gorm:"type:int;"`
 }
 
 type TblMemberNotesHighlights struct {
@@ -426,24 +466,27 @@ type TblMemberNotesHighlights struct {
 	DeletedBy               int               `gorm:"type:int"`
 	DeletedOn               time.Time         `gorm:"type:datetime;DEFAULT:NULL"`
 	IsDeleted               int               `gorm:"type:int"`
+	TenantId                int               `gorm:"type:int;"`
 }
 
-type TblStorageType struct {
+type TblStorageTypes struct {
 	Id           int               `gorm:"primaryKey;auto_increment"`
 	Local        string            `gorm:"type:varchar(255)"`
 	Aws          datatypes.JSONMap `gorm:"type:jsonb"`
 	Azure        datatypes.JSONMap `gorm:"type:jsonb"`
 	Drive        datatypes.JSONMap `gorm:"type:jsonb"`
 	SelectedType string            `gorm:"type:varchar(255)"`
+	TenantId     int               `gorm:"type:int;"`
 }
 
-type TblEmailConfiguration struct {
+type TblEmailConfigurations struct {
 	Id           int               `gorm:"primaryKey;auto_increment;"`
 	StmpConfig   datatypes.JSONMap `gorm:"type:jsonb"`
 	SelectedType string            `gorm:"type:varchar(255)"`
+	TenantId     int               `gorm:"type:int;"`
 }
 
-type TblGeneralSetting struct {
+type TblGeneralSettings struct {
 	Id             int       `gorm:"primaryKey;auto_increment"`
 	CompanyName    string    `gorm:"type:varchar(255)"`
 	LogoPath       string    `gorm:"type:varchar(255)"`
@@ -454,21 +497,24 @@ type TblGeneralSetting struct {
 	LanguageId     int       `gorm:"type:int"`
 	ModifiedBy     int       `gorm:"type:int"`
 	ModifiedOn     time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId       int       `gorm:"type:int;"`
+	StorageType    string    `gorm:"type:varchar(255)"`
 }
 
-type TblMemberSetting struct {
+type TblMemberSettings struct {
 	Id                int       `gorm:"primaryKey;auto_increment;"`
 	AllowRegistration int       `gorm:"type:int"`
 	MemberLogin       string    `gorm:"type:varchar(255)"`
 	ModifiedBy        int       `gorm:"type:integer"`
 	ModifiedOn        time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	NotificationUsers string    `gorm:"type:varchar(255)"`
+	TenantId          int       `gorm:"type:int;"`
 }
 
 type TblGraphqlSettings struct {
 	Id          int       `gorm:"primaryKey;auto_increment;type:serial"`
-	Token       string    `gorm:"type:varchar(255)"`
-	Description string    `gorm:"type:varchar(255)"`
+	TokenName   string    `gorm:"type:varchar(255)"`
+	Description string    `gorm:"type:LONGTEXT"`
 	Duration    string    `gorm:"type:varchar(255)"`
 	CreatedBy   int       `gorm:"type:int"`
 	CreatedOn   time.Time `gorm:"type:datetime;DEFAULT:NULL"`
@@ -477,49 +523,117 @@ type TblGraphqlSettings struct {
 	DeletedBy   int       `gorm:"type:integer;DEFAULT:NULL"`
 	DeletedOn   time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 	IsDeleted   int       `gorm:"type:int;DEFAULT:0"`
+	Token       string    `gorm:"type:varchar(255)"`
+	IsDefault   int       `gorm:"type:int;DEFAULT:0"`
+	ExpiryTime  time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId    int       `gorm:"type:int;"`
 }
 
-type TblTimezone struct {
+type TblTimezones struct {
 	Id       int    `gorm:"primaryKey;auto_increment"`
 	Timezone string `gorm:"type:varchar(255)"`
+	TenantId int    `gorm:"type:int;"`
+}
+
+type TblPageTypes struct {
+	Id         int       `gorm:"primaryKey;auto_increment"`
+	Title      string    `gorm:"type:varchar(255)"`
+	Slug       string    `gorm:"type:varchar(255)"`
+	CreatedBy  int       `gorm:"type:int"`
+	CreatedOn  time.Time `gorm:"type:datetime"`
+	ModifiedBy int       `gorm:"DEFAULT:NULL;type:int"`
+	ModifiedOn time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	DeletedBy  int       `gorm:"DEFAULT:NULL;type:int"`
+	DeletedOn  time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	IsDeleted  int       `gorm:"DEFAULT:0"`
+	TenantId   int       `gorm:"type:int;"`
+}
+
+type TblTemplates struct {
+	Id               int       `gorm:"primaryKey;auto_increment;"`
+	TemplateName     string    `gorm:"type:varchar(255)"`
+	TemplateSlug     string    `gorm:"type:varchar(255)"`
+	TemplateModuleId int       `gorm:"type:int"`
+	ImageName        string    `gorm:"type:varchar(255)"`
+	ImagePath        string    `gorm:"type:varchar(255)"`
+	DeployLink       string    `gorm:"type:varchar(255)"`
+	GithubLink       string    `gorm:"type:varchar(255)"`
+	CreatedOn        time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	CreatedBy        int       `gorm:"type:int"`
+	IsActive         int       `gorm:"type:int"`
+	IsDeleted        int       `gorm:"type:int;DEFAULT:0"`
+	DeletedOn        time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	DeletedBy        int       `gorm:"type:int;DEFAULT:NULL"`
+	ModifiedOn       time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	ModifiedBy       int       `gorm:"type:int"`
+	TenantId         int       `gorm:"type:int;"`
+	ChannelId        int       `gorm:"type:int;"`
+}
+
+type TblMstrTenant struct {
+	Id            int       `gorm:"primaryKey;auto_increment;"`
+	TenantId      int       `gorm:"type:int"`
+	S3StoragePath string    `gorm:"type:varchar(255)"`
+	IsDeleted     int       `gorm:"type:int;DEFAULT:0"`
+	DeletedOn     time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	DeletedBy     int       `gorm:"type:int;DEFAULT:NULL"`
+}
+
+type TblTemplateModules struct {
+	Id                 int       `gorm:"primaryKey;auto_increment;"`
+	TemplateModuleName string    `gorm:"type:varchar(255)"`
+	TemplateModuleSlug string    `gorm:"type:varchar(255)"`
+	Description        string    `gorm:"type:varchar(600)"`
+	IsActive           int       `gorm:"type:int;DEFAULT:1"`
+	CreatedBy          int       `gorm:"type:int"`
+	CreatedOn          time.Time `gorm:"type:datetime;DEFAULT:NULL"`
+	TenantId           int       `gorm:"type:int"`
+	ChannelId          int       `gorm:"type:int"`
+	IsDeleted          int       `gorm:"type:int;DEFAULT:0"`
+	DeletedBy          int       `gorm:"type:int;DEFAULT:NULL"`
+	DeletedOn          time.Time `gorm:"type:datetime;DEFAULT:NULL"`
 }
 
 func MigrationTables() {
 
 	err := controllers.DB.AutoMigrate(
 
-		TblAccessControl{},
+		TblAccessControls{},
 		TblAccessControlPages{},
-		TblAccessControlUserGroup{},
+		TblAccessControlUserGroups{},
 		TblCategories{},
-		TblChannelCategorie{},
-		TblChannelEntrie{},
-		TblChannelEntryField{},
-		TblChannel{},
-		TblEmailTemplate{},
-		TblFieldGroup{},
-		TblFieldOption{},
-		TblFieldType{},
-		TblField{},
-		TblLanguage{},
-		TblMemberGroup{},
+		TblChannelCategories{},
+		TblChannelEntries{},
+		TblChannelEntryFields{},
+		TblChannels{},
+		TblEmailTemplates{},
+		TblFieldGroups{},
+		TblFieldOptions{},
+		TblFieldTypes{},
+		TblFields{},
+		TblLanguages{},
+		TblMemberGroups{},
 		TblMemberNotesHighlights{},
-		TblMemberProfile{},
-		TblMember{},
-		TblModulePermission{},
-		TblModule{},
-		TblRole{},
-		TblRolePermission{},
-		TblRoleUser{},
-		TblUser{},
-		TblGroupField{},
-		TblUserPersonalize{},
-		TblStorageType{},
-		TblEmailConfiguration{},
-		TblGeneralSetting{},
-		TblMemberSetting{},
+		TblMemberProfiles{},
+		TblMembers{},
+		TblModulePermissions{},
+		TblModules{},
+		TblRoles{},
+		TblRolePermissions{},
+		TblRoleUsers{},
+		TblUsers{},
+		TblGroupFields{},
+		TblUserPersonalizes{},
+		TblStorageTypes{},
+		TblEmailConfigurations{},
+		TblGeneralSettings{},
+		TblMemberSettings{},
 		TblGraphqlSettings{},
-		TblTimezone{},
+		TblTimezones{},
+		TblPageTypes{},
+		TblTemplates{},
+		TblMstrTenant{},
+		TblTemplateModules{},
 	)
 
 	if err != nil {

@@ -14,6 +14,8 @@ $(document).ready(function(){
         $('#triggerId').val('Unpublished');
     }
 
+    $("#channelname").text("Select channel")
+
    
 })
 
@@ -32,7 +34,14 @@ $(".chllist-dropdown").click(function () {
     channelname = $(this).attr("data-name") 
     
     var crtchannelid = $("#channelid").val(channelid)
-    $("#channelname").text(channelname)
+    if(channelname != ""){
+        $("#channelname").text(channelname)
+    }else{
+        $("#channelname").text("Select Channel")
+    }
+
+    $("#getchannelid").val(channelid)
+   
     $("#channel-dropdown").css("color","#112D55")
    
     if (crtchannelid != undefined){
@@ -99,9 +108,9 @@ $(document).on('click', '.chlckbox', function () {
     var id = $(this).attr("data-id")
 
     var count = $("#entrycount").val()
-
-    if ($(this).is(':checked')) {
-
+    
+    if ($(this).prop('checked')) {
+       
         DownloadListArray.push(id)
 
         DownloadListArray.forEach(element => {
@@ -114,11 +123,19 @@ $(document).on('click', '.chlckbox', function () {
 
         var arrlenght = FinalDownloadListArray.length
 
-
         if(count == arrlenght){
             $("#Check").prop("checked",true)
         }
-        $("#download").removeAttr("disabled")
+
+        if (count == 1){
+        $("#downloadall").text("Download")
+        }else{
+            $("#downloadall").text("Download All")
+
+        }
+        $("#selectitems").text(arrlenght+" " +'items selected')
+        $(".downloadentry").addClass('show')
+        $(".downloadentry").removeClass('hidden')
     } else {
         FinalDownloadListArray = jQuery.grep(FinalDownloadListArray, function (value) {
 
@@ -132,11 +149,14 @@ $(document).on('click', '.chlckbox', function () {
         });
         $("#Check").prop("checked",false)
         $("#exportidarr").val("")
-        $("#download").prop("disabled",true)
+        $(".downloadentry").addClass('hidden')
+        $(".downloadentry").removeClass('show')
 
     }
-
     $("#exportidarr").val(FinalDownloadListArray)
+
+   
+
     console.log("checking array", FinalDownloadListArray);
 
 
@@ -167,17 +187,23 @@ $("#Check").click(function(){
                     FinalDownloadListArray.push(element);
                 }
             })
-        
-            $(this).prop("checked",true)
-            $("#download").removeAttr("disabled")
-
+            var count =FinalDownloadListArray.length
+       
+            $("#downloadall").text("Download All")
+         
+        $("#selectitems").text(count+" " +'items selected')
+           $(this).prop("checked",true)
+            $(".downloadentry").addClass('show')
+            $(".downloadentry").removeClass('hidden')
         })
 
      }else{
         
         $(".chlckbox").prop("checked",false)
         $("#exportchannelid").val("")
-        $("#download").prop("disabled",true)
+        // $("#download").prop("disabled",true)
+        $(".downloadentry").addClass('hidden')
+        $(".downloadentry").removeClass('show')
     }
     $("#exportchannelid").val(channelid)
 
@@ -210,7 +236,7 @@ $(document).on('keyup', '#searchentryname', function () {
 })
 
 // empty the check box
-$("#download").click(function(){
+$("#downloadentrydata").click(function(){
 
     $("#Check").prop("checked",false)
 
@@ -297,8 +323,34 @@ $(document).on("click",".next-data", function(){
                
         $("#Check"+element).prop("checked",true)
     })
-
+  
     
+})
+
+$(document).on("click",'.next-data1',function(){
+
+    var page =$(this).find("a").attr('data-id')
+
+    Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilter,limit,page)
+
+    FinalDownloadListArray.forEach(element => {
+               
+        $("#Check"+element).prop("checked",true)
+    })
+
+})
+
+$(document).on("click",'.next-data2',function(){
+
+    var page =$(this).find("a").attr('data-id')
+
+    Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilter,limit,page)
+
+    FinalDownloadListArray.forEach(element => {
+               
+        $("#Check"+element).prop("checked",true)
+    })
+
 })
 
 // entries list
@@ -326,6 +378,8 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
 
                     var changestatus
 
+                    var textclass
+
                     var classdisabled
 
                     var classnext
@@ -338,6 +392,8 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
 
                     var property =""
 
+                    var npage
+
                                                          
                     if(data.ChanEntrtlist != null){
 
@@ -347,11 +403,12 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                         for (let entry of data.ChanEntrtlist) {
 
                             if ($("#Check").is(':checked')) {
-                                property += ` <input type="checkbox" class="chlckbox" id="Check`+entry.Id+`" data-id=`+entry.Id +` checked>`
-                              $("#download").removeAttr("disabled")
+                              
+                                property += ` <input type="checkbox" class="hidden peer chlckbox" id="Check`+entry.Id+`" data-id=`+entry.Id +` checked>`
+                            //   $("#download").removeAttr("disabled")
                             }else{
-                                property += ` <input type="checkbox" class="chlckbox" id="Check`+entry.Id+`" data-id=`+entry.Id +`>`
-                                $("#download").prop("disabled",true)
+                                property += ` <input type="checkbox" class="hidden peer chlckbox" id="Check`+entry.Id+`" data-id=`+entry.Id +`>`
+                                // $("#download").prop("disabled",true)
 
 
                             }
@@ -359,38 +416,64 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                                                     
                             if (entry.Status == 0) {
     
-                                statusclass = "status draft"
+                                statusclass = "[#FDF1E4]"
+                                textclass="[#FC770F]"
                                 changestatus = "Draft"
     
                             } else if (entry.Status == 1) {
     
-                                statusclass = "status published"
+                                statusclass = "[#E2F7E3]"
+                                textclass="[#278E2B]"
                                 changestatus = "Published"
     
                             } else {
     
-                                statusclass = "status unpublished"
+                                statusclass = "[#E2EDFC]"
+                                textclass="[#0E56B3]"
                                 changestatus = "Unpublished"
                             }
     
                             var entireslist = ` <tr>
 
-                            <td>
-                        <div class="check-id">
-                        <div class="chk-group">
-                        ${property}
-                        <label for="Check`+entry.Id+`"></label>
-                    </div>
-                            <p class="para">`+ entry.Cno + `</p>
-                        </div>
-                     </td>
+                           
 
-                        <td>`+ entry.Title + ` </td>
-                        <td> `+ entry.CreatedDate + ` </td>
-                        <td>`+ entry.Username + ` </td>
+                             <td class="px-[16px] py-[12px] pr-0 border-b border-[#EDEDED] align-middle">
+                                    <div class="chk-group chk-group-label flex justify-center">
+                                     ${property} 
+                                    <label for="Check`+entry.Id+`"
+                                            class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                                    </div>
+                                </td>
+
+                                 <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
+                                    <div class="flex gap-[8px] items-center justify-start">
+                                        <p class="text-[#262626] font-normal text-xs mb-0 ">`+ entry.Title + ` </p>
+                                    </div>
+                                </td>
+
+
+                              <td  class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                    `+ entry.CreatedDate + `
+                                </td>
+
+                                  <td
+                                    class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                    `+ entry.Username + `
+                                </td>
+                        <td
+                                    class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-left">
+                                    <div class="flex justify-start">
+                                        <p
+                                            class=" py-[3px] px-1.5 text-${textclass} rounded-sm bg-${statusclass} text-xs font-normal">
+                                            ${changestatus}</p>
+                                    </div>
+
+                                </td>
+                        
             
                         <td>
-                            <span id="statuschange" class="${statusclass}">${changestatus}</span>
+                            <span id="statuschange" class=""></span>
                         </td>
 
                         <td></td>
@@ -414,49 +497,78 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                         }
 
                         if(data.Page !=null){
-                            for (let page of data.Page) {
-                                
+                            for (let page of data.Page) {   
+                                                
                                 if(page == crtpagecount){
+                                    console.log("checkcurrent")
                                     classcurrent = "current"
+                                    npage =page 
                                 }else{
                                     classcurrent = ""
                                 }
-
                               
-                             pgdesign += `<li class="next-data"><a  class="${classcurrent}   crtpgno">` +page +` </a></li>`
+                              
+                            //  pgdesign += `<li class="next-data"><a  class="${classcurrent}   crtpgno">` +page +` </a></li>`
 
                                    
                             }
                         }
-                    
+               
+                        if (data.chentrycount >data.limit) {
 
-                       if(data.Page != null){
-                        var paganation =` <ul class="flexx">
-                        <li>
-                            <a herf="" class="${classdisabled}">
+                              
+                            var pagination = "";
+                          
+                                pagination += ` <li class="next-data2"><a data-id="${data.Pagination.PreviousPage}" ${data.CurrentPage === 1 ? "class='disabled'" : ``}>
+                                    <img src="/public/img/carat-right.svg" alt="" />
+                                </a></li>`;
+                            
+                            if (data.CurrentPage > 3) {
+                                pagination += `<li class="next-data"><a  class="crtpgno" >1</a></li>`;
+                            }
+                            if (data.CurrentPage === 5) {
+                                pagination += `<li class="next-data"><a   class="crtpgno" >2</a></li>`;
+                            }
+                            if (data.CurrentPage > 5) {
+                                pagination += `<li class="next-data"><a class="crtpgno" >...</a></li>`;
+                            }
+                            if (data.CurrentPage > 2) {
+                                pagination += `<li class="next-data"><a   class="crtpgno">${data.Pagination.TwoBelow}</a></li>`;
+                            }
+                            if (data.CurrentPage > 1) {
+                                pagination += `<li class="next-data"><a  class="crtpgno">${data.Pagination.PreviousPage}</a></li>`;
+                            }
+                            pagination += `<li class="next-data"><a   ${data.CurrentPage === data.Pagination.TotalPages ? "class='current'" : ``}>${data.CurrentPage}</a></li>`;
+                            if (data.CurrentPage < data.Pagination.TotalPages) {
+                                pagination += `<li class="next-data"><a class="" >${data.Pagination.NextPage}</a></li>`;
+                            }
+                           
+                            if (data.Pagination.ThreeAfter <= data.Pagination.TotalPages) {
+                                pagination += `<li class="next-data"><a class="" >...</a></li>`;
+                            }
+                            if (data.Pagination.TwoAfter <= data.Pagination.TotalPages) {
+                                pagination += `<li class="next-data"><a class="" >${data.Pagination.TotalPages}</a></li>`;
+                            }
+                            pagination +=`  <li class="next-data1">
+                            <a herf="" class="${classnext}" data-id="${data.Pagination.NextPage}">
                                 <img src="/public/img/carat-right.svg" alt="" />
                             </a>
-                        </li>
-                        ${pgdesign}
-
-                        <li>
-                            <a herf="" class="${classnext}" >
-                                <img src="/public/img/carat-right.svg" alt="" />
-                            </a
-                        </li>
-                     </ul>
-
-                       <p>`+data.paginationstartcount+` – `+data.paginationendcount  +` of `+ data.chentrycount+`</p>
-
-                     `
-
-                     $(".export-pg").append(paganation) 
+                        </li>`
+                            paginations=` <ul class="flexx">`+pagination+`</ul> <p>`+data.paginationstartcount+` – `+data.paginationendcount  +` of `+ data.chentrycount+`</p>`
+                            $(".export-pg").append(paginations);
+                    
                      }else{
                      var pg=`  <p>`+data.paginationstartcount+` – `+data.paginationendcount +` of `+data.chentrycount+`</p>`
                      $(".export-pg").append(pg) 
                      }
                         
+                      $('.next-data').each(function(){
 
+                  if ($(this).find('a').text()==data.CurrentPage){
+
+                $(this).find('a').addClass('current')
+             }
+                      })
 
                     } else {
                         $(".entries-list").html("")
@@ -464,19 +576,19 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
 
                      if (data.ChanEntrtlist == null && data.filter.Keyword == "" && data.filter.Status == "" && data.filter.Title == "" && data.filter.UserName == "") {
 
-                        var nodata_html = `<tr class="no-dataHvr">
-                        <td style="text-align: center;border-bottom: none;" colspan="6">
-                            <div class="noData-foundWrapper">
-
-                                <div class="empty-folder">
-                                    <img src="/public/img/folder-sh.svg" alt="">
-                                    <img src="/public/img/shadow.svg" alt="">
-                                </div>
-                                <h1 class="heading">`+languagedata.oopsnodata+`</h1>
+                        var nodata_html = `<tr>
+                          <td colspan="6">
+                      <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                    <div class="text-center w-fit mx-auto">
+                       <img src="/public/img/noData.svg" alt="nodate">
+                     </div>
+        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+            `+languagedata.oopsnodata+`</h2>
+                                
                             </div>
                         </td>
                      </tr>`
-                     $("#download").prop("disabled",true)
+                    //  $("#download").prop("disabled",true)
 
                      $(".entries-list").append(nodata_html)
 
@@ -493,7 +605,7 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                             </div>
                         </td>
                      </tr>`
-                     $("#download").prop("disabled",true)
+                    //  $("#download").prop("disabled",true)
 
                      $(".entries-list").append(nodata_html)
 
@@ -514,8 +626,8 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
 }
 
 
-$(document).on('click','#removecategory',function(){
 
+$(document).on('click','#removecategory',function(){
 
     $('#triggerId').val("Status");
     $("#title").val("")
@@ -568,3 +680,17 @@ $(document).on('click','#removecategory',function(){
 //     })
 
 // })
+
+//Deselectall function//
+
+$(document).on('click','#deselectid',function(){
+
+    $('.chlckbox').prop('checked',false)
+
+    $('#Check').prop('checked',false)
+
+    FinalDownloadListArray =[]
+
+    $('#selectitems').addClass('hidden')
+    
+})

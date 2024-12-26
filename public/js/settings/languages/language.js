@@ -1,6 +1,6 @@
 var languagedata
 
-var selectedcheckboxarr=[]
+var selectedcheckboxarr = []
 /** */
 $(document).ready(async function () {
 
@@ -14,30 +14,122 @@ $(document).ready(async function () {
     })
 
 })
-$(document).keydown(function(event) {
+
+$(document).on('click', '#cancel-notify', function () {
+    delete_cookie("Alert-msg");
+    $(".toast-msg").remove();
+})
+
+//setting the json file name after update 
+
+$(document).on('change', '#jsonFile', function () {
+
+    $('#jsonFileErr').addClass('hidden')
+    $('#jsonFile-error').addClass('hidden')
+
+    var jsonFile = $(this)[0].files[0]
+
+    var fileName = jsonFile.name
+
+    var fileExtension = fileName.split(".").pop().toLowerCase()
+
+    console.log(fileExtension);
+
+    if (fileExtension == "json") {
+        console.log("test");
+
+        $('#jsonDesc').text(fileName)
+
+    } else {
+
+        $('#jsonFileErr').removeClass('hidden')
+    }
+
+})
+
+//after uploading flag image functionality for delete button
+$(document).on('click', '#deleteFlag', function (e) {
+    e.preventDefault()
+
+    $('canvas[class=cr-image]').css('opacity', '0')
+    $("#changepicModal").modal('hide');
+    $('#crop-container').removeClass('croppie-container').empty()
+    $('#flagSpan').removeClass('hidden')
+    $('#flaggFileLabel').removeClass('hidden')
+    $('#flagPara').removeClass('hidden')
+    $('#prof-crop').removeClass('h-[180px]')
+    $('#prof-crop').attr('src', "")
+    $('#cropData').attr('value', "")
+    $('.deleteFlag').remove();
+    $('.hover-delete-img').remove();
+
+})
+
+//on clicking lang create modal close button, modal will return to mormal 
+
+var originalModal = $('#LanguageModal').clone()
+
+$(document).on('click', '#langCancelBtn', function () {
+    $('#LanguageModal').html(originalModal.html())
+    $('canvas[class=cr-image]').css('opacity', '0')
+    $("#changepicModal").modal('hide');
+    $('#imageSpace').removeClass('croppie-container').empty()
+})
+
+
+var langCodeArr = [];
+$(document).ready(function () {
+
+    $('.languageCode').each(function (index, element) {
+        langCodeArr.push($.trim($(this).text()));
+
+    });
+
+    console.log(langCodeArr);
+
+})
+
+$(document).on('click', '.langCodeGrp', function () {
+    var langCode = $(this).attr('data-code')
+
+    $('#lang_code-error').addClass('hidden')
+    if (langCodeArr.includes(langCode)) {
+
+        $('#langCodeErr').removeClass('hidden')
+        $('#langCodePara').text("")
+
+    } else {
+        $('#lang_code').val(langCode)
+        $('#langCodePara').text(langCode)
+        $('#langCodeErr').addClass('hidden')
+    }
+})
+
+$(document).keydown(function (event) {
     if (event.ctrlKey && event.key === '/') {
         $("#languagesearch").focus().select();
     }
 });
+
 $(document).ready(function () {
 
-   
-    $(document).on('click', '.modal-save>button', function () {
+
+    $(document).on('click', '#langCreateBtn', function () {
 
         jQuery.validator.addMethod("duplicatelangname", function (value) {
 
             var result;
             var id = $("#langid").val()
-            
-                $.ajax({
+
+            $.ajax({
                 url: "/settings/languages/checklanguagename",
                 type: "POST",
                 async: false,
-                data: { "langname": value,"id":id ,csrf: $("input[name='csrf']").val() },
+                data: { "langname": value, "id": id, csrf: $("#csrfValue").val() },
                 datatype: "json",
                 caches: false,
                 success: function (data) {
-                    console.log("data",data);
+                    console.log("data", data);
                     result = data.trim();
                 }
             })
@@ -49,7 +141,7 @@ $(document).ready(function () {
             rules: {
                 lang_name: {
                     required: true,
-                    duplicatelangname:true
+                    duplicatelangname: true
                 },
                 lang_code: {
                     required: true,
@@ -57,14 +149,14 @@ $(document).ready(function () {
                 lang_json: {
                     required: true,
                 },
-                flag_imgpath: {
+                flag_imgPath: {
                     required: true,
                 }
             },
             messages: {
                 lang_name: {
                     required: languagedata.Languages.langnamevalid,
-                    duplicatelangname :languagedata.Languages.duplicatenameerr
+                    duplicatelangname: languagedata.Languages.duplicatenameerr
                 },
                 lang_code: {
                     required: languagedata.Languages.langcodevalid,
@@ -72,8 +164,8 @@ $(document).ready(function () {
                 lang_json: {
                     required: languagedata.Languages.seljsonvalid,
                 },
-                flag_imgpath: {
-                    required:languagedata.Languages.selflagimgvalid,
+                flag_imgPath: {
+                    required: languagedata.Languages.selflagimgvalid,
                 },
             }
         })
@@ -86,7 +178,7 @@ $(document).ready(function () {
 
             langcode = $("#triggerId").text()
 
-            if (langcode != ""){
+            if (langcode != "") {
 
                 $('.input-group').removeClass('input-group-error')
 
@@ -115,31 +207,38 @@ $(document).ready(function () {
 })
 
 //search language
-$(document).on('click','.search-grp>a',function(){
 
-    var keyword = $(this).siblings("input").val().trim()
+$(document).on('keypress', '#langSearchBar', function (e) {
 
-    if (keyword != "") {
+    if (e.which == 13) {
+        var searchText = $('#langSearchBar').val()
+        console.log(searchText, "searchText");
 
-        window.location.href = "/settings/languages/?keyword=" + keyword
+
+        if (searchText != "") {
+            $('#langSearchlink').attr('href', "/settings/languages/?keyword=" + searchText)
+            $('#langSearchBar').attr('value', searchText)
+            $('#langSearchlink').get(0).click()
+        } else {
+            window.location.href = "/settings/languages/"
+        }
+
     }
-
 })
 
 /*search redirect home page */
 
-$(document).on('keyup', '#languagesearch', function () {
-
-    if (event.key === 'Backspace') {
-
-    if ($('.search').val() === "") {
-
-         window.location.href = "/settings/languages/"
+$(document).on('keyup', '#langSearchBar', function (e) {
+    var searchVal = $('#langSearchBar').attr('value')
+    if (e.which == 8 && searchVal != "") {
+        var searchKey = $('#langSearchBar').val()
+        if (searchKey == "") {
+            window.location.href = "/settings/languages/"
+        }
     }
-}
 })
 
-$(document).on('click','input[name=lang_status][type=checkbox]',function(){
+$(document).on('click', '#setdefault', function () {
 
     if ($(this).is(':checked')) {
 
@@ -150,292 +249,148 @@ $(document).on('click','input[name=lang_status][type=checkbox]',function(){
     }
 })
 
-$(document).on('click','input[name=lang_default][type=checkbox]',function(){
 
-    if ($(this).is(':checked')) {
-
-        $(this).val("1")
-    } else {
-
-        $(this).val("0")
-    }
-})
-$(document).on('change','.file-upload input[name=lang_json]',function(){
-    var file = this.files[0]
-    var filename = $(this).val();
-    var ext = filename.split(".").pop().toLowerCase();
-    var nameExtract = filename.split("\\").pop()
-    if (ext == "json") {
-        $(this).css('display', 'none').appendTo($(this).parents(".upload-json")).insertBefore('#lang_json-error')
-        $(this).parents('.upload-json').find('.file-upload').remove()
-        var uploaded_html = `<div class="uploaded-file">
-                <img src="/public/img/folder.svg" alt="">
-                <p class="para">`+ nameExtract + `</p>
-                <a onclick="RemoveJsonData(this)"><img src="/public/img/delete-icon.svg" alt=""></a>
-                </div>`
-        $(uploaded_html).insertBefore("#lang_json-error")
-        $('#lang_json-error').hide()
-    } else {
-        $(this).val("")
-    }
-})
-
-$(document).on('click','.file-upload input[name=flag_imgpath]',function(event){
-    event.preventDefault()
-    $('#laguangeModal').css('opacity', 0)
-    $('#addnewimageModal').modal('show')
-})
-
-// $('.file-upload input[name=flag_imgpath]').change(function () {
-//     var file = this.files[0]
-//     var filename = $(this).val();
-//     var ext = filename.split(".").pop().toLowerCase();
-//     var reader = new FileReader();
-//     console.log("chk11", $.inArray(ext, ["jpg", "png", "jpeg", "svg"]) != -1);
-//     if (($.inArray(ext, ["jpg", "png", "jpeg", "svg"]) != -1)) {
-//         $(this).parents('.upload-json').find('.file-upload').remove()
-//         reader.onload = function (e) {
-//             var imgurl = e.target.result
-//             var flag_uploadHtml = `<div class="uploaded-file">
-//             <input type="hidden" name="flag_imgpath" value="`+ imgurl + `">
-//             <img src="`+ imgurl + `" alt="" class="uploaded-img-flag">
-//             <button class="delete-flag" onclick="RemoveFlagImage(this)" ><img src="/public/img/delete-white-icon.svg" alt=""></button>
-//             <div class="hover-delete-img"></div>
-//             </div>`
-//             $(flag_uploadHtml).insertBefore('#flag_imgpath-error')
-//             $('#flag_imgpath-error').hide()
-//         }
-//         reader.readAsDataURL(file)
-//     } else {
-//         $(this).val("")
-//     }
-// })
-
-function RemoveJsonData(This) {
-    $(This).parent().siblings('input[name=lang_json]').remove()
-    $(This).parents('.upload-json').find('.uploaded-file').remove()
-    var html = `<div class="file-upload">
-    <img src="/public/img/folder.svg" alt="">
-    <p class="para">`+ languagedata.Languages.uploadimg + `</p>
-    <div class="upload-button">
-        <button class="btn-reg btn-xs primary"> `+ languagedata.browse + ` </button>
-        <input type="file" name="lang_json" onchange="UploadJson(this)">
-    </div>
-    </div>`
-    $(html).insertBefore('#lang_json-error')
-}
-
-$(document).on('click', '#delete-flag', function () {
-    console.log("yesss");
-    $(this).parents('.upload-json').find('.uploaded-file').remove()
-    var html = `<div class="file-upload">
-        <img src="/public/img/upload-logo.svg" alt="">
-        <p class="para">`+ languagedata.Languages.uploadimg + `</p>
-        <div class="upload-button">
-            <button class="btn-reg btn-xs primary"> `+ languagedata.browse + ` </button>
-            <input  type="file" name="flag_imgpath" onclick="UploadFlagImage(event)">
-        </div>
-        </div>`
-    $(html).insertBefore('#flag_imgpath-error')
-
-})
-
-function UploadJson(This) {
-    var file = This.files[0]
-    var filename = $(This).val();
-    var ext = filename.split(".").pop().toLowerCase();
-    var nameExtract = filename.split("\\").pop()
-    if (ext == "json") {
-        $(This).css('display', 'none').appendTo($(This).parents(".upload-json")).insertBefore('#lang_json-error')
-        $(This).parents('.upload-json').find('.file-upload').remove()
-        var uploaded_html = `<div class="uploaded-file">
-          <img src="/public/img/folder.svg" alt="">
-          <p class="para">`+ nameExtract + `</p>
-          <a onclick="RemoveJsonData(this)"><img src="/public/img/delete-icon.svg" alt=""></a>
-          </div>`
-        $(uploaded_html).insertBefore('#lang_json-error')
-        $('#lang_json-error').hide()
-    }
-}
-
-function UploadFlagImage(event) {
-    // var file = This.files[0]
-    // var filename = $(This).val();
-    // var ext = filename.split(".").pop().toLowerCase();
-    // var reader = new FileReader();
-    // if (($.inArray(ext, ["jpg", "png", "jpeg", "svg"]) != -1)) {
-    //     $(This).parents('.upload-json').find('.file-upload').remove()
-    //     reader.onload = function (e) {
-    //         var imgurl = e.target.result
-    //         var flag_uploadHtml = `<div class="uploaded-file">
-    //         <input type="hidden" name="flag_imgpath" value="`+ imgurl + `">
-    //         <img src="`+ imgurl + `" alt="" class="uploaded-img-flag">
-    //         <button class="delete-flag" onclick="RemoveFlagImage(this)" ><img src="/public/img/delete-white-icon.svg" alt=""></button>
-    //         <div class="hover-delete-img"></div>
-    //         </div>`
-    //         $(flag_uploadHtml).insertBefore('#flag_imgpath-error')
-    //         $('#flag_imgpath-error').hide()
-    //     }
-    //     reader.readAsDataURL(file)
-    // }
-    event.preventDefault()
-    $('#laguangeModal').css('opacity', 0)
-    $('#addnewimageModal').modal('show')
-}
-
-$(document).on('click', '.edit-language', function () {
+$(document).on('click', '.langEditBtn', function () {
     var langId = $(this).attr('data-id')
-    $("#langid").val(langId)
-    var parentTr = $(this).parents('tr')
-    var keyword = $("#searchlanguagecode").val()
-    $(".languagecode-list-row button").each (function (index, element) {
-        if (keyword != ""){
-            $(element).show()
+    console.log(langId);
 
-            $("#searchlanguagecode").val("")
-            $("#nodatafoundtexts").hide()
-            }
-    })
-   
+    $('#langId').val(langId)
+
+
     $.ajax({
         url: '/settings/languages/editlanguage/' + langId,
         type: 'GET',
         dataType: 'JSON',
         success: function (data) {
             console.log("data", data)
-            $('form[name=language-form]').attr("action", data.UploadUrl)
-            $('input[name=lang_name]').val(data.Language.LanguageName)
-            $('#triggerId').text(data.Language.LanguageCode)
-            $("#lang_code").val(data.Language.LanguageCode)
-
-            var value = data.Language.LanguageCode
-           
-            $(".languagecode-list-row button").each(function (index, element) {
-
-                var title = $(element).text().toLowerCase()
-
-                if (title.includes(value) && langId == data.Language.Id) {
-                 
-                        $(element).css('background-color','var(--clr-dropdown-hover)')
-                    
-                }else{
-                    $(element).css('background-color','')
+            $('form[name=language-form]').validate({
+                ignore: [],
+                rules: {
+                    lang_name: {
+                        required: true,
+                        duplicatelangname: false
+                    },
+                    lang_code: {
+                        required: true,
+                    },
+                    lang_json: {
+                        required: false,
+                    },
+                    flag_imgPath: {
+                        required: false,
+                    }
+                },
+                messages: {
+                    lang_name: {
+                        required: languagedata.Languages.langnamevalid,
+                        duplicatelangname: languagedata.Languages.duplicatenameerr
+                    },
+                    lang_code: {
+                        required: languagedata.Languages.langcodevalid,
+                    },
+                    lang_json: {
+                        required: languagedata.Languages.seljsonvalid,
+                    },
+                    flag_imgPath: {
+                        required: languagedata.Languages.selflagimgvalid,
+                    },
                 }
             })
-
-            if (data.Language.IsStatus == 1) {
-                $('#ckb1[name=lang_status]').val("1").prop('checked', 'true')
-            }else{
-                $('#ckb1[name=lang_status]').val("0").prop('checked', 'false')
-            }
+            $('#LanguageModal #staticBackdropLabel').text(languagedata.updatelanguage)
+            $('#LanguageModal #langCreateBtn').text(languagedata.update)
+            $('form[name=language-form]').attr("action", data.UploadUrl)
 
             if (data.Language.DefaultLanguageId != 0 && data.Language.DefaultLanguageId == data.Language.Id) {
-                $('#ckb2[name=lang_default]').val("1").attr('checked', true)
-            }else{
-                console.log("elseif");
-                $('#ckb2[name=lang_default]').val("0").attr("checked", false)
+                $('#LanguageModal #setdefault').val("1").attr('checked', true)
+            } else {
+                $('#LanguageModal #setdefault').val("0").attr("checked", false)
             }
 
-            $('.full-upload >.upload-json:first>.file-upload').remove()
 
-            var uploaded_html = `<div class="uploaded-file">
-                <input type="hidden"  name="lang_json" value="`+ data.Language.JsonPath + `">
-                <img class="lang_json_para" src="/public/img/folder.svg" alt="">
-                <p class="para lang_json_para" id="lang_json_para">`+ data.Language.JsonPath.split('/').pop() + `</p>
-                </div>`
 
-            $(uploaded_html).insertBefore("#lang_json-error")
+            $('#langName').val(data.Language.LanguageName)
+            $('#langCodePara').text(data.Language.LanguageCode)
+            $("#lang_code").val(data.Language.LanguageCode)
+            $('#languageCodeDropdown').attr('data-bs-toggle', '')
+            $('#languageCodeDropdown').removeClass("bg-[url('/public/img/property-arrow.svg')]")
+            $('#langStatus').val(data.Language.IsStatus)
+            $('#setdefault').val(data.Language.IsDefault)
 
-            $('#lang_json-error').hide()
+            var jsonPath = data.Language.JsonPath
 
-            $('.full-upload >.upload-json:last>.file-upload').remove()
+            var jsonFileName = jsonPath.split("/").pop()
 
-            if (data.Language.ImagePath != ""){
-                var flag_uploadHtml = `<div class="uploaded-file">
-                <input type="hidden" name="flag_imgpath" value="`+ data.Language.ImagePath + `">
-                <img src="`+ data.Language.ImagePath + `" alt="" class="uploaded-img-flag">
-                <button class="delete-flag" type="button"><img id="delete-flag" src="/public/img/delete-white-icon.svg" alt=""></button>
-                <div class="hover-delete-img"></div>
-                </div>`
-    
-                $(flag_uploadHtml).insertBefore('#flag_imgpath-error')
-            }else{
-                var flag_uploadHtml = `<div class="file-upload">
-                <img src="/public/img/upload-logo.svg" alt="">
-                <p class="para">`+ languagedata.Languages.uploadimg + `</p>
-                <div class="upload-button">
-                    <button class="btn-reg btn-xs primary"> `+ languagedata.browse + ` </button>
-                    <input  type="file" name="flag_imgpath" onclick="UploadFlagImage(event)">
-                </div>
-                </div>`
-    
-                $(flag_uploadHtml).insertBefore('#flag_imgpath-error')
-            }
-             
-            $('#flag_imgpath-error').hide()
-            $('.modal-save>button').text(languagedata.update)
-            $('form[name=language-form]').prepend('<input type="hidden" name="lang_id" value="' + data.Language.Id + '">')
-            $('input[type=hidden][name=csrf]').val(data.csrf)
-            $('#lang_json').prop('disabled', true);
-            // $('#lang_code').prop('disabled', true);
-            // $('#lang_code').css("color", '#d2d2d2')
-            $('#lang_json_para').css("color", '#d2d2d2')
-            $('#laguangeModal').modal('show')
-            $('.modal-header>h3').text(languagedata.Languages.editlanguage)
+            $('#jsonDesc').text(jsonFileName)
+            console.log(data.Language.ImagePath);
+            $('#flagSpan').addClass('hidden')
+            $('#flaggFileLabel').addClass('hidden')
+            $('#flagPara').addClass('hidden')
+            $('#prof-crop').addClass('h-[180px]')
+
+            $('#LanguageModal #prof-crop').attr('src', data.Language.ImagePath)
+            $('#cropData').attr('value', data.Language.ImagePath)
+            $('#flagDiv').append('<div class="hover-delete-img "></div>');
+            $('#flagDiv').append('<button class="deleteFlag"><img id="deleteFlag" src="/public/img/deleteWhiteIcon.svg" alt=""></button>')
+
         }
 
     })
 })
 
-$('#laguangeModal').on('hide.bs.modal', function () {
-    $('#lang_json').prop('disabled', false);
-    // $('#lang_code').prop('disabled', false);
-    // $('#lang_code').css("color", '')
-    $('#lang_json_para').css("color", '')
-    $('.input-group input[name=lang_name]').val("")
-    // $('.input-group input[name=lang_code]').val("")
-    $('.input-field-group #ckb1[name=lang_status]').remove()
-    $('.input-field-group #ckb2[name=lang_default]').remove()
-    $('.input-field-group>.active-toggle:first>.toggle').prepend('<input class="tgl tgl-light" id="ckb1" name="lang_status" type="checkbox">')
-    $('.input-field-group>.active-toggle:last>.toggle').prepend('<input class="tgl tgl-light" id="ckb2" name="lang_default" type="checkbox">')
-    if ($('.full-upload >.upload-json:first>.uploaded-file').length == 1) {
-        $('.full-upload >.upload-json:first>input[name=lang_json]').remove()
-        $('.full-upload >.upload-json:first>.uploaded-file').remove()
-        var html = `<div class="file-upload">
-                   <img src="/public/img/folder.svg" alt="">
-                   <p class="para">Drag your JSON file or choose from directory</p>
-                   <div class="upload-button">
-                   <button class="btn-reg btn-xs primary"> `+ languagedata.browse + ` </button>
-                   <input type="file" name="lang_json" onchange="UploadJson(this)">
-                   </div>
-                   </div>`
-        $(html).insertBefore('#lang_json-error')
-    }
-    if ($('.full-upload >.upload-json:last>.uploaded-file').length == 1) {
-        $('.full-upload >.upload-json:last>.uploaded-file').remove()
-        var html = `<div class="file-upload">
-                  <img src="/public/img/upload-logo.svg" alt="">
-                  <p class="para">`+ languagedata.Languages.uploadimg + `</p>
-                  <div class="upload-button">
-                  <button class="btn-reg btn-xs primary"> `+ languagedata.browse + ` </button>
-                  <input type="file" name="flag_imgpath" onchange="UploadFlagImage(this)">
-                  </div>
-                  </div>`
-        $(html).insertBefore('#flag_imgpath-error')
-    }
-    $('#lang_name-error').hide()
-    $('#lang_code-error').hide()
-    $("#lang_json-error").hide()
-    $("#flag_imgpath-error").hide()
-    $('.modal-save>button').text(languagedata.save)
-    $('.modal-header>h3').text(languagedata.Languages.addnewlanguage)
-    if ($('form[name=language-form]>input[type=hidden][name=lang_id]').length == 1) {
-        $('form[name=language-form]>input[type=hidden][name=lang_id]').remove()
-    }
-    $('.input-group input').parents('.input-group').removeClass('input-group-error')
-});
+// status change on clicking the status button
+// $(document).on('click', '.langStatusBtn', function () {
+//     if ($(this).prop('checked')) {
 
-$(document).on('click', '.delete-language', function () {
+//         $(this).attr('value', '1')
+//     } else {
+//         $(this).attr('value', '0')
+//     }
+
+//     var lang_id = $(this).attr('data-id')
+
+//     var isactive = $(this).val();
+//     $.ajax({
+//         url: '/settings/languages/languageisactive',
+//         type: 'POST',
+//         async: false,
+//         data: {
+//             id: lang_id,
+//             isactive: isactive,
+//             csrf: $("input[name='csrf']").val()
+//         },
+//         dataType: 'json',
+//         cache: false,
+//         success: function (result) {
+//             console.log(result);
+
+//             if (result.status == true) {
+//                 notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Toast.languageupdated + `</p ></div ></div ></li></ul> `;
+//                 $(notify_content).insertBefore(".header-rht");
+//                 setTimeout(function () {
+//                     $('.toast-msg').fadeOut('slow', function () {
+//                         $(this).remove();
+//                     });
+//                 }, 5000);
+
+//             } else {
+
+//                 notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/toast-error.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + languagedata.Toast.languageupdated + `</p></div></div> </li></ul>`;
+//                 $(notify_content).insertBefore(".header-rht");
+//                 setTimeout(function () {
+//                     $('.toast-msg').fadeOut('slow', function () {
+//                         $(this).remove();
+//                     });
+//                 }, 5000);
+
+//             }
+
+
+//         }
+//     });
+// })
+
+
+$(document).on('click', '.langDeleteBtn', function () {
 
     var langId = $(this).attr("data-id")
 
@@ -447,9 +402,9 @@ $(document).on('click', '.delete-language', function () {
 
     $('.delname').text($(this).parents('tr').find('td:first>.flexx>h4').text())
 
-    $('button[id=delid]').parent().attr('href', "/settings/languages/deletelanguage/" + langId)
+    $('#delid').attr('href', "/settings/languages/deletelanguage/" + langId)
 
-    $('#centerModal').modal('show')
+    // $('#centerModal').modal('show')
 })
 
 $('#addnewimageModal').on('hide.bs.modal', function () {
@@ -458,358 +413,237 @@ $('#addnewimageModal').on('hide.bs.modal', function () {
 
 })
 
-function LanguageStatus(This, event) {
 
-    console.log("click", $(This).parents('tr').find('td:first>.tbl-img-content>.default').length == 0);
+$(document).on('click', '.selectcheckbox', function () {
 
-    // if ($(This).parents('tr').find('td:first>.tbl-img-content>.default').length == 0) {
-    var lang_id = $(This).attr("data-id")
+    console.log(selectedcheckboxarr);
 
-    if ($(This).is(':checked')) {
+    var languageId = $(this).attr('data-id')
 
-        $(This).val("1")
+    var status = $(`#toggle${languageId}`).val();
+
+    if ($(this).prop('checked')) {
+
+        selectedcheckboxarr.push({ "languageId": languageId, "status": status })
+
     } else {
 
-        $(This).val("0")
+        const index = selectedcheckboxarr.findIndex(item => item.languageId === languageId);
+
+        if (index !== -1) {
+
+            selectedcheckboxarr.splice(index, 1);
+        }
+
+        $('#Check').prop('checked', false)
+
     }
-    var isactive = $(This).val();
-    $.ajax({
-        url: '/settings/languages/languageisactive',
-        type: 'POST',
-        async: false,
-        data: {
-            id: lang_id,
-            isactive: isactive,
-            csrf: $("input[name='csrf']").val()
-        },
-        dataType: 'json',
-        cache: false,
-        success: function (result) {
-            console.log("language", result.language);
-            if (result.language.IsStatus == 0) {
 
-                $(".lang[data-id=" + result.language.Id + "]").remove()
 
-                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Toast.languageupdated + '</span></div>';
-                $(notify_content).insertBefore(".header-rht");
-                setTimeout(function () {
-                    $('.toast-msg').fadeOut('slow', function () {
-                        $(this).remove();
-                    });
-                }, 5000); // 5000 milliseconds = 5 seconds
-            }
-            if (result.language.IsStatus == 1) {
-                if (result.language.Id == $("#current-lang").attr("data-id")) {
-                    notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>'+ languagedata.Toast.languageupdated +'</span></div>';
-                    $(notify_content).insertBefore(".header-rht");
-                    setTimeout(function () {
-                        $('.toast-msg').fadeOut('slow', function () {
-                            $(this).remove();
-                        });
-                    }, 5000); // 5000 milliseconds = 5 seconds
-                } else {
-                    var html = `<li class="lang" data-code="${result.language.LanguageCode}" data-id="${result.language.Id}"><button class="dropdown-item" type="button"> <img src="${result.language.ImagePath}" alt="">${result.language.LanguageName}</button> </li>`
-                    $("#lang-menu").append(html)
-                    notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>' + languagedata.Toast.languageupdated + '</span></div>';
-                    $(notify_content).insertBefore(".header-rht");
-                    setTimeout(function () {
-                        $('.toast-msg').fadeOut('slow', function () {
-                            $(this).remove();
-                        });
-                    }, 5000); // 5000 milliseconds = 5 seconds
-                }
-            }
+    if (selectedcheckboxarr.length != 0) {
+        $('.selected-numbers').removeClass("hidden")
 
-        }
-    });
-    // } else {
-    //     event.preventDefault()
-    // }
-}
-// language code dropdown
-
-$(".dropdown-values").on("click", function () {
-    var text = $(this).text()
-    $(this).parents().siblings("a").text(text)
-    $("#lang_code").val(text)
-    $("#lang_code-error").hide()
-    $("#languagecode").removeClass("input-group-error")
-   
-})
-
-// language code dropdown filter input box search
-$("#searchlanguagecode").keyup(function () {
-    var keyword = $(this).val().trim().toLowerCase()
-    $(".languagecode-list-row button").each(function (index, element) {
-        var title = $(element).text().toLowerCase()
-
-        if (title.includes(keyword)) {
-            $(element).show()
-            $("#nodatafoundtexts").hide()
-
-        } else {
-            $(element).hide()
-            if($('.languagecode-list-row button:visible').length==0){
-                $("#nodatafoundtexts").show()
-            }
-           
-        }
-    })
-
-})
-
-$(document).on('click','.selectcheckbox',function(){
-
-    languageid =$(this).attr('data-id')
-
-    var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
-
-    console.log(status,"status")
-
-    var sstatus
-
- 
-    if (status ==true){
-       
-        sstatus= '1'
-
-        }else{
-
-        sstatus= '0'
-        
-        }
-
-   if ($(this).prop('checked')){
-
-       selectedcheckboxarr.push({"languageid":languageid,"status":sstatus})
-   
-   }else{
-
-       const index = selectedcheckboxarr.findIndex(item => item.languageid === languageid);
-   
-       if (index !== -1) {
-
-           console.log(index,"sssss")
-           selectedcheckboxarr.splice(index, 1);
-       }
-      
-       $('#Check').prop('checked',false)
-
-   }
-
-  
-   if (selectedcheckboxarr.length !=0){
-
-       $('.selected-numbers').show()
-
-       var allSame = selectedcheckboxarr.every(function(item) {
-           return item.status === selectedcheckboxarr[0].status;
-       });
-       
-       var setstatus
-       var img;
-
-          if (selectedcheckboxarr[0].status === '1') {
- 
-            setstatus = "Deactive";
-
-             img = "/public/img/In-Active (1).svg";
-
-       } else if (selectedcheckboxarr[0].status === '0') {
-
-              setstatus = "Active";
-
-              img = "/public/img/Active (1).svg";
-
-         } 
-
-          var htmlContent = '';
-
-            if (allSame) {
-
-             htmlContent = '<img src="' + img + '">' + setstatus;
-
-             } else {
-
-               htmlContent = '';
-
-             }
-
-           $('#unbulishslt').html(htmlContent);
-      
-       $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
-
-       if(!allSame){
-
-           $('#seleccheckboxdelete').removeClass('border-end')
-
-           $('.unbulishslt').html("")
-       }else{
-
-           $('#seleccheckboxdelete').addClass('border-end')
-       }
-
-      
-   }else{
-
-       $('.selected-numbers').hide()
-   }
-
-       var allChecked = true;
-
-        $('.selectcheckbox').each(function() {
-
-            if (!$(this).prop('checked')) {
-
-            allChecked = false;
-
-           return false; 
-        }
-   });
-
-         $('#Check').prop('checked', allChecked);
-
-    console.log(selectedcheckboxarr,"checkkkk")
-})
-
-//ALL CHECKBOX CHECKED FUNCTION//
-
-$(document).on('click','#Check',function(){
-
-    selectedcheckboxarr=[]
-
-    var isChecked = $(this).prop('checked');
-
-    if (isChecked){
-
-        $('.selectcheckbox').prop('checked', isChecked);
-
-        $('.selectcheckbox').each(function(){
-    
-           languageid= $(this).attr('data-id')
-
-           var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
-
-           var sstatus
-
-           if (status ==true){
-       
-            sstatus= '1'
-    
-            }else{
-    
-            sstatus= '0'
-
-            }
- 
-    
-           selectedcheckboxarr.push({"languageid":languageid,"status":sstatus})
-        })
-
-        $('.selected-numbers').show()
-
-        var allSame = selectedcheckboxarr.every(function(item) {
-
+        var allSame = selectedcheckboxarr.every(function (item) {
             return item.status === selectedcheckboxarr[0].status;
         });
-        
+
         var setstatus
-
-        var img
-    
-
-        if (selectedcheckboxarr.length !=0){
+        var img;
 
         if (selectedcheckboxarr[0].status === '1') {
- 
+
             setstatus = "Deactive";
 
-             img = "/public/img/In-Active (1).svg";
+            img = "/public/img/In-Active.svg";
 
-       } else if (selectedcheckboxarr[0].status === '0') {
+        } else if (selectedcheckboxarr[0].status === '0') {
 
-              setstatus = "Active";
+            setstatus = "Active";
 
-              img = "/public/img/Active (1).svg";
+            img = "/public/img/Active.svg";
 
-         } 
         }
 
         var htmlContent = '';
 
         if (allSame) {
 
-         htmlContent = '<img src="' + img + '">' + setstatus;
+            htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + setstatus;
 
-         $('#seleccheckboxdelete').addClass('border-end')
+        } else {
 
-         } else {
+            htmlContent = '';
 
-           htmlContent = '';
+        }
 
-           $('#seleccheckboxdelete').removeClass('border-end')
+        $('#unbulishslt').html(htmlContent);
 
-         }
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
 
-       $('#unbulishslt').html(htmlContent);
+        if (!allSame) {
 
-        $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
-    
-    }else{
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+            $('.unbulishslt').html("")
+        } else {
+
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+        }
 
 
-        selectedcheckboxarr=[]
+    } else {
+
+        $('.selected-numbers').addClass("hidden")
+    }
+
+    var allChecked = true;
+
+    $('.selectcheckbox').each(function () {
+
+        if (!$(this).prop('checked')) {
+
+            allChecked = false;
+
+            return false;
+        }
+    });
+
+    $('#Check').prop('checked', allChecked);
+
+    console.log(selectedcheckboxarr, "checkkkk")
+})
+
+
+//  //ALL CHECKBOX CHECKED FUNCTION//
+
+
+
+$(document).on('click', '#Check', function () {
+
+    selectedcheckboxarr = []
+
+    var isChecked = $(this).prop('checked');
+
+    if (isChecked) {
 
         $('.selectcheckbox').prop('checked', isChecked);
 
-        $('.selected-numbers').hide()
+        $('.selectcheckbox').each(function () {
+
+            var languageId = $(this).attr('data-id')
+
+            var status = $(`#toggle${languageId}`).val();
+
+            console.log(status, "state");
+
+            selectedcheckboxarr.push({ "languageId": languageId, "status": status })
+        })
+
+
+        $('.selected-numbers').removeClass("hidden")
+
+        var allSame = selectedcheckboxarr.every(function (item) {
+
+            return item.status === selectedcheckboxarr[0].status;
+        });
+
+        console.log(allSame, "allsome");
+
+
+
+        var img
+        if (selectedcheckboxarr[0].status === '1') {
+
+            setstatus = "Deactive";
+
+            img = "/public/img/In-Active.svg";
+
+        } else if (selectedcheckboxarr[0].status === '0') {
+
+            setstatus = "Active";
+
+            img = "/public/img/Active.svg";
+        }
+
+        // }
+        var htmlContent = '';
+
+        if (allSame) {
+
+            htmlContent = '<img src="' + img + '" style="width: 14px; height: 14px;">' + setstatus;
+
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+        } else {
+
+            htmlContent = '';
+
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
+        }
+
+        $('#unbulishslt').html(htmlContent);
+
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
+
+    } else {
+        $('.selected-numbers').addClass("hidden")
+
+        selectedcheckboxarr = []
+
+        $('.selectcheckbox').prop('checked', isChecked);
     }
 
-    if (selectedcheckboxarr.length ==0){
-
-        $('.selected-numbers').hide()
-    }
 })
 
-$(document).on('click','#seleccheckboxdelete',function(){
+// ------------------------------------------------------------------
 
-    if (selectedcheckboxarr.length>1){
-         
-    $('.deltitle').text("Delete Languages?")
 
-    $('#content').text('Are you sure want to delete selected Languages?')
+$(document).on('click', '#seleccheckboxdelete', function () {
 
-    }else {
+    if (selectedcheckboxarr.length > 1) {
 
-         $('.deltitle').text("Delete Language?")
+        $('.deltitle').text("Delete Languages?")
 
-         $('#content').text('Are you sure want to delete selected Language?')
+        $('#content').text('Are you sure want to delete selected Languages?')
+
+    } else {
+
+        $('.deltitle').text("Delete Languages?")
+
+        $('#content').text('Are you sure want to delete selected Languages?')
     }
 
-
-    $('#delete').addClass('checkboxdelete')
+    $("#delid").text($(this).text());
+    $('#delid').addClass('checkboxdelete')
 })
 
-$(document).on('click','#unbulishslt',function(){
+$(document).on('click', '#unbulishslt', function () {
 
-    if (selectedcheckboxarr.length>1){
+    if (selectedcheckboxarr.length > 1) {
 
-         $('.deltitle').text( $(this).text()+" "+"Languages?")
+        $('.deltitle').text($(this).text() + " " + "Languages?")
 
-         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Languages?")
-    }else{
+        $('#content').text("Are you sure want to " + $(this).text() + " " + "selected Languages?")
+    } else {
 
-         $('.deltitle').text( $(this).text()+" "+"Language?")
+        $('.deltitle').text($(this).text() + " " + "Languages?")
 
-         $('#content').text("Are you sure want to " +$(this).text()+" "+"selected Language?")
+        $('#content').text("Are you sure want to " + $(this).text() + " " + "selected Languages?")
     }
+    // $('#delid').text(setstatus)
+    $("#delid").text($(this).text());
 
-    $('#delete').addClass('selectedunpublish')
+    $('#delid').addClass('selectedunpublish')
 
 })
 
 //MULTI SELECT DELETE FUNCTION//
-$(document).on('click','.checkboxdelete',function(){
+$(document).on('click', '.checkboxdelete', function () {
+
+    var url = window.location.href;
+
+    console.log("url", url)
 
     var pageurl = window.location.search
 
@@ -826,20 +660,20 @@ $(document).on('click','.checkboxdelete',function(){
         data: {
             "languageids": JSON.stringify(selectedcheckboxarr),
             csrf: $("input[name='csrf']").val(),
-            "page":pageno
+            "page": pageno
 
-            
+
         },
         success: function (data) {
 
-            console.log(data,"result")
+            console.log(data, "result")
 
-            if (data.value==true){
+            if (data.value == true) {
 
                 setCookie("get-toast", "Language Deleted Successfully")
 
-                window.location.href=data.url
-            }else{
+                window.location.href = data.url
+            } else {
 
                 setCookie("Alert-msg", "Internal Server Error")
 
@@ -851,21 +685,23 @@ $(document).on('click','.checkboxdelete',function(){
 })
 //Deselectall function//
 
-$(document).on('click','#deselectid',function(){
+$(document).on('click', '#deselectid', function () {
 
-    $('.selectcheckbox').prop('checked',false)
+    $('.selectcheckbox').prop('checked', false)
 
-    $('#Check').prop('checked',false)
+    $('#Check').prop('checked', false)
 
-    selectedcheckboxarr=[]
+    selectedcheckboxarr = []
 
-    $('.selected-numbers').hide()
-    
+    $('.selected-numbers').addClass("hidden")
+
 })
 
 //multi select active and deactive function//
 
-$(document).on('click','.selectedunpublish',function(){
+$(document).on('click', '.selectedunpublish', function () {
+
+    var url = window.location.href;
 
     var pageurl = window.location.search
 
@@ -880,22 +716,20 @@ $(document).on('click','.selectedunpublish',function(){
         dataType: 'json',
         async: false,
         data: {
-            "languageids":JSON.stringify(selectedcheckboxarr),
+            "languageids": JSON.stringify(selectedcheckboxarr),
             csrf: $("input[name='csrf']").val(),
-            "page":pageno
+            "page": pageno
 
-            
+
         },
         success: function (data) {
 
-            console.log(data,"result")
-
-            if (data.value==true){
+            if (data.value == true) {
 
                 setCookie("get-toast", "languageupdated")
 
-                window.location.href=data.url
-            }else{
+                window.location.href = data.url
+            } else {
 
                 setCookie("Alert-msg", "Internal Server Error")
 
@@ -904,5 +738,481 @@ $(document).on('click','.selectedunpublish',function(){
         }
     })
 
-
 })
+
+// stop changing default language for users and allow only for tenants
+
+$(document).on('click', ".langStatusBtn", function (event) {
+
+    var roleId = $(this).attr('data-role-id')
+
+
+    if (roleId != 2 && roleId != 1) {
+        event.preventDefault()
+        notify_content = `<ul class=" warn-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="/ flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/toast-error.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + "please contact admin for changing default language" + `</p></div></div> </li></ul>`;
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.warn-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000);
+
+    }
+})
+
+// changing default language by tenant 
+
+function SetDefaultLang(langId, isDefault, roleId) {
+
+    if (roleId != 2 && roleId != 1) {
+        notify_content = `<ul class=" warn-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/toast-error.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + "please contact admin for changing default language" + `</p></div></div> </li></ul>`;
+        $(notify_content).insertBefore(".header-rht");
+        setTimeout(function () {
+            $('.warn-msg').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000);
+
+        return
+    }
+
+    $.ajax({
+        url: '/settings/languages/setdefaultlanguage',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        data: {
+            langId: langId,
+            isDefault: isDefault,
+            csrf: $("input[name='csrf']").val()
+        },
+        success: function (result) {
+            if (result.value) {
+                setCookie("get-toast", "Language Updated Successfully")
+                window.location.href = "/settings/languages/"
+            }
+
+        }
+    })
+
+
+}
+
+$(document).on('click', '.langStatusBtn', function () {
+    var langId = $(this).attr("data-id")
+    var dataRoleId = $(this).attr("data-role-id")
+    var isDefault = $(this).val()
+
+
+    if ($(this).is(':checked')) {
+        $(this).val("1")
+        $('.langStatusBtn').each(function (index, element) {
+            // element == this
+            if (dataRoleId == 2 || dataRoleId == 1) {
+                if ($(element).attr('data-id') != langId) {
+                    $(element).prop('checked', false)
+                }
+
+            }
+
+        });
+        if ($(this).val() == 1) {
+            SetDefaultLang(langId, isDefault, dataRoleId)
+        }
+    } else {
+        console.log("ulla vra");
+
+        var isChecked = false
+        $('.langStatusBtn').each(function (index, element) {
+            // element == this
+            if ($(this).is(':checked')) {
+                isChecked = true
+            }
+        });
+        if (!isChecked) {
+            $(this).prop('checked', true)
+            $(this).val("1")
+        }
+    }
+    // SetDefaultLang(langId, isDefault, dataRoleId)
+})
+
+$(document).on("click", ".Closebtn", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+})
+
+$(document).on("click", ".searchClosebtn", function () {
+    $(".search").val('')
+
+    window.location.href = "/settings/languages/"
+})
+
+$(document).ready(function () {
+
+    $('.search').on('input', function () {
+        if ($(this).val().length >= 1) {
+            $(".Closebtn").removeClass("hidden")
+        } else {
+            $(".Closebtn").addClass("hidden")
+        }
+    });
+})
+
+$(document).on("click", ".langHoverIcon", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+})
+
+
+
+//old Code ......................... down
+
+// $(document).on('click', '.selectcheckbox', function () {
+
+//     languageid = $(this).attr('data-id')
+
+//     var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+//     console.log(status, "status")
+
+//     var sstatus
+
+
+//     if (status == true) {
+
+//         sstatus = '1'
+
+//     } else {
+
+//         sstatus = '0'
+
+//     }
+
+//     if ($(this).prop('checked')) {
+
+//         selectedcheckboxarr.push({ "languageid": languageid, "status": sstatus })
+
+//     } else {
+
+//         const index = selectedcheckboxarr.findIndex(item => item.languageid === languageid);
+
+//         if (index !== -1) {
+
+//             console.log(index, "sssss")
+//             selectedcheckboxarr.splice(index, 1);
+//         }
+
+//         $('#Check').prop('checked', false)
+
+//     }
+
+
+//     if (selectedcheckboxarr.length != 0) {
+
+//         $('.selected-numbers').show()
+
+//         var allSame = selectedcheckboxarr.every(function (item) {
+//             return item.status === selectedcheckboxarr[0].status;
+//         });
+
+//         var setstatus
+//         var img;
+
+//         if (selectedcheckboxarr[0].status === '1') {
+
+//             setstatus = "Deactive";
+
+//             img = "/public/img/In-Active (1).svg";
+
+//         } else if (selectedcheckboxarr[0].status === '0') {
+
+//             setstatus = "Active";
+
+//             img = "/public/img/Active (1).svg";
+
+//         }
+
+//         var htmlContent = '';
+
+//         if (allSame) {
+
+//             htmlContent = '<img src="' + img + '">' + setstatus;
+
+//         } else {
+
+//             htmlContent = '';
+
+//         }
+
+//         $('#unbulishslt').html(htmlContent);
+
+//         $('.checkboxlength').text(selectedcheckboxarr.length + " " + 'items selected')
+
+//         if (!allSame) {
+
+//             $('#seleccheckboxdelete').removeClass('border-end')
+
+//             $('.unbulishslt').html("")
+//         } else {
+
+//             $('#seleccheckboxdelete').addClass('border-end')
+//         }
+
+
+//     } else {
+
+//         $('.selected-numbers').hide()
+//     }
+
+//     var allChecked = true;
+
+//     $('.selectcheckbox').each(function () {
+
+//         if (!$(this).prop('checked')) {
+
+//             allChecked = false;
+
+//             return false;
+//         }
+//     });
+
+//     $('#Check').prop('checked', allChecked);
+
+//     console.log(selectedcheckboxarr, "checkkkk")
+// })
+
+// //ALL CHECKBOX CHECKED FUNCTION//
+
+// $(document).on('click', '#Check', function () {
+
+//     selectedcheckboxarr = []
+
+//     var isChecked = $(this).prop('checked');
+
+//     if (isChecked) {
+
+//         $('.selectcheckbox').prop('checked', isChecked);
+
+//         $('.selectcheckbox').each(function () {
+
+//             languageid = $(this).attr('data-id')
+
+//             var status = $(this).parents('td').siblings('td').find('.tgl-light').prop('checked');
+
+//             var sstatus
+
+//             if (status == true) {
+
+//                 sstatus = '1'
+
+//             } else {
+
+//                 sstatus = '0'
+
+//             }
+
+
+//             selectedcheckboxarr.push({ "languageid": languageid, "status": sstatus })
+//         })
+
+//         $('.selected-numbers').show()
+
+//         var allSame = selectedcheckboxarr.every(function (item) {
+
+//             return item.status === selectedcheckboxarr[0].status;
+//         });
+
+//         var setstatus
+
+//         var img
+
+
+//         if (selectedcheckboxarr.length != 0) {
+
+//             if (selectedcheckboxarr[0].status === '1') {
+
+//                 setstatus = "Deactive";
+
+//                 img = "/public/img/In-Active (1).svg";
+
+//             } else if (selectedcheckboxarr[0].status === '0') {
+
+//                 setstatus = "Active";
+
+//                 img = "/public/img/Active (1).svg";
+
+//             }
+//         }
+
+//         var htmlContent = '';
+
+//         if (allSame) {
+
+//             htmlContent = '<img src="' + img + '">' + setstatus;
+
+//             $('#seleccheckboxdelete').addClass('border-end')
+
+//         } else {
+
+//             htmlContent = '';
+
+//             $('#seleccheckboxdelete').removeClass('border-end')
+
+//         }
+
+//         $('#unbulishslt').html(htmlContent);
+
+//         $('.checkboxlength').text(selectedcheckboxarr.length + " " + 'items selected')
+
+//     } else {
+
+
+//         selectedcheckboxarr = []
+
+//         $('.selectcheckbox').prop('checked', isChecked);
+
+//         $('.selected-numbers').hide()
+//     }
+
+//     if (selectedcheckboxarr.length == 0) {
+
+//         $('.selected-numbers').hide()
+//     }
+// })
+
+// $(document).on('click', '#seleccheckboxdelete', function () {
+
+//     if (selectedcheckboxarr.length > 1) {
+
+//         $('.deltitle').text("Delete Languages?")
+
+//         $('#content').text('Are you sure want to delete selected Languages?')
+
+//     } else {
+
+//         $('.deltitle').text("Delete Language?")
+
+//         $('#content').text('Are you sure want to delete selected Language?')
+//     }
+
+
+//     $('#delete').addClass('checkboxdelete')
+// })
+
+// $(document).on('click', '#unbulishslt', function () {
+
+//     if (selectedcheckboxarr.length > 1) {
+
+//         $('.deltitle').text($(this).text() + " " + "Languages?")
+
+//         $('#content').text("Are you sure want to " + $(this).text() + " " + "selected Languages?")
+//     } else {
+
+//         $('.deltitle').text($(this).text() + " " + "Language?")
+
+//         $('#content').text("Are you sure want to " + $(this).text() + " " + "selected Language?")
+//     }
+
+//     $('#delete').addClass('selectedunpublish')
+
+// })
+
+// //MULTI SELECT DELETE FUNCTION//
+// $(document).on('click', '.checkboxdelete', function () {
+
+//     var pageurl = window.location.search
+
+//     const urlpar = new URLSearchParams(pageurl)
+
+//     pageno = urlpar.get('page')
+
+//     $('.selected-numbers').hide()
+//     $.ajax({
+//         url: '/settings/languages/multiselectlanguagedelete',
+//         type: 'post',
+//         dataType: 'json',
+//         async: false,
+//         data: {
+//             "languageids": JSON.stringify(selectedcheckboxarr),
+//             csrf: $("input[name='csrf']").val(),
+//             "page": pageno
+
+
+//         },
+//         success: function (data) {
+
+//             console.log(data, "result")
+
+//             if (data.value == true) {
+
+//                 setCookie("get-toast", "Language Deleted Successfully")
+
+//                 window.location.href = data.url
+//             } else {
+
+//                 setCookie("Alert-msg", "Internal Server Error")
+
+//             }
+
+//         }
+//     })
+
+// })
+// //Deselectall function//
+
+// $(document).on('click', '#deselectid', function () {
+
+//     $('.selectcheckbox').prop('checked', false)
+
+//     $('#Check').prop('checked', false)
+
+//     selectedcheckboxarr = []
+
+//     $('.selected-numbers').hide()
+
+// })
+
+// //multi select active and deactive function//
+
+// $(document).on('click', '.selectedunpublish', function () {
+
+//     var pageurl = window.location.search
+
+//     const urlpar = new URLSearchParams(pageurl)
+
+//     pageno = urlpar.get('page')
+
+//     $('.selected-numbers').hide()
+//     $.ajax({
+//         url: '/settings/languages/multiselectlanguagestatus',
+//         type: 'post',
+//         dataType: 'json',
+//         async: false,
+//         data: {
+//             "languageids": JSON.stringify(selectedcheckboxarr),
+//             csrf: $("input[name='csrf']").val(),
+//             "page": pageno
+
+
+//         },
+//         success: function (data) {
+
+//             console.log(data, "result")
+
+//             if (data.value == true) {
+
+//                 setCookie("get-toast", "languageupdated")
+
+//                 window.location.href = data.url
+//             } else {
+
+//                 setCookie("Alert-msg", "Internal Server Error")
+
+//             }
+
+//         }
+//     })
+
+
+// })

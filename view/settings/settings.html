@@ -1,139 +1,208 @@
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
-<div class="page-wrapper">
-  <input type="hidden" name="csrf" value="{{.csrf}}">
-  <div class="setting-admin">
-    {{range .Menu.TblModule}}
-    {{if eq .ModuleName "Settings"}}
-    
-    <div class="setting-profile">
-      <h2 class="heading-second">{{$Translate.Profile}}</h2>
-      <p class="para">{{$Translate.Setting.Profilecontent}}</p>
-      <div class="full-details">
-        {{range .SubModule}}
-        {{if eq .ModuleName "My Account"}}
-        <a href="/settings/myprofile" class="details">
-          <img src="/public/img/profile.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Setting.Myaccount}}</h3>
-            <p class="para">{{$Translate.Setting.Myaccountcontent}}</p>
-          </div>
-        </a>
-        {{end}}
-        {{if eq .ModuleName "Security"}}
-        <a href="/settings/changepassword" class="details">
-          <img src="/public/img/security.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Setting.Security}}</h3>
-            <p class="para">{{$Translate.Setting.Securitycontent}} </p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-      </div>
-      <div class="sep-settings"></div>
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+  <!--header-->
+  <header
+    class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+    <div class="mr-auto flex items-center space-x-[6px]">
+      <a href="javascript:void(0);"
+        class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+        <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+      </a>
+      <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Setting.Title}}
+      </h2>
     </div>
 
-    {{$FLG := ""}}
+  </header>
 
-    <div class="setting-profile" {{range .SubModule}}{{if eq .ModuleName "Roles & Permissions"}} {{if .Routes}} {{$FLG = "true"}} {{end}}{{else if  eq .ModuleName "Team"}} {{if .Routes}} {{$FLG = "true"}} {{end}} {{end}}{{end}} {{if ne $FLG "true"}} style="display: none;"{{end}}>
-      <h2 class="heading-second">{{$Translate.Permission.Permissions}}</h2>
-      <p class="para">{{$Translate.Setting.Permissionscontent}}</p>
-      <div class="full-details">
+  <!--content-->
+
+  <div class="p-[24px] max-sm:p-[16px]">
+    <div class="block">
+      <h2 class="text-[#262626] text-sm leading-[17.5px] font-normal mb-[6px]">{{$Translate.Setting.Profiletitle}}
+      </h2>
+      <p class="text-[#717171] text-xs leading-4 font-normal  ">{{$Translate.Setting.Profilecontent}}</p>
+      <ul
+        class="grid  row-gap-3 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] py-[32px] mb-[32px] border-b border-[#EDEDED]">
+        <li><a href="/settings/myprofile"
+            class=" h-[64px] p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myAccount.svg" alt="account">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Myaccount}}</h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal  hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Myaccountcontent}}</p>
+            </div>
+          </a></li>
+        <li><a href="/settings/changepassword"
+            class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/mySecurity.svg" alt="security">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Security}}
+              </h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Securitycontent}}</p>
+            </div>
+          </a></li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h2 class="text-[#262626] text-sm leading-[17.5px] font-normal mb-[6px]">{{$Translate.Setting.Permissionstitle}}
+      </h2>
+      <p class="text-[#717171] text-xs leading-4 font-normal  ">{{$Translate.Setting.Permissionscontent}}</p>
+      <ul
+        class="grid   row-gap-3 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] py-[32px] mb-[32px] border-b border-[#EDEDED]">
+       
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
         {{range .SubModule}}
         {{if eq .ModuleName "Roles & Permissions"}}
         {{if .Routes}}
-        <a href="/settings/roles/" class="details">
-          <img src="/public/img/roles-permision.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Roles}} & {{$Translate.Permission.Permissions}}</h3>
-            <p class="para">{{$Translate.Setting.Rolescontent}}
-            </p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        {{if eq .ModuleName "Team"}}
-        {{if .Routes}}
-        <a href="/settings/users" class="details">
-          <img src="/public/img/team.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Setting.Teams}}</h3>
-            <p class="para">{{$Translate.Setting.Teamcontent}}
-            </p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        {{end}}
-      </div>
-      <div class="sep-settings"></div>
+       
+        <li><a href="/settings/roles/"
+            class=" h-[64px] p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myRoles.svg" alt="roles">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Rolesandpermissions}}
+              </h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Rolescontent}}</p>
+            </div>
+          </a></li>
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+
+          {{range .Menu.TblModule}}
+          {{if eq .ModuleName "Settings"}}
+          {{range .SubModule}}
+          {{if eq .ModuleName "Team"}}
+          {{if .Routes}}
+
+        <li><a href="/settings/users/"
+            class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myTeams.svg" alt="teams">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Teams}}</h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Teamcontent}}</p>
+            </div>
+          </a></li>
+
+         
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+
+      </ul>
     </div>
 
-    {{$FLG2 := ""}}
-    <div class="setting-profile" {{range .SubModule}}{{if eq .ModuleName "Languages"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}}{{else if  eq .ModuleName "Email Templates"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}}{{else if  eq .ModuleName "General Settings"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}}{{else if  eq .ModuleName "Graphql Api"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}}{{else if  eq .ModuleName "Data"}} {{if .Routes}} {{$FLG2 = "true"}} {{end}} {{end}}{{end}} {{if ne $FLG2 "true"}} style="display: none;"{{end}}>
-      <h2 class="heading-second">{{$Translate.Setting.System}}</h2>
-      <p class="para">{{$Translate.Setting.Systemcontent}}</p>
-      <div class="full-details">
+    <div class="block">
+      <h2 class="text-[#262626] text-sm leading-[17.5px] font-normal mb-[6px]">{{$Translate.Setting.System}}</h2>
+      <p class="text-[#717171] text-xs leading-4 font-normal">{{$Translate.Setting.Systemcontent}}</p>
+      <ul
+        class="grid  gap-x-4  grid-cols-[repeat(auto-fill,_minmax(228px,_1fr))] py-[32px] mb-[32px] border-b border-[#EDEDED]">
+        
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
         {{range .SubModule}}
         {{if eq .ModuleName "General Settings"}}
         {{if .Routes}}
-        <a href="/settings/general-settings" class="details">
-          <img src="/public/img/general-settings.svg" alt="" width="32px" height="32px">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Setting.Generalsettings}}</h3>
-            <p class="para">{{$Translate.Setting.Generalsettings}}</p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        {{if eq .ModuleName "Languages"}}
-        {{if .Routes}}
-        <a href="/settings/languages/" class="details">
-          <img src="/public/img/language.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Languages.Language}}</h3>
-            <p class="para">{{$Translate.Setting.Languagecontent}} </p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        {{if eq .ModuleName "Email"}}
-        {{if .Routes}}
-        <a href="/settings/emails/" class="details">
-          <img src="/public/img/email.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Memberss.Email}}</h3>
-            <p class="para">{{$Translate.Setting.Emailtemplatescontent}}</p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        
-        {{if eq .ModuleName "Data"}}
-        {{if .Routes}}
-        <a href="/settings/data" class="details">
-          <img src="/public/img/data.svg" alt="">
-          <div class="details-content">
-            <h3 class="heading-three">{{$Translate.Data}}</h3>
-            <p class="para">{{$Translate.Datas.Datadesc}}</p>
-          </div>
-        </a>
-        {{end}}
-        {{end}}
-        {{end}}
+        <li><a href="/settings/general-settings/"
+            class=" h-[64px] p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/generalSettings.svg" alt="general setting">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Generalsettings}}
+              </h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Generalsettings}}</p>
+            </div>
+          </a></li>
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
 
-      </div>
+          
 
+          {{range .Menu.TblModule}}
+          {{range .SubModule}}
+          {{if eq .ModuleName "Languages"}}
+          {{if .Routes}}
+        <li><a href="/settings/languages/"
+            class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myLangage.svg" alt="my language">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Languages.Language}}
+              </h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Languagecontent}}</p>
+            </div>
+          </a></li>
+
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          {{range .Menu.TblModule}}
+          {{if eq .ModuleName "Settings"}}
+          {{range .SubModule}}
+          {{if eq .ModuleName "Email"}}
+          {{if .Routes}}
+        <li><a href="/settings/emails/"
+            class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myEmail.svg" alt="my language">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Email}}
+              </h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Emailcontent}}</p>
+            </div>
+          </a></li>
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          {{end}}
+          
+
+      </ul>
     </div>
- 
-    {{end}}
-    {{end}}
 
-   
+
+
   </div>
-</div>
+
+</section>
 {{template "footer" .}}
 
 {{template "footerclose" .}}

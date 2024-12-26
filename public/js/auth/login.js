@@ -3,21 +3,43 @@ $("#Check2").click(function () {
 
     if ($(this).is(":checked")) {
         $(this).val("1")
-
+        
+        $('.user-select-none').removeClass("text-[#D2D2D2]").addClass("text-[#262626]")
     } else {
         $(this).val("0")
+        $('.user-select-none').removeClass("text-[#262626]").addClass("text-[#D2D2D2]")
 
     }
 })
 
+$(document).ready(function() {
+
+   
+
+  
+    $('#usrid').keypress(function(event) {
+        if (event.which === 32 && $(this).val().length === 0) {
+            event.preventDefault();
+        }
+    });
+
+    $('#passid').keypress(function(event) {
+        if (event.which === 32 && $(this).val().length === 0) {
+            event.preventDefault();
+        }
+    });
+});
+
 $(document).on('click', '#loginf', function () {
+
+   
     $('#pas-error').hide();
     $('#em-error').hide();
     $('#em-error1').hide();
     $("form[name='loginform']").validate({
         rules: {
             username: {
-                required: true,
+                required: true,      
             },
             pass: {
                 required: true,
@@ -77,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var Cookie = getCookie("log-toast");
     var content = getCookie("pass-toast");
     var username = getCookie("username");
+    var passchange =getCookie("pass-change")
 
     console.log("fsrzg", Cookie);
 
@@ -91,10 +114,26 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#pas-error').show();
         $('#passgrp').addClass('input-group-error');
     }
+    if (getCookie("pass-change") === 'Password+Updated+Successfully') {
+
+     
+        notify_content = `<ul class="toast-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " > Password Updated Successfully </p ></div ></div ></li></ul> `;
+        $(notify_content).insertBefore(".header-rht");
+
+        setTimeout(function () {
+            $('.toast-msg').fadeOut('slow', function () {
+                $(this).remove();
+
+            });
+        }, 5000);
+    }
+
+    
 
     delete_cookie("log-toast");
     delete_cookie("username");
     delete_cookie("pass-toast");
+    delete_cookie("pass-change");
 });
 $(document).on('click', '#eye', function () {
 
@@ -149,7 +188,9 @@ $(document).on('keyup', ".field", function () {
 // delete the cookies and session storage
 
 $("#logout").click(function(){
-    
+
+    console.log("checkss")
+
     sessionStorage.removeItem("rememberme");
     localStorage.removeItem("rememberme");
 })

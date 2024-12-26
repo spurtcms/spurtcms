@@ -1,207 +1,195 @@
+
+
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
 
-    <div class="page-wrapper">
-    <form action="/member/settings/update" method="post" id="membersettingform">
-    <input type="hidden" name="csrf" value="{{.csrf}}">
-    <input type="hidden" name="templatestatus" id="templatestatus" value="">
-
-        <div class="bread-crump">
-            <a href="/member/">{{.HeadTitle}}</a>
-            <img src="/public/img/right-light-arrow.svg" alt="">
-            <a href="/member/settings" class="current-page">{{.Tabmenu}}</a>
+<section class="header-rht max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Memberss.Members}}</h2>
         </div>
-        
-        {{template "cmstab" .}}
-     
 
-        <div class="all-tab-content" id="entriesContent">
-            <!--settings-->
-            <div class="setting-container">
+        <div class="flex space-x-[12px]">
+            <a href="#" data-bs-dismiss="modal"
+                class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-slate-250   rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
+            <div id="update"
+                class="cursor-pointer h-8 flex items-center justify-center px-3  text-sm font-normal text-white bg-[#10A37F]  hover:bg-[#148569] rounded-[4px] no-underline">
+                {{$Translate.Save}}
+            </div>
+        </div>
+    </header>
 
-                <div class="grd-1-2fr myprofile-brd">
-                    <div class="update-profile-cont">
-                        <h4 class="heading-three">{{$Translate.Memberss.Allowereg}}</h4>
-                        <p class="para color-light">{{$Translate.Memberss.Alloweregcont}}
-                        </p>
+    <section>
+
+        {{template "membertab" .}}
+
+        <form action="/member/settings/update" method="post" id="membersettingform">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <input type="hidden" name="templatestatus" id="templatestatus" value="">
+        <div class="2xl:py-8 py-[16px] 2xl:px-12 px-[16px]">
+            {{if .Membersettings}}
+            {{range .Membersettings}}
+            <div class="2xl:pb-6 pb-[16px] 2xl:mb-6 mb-[16px]  border-b border-[#EDEDED]">
+                <div class="grid md:grid-cols-2 grid-cols-1 gap-y-4 gap-x-0   sm:gap-x-20">
+                    <div class="flex flex-col space-y-[6px]">
+                        <h3 class="text-[#222222] font-normal text-sm mb-0">{{$Translate.Memberss.Allowereg}}</h3>
+                        <p class="text-[#717171] text-xs font-normal mb-0">{{$Translate.Memberss.Alloweregcont}}</p>
                     </div>
 
-                    <div class="d-flex gap-3 align-items-center justify-content-start">
-                        {{if .Membersettings}}
-                        {{range .Membersettings}}
+                    <label for="toggleTwo"
+                        class=" max-md:justify-start flex items-center  cursor-pointer select-none text-dark dark:text-white">
+
                         <input type="hidden" id="multiselectuser" name="multiselectuser" value="{{.NotificationUsers}}">
-                        <div class="flexx">
-                            <div class="toggle">
-                                <input type="hidden" name="membersettingid" class="membersettingid" value="{{.Id}}">
-                                <input type="hidden" name="allowregistration" class="allowregistration" value="{{.AllowRegistration}}">
-                                <input class="tgl tgl-light allowregis" id="cb{{.Id}}"  type="checkbox" {{if eq .AllowRegistration 1}} checked {{end}}>
-                                <label class="tgl-btn" for="cb{{.Id}}"></label>
+
+                        <div class="relative">
+                            <input type="hidden" name="membersettingid" class="membersettingid" value="{{.Id}}">
+                            <input type="hidden" name="allowregistration" class="allowregistration" value="{{.AllowRegistration}}">
+                            <input type="checkbox" id="toggleTwo" class="peer sr-only allowregis" {{if eq .AllowRegistration 1}}
+                                checked {{end}} />
+
+                            <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                            <div
+                                class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
                             </div>
                         </div>
-                       
-                    </div>
-                </div>
-
-            
-                <div class="grd-1-2fr myprofile-brd">
-                    <div class="update-profile-cont">
-                        <h4 class="heading-three">{{$Translate.Memberss.Optionmeberlogin}}</h4>
-                        <p class="para color-light">{{$Translate.Memberss.Optioncont}}
-                        </p>
-                    </div>
-                    <div class="d-grid gap-4">
-
-                        <div class="d-grid gap-4">
-                            <input type="hidden" name="memberlogin" class="memberlogin" value="{{.MemberLogin}}">
-                            <h4 class="heading-four">{{$Translate.Memberss.Optionmeberlogin}}</h4>
-                            <div class="radio radio-label">
-                                <input id="radio-1" name="radio" type="radio" {{if eq .MemberLogin "otp" }} checked {{end}}>
-                                <label for="radio-1" class="radio-label para cursor-pointer">OTP</label>
-                            </div>
-                            <div class="radio radio-label">
-                                <input id="radio-2" name="radio" type="radio"  {{if eq .MemberLogin "password" }} checked {{end}}>
-                                <label for="radio-2" class="radio-label para cursor-pointer">Password</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                {{end}}
-                {{end}}
-                <div class="grd-1-2fr myprofile-brd">
-                    <div class="update-profile-cont">
-                        <h4 class="heading-three">{{$Translate.Memberss.Receivenot}}</h4>
-                        <p class="para color-light">{{$Translate.Memberss.Reveivecont}}
-                        </p>
-                    </div>
-                    <div class="d-grid gap-4">
-
-
-                        <div class="input-group  user-drop-down " style="width: 50%;">
-
-                            <label for="" class="input-label">{{$Translate.Users}} </label>
-
-                            <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                {{$Translate.Memberss.Selectusers}}
-                            </a>
-                            <input type="hidden" id="rolen" value="" name="user_role">
-
-                            <div class="dropdown-menu dropdown-role memberdropdown" aria-labelledby="triggerId">
-
-                                <div class="ig-row ig-channel-input">
-                                    <button class="closemember" type="button" style="display: none;"><img src="/public/img/close-1234.svg"></button>
-                                    <input type="text" id="searchdropdownrole" class="search" name="keyword"
-                                        placeholder="{{$Translate.Memberss.Selectusers}}" value="">
-                                </div>
-
-                                <div class="dropdown-filter-roles">
-                                    {{range .Adminmembers}}
-                                    <div class="chk-group chk-group-label checkboxdiv {{if eq .Id 1}} roldisabled{{end}}">
-                                        <input type="checkbox" class="checkboxid" id="checkboxid{{.Id}}" data-id="{{.Id}}" {{if eq .Id 1}} checked{{end}}>
-                                        <label for="checkboxid{{.Id}}" class="checkboxcls" style="font-weight: 300;">{{.FirstName}} {{.LastName}}</label>
-                                      
-                                    </div>
-                                    {{end}}
-                                  
-                                    <div class="noData-foundWrapper" id="nodatafounddesign"
-                                    style="margin-top: -40px;display: none;">
-
-                                    <div class="empty-folder">
-                                        <img style="max-width: 20px;" src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
-                                    </div>
-                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                        {{$Translate.Oopsnodata}}</h1>
-
-                                </div>
-
-                                </div>
-
-                               
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-                </div>
-           
-                <!-- <div class="grd-1-2fr myprofile-brd">
-                    <div class="update-profile-cont">
-                        <h4 class="heading-three">E-mail Template</h4>
-                        <p class="para color-light">Create and Maintain Email Templates that are to be sent to users in different scenarios.
-                        </p>
-                    </div> -->
-<!-- 
-                    <div class="d-grid border-t">
-                        {{range .Templatelist}}
-                        <div class="d-flex gap-4 align-items-start justify-content-start border-space">
-
-                            <div class="flexx">
-                                <div class="toggle">
-                                    <input class="tgl tgl-light templatecb" id="cbox{{.Id}}" data-id="{{.Id}}" type="checkbox" {{if eq .IsActive 1}} checked {{end}}>
-                                    <label class="tgl-btn" for="cbox{{.Id}}"></label>
-                                </div>
-                            </div>
-
-                            <div>
-                                <p class="para color-light">{{.TemplateDescription}}
-                                </p>
-                            </div>
-                            <a class="open-modal open-emailtemp" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal">Edit</a>
-                        </div>
-                  {{end}}
-                    </div>
-
-                    
-                </div> -->
-                <div class="full-email-temp">
-                    <h1 class="heading-second"> {{$Translate.Setting.Emailtemplates}}</h1>
-                    {{range .Templatelist}}
-                    <div class="settings-grid center">
-                        <div class="left-cms">
-                            <h2 class="heading-second" style="font-size: 0.875rem;">{{.TemplateName}}</h1>
-                          
-                        </div>
-                        <div class="settings-select">
-                            <div class="toogle-content">
-                                <div class="toggle">
-                                    <input class="tgl tgl-light templatecb" id="cbox{{.Id}}" data-id="{{.Id}}" type="checkbox" {{if eq .IsActive 1}} checked {{end}}>
-                                    <label class="tgl-btn" for="cbox{{.Id}}"></label>
-                                </div>
-                                <p class="para color-light" style="width: 580px;">{{.TemplateDescription}}
-                                </p>
-                            </div>
-                            <a class="open-modal open-emailtemp" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal" style="padding-left: 20px;">{{$Translate.Edit}}</a>
-                        </div>
-                       
-                    </div>
-                    {{end}}
+                    </label>
                 </div>
             </div>
 
-            
-        </div>
-       
-    </form>
-    <div class="configurationContent-btm">
-        <button class="btn-reg btn-lg secondary" id="cancel" type="button"> {{$Translate.Cancel}} </button>
-        <button class="btn-reg btn-lg primary" type="button" id="update"> {{$Translate.Save}}</button>
+            <div class="2xl:pb-6 pb-[16px] 2xl:mb-6 mb-[16px]  border-b border-[#EDEDED]">
+                <div class="grid md:grid-cols-2 grid-cols-1 gap-y-4 gap-x-0   sm:gap-x-20">
+                    <div class="flex flex-col space-y-[4px]">
+                        <h3 class="text-[#222222] font-normal text-sm mb-0">{{$Translate.Memberss.Optionmeberlogin}}
+                        </h3>
+                        <p class="text-[#717171] text-xs font-normal mb-0">{{$Translate.Memberss.Optioncont}}</p>
+                    </div>
+                    <div class="flex flex-col space-y-[16px]">
+                        <h6 class="text-[#222222] font-normal text-sm mb-0">{{$Translate.Memberss.Optionmeberlogin}}
+                        </h6>
+                        <div class="flex flex-col space-y-[24px]">
+                                                        <input type="hidden" name="memberlogin" class="memberlogin" value="{{.MemberLogin}}">
 
-    </div>
-    </div>
+                            <div class="flex items-center space-x-[8px] cursor-pointer">
+                                <input type="radio"  id="check-1" name="radio" {{if eq .MemberLogin `otp` }} checked
+                                    {{end}}
+                                    class="web-kit w-4 h-4 border accent-[#262626] border-[#717171] cursor-pointer rounded-full" />
+                                <label for="check-1"
+                                    class="text-[#222222] text-sm font-normal  cursor-pointer">OTP</label>
+                            </div>
+                            <div class="flex items-center space-x-[8px] cursor-pointer">
+                                <input type="radio" id="check-2" name="radio" {{if eq .MemberLogin `password` }} checked
+                                    {{end}}
+                                    class="web-kit w-4 h-4 border accent-[#262626] border-[#717171] cursor-pointer rounded-full" />
+                                <label for="check-2"
+                                    class="text-[#222222] text-sm font-normal cursor-pointer">{{$Translate.Memberss.Password}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+            {{end}}
+            <div class="2xl:pb-6 pb-[16px] 2xl:mb-6 mb-[16px]  border-b border-[#EDEDED]">
+                <div class="grid md:grid-cols-2 grid-cols-1 gap-y-4 gap-x-0   sm:gap-x-20">
+                    <div class="flex flex-col space-y-[4px]">
+                        <h3 class="text-[#222222] font-normal text-sm mb-0">{{$Translate.Memberss.Receivenot}}</h3>
+                        <p class="text-[#717171] text-xs font-normal mb-0">{{$Translate.Memberss.Reveivecont}}</p>
+                    </div>
 
- 
+
+                    <div class="dropdown open max-w-[400px]">
+                        <a href="#"
+                            class="cursor-pointer bg-transparent rounded-[4px] p-[12px] h-9 border border-light-300  no-underline  w-full flex justify-between items-center"
+                             id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-bold-gray text-sm font-normal">{{$Translate.Memberss.Selectusers}}</span>
+                            <img src="/public/img/drop-down-img.svg" />
+                        </a>
+                        <div class="dropdown-menu min-w-full w-full border-0 focus:bg-transparent drop-shadow-4 max-h-52 overflow-auto"
+                            aria-labelledby="triggerId">
+                            <div class="px-[12px] pb-[8px] relative flex items-center">
+                                <button class="closemember absolute right-[16px]" type="button" style="display: none;"><img src="/public/img/removeCover.svg"></button>
+                                <input type="text" id="searchdropdownrole"  placeholder="{{$Translate.Memberss.Selectusers}}"
+                                    class="border border-[#ECECEC] pl-10 text-[#222222] text-xs font-light w-full h-8 rounded-[3px]" />
+                                <img src="/public/img/search-icon.svg" class="absolute top-2 left-6" />
+                            </div>
+
+                            {{range .Adminmembers}}
+                            <a class="chk-group chk-group-label dropdown-item h-8 lg items-center flex checkboxdiv {{if eq .Id 1}} pointer-events-none {{end}}">
+
+                                    <input type="checkbox" class=" hidden peer checkboxid" id="checkboxid{{.Id}}"
+                                    data-id="{{.Id}}" {{if eq .Id 1}} checked{{end}}>
+                                <label for="checkboxid{{.Id}}"
+                                    class=" h-[14px] relative cursor-pointer flex before:mr-[6px] w-fit  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">
+                                    <p class="text-bold-black text-xs font-normal mb-0">{{.FirstName}} {{.LastName}}</p>
+                                </label>
+
+                            </a>
+                            {{end}}
+
+
+                                <div class="noData-foundWrapper hidden flex flex-col justify-content-center items-center h-full" id="nodatafounddesign">
+
+                                <div class="empty-folder">
+                                    <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
+                                    <img src="/public/img/shadow.svg" alt="">
+                                </div>
+                                <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                    {{$Translate.Oopsnodata}}</h1>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div>
+                <h3 class="text-[#222222] font-normal text-base  pb-[16px] mb-6 border-b border-[#EDEDED]">
+                    {{$Translate.Memberss.Emailnotification}}</h3>
+                {{range .Templatelist}}
+                <div
+                    class="grid md:grid-cols-2 grid-cols-1 gap-y-4 gap-x-0   sm:gap-x-20 2xl:pb-6 pb-[16px] 2xl:mb-6 mb-[16px]  border-b border-[#EDEDED]">
+                    <h4 class="text-[#222222] text-sm font-normal mb-0">{{.TemplateName}}</h4>
+                    <div class="flex space-x-[24px] justify-between items-center">
+                        <label for="cbox{{.Id}}"
+                            class="flex items-center space-x-[12px]  cursor-pointer select-none text-dark dark:text-white">
+                            <div class="relative">
+                                <input type="checkbox" id="cbox{{.Id}}" data-id="{{.Id}}" class="peer sr-only templatecb" {{if eq .IsActive 1}} checked {{end}} />
+                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                <div
+                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                </div>
+                            </div>
+                            <p class="text-[#717171] font-normal text-xs mb-0">{{.TemplateDescription}}</p>
+                        </label>
+                        <a data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal" class="open-emailtemp cursor-pointer text-xs font-normal text-[#10A37F] no-underline">{{$Translate.Edit}}</a>
+                    </div>
+                </div>
+                {{end}}
+
+            </div>
+        </form>
+
+    </section>
+</section>
 
 {{template "emailmodal" .}}
-    {{template "footer" .}}
-    
-    <script src="/public/js/member/membersettings.js"></script>
- 
-       
-       
-        {{template "footerclose" .}}
+{{template "footer" .}}
+
+<script src="/public/js/member/membersettings.js"></script>
+
+{{template "footerclose" .}}
+
+
+
+

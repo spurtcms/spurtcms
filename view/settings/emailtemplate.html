@@ -1,311 +1,228 @@
 {{template "header" .}}
-{{template "settingsmenu" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<div class="page-wrapper settings-wrapper">
-    <div class="email-temp-tabs">
-        <input type="hidden" name="csrf" value="{{.csrf}}">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                    type="button" role="tab" aria-controls="home" aria-selected="true" onclick="setroute()">
-                    {{$Translate.Setting.Emailtemplates}}
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button"
-                    role="tab" aria-controls="home2" aria-selected="false" onclick="setroute1()">
-                    {{$Translate.Setting.Emailconfig}}
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="records-email">
-                    <p class="para">
-                        {{.Count}}
-                        <span>Records Available</span>
-                    </p>
-                    <form action="/settings/emails/" class="filterform" method="get" autocomplete="off">
-                    <div class="email-search">
-                        <!-- <img src="img/Magnifying-Glass.svg" alt="" /> -->
-                        <a type="button" class="searchbtn" id="filterformsubmit" style="padding-top: 9px; padding-left: 14px;"><img
-                            src="/public/img/Magnifying-Glass.svg"></a>
-                        <input type="text" id="searchemails" class="search" name="keyword" value="{{ .Filter.Keyword }}"
-                        placeholder="{{$Translate.Csearch}}">
-                    </div>
-                </form>
-                  
-                      
-        
-                </div>
-                <div class="table-responsive page-ponit">
-                    <table class="table">
-                        <thead>
-                            <tr>
-        
-                                <th>{{$Translate.Emailtemplate.Templatename}}</th>
-                                <th>{{$Translate.Lastupdatedon}}</th>
-                                <th class="text-center">{{$Translate.Channell.Status}}</th>
-                                <th>{{$Translate.Actions}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{if .Template}}
-                            {{ range .Template }}
-                            <tr>
-        
-                                <td>{{.TemplateName}}</td>
-                                <td class="role-desc">{{.DateString}}</td>
-        
-                                <td class="text-center">
-                                    <div class="toggle">
-                                        <input class="tgl tgl-light" id="cb1{{.Id}}" data-id="{{.Id}}"
-                                            onclick="TempStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
-                                            {{end}} />
-                                        <label class="tgl-btn" for="cb1{{.Id}}"></label>
-                                    </div>
-                                </td>
-        
-                                <td>
-                                    <div class="btn-group language-group">
-                                        <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-        
-                                            <li><a class="dropdown-item open-emailtemp" type="button" 
-                                                data-bs-toggle="modal" data-id="{{.Id}}" data-bs-target="#emailtemplateModal" data-id="{{ .Id }}" id="edit-btn">
-                                                    <span><img src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
-                                                </a></li>
-        
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            {{end}}
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Email}}
+            </h2>
+
+        </div>
+
+
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+        <!--accordion-->
+
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+        <!--table-->
+        <div class="block overflow-hidden @container pb-[120px] ">
+            <div class="block overflow-auto">
+                <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                    <li><a href="/settings/emails/"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">{{$Translate.Setting.Emailtemplates}}</a>
+                    </li>
+                    <li><a href="/settings/emails/emailconfig/"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">{{$Translate.Setting.Emailconfig}}</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="overflow-x-auto scrollbar-thin  ">
+                <table class=" caption-top w-full min-w-[768px]">
+                    <caption class="py-[8px] px-[16px] border-b border-[#EDEDED]">
+                        <p class="text-[12px] font-normal leading-[16px] text-[#A1A1A1] w-fit sticky left-[16px]">
+                            <span class="font-semibold text-[#262626]  "> {{.Count}}
+                            </span>
+                            {{if gt .Count 1}}
+                            {{$Translate.Emailtemplate.Emailcounts}}
                             {{else}}
-                            {{if .Filter.Keyword}}
-                            <tr class="no-dataHvr">
-                                <td style="text-align: center; border-bottom: none;" colspan="8">
-                                    <div class="noData-foundWrapper">
-        
-                                        <div class="empty-folder">
-                                            <img src="/public/img/nodatafilter.svg" alt="">
-                                        </div>
-                                        <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-        
-                                    </div>
-                                </td>
-                            </tr>
-                            {{else}}
-                            
-                            <tr class="no-dataHvr">
-                                <td style="text-align: center; border-bottom: none;" colspan="8">
-                                    <div class="noData-foundWrapper">
-        
-                                        <div class="empty-folder">
-                                            <img src="/public/img/folder-sh.svg" alt="">
-                                            <img src="/public/img/shadow.svg" alt="">
-                                        </div>
-                                        <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-        
-                                    </div>
-                                </td>
-                            </tr>
+                            {{$Translate.Emailtemplate.Emailcount}}
                             {{end}}
-                            {{end}}
-                        </tbody>
-                    </table>
-                </div>
-                {{if .Template}}
-                <div class="pogination flexx pagenation-padding sticky-pagination">
-                    <ul class="flexx">
-                        {{if gt .Count .Limit}}
-                    
-                        <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a></li>
-                        {{if gt .CurrentPage 3}}
-                        <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
+                        </p>
+                    </caption>
+                    <thead>
+                        <tr>
+
+                            <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                <p class="text-[#222222] text-sm font-normal mb-0">
+                                    {{$Translate.Emailtemplate.Templatename}}
+                                </p>
+                            </th>
+
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                {{$Translate.Lastupdatedon}}
+                            </th>
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                {{$Translate.Channell.Status}}
+                            </th>
+
+
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                {{$Translate.Action}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Template}}
+                        <tr>
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle text-[#262626] text-xs font-normal">
+                                {{.TemplateName}}
+                            </td>
+
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                {{.DateString}}
+                            </td>
+
+                            <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                <label for="toggle{{.Id}}"
+                                    class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white {{if eq .TemplateName `OTP Generation`}} pointer-events-none opacity-25 {{end}}">
+                                    <div class="relative">
+                                        <input type="checkbox" id="toggle{{.Id}}" class="peer sr-only emailStatusBtn"
+                                            {{if eq .IsActive 1}} checked {{end}} value="" data-id="{{.Id}}" />
+                                        <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                        </div>
+                                        <div
+                                            class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                        </div>
+                                    </div>
+                                </label>
+                            </td>
+
+
+
+
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                                <div class="btn-group position-static">
+                                    <a href="javascript:void(0);" 
+                                        class="border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] focus:bg-[#F5F5F5] show"
+                                        data-bs-toggle="dropdown" aria-expanded="true">
+                                        <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                            class="hidden group-hover:block">
+                                        <img src="/public/img/action-btn.svg" alt="dropdown"
+                                            class="block group-hover:hidden">
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-180 py-[12px]"
+                                        aria-labelledby="triggerId">
+
+                                        <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] emailEditBtn"
+                                            href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#emailtemplateModal" data-id="{{.Id}}"><img
+                                                src="/public/img/edit.svg" />
+                                            {{$Translate.Edit}}</a>
+
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
                         {{end}}
-                        {{if eq .CurrentPage 5}}
-                        <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
-                        {{end}}
-                        {{if gt .CurrentPage 5}}
-                        <li><a href="">...</a></li>
-                        {{end}}
-                        {{if gt .CurrentPage 2}}
-                        <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
-                        {{end}}
-                        {{if gt .CurrentPage 1}}
-                        <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
-                        {{end}}
-                        <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
-                        {{if lt .CurrentPage .Pagination.TotalPages}}
-                        <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
-                        {{end}}
-                        {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
-                        <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
-                        {{end}}
-                        {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
-                        <li><a href="">...</a></li>
-                        {{end}}
-                        {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
-                        <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
-                        {{end}}
-                        <li>
-                            <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
-                                <img src="/public/img/carat-right.svg" alt="" />
-                            </a>
-                        </li>
-                       
-                       {{end}}
-                    </ul>
-                    <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
-                </div>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!--pagination-->
+
+        <div
+            class=" max-sm:flex-col max-sm:gap-[1rem] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+            <ul class="!ml-auto    max-sm:mx-auto  justify-center items-center gap-[8px] flex flex-wrap">
+                {{if gt .Count .Limit}}
+
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                        class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                        <img src="/public/img/pg-prev.svg" alt="previous">
+                        <span class=" max-sm:hidden"> {{$Translate.Back}}</span>
+                    </a>
+                </li>
+                {{if gt .CurrentPage 3}}
+                {{$keyword := .filter.Keyword}}
+                <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        1 </a> </li>
                 {{end}}
-            </div>
-            <div class="tab-pane" id="home2" role="tabpanel" aria-labelledby="home-tab2">
-                <div class="email-config">
-                    <div class="grd-2-fr">
-                        <div class="left-cms">
-                            <h1 class="heading" style="font-size: 16px;">E-Mail Configuration</h1>
-                            <p class="para color-light">  You can set up the Sender's email address from which emails are sent to application users in various scenarios.
-                            </p>
-                        </div>
-                        <div class="channel-edit new-temp">
-                            <div class="radio radio-label" id="smtpmail">
-                                <input id="radiosmtp" name="smtpradio" {{if eq .Smtpdiv false}}  {{else if eq .Maildetails.SelectedType `smtp`}} checked  {{end}} value="" type="radio">
-                                <label for="radiosmtp" class="radio-label">
-                                    <div class="to-select-cms">
-                                        <img src="/public/img/email-temp-new1.svg" />
-                                        <p>SMTP</p>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="radio radio-label" id="environmentmail">
-                                <input id="radioenv" name="envradio" {{if eq .Maildetails.SelectedType `environment`}}checked {{else if eq .Smtpdiv false}} checked {{end}} value="" type="radio">
-                                <label for="radioenv" class="radio-label">
-                                    <div class="to-select-cms">
-                                        <img src="/public/img/email-temp-new2.svg" />
-                                        <p>Environment</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cms-sep"></div>
-                 
-                    <div class="grd-2-fr" id="emailconfigdiv" {{if eq .Smtpdiv false}} style="display: none;" {{else if eq .Maildetails.SelectedType `environment`}} style="display: none;" {{end}}>
-                
-                        <div class="left-cms">
-                            <div class="selected-cms">
-                                <img src="/public/img/email-temp-new1.svg" />  
-                                    <div>
-                                    <h1 class="heading-three">SMTP</h1>
-                                    <p class="para color-light"> Allows manual configuration of the Sender's Email Id.
-                                    </p>
-                                </div>
-                            </div>
-                         </div>
-                         <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
-                            <input type="hidden" name="csrf" value="{{.csrf}}">
-                            <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
-                           <input type="hidden" name="seltype" id="emailseltype" value="Environment">
-        
-                         <div class="channel-input">
-                            <div class="input-group" id="config_email">
-                                <label for="" class="input-label">Sender Email *</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field"   value="{{.Email.Mail}}"   name="email" id="emailaddress" placeholder="enter the stmp email ...">
-                                    
-                                </div>
-                            </div>
-                            <div class="input-group" id="config_password">
-                                <label for="" class="input-label">Email Password*</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" value="{{.Email.Password}}" name="password" id="mailpassword" placeholder="enter the stmp email password...">
-                                </div>
-                            </div>
-                            <div class="input-group" id="config_host">
-                                <label for="" class="input-label">SMTP Host*</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" value="{{.Email.Host}}" name="host" id="mailhost" placeholder="enter the stmp email host...">
-                                </div>
-                            </div>
-                            <div class="input-group" id="config_port">
-                                <label for="" class="input-label">SMTP Port*</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" value="{{.Email.Port}}" name="port" id="mailport" placeholder="enter the stmp email port...">
-                                </div>
-                            </div>
-                        </div>
-                             
-                    </div>
-                         
-                </div>
-                <div class="configure-btn-grp" id="emailfooter">
-                    <button class="btn-reg btn-lg secondary" type="button" id="emailback">Cancel </button>
-                        <button class="btn-reg btn-lg primary theme-color " type="button" id="addemailconfig">{{$Translate.Update}}</button>
-                </div>
-                </div>
-            </div>
+                {{if eq .CurrentPage 5}}
+                <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px] ">
+                        2 </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        {{.Pagination.TwoBelow}} </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        {{.Pagination.PreviousPage}} </a> </li>
+                {{end}}
+
+                <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+                                    text-[14px] w-[33px] h-[36px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+                                    bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                        {{.CurrentPage}} </a> </li>
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        {{.Pagination.NextPage}} </a> </li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        {{.Pagination.TwoAfter}} </a> </li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                        {{.Pagination.TotalPages}}</a> </li> {{end}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                        <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                            alt="next">
+                    </a>
+                </li>
+                {{end}}
+            </ul>
+            <p class="!ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+                <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
+                {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+            </p>
         </div>
     </div>
-  
-    </form>
-</div>
 
-<!-- Center Modal -->
-<div class="modal fade" id="email-templateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="emailtemp">{{$Translate.Emailtemplate.Updatetemplate}}</h3>
-                <button class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/settings/emails/update-temp" method="post" id="updtemp">
-                    <input type="hidden" name="csrf" value="{{.csrf}}">
-                    <input type="hidden" name="userid" value="" id="userid">
-                    <input type="hidden" name="pageno" value="" id="pageno">
 
-                    <div class="input-group" id="namegrb">
-                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatename}} *</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" name="tempname" style="color: #d2d2d2;" placeholder="{{$Translate.Emailtemplate.Entertemplatename}}"
-                                id="tempname" readonly>
-                        </div>
-                    </div>
-                    <div class="input-group" id="">
-                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatesubject}} *</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" name="tempsub" placeholder="{{$Translate.Emailtemplate.Entertemplatesubject}}"
-                                id="tempsub">
-                        </div>
-                    </div>
-                    <div class="input-group email-textarea" id="textgrb">
-                        <label for="" class="input-label">{{$Translate.Emailtemplate.Templatecontent}} *</label>
-                        <div class="ig-row">
-                            <textarea placeholder="{{$Translate.Emailtemplate.Entertemplatecontent}}" class="field" name="temcont"
-                                id="temcont"></textarea>
-                        </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <div class="modal-save">
-                    <button class="btn-reg btn-md primary " id="uptemplate"> {{$Translate.Update}} </button>
-                </div>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
+</section>
+
 {{template "emailmodal" .}}
 {{template "footer" .}}
 <script>
@@ -316,5 +233,4 @@
     })
 </script>
 <script src="/public/js/settings/emailtemplate/emailtemplate.js"></script>
-<!-- <script src="/public/js/settings/emailconfig/emailconfig.js"></script> -->
 {{template "footerclose" .}}

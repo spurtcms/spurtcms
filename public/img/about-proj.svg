@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_4817" data-name="Rectangle 4817" width="18" height="18" transform="translate(3593 -10148)" fill="#202224"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_337" data-name="Mask Group 337" transform="translate(-3593 10148)" clip-path="url(#clip-path)">
+    <path id="book-svgrepo-com" d="M3.6,17.1V5.58a4.472,4.472,0,0,1,.2-1.9A1.8,1.8,0,0,1,4.583,2.9a4.472,4.472,0,0,1,1.9-.2h8.64a4.472,4.472,0,0,1,1.9.2,1.8,1.8,0,0,1,.787.787,4.472,4.472,0,0,1,.2,1.9V15.3H5.4A1.8,1.8,0,0,0,3.6,17.1Zm0,0a1.8,1.8,0,0,0,1.8,1.8H18M8.1,6.3h5.4M8.1,9.9h5.4m3.6,5.4v3.6" transform="translate(3591.2 -10149.8)" fill="none" stroke="#202224" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  </g>
+</svg>

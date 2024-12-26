@@ -18,11 +18,11 @@ $(document).on('click', '#radio-1', function () {
 
     if ($(this).is(':checked')) {
 
-        $('.localstoragesetting').show();
+        $('.localstoragesetting').removeClass("hidden");
 
-        $('.amazonsetting').hide();
+        $('.amazonsetting').addClass("hidden");
 
-        $('.azuresetting').hide();
+        $('.azuresetting').addClass("hidden");
     }
 })
 
@@ -30,11 +30,11 @@ $(document).on('click', '#radio-2', function () {
 
     if ($(this).is(':checked')) {
 
-        $('.amazonsetting').show();
+        $('.amazonsetting').removeClass("hidden");
 
-        $('.localstoragesetting').hide();
+        $('.localstoragesetting').addClass("hidden");
 
-        $('.azuresetting').hide();
+        $('.azuresetting').addClass("hidden");
     }
 })
 

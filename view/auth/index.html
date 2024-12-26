@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script
+        src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+</head>
+
+<body>
+
+    <main
+        class="min-h-[100vh] w-full bg-[url('/public/img/login-bg.svg')] bg-no-repeat bg-cover font-[Lexend,sans] grid grid-rows-[auto_1fr_auto] p-[30px_30px_20px_30px] gap-[2rem] max-[768px]:p-[16px] ">
+
+        <header class="header-rht">
+
+            <div>
+               <a href=""> <img src="/public/img/logo.svg" alt="logo" class="max-w-[40%]"></a>
+            </div>
+        </header>
+
+        <section
+            class="p-[40px_24px] rounded-[8px] bg-[#FFFFFF] shadow-[0px_3px_32px_5px#00000005] max-w-[430px] m-auto w-full h-fit  max-[576px]:p-[20px_16px]">
+            <h1 class=" text-[20px] font-[500] leading-[25px] text-[#152027] mb-[8px]  ">Welcome
+                to SpurtCMS</h1>
+            <p class=" text-[12px] font-[300] leading-[15px] text-[#525252]">Please enter your login details below</p>
+            <form action="/adminlogin" method="post" name="loginform" id="loginform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+
+                <div class="mt-[24px]">
+                    <label for="" class="text-[14px] font-normal leading-[17.5px] text-[#262626] block mb-[2px]" 
+                    >User
+                        Name</label>
+                    <input type="text" placeholder="Enter User Name" id="usrid" name="username"
+                        class=" field [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs border-[#EDEDED] p-[8px] rounded-[3px] text-[14px] font-normal leading-[17.5px] text-[#262626] placeholder:text-[#D2D2D2] block w-full focus:border-[#EDEDED] focus:ring-0 ">
+                        <label id="em-error" class="error logScr" style="display: none;">
+                            *
+                            You are not registered with us!</label>
+                        <label id="em-error1" class="error logScr text-[#f26674] font-normal text-xs" style="display: none;">
+                            * This account is inactive please contact the admin!</label>
+                    </div>
+
+                <div class="mt-[24px]">
+                    <label for=""
+                        class="text-[14px] font-normal leading-[17.5px] text-[#262626] block mb-[2px]">Password</label>
+                   <div class="relative">
+                        <input type="password" placeholder="Enter Password"  name="pass" id="passid"
+                        class="field [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs border-[#EDEDED] p-[8px] rounded-[3px] text-[14px] font-normal leading-[17.5px] text-[#262626] placeholder:text-[#D2D2D2] block w-full focus:ring-0 focus:border-[#EDEDED] ">
+              
+                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye">
+                            <img id="img" src="/public/img/eye-closed.svg" alt="">
+
+                        </button>
+                    </div>
+                        <label id="pas-error" class="error logScr text-[#f26674] font-normal text-xs" style="display: none;">
+                            *
+                            Invalid Password</label>
+                    </div>
+
+                <div class="flex justify-between items-center leading-none my-[16px]">
+                    <div>
+                        <input  type="checkbox" name="rememberme" id="Check2" value="0"
+                            class="rounded-[3px] w-[10px] cursor-pointer h-[10px] text-[#262626]  !ring-offset-0  !ring-0" />
+                        <label for="Check2"
+                            class=" user-select-none text-[12px] font-normal leading-[15px] cursor-pointer text-[#D2D2D2]">Remember
+                            me</label>
+                    </div>
+                    <a href="/forgot"
+                        class="text-[12px] font-normal leading-[15px] text-[#2FACD6] hover:underline">Forgot
+                        Password ?</a>
+                </div>
+
+                <button type="submit" id="loginf"
+                    class="bg-[#2FACD6] p-[10px] rounded-[3px] text-[14px] font-medium leading-[17.5px] text-[#FFFFFF] text-center h-[38px] block w-full hover:bg-[#069ec5]">Login</button>
+
+            </form>
+
+        </section>
+
+        <footer class="text-[12px] font-normal leading-[15px] text-[#525252] text-center">
+            Copyrights © 2024, Piccosoft Software labs India Private Limited.All Rights Reserved.
+        </footer>
+    </main>
+
+    {{template "authfooter" .}}

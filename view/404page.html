@@ -2,19 +2,28 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<div class="page-wrapper">
-    <section class="cms404-wrapper">
-        <div class="cms404-img">
-            <img src="/public/img/cms404-img.svg" alt="">
+<section class="w-full overflow-hidden pt-[48px] min-h-screen">
+
+
+    <!--404-->
+    <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
+        <div class="text-center w-fit mx-auto mb-[32px]">
+            <img src="/public/img/cms404-img.svg" alt="noFilter">
         </div>
-        <h1 class="cms404-heading">Page not found</h1>
-        <p class="heading-second">The page you are looking for might have been removed had its name changed or is
-            temporarily unavailable.</p>
-        <a href="/dashboard" class="btn-reg btn-lg primary">Back to Home</a>
-    </section>
+        <h2 class="text-[24px] font-semibold text-[#262626] mb-[8px] leading-[30px]">
+            PAGE NOT FOUND</h2>
+        <p class="text-[#262626] mb-[24px] text-center text-[16px] font-normal leading-[15px]  ">
+            The page you are looking for might have been removed had its name changed or
+            is temporarily unavailable.</p>
 
-</div>
+        <a href=""
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-[17.5px] text-center py-[7px] px-[16px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] h-[42px] mx-auto ">Back
+            to Home</a>
 
-{{template "footer" .}}
+    </div>
 
-{{template "footerclose" .}}
+
+
+    {{template "footer" .}}
+
+    {{template "footerclose" .}}

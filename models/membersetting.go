@@ -13,9 +13,9 @@ type TblMemberSetting struct {
 	NotificationUsers string
 }
 
-func GetMemberSettings() (membersetting *[]TblMemberSetting, error bool) {
+func GetMemberSettings(tenantid int) (membersetting *[]TblMemberSetting, error bool) {
 
-	if err := db.Table("tbl_member_settings").Find(&membersetting).Error; err != nil {
+	if err := DB.Where("tenant_id = ?", tenantid).Table("tbl_member_settings").Find(&membersetting).Error; err != nil {
 
 		return &[]TblMemberSetting{}, false
 	}
@@ -23,9 +23,9 @@ func GetMemberSettings() (membersetting *[]TblMemberSetting, error bool) {
 	return membersetting, true
 }
 
-func UpdateMemberSetting(membersetting *TblMemberSetting) error {
+func UpdateMemberSetting(membersetting *TblMemberSetting, tenantid int) error {
 
-	if err := db.Model(TblMemberSetting{}).Where("id=?", membersetting.Id).UpdateColumns(map[string]interface{}{"allow_registration": membersetting.AllowRegistration, "member_login": membersetting.MemberLogin, "notification_users": membersetting.NotificationUsers, "modified_on": membersetting.ModifiedOn, "modified_by": membersetting.ModifiedBy}).Error; err != nil {
+	if err := DB.Model(TblMemberSetting{}).Where("id=? and tenant_id = ?", membersetting.Id, tenantid).UpdateColumns(map[string]interface{}{"allow_registration": membersetting.AllowRegistration, "member_login": membersetting.MemberLogin, "notification_users": membersetting.NotificationUsers, "modified_on": membersetting.ModifiedOn, "modified_by": membersetting.ModifiedBy}).Error; err != nil {
 
 		return err
 	}

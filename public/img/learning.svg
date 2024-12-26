@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5128" data-name="Rectangle 5128" width="40" height="40" transform="translate(312 1746)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_385" data-name="Mask Group 385" transform="translate(-312 -1746)" clip-path="url(#clip-path)">
+    <path id="book_1_" data-name="book (1)" d="M38.125,32.778H23.053L34.62,28.8a.937.937,0,0,0,.632-.886V12.625h2.873V32.778ZM1.875,12.625H4.747V27.916a.937.937,0,0,0,.633.886l11.567,3.977H1.875ZM6.623,7.6V27.246l12.44,4.277V11.874Zm14.315,4.276V31.523l12.44-4.277V7.6ZM39.063,10.75h-3.81V6.284A.938.938,0,0,0,34.01,5.4L20,10.214,5.99,5.4a.938.938,0,0,0-1.242.887V10.75H.937A.938.938,0,0,0,0,11.688V33.716a.937.937,0,0,0,.937.938H39.063A.938.938,0,0,0,40,33.716V11.688A.938.938,0,0,0,39.063,10.75Z" transform="translate(312 1746)" fill="#f44336" fill-rule="evenodd"/>
+  </g>
+</svg>

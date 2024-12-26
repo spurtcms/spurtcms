@@ -2,56 +2,32 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-    <div class="page-wrapper">
-        <div class="bread-crump">
-            <a href="/channel/entrylist/">{{.HeadTitle}}</a>
-            <img src="/public/img/right-light-arrow.svg" alt="">
-            <a href="/channel/settings" class="current-page">{{.Tabmenu}}</a>
-        </div>
-        
-        {{template "cmstab" .}}
-     
-          
-    
-            <div class="all-tab-content" id="entriesContent">
-                <!--settings-->
-                <div class="setting-container">
-    
-               
-                    <div class="grd-1-2fr myprofile-brd">
-                        <div class="update-profile-cont">
-                            <h4 class="heading-three">E-mail Template</h4>
-                            <p class="para color-light">Create and Maintain Email Templates that are to be sent to users in different scenarios.
-                            </p>
-                        </div>
-    
-                        <div class="d-grid border-t">
-                            {{if .Template}}
-                            {{ range .Template }}
-                            <div class="d-flex gap-4 align-items-start justify-content-start border-space">
 
-                                <div class="flexx">
-                                    <div class="toggle">
-                                        <input class="tgl tgl-light" id="cb{{.Id}}" type="checkbox" {{if eq .IsActive 1}} checked {{end}}>
-                                        <label class="tgl-btn" for="cb{{.Id}}"></label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="para color-light">{{.TemplateDescription}}</p>
-                                </div>
-                                <a class="open-modal open-emailtemp" href="javascript:void(0)" class="primary-link" data-bs-toggle="modal" data-bs-target="#emailtemplateModal" data-id="{{.Id}}">Edit</a>
-                              
-                            </div>
-                            {{end}}
-                            {{end}}
-                         
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    {{template "emailmodal" .}}
-    {{template "footer" .}}
-    <script src="/public/js/channels/channelsettings.js"></script>
-    {{template "footerclose" .}}
+<!-- <section class="pg-wrapper">
+    <header class="editor-header">
+        <div class="editor-header-lft">
+            <a href="javascript:void(0);" class="toggle-button">
+                <img src="/public/img/menu-button.svg" alt="toggle button">
+            </a>
+            <h1>Channels</h1>
+        </div>
+        <div class=" search-btn">
+            <a href="javascript:void(0);" class="srchBtn-togg toggle-img">
+                <img src="/public/img/search-icon.svg" alt="search">
+                <img src="/public/img/search-icon-active.svg" alt="search">
+            </a>
+            <input type="text" placeholder="Search (Ctrl + “k” to focus)" name="" id="">
+        </div>
+        <a href="javascript:void(0);" class="bt-md bt-grn">Create Channel</a>
+    
+    </header>
+<div class="entries-bdg">
+
+    {{template "cmstab" .}}
+   
+</div>
+{{template "emailmodal" .}} -->
+{{template "footer" .}}
+<script src="/public/js/channels/channelsettings.js"></script>
+{{template "footerclose" .}}

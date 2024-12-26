@@ -69,6 +69,7 @@ function NewValidationCheck() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
     var Cookie = getCookie("log-toast");
 
     if (Cookie != "") {

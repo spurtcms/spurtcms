@@ -3,9 +3,9 @@ var languagedata
 $(document).ready(async function () {
 
     var languagepath = $('.language-group>button').attr('data-path')
-  
+
     await $.getJSON(languagepath, function (data) {
-        
+
         languagedata = data
     })
 
@@ -57,8 +57,10 @@ $(document).on('click', '.passsave', function (event) {
             success: function (data) {
                 console.log("result", data.pass, data.pass == true);
                 if (data.pass == true) {
+
+                    console.log("checkformsub")
                     $('#passform')[0].reset();
-                    notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span> New password must be different from the old password </span></div>';
+                    notify_content = '<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="toast-msg flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/danger-group-12.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">New password must be different from the old password</p></div></div> </li></ul>';
 
                     $(notify_content).insertBefore(".header-rht");
 
@@ -106,22 +108,18 @@ $(document).on('click', '#eye1', function () {
     var This = $("#pass")
 
     if ($(This).attr('type') === 'password') {
-
-        $('#eye-close1').hide()
-
-        $('#eye-open1').show()
+      
+        $(this).find('img').attr('src', '/public/img/eye-opened.svg');
 
         $(This).attr('type', 'text');
 
     } else {
 
-        $('#eye-open1').hide()
-
-        $('#eye-close1').show()
+        $(this).find('img').attr('src',"/public/img/eye-closed.svg")
 
         $(This).attr('type', 'password');
 
-    
+
     }
 })
 
@@ -132,21 +130,18 @@ $(document).on('click', '#eye2', function () {
 
     if ($(This).attr('type') === 'password') {
 
-        $('#eye-close2').hide()
-
-        $('#eye-open2').show()
+        $(this).find('img').attr('src', '/public/img/eye-opened.svg');
 
         $(This).attr('type', 'text');
 
 
     } else {
-
-        $('#eye-open2').hide()
-
-        $('#eye-close2').show()
+        $(this).find('img').attr('src',"/public/img/eye-closed.svg")
 
         $(This).attr('type', 'password');
 
     }
 })
+
+
 

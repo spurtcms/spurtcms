@@ -2,203 +2,289 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-{{$IMAGEPATH := ""}}
-{{$IMAGEPATH2 := ""}}
-
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
-{{$IMAGEPATH = "/public/img/add-icon-red.svg"}}{{$IMAGEPATH2 = "/public/img/reload-red.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
-{{$IMAGEPATH = "/public/img/add-icon-purple.svg"}}{{$IMAGEPATH2 = "/public/img/reload-purple.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
-{{$IMAGEPATH = "/public/img/add-icon-blue.svg"}}{{$IMAGEPATH2 = "/public/img/reload-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
-{{$IMAGEPATH = "/public/img/add-icon.svg"}}{{$IMAGEPATH2 = "/public/img/reload.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
-{{$IMAGEPATH = "/public/img/add-icon-brown.svg"}}{{$IMAGEPATH2 = "/public/img/reload-brown.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
-{{$IMAGEPATH = "/public/img/add-icon-orange.svg"}}{{$IMAGEPATH2 = "/public/img/reload-orange.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
-{{$IMAGEPATH = "/public/img/add-icon-green.svg"}}{{$IMAGEPATH2 = "/public/img/reload-green.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
-{{$IMAGEPATH = "/public/img/add-icon-teal-blue.svg"}}{{$IMAGEPATH2 = "/public/img/reload-teal-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$IMAGEPATH = "/public/img/add-icon-black.svg"}}{{$IMAGEPATH2 = "/public/img/reload-black.svg"}}
-{{else}}
-{{$IMAGEPATH ="/public/img/add-icon.svg"}}{{$IMAGEPATH2 = "/public/img/reload.svg"}}
-{{end}}
-
 {{$StorageType:=.StorageType}}
 
 <input type="hidden" id="storagetype" value="{{.StorageType}}">
-
-<div class="page-wrapper">
-
-    <div class="bread-crump">
-        <a href="/media/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="/media/" class="current-page">{{.Tabmenu}}</a>
+<input type="hidden" id="nextcont" value="{{.Nextcont}}">
+<input type="hidden" id="offset" value="{{.CurrentPage}}">
+<input type="hidden" id="path" value="">
+<input type="hidden" id="mediacount" value="{{.ListCount}}">
+<input type="hidden" name="csrf" value="{{.csrf}}">
+<input type="hidden" id="renamepath" value="">
+<section
+class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<header
+    class="max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht">
+    <div class="mr-auto flex items-center gap-[6px] ">
+        <a href="javascript:void(0);"
+            class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+            <img src="/public/img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
+        <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Media</h2>
     </div>
+    <form>
+    <div
+        class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] ">
+        <a href="javascript:void(0);"
+            class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+            <img src="/public/img\search-icon.svg" alt="search" class="block group-hover:hidden ">
+            <img src="/public/img\search-icon-active.svg" alt="search" class="hidden group-hover:block ">
+        </a>
+        <input type="text" placeholder="Search (Ctrl + “k” to focus)" name="keyword" id="searchkey" value="{{.Filter}}"
+            class="text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 hidden absolute right-0">
+    </div>
+  </form>
+    <a  id="Refreshdiv"
+        class=" group group w-[32px] h-[32px] rounded-[4px] grid place-items-center hover:bg-[#F0F0F0] cursor-pointer">
+        <img src="/public/img\mediaRefresh.svg" alt="refresh" class="inline-block group-hover:hidden">
+        <img src="/public/img\mediaRefresh-active.svg" alt="refresh" class=" group-hover:inline-block hidden">
+</a>
+
+    <a href="#addFolder" data-bs-toggle="modal" 
+        class="addfolderbtn  group w-[32px] h-[32px] rounded-[4px] grid place-items-center hover:bg-[#F0FFFB]">
+        <img src="/public/img\add-mediaFolder.svg" alt="add folder" class="inline-block group-hover:hidden">
+        <img src="/public/img\add-mediaFolder-active.svg" alt="add folder" class="hidden group-hover:inline-block">
+    </a>
+    <form id="imageForm">
+    <button type="button" id="upload" 
+        class="bg-[#10A37F] flex gap-[6px] text-[white] items-center justify-center hover:bg-[#148569] text-[14px] font-[400] leading-[1] text-center p-[7px_16px] h-[32px] rounded-[4px] place-items-center tracking-[0.7px] w-fit whitespace-nowrap">
+        <img src="/public/img\media-upload.svg" alt="upload">
+        <span>
+            {{$Translate.Mediaa.Upload}}
+        </span>
+       
+    </button>
+
+    <input type="file" id="imgupload" class="hidden" />
+</form>
+</header>
+
+<div class="block">
+
     {{template "mediatab" .}}
-    <div class="all-tab-content" id="entriesContent">
-        <!--1-->
+  
+    <div class="p-[8px_16px] border-b border-[#EDEDED]">
+        <p class="text-[12px] font-[400] leading-[16px] text-[#A1A1A1]"><span
+                class="font-[600] text-[#262626]">  {{.Count}} </span>Records Available</p>
+    </div>
 
-        <div class="topOptions">
-            <div class="leftHeader">
-                <div class="caption-flexx">
-                    <!-- <p class="para">
-                        <span class="para"> {{.Count}}  </span>
-                        {{if gt .Count 9}}{{$Translate.Mediaa.Images}}{{else}}{{$Translate.Mediaa.Image}}{{end}} {{$Translate.Available}} 
-                    </p> -->
-                    <p class="para">
+   
+    <div id="errorhtml">
 
-                        {{ if gt .Count 1}} {{$Translate.Total}} {{$Translate.Mediaa.Mediafiles}} : <span class="para">
-                            {{.Count}} </span>{{else}} {{$Translate.Total}} {{$Translate.Mediaa.Mediafile}}: <span
-                            class="para"> {{.Count}} </span> {{end}}
-                    </p>
-                </div>
+        {{ if .Media }}
+        {{else}}
+
+    <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+        <div class="text-center w-fit mx-auto">
+            <img src="/public/img/noData.svg" alt="nodate">
+        </div>
+        <h2
+            class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+            {{$Translate.Oopsnodata}}</h2>
+    
+    </div>
+
+    {{end}}
+</div>
+
+    <div class=" p-[16px_16px_26px_16px]" >
+
+        {{ if .Media }}
+     
+        
+        {{ if .Folder }}
+        <h3 class="text-[16px] font-[400] leading-[20px] mb-[16px] text-[#262626]">Folder</h3>{{end}}
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(277px,1fr))] gap-[24px] mb-[32px] " id="drivelist1">
+            {{ if .Folder }}
+        {{range .Folder}}
+            <div class="block  folderdiv" >
+
+                <a href="javascript:void(0)" class="block cursor-default" >
+                    <div class="chk-group chk-group-label">
+
+                        <div
+                            class=" group p-[16px_16px_16px_8px] border border-[#ECECEC] gap-[16px] rounded-[4px] h-[72px] relative  flex items-center mb-0 text-[14px] font-[400] leading-[1] text-[#262626] tracking-[0.005em]  ">
+                            <input type="checkbox" id="{{.AliaseName}}" data-fname="folderdiv" data-id="{{.AliaseName}}" data-name="{{.Name}}" class="hidden peer ckbox">
+                            <label for="{{.AliaseName}}"
+                                class=" before:appearance-none before:inline-block  before:min-w-[14px] group-hover:before:w-[14px] before:h-[14px] before:relative before:align-middle before:cursor-pointer group-hover:before:bg-[url('../public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:bg-none  peer-checked:before:bg-[url('../public/img/checked-box.svg')]"></label>
+                            <div class="min-w-10 folder cursor-pointer">
+                                <img src="/public/img/sample-folder.svg" alt="sample-folder">
+                            </div>
+                            <p
+                                class="text-[14px] font-[400] leading-[17.5px] text-[#252525] flex-grow overflow-hidden flex-[1_1_auto] line-clamp-1">
+                                {{.Name}}</p>
+                            <span class="ml-auto text-[12px] font-[400] leading-[15px] text-[#717171]">
+                                {{if gt .TotalSubMedia 1}}{{.TotalSubMedia}} Files{{else}}{{.TotalSubMedia}} File{{end}}
+                            </span>
+                        </div>
+                    </div>
+
+
+
+                </a>
+
             </div>
 
-            <div class="transitionSearch active">
-                <img src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" class="search" name="keyword" id="mediasearch"
-                    placeholder="{{$Translate.Csearch}}" />
-            </div>
+            {{end}}
+            {{end}}
 
-            <button class="btn-reg btn-sm btn-outline   " id="Refreshdiv"> <img src="{{$IMAGEPATH2}}" alt=""
-                    style="width: 13px;">
-                {{$Translate.Mediaa.Refresh}}
-            </button>
-
-            <button class="btn-reg btn-sm btn-outline  " id="addfolder"> <img src="{{$IMAGEPATH}}" alt="">
-                {{$Translate.Mediaa.Folder}}
-            </button>
-            <div class="input-fixed  input-group">
-                <div class="input-field">
-                    <input type="text" name="foldername" id="foldername" class="field"
-                        placeholder="{{$Translate.Mediaa.Plenterfolder}}">
-                    <button class="button-reg primary" id="newfileadd">{{$Translate.Add}}</button>
-                </div>
-                <label id="foldername-error" class="error" for="foldername" style="display: none;margin-bottom: 75%;">*
-                    {{$Translate.Mediaa.Vailderr}} </label>
-                <label for="" class="error" id="folderspec-error" style="display: none;margin-bottom: 75%;">*Folder name
-                    cannot contain special characters</label>
-            </div>
-
-            <form id="imageForm">
-                <button class="btn-reg btn-sm primary " type="button" id="upload">
-                    <img src="/public/img/upload-ico.svg" alt="" /> {{$Translate.Mediaa.Upload}}
-                </button>
-                <input type="file" id="imgupload" style="display: none;" />
-            </form>
         </div>
 
-        <div class="media-select-del flexx">
-            <a href="javascript:void(0)" class="primary-link " id="selectall" {{if
-                .Media}}{{else}}style="display: none;" {{end}}>{{$Translate.Selectall}}</a>
-            <a href="javascript:void(0)" class="primary-link " id="unselectall"
-                style="display: none;">{{$Translate.Mediaa.Unselectall}}</a>
-            <a href="javascript:void(0)" class="primary-link disabled " {{if .Media}}{{else}}style="display: none;"
-                {{end}} id="media-del-btn">{{$Translate.Delete}} </a>
+      
+        {{ if .File }}   <h3 class="text-[16px] font-[400] leading-[20px] mb-[16px] text-[#262626] ">Image</h3>{{end}}
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-x-[12px] gap-y-[16px] " id="drivelist2">
+            {{ if .File }}
+            {{range .File}}
+            <div class="block filediv">
+                <div class="block">
+                    <input type="checkbox" id="{{.AliaseName}}" data-fname="filediv" data-name="{{.Name}}" data-id="{{.AliaseName}}" class="hidden peer ckbox">
+                    <label for="{{.AliaseName}}"
+                        class="flex flex-col border border-[#ECECEC] rounded-[4px] p-[8px] items-start relative cursor-pointer gap-[6px] mb-0 text-[14px] font-[400] leading-[1] text-[#262626] tracking-[0.005em] before:appearance-none  before:min-w-[14px] before:w-[14px] before:h-[14px] before:relative before:align-middle before:cursor-pointer hover:before:bg-[url('../public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:bg-none  peer-checked:before:bg-[url('../public/img/checked-box.svg')]">
+                        <div class="m-[0_-8px_4px_-8px] h-[116px] bg-[#FBFBFB] w-[calc(100%+16px)]">
+                          
+                            {{if eq $StorageType "local"}}
+                            <img src="{{.Path}}/{{.Name}}"  class="w-full h-full object-contain object-center" alt="">
+                            {{else}}
+                            <img src="/image-resize?name={{.AliaseName}}"  class="w-full h-full object-contain object-center" alt="">
+                            {{end}}
+                            <!-- <img src="/public/img\media-sample1.svg" alt="image"
+                                class="w-full h-full object-contain object-center"> -->
+                        </div>
+                        <p data-fullname="{{.AliaseName}}"
+                            class="whitespace-nowrap overflow-hidden text-ellipsis text-[12px] font-[400] leading-[16px] text-[#152027] w-full">
+                            {{.Name}}</p>
+
+                    </label>
+                </div>
+
+            </div>
+
+            {{end}}
+            {{end}}
+           
+
         </div>
+       
+        {{end}}
+    </div>
+</div>
 
-        <div class="media-upload">
-            <input type="hidden" name="csrf" value="{{.csrf}}">
 
-            <!-- <div class="media-library-header flexx" id="addfoldervalues" style="display: none;">
-                <h4 id="path"><span></span></h4>
-                <div class="input-group" id="namecheck">
-                    <div class="ig-row media-btn">
-                        <input type="text" name="foldername" id="foldername" class="field"
-                            placeholder="{{$Translate.Mediaa.Plenterfolder}}">
-                        <button class="button-reg primary" id="newfileadd">{{$Translate.Add}}</button>
-                    </div>
-                    <label id="foldername-error" class="error" for="foldername"
-                        style="display: none;margin-left: 50%;">* {{$Translate.Mediaa.Vailderr}} </label>
+<div
+    class="mediapagination max-sm:flex-col max-sm:gap-[1rem] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+    <ul class="ml-auto    max-sm:mx-auto  justify-center items-center gap-[8px] flex flex-wrap">
+        
+        {{if gt .Count .Limit}}
+
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                <img src="/public/img/pg-prev.svg" alt="previous">
+                <span class=" max-sm:hidden"> Back</span>
+            </a>
+        </li>
+        {{if gt .CurrentPage 3}}
+        {{$keyword := .Filter}}
+        <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                1 </a> </li>
+        {{end}}
+        {{if eq .CurrentPage 5}}
+        <li> <a href="?page=2{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px] ">
+                2 </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 5}}
+        <li> <a href="javascript:void(0)"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if gt .CurrentPage 2}}
+        <li> <a href="?page={{.Pagination.TwoBelow}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                {{.Pagination.TwoBelow}} </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 1}}
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                {{.Pagination.PreviousPage}} </a> </li>
+        {{end}}
+
+        <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+            text-[14px] w-[33px] h-[36px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+            bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                {{.CurrentPage}} </a> </li>
+        {{if lt .CurrentPage .Pagination.TotalPages}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                {{.Pagination.NextPage}} </a> </li>
+        {{end}}
+        {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TwoAfter}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                {{.Pagination.TwoAfter}} </a> </li>
+        {{end}}
+        {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+        <li> <a href="javascript:void(0)"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TotalPages}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                {{.Pagination.TotalPages}}</a> </li> {{end}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter}}&keyword={{.Filter}}{{end}}"
+                class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                <span class=" max-sm:hidden"> Next </span> <img src="/public/img\pg-nxt.svg" alt="next">
+            </a>
+        </li>
+        {{end}}
+    </ul>
+    <p class="ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+        {{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}
+    </p>
+</div>
+
+
+
+
+    <!--addFolder-->
+    <div class="modal fade" id="addFolder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog mt-[10%] max-w-[520px]">
+            <div class="modal-content rounded-[4px]">
+                <div class="modal-header flex justify-between items-center border-b border-[#EDEDED] p-[12px_24px]">
+                    <h1 class="foldereditcon font-normal text-base text-[#262626] leading-6">Add Folder
+                    </h1>
+                    <a href="javascript:void(0)" data-bs-dismiss="modal" class="cursor-pointer">
+                        <img src="/public/img\modal-close.svg" alt="close" class="w-[12px] h-[12px]">
+                    </a>
                 </div>
-            </div> -->
-
-            <div class="media-library-header flexx mediabreadcrumb tab-breadCrumb">
-                <ul class="media-innr-breadcrumbs flexx breadcrumb-container" style="list-style: none;">
-                    <li><a href="javascript:void(0)" class="" data-id="/">{{$Translate.Mediaa.Medialibrary}}</a></li>
-                    <!-- <li>/</li> -->
-                </ul>
-            </div>
-
-
-            <div id="errorhtml" class="media-error-design">
-                {{ if .Media }}
-                {{else}}
-
-                <div class="noData-foundWrapper">
-
-                    <div class="empty-folder">
-                        <img src="/public/img/folder-sh.svg" alt="">
-                        <img src="/public/img/shadow.svg" alt="">
-                    </div>
-                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-
+                <div class="modal-body px-6 py-[16px]">
+                    <label for="" class="mb-[12px] text-[#262626] text-[14px] font-[400] leading-[17.5px] ">Please enter
+                        a folder name:</label>
+                    <input type="text" placeholder="Enter Name" name="foldername" id="foldername"  class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  rounded-[4px]  p-[8px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full"
+                        class= "field p-[10px_12px] text-[11px] font-[400] leading-[13.75px] tracking-[0.005em] placeholder:text-[#444444] h-[34px] rounded-[4px] mb-[16px] block w-full bg-[#F7F7F5]">
+                        <label id="foldername-error" class="error" for="foldername" style="display: none;">*
+                            {{$Translate.Mediaa.Vailderr}} </label>
+                        <label for="" class="error" id="folderspec-error" style="display: none;">*Folder name
+                            cannot contain special characters</label>
+                  
+                        <p class="text-xs font-normal leading-4 text-[#717171] mb-[16px] mt-[1rem]"><span class="text-[#262626]">
+                            Note: </span> </p>
+                    <div class="flex gap-3 justify-end">
+                        <a  data-bs-dismiss="modal"
+                            class="h-8 flex items-center justify-center px-[12px]  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline">Cancel</a>
+                        <button 
+                            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline" id="newfileadd">Save</button>
+                            <button  
+                            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline" id="updatefileadd">Update</button>
+                  
+                   
+                        </div>
                 </div>
-                {{end}}
 
-            </div>
-
-            <div class="upload-files media-library-list" id="drivelist">
-                {{ if .Media }}
-                {{range .Media}}
-                {{if eq .File true}}
-                <div class="upload-folders  folderdiv">
-                    <p class="forsearch" style="display: none;">{{.AliaseName}}</p>
-
-                    <div class="chk-group chk-group-box">
-                        <input type="checkbox" class="ckbox" id="{{.AliaseName}}" data-id="{{.AliaseName}}">
-                        <label for="{{.AliaseName}}"></label>
-                    </div>
-                    <div class="upload-folder-img folder">
-                        <img src="/public/img/folder-media.svg" alt="">
-                    </div>
-                    <div class="file-detail">
-                        {{if ge (len .Name) 20}}
-                        <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true"
-                            data-bs-placement="top" title={{.Name}} data-fullname="{{.AliaseName}}">{{.Name}}</h3>
-                        {{else}}
-                        <h3 data-fullname="{{.AliaseName}}">{{.Name}}</h3>
-                        {{end}}
-                        <p>{{if gt .TotalSubMedia 1}}{{.TotalSubMedia}} Files{{else}}{{.TotalSubMedia}} File{{end}}</p>
-                    </div>
-                </div>
-                {{else}}
-                <div class="upload-folders filediv">
-                    <p class="forsearch" style="display: none;">{{.AliaseName}}</p>
-
-                    <div class="chk-group chk-group-box">
-                        <input type="checkbox" class="ckbox" id="{{.AliaseName}}" data-id="{{.AliaseName}}">
-                        <label for="{{.AliaseName}}"></label>
-                    </div>
-                    <div class="upload-folder-img file">
-                        {{if eq $StorageType "local"}}
-                        <img src="{{.Path}}/{{.Name}}" alt="">
-                        {{else}}
-                        <img src="/image-resize?name={{.AliaseName}}" alt="">
-                        {{end}}
-                    </div>
-                    <div class="file-detail">
-                        {{if ge (len .Name) 20}}
-                        <h3 data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true"
-                            data-bs-placement="top" title={{.Name}} data-fullname="{{.AliaseName}}">{{.Name}}</h3>
-                        {{else}}
-                        <h3 data-fullname="{{.AliaseName}}">{{.Name}}</h3>
-                        {{end}}
-                        <!-- <p></p> -->
-                    </div>
-                </div>
-                {{end}}
-                {{end}}
-                {{end}}
             </div>
         </div>
     </div>
-    <!--2-->
-</div>
 {{template "cropmodal" .}}
 
 {{template "footer" .}}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5067" data-name="Rectangle 5067" width="16" height="16" transform="translate(0.066)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_378" data-name="Mask Group 378" transform="translate(-0.066)" clip-path="url(#clip-path)">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="linkedin">
+        <rect id="background" width="16" height="16" rx="2.182" transform="translate(0.066)" fill="#0077b5"/>
+        <g id="icon" transform="translate(3.036 3)">
+          <path id="Path_29810" data-name="Path 29810" d="M5.764,4.364A1.364,1.364,0,1,1,4.4,3,1.364,1.364,0,0,1,5.764,4.364Z" transform="translate(-3.036 -3)" fill="#fff"/>
+          <path id="Path_29811" data-name="Path 29811" d="M5.455,6.636v6.025A.337.337,0,0,1,5.117,13H3.68a.337.337,0,0,1-.338-.338V6.636A.338.338,0,0,1,3.68,6.3H5.117a.338.338,0,0,1,.337.338Z" transform="translate(-3.036 -3)" fill="#fff"/>
+          <path id="Path_29812" data-name="Path 29812" d="M12.967,9.773v2.916a.31.31,0,0,1-.311.311H11.111a.31.31,0,0,1-.311-.311V9.863c0-.422.124-1.847-1.1-1.847-.95,0-1.144.975-1.182,1.414v3.26A.311.311,0,0,1,8.209,13H6.716a.31.31,0,0,1-.31-.311V6.61a.31.31,0,0,1,.31-.311H8.209a.311.311,0,0,1,.311.311v.525A2.116,2.116,0,0,1,10.511,6.2c2.471,0,2.456,2.307,2.456,3.575Z" transform="translate(-3.036 -3)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

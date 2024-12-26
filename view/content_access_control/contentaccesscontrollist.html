@@ -2,199 +2,292 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-
-
-<div class="page-wrapper">
-
-    <div class="bread-crump">
-        <a href="/member/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="/memberaccess/" class="current-page">{{.Tabmenu}}</a>
-    </div>
-    {{template "membertab" .}}
-    <div class="all-tab-content list-container" id="entriesContent">
-        <!--1-->
-        <div class="topOptions">
-            <!-- <div class="leftHeader self-top">
-                <div class="card-breadCrumb">
-                    <ul class="breadcrumb-container">
-                        <li><a href="" class="para-light">Settings </a></li>
-                        <li><a href="" class="para-light">Content Access Control</a></li>
-
-                    </ul>
-                </div>
-            </div> -->
-
-            <div class="transitionSearch active">
-                <form action="/memberaccess/" method="get" name="contentaccess-form">
-                <img style="bottom: 5px;" src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" name="keyword" id="memberrestrictsearch" class="search" placeholder="{{$Translate.Csearch}}" value="{{.Filter.Keyword}}">
-                </form>
-            </div>
-            <a href="/memberaccess/newcontentaccesscontrol">
-                <button class="btn-reg btn-sm primary " data-bs-toggle="modal" data-bs-target="#rightModal">
-                    <img src="/public/img/add.svg" alt="" /> {{$Translate.ContentAccessControl.Contentaccess}}
-                </button>
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Memberss.Members}}</h2>
         </div>
 
-        <div class="tablePagination-wrapper verticalScroll">
-
-            <div class="table-responsive access-table verticalScroll">
-                <table class="table">
-
-                    <thead>
-                        <tr>
-                            <th>{{$Translate.ContentAccessControl.Title}}</th>
-                            <th>{{$Translate.ContentAccessControl.Permissionaccess}}</th>
-                            <th> {{$Translate.Action}}</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{$currentpage := .CurrentPage}}
-
-                        {{if .ContentAccess}}
-                        {{range .ContentAccess}}
-                        <tr>
-                            <td>
-                                <div class="title-cell">
-                                    <h3 class="heading-three">{{.AccessControlName}}</h3>
-                                    
-                                    <ul>
-                                        <!-- <li class="para ">{{$Translate.ContentAccessControl.Space}}</li> -->
-                                        {{range .AccessGrantedModules}}
-                                        <li class="para ">{{.}}</li>
-                                        {{end}}
-                                    </ul>
-                                    <p class="para-light">{{$Translate.Updated}}: {{.DateString}}</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="permission-cell">
-                                    <h3 class="heading-three">{{$Translate.ContentAccessControl.Accessgrantedmembergroups}} :</h3>
-                                    <ul>
-                                        {{range .MemberGroups}}
-                                        <li class="para-light">{{.Name}}</li>
-                                        {{end}}
-                                    </ul>
-                                </div>
-                            </td>
+        <div
+            class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB] {{if eq .Searchtrue true}} pointer-events-none {{end}}">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="hovericon hidden group-hover:block ">
+            </a>
+            <form action="/memberaccess/" method="get" name="contentaccess-form">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="memberrestrictsearch"
+                    value="{{.Filter.Keyword}}"
+                    class="search top-0 text-[12px] shadow-none font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                    {{if eq .Searchtrue true}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
 
 
-                            <td>
-                                <div class="card-option action-cell">
-                                    <div class="btn-group language-group">
-                                        <button type="button" class="dropdown-tog" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            <img src="/public/img/card-option.svg" alt="">
-                                            <img src="/public/img/blue-option.svg" alt="">
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a href="/memberaccess/copy-accesscontrol/{{.Id}}?page={{$currentpage}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
-                                                            src="/public/img/copy.svg" alt=""></span> {{$Translate.Copy}} </button></a>
-                                            </li>
-                                            <li><a href="/memberaccess/edit-accesscontrol/{{.Id}}?page={{$currentpage}}"><button data-id="{{.Id}}" class="dropdown-item" type="button"> <span><img
-                                                            src="/public/img/edit.svg" alt=""></span>{{$Translate.Edit}} </button></a>
-                                            </li>
-                                            <li><button data-id="{{.Id}}" class="dropdown-item delete-access" type="button"> <span><img
-                                                            src="/public/img/delete.svg" alt=""></span>{{$Translate.Delete}} </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {{end}}
-                        {{else}}
-                        {{if .Filter.Keyword}}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
+                </form>
+        </div>
 
-                                    <div class="empty-folder">
-                                        <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
-                                        <img src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
 
-                                </div>
-                            </td>
-                        </tr>
-                        {{else}}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
+        <a href="/memberaccess/newcontentaccesscontrol"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569]">
+            <span class="hidden max-sm:block text-lg leading-none ">+</span> <span class="max-sm:hidden"> {{$Translate.ContentAccessControl.Contentaccess}}</span></a>
 
-                                    <div class="empty-folder">
-                                        <img src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    <p class="para">
-                                        {{$Translate.Pagesorry}}
-                                        {{$Translate.Gobackhome}}
-                                    </p>
-                                    <a href="/memberaccess/newcontentaccesscontrol" id="clickadd" class="heading-three "> {{$Translate.Clickadd}} >> </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {{end}}
-                        {{end}}
-                    </tbody>
-                </table>
-            </div>
-            {{if .ContentAccess}}
-            <div class="pogination flexx pagenation-padding">
-                <ul class="flexx">
-                    {{if gt .Count .Limit}}
-                
-                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a></li>
-                    {{if gt .CurrentPage 3}}
-                    <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
-                    {{end}}
-                    {{if eq .CurrentPage 5}}
-                    <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 5}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 2}}
-                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 1}}
-                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
-                    {{end}}
-                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
-                    {{if lt .CurrentPage .Pagination.TotalPages}}
-                    <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
-                    {{end}}
-                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
-                    {{end}}
-                    <li>
-                        <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                   
-                   {{end}}
-                </ul>
-                <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
-            </div>
+    </header>
+
+    <section>
+
+        {{template "membertab" .}}
+
+        <div class="px-[16px] py-[8px] border-b border-[#EDEDED] flex justify-between items-center">
+            <p class="text-[#717171] text-xs font-normal mb-0"><span class="text-bold-black">{{.Count}} </span>
+                {{if gt .Count 1}}
+                {{$Translate.ContentAccessControl.Memberrestrictsavailble}}
+                {{else}}
+                {{$Translate.ContentAccessControl.Memberretrictavailble}}
+                {{end}}
+            </p>
+
+        </div>
+        <div class="overflow-x-auto overflow-unset pb-[70px]">
+            {{$currentpage := .CurrentPage}}
+            <table class="w-full min-w-[768px]">
+                <tr>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.ContentAccessControl.Title}}
+                    </th>
+                    <th
+                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                        {{$Translate.ContentAccessControl.Permissionaccess}}
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.ContentAccessControl.Updatedon}}
+
+
+                    </th>
+                    <th
+                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                        {{$Translate.Action}}
+                    </th>
+                </tr>
+
+                {{if .ContentAccess}}
+                {{range .ContentAccess}}
+                <tr>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
+                        <h4 class="text-[#222222] text-sm font-normal mb-[4px]">{{.AccessControlName}}</h4>
+
+                        <ul class="list-none p-0 flex items-center space-x-[6px]">
+
+                            <li class="px-1.5 py-[3px] bg-[#E9FFFA] rounded-[3px] text-xs font-normal text-[#10A37F]">
+                                {{$Translate.Channell.Channels}}</li>
+                            <!-- <li class="px-1.5 py-[3px] bg-[#E9FFFA] rounded-[3px] text-xs font-normal text-[#10A37F]">
+                                    Space</li> -->
+                        </ul>
+                    </td>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center align-middle">
+                        <h4 class="text-[#222222] text-sm font-normal mb-1.5 text-center">
+                            {{$Translate.ContentAccessControl.Accessgrantedmembergroups}} :
+
+                        </h4>
+
+                        <ul class="list-none p-0 flex items-center space-x-[6px] justify-center">
+                            {{range .MemberGroups}}
+                            <li class="mr-[4px] text-[#717171] text-[11px] font-normal">{{.Name}}</li>
+                            {{end}}
+                        </ul>
+                    </td>
+                    <td
+                        class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle text-[#717171] text-xs font-normal">
+                        {{.DateString}}
+                    </td>
+                    <td
+                        class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                        <div class="btn-group">
+                            <button id="triggerId" class="bg-transparent  pa-1  rounded-[4px]    bg-hover h-6 w-6"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="/public/img/dots.svg" />
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-180"
+                                aria-labelledby="triggerId">
+
+                                <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5]"
+                                    href="/memberaccess/copy-accesscontrol/{{.Id}}?page={{$currentpage}}"
+                                    data-id="{{.Id}}" ><img src="/public/img/temp-copy.svg" />
+                                    {{$Translate.Copy}}</a>
+
+                                <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5]"
+                                    data-id="{{.Id}}"
+                                    href="/memberaccess/edit-accesscontrol/{{.Id}}?page={{$currentpage}}">
+                                    <img src="/public/img/edit.svg" /> {{$Translate.Edit}}</a>
+                                <button data-id="{{.Id}}"
+                                    class="dropdown-item h-[40px] w-full flex space-x-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] delete-access"
+                                    href="#"> <img src="/public/img/delete.svg"><span>{{$Translate.Delete}}</span></button>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {{end}}
+                {{else}}
+
+                {{if .Filter.Keyword}}
+                <!-- <tr class="no-dataHvr">
+                    <td style="text-align: center; border-bottom: none;" colspan="8">
+                        <div class="noData-foundWrapper">
+
+                            <div class="empty-folder">
+                                <img src="/public/img/nodatafilter.svg" alt="">
+                            </div>
+                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
+
+                        </div>
+                    </td>
+                </tr> -->
+
+                <tr>
+                    <td colspan="9">
+
+                        <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                            <div class="text-center w-fit mx-auto">
+                                <img src="/public/img/noFilter.svg" alt="noFilter">
+                            </div>
+                            <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                {{$Translate.Filtersearch}}</h2>
+                            <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                {{$Translate.Filterkeyword}} </p>
+
+                        </div>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="9">
+                        <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                            <div class="text-center w-fit mx-auto">
+                                <img src="/public/img/noData.svg" alt="nodate">
+                            </div>
+                            <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                {{$Translate.Oopsnodata}}</h2>
+                            <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                {{$Translate.Pagesorry}}
+                                {{$Translate.Gobackhome}}</p>
+                            <a href="/memberaccess/newcontentaccesscontrol"
+                                class="cursor-pointer text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                                {{$Translate.Clickadd}} >></a>
+                        </div>
+
+                    </td>
+                </tr>
+                {{end}}
+                {{end}}
+            </table>
+        </div>
+        {{if .ContentAccess}}
+
+
+         <!--pagination-->
+    <div
+        class="@container space-x-[16px] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+        <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    1 </a> </li>
             {{end}}
-        </div>
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[4px]border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+     @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
     </div>
-    <!--2-->
-</div>
+
+        {{end}}
+
+    </section>
+
+
+
+</section>
+
+
 {{template "footer" .}}
 <script src="/public/js/content-access-control/contentaccesscontrol.js"></script>
 {{template "footerclose" .}}

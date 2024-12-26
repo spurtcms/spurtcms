@@ -13,10 +13,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/spurtcms/pkgcontent/categories"
-	"github.com/spurtcms/pkgcontent/channels"
-	"github.com/spurtcms/pkgcore/auth"
 )
 
 var ErrorLog *log.Logger
@@ -25,15 +21,15 @@ var WarnLog *log.Logger
 
 func init() {
 
-	ErrorLog = logger.ErrorLOG()
+	ErrorLog = logger.ErrorLog()
 
-	WarnLog = logger.WarnLOG()
+	WarnLog = logger.WarnLog()
 
 }
 
-var category categories.Category
+// var category categories.Category
 
-var channelAuth channels.Channel
+// var channelAuth channels.Channel
 
 type Medias struct {
 	File          bool
@@ -57,56 +53,38 @@ func LocalStorageCreation() {
 	if storagetype.Local != "" {
 
 		if _, folerr := os.Stat(storagetype.Local); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local, os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
 			}
 		}
 
 		if _, folerr := os.Stat(storagetype.Local + "/media"); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local+"/media", os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
-
 			}
-
 		}
 
 		if _, folerr := os.Stat(storagetype.Local + "/entry"); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local+"/entry", os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
-
 			}
 		}
 
 		if _, folerr := os.Stat(storagetype.Local + "/member"); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local+"/member", os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
-
 			}
 		}
 
 		if _, folerr := os.Stat(storagetype.Local + "/pages"); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local+"/pages", os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
-
 			}
 		}
 
 		if _, folerr := os.Stat(storagetype.Local + "/user"); os.IsNotExist(folerr) {
-
 			if err := os.Mkdir(storagetype.Local+"/user", os.ModePerm); err != nil {
-
 				WarnLog.Println(err)
-
 			}
 		}
 
@@ -114,72 +92,86 @@ func LocalStorageCreation() {
 
 }
 
-func MediaLocalList() ([]Medias, []Medias, error) {
+func MediaLocalList(search, folderpath string) ([]Medias, []Medias, error) {
 
 	storagetype, err := GetSelectedType()
-
 	if err != nil {
-
 		fmt.Println(err)
-
 	}
 
 	var Path string
-
 	if storagetype.Local != "" {
-
-		Path = storagetype.Local + "/media/"
-
+		Path = storagetype.Local + "/media/" + folderpath
 	}
 
 	entries, err := os.ReadDir(Path)
-
 	if err != nil {
-
 		log.Println(err)
-
 		return []Medias{}, []Medias{}, err
-
 	}
 
-	var Folder []Medias
+	var (
+		Folder []Medias
+		File   []Medias
+	)
 
-	var File []Medias
+	if search != "" {
 
-	for _, e := range entries {
+		for _, e := range entries {
 
-		var med Medias
+			fileInfo, _ := e.Info()
 
-		fileInfo, _ := e.Info()
+			if strings.Contains(strings.ToLower(fileInfo.Name()), strings.ToLower(search)) {
 
-		med.File = fileInfo.IsDir()
+				var med Medias
+				med.File = fileInfo.IsDir()
+				med.Name = fileInfo.Name()
+				med.AliaseName = fileInfo.Name()
+				med.Path = "/" + Path
+				med.ModTime = fileInfo.ModTime()
 
-		med.Name = fileInfo.Name()
+				if fileInfo.IsDir() {
+					submedia, err := os.ReadDir(Path + fileInfo.Name())
+					if err != nil {
+						log.Println(err)
+					}
 
-		med.AliaseName = fileInfo.Name()
+					med.TotalSubMedia = len(submedia)
+					Folder = append(Folder, med)
 
-		med.Path = "/" + Path
-
-		med.ModTime = fileInfo.ModTime()
-
-		if fileInfo.IsDir() {
-
-			submedia, err := os.ReadDir(Path + fileInfo.Name())
-
-			if err != nil {
-
-				log.Println(err)
+				} else {
+					File = append(File, med)
+				}
 			}
 
-			med.TotalSubMedia = len(submedia)
-
-			Folder = append(Folder, med)
-
-		} else {
-
-			File = append(File, med)
 		}
 
+	} else {
+
+		for _, e := range entries {
+
+			var med Medias
+			fileInfo, _ := e.Info()
+			med.File = fileInfo.IsDir()
+			med.Name = fileInfo.Name()
+			med.AliaseName = fileInfo.Name()
+			med.Path = "/" + Path
+			med.ModTime = fileInfo.ModTime()
+
+			if fileInfo.IsDir() {
+				submedia, err := os.ReadDir(Path + fileInfo.Name())
+				if err != nil {
+					log.Println(err)
+				}
+
+				med.TotalSubMedia = len(submedia)
+				Folder = append(Folder, med)
+
+			} else {
+				File = append(File, med)
+			}
+
+		}
 	}
 
 	return Folder, File, nil
@@ -189,23 +181,15 @@ func MediaLocalList() ([]Medias, []Medias, error) {
 func AddFolderMakeDir(name string, folderpath string) error {
 
 	storagetype, err := GetSelectedType()
-
 	if err != nil {
-
 		fmt.Println(err)
-
 	}
 
 	if name != "" {
-
 		Path := storagetype.Local + "/media/"
-
 		if err := os.Mkdir(Path+folderpath+name, os.ModePerm); err != nil {
-
 			return err
-
 		}
-
 		return nil
 
 	}
@@ -216,25 +200,17 @@ func AddFolderMakeDir(name string, folderpath string) error {
 func UploadImageLocal(file multipart.File, fileHeader *multipart.FileHeader, filePath string, c *gin.Context) error {
 
 	storagetype, serr := GetSelectedType()
-
 	if serr != nil {
-
 		fmt.Println(serr)
-
 	}
 
 	pathEnv := storagetype.Local + "/media/"
-
 	filename := strings.ReplaceAll(fileHeader.Filename, "%", "")
-
 	splitArr := strings.Split(filename, ".")
-
 	ext := splitArr[len(splitArr)-1]
-
 	nameWithoutExt := strings.ReplaceAll(filename, "."+ext, "")
 
 	if len(nameWithoutExt) == 0 {
-
 		return nil
 	}
 
@@ -242,11 +218,8 @@ func UploadImageLocal(file multipart.File, fileHeader *multipart.FileHeader, fil
 
 	// You can customize the file storage path and name as per your requirement.
 	if filePath != "" {
-
 		err = c.SaveUploadedFile(fileHeader, pathEnv+filePath+filename)
-
 	} else {
-
 		err = c.SaveUploadedFile(fileHeader, pathEnv+filename)
 	}
 
@@ -256,21 +229,14 @@ func UploadImageLocal(file multipart.File, fileHeader *multipart.FileHeader, fil
 func UploadCropImage(imageData, imagename string) (path string) {
 
 	storagetype, serr := GetSelectedType()
-
 	if serr != nil {
-
 		fmt.Println(serr)
-
 	}
 
 	Path := storagetype.Local + "/media/"
-
 	if imageData != "" {
-
 		_, _, err := ConvertBase64WithName(imageData, Path, imagename)
-
 		if err != nil {
-
 			return
 		}
 
@@ -306,13 +272,13 @@ func ConvertBase64WithName(imageData string, storagepath string, imagename strin
 }
 
 /*Delete*/
-func DeleteImageFolder(folderpath, name string, AUTH *auth.Authorization) error {
+func DeleteImageFolder(folderpath, name string) error {
 
 	// sp.Authority = &AUTH
 
-	channelAuth.Authority = AUTH
+	// channelAuth.Authority = AUTH
 
-	category.Authority = AUTH
+	// category.Authority = AUTH
 
 	storagetype, serr := GetSelectedType()
 
@@ -326,20 +292,15 @@ func DeleteImageFolder(folderpath, name string, AUTH *auth.Authorization) error 
 
 	// sp.RemoveSpaceImage("/" + Path + folderpath + val)
 
-	channelAuth.RemoveEntriesCoverImage("/" + Path + folderpath + name)
+	// channelAuth.RemoveEntriesCoverImage("/" + Path + folderpath + name)
 
-	category.UpdateImagePath("/" + Path + folderpath + name)
+	// category.UpdateImagePath("/" + Path + folderpath + name)
 
-	models.RemoveLanguageImagePath("/" + Path + folderpath + name)
-
+	models.RemoveLanguageImagePath("/"+Path+folderpath+name, TenantId)
 	err := os.RemoveAll(Path + folderpath + name)
-
 	if err != nil {
-
 		log.Println(err)
-
 		return err
-
 	}
 
 	return nil
@@ -349,55 +310,39 @@ func DeleteImageFolder(folderpath, name string, AUTH *auth.Authorization) error 
 func FolderDetails(folderpath string) (folderCount int, fileCount int, Folder []Medias, File []Medias, err error) {
 
 	storagetype, serr := GetSelectedType()
-
 	if serr != nil {
-
 		fmt.Println(serr)
-
 	}
 
 	Path := storagetype.Local + "/media/"
-
 	entries, err := os.ReadDir(Path + folderpath)
-
 	if err != nil {
-
 		fmt.Printf("FolderDetails Error : %s/n", err)
 	}
 
 	for _, e := range entries {
 
 		var med Medias
-
 		fileInfo, _ := e.Info()
-
 		med.File = fileInfo.IsDir()
-
 		med.Name = fileInfo.Name()
-
+		med.AliaseName = fileInfo.Name()
 		med.Path = Path + folderpath
-
 		med.ModTime = fileInfo.ModTime()
 
 		if fileInfo.IsDir() {
-
 			submedia, err := os.ReadDir(Path + folderpath + "/" + fileInfo.Name())
-
 			if err != nil {
-
 				log.Println(err)
 			}
 
 			med.TotalSubMedia = len(submedia)
-
 			Folder = append(Folder, med)
-
 			folderCount++
 
 		} else {
 
 			File = append(File, med)
-
 			fileCount++
 
 		}

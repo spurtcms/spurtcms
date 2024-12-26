@@ -1,0 +1,171 @@
+{{template "header" .}}
+{{template "settingsmenu" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<div class="page-wrapper settings-wrapper">
+    <form id="apiform" method="post" {{if eq .CreateForm true}} action="/settings/graphql/create" {{else}} action="/settings/graphql/update" {{end}} >
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <input type="hidden" name="id" value="{{.tokenid}}">
+        <input type="hidden" name="token" id="token" value="">
+        <div class="email-temp-tabs">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a href="/settings/graphql/">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                            type="button" role="tab" aria-controls="home" aria-selected="true">
+                            API Setup
+                        </button>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="create-api">
+                        <div class="head-title">
+                            <h1 class="heading">Create API Token</h1>
+                        </div>
+                        <div class="full-graph">
+                            <div class="full-ql">
+                                <div class="left-cms">
+                                    <h2 class="heading-second">Token Name</h2>
+                                    <p class="para para-light w-300">You can set your own Token Name</p>
+                                </div>
+                                <div class="input-group">
+                                    <label for="" class="input-label">Name*</label>
+                                    <div class="ig-row">
+                                        <input type="text" name="tokenname" placeholder="Enter the token name" id="tokenname" value="{{.token.TokenName}}">
+                                        <label id="tokenname-error" class="error" for="tokenname" style="display: none;">* Please enter the token name</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="full-ql">
+                                <div class="left-cms">
+                                    <h2 class="heading-second">Description</h2>
+                                    <p class="para para-light w-300">Set your Description related to the token name</p>
+                                </div>
+                                <div class="input-group">
+                                    <label for="" class="input-label">Description</label>
+                                    <div class="ig-row">
+                                        <textarea name="tokendescp">{{.token.Description}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="full-ql">
+                                <div class="left-cms">
+                                    <h2 class="heading-second">Token Duration </h2>
+                                    <p class="para para-light w-300">Choose the token duration</p>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group  user-drop-down ">
+
+                                        <label for="" class="input-label">Duration*</label>
+
+                                        <a class="dropdown-toggle selectdurat" type="button" id="triggerId"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          {{if .token.Duration}}  {{.token.Duration}} {{else}}   select duration {{end}}
+                                        </a>
+                                        <input type="hidden" name="duration" id="dur" value="{{.token.Duration}}">
+
+                                        <div class="dropdown-menu dropdown-role" aria-labelledby="triggerId">
+
+                                            <div class="dropdown-filter-roles">
+
+                                                <button type="button" data-id="7 Days" class="dropdown-item durat">7
+                                                    Days</button>
+                                                <button type="button" data-id="15 Days" class="dropdown-item durat">15
+                                                    Days</button>
+                                                <button type="button" data-id="30 Days" class="dropdown-item durat">30
+                                                    Days</button>
+                                                <button type="button" data-id="Unlimited"
+                                                    class="dropdown-item durat">Unlimited</button>
+
+                                            </div>
+
+                                            <div class="noData-foundWrapper" id="nodatafounddesign"
+                                                style="margin-top: -40px;display: none;">
+
+                                                <div class="empty-folder">
+                                                    <img style="max-width: 20px;" src="/public/img/folder-sh.svg"
+                                                        alt="">
+                                                    <img src="/public/img/shadow.svg" alt="">
+                                                </div>
+                                                <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                </h1>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label id="tokenduration-error" class="error" for="tokenduratioin" style="display: none;">* Please Choose the duration</label>
+                                </div>
+                            </div>
+                            {{if eq .CreateForm false}}
+                            <div class="token-key">
+                                <div class="token-key-details">
+                                    <div class="key-img">
+                                        <img src="/public/img/key.svg">
+                                    </div>
+                                    <div class="token-name-details">
+                                        <p>This token isn't accessible anymore</p>
+                                        <!-- <span>Make Sure to copy this token, you won't be able to see it again!</span> -->
+                                        <span>For security reasons, you can only see your token only.</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- <a href="javascript:void(0)" class="token-copy">
+                                    <img src="/public/img/copy-gray.svg">
+                                </a> -->
+                            </div>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="configure-btn-grp">
+            <a href="/settings/graphql/"><button class="btn-reg btn-lg secondary" type="button">Cancel</button></a>
+            {{if eq .CreateForm true}} <button class="btn-reg btn-lg primary" type="button" id="save">Save</button>
+            {{else}}<button class="btn-reg btn-lg primary" type="button" id="update">Update</button>{{end}}
+        </div>
+    </form>
+</div>
+
+<div class="modal fade claim-modal" id="TokenModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="warn-image">
+          <!-- <img src="/public/img/wraning.svg" alt="" /> -->
+        </div>
+        <h2 class="heading-second deltitle"></h2>
+        <div class="token-key">
+            <div class="token-key-details">
+                <div class="key-img">
+                    <img src="/public/img/key.svg">
+                </div>
+                <div class="token-name-details">
+                    <span>Make Sure to copy this token, you won't be able to see it again!</span>
+                    <span id="token-string">asdfasdfzxcvz.</span>
+                </div>
+            </div>
+            
+            <a href="javascript:void(0)" class="token-copy">
+                <img src="/public/img/copy-gray.svg">
+            </a>
+        </div>
+        <a href="javascript:void(0)" class="heading-three delname"></a>
+      </div>
+      <div class="modal-footer">
+        <a id="delete" class="spaceid" href="javascript:void(0)">
+          <button type="button" class="btn-reg btn-md primary" id="grahpql-token-model" name="delid">Yes</button></a>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{template "footer" .}}
+
+<script src="/public/js/settings/graphql-settings.js"></script>
+{{template "footerclose" .}}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_4290" data-name="Rectangle 4290" width="24" height="24" transform="translate(729.754 445)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_204" data-name="Mask Group 204" transform="translate(-729.754 -445)" clip-path="url(#clip-path)">
+    <g id="graphql-icon" transform="translate(731.144 445)">
+      <path id="Path_2771" data-name="Path 2771" d="M3.659,18.368l-.877-.507L12.566.915l.877.507Z" transform="translate(-1.721 -0.133)" fill="#e10098"/>
+      <path id="Path_2772" data-name="Path 2772" d="M2.545,19.162h19.57v1.014H2.545Z" transform="translate(-1.686 -2.788)" fill="#e10098"/>
+      <path id="Path_2773" data-name="Path 2773" d="M12.787,22.824,3,17.172l.507-.877,9.788,5.651Zm8.5-14.731L11.5,2.443l.507-.877L21.8,7.217Z" transform="translate(-1.752 -0.228)" fill="#e10098"/>
+      <path id="Path_2774" data-name="Path 2774" d="M3.509,8.089,3,7.212l9.8-5.653.507.877Z" transform="translate(-1.753 -0.227)" fill="#e10098"/>
+      <path id="Path_2775" data-name="Path 2775" d="M21.177,18.368,11.391,1.42l.877-.507,9.786,16.948ZM3.453,6.445H4.468v11.3H3.453Zm17.01,0h1.014v11.3H20.464Z" transform="translate(-1.818 -0.133)" fill="#e10098"/>
+      <path id="Path_2776" data-name="Path 2776" d="M14.177,24.973l-.443-.767,8.514-4.915.443.767Z" transform="translate(-3.314 -2.807)" fill="#e10098"/>
+      <path id="Path_2777" data-name="Path 2777" d="M22.544,17.945a2.134,2.134,0,1,1-.782-2.914,2.137,2.137,0,0,1,.782,2.914M5.521,8.114A2.134,2.134,0,1,1,4.739,5.2a2.137,2.137,0,0,1,.782,2.915m-3.69,9.831a2.134,2.134,0,1,1,2.914.782,2.137,2.137,0,0,1-2.914-.782M18.853,8.115a2.134,2.134,0,1,1,2.914.782,2.137,2.137,0,0,1-2.914-.782M12.187,23.927a2.133,2.133,0,1,1,2.133-2.132,2.133,2.133,0,0,1-2.133,2.132m0-19.661A2.131,2.131,0,1,1,13.7,3.641a2.129,2.129,0,0,1-1.508.625" transform="translate(-1.54 0)" fill="#e10098"/>
+    </g>
+  </g>
+</svg>

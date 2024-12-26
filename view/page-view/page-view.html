@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Entry.Slug}}</title>
+    <meta name="description" content="{{.Entry.MetaDescription}}">
+    <meta name="keyword" content="{{.Entry.Keyword}}">
+    <meta property="og:title" content="{{.Entry.Slug}}">
+    <meta property="og:description" content="{{.Entry.MetaDescription}}">
+</head>
+
+<body>
+    {{if ne .Entries ""}}
+    <div>
+        <div
+            class="fixed bottom-0 left-0 shadow-[2px_-1px_4px_0px_#0000001A] flex justify-end items-center px-6 py-[12px] w-full bg-white z-50">
+            <a href="#"
+                class="h-9 flex items-center justify-center px-6 text-base font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline w-auto ">Submit</a>
+        </div>
+        <div class="max-w-[800px] mx-auto pb-[65px]"> {{.Entries}}</div>
+
+    </div>
+    {{else}}
+    <section class="w-full overflow-hidden pt-[48px] min-h-screen">
+
+
+    
+        <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
+            <div class="text-center w-fit mx-auto mb-[32px]">
+                <img src="/public/img/cms404-img.svg" alt="noFilter">
+            </div>
+            <h2 class="text-[24px] font-semibold text-[#262626] mb-[8px] leading-[30px]">
+                PAGE NOT FOUND</h2>
+            <p class="text-[#262626] mb-[24px] text-center text-[16px] font-normal leading-[15px]  ">
+                The page you are looking for might have been removed had its name changed or
+                is temporarily unavailable.</p>
+        </div>
+
+    
+    </section>
+    {{end}}
+</body>
+
+</html>

@@ -1,440 +1,500 @@
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
+{{$Viewbaseurl := .Viewbaseurl}}
+{{$Namestring := .Menu.NameString}}
+{{$Entryid := 0}}
+{{$Channelfilter := .channelfilter}}
 
-{{$IMAGEPATH := ""}}
-
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
- {{$IMAGEPATH = "/public/img/filter-red.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
- {{$IMAGEPATH = "/public/img/filter-purple.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
- {{$IMAGEPATH = "/public/img/filter-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
- {{$IMAGEPATH = "/public/img/filter.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
- {{$IMAGEPATH = "/public/img/filter-brown.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
- {{$IMAGEPATH = "/public/img/filter-orange.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
- {{$IMAGEPATH = "/public/img/filter-green.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
- {{$IMAGEPATH = "/public/img/filter-teal-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
- {{$IMAGEPATH = "/public/img/filter-black.svg"}}
-{{else}}
- {{$IMAGEPATH = "/public/img/filter.svg"}}
-{{end}}
-<div class="page-wrapper">
-
-    <div class="bread-crump">
-        <a href="/channel/entrylist/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="/channel/entrylist/" class="current-page">{{.Tabmenu}}</a>
-    </div>
-
-    {{template "cmstab" .}}
-
-    <div class="all-tab-content" id="entriesContent">
-        <!--1-->
-
-        <div class="topOptions">
-            <div class="leftHeader ">
-                <div class="caption-flexx">
-                 
-                           
-                    {{if eq .filterflag false}}
-
-                    <div class="selected-list">
-                        <div class="list-items-select"><p class="pcategory" style="display: flex" >   Clear Filter   </div>
-                        <button id="removecategory"><img src="/public/img/quit-img.svg" alt=""></button>
-                    </div>
-                    {{end}}
-                         </div>
-                <!-- <h1 class="para heading m-lft" style="font-size: 1.125rem;" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
-                data-bs-placement="top" title="{{.channelname}}" >{{.channelname}}</h1> -->
-            </div>
-                    
-            <div class="transitionSearch active">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <form action="">
-                <img src="/public/img/Magnifying-Glass.svg" alt="" />
-                <input type="text" name="keyword" id="searchkey" class="search" value="{{.filter.Keyword}}" placeholder={{$Translate.Csearch}} >
-            </form>
-                
-               
-            </div>
-            <div class="dropdown filter-dropdown">
-                <button class="btn-reg btn-sm btn-outline  " data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{$IMAGEPATH}}" alt="" /> {{$Translate.Channell.Filter}}  
-                </button>
-
-                <div class="dropdown-menu dropdown-menu-end filter-dropdown-menu">
-                    <form action="" name="filterform" id="filterform">
-                    <div class="input-div">
-                        <label for="" class="para-light"  {{ if .channelname }}  style="opacity: 0.5;" {{end}}>{{$Translate.Channell.Channelname}} </label>
-                        <input type="text" value="{{.filter.ChannelName}}" name="ChannelName" class="para-extralight"   {{ if .channelname }} disabled style="opacity: 0.5;" {{end}} placeholder="Enter Channel Name"/>
-                    </div>
-                    <div class="input-div">
-                        <label for="" class="para-light">{{$Translate.Channell.Entriestitle}}</label>
-                        <input type="text" value="{{.filter.Title}}" name="Title" class="para-extralight" placeholder="Enter Entries Title"/>
-                    </div>
-                    <div class="input-div">
-                        <label for="" class="para-light">{{$Translate.Channell.Status}} </label>
-                     
-                          <div class="input-group  user-drop-down">
-                           
-                            <input class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false" value="Status"  style="font-size: x-small;">
-                               
-                              <input type="hidden" value="{{.filter.Status}}" id="statusid" name="Status" class="para-extralight" />
-                           
-                            <div class="dropdown-menu" style="height: 85px;" aria-labelledby="triggerId">
-                              
-                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Draft}} </button>
-                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Published}} </button>
-                                <button type="button"  class="dropdown-item statuss">{{$Translate.Channell.Unpublished}} </button>
-                               
-                            </div>
+<section
+    class=" drop-able max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    {{template "entriestab" .}}
+    <input type="hidden" name="csrf" value="{{.csrf}}">
 
 
-                        </div>
-                       
-                    </div>
 
-               
-                   
+    <div class="block">
+        <div class="block overflow-auto">
+            {{$Filter := .filter.Keyword}}
 
-                    <div class="button-col">
-                        <button class="btn-reg btn-xs primary theme-color ">{{$Translate.Channell.Applyfilters}}</button>
-                        <button class="btn-reg btn-xs btn-outline  " type="button" id="filtercancel">{{$Translate.Cancel}} </button>
-                    </div>
-                </form>
-                </div>
-            </div>
-            <div class="dropdown avaliable-dropdown">
-               
-                <button class="availablesIndicator btn-reg btn-sm" data-bs-toggle="dropdown" aria-expanded="false"
-                    data-bs-auto-close="outside">
-                    <p class="para channeltitle1"   data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
-                    data-bs-placement="top" title="{{.channelname}}" >{{.channelname}}</p>
-                    <p class="para-extralight" style="margin-right: 5px;">
-                        {{$Translate.Total}}  {{if gt .entrycount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.entrycount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.entrycount}} </span> {{end}} </p>
-                        
-                </button>
+            <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                <li><a href="{{if .publishroute}}{{.publishroute}}{{else if $Filter}}/channel/entrylist?keyword={{$Filter}}{{else}}/channel/entrylist{{end}}"
+                        class=" max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 pb-tab">{{$Translate.Channell.Published}}</a>
+                </li>
+                <li><a href="{{if .unpublishroute}} {{.unpublishroute}}{{else if $Filter}} /channel/unpublishentries?keyword={{$Filter}}{{else}}/channel/unpublishentries{{end}}"
+                        class=" max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626] ">{{$Translate.Channell.Unpublished}}</a>
+                </li>
+                <li><a href="{{if .draftroute}}{{.draftroute}}{{else if $Filter}}/channel/draftentries?keyword={{$Filter}}{{else}}/channel/draftentries{{end}}"
+                        class="max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626] ">{{$Translate.Channell.Draft}}</a>
+                </li>
 
-                <div class="dropdown-menu dropdown-menu-end avaliable-dropdown-menu">
-                    <div class="drop-item-wrapper">
-                        {{$ChannelId := .chnid}}
-                        {{range .channellist}}
-                        <a href="/channel/entrylist/{{.Id}}">
-                        <div class="avaliable-dropdown-item {{if eq $ChannelId .Id}} active {{end}}">
-                            <div class="avaliable-dropdown-itemLeft">
-                                <p class="heading-second" data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
-                                data-bs-placement="top" title="{{.ChannelName}}" style="font-size: 0.75rem; font-weight: 400">{{.ChannelName}}</p>
-                                 <p class="para" style="font-weight: 300;     font-size: 0.625rem;">
-                                    {{$Translate.Total}}  {{if gt .EntriesCount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.EntriesCount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.EntriesCount}} </span> {{end}} </p>
-                                   
-                        </p>
-                            </div>
+                <li class="ms-auto">
+                    <p class="text-[12px] font-normal leading-[16px] text-[#A1A1A1] w-fit sticky left-[16px]">
+                        <span class="font-semibold text-[#262626]  "> {{.chentrycount}}
+                        </span>{{if gt .chentrycount 1}}{{$Translate.Channell.Blogavailable}}{{else}}{{$Translate.Channell.Entriesavailable}}{{end}}
+                    </p>
+                </li>
 
-                            <div class="avaliable-dropdown-itemRight">
-                                <input class="check-circle searchentry"  type="checkbox" name="avaliableRadio" id="{{.Id}}" {{if eq $ChannelId .Id}} checked {{end}} />
 
-                                <div class="check-image">
-                                    <img src="/public/img/unchecked-circle.svg" alt="" />
-                                    <img src="/public/img/checked-circle.svg" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                        {{end}}
-                    </div>   
-                    <a href="/channels/newchannel">
-                        <button class="createChannel">
-                            <span class="heading-three"> + {{$Translate.Channell.Createchannel}} </span>
-                        </button>
-                    </a>
-                </div>
-            </div>
-            <a href="/channel/newentry"> 
-                <button class="btn-reg btn-sm primary theme-color  " >
-                    <img src="/public/img/add.svg" alt="" /> {{$Translate.Channell.Newentry}} 
-                </button> 
-            </a>
+            </ul>
         </div>
 
-        <div class="tablePagination-wrapper">
-            <div class="table-responsive entries-table">
-                <table class="table">
-                    <caption class="table-caption">
-              
-                        <div class="caption-flexx">
-                            <p class="para"> 
-                                {{$Translate.Total}}  {{if gt .chentrycount 1}}{{$Translate.Entries}} :  <span class="para" id="searchcount"> {{.chentrycount}} </span>   {{else}} {{$Translate.Channell.Entry}} : <span class="para" id="searchcount"> {{.chentrycount}} </span> {{end}} </p>
-                                 
-                            </p>
-        </div>  
-                      </caption>
-                    <thead>
-                        <tr>
-                            <th style="width: 0; padding-right: 0;"> 
-                                <div class="chk-group">
-                                  <input type="checkbox" id="Check">
-                                  <label for="Check"></label>
-                                </div>
-                              </th>
-                            <th>{{$Translate.Channell.Id}}</th>
-                            <th>{{$Translate.Channell.Channelname}}</th>
-                            <th>{{$Translate.Channell.Entriestitle}}</th>
-                            <th>{{$Translate.Channell.Createddatetime}}</th>
-                            <th>{{$Translate.Createdby}} </th>
-                            <th>{{$Translate.Lastupdatedon}} </th>
-                            <th>{{$Translate.Channell.Status}}</th>
-                            <th style="text-align: end; padding-right: 60px;">{{$Translate.Actions}} </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{if .ChanEntrtlist}}
-                        {{$Pageno := .CurrentPage}}
-                        {{range .ChanEntrtlist}}
+        <div class="px-[16px] pb-[68px] overflow-auto scrollbar-thin  overallentry  sortable">
 
-                        <tr {{if eq .Feature 1}} class="featured" {{end}}>
-                            <td style="padding-right: 0;">
-                                {{if eq .Feature 1}}
-                                <div  class="featured-label" ><img src="/public/img/featured.svg" alt=""></div>{{end}}
-                                <div class="d-flex  gap-4 align-items-center">
-                                  <div class="chk-group">
-                                    <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
-                                    <label for="Check{{.Id}}"></label>
-                                  </div>
-                                </div>
-                              </td>
-                            <td>{{.Cno}}</td>
-                            <td style="width: 11%;">{{.ChannelName}}</td>
-                            <td style="width: 25%;" {{if eq .Feature 1}} class="featured-title" {{end}} >{{.Title}}</td>
-                            <td style="width: 15%;">{{.CreatedDate}}</td>
-                            <td>{{.Username}}</td>
-                            <td style="width: 13%;">{{.ModifiedDate}}</td>
-                            <td>
-                                {{if eq .Status 0}}
-                                <span class="status draft" id="statusname-{{.Id}}">{{$Translate.Channell.Draft}} </span>
-                                {{else if eq .Status 1}}
-                                <span class="status published" id="statusname-{{.Id}}"> {{$Translate.Channell.Published}} </span>
-                                {{else if eq .Status 2}}
-                                <span class="status unpublished" id="statusname-{{.Id}}"> {{$Translate.Channell.Unpublished}} </span>
+
+            {{if .ChanEntrtlist}}
+            {{$Pageno := .CurrentPage}}
+            {{$Chnid :=.chnid}}
+            {{range .ChanEntrtlist}}
+            {{if eq .ParentId 0}}
+            {{$Entryid :=.Id}}
+            <div class=" py-[16px]  border-b border-[#EDEDED] min-w-[850px] entry{{.Id}}  draggable"
+                data-page="{{$Pageno}}" data-id="{{.Id}}" data-channel="{{.ChannelName}}">
+                <div class="  grid grid-cols-[45px_1fr_0.5fr_126px] gap-[12px]  ">
+                    <div class="flex items-start space-x-[12px]">
+                        <input type="hidden" class="pagno" data-page="{{$Pageno}}">
+                        <div class="chk-group chk-group-label m-0">
+                            <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
+                                class="hidden peer selectcheckbox">
+                            <label for="Check{{.Id}}"
+                                class="z-[100] before:z-[100] w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]"></label>
+
+
+                        </div>
+                        <a href="javascript:void(0);"><img src="/public/img/entries-drag.svg" alt="drag"></a>
+                        <!-- <a href="javascript:void(0);" data-bs-toggle="collapse" class="[&.collapsed]:rotate-180 collapsed"
+                            data-bs-target="#collapse{{.Id}}"><img src="/public/img/entries-arrow.svg" alt="arrow"></a> -->
+                    </div>
+
+
+
+                    <div>
+
+                        <a {{if .ChannelName}} href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
+                            {{else}}href="/channel/editsentry/{{.Id}}?page={{$Pageno}}" {{end}}>
+                            <h3 class="text-[#262626] text-sm font-medium leading-[17.5px] mb-[8px] w-[90%] ">{{.Title}}
+                            </h3>
+                        </a>
+                        <div class="flex space-x-[12px] items-center">
+                            <p class="text-[#717171] text-xs font-normal leading-4">{{$Translate.Lastupdatedon}} : <span
+                                    class="text-[#262626]">{{.ModifiedDate}}</span></p>
+
+                            <div class="flex items-center space-x-[8px]">
+                                {{if ne $Channelfilter "true"}}
+
+                                <span
+                                    class="bg-[#EBEBEB] p-[6px_12px] rounded-[39px] text-[#262626] text-[12px] font-normal leading-[14px] grid place-items-center w-fit">({{.ChannelName}})</span>
+
                                 {{end}}
-                                
-                            </td>
-
-                            <td style="text-align: end; padding-right: 60px;">
-                                <div class="btn-group language-group">
-                                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="" />
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        {{if eq .Status 1}}
-                                        {{if eq .Feature 0}}
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="feature"
-                                                data-channelname="{{.ChannelName}}" data-status="1"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal2">
-                                                <span><img src="/public/img/feature.svg" alt="" /></span>
-                                                Feature
-                                            </a>
-                                        </li>
-                                        {{else}}
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="Unfeature"
-                                                data-channelname="{{.ChannelName}}" data-status="0"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal2">
-                                                <span><img src="/public/img/feature.svg" alt="" /></span>
-                                                Unfeature
-                                            </a>
-                                        </li>
-                                        {{end}}
-                                        {{end}}
-                                        {{if eq .Status 0}}
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="publish"
-                                                data-channelname="{{.ChannelName}}" data-status="1"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
-                                                <span><img src="/public/img/published.svg" alt="" /></span>
-                                                {{$Translate.Channell.Publish}}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish"
-                                                data-channelname="{{.ChannelName}}" data-status="2"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
-                                                <span><img src="/public/img/eye_off.svg" alt="" /></span>
-                                                {{$Translate.Channell.Unpublish}}
-                                            </a>
-                                        </li>
-                                        {{else if eq .Status 1}}
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="unpublish"
-                                                data-channelname="{{.ChannelName}}" data-status="2"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
-                                                <span><img src="/public/img/eye_off.svg" alt="" /></span>
-                                                {{$Translate.Channell.Unpublish}}
-                                            </a>
-                                        </li>
-                                        {{else if eq .Status 2}}
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-id="{{.Id}}" id="publish"
-                                                data-channelname="{{.ChannelName}}" data-status="1"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
-                                                <span><img src="/public/img/published.svg" alt="" /></span>
-                                                {{$Translate.Channell.Publish}}
-                                            </a>
-                                        </li>
-                                        {{end}}
-
-                                        <li>
-
-                                            <a href="/channel/copyentry/{{.Id}}" class="dropdown-item" type="button">
-                                                <span><img src="/public/img/copy.svg" alt="" /></span>
-                                                {{$Translate.Copy}}
-                                            </a>
-
-                                        </li>
-                                        <li>
-                                            <a href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
-                                                class="dropdown-item" type="button" data-id="{{.Id}}" id="editbtn">
-                                                <span><img src="/public/img/edit.svg" alt="" /></span>
-                                                {{$Translate.Edit}}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item deleteentry" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#centerModal" data-page="{{$Pageno}}" data-id="{{.Id}}"
-                                                data-name="{{.ChannelName}}">
-                                                <span><img src="/public/img/delete.svg" alt="" /></span>
-                                                {{$Translate.Delete}}
-                                            </a>
-                                        </li>
-                                    </ul>
+                                {{if eq .Feature 1}}
+                                <div class="min-w-[20px]">
+                                    <img src="/public/img/featured-icon.svg" alt="featured">
                                 </div>
-                            </td>
-                        </tr>
-                        {{end}}
-                        {{else}}
-                        {{if .filter.Keyword}}
+                                {{end}}
+                            </div>
+                        </div>
+                    </div>
 
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center;border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
+                    <div class="flex space-x-[8px] items-center">
+                        <div
+                            class="w-[40px] h-[40px] min-w-[40px] overflow-hidden rounded-full grid place-items-center bg-[#F5F5F5]">
+                            {{if ne .ProfileImagePath ""}}
+                            <img src="{{.ProfileImagePath}}" alt="profile image">
+                            {{else}}
+                            <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
+                            {{end}}
+                        </div>
+                        <div>
+                            <h4 class="text-[#262626] text-xs font-normal leading-4"> {{.Username}}</h4>
+                            <p class="text-[#717171] text-xs font-normal leading-4">{{$Translate.Memberss.Createdon}}:
+                                <span class="text-[#262626] whitespace-nowrap">
+                                    {{.CreatedDate}}</span></p>
+                        </div>
 
-                                    <div class="empty-folder">
-                                        <img src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                </div>
-                            </td>
-                        </tr>
-                        {{else if eq .filterflag false}}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center;border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
+                    </div>
 
-                                    <div class="empty-folder">
-                                        <img src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                </div>
-                            </td>
-                        </tr>
-                        {{else}}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center;border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
+                    <div class="flex space-x-[8px] items-center">
 
-                                    <div class="empty-folder">
-                                        <img src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    <p class="para">
-                                        {{$Translate.Pagesorry}}
-                                        {{$Translate.Gobackhome}}
-                                    </p>
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" id="clickadd"
-                                        data-bs-target="#memModal"
-                                        class="heading-three">{{$Translate.Clickadd}} >></a>
-                                </div>
-                            </td>
-                        </tr>
-                        {{end}}
-                        {{end}}                  
-                    </tbody>
-                </table>
+                        <a href="javascript:void(0);"
+                            class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5] copyButton"
+                            data-id="{{$Viewbaseurl}}/{{.Slug}}-{{.Uuid}}">
+                            <img src="/public/img/entries-link.svg" alt="copyLink" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Copy Link">
+                        </a>
+                        <a href="{{$Viewbaseurl}}/{{.Slug}}-{{.Uuid}}" target="_blank" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                        data-bs-title="Preview" class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5]">
+                            <img src="/public/img/Eye.svg" alt="global">
+                        </a>
+
+                        <div class="btn-group language-group position-static">
+                            <a href="javascript:void(0);" 
+                                class=" border-0 grid place-items-center items-center focus gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] [&.show]:bg-[#F5F5F5] "
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                    class="hidden group-hover:block">
+                                <img src="/public/img/action-btn.svg" alt="dropdown" class="block group-hover:hidden">
+                            </a>
+
+
+
+                            <ul
+                                class="dropdown-menu dropdown-menu-end min-w-[180px] rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[12px] border-0">
+
+                                <li class="mb-[4px] last-of-type:mb-[0]">
+                                    <a href="javascript:void(0);" data-id="{{.Id}}" id="unpublish"
+                                        data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                        data-channelname="{{.ChannelName}}" data-status="2"
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span class="w-[16px] h-[16px] grid place-items-center"><img
+                                                src="/public/img/Unpublished (1) (1).svg" alt="publish"></span>
+                                        {{$Translate.Channell.Unpublish}}</a>
+                                </li>
+
+                                <li class="mb-[4px] last-of-type:mb-[0]">
+                                    <a href="javascript:void(0);"data-bs-toggle="modal"
+                                    data-bs-target="#makeprivatemodal"data-id="{{.Id}}"  id="makeprivate"
+                                       
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span class="w-[16px] h-[16px] grid place-items-center"><img
+                                                src="/public/img/Make it private.svg" alt="publish"></span>
+                                        Make it Private</a>
+                                </li>
+                                {{if eq .Feature 0}}
+                                <li class="mb-[4px] last-of-type:mb-[0]">
+                                    <a href="javascript:void(0);" data-id="{{.Id}}" id="feature"
+                                        data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                        data-channelname="{{.ChannelName}}" data-status="1"
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span class="w-[16px] h-[16px] grid place-items-center"><img
+                                                src="/public/img/featured-drop.svg" alt="publish"></span>Featured</a>
+                                </li>
+                                {{else}}
+                                <li class="mb-[4px] last-of-type:mb-[0]">
+                                    <a href="javascript:void(0);" data-id="{{.Id}}" id="Unfeature"
+                                        data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                        data-channelname="{{.ChannelName}}" data-status="0"
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span class="w-[16px] h-[16px] grid place-items-center"><img
+                                                src="/public/img/featured-drop.svg" alt="publish"></span> Unfeature</a>
+                                </li>
+                                {{end}}
+                                <li class="mb-[4px] last-of-type:mb-[0]"><a {{if .ChannelName}}
+                                        href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
+                                        {{else}}href="/channel/editsentry/{{.Id}}?page={{$Pageno}}" {{end}}
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span><img src="/public/img/edit.svg" alt=""></span>{{$Translate.Edit}} </a>
+                                </li>
+
+
+                                <li class="mb-[4px] last-of-type:mb-[0]"><a href="/channel/copyentry/{{.Id}}"
+                                        class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span><img src="/public/img/duplicate.svg"
+                                                alt=""></span>{{$Translate.Channell.Duplicate}}
+                                    </a>
+                                </li>
+
+                                <li class="mb-[4px] last-of-type:mb-[0]"><a data-bs-target="#deleteModal"
+                                        data-bs-toggle="modal" data-page="{{$Pageno}}" data-id="{{.Id}}"
+                                        data-name="{{.ChannelName}}"
+                                        class="deleteentry dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                        >
+                                        <span><img src="/public/img/delete.svg" alt=""></span>{{$Translate.Delete}} </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+
             </div>
-            <div class="pogination flexx pagenation-padding">
-                <ul class="flexx">
+
+
+
+            {{end}}
+            {{end}}
+            {{else if eq .filterflag false}}
+
+            <tr>
+                <td colspan="9">
+
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noFilter.svg" alt="noFilter">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            No data found with current filters</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            Try changing any other keywords </p>
+
+                    </div>
+                </td>
+            </tr>
+            {{else}}
+
+            <tr>
+                <td colspan="9">
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noData.svg" alt="nodate">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Oopsnodata}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Pagesorry}}
+                            {{$Translate.Gobackhome}}</p>
+                        <a href="/channel/newentry"
+                            class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                            {{$Translate.Clickadd}} >></a>
+                    </div>
+
+                </td>
+            </tr>
+
+
+
+            {{end}}
+
+            <div
+            class="@container space-x-[16px] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+            <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+                {{if gt .chentrycount .limit}}
+    
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                        class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                        <img src="/public/img/pg-prev.svg" alt="previous">
+                        <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                    </a>
+                </li>
+                {{if gt .CurrentPage 3}}
+                {{$keyword := .filter.Keyword}}
+                <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        1 </a> </li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                        2 </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TwoBelow}} </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.PreviousPage}} </a> </li>
+                {{end}}
+    
+                <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                        {{.CurrentPage}} </a> </li>
+    
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+         @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.NextPage}} </a> </li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TwoAfter}} </a> </li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TotalPages}}</a> </li> {{end}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                        <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                            alt="next">
+                    </a>
+                </li>
+                {{end}}
+            </ul>
+            <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+                {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}
+            </p>
+        </div>
+            <!-- <div
+                class=" max-sm:flex-col max-sm:gap-[1rem] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+                <ul class="ml-auto    max-sm:mx-auto  justify-center items-center gap-[8px] flex flex-wrap">
                     {{if gt .chentrycount .limit}}
-                   
-                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a></li>
-                    {{if gt .CurrentPage 3}}
-                    {{$keyword := .filter.Keyword}}
-                    <li><a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" >1</a></li>
-                    {{end}}
-                    {{if eq .CurrentPage 5}}
-                    <li><a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">2</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 5}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 2}}
-                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 1}}
-                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
-                    {{end}}
-                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
-                    {{if lt .CurrentPage .Pagination.TotalPages}}
-                    <li><a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
-                    {{end}}
-                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
-                    {{end}}
-                    <li>
-                        <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
+
+                    <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                            <img src="/public/img/pg-prev.svg" alt="previous">
+                            <span class=" max-sm:hidden"> Back</span>
                         </a>
                     </li>
-                   
-                   {{end}}
-                </ul>
-               
-                <p> {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}</p>
-            </div>
-          
-        </div>
-    </div>
-    <!--2-->
-    <!--------selected----------->
-    <div class="selected-numbers" style="display: none;">
-        <p class="heading-three text-white checkboxlength"> </p>
-        <div class="d-flex">
-          <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
-          data-bs-target="#centerModal">
-            <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
-          <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
-        </div>
-        <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
-      </div>
-</div>
-{{template "footer" .}}
-<script src="/public/js/entries/entry.js"></script>
+                    {{if gt .CurrentPage 3}}
+                    {{$keyword := .filter.Keyword}}
+                    <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            1 </a> </li>
+                    {{end}}
+                    {{if eq .CurrentPage 5}}
+                    <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px] ">
+                            2 </a> </li>
+                    {{end}}
+                    {{if gt .CurrentPage 5}}
+                    <li> <a href="javascript:void(0)"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            ...</a> </li>
+                    {{end}}
+                    {{if gt .CurrentPage 2}}
+                    <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            {{.Pagination.TwoBelow}} </a> </li>
+                    {{end}}
+                    {{if gt .CurrentPage 1}}
+                    <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            {{.Pagination.PreviousPage}} </a> </li>
+                    {{end}}
 
-{{template "footerclose" .}}
+                    <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+             text-[14px] w-[33px] h-[36px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+             bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                            {{.CurrentPage}} </a> </li>
+                    {{if lt .CurrentPage .Pagination.TotalPages}}
+                    <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            {{.Pagination.NextPage}} </a> </li>
+                    {{end}}
+                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            {{.Pagination.TwoAfter}} </a> </li>
+                    {{end}}
+                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                    <li> <a href="javascript:void(0)"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            ...</a> </li>
+                    {{end}}
+                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                    <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                            {{.Pagination.TotalPages}}</a> </li> {{end}}
+                    <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                            class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                            <span class=" max-sm:hidden"> Next </span> <img src="/public/img/pg-nxt.svg" alt="next">
+                        </a>
+                    </li>
+                    {{end}}
+                </ul>
+                <p class="ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+                    {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}
+                </p>
+            </div> -->
+
+        </div>
+
+  <!--Make it Private-->
+  <div class="modal right fade" id="makeprivatemodal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+  role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+          <div class="px-6 py-1.5 max-sm:px-[16px] border-b border-[#EDEDED] flex justify-between items-center">
+              <h5 class="mb-0 text-bold-black font-medium text-base" id="modalTitleId">
+                  Make it as Private
+              </h5>
+              <div class="flex gap-3">
+                  <a href="#" data-bs-dismiss="modal"
+                      class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline">Cancel</a>
+                  <a href="#" data-bs-dismiss="modal" id="permissionupdate"
+                      class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white rounded-[3px]  hover:bg-[#148569] bg-[#10A37F] no-underline">Update</a>
+
+              </div>
+          </div>
+          <div class="overflow-auto h-full">
+              <div class="p-6 py-[16px] max-sm:px-[16px] h-full">
+                  <div class="flex flex-col gap-[16px] items-start">
+                    <div
+                    class="flex items-center gap-6 justify-between w-full pb-[5px] ">
+    
+                    <div class="flex flex-col gap-[4px]">
+                        <h3 class="text-[#152027] text-sm font-medium mb-0">{{$Translate.ContentAccessControl.Accesstomembergroups}}</h3>
+                        <p class="text-[#B6B6B7] text-[11px] font-normal mb-0 line-clamp-none lg:line-clamp-1">
+                            {{$Translate.ContentAccessControl.Memberdesc}}</p>
+                    </div>
+                </div>
+                {{if .Membergroup}}
+                      <div
+                          class="flex items-center gap-6 justify-between w-full pb-[16px] border-b border-[#E0E0E0]">
+                          <h3 class="text-sm text-[#525252] font-normal m-0">Select All</h3>
+                          <label for="memgrp-slctall"
+                              class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                              <div class="relative">
+                                  <input type="checkbox" id="memgrp-slctall" class="peer sr-only" />
+                                  <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                  </div>
+                                  <div
+                                      class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                  </div>
+                              </div>
+                          </label>
+                      </div>
+                    
+                     
+                      {{range .Membergroup}}
+                      <div
+                          class="flex items-center gap-6 justify-between w-full pb-[16px] border-b border-[#E0E0E0]">
+                          <h3 class="text-sm text-[#152027] font-normal m-0">{{.Name}}</h3>
+                          <label for="ckb{{.Id}}"
+                              class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                              <div class="relative">
+                                  <input type="checkbox" id="ckb{{.Id}}"  data-id="{{.Id}}"  class="peer sr-only  memgrp-chkboxes" />
+                                  <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                  </div>
+                                  <div
+                                      class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                  </div>
+                              </div>
+                          </label>
+                      </div>
+                      {{end}}
+                      {{end}}
+                   
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+        {{template "footer" .}}
+        <script src="/public/js/entries/entry.js"></script>
+        <!-- <script src="script.js"></script> -->
+
+        {{template "footerclose" .}}

@@ -1,91 +1,84 @@
 {{define "footer"}}
 {{$Translate := .translate}}
-<!-- Center Modal -->
-<div class="modal fade delete-modal" id="centerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="warn-image">
-          <img src="/public/img/wraning.svg" alt="" />
+
+
+<!--DeleteModal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog max-w-[406px] p-[4rem_1rem] max-xl:p-[2rem_1rem] m-auto">
+    <div class="modal-content rounded-[12px]">
+      <div class="modal-body p-0">
+        <div class="p-[12px] border-b border-[#F4F4F4]">
+          <div class="mb-[12px] w-fit mx-auto">
+            <img src="/public/img/delete-icon.svg" alt="delete">
+          </div>
+          <h3 class="text-base font-normal text-[#262626] leading-5 mb-[8px] text-center deltitle">
+          </h3>
+          <p class="text-sm text-[#717171] font-light leading-[17px] mb-[8px] text-center deldesc" id="content">
+          </p>
+          <h2 class="text-sm text-[#10A37F] text-center leading-[17px] font-normal delname"></h2>
         </div>
-        <h2 class="heading-second deltitle"></h2>
-        <p class="heading-three deldesc" id="content">
-        </p>
-        <a href="javascript:void(0)" class="heading-three delname"></a>
+        <div class="flex space-x-[12px] justify-center p-[16px]">
+          <a href="javascript:void(0)" data-bs-dismiss="modal"
+            class="h-8 flex items-center justify-center px-[12px]  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline max-w-[130px] w-full"
+            id="dltCancelBtn">{{$Translate.Webhooks.Cancel}}</a>
+
+          <a href="javascript:void(0)"
+            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline max-w-[130px] w-full deleteBtn"
+            id="delid" data-id="">{{$Translate.Webhooks.Delete}}</a>
+        </div>
       </div>
-      <div class="modal-footer">
-        <a id="delete" class="spaceid" href="javascript:void(0)">
-          <button type="button" class="btn-reg btn-md primary" id="delid" name="delid">{{$Translate.Yes}}</button></a>
-        </button>
-        <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="delcancel">
-          {{$Translate.No}}
-        </button>
-      </div>
+
     </div>
   </div>
 </div>
 
-<div class="modal fade delete-modal" id="centerModal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="warn-image">
-          <img src="/public/img/wraning.svg" alt="" />
-        </div>
-        <h2 class="heading-second deltitle"></h2>
-        <p class="heading-three deldesc" id="content">
-        </p>
-        <a href="javascript:void(0)" class="heading-three delname"></a>
-      </div>
-      <div class="modal-footer">
-        <a id="delete" class="spaceid" href="javascript:void(0)">
-          <button type="button" class="btn-reg btn-md primary" id="delid1" name="delid">{{$Translate.Yes}}</button></a>
-        </button>
-        <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="delcancel1">
-          {{$Translate.No}}
-        </button>
-      </div>
+<!-- multiselect -->
+
+<div
+  class="z-[99] w-full flex justify-center fixed bottom-[84px] left-auto right-0 max-w-[calc(100%-232px)] max-md:max-w-full multidelete
+   [&.responsive-width]:max-w-[calc(100%-470px)]  [&.responsive-width]:max-[768px]:max-w-[calc(100%-180px)]  [&.responsive-width]:max-sm:max-w-full
+    [&.responsive-width]:max-xl:max-w-[calc(100%-412px)]  @container ">
+  <div
+    class=" z-[1000] bg-[#F7F7F5]  drop-shadow-[0px_8px_24px_-4px_#0000001F]
+   rounded-[8px] max-w-[960px] mx-auto  flex items-center  sticky bottom-[84px] w-[80%] max-sm:p-[16px] max-sm:w-[90%] max-md:bottom-[100px] hidden selected-numbers @[550px]:p-[24px_32px] p-[16px] ">
+    <p class="text-[14px] font-[500] leading-[17.5px] text-[#262626] checkboxlength ">{{$Translate.Itemselected}}</p>
+    <div class="flex ml-auto">
+      <a href="javascript:void(0)" id="seleccheckboxdelete" data-bs-toggle="modal" data-bs-target="#deleteModal"
+        class="flex gap-[6px] items-center text-[14px] font-[500] leading-[17.5px] text-[#262626] border-r border-[#717171] mr-[8px] pr-[8px] hover:underline">
+        <img src="/public/img/delete-select.svg" alt="delete"> <span class="max-sm:hidden @[550px]:inline-block hidden">{{$Translate.Delete}}</span></a>
+      <a href="javascript:void(0)" id="unbulishslt" data-bs-toggle="modal" data-bs-target="#deleteModal"
+        class="flex gap-[6px] items-center text-[14px] font-[500] leading-[17.5px] text-[#262626] hover:underline">
+        <img src="/public/img/rename-select.svg" alt="rename" class="hidden renameimg">
+        <span class="max-sm:hidden">Rename</span></a>
     </div>
+    <a href="javascript:void(0)" class=" hover:underline text-[14px] font-[500] leading-[17.5px] text-[#262626] ml-auto"
+      id="deselectid">{{$Translate.Deselectall}}</a>
   </div>
 </div>
 
-<div class="modal fade delete-modal" id="centerModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="warn-image">
-          <img src="/public/img/wraning.svg" alt="" />
-        </div>
-        <h2 class="heading-second deltitle"></h2>
-        <p class="heading-three deldesc" id="content2">
-        </p>
-        <a href="javascript:void(0)" class="heading-three delname"></a>
-      </div>
-      <div class="modal-footer">
-        <a id="delete" class="spaceid" href="javascript:void(0)">
-          <button type="button" class="btn-reg btn-md primary" id="delid2" name="delid">{{$Translate.Yes}}</button></a>
-        </button>
-        <button class="btn-reg btn-md secondary" data-bs-dismiss="modal" id="delcancel2">
-          {{$Translate.No}}
-        </button>
-      </div>
-    </div>
+<div id="overlay">
+  <div class="cv-spinner">
+    <span class="spinner"></span>
   </div>
 </div>
-<footer>
-  <p class="para">{{.Menu.Footer}}</p>
-</footer>
+
+</section>
+
+</main>
+
+{{template "cropsquare" .}}
 
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-  integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+  integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 
 
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -106,6 +99,7 @@
 
 <!-- superbuild cdn -->
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/super-build/ckeditor.js"></script>
+<!-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> -->
 
 <!-- jquery validator-->
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -117,8 +111,8 @@
   integrity="sha512-CTSrPIDxxtTdaIYlTKHEyvHa+70TOhC1pY3PLDgrUqCFifFtV7KrucZCvPy2K7hB0HtKgt0r4INTGBISqnaLNg=="
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!--cropper-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+<!--cropper-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
 
 <!--Local files-->
 <script src="/public/js/common.js"></script>
@@ -133,14 +127,96 @@
   // Initialize tooltips
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
+    return new bootstrap.Tooltip(tooltipTriggerEl)
   })
 
-  
+
 </script>
 
 <script>
   const tooltipTriggerList1 = document.querySelectorAll('[data-bs-toggle="tooltip"]')
   const tooltipList2 = [...tooltipTriggerList1].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
+<script>
+  $(document).ready(function () {
+    $('.search-btn').on('click', function () {
+      $('.target-element').addClass('new-class');
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Toggle visibility on accord-bt click and toggle the active class
+    $('.accord-bt').click(function () {
+      var parent = $(this).closest('.sk-doc-tp');
+      $(this).toggleClass('active');
+      parent.find('.doc-lst').toggleClass('hide');
+    });
+  });
+</script>
+
+<!-- <script>
+  $(document).ready(function () {
+      $(".srchBtn-togg").click(function () {
+          $(".search-btn").toggleClass("active");
+      });
+  });
+</script> -->
+
+<script>
+  $(document).ready(function () {
+    $('.toggle-button').click(function () {
+      $('.sk-aside, .toggle-button , .sk-home-container').toggleClass('active');
+    });
+  });
+
+</script>
+<!--accordion-->
+<script>
+  $(document).ready(function () {
+    $('.accord-bt').click(function () {
+      var parent = $(this).closest('.sk-doc-tp');
+      $(this).toggleClass('active');
+      parent.find('.doc-lst').toggleClass('hidden');
+      parent.find('.active').removeClass('hidden');
+      parent.find('.arrow').toggleClass(' rotate-180');
+    });
+  });
+</script>
+
+<!--toggle sidebar-->
+<script>
+  $(document).ready(function () {
+    $('.toggle-button').click(function () {
+      $('#sk-aside ').toggleClass('max-md:-translate-x-full');
+      $('main ').toggleClass('dropbck');
+    });
+  });
+
+</script>
+
+<!--search-->
+<!-- <script>
+      $(document).ready(function () {
+          $(".srchBtn-togg").click(function () {
+              $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
+              $(this).next('input').toggleClass('hidden ');
+              $(this).parent('div').toggleClass('w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
+          });
+      });
+  </script> -->
+
+<script>
+  $(document).ready(function () {
+    $(".srchBtn-togg").click(function () {
+      $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
+      $(this).next('input').toggleClass('hidden ');
+      $(this).parent('div').toggleClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
+    });
+  });
+
+</script>
+
+
 {{end}}

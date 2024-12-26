@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap'); 
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
         body {
             font-family: "Lexend", sans-serif;
             margin: 0;
@@ -50,7 +51,7 @@
         }
 
         .mb-1 {
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .copy-ticket {
@@ -76,11 +77,92 @@
 </head>
 
 <body style="font-family: 'Lexend', sans-serif;">
+
     <table class="copy-ticket" style="max-width: 43.5rem;background-color:#FFFFFF;" cellpadding="0" cellspacing="0">
         <tbody>
-            {{.Body}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tbody>
+                    <tr>
+                        <td style="padding: 27px 16px 32px 16px;">
+                            <table style="width: 100%; max-width:696px; margin-inline: auto;" width="100%"
+                                cellpadding="0" cellspacing="0" role="presentation">
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center;"><img style="height: 36px; width:240px;"
+                                                src="{{.AdminLogo}}" alt="logo"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 59px 0 60px 0; border-bottom: 1px solid #EEEEEE;">
+                                            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                                <tbody>
+                                                    {{.Body}}
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 80px 0 0 0 ;" align="center">
+                                            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                                <tbody>
+                                                    <tr>
+                                                        <td align="center" style="padding-bottom: 16px;">
+                                                            <table cellpadding="0" cellspacing="0" role="presentation"
+                                                                style="width: fit-content;">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style="padding-right: 12px;" align="center">
+                                                                            <a href="{{.FacebookLink}}"
+                                                                                style=" display: block;"
+                                                                                target="_blank"><img src="{{.FbLogo}}"
+                                                                                    alt="facebook"
+                                                                                    style="width: 24px; height: 24px;"></a>
+                                                                        </td>
+                                                                        <td style="padding-right: 12px;"><a
+                                                                                href="{{.LinkedinLink}}"
+                                                                                style="display: block;"
+                                                                                target="_blank"><img
+                                                                                    src="{{.LinkedinLogo}}" alt="linkedin"
+                                                                                    style="width: 24px; height: 24px;"></a>
+                                                                        </td>
+                                                                        <td style="padding-right: 12px;"><a
+                                                                                href="{{.TwitterLink}}"
+                                                                                style="display: block;"
+                                                                                target="_blank"><img src="{{.TwitterLogo}}"
+                                                                                    alt="x"
+                                                                                    style="width: 24px; height: 24px;"></a>
+                                                                        </td>
+                                                                        <td style="padding-right: 12px;"><a
+                                                                                href="{{.YoutubeLink}}"
+                                                                                style="display: block;"
+                                                                                target="_blank"><img src="{{.YoutubeLogo}}"
+                                                                                    alt="youtube"
+                                                                                    style="width: 24px; height: 24px;"></a>
+                                                                        </td>
+                                                                        <td style="padding-right: 12px;"><a
+                                                                                href="{{.InstagramLink}}"
+                                                                                style="display: block;"
+                                                                                target="_blank"><img src="{{.InstaLogo}}"
+                                                                                    alt="instagram"
+                                                                                    style="width: 24px; height: 24px;"></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </tbody>
     </table>
+    </div>
 </body>
 
 </html>

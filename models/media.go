@@ -24,9 +24,9 @@ type Azure struct {
 	ContainerName  string `json:"containername"`
 }
 
-func UpdateStorageType(stype TblStorageType) (TblStorageType, error) {
+func UpdateStorageType(stype TblStorageType, _ int) (TblStorageType, error) {
 
-	query := db.Debug().Model(TblStorageType{}).Where("id=1")
+	query := DB.Debug().Model(TblStorageType{}).Where("id=1")
 
 	if stype.SelectedType == "local" {
 
@@ -46,7 +46,7 @@ func UpdateStorageType(stype TblStorageType) (TblStorageType, error) {
 
 	}
 
-	query.UpdateColumns(map[string]interface{}{"local": stype.Local, "aws": stype.Aws, "azure": stype.Azure, "drive": stype.Drive, "selected_type": stype.SelectedType})
+	query = query.UpdateColumns(map[string]interface{}{"local": stype.Local, "aws": stype.Aws, "azure": stype.Azure, "drive": stype.Drive, "selected_type": stype.SelectedType})
 
 	if err := query.Error; err != nil {
 
@@ -56,9 +56,9 @@ func UpdateStorageType(stype TblStorageType) (TblStorageType, error) {
 	return stype, nil
 }
 
-func GetStorageValue() (tblstorgetype TblStorageType, err error) {
+func GetStorageValue(_ int) (tblstorgetype TblStorageType, err error) {
 
-	if err := db.Model(TblStorageType{}).Where("id=1").First(&tblstorgetype).Error; err != nil {
+	if err := DB.Model(TblStorageType{}).Where("id=1").First(&tblstorgetype).Error; err != nil {
 
 		return TblStorageType{}, err
 	}

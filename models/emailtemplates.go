@@ -3,6 +3,7 @@ package models
 import (
 	"spurt-cms/config"
 	"time"
+	"fmt"
 )
 
 type Filter struct {
@@ -30,6 +31,8 @@ type TblEmailTemplate struct {
 	IsActive            int
 	IsDefault           int
 	DateString          string `gorm:"-"`
+	TemplateSlug        string
+	TenantId            int `gorm:"DEFAULT:1"`
 }
 
 type TblImportfileLogs struct {
@@ -42,17 +45,18 @@ type TblImportfileLogs struct {
 	CreatedBy      int
 	Status         int
 	DateString     string `gorm:"-"`
+	TenantId       int    `gorm:"DEFAULT:1"`
 }
 
-var db = config.SetupDB()
+var DB = config.SetupDB()
 
-func GetTemplateList(templates *[]TblEmailTemplate, limit, offset int, filter Filter, flag bool) ([]TblEmailTemplate, int64) {
+func GetTemplateList(templates *[]TblEmailTemplate, limit, offset int, filter Filter, flag bool, tenantid int) ([]TblEmailTemplate, int64) {
 
 	var Total_templates int64
 
 	var emptyslice []TblEmailTemplate
 
-	query := db.Table("tbl_email_templates").Where("tbl_email_templates.is_deleted=? and tbl_email_templates.module_id=0", 0).Order("id desc")
+	query := DB.Debug().Table("tbl_email_templates").Where("tbl_email_templates.is_deleted=0 and tbl_email_templates.module_id=0 and tbl_email_templates.tenant_id=?",tenantid).Order("id desc")
 
 	if filter.Keyword != "" {
 
@@ -60,7 +64,7 @@ func GetTemplateList(templates *[]TblEmailTemplate, limit, offset int, filter Fi
 
 	}
 
-	if flag == true {
+	if flag {
 
 		query.Find(&templates)
 
@@ -68,7 +72,7 @@ func GetTemplateList(templates *[]TblEmailTemplate, limit, offset int, filter Fi
 
 	}
 
-	if limit != 0 && flag == false {
+	if limit != 0 && !flag {
 
 		query.Offset(offset).Limit(limit).Find(&templates)
 
@@ -81,21 +85,20 @@ func GetTemplateList(templates *[]TblEmailTemplate, limit, offset int, filter Fi
 		return emptyslice, Total_templates
 	}
 
-	return emptyslice, 0
-
 }
 
-func GetTempdetail(temp *TblEmailTemplate, id int) error {
+func GetTempdetail(temp *TblEmailTemplate, id int, _ int) error {
 
-	if err := db.Table("tbl_email_templates").Where("id=?", id).First(&temp).Error; err != nil {
+	if err := DB.Table("tbl_email_templates").Where("is_deleted =0 and id=?", id).First(&temp).Error; err != nil {
 
 		return err
 	}
 	return nil
 }
-func UpdateTemplate(template *TblEmailTemplate) error {
 
-	if err := db.Table("tbl_email_templates").Where("id=?", template.Id).Updates(TblEmailTemplate{TemplateName: template.TemplateName, TemplateSubject: template.TemplateSubject, TemplateMessage: template.TemplateMessage, Id: template.Id, ModifiedOn: template.ModifiedOn, ModifiedBy: template.ModifiedBy, TemplateDescription: template.TemplateDescription}).Error; err != nil {
+func UpdateTemplate(template *TblEmailTemplate, _ int) error {
+
+	if err := DB.Table("tbl_email_templates").Where("is_deleted=0 and id=?", template.Id).Updates(TblEmailTemplate{TemplateName: template.TemplateName, TemplateSubject: template.TemplateSubject, TemplateMessage: template.TemplateMessage, Id: template.Id, ModifiedOn: template.ModifiedOn, ModifiedBy: template.ModifiedBy, TemplateDescription: template.TemplateDescription}).Error; err != nil {
 
 		return err
 	}
@@ -103,7 +106,7 @@ func UpdateTemplate(template *TblEmailTemplate) error {
 	return nil
 }
 
-func TemplateStatus(id int, status int, userid int) error {
+func TemplateStatus(id int, status int, userid int, _ int) error {
 
 	var Tempstatus TblEmailTemplate
 
@@ -111,7 +114,7 @@ func TemplateStatus(id int, status int, userid int) error {
 
 	Tempstatus.ModifiedOn, _ = time.Parse("2006-01-02 15:04:05", time.Now().UTC().Format("2006-01-02 15:04:05"))
 
-	err1 := TemplateIsActive(&Tempstatus, id, status)
+	err1 := TemplateIsActive(&Tempstatus, id, status,-1)
 
 	if err1 != nil {
 
@@ -123,9 +126,9 @@ func TemplateStatus(id int, status int, userid int) error {
 }
 
 /*update template isactive*/
-func TemplateIsActive(template *TblEmailTemplate, id int, val int) error {
+func TemplateIsActive(template *TblEmailTemplate, id int, val int,_ int) error {
 
-	if err := db.Table("tbl_email_templates").Where("id=?", id).UpdateColumns(map[string]interface{}{"is_active": val, "modified_by": template.ModifiedBy, "modified_on": template.ModifiedOn}).Error; err != nil {
+	if err := DB.Table("tbl_email_templates").Where("id=? and is_deleted = 0", id).UpdateColumns(map[string]interface{}{"is_active": val, "modified_by": template.ModifiedBy, "modified_on": template.ModifiedOn}).Error; err != nil {
 
 		return err
 	}
@@ -133,28 +136,36 @@ func TemplateIsActive(template *TblEmailTemplate, id int, val int) error {
 	return nil
 }
 
-func GetTemplates(template *TblEmailTemplate, key string) error {
+func GetTemplates(template *TblEmailTemplate, key string, tenantid int) error {
+	fmt.Println("tenantsss",tenantid)
+if tenantid<=0{
 
-	if err := db.Table("tbl_email_templates").Where("template_name=?", key).First(&template).Error; err != nil {
-
-		return err
-	}
-	return nil
-}
-
-func CreateFileLog(logdata *TblImportfileLogs) error {
-
-	if err := db.Debug().Table("tbl_importfile_logs").Create(&logdata).Error; err != nil {
+	if err := DB.Debug().Table("tbl_email_templates").Where("template_slug=? and is_deleted = 0 ", key).First(&template).Error; err != nil {
 
 		return err
 	}
+}else{
+	if err := DB.Debug().Table("tbl_email_templates").Where("template_slug=? and is_deleted = 0 and tenant_id=?", key,tenantid).First(&template).Error; err != nil {
+
+		return err
+	}
+}
+	return nil
+}
+
+func CreateFileLog(logdata *TblImportfileLogs, tenantid int) error {
+
+	if err := DB.Debug().Table("tbl_importfile_logs").Where("tenant_id = ?", tenantid).Create(&logdata).Error; err != nil {
+
+		return err
+	}
 
 	return nil
 
 }
-func GetFileLogs(logdata *[]TblImportfileLogs) ([]TblImportfileLogs, error) {
+func GetFileLogs(logdata *[]TblImportfileLogs, tenantid int) ([]TblImportfileLogs, error) {
 
-	if err := db.Debug().Table("tbl_importfile_logs").Select("tbl_importfile_logs.*").Order("id desc").Find(&logdata).Error; err != nil {
+	if err := DB.Debug().Table("tbl_importfile_logs").Where("tenant_id = ?", tenantid).Select("tbl_importfile_logs.*").Order("id desc").Find(&logdata).Error; err != nil {
 
 		return *logdata, err
 	}
@@ -163,9 +174,10 @@ func GetFileLogs(logdata *[]TblImportfileLogs) ([]TblImportfileLogs, error) {
 
 }
 
-func GetTemplatesByModuleId(moduleid int) (templates *[]TblEmailTemplate, error bool) {
+func GetTemplatesByModuleId(moduleid int, tenantid int) (templates *[]TblEmailTemplate, error bool) {
+	fmt.Println("moduleid",moduleid)
 
-	if err := db.Table("tbl_email_templates").Where("module_id=?", moduleid).Find(&templates).Error; err != nil {
+	if err := DB.Debug().Table("tbl_email_templates").Where("is_deleted = 0 and module_id=? and tenant_id=?", moduleid,tenantid).Order("id asc").Find(&templates).Error; err != nil {
 
 		return &[]TblEmailTemplate{}, false
 	}

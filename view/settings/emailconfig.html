@@ -1,111 +1,129 @@
-
-
 {{template "header" .}}
-{{template "settingsmenu" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
-    <div class="page-wrapper settings-wrapper">
-        <div class="email-temp-tabs">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link " id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                        type="button" role="tab" aria-controls="home" aria-selected="true"onclick="setroute()" >
-                        {{$Translate.Setting.Emailtemplates}}
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab2" data-bs-toggle="tab" data-bs-target="#home2" type="button"
-                        role="tab" aria-controls="home2" aria-selected="false" onclick="setroute1()">
-                        {{$Translate.Setting.Emailconfig}}
-                    </button>
-                </li>
-            </ul>
-            <div class="email-config">
-            <div class="grd-2-fr">
-                <div class="left-cms">
-                    <h1 class="heading" style="font-size: 16px;">{{$Translate.Setting.Emailconfig}}</h1>
-                    <p class="para color-light">  {{$Translate.Setting.Emailconfcontent}}
-                    </p>
-                </div>
-                <div class="channel-edit new-temp">
-                    <div class="radio radio-label" id="smtpmail">
-                        <input id="radiosmtp" name="smtpradio" {{if eq .Maildetails.SelectedType `smtp`}} checked  {{end}} value="" type="radio">
-                        <label for="radiosmtp" class="radio-label">
-                            <div class="to-select-cms">
-                                <img src="/public/img/email-temp-new1.svg" />
-                                <p>SMTP</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="radio radio-label" id="environmentmail">
-                        <input id="radioenv" name="envradio" {{if eq .Maildetails.SelectedType `environment`}}checked {{end}} value="" type="radio">
-                        <label for="radioenv" class="radio-label">
-                            <div class="to-select-cms">
-                                <img src="/public/img/email-temp-new2.svg" />
-                                <p>Environment</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="cms-sep"></div>
-            <div class="grd-2-fr" id="emailconfigdiv" {{if eq .Maildetails.SelectedType `environment`}} style="display: none;" {{end}}>
-                
-                <div class="left-cms">
-                    <div class="selected-cms">
-                        <img src="/public/img/email-temp-new1.svg" />  
-                            <div>
-                            <h1 class="heading-three">SMTP</h1>
-                            <p class="para color-light"> {{$Translate.Setting.Smtpcontent}}
-                            </p>
-                        </div>
-                    </div>
-                 </div>
-                 <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
-                    <input type="hidden" name="csrf" value="{{.csrf}}">
-                    <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
-                   <input type="hidden" name="seltype" id="emailseltype" value="Environment">
 
-                 <div class="channel-input">
-                    <div class="input-group" id="config_email">
-                        <label for="" class="input-label">{{$Translate.Setting.Senderemail}} *</label>
-                        <div class="ig-row">
-                            <input type="text" class="field"   value="{{.Email.Mail}}"   name="email" id="emailaddress" placeholder="{{$Translate.Setting.Smtpplcholder}} ...">
-                            
-                        </div>
-                    </div>
-                    <div class="input-group" id="config_password">
-                        <label for="" class="input-label">{{$Translate.Setting.Emailpass}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" value="{{.Email.Password}}" name="password" id="mailpassword" placeholder="{{$Translate.Setting.Smtpemailplcholder}}...">
-                        </div>
-                    </div>
-                    <div class="input-group" id="config_host">
-                        <label for="" class="input-label">{{$Translate.Setting.Smtphost}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" value="{{.Email.Host}}" name="host" id="mailhost" placeholder="{{$Translate.Setting.Smtphostplcholder}}...">
-                        </div>
-                    </div>
-                    <div class="input-group" id="config_port">
-                        <label for="" class="input-label">{{$Translate.Setting.Smtpport}}*</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" value="{{.Email.Port}}" name="port" id="mailport" placeholder="{{$Translate.Setting.Smtpportplcholder}}...">
-                        </div>
-                    </div>
-                </div>
-                     
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    <header class="header-rht max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Setting.Email}}</h2>
+
+        </div>
+
+
+        <div class="flex space-x-3">
+            <a href="/settings/emails/" class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline" id="emailback">{{$Translate.Cancel}}</a>
+            <a href="javascript:void(0);"  class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline" id="addemailconfig">{{$Translate.Save}}</a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+        <!--accordion-->
+
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+
+
+        <div class="block overflow-hidden @container pb-[120px] setConatiner ">
+
+
+            <div class="block overflow-auto">
+                <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                    <li><a href="/settings/emails/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">{{$Translate.Setting.Emailtemplates}} </a></li>
+                    <li><a href="/settings/emails/emailconfig/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">{{$Translate.Setting.Emailconfig}}</a></li>
+                </ul>
             </div>
-            
+
+            <div class="p-[24px_16px] max-w-[1920px] mx-auto  max-lg:p-[16px]">
+                <div class=" grid-cols-1 grid configContainer @[500px]:grid-cols-[1fr_1.2fr] lg:gap-x-[80px] justify-between gap-[24px]   ">
+
+                    <div class="block">
+                        <h2 class=" text-[16px] font-[400] leading-[20px] text-[#262626] mb-[6px] ">{{$Translate.Setting.Emailconfig}}</h2>
+                        <p class="text-[12px] font-[400] leading-[15px] text-[#717171]">{{$Translate.Setting.Emailconfcontent}} </p>
+                    </div>
+
+                    <div class="flex items-center space-x-[32px] flex-wrap max-md:space-x-[16px]">
+                        <input type="radio" name="radio" id="radiosmtp" name="smtpradio" {{if eq .Maildetails.SelectedType "smtp" }} checked {{end}} value="{{.Maildetails.SelectedType}}"  class="hidden peer/local">
+                        <input type="radio" name="radio" id="radioenv" name="envradio" {{if eq .Maildetails.SelectedType "environment" }} checked {{end}} value="{{.Malidetails.SelectedType}}"  class="hidden peer/amazon">
+
+                        <label for="radiosmtp" id="smtpmail" class="relative cursor-pointer flex space-x-[8px] items-center mb-0 text-sm font-normal text-[#152027] peer-checked/member:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/local:before:bg-[url('/public/img/radio-checked.svg')] before:mr-[8px]">
+                            <div class="mediasetting-img-dv">
+                                <img src="/public/img/smtp.svg" alt="smtp">
+                            </div>
+                           {{$Translate.Setting.Smtp}}
+                        </label>
+
+                        <label for="radioenv" id="environmentmail" class="relative cursor-pointer flex space-x-[8px] items-center mb-0 text-sm font-normal text-[#152027] peer-checked/member:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/amazon:before:bg-[url('/public/img/radio-checked.svg')] before:mr-[8px]">
+                            <div class="mediasetting-img-dv">
+                                <img src="/public/img/env.svg" alt="env">
+                            </div>
+                             {{$Translate.Setting.Environment}}
+                        </label>
+
+                    </div>
+
+
+
+                </div>
+                <div class="border-b border-[#EDEDED] my-[24px] col-span-full ">
+
+                </div>
+
+                <div id="emailconfigdiv"  class="grid-cols-1 grid @[500px]:grid-cols-[1fr_1.2fr] configContainer lg:gap-x-[80px] justify-between gap-[24px]" {{if eq .Maildetails.SelectedType "environment" }} style="display: none;" {{end}} >
+                    <div class="flex items-start space-x-[12px]">
+                        <div class="provider-logo">
+                            <img src="/public/img/smtp.svg" alt="smtp" class="w-[32px] min-w-[32px]">
+                        </div>
+                        <div>
+                            <h4 class="text-[14px] font-[400] leading-[17.5px] text-[#152027] mb-[6px]">{{$Translate.Setting.Smtp}}
+                            </h4>
+                            <p class="text-[12px] font-[300] leading-[15px] text-[#525252] text-left">{{$Translate.Setting.Smtpcontent}}</p>
+                        </div>
+                    </div>
+
+                    <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+                        <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
+                        <input type="hidden" name="seltype" id="emailseltype" value="{{.Maildetails.SelectedType}}">
+                      <div class="block">
+                        <div class="mb-[16px]">
+                            <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Setting.Senderemail}} *</label>
+                            <input type="text" value="{{.Email.Mail}}" name="email" id="emailaddress" placeholder="{{$Translate.Setting.Smtpplcholder}}" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
+                        </div>
+                        <div class="mb-[16px]">
+                            <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Setting.Emailpass}}*</label>
+                            <input type="text" value="{{.Email.Password}}" name="password" id="mailpassword" placeholder="{{$Translate.Setting.Smtpemailplcholder}}" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
+                        </div>
+                        <div class="mb-[16px]">
+                            <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Setting.Smtphost}}*</label>
+                            <input type="text" value="{{.Email.Host}}" name="host" id="mailhost" placeholder="{{$Translate.Setting.Smtphostplcholder}}" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
+                        </div>
+                        <div class="block">
+                            <label class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Setting.Smtpport}}*</label>
+                            <input type="number" placeholder="{{$Translate.Setting.Smtpportplcholder}}" value="{{.Email.Port}}" name="port" id="mailport" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
+                        </div>
+                      </div>
+                    </form>
+
+                </div>
+
+            </div>
         </div>
-        </div>
-        <div class="configurationContent-btm" id="emailfooter">
-            <button class="btn-reg btn-lg secondary" type="button" id="emailback">{{$Translate.Cancel}} </button>
-            <button class="btn-reg btn-lg primary theme-color " type="button" id="addemailconfig">{{$Translate.Update}}</button>
-        </div>
-    </form>
     </div>
 
-    {{template "footer" .}}
-    <script src="/public/js/settings/emailconfig/emailconfig.js"></script>
+
+
+
+</section>
+
+
+
+{{template "footer" .}}
+<script src="/public/js/settings/emailconfig/emailconfig.js"></script>
 
 {{template "footerclose" .}}

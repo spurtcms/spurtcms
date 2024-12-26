@@ -99,18 +99,27 @@ $(document).ready(function () {
 
                   $(this).prop('checked', true)
 
-                } else {
-
-                  isAllMembersChkd = false
                 }
 
+
               })
+              console.log("condtionchecksss", isAllMembersChkd)
 
-              if (isAllMembersChkd) {
 
-                $('#memgrp-slctall').prop('checked', true)
+
+            }
+            $('.memgrp-chkboxes').each(function () {
+
+              if (!$(this).is(':checked')) {
+
+                isAllMembersChkd = false;
               }
+            });
 
+            if (isAllMembersChkd) {
+
+
+              $('#memgrp-slctall').prop('checked', true)
             }
 
           }
@@ -119,26 +128,30 @@ $(document).ready(function () {
 
             channels = data.Channels
 
-            if ($('#default-mod-chk[type=hidden]').val() == "channel") {
 
-              for (let channelId of channels) {
 
-                $('.channelchkbox[data-id=' + channelId + ']').prop('checked', true)
-              }
+            // if ($('#default-mod-chk[type=hidden]').val() == "channel") {
+
+            for (let channelId of channels) {
+
+              $('.channelchkbox[data-id=' + channelId + ']').prop('checked', true)
             }
+            // }
           }
 
           if (data.ChannelEntries != null) {
 
             channelEntries = data.ChannelEntries
 
-            if ($('#default-mod-chk[type=hidden]').val() == "channel") {
+            // if ($('#default-mod-chk[type=hidden]').val() == "channel") {
 
-              for (let entry of channelEntries) {
+            for (let entry of channelEntries) {
+              console.log("loop", entry.id);
 
-                $('.chanEntry-chkbox[data-id=' + entry.id + ']').prop('checked', true)
-              }
+
+              $('.chanEntry-chkbox[data-id=' + entry.id + ']').prop('checked', true)
             }
+            // }
 
           }
 
@@ -481,7 +494,7 @@ function GetSubpageHtml(data, spid, spaceChecked, spgChecked) {
   }
 
   return ` <div class="chk-group chk-group-label">
-                ${spg_chkbox} 
+                ${spg_chkbox}
                 <label for="chkspg${data.SpgId}" class="para">${data.Name}</label>
              </div>`
 }
@@ -578,7 +591,7 @@ function GetSubpageForPageGroup(data, spid, pggid, pgid, spaceChecked, spgzCheck
   }
 
   return ` <div class="chk-group chk-group-label">
-              ${spg_chkbox} 
+              ${spg_chkbox}
               <label for="chkspg${data.SpgId}" class="para">${data.Name}</label>
              </div>`
 
@@ -770,7 +783,7 @@ $(document).on('click', '.pagegroup-chkbox', function () {
         subpages.push(new_subpage)
       }
 
-      $(this).prop('checked',true)
+      $(this).prop('checked', true)
     })
 
     pagegroups.push(pagegroup)
@@ -790,7 +803,7 @@ $(document).on('click', '.pagegroup-chkbox', function () {
 
     subpages = subpages.filter(obj => { obj.groupId != pgg_id })
 
-    $('.GRPID' + pgg_id).prop('checked',false)
+    $('.GRPID' + pgg_id).prop('checked', false)
 
   }
 
@@ -841,7 +854,7 @@ $(document).on('click', '.pgunderpgg-chkbox', function () {
 
     })
 
-    if(isAllPagesChecked){
+    if (isAllPagesChecked) {
 
       $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', true)
     }
@@ -919,7 +932,7 @@ $(document).on('click', '.spgunderpgg-chkbox', function () {
 
     })
 
-    if(isAllPagesChecked){
+    if (isAllPagesChecked) {
 
       $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', true)
     }
@@ -943,10 +956,10 @@ $(document).on('click', '.spgunderpgg-chkbox', function () {
 
     }
 
-    $('.pagegroup-chkbox[data-pggid='+pggid+']').prop('checked',false)
+    $('.pagegroup-chkbox[data-pggid=' + pggid + ']').prop('checked', false)
 
   }
-  
+
   var containerObj = HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups, spaces)
 
   subpages = containerObj.subpages
@@ -1118,32 +1131,32 @@ function HandleSpaceCheckboxesAndSpaceArray(spaceid, subpages, pages, pagegroups
           pgg_chkd.push(id)
         }
 
-      }else{
+      } else {
 
         $('.pgunderpgg-chkbox[data-spid=' + spaceid + '][data-pggid=' + id + ']').each(function () {
 
           var pgInPgg_id = $(this).attr('data-pgid')
 
           if ($(this).is(':checked')) {
-  
+
             var isPgIdExist = pages.some(item => item.id === pgInPgg_id);
-  
+
             var new_page = {}
-  
+
             new_page.id = pgInPgg_id
-  
+
             new_page.groupId = id
-  
+
             new_page.spaceId = spaceid
-  
+
             if (!isPgIdExist) {
-  
+
               pages.push(new_page)
-  
+
             }
-  
+
           }
- 
+
         })
       }
 
@@ -1354,6 +1367,8 @@ $('#memgrp-slctall').click(function () {
   console.log("memgrps", access_granted_memgrps);
 })
 
+
+
 $('.memgrp-chkboxes').each(function (chk_index, chk_element) {
 
   $(chk_element).click(function () {
@@ -1376,6 +1391,7 @@ $('.memgrp-chkboxes').each(function (chk_index, chk_element) {
 
         }
       })
+
 
       if (!$('#memgrp-slctall').prop('checked')) {
 
@@ -1459,17 +1475,19 @@ $('.configurationContent-btm > button').click(function () {
 
   const urlpar = new URLSearchParams(url);
 
+
   pageno = urlpar.get('page');
 
-  pages = pages.filter(obj => !spaces.includes(obj.spaceId))
+  // pages = pages.filter(obj => !spaces.includes(obj.spaceId))
 
-  subpages = subpages.filter(obj => !spaces.includes(obj.spaceId))
+  // subpages = subpages.filter(obj => !spaces.includes(obj.spaceId))
 
-  pagegroups = pagegroups.filter(obj => !spaces.includes(obj.spaceId))
+  // pagegroups = pagegroups.filter(obj => !spaces.includes(obj.spaceId))
 
   console.log("subpages", subpages, "pages", pages, "pagegroups", pagegroups, "spaces", spaces, "memgrps", access_granted_memgrps, "channels", channels, "channelEntries", channelEntries);
 
   if ($('#ca-inpt').val() != "") {
+    console.log("titile:");
 
     if ($('#ca-inpt').val() != "" && $('input[type=hidden][id=csrf-input]').val() != "") {
 
@@ -1477,13 +1495,13 @@ $('.configurationContent-btm > button').click(function () {
 
       data.title = $('#ca-inpt').val()
 
-      data.spaces = JSON.stringify({ spaces })
+      // data.spaces = JSON.stringify({ spaces })
 
-      data.pages = JSON.stringify({ pages })
+      // data.pages = JSON.stringify({ pages })
 
-      data.subpages = JSON.stringify({ subpages })
+      // data.subpages = JSON.stringify({ subpages })
 
-      data.pagegroups = JSON.stringify({ pagegroups })
+      // data.pagegroups = JSON.stringify({ pagegroups })
 
       data.channels = JSON.stringify({ channels })
 
@@ -1494,6 +1512,7 @@ $('.configurationContent-btm > button').click(function () {
       data.csrf = $('input[type=hidden][id=csrf-input]').val()
 
       if (content_access_id != "") {
+        console.log(content_access_id, "mem access");
 
         data.content_access_id = content_access_id
 
@@ -1510,7 +1529,6 @@ $('.configurationContent-btm > button').click(function () {
       // }
 
       if ((spaces.length > 0 || pages.length > 0 || subpages.length > 0 || pagegroups.length > 0 || channelEntries.length > 0 || channels.length > 0) && access_granted_memgrps.length > 0) {
-
         var callUrl
 
         if ($('#route-type').val() == "Save") {
@@ -1552,20 +1570,12 @@ $('.configurationContent-btm > button').click(function () {
         }
 
 
-        console.log("msg", message);
-
-        notify_content = '<div style="top:2px;" class="toast-msg dang-red"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/danger-group-12.svg" alt="" class="left-img" /> <span>' + message + '</span></div>';
-
+        notify_content = `<ul class=" warn-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="/ flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/toast-error.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + "please select entry and member group properly" + `</p></div></div> </li></ul>`;
         $(notify_content).insertBefore(".header-rht");
-
         setTimeout(function () {
-
-          $('.toast-msg').fadeOut('slow', function () {
-
+          $('.warn-msg').fadeOut('slow', function () {
             $(this).remove();
-
           });
-
         }, 5000);
 
       }
@@ -1593,6 +1603,7 @@ $('#ca-inpt').keyup(function () {
 })
 
 function PassContentAccessGrantedIds(data, url, pageno) {
+  console.log("hir", url);
 
   $.ajax({
 
@@ -1605,6 +1616,8 @@ function PassContentAccessGrantedIds(data, url, pageno) {
     dataType: 'json',
 
     success: function (data) {
+
+      console.log("datass", data)
 
       if (data) {
 
@@ -1643,21 +1656,46 @@ function PassContentAccessGrantedIds(data, url, pageno) {
   })
 }
 
-$('.ava-sel-srch>input').keyup(function () {
 
+// $('.ava-sel-srch>input').keyup(function () {
+
+//   var keyword = $(this).val().trim().toLowerCase()
+
+//   if ($(this).hasClass("space-srch-input") && $('.space-row').length > 0) {
+
+//     PerformSpaceSearch(keyword)
+
+//   } else if ($(this).hasClass("channel-srch-input") && $('.channel-row').length > 0) {
+
+//     PerformChannelSearch(keyword)
+
+//   }
+
+// })
+
+
+$('.channel-srch-input').keyup(function () {
   var keyword = $(this).val().trim().toLowerCase()
 
-  if ($(this).hasClass("space-srch-input") && $('.space-row').length > 0) {
+  if (keyword !== "") {
 
-    PerformSpaceSearch(keyword)
+    $('.closesearch-btn').show()
+    $('.srchBtn-togg').addClass('pointer-events-none')
 
-  } else if ($(this).hasClass("channel-srch-input") && $('.channel-row').length > 0) {
+}else{
 
+    $('.closesearch-btn').hide()
+    $('.srchBtn-togg').removeClass('pointer-events-none')
+
+}
+  if ($('.channel-row').length > 0) {
     PerformChannelSearch(keyword)
-
   }
 
+
 })
+
+
 
 $('.ava-sel-srch>img').click(function () {
 
@@ -1675,58 +1713,58 @@ $('.ava-sel-srch>img').click(function () {
 
 })
 
-function PerformSpaceSearch(keyword) {
+// function PerformSpaceSearch(keyword) {
 
-  if (keyword !== "") {
+//   if (keyword !== "") {
 
-    $('.space-row').each(function () {
+//     $('.space-row').each(function () {
 
-      var regex = new RegExp(keyword, "i"); // "i" makes the search case-insensitive
+//       var regex = new RegExp(keyword, "i"); // "i" makes the search case-insensitive
 
-      var spacename = $(this).find('.accessAccord-parent>.chk-group>label').text()
+//       var spacename = $(this).find('.accessAccord-parent>.chk-group>label').text()
 
-      if (regex.test(spacename)) {
+//       if (regex.test(spacename)) {
 
-        $(this).show()
+//         $(this).show()
 
-        $('.noData-foundWrapper').remove()
+//         $('.noData-foundWrapper').remove()
 
-      } else {
+//       } else {
 
-        $(this).hide()
+//         $(this).hide()
 
-        if ($('.space-row:visible').length == 0) {
+//         if ($('.space-row:visible').length == 0) {
 
-          var nodata_html = `<div class="noData-foundWrapper">
-                                    <div class="empty-folder">
-                                        <img style="max-width: 35px;" src="/public/img/nodatafilter.svg" alt="">
-                                        
-                                    </div>
-                                   <h1 style="text-align: center;font-size: 14px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
-                                </div>`
+//           var nodata_html = `<div class="noData-foundWrapper">
+//                                     <div class="empty-folder">
+//                                         <img style="max-width: 35px;" src="/public/img/nodatafilter.svg" alt="">
 
-          if ($('.noData-foundWrapper').length == 0) {
+//                                     </div>
+//                                    <h1 style="text-align: center;font-size: 14px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
+//                                 </div>`
 
-            $(this).parent().append(nodata_html)
-          }
+//           if ($('.noData-foundWrapper').length == 0) {
 
-        } else {
+//             $(this).parent().append(nodata_html)
+//           }
 
-          $('.noData-foundWrapper').remove()
-        }
+//         } else {
 
-      }
-    })
+//           $('.noData-foundWrapper').remove()
+//         }
 
-  } else {
+//       }
+//     })
 
-    $('.noData-foundWrapper').remove()
+//   } else {
 
-    $('.space-row').show()
+//     $('.noData-foundWrapper').remove()
 
-  }
+//     $('.space-row').show()
 
-}
+//   }
+
+// }
 
 function PerformChannelSearch(keyword) {
 
@@ -1735,8 +1773,9 @@ function PerformChannelSearch(keyword) {
     $('.channel-row').each(function () {
 
       var regex = new RegExp(keyword, "i"); // "i" makes the search case-insensitive
+      console.log(regex, "regx");
 
-      var channelname = $(this).find('.accessAccord-parent>.chk-group>label').text()
+      var channelname = $(this).find('.accessAccord-parent p').text();
 
       if (regex.test(channelname)) {
 
@@ -1750,10 +1789,10 @@ function PerformChannelSearch(keyword) {
 
         if ($('.channel-row:visible').length == 0) {
 
-          var nodata_html = `<div class="noData-foundWrapper">
-                                  <div class="empty-folder">
-                                      <img style="max-width: 35px;" src="/public/img/nodatafilter.svg" alt="">
-                                      
+          var nodata_html = `<div class="noData-foundWrapper m-auto" style="margin:auto;">
+                                  <div class="empty-folder" >
+                                      <img style="max-width: 100px; margin:auto" src="/public/img/nodatafilter.svg" alt="">
+
                                   </div>
                                  <h1 style="text-align: center;font-size: 14px;" class="heading"> `+ languagedata.nodatafound + ` </h1>
                               </div>`
@@ -1801,20 +1840,21 @@ $('.delete-access').click(function () {
 
   if (pageno == null) {
 
-    $('button[id=delid]').parent().attr('href', "/memberaccess/delete-accesscontrol/" + accessId)
+    $('#delid').attr('href', "/memberaccess/delete-accesscontrol/" + accessId)
 
   } else {
 
-    $('button[id=delid]').parent().attr('href', "/memberaccess/delete-accesscontrol/" + accessId + "?page=" + pageno)
+    $('#delid').attr('href', "/memberaccess/delete-accesscontrol/" + accessId + "?page=" + pageno)
 
   }
-  $('#centerModal').modal('show')
+
+  $('#deleteModal').modal('show')
 
 })
 
 $(document).on('click', '#channel-access', function () {
 
-  $("#description").text(languagedata?.ContentAccessControl?.channelaccessdesc)
+  $("#description").text(languagedata.ContentAccessControl.channelaccessdesc)
 
   console.log("channel-access clicked");
 
@@ -1871,7 +1911,7 @@ $(document).on('click', '#channel-access', function () {
                                                  ${entry_chkbox}
                                                     <label for="ChannelEntry${channelEntry.Id}"></label>
                                                   </div>
-        
+
                                                   <button class="accord-collapse">
                                                      <span class="para">${channelEntry.Title}</span>
                                                    </button>
@@ -1918,24 +1958,24 @@ $(document).on('click', '#channel-access', function () {
               }
 
               var channelBindHtml = `<div class="accessAccord-row channel-row">
-  
+
               <div class="accessAccord-parent">
-  
+
                     <div class="chk-group chk-group-label">
                           ${channel_chkbox}
                           <label for="channel${channel.Id}" class="para">${channel.ChannelName}</label>
                     </div>
-      
+
                     <div class="accessAccord-parent-end">
-      
+
                        <div class="card-breadCrumb">
                            <ul class="breadcrumb-container"></ul>
                        </div>
-  
+
                        <a href="javascript:void(0)" class="img-div accord-collapse" data-bs-toggle="collapse" data-bs-target="#channel${channel.Id}" aria-expanded="false" aria-controls="channel${channel.Id}">
                         <img src="/public/img/arrow-rgt.svg" alt="" data-toggle="${channel.Id}">
                       </a>
-      
+
                    </div>
               </div>
               ${channelEntryDiv}
@@ -2013,7 +2053,7 @@ $(document).on('click', '#space-access', function () {
 
   console.log("space-access clicked");
 
-  $("#description").text(languagedata?.ContentAccessControl?.spacedesc)
+  $("#description").text(languagedata.ContentAccessControl.spacedesc)
 
   $(this).addClass('active')
 
@@ -2067,7 +2107,9 @@ $(document).on('click', '#space-access', function () {
 
 })
 
+
 $(document).on('click', '.channelchkbox', function () {
+  console.log("hKHF");
 
   var channelId = $(this).attr('data-id')
 
@@ -2100,11 +2142,17 @@ $(document).on('click', '.channelchkbox', function () {
       if (channels[x] == channelId) {
 
         channels.splice(x, 1)
+
+
       }
 
     }
 
-    channelEntries = channelEntries.filter(obj => { obj.channelId != channelId })
+    // channelEntries = channelEntries.filter(obj => { obj.channelId != channelId })
+
+    channelEntries = channelEntries.filter(function(obj) {
+      return obj.channelId !== channelId; // Keep only objects whose channelId is not equal to the unchecked one
+  });
 
     $('.chanEntry-chkbox[data-chanid=' + channelId + ']').prop('checked', false)
 
@@ -2115,6 +2163,9 @@ $(document).on('click', '.channelchkbox', function () {
   console.log("chk channel", channels, channelEntries);
 
 })
+
+
+
 
 $(document).on('click', '.chanEntry-chkbox', function () {
 
@@ -2190,16 +2241,74 @@ $(document).on('click', '.chanEntry-chkbox', function () {
 
 })
 
+
 // Search return to home page
 
 $(document).on('keyup', '#memberrestrictsearch', function () {
 
-  if (event.key === 'Backspace') {
+  if (event.key === 'Backspace' && window.location.href.indexOf("keyword") > -1) {
 
-  if ($('.search').val() === "") {
-    window.location.href = "/memberaccess"
+    if ($('.search').val() === "") {
+      window.location.href = "/memberaccess"
 
+    }
   }
-}
 
+})
+
+$(document).on("click", ".Closebtn", function () {
+  $(".search").val('')
+  $(".Closebtn").addClass("hidden")
+  $(".srchBtn-togg").removeClass("pointer-events-none")
+
+})
+
+$(document).on("click", ".searchClosebtn", function () {
+  $(".search").val('')
+  window.location.href = "/memberaccess/"
+})
+
+$(document).ready(function () {
+
+  $('.search').on('input', function () {
+
+      if ($(this).val().length >= 1) {
+          $(".Closebtn").removeClass("hidden")
+          $(".srchBtn-togg").addClass("pointer-events-none")
+
+      }else{
+        $(".Closebtn").addClass("hidden")
+        $(".srchBtn-togg").removeClass("pointer-events-none")
+
+      }
+  });
+})
+
+$(document).on("click", ".hovericon", function () {
+  $(".search").val('')
+  $(".Closebtn").addClass("hidden")
+})
+
+$(document).on('keyup', '.checklength', function () {
+  var inputVal = $(this).val()
+
+  // console.log(inputVal.length);
+
+  var inputLength = inputVal.length
+
+  if (inputLength == 25) {
+    $(this).siblings('.lengthErr').removeClass('hidden')
+  } else {
+    $(this).siblings('.lengthErr').addClass('hidden')
+  }
+
+})
+
+
+$(document).on('click','.closesearch-btn',function(){
+    $('#restrict-searchinput').val('')
+    $(this).hide()
+    $('.noData-foundWrapper').remove()
+
+    $('.channel-row').show()
 })

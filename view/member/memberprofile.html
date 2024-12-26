@@ -2,356 +2,311 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<div class="page-wrapper">
+<section
+    class="sectionclass max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <form action="/member/updatemember" id="memberprofileform" name="updatemember" method="post">
+        <header
+            class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+            <div class="mr-auto flex items-center space-x-[6px]">
+                <a href="javascript:void(0);"
+                    class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                    <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                </a>
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
+                    {{$Translate.Memberss.Membresupdate}}</h2>
+            </div>
 
-    <div class="bread-crump">
-        <a href="/member/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="" class="current-page">{{$Translate.Memberss.Updatemember}}</a>
-    </div>
 
-    <!-- {{template "membertab" .}} -->
-    <form action="/member/updatemember" id="memberform" name="updatemember" method="post">
-        <div class="all-tab-content" id="groupsContent">
-            <!--1-->
-            <input type="hidden" name="csrf" value="{{.csrf}}">
-            <input type="hidden" name="mem_id" value="{{.Member.Id}}" id="mem_id">
-            <input type="hidden" name="memgrbpageno" id="memgrbpageno" value="{{.CurrentPage}}">
-            <div class="update-member">
-                <div class="update-title">
-                    <h4>Update Member</h4>
-                </div>
-                <div class="update-form">
-                    <div class="myaccount-details">
-                        <h4 class="heading">Basic Info</h4>
-                        <div class="update-account">
-                            <div class="update-profile-img">
-                                <input type="hidden" id="prof-crop">
-                                <img src=" {{if .Member.ProfileImage}}/{{.Member.ProfileImagePath}}{{end}}"
-                                    name="profpic" id="profpic" alt="">
-                                {{if .Member.ProfileImage}}{{else}}
-                                <div class="name-string" id="name-string"> <span>{{.Member.NameString}} </span></div>
-                                {{end}}
-                                <div class="profile-info profile-crop">
+            <div class="flex space-x-[12px]">
+                <a href="/member"
+                    class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">Cancel</a>
+                <button id="update" type="button"
+                    class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline">Update</button>
+            </div>
+        </header>
+
+        <section>
+            <div class="p-[16px]">
+
+                <div class="pb-6 border-b border-[#EDEDED]">
+
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="mem_id" value="{{.Member.Id}}" id="mem_id">
+                    <input type="hidden" name="memgrbpageno" id="memgrbpageno" value="{{.CurrentPage}}">
+
+                    <div class="max-w-full lg:max-w-[62%]">
+                        <h3 class="text-[#262626] mb-[16px] text-base font-normal">{{$Translate.Memberss.Basicinfo}}
+                        </h3>
+                        <div class="flex items-start flex-col sm:flex-row max-sm:space-y-[24px] sm:space-x-[24px] w-full">
+                            <div class="relative">
+                                <div
+                                    class="min-w-[120px] h-[120px] rounded-full bg-[#F9F9FA] relative group overflow-hidden">
+                                    {{if .Member.ProfileImagePath}}
+                                    <img class="min-w-[120px] h-[120px]" alt="" src="{{.Member.ProfileImagePath}}"
+                                        id="mem-img">
+                                    {{else}}
+                                    <div class="name-string  absolute top-0 w-full h-full name-string grid place-items-center"
+                                        id="name-string"> <span>{{.Member.NameString}} </span></div>
+
+                                    {{end}}
+                                    <div
+                                        class="absolute top-0 left-0 w-full h-full opacity-[0] bg-[#1E292C76] group-hover:opacity-100 flex justify-center items-center">
+                                        <img src="/public/img/cam-logo.svg">
+                                    </div>
+                                    <!-- <button class="cam-logo" type="button">
+                                <input id="myfile" name="prof_pic" type="file">
+                                <img src="/public/img/cam-logo.svg" alt=""></button> -->
+                                    <input type="hidden" id="cropData" name="crop_data" />
+                                    <input type="hidden" id="prof-crop">
+                                    <input type="hidden" name="crop_data2">
+                                    <input type="hidden" name="profileid" value="{{.MemberProfile.Id}}">
+
+
+                                    <input type="file" id="profileImgLabel" name=" prof_pic" accept="image/png, image/jpeg,image/jpg,image/svg"
+                                        class="opacity-0 w-full h-full absolute top-0 left-0 cursor-pointer">
                                 </div>
-                                <button class="cam-logo" type="button">
-                                    <input id="myfile" name="prof_pic" type="file">
-                                    <input type="hidden" name="crop_data">
-                                    <img src="/public/img/cam-logo.svg" alt=""></button>
-                                <label id="myfile-error" class="error" for="myfile" style="display: none;
+                                <label id="myfile-error" class="error hidden" for="myfile" style="
                             font-size: 0.75rem;
                             font-weight: 400;
                             color: #F26674;position: absolute;
-                            top: 100%;">* Please select jpg|png|jpeg files only</label>
+                           ">* Please select jpg | png | jpeg files only</label>
                             </div>
-                            <div class="fill-account-details">
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Firstname}} *</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field"
-                                                placeholder="{{$Translate.Memberss.Entermemname}}"
-                                                value="{{.Member.FirstName}}" id="mem_name" name="mem_name">
+
+                            <div class="sm:grid-cols-2 grid-cols-1 grid gap-[16px] input-group">
+                                <div class="flex flex-col space-y-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">
+                                        {{$Translate.Memberss.Firstname}} <span class="text-red-600" >*</span></p>
+                                    <input type="text" value="{{.Member.FirstName}}" id="mem_name" name="mem_name"
+                                        placeholder="{{$Translate.Memberss.Entermemname}}"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Lastname}}
+                                    </p>
+                                    <input type="text" value="{{.Member.LastName}}" id="mem_lname" name="mem_lname"
+                                        placeholder="{{$Translate.Memberss.Enterlastname}}"
+                                        class=" rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Email}} <span class="text-red-600" >*</span>
+                                    </p>
+                                    <input type="text" placeholder="{{$Translate.Memberss.Entermememail}}"
+                                        value="{{.Member.Email}}" id="mem_email" name="mem_email"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Mobile}} <span class="text-red-600" >*</span>
+                                    </p>
+                                    <input type="text" placeholder="{{$Translate.Memberss.Entermemmobnum}}" id="mem_mobile"
+                                        value="{{.Member.MobileNo}}" name="mem_mobile" maxlength="10"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Username}}
+                                        <span class="text-red-600" >*</span></p>
+                                    <input type="text" placeholder="{{$Translate.Memberss.Enterusername}}"
+                                        value="{{.Member.Username}}" id="mem_usrname" name="mem_usrname"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Password}}
+                                        <span class="text-red-600" >*</span></p>
+                                    <input type="text" placeholder="{{$Translate.Memberss.Enterpswd}}" id="mem_pass"
+                                        name="mem_pass" autocomplete="off"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                </div>
+
+                                <div class="dropdown open input-group" id="memgrp">
+                                    <p class="text-bold-black text-sm font-normal mb-1">
+                                        {{$Translate.Memberss.Membergroup}}</p>
+                                    <a id="triggerId"
+                                        class="!rounded-[4px] p-[8px_12px] h-9  border-[1px] !border-[#ededed] no-underline w-full flex justify-between items-center field cursor-pointer  border-solid"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span id="showgroup1" data-id="{{.Member.Id}}"
+                                            class="text-bold-gray text-sm font-normal">{{.Member.GroupName}}</span>
+                                        <img src="/public/img/drop-down-img.svg" />
+                                    </a>
+                                    <input type="hidden" name="membergroupid" id="membergroupid" value="">
+                                    <input type="hidden" name="membergroupvalue" id="membergroupvalue1"
+                                        value="{{.Member.MemberGroupId}}">
+                                    <!-- <input type="text" class="hidden" id="membergroupdata" name="membergroup_data" > -->
+                                    <div class=" dropdown-menu  min-w-full w-full border-0 focus:bg-transparent pt-0 drop-shadow-4 max-h-52 overflow-auto"
+                                        aria-labelledby="triggerId" data-dropdown="down">
+                                        <div class="sticky top-0 bg-white z-10">
+                                            <div class="px-[12px] py-[8px] relative ">
+                                                <input type="text" placeholder="Search Group Name" id="searchmembergrp"
+                                                    name="keyword"
+                                                    class="search  border-[1px] border-[#ECECEC] pl-10 text-[#222222] text-xs font-light w-full h-8 rounded-[3px]" />
+                                                <img src="/public/img/search-icon.svg" class="absolute top-4 left-6" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Lastname}}</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field"
-                                                placeholder="{{$Translate.Memberss.Enterlastname}}"
-                                                value="{{.Member.LastName}}" id="mem_lname" name="mem_lname">
-                                        </div>
+                                        {{range .Group}}
+                                        <button
+                                            class="chk-group1 chk-group-label dropdown-item text-[14px] font-normal leading-[1] text-[#262626]"
+                                            type="button" data-id="{{.Id}}">{{.Name}}</button>
+                                        {{end}}
+
                                     </div>
                                 </div>
 
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Email}} *</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field"
-                                                placeholder="{{$Translate.Memberss.Entermememail}}"
-                                                value="{{.Member.Email}}" id="mem_email" name="mem_email">
-                                        </div>
+                                <div class="flex space-x-[32px] items-center">
+                                    <div class="flex flex-col space-y-[6px] toggle">
+                                        <h3 class="text-[#152027] text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Active}}</h3>
+                                        <p class="text-[#717171] text-xs font-light mb-0">
+                                            {{$Translate.Memberss.Activetoggle}}</p>
                                     </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Mobile}} *</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field"
-                                                placeholder="{{$Translate.Memberss.Entermemmobnum}}" id="mem_mobile"
-                                                value="{{.Member.MobileNo}}" name="mem_mobile" maxlength="10">
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Username}} *</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field"
-                                                placeholder="{{$Translate.Memberss.Enterusername}}"
-                                                value="{{.Member.Username}}" id="mem_usrname" name="mem_usrname">
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Password}} *</label>
-                                        <div class="ig-row">
-                                            <input type="password" class="field"
-                                                placeholder="{{$Translate.Memberss.Enterpswd}}" id="mem_pass"
-                                                name="mem_pass" autocomplete="off">
-                                            <button type="button" class="eye" id="eye">
-                                                <img id="img" src="/public/img/eye-closed.svg" alt="">
-
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-field-group">
-                                    <div class="input-group  user-drop-down" id="memgrp">
-                                        <label for="" class="input-label">{{$Translate.Memberss.Membergroup}}</label>
-                                        <a class="dropdown-toggle field" type="button" id="triggerId"
-                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            {{.Member.GroupName}}
-
-
-                                        </a>
-                                        <input type="hidden" name="membergroupid" id="membergroupid" value="">
-                                        <input type="hidden" name="membergroupvalue" id="membergroupvalue"
-                                            value="{{.Member.MemberGroupId}}">
-
-                                        <div class="dropdown-menu filter-dropdown-menu" aria-labelledby="triggerId">
-                                            {{if .Group}}
-                                            <div class="ig-row ig-channel-input">
-                                                <input type="text" id="searchmembergrp" class="search" name="keyword"
-                                                    placeholder="{{$Translate.MembersGroup.Searchgrpname}}"
-                                                    value="{{.Member.GroupName}}">
-
+                                    <label for="cb1"
+                                        class="flex items-center  justify-center cursor-pointer select-none text-dark dark:text-white">
+                                        <div class="relative">
+                                            <input type="checkbox" class="peer sr-only" name="mem_activestat" id="cb1"
+                                                value="{{.Member.IsActive}}" {{if eq .Member.IsActive 1}} checked
+                                                {{end}} />
+                                            <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
                                             </div>
-                                            <div class="membergrp-list-row">
-
-                                                {{range .Group}}
-                                                <button class="dropdown-item dropdown-values" type="button"
-                                                    data-id="{{.Id}}">{{.Name}}</button>
-
-                                                {{end}}
+                                            <div
+                                                class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
                                             </div>
-                                            {{else}}
-                                            <div class="noData-foundWrapper" style="margin-top: -40px;">
-
-                                                <div class="empty-folder">
-                                                    <img style="max-width: 20px;" src="/public/img/folder-sh.svg"
-                                                        alt="">
-                                                    <img src="/public/img/shadow.svg" alt="">
-                                                </div>
-                                                <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                                    {{$Translate.Oopsnodata}}</h1>
-
-                                            </div>
-
-                                            {{end}}
-
-                                            <div class="noData-foundWrapper" id="nodatafoundtext"
-                                                style="margin-top: -40px;display: none;">
-
-                                                <div class="empty-folder">
-                                                    <img style="max-width: 20px;" src="/public/img/folder-sh.svg"
-                                                        alt="">
-                                                    <img src="/public/img/shadow.svg" alt="">
-                                                </div>
-                                                <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                                    {{$Translate.Oopsnodata}}</h1>
-
-                                            </div>
-
                                         </div>
-                                        <label id="membergroupvalue-error" class="error" for="membergroupvalue"
-                                            style="display: none;">* {{$Translate.Memberss.Selectmemerr}}</label>
-                                    </div>
-                                    <div class="active-toggle">
-                                        <div class="active-content">
-                                            <h4 class="heading-four">{{$Translate.Memberss.Active}}</h4>
-                                            <p class="para-light">{{$Translate.Memberss.Activetoggle}}</p>
-                                        </div>
-                                        <div class="toggle">
-
-                                            <!-- <input class="tgl tgl-light" id="cb1" type="checkbox" />
-                                    <label class="tgl-btn" for="cb1"></label> -->
-
-                                            <input class="tgl tgl-light" name="mem_activestat" id="cb1" value="{{.Member.IsActive}}"
-                                                type="checkbox" {{if eq .Member.IsActive 1}} checked {{end}} />
-                                            <label class="tgl-btn" for="cb1"></label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <div class="chk-group chk-group-label">
-                                            <input type="checkbox" name="mem_emailactive" id="Check2">
-                                            <label for="Check2">Send Email</label>
-                                        </div>
-                                    </div>
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="myaccount-details">
-                        <h4 class="heading">Company Info</h4>
-                        <div class="update-account">
-                            <div class="update-profile-img compy-profile">
-                                <input type="hidden" name="profileid" value="{{.MemberProfile.Id}}">
-                                <img src="{{if .MemberProfile.CompanyLogo}} /{{.MemberProfile.CompanyLogo}}  {{end}}"
-                                    name="profpic2" id="profpic2" alt="">
+                </div>
+                <div class="pb-6 pt-6 border-b border-[#EDEDED]">
+                    <div class="max-w-full lg:max-w-[62%]">
+                        <h3 class="text-[#262626] mb-[16px] text-base font-normal">{{$Translate.Memberss.Companyinfo}}
+                        </h3>
+
+                        <div class="flex items-start flex-col sm:flex-row max-sm:space-y-[24px] sm:space-x-[24px] w-full">
+                            <div
+                                class="min-w-[120px] w-[120px] h-[120px] rounded-full bg-[#F9F9FA] relative group overflow-hidden">
+                                <img class="min-w-[120px] h-[120px]" name="profpic2" id="profpic2"
+                                    src="{{if .MemberProfile.CompanyLogo}}{{.MemberProfile.CompanyLogo}}{{end}}">
                                 {{if .MemberProfile.CompanyLogo}} {{else}}
                                 <div class="name-string" id="cname-string"> <span>{{.NameString}}</span>
                                 </div>
                                 {{end}}
-                                <div class="profile-info companylogo-crop">
+                                <div
+                                    class="absolute top-0 left-0 w-full h-full opacity-[0] bg-[#1E292C76] group-hover:opacity-100 flex justify-center items-center">
+                                    <img src="/public/img/cam-logo.svg">
                                 </div>
-                                <button class="cam-logo" type="button">
-                                    <input id="cmpymyfile" name="prof_pic2" type="file">
-                                    <input type="hidden" name="crop_data2">
-                                    <img src="/public/img/cam-logo.svg" alt=""></button>
-                                <label id="cmpymyfile-error" class="error" for="cmpymyfile" style="display: none;
-                            font-size: 0.75rem;
-                            font-weight: 400;
-                            color: #F26674;position: absolute;
-                            top: 100%;">* Please select jpg|png|jpeg files only</label>
+                                <input type="file" id="cmpymyfile" accept="image/png, image/jpeg,image/jpg,image/svg"
+                                    class="opacity-0 w-full h-full absolute top-0 left-0 cursor-pointer">
                             </div>
-                            <div class="fill-account-details">
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Company Name</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="Company Name" class="field" name="companyname" id="companyname"
-                                                value="{{.MemberProfile.CompanyName}}">
-                                        </div>
+                            <div class="flex flex-col space-y-[24px] w-full">
+                                <div class="sm:grid-cols-2 grid-cols-1 grid gap-[16px]">
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Companyname}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Companyname}}" name="companyname"
+                                            id="companyname" value="{{.MemberProfile.CompanyName}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full field" />
                                     </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Profile Name</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="Profile Name" class="field" name="profilename" id="profilename"
-                                                id="profilename" value="{{.MemberProfile.ProfileName}}">
-                                        </div>
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Profilename}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Profilename}}" name="profilename"
+                                            id="profilename" value="{{.MemberProfile.ProfileName}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
-                                </div>
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Profile Slug</label>
-                                        <div class="ig-row">
-                                            <input type="text" id="profile-slugData"  placeholder="Profile Page" name="profilepage" id="profilepage"
-                                                value="{{.MemberProfile.ProfileSlug}}">
-                                                <label id="profilename-error" class="custom-err" for="profilepage"
-                                                style="display: none;">* Profile Slug Already Exists</label>
-                                        </div>
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Profileslug}}</p>
+                                        <input type="text" id="profile-slugData" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Profileslug}}"
+                                            name="profilepage" id="profilepage" value=""
+                                            class=" [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                        <label id="profilename-error" class="custom-err" for="profilepage"
+                                            style="display: none;">* Profile Slug Already Exists</label>
                                     </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Company Location</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="Company Location" class="field" name="companylocation" id="companylocation"
-                                                value="{{.MemberProfile.CompanyLocation}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-text-field-group">
-                                    <div class="input-group" id="aboutgrb">
-                                        <label for="" class="input-label">About</label>
-                                        <div class="ig-row">
-                                            <textarea type="text" class="d-block field" placeholder="About..." id="aboutcompany"
-                                                name="aboutcompany">{{.MemberProfile.About}}</textarea>
-                                        </div>
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Companylocation}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Companylocation}}"
+                                            name="companylocation" id="companylocation"
+                                            value="{{.MemberProfile.CompanyLocation}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
                                 </div>
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">LinkedIn</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="LinkedIn..." class="field" name="linkedin" id="linkedin"
-                                                value="{{.MemberProfile.Linkedin}}">
-                                        </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.About}}
+                                    </p>
+                                    <textarea type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.About}}"
+                                        id="aboutcompany" name="aboutcompany"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] resize-none bg-[#F7F7F5] text-bold-black text-sm font-normal w-full h-[120px]  border-[1px] border-[#ECECEC] ">{{.MemberProfile.About}}</textarea>
+                                </div>
+                                <div class="sm:grid-cols-2 grid-cols-1 grid gap-[16px]">
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Linkedin}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Linkedin}}"
+                                            name="linkedin" id="linkedin" value="{{.MemberProfile.Linkedin}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Twitter</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field" placeholder="Twitter..." name="twitter"
-                                                value="{{.MemberProfile.Twitter}}">
-                                        </div>
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Twitter}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Twitter}}"
+                                            name="twitter" value="{{.MemberProfile.Twitter}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
                                 </div>
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Website</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field" placeholder="Website..." name="website"
-                                                value="{{.MemberProfile.Website}}">
-                                        </div>
-                                    </div>
-                                    <div class="active-toggle">
-                                        <div class="active-content">
-                                            <h4 class="heading-four">Claim Status</h4>
-                                            <p class="para-light">You can use the toggle to activate the company claim status</p>
-                                        </div>
-                                        <div class="toggle">
-                                            <input class="tgl tgl-light" name="com_activestat" id="cb2" value="{{.MemberProfile.ClaimStatus}}"
-                                                type="checkbox" {{if eq .MemberProfile.ClaimStatus 1}} checked {{end}} />
-                                            <label class="tgl-btn" for="cb2"></label>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="myaccount-details">
-                        <h4 class="heading">Meta Info</h4>
-                        <div class="update-account">
-                            <div></div>
-                            <div class="fill-account-details">
-                                
-                                <div class="input-field-group">
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Meta Tag Title</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field" placeholder="Meta Tag Title..." name="metaTitle"
-                                                value="{{.MemberProfile.SeoTitle }}">
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="" class="input-label">Meta Tag Keyword</label>
-                                        <div class="ig-row">
-                                            <input type="text" class="field" placeholder="Meta Tag Keyword..." name="metaKeyword"
-                                                value="{{.MemberProfile.SeoKeyword}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-text-field-group">
-                                    <div class="input-group" id="descgrbmeta">
-                                        <label for="" class="input-label">Meta Tag Description</label>
-                                        <div class="ig-row">
-                                            <textarea type="text" class="d-block field" id="metadesc" placeholder="Meta Tag Description..."
-                                                name="metaDescription">{{.MemberProfile.SeoDescription}}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Website}}
+                                    </p>
+                                    <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Website}}" name="website"
+                                        value="{{.MemberProfile.Website}}"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="configurationContent-btm">
-            <button class="btn-reg btn-lg secondary" id="cancel" type="button"> {{$Translate.Cancel}} </button>
-            <button class="btn-reg btn-lg primary" type="button" id="update"> {{$Translate.Update}}</button>
+                <div class="pb-6 pt-6">
+                    <div class="max-w-full lg:max-w-[62%]">
+                        <h3 class="text-[#262626] mb-[16px] text-base font-normal">{{$Translate.Memberss.Metainfo}}</h3>
+                        <div class="flex items-start flex-col sm:flex-row max-sm:space-y-[24px] sm:space-x-[24px] w-full">
+                            <div class="min-w-[120px] h-[120px] sm:block hidden"></div>
+                            <div class="flex flex-col space-y-[16px] w-full">
+                                <div class="sm:grid-cols-2 grid-cols-1 grid gap-[16px] w-full">
+                                    <div class="flex flex-col space-y-[6px]  input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Metatagtitle}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Metatagtitle}}"
+                                            name="metaTitle" value="{{.MemberProfile.SeoTitle }}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                    </div>
+                                    <div class="flex flex-col space-y-[6px] input-group">
+                                        <p class="text-bold-black text-sm font-normal mb-0">
+                                            {{$Translate.Memberss.Metatagkeyword}}</p>
+                                        <input type="text" placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Metatagkeyword}}"
+                                            name="metaKeyword" value="{{.MemberProfile.SeoKeyword}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-[6px] input-group">
+                                    <p class="text-bold-black text-sm font-normal mb-0">
+                                        {{$Translate.Memberss.Metatagdescription}}</p>
+                                    <textarea type="text" id="metadesc"
+                                    placeholder="{{$Translate.Memberss.Enteryour}}{{$Translate.Memberss.Metatagdescription}}"
+                                        name="metaDescription"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] field  p-[8px_12px] resize-none bg-[#F7F7F5] text-bold-black text-sm font-normal w-full h-[120px]  border-[1px] border-[#ECECEC] ">{{.MemberProfile.SeoDescription}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        </div>
+            </div>
+        </section>
     </form>
-    <!--2-->
-</div>
+
+
+
+
 
 {{template "footer" .}}
 <script src="/public/js/member/member.js"></script>
 
-{{template "cropmodal" .}}
 {{template "footerclose" .}}

@@ -1,0 +1,547 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$Totalcount := .totalcount}}
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht z-[101]">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
+                {{$Translate.Graphql.Title}}
+            </h2>
+        </div>
+        {{if gt .totalcount 0}}
+        <div
+            class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}} langSearchDiv {{end}}">
+
+            <a href="#" id="graphqlSearchlink"
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="hidden group-hover:block graphqlHoverIcon">
+            </a>
+            <input type="text" placeholder={{$Translate.Csearch}} name="keyword" id="graphqlSearchBar"
+                value="{{.filter}}"
+                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 {{if .filter}} w-[calc(100%-36px)] h-full block {{else}} hidden {{end}}">
+            <input type="text" name="csrf" value={{.csrf}} hidden>
+            {{if .filter}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{else}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{end}}
+        </div>
+        <a href="#"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline min-w-[32px]"
+            data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
+            <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
+            </span>
+        </a>
+        {{$keyword := .filter}}
+        {{else if and (eq .totalcount 0) .filter }}
+        <div
+            class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}} langSearchDiv {{end}}">
+
+            <a href="#" id="graphqlSearchlink"
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="hidden group-hover:block graphqlHoverIcon ">
+            </a>
+            <input type="text" placeholder={{$Translate.Csearch}} name="keyword" id="graphqlSearchBar"
+                value="{{.filter}}"
+                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 {{if .filter}} w-[calc(100%-36px)] h-full block {{else}} hidden {{end}}">
+            {{if .filter}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{else}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{end}}
+            <input type="text" name="csrf" value={{.csrf}} hidden>
+
+        </div>
+        <a href="#"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline min-w-[32px]"
+            data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
+            <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
+            </span>
+        </a>
+        {{end}}
+
+    </header>
+
+    <div>
+        {{if gt .totalcount 0}}
+        <div class="flex pt-1.5 px-[16px]  border-b border-[#EDEDED]">
+            <button
+                class="bg-transparent  px-3 relative h-8 border-b-2 border-b-black flex justify-center text-sm font-normal text-bold-black">{{$Translate.Graphql.SubHeading}}
+            </button>
+            <button
+                class="bg-transparent  px-3 relative h-8 border-b-2 border-transparent flex justify-center text-sm font-normal text-bold-gray hidden">Document
+            </button>
+        </div>
+        <div>
+            <div class="px-[16px]  py-[8px]  border-b border-[#EDEDED]">
+                <p class="mb-0 text-bold-gray text-xs font-normal"><span
+                        class="text-bold-black font-semibold">{{.totalcount}}</span>
+                    {{$Translate.Graphql.RecordsHeading}}</p>
+            </div>
+            <div class="overflow-x-auto  h-fit  mb-[68px] scrollbar-thin">
+                <table class="caption-top min-w-[800px] mb-0 w-full">
+                    <tr>
+                        {{if gt .totalcount 1}}
+                        <th
+                            class=" w-[30px] p-y[12px] pl-[16px] pr-0 text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            <div class="chk-group chk-group-label">
+
+                                <input type="checkbox" id="Check" class="hidden peer ">
+                                <label for="Check"
+                                    class="w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+
+                            </div>
+                        </th>
+                        {{end}}
+                        <th
+                            class=" first-of-type:pl-[16px] p-[12px] text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            {{$Translate.Graphql.TableNameHeading}}</th>
+
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableDescriptionHeading}}
+                        </th>
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableDurationHeading}}
+                        </th>
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableLastHeading}}
+                        </th>
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED] text-center">
+                            {{$Translate.Graphql.TableActionHeading}}
+                        </th>
+                    </tr>
+                    {{range .Tokens}}
+                    <tr>
+                        {{if gt $Totalcount 1}}
+                        <td
+                            class=" w-[30px] p-y[12px] pl-[16px] pr-0 text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            <div class="chk-group chk-group-label ">
+                                <input type="checkbox" id="Check{{.Id}}" class="hidden peer selectcheckbox"
+                                    data-default="{{.IsDefault}}" data-id="{{.Id}}">
+                                <label for="Check{{.Id}}" data-id={{.Id}}
+                                    class="z-[100] before:z-[100] w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')] {{if eq .IsDefault 1}}pointer-events-none opacity-50 {{end}} "></label>
+                            </div>
+                        </td>
+                        {{end}}
+
+                        <td
+                            class=" first-of-type:pl-[16px] p-[12px] text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            {{.TokenName}}</td>
+                        <td class="px-[16px]  py-[12px]  border-b border-[#EDEDED] text-xs text-bold-gray align-top">
+                            {{.Description}}
+                        </td>
+                        <td class="px-[16px]  py-[12px]  border-b border-[#EDEDED] text-xs text-bold-gray align-top">
+                            {{.Duration}}
+                        </td>
+                        <td class="px-[16px]  py-[12px]  border-b border-[#EDEDED] text-xs text-bold-gray align-top">
+                            {{.DateString}}
+                        </td>
+
+                        <td
+                            class="px-[16px]  py-[12px]  border-b border-[#EDEDED] text-xs text-bold-gray align-top text-center">
+                            <a href="javascript:void(0)" id="key-desc" data-id="{{.Id}}"
+                                class="bg-transparent  p-[4px]  rounded bg-hover h-6 w-6 flex mx-auto items-center justify-center">
+                                <img src="/public/img/api-key-gray.svg" alt="">
+                            </a>
+
+                        </td>
+                    </tr>
+                    {{end}}
+
+                </table>
+            </div>
+        </div>
+        {{$keyword := .filter}}
+        {{else if and (eq .totalcount 0) .filter }}
+
+        <div class="flex pt-1.5 px-[16px]  border-b border-[#EDEDED]">
+            <button
+                class="px-3 relative h-8 border-b-2 border-b-black flex justify-center text-sm font-normal text-bold-black">{{$Translate.Graphql.SubHeading}}
+            </button>
+            <button
+                class="px-3 relative h-8 border-b-2 border-transparent flex justify-center text-sm font-normal text-bold-gray hidden ">Document
+            </button>
+        </div>
+        <div>
+            <div class="px-[16px]  py-[8px]  border-b border-[#EDEDED]">
+                <p class="mb-0 text-bold-gray text-xs font-normal"><span
+                        class="text-bold-black font-semibold">{{.totalcount}}</span>
+                    {{$Translate.Graphql.RecordsHeading}}</p>
+            </div>
+            <div class="overflow-x-auto overflow-unset h-fit  mb-[68px] scrollbar-thin">
+                <table class="caption-top min-w-[800px] mb-0 w-full">
+                    <tr>
+
+                        <th
+                            class=" w-[30px] p-y[12px] pl-[16px] pr-0 text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            <div class="chk-group chk-group-label">
+                                <input type="checkbox" id="Check" class="hidden peer ">
+                                {{if gt .totalcount 1}}
+                                <label for="Check"
+                                    class="w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                
+                                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                                {{end}}
+                            </div>
+                        </th>
+                        <th
+                            class="p-[12px] text-[14px] font-normal text-[#222222] border-b-[0.0625rem] border-[#EDEDED] !important align-middle leading-[17.5px]">
+                            {{$Translate.Graphql.TableNameHeading}}</th>
+
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableDescriptionHeading}}
+                        </th>
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableDurationHeading}}
+                        </th>
+                        <th class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED]">
+                            {{$Translate.Graphql.TableLastHeading}}
+                        </th>
+                        <th
+                            class="text-black-200 font-normal text-sm px-[16px]  py-[12px]  border-b border-[#EDEDED] text-center">
+                            {{$Translate.Graphql.TableActionHeading}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="9">
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    {{$Translate.Filtersearch}}</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    {{$Translate.Filterkeyword}} </p>
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        {{else}}
+        <div class="p-6">
+            <div class="flex flex-col space-y-[16px] items-start">
+                <div class="flex flex-col space-y-[6px]">
+                    <h3 class="font-normal text-2xl text-black-200 mb-0">{{$Translate.Graphql.NewUserHeading}}</h3>
+                    <p class="text-[#555555] font-normal text-xs mb-[16px]">{{$Translate.Graphql.NewUserDescription}}
+                    </p>
+                </div>
+                <a href="#"
+                    class="w-auto flex space-x-[6px] items-center justify-center px-[16px]  h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline"
+                    data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
+                    {{$Translate.Graphql.CreateToken}}</a>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
+
+
+    <!--fullpagination-->
+    <div
+        class="@container space-x-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+        <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+            {{if gt .totalcount .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.totalcount}}
+        </p>
+    </div>
+
+</section>
+
+<!--Create API Token-->
+
+
+<div class="modal right fade" id="createToken" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content border-0">
+            <div class="px-6 py-1.5 max-sm:p-[6px_16px] border-b border-[#EDEDED] flex justify-between items-center ">
+                <h5 class="mb-0 text-bold-black font-medium text-base" id="modalTitleId">
+                    {{$Translate.Graphql.CreateToken}}
+                </h5>
+                <div class="flex space-x-[12px]">
+                    <a href="javascript:void(0)" data-bs-dismiss="modal" id="tokenCancelBtn"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline">{{$Translate.Graphql.CancelButton}}</a>
+                    <a href="javascript:void(0)" id="genTokenBtn" data-status="0"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white rounded-[3px]  hover:bg-[#148569] bg-[#10A37F] no-underline">{{$Translate.Graphql.GenerateButton}}
+                    </a>
+                    <!-- <a href="#" id="genTokenBtn" data-status="0"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white hover:bg-[#7f7e7e] bg-[#D1D1D1] rounded-[3px] no-underline">{{$Translate.Graphql.GenerateButton}}</a>-->
+                </div>
+            </div>
+            <div class="overflow-auto h-full scrollbar-thin">
+                <div class="p-6 max-sm:px-[16px] h-full">
+                    <div class="flex flex-col space-y-[16px]">
+                        <div class="flex flex-col space-y-[6px] tokenInputGrp">
+                            <p class="text-[#152027] text-sm font-normal mb-0">{{$Translate.Graphql.NameFieldHeading}}
+                                <span class="text-red-600">*</span>
+                            </p>
+                            <input type="text" name="tokenName" id="tokenName"
+                                class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-[#EDEDED] text-bold-black text-sm font-normal w-full apitoken-data" />
+                            </input>
+                            <label for="tokenName"
+                                class="hidden apiTokenErr  text-red-600 text-[13px]">{{$Translate.Graphql.NameFieldError}}</label>
+                        </div>
+                        <div class="flex flex-col space-y-[6px] tokenInputGrp" id="tok-desc">
+                            <p class="text-[#152027] text-sm font-normal mb-0">
+                                {{$Translate.Graphql.DescriptionFieldHeading}}
+                            </p>
+                            <textarea type="text" name="tokenDesc" id="tokenDesc"
+                                class="rounded-[4px] p-[12px] border border-[#EDEDED] resize-none  bg-[#EDEDED] h-120 text-bold-black text-sm text-start font-normal w-full apitoken-data scrollbar-none"
+                                maxlength="250"></textarea>
+                            <p class="text-[12px] text-red-600 mt-2 hidden lengthErr">You have reached a maximum limit
+                                of 250
+                                characters
+                            </p>
+                            <div id="error-message" class="text-red-500 text-xs mt-1 hidden">
+                            </div>
+
+                        </div>
+                        <div class="dropdown open tokenInputGrp">
+                            <p class="text-[#152027] text-sm font-normal mb-[6px] " id="tknDuration">
+                                {{$Translate.Graphql.DurationFieldHeading}}
+                                <span class="text-red-600">*</span>
+                            </p>
+                            <a class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED]   no-underline  w-full flex justify-between items-center apitoken-data selectVal cursor-pointer"
+                                 id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" name="duration">
+                                <span class="text-bold-gray text-sm font-normal" id="slctdurn">
+                                    {{$Translate.Graphql.DurationSelect}}</span>
+                                <img src="/public/img/drop-down-img.svg" />
+                            </a>
+                            <label for="tknDuration" id="durationLabel"
+                                class="hidden apiTokenErr pt-2 text-red-600 text-[13px]">{{$Translate.Graphql.DurationFieldError}}
+                            </label>
+                            <div class="dropdown-menu min-w-full w-full border-0 focus:bg-transparent drop-shadow-4"
+                                aria-labelledby="triggerId">
+                                <a class="tkn-durn dropdown-item border-b border-black"
+                                    href="#">{{$Translate.Graphql.SevenDays}}</a>
+                                <div class="w-full h-px bg-gray-100"></div>
+                                <a class="tkn-durn dropdown-item" href="#">{{$Translate.Graphql.FifteenDays}}</a>
+                                <div class="w-full h-px bg-gray-100"></div>
+                                <a class="tkn-durn dropdown-item" href="#">{{$Translate.Graphql.ThirtyDays}}</a>
+                                <div class="w-full h-px bg-gray-100"></div>
+                                <a class="tkn-durn dropdown-item" href="#">{{$Translate.Graphql.UnlimitedDays}}</a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-[12px] items-start hidden" id="key-blck">
+                            <div class="flex items-start space-x-[6px] bg-[#F7F7F5] border border-[#EDEDED] pd-3 rounded-[4px]">
+                                <div
+                                    class="min-w-8 whitespace-nowrap h-8 flex items-center rounded bg-[#E7E7E7] justify-center">
+                                    <img src="/public/img/key-lg.svg" />
+                                </div>
+                                <div>
+                                    <p class="text-gray-800 text-xs font-normal mb-0 break-all" id="tokeninsideContent">
+                                        Lorem ipsum dolor sit amet.Lorem
+                                        ipsum dolor sit amet.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center space-x-[24px] w-full">
+                                <p class="text-bold-black text-xs font-normal">{{$Translate.Graphql.Notes}}:
+                                    <span
+                                        class="text-[#717171] text-xs font-normal">{{$Translate.Graphql.Copydetails}}</span>
+                                </p>
+                                <button
+                                    class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center items-center"
+                                    id="copy-insidebtn"><img src="/public/img/copy-green.svg">
+                                    <span>{{$Translate.Copy}}</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--copyToken-->
+
+<!-- <div class="modal fade" id="copyToken" tabindex="-1" data-bs-keyboard="false" role="dialog" data-bs-backdrop="static"
+    aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable mt-[200px] h-fit" role="document">
+        <div class="modal-content">
+            <div class="px-6 max-sm:px-[16px] py-1.5 border-b border-[#EDEDED] flex justify-between items-center">
+                <h5 class="mb-0 text-bold-black font-medium text-base">
+                    Copy API Token
+                </h5>
+                <div class="flex gap-3">
+                    <a href="#" id="tokenCancelBtn" data-bs-dismiss="modal"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white hover:bg-[#7f7e7e] bg-[#999999] rounded-[3px] no-underline">Cancel</a>
+                    <a href="#" id="tokenSaveBtn"
+                        class="flex gap-1 h-8 rounded px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center rounded-[3px] items-center"><img
+                            src="/public/img/temp-copy.svg" /> Copy</a>
+                </div>
+            </div>
+            <div class="overflow-auto">
+
+                <div class="p-6 max-sm:px-[16px]">
+                    <div class="flex items-start gap-2 bg-[#F7F7F5] border border-[#EDEDED] pd-3 rounded-[4px]">
+                        <div
+                            class="min-w-8 whitespace-nowrap h-8 flex items-center rounded bg-[#E7E7E7] justify-center">
+                            <img src="/public/img/key-lg.svg" />
+                        </div>
+                        <div id="tokenContentDiv">
+                            <p class="text-gray-800 text-xs font-normal mb-0 break-all" id="tokenContent">Create unique tokens for your graphQL API's</p>
+                            <div class="flex justify-between items-end gap-6">
+                                <span class="text-bold-black text-xs font-normal mt-2" id="makesure">Make Sure to copy
+                                    this
+                                    token, you
+                                    won't be able to see it again!</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- latest  copy token modal -->
+<div class="modal  fade" id="copyToken" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable max-w-608 pt-[200px] max-md:pt-[100px]" role="document">
+        <div class="modal-content border-0">
+            <div class="px-6 max-sm:px-[16px] py-1.5 border-b border-[#EDEDED] flex justify-between items-center">
+                <h5 class="mb-0 text-bold-black font-medium text-base">
+                    {{$Translate.Graphql.Copyheading}}
+                </h5>
+                <div class="flex space-x-[12px]">
+                    <a href="/graphql/" data-bs-dismiss="modal"
+                        class="h-[30px] flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline"
+                        id="graphqlCopyCancel"><span>{{$Translate.Cancel}}</span></a>
+                    <button id="copy-btn"
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white hover:bg-[#148569] bg-[#10A37F] justify-center items-center"><img
+                            src="/public/img/copy-white.svg" /> <span>{{$Translate.Copy}}</span></button>
+                    <button id="copied-btn"
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
+                </div>
+            </div>
+            <div class="overflow-auto">
+                <div class="p-6 max-sm:px-[16px]">
+                    <div class="flex flex-col space-y-[12px] items-start" id="key-blck">
+                        <div class="flex items-start space-x-[8px] bg-[#F7F7F5] border border-[#EDEDED] pd-3 rounded-[4px]">
+                            <div
+                                class="min-w-8 whitespace-nowrap h-8 flex items-center rounded bg-[#E7E7E7] justify-center">
+                                <img src="/public/img/key-lg.svg">
+                            </div>
+                            <div id="tokenContentDiv">
+                                <p id="tokenContent" class="text-gray-800 text-xs font-normal mb-0 break-all"
+                                    data-value="">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center space-x-[24px] w-full">
+                            <p class="text-bold-black text-xs font-normal">{{$Translate.Graphql.Notes}}:
+                                <span class="text-[#717171] text-xs font-normal">
+                                    {{$Translate.Graphql.Copydetails}}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
+<script src="/public/js/data-connect/graphql-settings.js"></script>

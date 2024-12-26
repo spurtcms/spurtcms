@@ -1,311 +1,410 @@
 {{template "header" .}}
-{{template "settingsmenu" .}}
+
 {{template "head" .}}
 {{$Translate := .translate}}
-{{$IMAGEPATH := ""}}
+{{$roleid := .roleid}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(225, 102, 97)"}}
-{{$IMAGEPATH = "/public/img/add-icon-red.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(128, 96, 185)"}}
-{{$IMAGEPATH = "/public/img/add-icon-purple.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(57, 129, 234)"}}
-{{$IMAGEPATH = "/public/img/add-icon-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 217)"}}
-{{$IMAGEPATH = "/public/img/add-icon.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(109, 77, 64)"}}
-{{$IMAGEPATH = "/public/img/add-icon-brown.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(243, 133, 7)"}}
-{{$IMAGEPATH = "/public/img/add-icon-orange.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(75, 163, 74)"}}
-{{$IMAGEPATH = "/public/img/add-icon-green.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(0, 140, 140)"}}
-{{$IMAGEPATH = "/public/img/add-icon-teal-blue.svg"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$IMAGEPATH = "/public/img/add-icon-black.svg"}}
-{{else}}
- {{$IMAGEPATH ="/public/img/add-icon.svg"}}
-{{end}}
-<div class="page-wrapper settings-wrapper">
-    <input type="hidden" name="csrf" value="{{.csrf}}">
-    <div class="details-roles roles-permission setting-teamm">
-        <div class="search-role">
-            <form action="/settings/roles/" class="filterform" method="get" autocomplete="off"
-                style="position: relative;">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <!-- <input type="text" name="" id="" class="search" placeholder="Search Roles"> -->
-                <a type="button" class="searchbtn" id="filterformsubmit"><img src="/public/img/search.svg"></a>
-                <div>
-                    <input type="text" id="searchroles" class="search" name="keyword" value="{{.keyword}}"
-                        placeholder="{{$Translate.Csearch}}">
-                </div>
-            </form>
-            <a href="javascript:void(0)" class="primary-link decor-none" data-bs-toggle="modal"
-                data-bs-target="#roles-permissionModal">
-                <div class="add-new"><img src="{{$IMAGEPATH}}" alt="">
-                    <p class="primary-link decor-none">{{$Translate.Rolecontent.Newrole}}</p>
-                </div>
-            </a>
-        </div>
-        <div class="table-responsive page-ponit role-pg entries-table">
-            <table class="table">
-                <thead>
-                    <tr>
+        <section
+            class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
 
-                        <th style="width: 0; padding-right: 0;"> 
-                            <div class="chk-group">
-                              <input type="checkbox" id="Check">
-                              <label for="Check"></label>
-                            </div>
-                          </th>
-                        <th>{{$Translate.Role}}</th>
-                        <th width="50%">{{$Translate.Description}}</th>
-                        <th>{{$Translate.Rolecontent.Lastmodifiedon}}</th>
-                        <th class="text-center">{{$Translate.Channell.Status}}</th>
-                        <th class="text-center">{{$Translate.Configuration}}</th>
-                        <th style="text-align: end;padding-right: 60px;">{{$Translate.Actions}}</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {{if .roles}}
-                    {{range .roles}}
-                    <tr>
-                        <td style="padding-right: 0;"> 
-                            {{if ne .Id 1}}
-                             <div class="d-flex  gap-4 align-items-center">
-                            <div class="chk-group">
-                              <input type="checkbox" class="selectcheckbox" id="Checkbox{{.Id}}" data-id="{{.Id}}">
-                              <label for="Checkbox{{.Id}}"></label>
-                            </div>
-                          </div>
-                          {{end}}
-                        </td>
-                        <td>{{.Name}}</td>
-                        <td class="role-desc">{{.Description}}</td>
-                        <td class="role-desc role-date">{{.CreatedDate}}</td>
-                        <td class="text-center">
-                            <div class="toggle">
-                                <input class="tgl tgl-light" id="cb{{.Id}}" data-id="{{.Id}}"
-                                    onclick="RoleStatus('{{.Id}}')" type="checkbox" {{if eq .IsActive 1}} checked
-                                    {{end}} />
-                                <label class="tgl-btn  {{if eq .Id 1}} roldisabled{{end}}" for="cb{{.Id}}" ></label>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            {{if eq .Slug "Yettoconf"}}
-                            <a href="javascript:void(0)" class="primary-link" id="configure"
-                                data-bs-toggle="modal" data-bs-target="#roles-permissionModal"
-                                data-id="{{.Id}}">{{$Translate.Rolecontent.Yettoconfigure}}</a>
-                            {{else}}
-                            <a href="javascript:void(0)" id="manage" class="secondary-link" data-bs-toggle="modal"
-                                data-bs-target="#roles-permissionModal"
-                                data-id="{{.Id}}">{{$Translate.Rolecontent.Manage}}</a>
-                            {{end}}
-                        </td>
-                        <td style="text-align: end;padding-right: 60px;">
-                    
-                            <div class="btn-group language-group">
-                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="">
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item roledit" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#roles-permissionModal" data-id="{{.Id}}"> <span><img
-                                                    src="/public/img/edit.svg" alt=""></span> {{$Translate.Edit}}
-                                        </a></li>
-                                    <li><a class="dropdown-item roldel {{if eq .Id 1}} roldisabled{{end}}"  {{if eq .Id 1}} disabled {{else}} type="button" data-bs-toggle="modal"
-                                            data-bs-target="#centerModal" data-id="{{.Id}}" {{end}}> <span><img
-                                                    src="/public/img/delete.svg" alt=""></span> {{$Translate.Delete}}
-                                        </a></li>
-                                </ul>
-                            </div>
-                            
-                        </td>
-                    </tr>
-                    {{end}}
-                    {{else}}
-                    {{if .keyword}}
-                    <tr class="no-dataHvr">
-                        <td style="text-align: center; border-bottom: none;" colspan="8">
-                            <div class="noData-foundWrapper">
-
-                                <div class="empty-folder">
-                                    <!-- <img src="/public/img/folder-sh.svg" alt=""> -->
-                                    <img src="/public/img/nodatafilter.svg" alt="">
-                                </div>
-                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-
-                            </div>
-                        </td>
-                    </tr>
-                    {{else}}
-                    <tr class="no-dataHvr">
-                        <td style="text-align: center; border-bottom: none;" colspan="8">
-                            <div class="noData-foundWrapper">
-
-                                <div class="empty-folder">
-                                    <img src="/public/img/folder-sh.svg" alt="">
-                                    <img src="/public/img/shadow.svg" alt="">
-                                </div>
-                                <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                <p class="para">
-                                    {{$Translate.Pagesorry}}
-                                    {{$Translate.Gobackhome}}
-                                </p>
-                                <a href="/settings/roles/" data-bs-toggle="modal"
-                                    data-bs-target="#roles-permissionModal" id="clickadd"
-                                    class="heading-three">{{$Translate.Clickadd}} &gt;&gt;</a>
-                            </div>
-                        </td>
-                    </tr>
-                    {{end}}
-                    {{ end }}
-                </tbody>
-            </table>
-        </div>
-        {{if .roles}}
-        <div class="pogination flexx pagenation-padding sticky-pagination">
-            <ul class="flexx">
-                {{if gt .Count .Limit}}
-            
-                <li>  <a href="?page={{.Pagination.PreviousPage}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                    <img src="/public/img/carat-right.svg" alt="" />
-                </a></li>
-                {{if gt .CurrentPage 3}}
-                <li><a href="?page=1" >1</a></li>
-                {{end}}
-                {{if eq .CurrentPage 5}}
-                <li><a href="?page=2">2</a></li>
-                {{end}}
-                {{if gt .CurrentPage 5}}
-                <li><a href="">...</a></li>
-                {{end}}
-                {{if gt .CurrentPage 2}}
-                <li><a href="?page={{.Pagination.TwoBelow}}">{{.Pagination.TwoBelow}}</a></li>
-                {{end}}
-                {{if gt .CurrentPage 1}}
-                <li><a href="?page={{.Pagination.PreviousPage}}">{{.Pagination.PreviousPage}}</a></li>
-                {{end}}
-                <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
-                {{if lt .CurrentPage .Pagination.TotalPages}}
-                <li><a href="?page={{.Pagination.NextPage}}">{{.Pagination.NextPage}}</a></li>
-                {{end}}
-                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
-                <li><a href="?page={{.Pagination.TwoAfter}}">{{.Pagination.TwoAfter}}</a></li>
-                {{end}}
-                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
-                <li><a href="">...</a></li>
-                {{end}}
-                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
-                <li><a href="?page={{.Pagination.TotalPages}}">{{.Pagination.TotalPages}}</a></li>
-                {{end}}
-                <li>
-                    <a href="?page={{.Pagination.NextPage}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
+            <header
+                class="header-rht max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 z-[101]">
+                <div class="mr-auto flex items-center space-x-[6px]">
+                    <a href="javascript:void(0);"
+                        class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                        <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
                     </a>
-                </li>
-               
-               {{end}}
-            </ul>
-            <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
-        </div>
+                    <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Setting.Rolesandpermissions}}</h2>
+                </div>
+
+                <div class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+                <a href="javascript:void(0);"
+                    class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB] {{if eq .Searchtrue true}} pointer-events-none {{end}}">
+                    <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                    <img src="/public/img/search-icon-active.svg" alt="search" class="hidden hovericon group-hover:block ">
+                </a>
+                <form action="/settings/roles/" method="get" class="filterform " autocomplete="off">
+                    <input type="text" placeholder="{{$Translate.Csearch}}" id="searchroles"  name="keyword" value="{{.keyword}}"
+                    value="{{.Filter.Keyword}}"
+                    class="top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block search shadow-none">
+                    {{if eq .Searchtrue true}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+
+                </form>
+                </div>
+
+
+                <a href="#newroles"  data-bs-toggle="modal" disabled
+                    class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:leading-none max-sm:text-lg  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[#10A37F] flex items-center justify-center hover:bg-[#148569] text-sm font-normal text-white no-underline leading-0 space-x-[2px] max-sm:leading-none">
+                    <span class="max-sm:hidden">
+                        {{$Translate.Rolecontent.Addnewrole}}
+                        </span><span class="hidden max-sm:block text-lg leading-none ">+</span>    </a>
+
+            </header>
+
+            <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+
+                {{template "settingsmenu" .}}
+
+                <!--table-->
+                <div class="block overflow-hidden @container pb-[70px] ">
+
+                   <div class="overflow-x-auto scrollbar-thin  ">
+                        <table class="w-full min-w-[768px]">
+                            <thead>
+                                <tr>
+                                    <th class="px-[16px] py-[12px] pr-0 w-[30px] border-b border-[#EDEDED]">
+                                        <div class="chk-group chk-group-label flex justify-center">
+                                            <input type="checkbox" id="Check" class="hidden peer">
+                                            <label for="Check"
+                                                class="w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                                        </div>
+                                    </th>
+                                    <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                        <p class="text-[#222222] text-sm font-normal mb-0">{{$Translate.Role}}</p>
+                                    </th>
+                                    <th
+                                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] w-[30%] ">
+                                        {{$Translate.Description}}
+                                    </th>
+
+                                    <th
+                                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                        {{$Translate.Rolecontent.Lastmodifiedon}}
+                                    </th>
+                                    <th
+                                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                        {{$Translate.Channell.Status}}
+                                    </th>
+                                    <th
+                                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                        {{$Translate.Configuration}}
+                                    </th>
+
+                                    <th
+                                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                        {{$Translate.Actions}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{if .roles}}
+                                {{range .roles}}
+                                <tr>
+                                    <td class="px-[16px] py-[12px] pr-0 border-b border-[#EDEDED] align-middle">
+                                        <div class="chk-group chk-group-label flex justify-center">
+                                            {{if or (eq .Id 1) (eq .Id 2) (eq .Id $roleid)}}
+
+                                            {{else}}
+                                            <input type="checkbox" id="Checkbox{{.Id}}" data-id="{{.Id}}"  class="hidden peer selectcheckbox">
+                                            <label for="Checkbox{{.Id}}"
+                                                class="z-[100] before:z-[100] w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')] "></label>
+                                            {{end}}
+                                            
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle text-[#152027] text-xs font-normal">
+                                        {{.Name}}
+                                    </td>
+                                    <td
+                                        class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                        {{.Description}}
+                                    </td>
+                                    <td
+                                        class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                        {{.CreatedDate}}
+                                    </td>
+                                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center {{if eq .Id 1}} pointer-events-none opacity-50{{end}}">
+                                        <label for="cb{{.Id}}"
+                                            class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white {{if eq .Id $roleid}}pointer-events-none opacity-50{{end}} {{if or (eq .Id 1) (eq .Id 2)}} pointer-events-none opacity-50{{end}}">
+                                            <div class="relative">
+                                                <input type="checkbox" value="{{.IsActive}}"  class="peer sr-only tgl-light " id="cb{{.Id}}" data-id="{{.Id}}"
+                                                onclick="RoleStatus('{{.Id}}')"{{if eq .IsActive 1}}checked{{end}} />
+                                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                                </div>
+                                                <div
+                                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </td>
+
+                                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                                        {{if eq .Slug "Yettoconf"}}
+                                        <a href="javascript:void(0)" class=" underline {{if eq .Id $roleid}}pointer-events-none opacity-50{{end}} {{if or (eq .Id 1) (eq .Id 2)}} pointer-events-none opacity-50{{end}}" id="configure"
+                                            data-bs-toggle="modal" data-bs-target="#newroles"
+                                            data-id="{{.Id}}">{{$Translate.Rolecontent.Yettoconfigure}}</a>
+                                        {{else}}
+                                        <a href="javascript:void(0)" id="manage" class=" underline {{if eq .Id $roleid}}pointer-events-none opacity-50{{end}} {{if or (eq .Id 1) (eq .Id 2)}} pointer-events-none opacity-50{{end}}" data-bs-toggle="modal" data-bs-target="#newroles"
+                                            data-id="{{.Id}}">{{$Translate.Rolecontent.Manage}}</a>
+                                        {{end}}
+                                    </td>
+
+                                    <td
+                                        class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                                        <div class="btn-group position-static">
+                                            <a href="javascript:void(0);" 
+                                                class="border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] focus:bg-[#F5F5F5] show"
+                                                data-bs-toggle="dropdown" aria-expanded="true">
+                                                <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                                    class="hidden group-hover:block">
+                                                <img src="/public/img/action-btn.svg" alt="dropdown"
+                                                    class="block group-hover:hidden">
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-[180px] py-[12px]"
+                                                aria-labelledby="triggerId">
+
+                                                <a data-bs-toggle="modal" data-bs-target="#newroles" data-id="{{.Id}}" class="roledit dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] {{if eq .Id $roleid}}pointer-events-none opacity-50{{end}} {{if or (eq .Id 1) (eq .Id 2)}} pointer-events-none opacity-50{{end}}"
+                                                    href="javascript:void(0);"><img src="/public/img/edit.svg" /> {{$Translate.Edit}}</a>
+                                                <a id="deleterole-btn" class="cursor-pointer dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] roldel {{if eq .Id $roleid}}pointer-events-none opacity-50{{end}} {{if or (eq .Id 1) (eq .Id 2)}} pointer-events-none opacity-50{{end}}" {{if eq .Id 1}} disabled {{else}} data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{.Id}}" {{end}}
+                                                    href="javascript:void(0);"> <img src="/public/img/delete.svg">{{$Translate.Delete}}</a>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                {{end}}
+                                {{else}}
+                    {{if .keyword}}
+                    <tr>
+                        <td colspan="9">
+
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    No data found with current filters</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    Try changing any other keywords </p>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{else}}
+
+
+                    {{end}}
+                   {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+
+
+                 {{if .roles}}
+
+         <!--pagination-->
+    <div
+    class="@container space-x-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+    <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+        {{if gt .Count .Limit}}
+
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                <img src="/public/img/pg-prev.svg" alt="previous">
+                <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+            </a>
+        </li>
+        {{if gt .CurrentPage 3}}
+        {{$keyword := .filter.Keyword}}
+        <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                1 </a> </li>
         {{end}}
-   
-             <!--------selected----------->
- <div class="selected-numbers leftalign" style="display: none;">
-    <p class="heading-three text-white checkboxlength"> </p>
-    <div class="d-flex">
-      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2 border-end border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
-      data-bs-target="#centerModal">
-        <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
-      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
-    </div>
-    <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
-  </div>
-</div>
-</div>
+        {{if eq .CurrentPage 5}}
+        <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                2 </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 5}}
+        <li> <a href="javascript:void(0)"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if gt .CurrentPage 2}}
+        <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                {{.Pagination.TwoBelow}} </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 1}}
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                {{.Pagination.PreviousPage}} </a> </li>
+        {{end}}
 
-<!-- Center Modal -->
-<div class="modal fade roles-permision-modal" id="roles-permissionModal" data-bs-backdrop="static"
-    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>{{$Translate.Rolecontent.Addnewrole}} & {{$Translate.Rolecontent.Setpermisson}}</h3>
-                <button class='close' data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
-                </button>
+        <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                {{.CurrentPage}} </a> </li>
+
+        {{if lt .CurrentPage .Pagination.TotalPages}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+ @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                {{.Pagination.NextPage}} </a> </li>
+        {{end}}
+        {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                {{.Pagination.TwoAfter}} </a> </li>
+        {{end}}
+        {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+        <li> <a href="javascript:void(0)"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                {{.Pagination.TotalPages}}</a> </li> {{end}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                    alt="next">
+            </a>
+        </li>
+        {{end}}
+    </ul>
+    <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+        {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+    </p>
+</div>
+        {{end}}
+
             </div>
-            <div class="modal-body">
-                <form action="" id="roleform" method="post">
-                    <input type="hidden" name="csrf" value="{{.csrf}}">
-                    <input type="hidden" name="pageno" value="" id="pageno">
-                    <input type="hidden" id="url">
-                    <input type="hidden" id="rolid">
-                    <h1 class="heading">{{$Translate.Rolecontent.Roledetails}}</h1>
-                    <div class="input-group" id="rolen">
-                        <label for="" class="input-label">{{$Translate.Role}} *</label>
-                        <div class="ig-row">
-                            <input type="text" name="name" class="field" id="rolename" value="{{.Name}}"
-                                placeholder="{{$Translate.Rolecontent.Enterrole}}" />
-                            <label id="rolename-error" class="error" for="rolename" style="display: none;">* Please
-                                enter the Role name</label>
-                        </div>
-                    </div>
-                    <div class="input-group rolespermision-textarea" id="roledes">
-                        <label for="" class="input-label">{{$Translate.Description}} *</label>
-                        <div class="ig-row">
-                            <textarea name="description" placeholder="{{$Translate.Enterdescription}}" class="field"
-                                id="roledesc" style="resize: none;height:100px;"></textarea>
-                        </div>
-                    </div>
-                    <div class="permissionsection">
-                        <h1 class="heading">{{$Translate.Permission.Permissions}}</h1>
-                        {{range .Module}}
-                        <div class="accordion " id="{{.Description}}">
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{.Description}}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+
+            <!-- new model -->
+            <form action="" id="roleform" method="post">
+            <div class=" modal right fade" id="newroles" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+                role="document">
+                <div class="modal-content  ">
+
+                    <div class="flex justify-between items-center border-b border-[#ECECEC] px-6 py-1.5 max-sm:p-[6px_16px] modal-header">
+                        <h5 class="text-[#262626] mb-0 font-medium text-base " id="staticBackdropLabel">
+                            {{$Translate.Rolecontent.Addnewrole}} & {{$Translate.Rolecontent.Setpermisson}}
+                        </h5>
+                        <div class="flex space-x-[12px]">
+                            <a href="javascript:void(0);"
+                                class="h-8 flex items-center  justify-center px-3 text-sm font-normal text-[#222222] bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline"
+                                data-bs-dismiss="modal">cancel</a>
+                            <a href="javascript:void(0);"
+                                class="saverolperm h-8 flex items-center justify-center px-3 text-sm font-normal text-white hover:bg-[#148569] bg-[#10A37F]  rounded-[4px] no-underline">Save</a>
+                        </div>
+                    </div>
+
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+                        <input type="hidden" name="pageno" value="" id="pageno">
+                        <input type="hidden" id="url">
+                        <input type="hidden" id="rolid">
+
+                    <div class="overflow-auto scrollbar-thin">
+                        <div class="py-[16px] px-6  max-sm:p-[16px] ">
+
+                            <h3 class="text-[#262626] font-medium text-base leading-[20px] mb-[16px]">{{$Translate.Rolecontent.Roledetails}}</h3>
+                            <div class="mb-[16px] ">
+                                <label for="rolename"
+                                    class="text-[#262626] text-sm  font-normal leading-[16.41px] mb-[6px] ">{{$Translate.Role}}  <span class="text-red-600" >*</span></label>
+                                <input id="rolename" type="text" name="name" maxlength="25" placeholder="{{$Translate.Roless.Enterrolename}}"
+                                    class=" border border-[#EDEDED] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] rounded-[4px] w-full block h-[36px] p-[8px] text-bold-black text-sm font-normal checklength">
+                                    <label id="rolename-error" class="error" for="rolename" style="display: none;">* Please
+                                        enter the Role name</label>
+                                        <p class="text-xs text-[#F26674] mt-1 hidden lengthErr">You have reached a maximum limit
+                                            of 25
+                                            characters
+                                        </p>
+                                    </div>
+                            <input class="hidden" type="text" value="{{.loguserid}}" id="logeduserid">
+                            <input type="hidden" value="1" id="roleisactive">
+                            <div>
+                                <label for="roledesc"
+                                    class="text-[#262626] text-sm  font-normal leading-[16.41px] mb-[6px] ">{{$Translate.Description}}  <span class="text-red-600" >*</span></label>
+                                <textarea name="description" id="roledesc" maxlength="251" placeholder="{{$Translate.Roless.Enterroledesc}}"
+                                    class=" border border-[#EDEDED] scrollbar-none [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] rounded-[4px] w-full block h-[142px] p-[8px] text-bold-black text-sm font-normal resize-none"></textarea>
+                                    <label id="roledesc-error" class="error" for="roledesc"></label>
+                                </div>
+
+                            <h3 class="text-[#262626] font-medium text-base leading-[20px] m-[24px_0_16px]">{{$Translate.Permission.Permissions}}
+                            </h3>
+
+                            {{range .Module}}
+                            <div class="accordion mb-[12px]" id="{{.Description}}">
+
+                                <div id="heading{{.Description}}" class="accordion-item  border !border-[#ECECEC] overflow-hidden !rounded-[4px]">
+                                    <button class="collapsed accordion-button flex justify-between items-center leading-none collapsed p-[16px] !bg-white !shadow-none after:!h-[16px] after:!w-[16px]  after:!bg-contain   after:!inline-block  after:!bg-[url('/public/img/accord-arrow.svg')] [&.collapsed]:!after:rotate-180  !transform-none !transition-none"
+                                        type="button" data-bs-toggle="collapse" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapse{{.Description}}" aria-expanded="true"
                                         aria-controls="collapse{{.Description}}">
-                                        <div class="accord-head">
-                                            <img src="{{.IconPath}}" alt="">
-                                            {{.ModuleName}}
+                                        <div
+                                            class="flex items-end  space-x-[8px] text-[#262626] text-sm font-normal leading-none">
+                                            <img src="{{.IconPath}}" >
+                                          <span>  {{.ModuleName}}</span>
                                         </div>
                                     </button>
-                            </div>
-                            <div id="collapse{{.Description}}" class="accordion-collapse collapse"
-                                aria-labelledby="heading{{.Description}}" data-bs-parent="#{{.Description}}">
-                                <div class="accordion-body">
-                                    {{range .TblModulePermission}}
-                                    <div class="permission-modal">
-                                        <div class="permission-content">
-                                            <h4 class="heading-four">{{.DisplayName}}</h4>
-                                            <p class="para-light">{{.Description}}</p>
-                                        </div>
-                                        <div class="chk-group">
-                                            <input type="checkbox" class="roleperm" data-id="{{.Id}}" id="Check{{.Id}}">
-                                            <label for="Check{{.Id}}"></label>
-                                        </div>
-                                    </div>
-                                    {{end}}
                                 </div>
-                            </div>
-                        </div>
 
+
+                                <div id="collapse{{.Description}}" class="accordion-collapse collapse"
+                                aria-labelledby="heading{{.Description}}" data-bs-parent="#{{.Description}}">
+                                    <div class="accordion-body p-[12px_16px_0_16px]">
+                                        {{range .TblModulePermission}}
+                                        <div class="flex  justify-between items-center mb-[12px] last-of-type:mb-0">
+                                            <div class="permission-content">
+                                                <h4 class="text-[#262626] text-xs mb-[4px] font-normal leading-[14.06px]">
+                                                    {{.DisplayName}}</h4>
+                                                <p class="text-[#717171] text-[11px] leading-[14px] font-normal">{{.Description}}</p>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="hidden peer roleperm" data-id="{{.Id}}" id="Check{{.Id}}">
+                                                <label for="Check{{.Id}}"
+                                                    class=" h-[14px] relative cursor-pointer flex gap-[6px] w-fit  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')] hidecheckbox">
+                                                </label>
+                                            </div>
+                                        </div>
+                                       {{end}}
+                                    </div>
+                                </div>
+
+                            </div>
                         {{end}}
+
+                        </div>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <div class="modal-save">
-                    <button class="btn-reg btn-md primary saverolperm" type="button">{{$Translate.Save}} </button>
+                </form>
                 </div>
             </div>
-            </form>
         </div>
-    </div>
-</div>
+
+        </section>
+
+
+
+
 {{template "footer" .}}
 <script>
     // Initialize tooltips

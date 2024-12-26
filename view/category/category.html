@@ -1,383 +1,493 @@
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
+{{$permission :=.permission}}
+{{$dper :=.dpermission}}
 
-<div class="page-wrapper">
+<section
+    class="sectionclass max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 z-[101] ">
+        <a href="javascript:void(0);"
+            class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+            <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
 
-    <div class="bread-crump">
-        <a href="/categories/">{{.HeadTitle}}</a>
-        <img src="/public/img/right-light-arrow.svg" alt="">
-        <a href="" class="current-page">{{.Tabmenu}}</a>
-    </div>
-    {{template "categorytab" .}}
-
-    <div class="all-tab-content" id="groupsContent">
-        <!--1-->
-        <div class="tablePagination-wrapper">
-            <div class="table-responsive entries-table">
-                <table class="table">
-                    <caption class="table-caption" style="padding-left: 0px;">
-                        <div class="caption-flexx">
-                            <p class="para">
-                                {{$Translate.Total}} {{if gt .Count 1}}{{$Translate.Categoryy.Categorys}} : <span
-                                    class="para" id="searchcount"> {{.Count}} </span> {{else}}
-                                {{$Translate.Categoryy.Category}} : <span class="para" id="searchcount"> {{.Count}}
-                                </span> {{end}} </p>
-
-
-                            </p>
-
-                            <div class="transitionSearch active">
-                                <form action="/categories/addcategory/{{.categoryid}}" method="get" class="filterform"
-                                    autocomplete="off">
-                                    <img src="/public/img/Magnifying-Glass.svg" alt="" style="bottom: 5px;">
-                                    <input type="text" class="search" id="searchsubcategory" name="keyword"
-                                        placeholder="{{$Translate.Csearch}}"
-                                        value="{{.Filter.Keyword}}">
-                                </form>
-                            </div>
-                            {{$MENU := .Menu}}
-                        
-                            <button class="btn-reg btn-sm primary " data-bs-toggle="modal"
-                                data-bs-target="#categoryModal" id="caddbtn">
-                                <img src="/public/img/add.svg" alt="" />{{$Translate.Categoryy.Category}}
-                            </button>
-                           
-                        </div>
-                    </caption>
-
-                    <thead>
-                        <tr>
-                            <th style="width: 0; padding-right: 0;"> 
-                                <div class="chk-group">
-                                  <input type="checkbox" id="Check">
-                                  <label for="Check"></label>
-                                </div>
-                              </th>
-                            <th>{{$Translate.Categoryy.Categories}} </th>
-                            <th>{{$Translate.Categoryy.Parentcategory}} </th>
-                            <th>{{$Translate.Lastupdatedon}} </th>
-                            <th style ="text-align: end;padding-right: 60px;">{{$Translate.Actions}} </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{if .CategoryList}}
-                        {{range .CategoryList}}
-                        <tr>
-                            <td style="padding-right: 0;"> 
-                                
-                                <div class="d-flex  gap-4 align-items-center">
-                                <div class="chk-group">
-                                  <input type="checkbox" class="selectcheckbox" id="Check{{.Id}}" data-id="{{.Id}}">
-                                  <label for="Check{{.Id}}"></label>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td> {{.CategoryName}} </td>
-
-                            <td>
-                                <div class="category-path-list"> {{range $value := .Parent}} <h3
-                                        class="para categorylistname"> {{$value}}</h3>
-                                    <h3 class="para">&nbsp;/&nbsp;</h3> {{end}}
-                                </div>
-                            </td>
-                            <td>{{.DateString}} </td>
-
-                            <td style="text-align: end;padding-right: 60px;">
-                                <div class="btn-group language-group">
-                                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        {{$Translate.Action}} <img src="/public/img/arrow-down.svg" alt="" />
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        {{$Id := .Id}}
-
-
-                                        <li>
-                                            <a class="dropdown-item" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#categoryModal" data-id="{{$Id}}" id="edit">
-                                                <span><img src="/public/img/edit.svg" alt="" /></span>
-                                                {{$Translate.Edit}}
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item" type="button" id="delete-btn" data-id="{{$Id}}"
-                                                data-bs-toggle="modal" data-bs-target="#centerModal">
-                                                <span><img src="/public/img/delete.svg" alt="" /></span>
-                                                {{$Translate.Delete}}
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                        {{end}}
-                        {{ else if eq .catcount 0}}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
-
-                                    <div class="empty-folder">
-                                        <img src="/public/img/folder-sh.svg" alt="">
-                                        <img src="/public/img/shadow.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                    <p class="para">
-                                        {{$Translate.Pagesorry}}
-                                        {{$Translate.Gobackhome}}
-                                    </p>
-                                    <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal"
-                                        data-bs-target="#categoryModal"
-                                        class="heading-three ">{{$Translate.Clickadd}} >></a>
-                                </div>
-                            </td>
-                        </tr>
-
-                        {{else }}
-                        <tr class="no-dataHvr">
-                            <td style="text-align: center; border-bottom: none;" colspan="8">
-                                <div class="noData-foundWrapper">
-
-                                    <div class="empty-folder">
-                                        <img src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-                                </div>
-                            </td>
-                        </tr>
-                        {{end}}
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pogination flexx pagenation-padding">
-                <ul class="flexx">
-                    {{if gt .Count .Limit}}
-                
-                    <li>  <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage 1}} class="disabled" {{end}}>
-                        <img src="/public/img/carat-right.svg" alt="" />
-                    </a></li>
-                    {{if gt .CurrentPage 3}}
-                    <li><a href="?page=1{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" >1</a></li>
-                    {{end}}
-                    {{if eq .CurrentPage 5}}
-                    <li><a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">2</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 5}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 2}}
-                    <li><a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoBelow}}</a></li>
-                    {{end}}
-                    {{if gt .CurrentPage 1}}
-                    <li><a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.PreviousPage}}</a></li>
-                    {{end}}
-                    <li><a href="" {{if  .CurrentPage }} class="current" {{end}}>{{.CurrentPage}}</a></li>
-                    {{if lt .CurrentPage .Pagination.TotalPages}}
-                    <li><a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.NextPage}}</a></li>
-                    {{end}}
-                    {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TwoAfter}}</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
-                    <li><a href="">...</a></li>
-                    {{end}}
-                    {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
-                    <li><a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}">{{.Pagination.TotalPages}}</a></li>
-                    {{end}}
-                    <li>
-                        <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}" {{if eq .CurrentPage .PageCount}} class="disabled" {{else}} class="next" {{end}}>
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                   
-                   {{end}}
-                </ul>
-                <p>{{.Paginationstartcount}} – {{.Paginationendcount}} of {{.Count}}</p>
-            </div>
-
-            <!-- <div class="pogination flexx pagenation-padding">
-                <ul class="flexx pagination">
-                    <li class="page-item previous-page disable">
-                        <a href="#" class="disable page-link" >
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-                    <li class="page-item current-page active">
-                        <a href="#" class="page-link">1</a>
-                    </li>
-
-                    <li class="page-item dots">
-                        <a class="page-link" href="#">...</a>
-                    </li>
-
-                    <li class="page-item current-page">
-                        <a class="page-link" href="#">5</a>
-                    </li>
-
-                    <li class="page-item next-page">
-                        <a href="#"  class="disabled page-link">
-                            <img src="/public/img/carat-right.svg" alt="" />
-                        </a>
-                    </li>
-
-                </ul>
-                <p>Items Per Page: {{.Count}} and {{.Paginationstartcount}} – {{.Paginationendcount}} of{{.Count}}</p>
-            </div> -->
+        <div class="mr-auto flex items-center gap-[6px] overflow-hidden">
+            <a href="/categories/">
+                <h2 class="text-[14px] font-light leading-[20px] text-[#252525] whitespace-nowrap max-sm:text-xs">
+                    {{.HeadTitle}}
+                    {{$Translate.Categoryy.Newgroup}}</h2>
+            </a>
+            <img src="/public/img/arrow-category.svg" alt="arrow-category">
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap  max-sm:text-xs">
+                {{.ParentCategoryName}}
+            </h2>
         </div>
-    </div>
-    <!--2-->
-         <!--------selected----------->
- <div class="selected-numbers" style="display: none;">
-    <p class="heading-three text-white checkboxlength"> </p>
-    <div class="d-flex">
-      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 pe-2 me-2  border-gray " id="seleccheckboxdelete" data-bs-toggle="modal"
-      data-bs-target="#centerModal">
-        <img src="/public/img/delete-select.svg" alt="delete"> Delete</a>
-      <a href="javascript:void(0)" class="heading-three text-white d-flex align-items-center gap-2 " id="unbulishslt" data-bs-toggle="modal" data-bs-target="#centerModal"> </a>
-    </div>
-    <a href="javascript:void(0)" class="heading-three text-white" id="deselectid">Deselect All</a>
-  </div>
-</div>
 
+        <div
+            class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+                class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
+            </a>
+            <form action="/categories/addcategory/{{.categoryid}}" method="get" class="filterform " autocomplete="off">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="searchsubcategory"
+                    value="{{.Filter.Keyword}}"
+                    class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                {{if eq .Searchtrue true}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{end}}
 
-<!-- Right Modal -->
-<div class="modal fade right member-modal" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="title">{{$Translate.Categoryy.Addcategory}}</h3>
-                <button class="close" data-bs-dismiss="modal"> <img src="/public/img/modal-close.svg" alt="" />
-                </button>
-            </div>
+            </form>
+        </div>
+        <!-- </div> -->
+        {{$MENU := .Menu}}
 
-            <div class="modal-body">
-                <form name="" id="form" enctype="multipart/form-data">
-                    <input type="hidden" name="category_id" id="category_id" value="">
-                    <input type="hidden" value="{{.categoryid}}" name="categoryid" id="categoryid">
-                    <input type="hidden" value="" name="groupid" id="groupid">
-                    <input type="hidden" name="catpageno" id="catpageno" value="">
-                    <input type="hidden" name="csrf" value="{{.csrf}}">
+        {{range $MENU.TblModule}}
+        {{if eq .ModuleName "Categories"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Categories"}}
+        {{range .Routes}}
+        {{if eq .DisplayName "Create"}}
+        <a href="#addCategory" data-bs-toggle="modal" id="caddbtn"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569]">
+            <span class="hidden max-sm:block text-lg leading-none ">+</span> <span
+                class="max-sm:hidden">{{$Translate.Create}} {{$Translate.Channell.Category}}
+            </span></a>
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+    </header>
 
-                    <div class="input-group" id="catname">
-                        <label for="" class="input-label"> {{$Translate.Categoryy.Categoryname}} *</label>
-                        <div class="ig-row">
-                            <input type="text" class="field" name="cname" id="cname"
-                                placeholder="{{$Translate.Categoryy.Entercategoryname}}">
-                        </div>
-                    </div>
+    <!--body-->
+    <div>
 
-                    <div class="input-group" id="catdesc">
-                        <label for="" class="input-label">{{$Translate.Description}} *</label>
-                        <div class="ig-row">
-                            <textarea class="field" name="cdesc" id="cdesc"
-                                placeholder="{{$Translate.Categoryy.Entercategorydescription}}"></textarea>
-                        </div>
-                    </div>
+        <!--avaliable-->
+        <div class="px-[16px] py-[8px] border-b border-[#EDEDED] flex justify-between items-center">
+            <p class="text-[#717171] text-xs font-normal mb-0"><span class="text-bold-black">{{.Count}}
+                </span>
+                {{if gt .Count 1}}
+                {{.HeadTitle}}
+                {{else}}
+                {{$Translate.Channell.Category}}
+                {{end}}
+                {{$Translate.Available}}
+            </p>
 
-                    <div class="input-group upload-img">
-                        <label for="" class="input-label">{{$Translate.Uploadcoverimage}}</label>
-                        <div class="ig-row file-input-row file-upload uploaded-file">
-                            <div id="catdel-img">
-                                <button class="delete-flag" type="button"><img src="/public/img/delete-white-icon.svg"
-                                        alt=""></button>
-                                <div class="hover-delete-img"></div>
+        </div>
+        <!--table-->
+        <div class="overflow-x-auto scrollbar-thin w-full mb-[50px]">
+            <table class="w-full min-w-[768px]">
+                <thead>
+                    <tr>
+                        <th class="px-[16px] py-[12px] pr-0 w-[30px] border-b border-[#EDEDED]">
+                            <div class="chk-group-label flex justify-center">
+                                <input type="checkbox" id="Check" class="hidden peer">
+                                <label for="Check"
+                                    class="{{if eq $dper false}} pointer-events-none opacity-50 {{else}}cursor-pointer{{end}} w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
                             </div>
+                        </th>
+                        <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                            <p class="text-[#222222] text-sm font-normal mb-0">{{$Translate.Categoryy.Categories}}</p>
+                        </th>
+                        <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                            {{$Translate.Categoryy.Parentcategory}}
+                        </th>
+                        <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                            {{$Translate.Lastupdatedon}}
+                        </th>
 
-                            <h3 class="heading-three" id="mediadesc">{{$Translate.Uploadneworchoose}}</h3>
-                            <button class="btn-reg btn-xs primary " id="browse" type="button"
-                                data-bs-toggle="modal" data-bs-target="#addnewimageModal"> {{$Translate.Browse}}
-                            </button>
 
-                            <input type="hidden" value="" name="categoryimage" id="categoryimage">
-                            <img src="" name="ctimagehide" id="ctimagehide" style="height: 100%;position: absolute;">
-                        </div>
+                        <th
+                            class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                            {{$Translate.Actions}}
+                        </th>
+                    </tr>
+                </thead>
 
-                    </div>
+                <tbody>
+                    {{if .CategoryList}}
+                    {{range .CategoryList}}
+                    <tr>
+                        <td class="px-[16px] py-[12px] pr-0 border-b border-[#EDEDED] align-middle">
+                            <div class="chk-group chk-group-label flex justify-center">
+                                <input type="checkbox" class="selectcheckbox hidden peer" id="Check{{.Id}}"
+                                    data-id="{{.Id}}">
+                                <label for="Check{{.Id}}"
+                                    class="{{if eq $dper false}} pointer-events-none opacity-50 {{else}}cursor-pointer{{end}} z-[100] before:z-[100] w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                            </div>
+                        </td>
+
+                        <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
+                            <div class="flex gap-[8px] items-center justify-start">
+                                <p class="text-[#262626] font-normal text-xs mb-0 ">
+                                    {{.CategoryName}}</p>
+                            </div>
+                        </td>
+                        <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                            <div
+                                class="category-path-list relative flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]">
+                                {{range $value := .Parent}}
+                                <span
+                                    class="para categorylistname inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">{{$value}}</span>
+                                <span class="para inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]
+                        after:inline-block after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center
+                                            "></span>
+                                {{end}}
+                            </div>
+                        </td>
+                        <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                            {{.DateString}}
+                        </td>
 
 
-                    <div class="input-group">
-                        <div class="input-group  user-drop-down" id="availablecat">
-                            <label for="" class="input-label">{{$Translate.Categoryy.Availablecategory}} *</label>
-                            <a class="dropdown-toggle" class="field" type="button" id="triggerId"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{$Translate.Categoryy.Selectcategry}} </a>
-                            <label id="cid-error" class="error" for="cid" style="display: none;">*
-                                {{$Translate.Categoryy.Selcatvailderr}} </label>
+                        <td
+                            class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                            <div class="btn-group position-static">
+                                <a href="javascript:void(0);"
+                                    class="border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] focus:bg-[#F5F5F5] show"
+                                    data-bs-toggle="dropdown" aria-expanded="true">
+                                    <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                        class="hidden group-hover:block">
+                                    <img src="/public/img/action-btn.svg" alt="dropdown"
+                                        class="block group-hover:hidden">
+                                </a>
 
-                            <div class="dropdown-menu dropdown-value dropdown-values" aria-labelledby="triggerId">
-                                <input type="hidden" name="subcategoryid" value="" id="cid">
-
-                                <div class="ig-row ig-channel-input">
-                                    <input type="text" id="searchcatlists" class="search" name="keyword"
-                                        placeholder="{{$Translate.Spaces.Searchcategory}}">
-
-                                </div>
-
-                                <div class="catrgory-dropdownlist">
-                                    {{range .FinalModalCategoriesList}}
-                                    <button class="dropdown-item dropdown-value drp category-path-list" data-parentid="{{.ParentId}}" id="categoryclick"
-                                        type="button" data-id="{{.Id}}" style="display: flex;gap: 5px;">
-                                        {{range $value := .Parent}} <h3 class="para categorylistname"> {{$value}}</h3>
-                                        <h3 class="para">&nbsp;/&nbsp;</h3> {{end}}
-                                        <p class="forsearch" style="display: none;">{{range $value := .Parent}}
-                                            ~{{$value}}{{end}}</p>
-                                    </button>
-                                    
+                                <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent shadow-[2px_3px_8px_1px_#00000026] min-w-[180px] py-[12px]"
+                                    aria-labelledby="triggerId">
+                                    {{$Id := .Id}}
+                                    {{range $MENU.TblModule}}
+                                    {{if eq .ModuleName "Categories"}}
+                                    {{range .SubModule}}
+                                    {{if eq .ModuleName "Categories"}}
+                                    {{range .Routes}}
+                                    {{if eq .DisplayName "Update"}}
+                                    <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-[12px] hover:bg-[#F5F5F5] cursor-pointer"
+                                        href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addCategory"
+                                        data-id="{{$Id}}" id="edit"><img src="/public/img/edit.svg" />
+                                        {{$Translate.Edit}}</a>
+                                    <!-- <div class="w-full h-px bg-gray-100 ma-y-2"></div> -->
                                     {{end}}
-                                 
-                                </div> 
-
-                                <div class="noData-foundWrapper" style="margin-top: -40px;display: none;">
-
-                                    <div class="empty-folder">
-                                        <img style="max-width: 20px;" src="/public/img/nodatafilter.svg" alt="">
-                                    </div>
-                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                        {{$Translate.Oopsnodata}}</h1>
-
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{range $MENU.TblModule}}
+                                    {{if eq .ModuleName "Categories"}}
+                                    {{range .SubModule}}
+                                    {{if eq .ModuleName "Categories"}}
+                                    {{range .Routes}}
+                                    {{if eq .DisplayName "Delete"}}
+                                    <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-[12px] hover:bg-[#F5F5F5] cursor-pointer"
+                                        href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        id="delete-btn" data-id="{{$Id}}"> <img
+                                            src="/public/img/delete.svg">{{$Translate.Delete}}</a>
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
+                                    {{end}}
                                 </div>
 
-                              
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{ else if eq .catcount 0}}
+                    <tr>
+                        <td colspan="9">
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noData.svg" alt="nodate">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    {{$Translate.Oopsnodata}}</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    {{$Translate.Pagesorry}}
+                                    {{$Translate.Gobackhome}}</p>
+                                <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal"
+                                    data-bs-target="#addCategory"
+                                    class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                                    {{$Translate.Clickadd}} >></a>
                             </div>
 
-                        </div>
-                    </div>
+                        </td>
+                    </tr>
+
+                    {{else }}
+
+                    <tr>
+                        <td colspan="8">
+
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    {{$Translate.Filtersearch}}</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    {{$Translate.Filterkeyword}} </p>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
 
 
-
-                </form>
-
-            </div>
-
-            <div class="button-col add-category-btm-row flexx">
-                <button class="btn-reg btn-md primary  " type="button" id="save"> {{$Translate.Save}}
-                </button>
-                <button class="btn-reg btn-md primary  " type="button" id="update"
-                    style="display: none;"> {{$Translate.Update}}
-                </button>
-                <button class="btn-reg btn-md secondary" id="cancel" data-bs-dismiss="modal"> {{$Translate.Cancel}}
-                </button>
-            </div>
-
+            </table>
         </div>
     </div>
-</div>
-</div>
-{{template "mediamodal" .}}
 
-{{template "mediadecidemodal" .}}
 
-{{template "cropmodal" .}}
+    <!--pagination-->
+    <div
+        class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+        <ul class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex">
+            {{if gt .Count .Limit}}
 
-{{template "footer" .}}
-<script src="/public/js/media/media.js"></script>
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
 
-<script src="/public/js/categories/category.js"></script>
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
 
-{{template "footerclose" .}}
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+     @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+    <!--Add Category-->
+
+    <div class="modal right fade" id="addCategory" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable  mx-auto">
+            <div class="modal-content ">
+                <div
+                    class="modal-header flex justify-between items-center border-b border-[#EDEDED] p-[6px_24px] max-sm:p-[6px_16px]">
+                    <h1 class="font-normal text-base text-[#262626] leading-6" id="exampleModalLabel">
+                        {{$Translate.Create}} {{$Translate.Channell.Category}}
+                    </h1>
+
+                    <div class="flex space-x-[12px]">
+                        <a href="javascript:void(0);" data-bs-dismiss="modal" id="cancel"
+                            class="h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-bold-black bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
+                        <a href="javascript:void(0);" id="save"
+                            class="h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white bg-[#10A27F]  hover:bg-[#148569] rounded-[4px] no-underline">{{$Translate.Save}}
+                        </a>
+                        <a href="javascript:void(0);" id="update"
+                            class="h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white bg-[#10A27F]  hover:bg-[#148569] rounded-[4px] no-underline">{{$Translate.Update}}
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-body p-6 scrollbar-thin max-sm:p-[16px]">
+                    <form name="" id="form" enctype="multipart/form-data">
+                        <input type="hidden" name="category_id" id="category_id" value="">
+                        <input type="hidden" value="{{.categoryid}}" name="categoryid" id="categoryid">
+                        <input type="hidden" value="" name="groupid" id="groupid">
+                        <input type="hidden" name="catpageno" id="catpageno" value="">
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+
+                        <div class="flex flex-col space-y-[6px] mb-[16px] last-of-type:mb-0">
+                            <label
+                                class="text-[#262626] text-sm font-normal mb-0">{{$Translate.Categoryy.Categoryname}}<span
+                                    class="text-red-600"> *</span></label>
+                            <input type="text" name="cname" id="cname" maxlength="50"
+                                placeholder="{{$Translate.Categoryy.Entercategoryname}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]" />
+                            <div id="error-messagename" class="text-red-500 text-xs mt-1"></div>
+                        </div>
+                        <div class="flex flex-col space-y-[6px]  mb-[16px] last-of-type:mb-0">
+                            <label class="text-[#262626] text-sm font-normal mb-0">{{$Translate.Description}}<span
+                                    class="text-red-600"> *</span></label>
+                            <textarea name="cdesc" id="cdesc" maxlength="250"
+                                placeholder="{{$Translate.Categoryy.Entercategorydescription}}"
+                                class="scrollbar-none [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) rounded-[4px] p-[12px] h-[135px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full resize-none border border-[#EDEDED]">
+                            </textarea>
+                            <div id="error-messagedesc" class="text-red-500 text-xs mt-1"></div>
+                        </div>
+
+                        <div class="flex flex-col space-y-[6px] mb-[16px] last-of-type:mb-0">
+                            <label
+                                class="text-bold-black text-sm font-normal mb-0">{{$Translate.Categoryy.Availablecategory}}<span
+                                    class="text-red-600"> *</span></label>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" id="triggerId"
+                                    class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <p></p>
+
+                                </a>
+                                <input type="hidden" name="subcategoryid" value="" id="cid"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+
+                                    <li class="p-[4px_12px_8px_12px]">
+                                        <input type="text" name="keyword" id="searchcatlists"
+                                            placeholder="{{$Translate.Spaces.Searchcategory}}"
+                                            class="search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                    </li>
+                                    {{range .FinalModalCategoriesList}}
+                                    <li class="catrgory-dropdownlist">
+                                        <a href="javascript:void(0);" data-parentid="{{.ParentId}}" id="categoryclick"
+                                            data-id="{{.Id}}"
+                                            class="drp category-path-list relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                            {{range $value := .Parent}}
+                                            <span
+                                                class="para categorylistname inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                                {{$value}}
+                                            </span>
+                                            <span class="inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]
+        after:inline-block after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center
+                            "></span>{{end}}
+                                        </a>
+                                    </li>
+                                    {{end}}
+                                    <li class="noData-foundWrapper" style="display: none;">
+                                        <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                            <div class="text-center mx-auto w-[48px]">
+                                                <img src="/public/img/noFilter.svg" alt="noFilter">
+                                            </div>
+                                            <h2
+                                                class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                No data found with current filters</h2>
+                                            <p
+                                                class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                Try changing any other keywords </p>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col space-y-[6px]  mb-[16px] last-of-type:mb-0">
+                            <label
+                                class="text-[#262626] text-sm font-normal mb-0">{{$Translate.Uploadcoverimage}}</label>
+                            <div
+                                class="rounded-[4px] relative p-[12px] h-[160px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full flex items-center flex-col space-y-[12px] justify-center">
+
+                                <label for="categoryimage"
+                                    class="flex cursor-pointer h-[32px] hover:bg-[#148569] bg-[#10A37F] rounded-[3px] text-[#FFFFFF] text-[14px] font-normal leading-[16.41px] p-[8px_16px]"
+                                    id="browse">{{$Translate.Browse}}</label>
+                                <p class="text-[#717171] text-[14px] font-normal  leading-[16.41px] " id="uploadLine">
+                                    {{$Translate.Uploadneworchoose}}</p>
+                                <p class="text-[#717171] text-[12px] font-normal  leading-[16.41px] " id="uploadFormat">
+                                    {{$Translate.ChooseFormats}}
+                                </p>
+                                <input type="file" name="categoryimage" id="categoryimage"
+                                    accept="image/png, image/jpeg,image/jpg,image/svg"
+                                    class="hidden [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                                <label id="myfile-error" class="error hidden " for="myfile"
+                                    style="font-size: 0.75rem; font-weight: 400; color: rgb(242, 102, 116); position: absolute; top: 100%;left: 0;">*
+                                    Please
+                                    choose images with jpg /jpeg /png formats only</label>
+                                <img alt="" data-id="9" id="prof-crop" name="prof_pic" class="hidden">
+                                <div id="catdel-img" class=" hover:opacity-100 opacity-[0] ">
+                                    <button type="button"
+                                        class="absolute right-[0.75rem] top-[0.75rem] bg-transparent  rounded-full border-[1px] border-solid border-[white] p-[5px] z-[3] cursor-pointer "><img
+                                            src="/public/img/deletehovericon.svg" alt="" class="h-[15px]"></button>
+                                    <div class="bg-[#1E292C76] m-auto h-full w-full absolute left-0 top-0 z-[1]"></div>
+                                </div>
+                                <input type="hidden" value="" name="categoryimages" id="categoryimages">
+                                <img src="" name="ctimagehide" id="ctimagehide" class="w-full h-full object-contain">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {{template "newmediamodal" .}}
+
+    {{template "footer" .}}
+
+    <script src="/public/js/media/media.js"></script>
+
+    <script src="/public/js/categories/category.js" ></script>
+
+    {{template "footerclose" .}}

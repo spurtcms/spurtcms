@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script
+        src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+</head>
+
+<body>
+
+    <main
+        class="min-h-[100vh] w-full bg-[url('/public/img/login-bg.svg')] bg-no-repeat bg-cover font-[Lexend,sans] grid grid-rows-[auto_1fr_auto] p-[30px_30px_20px_30px] gap-[2rem] max-[768px]:p-[16px] ">
+
+        <header class="header-rht">
+
+            <div>
+               <a href=""> <img src="/public/img/logo.svg" alt="logo" class="max-w-[40%]"></a>
+            </div>
+        </header>
+
+
+        <section
+            class="p-[40px_24px] rounded-[8px] bg-[#FFFFFF] shadow-[0px_3px_32px_5px#00000005] max-w-[430px] m-auto w-full h-fit  max-[576px]:p-[20px_16px]">
+            <h1 class=" text-[20px] font-[500] leading-[25px] text-[#152027] mb-[8px]  ">Change Password</h1>
+            <p class=" text-[12px] font-[300] leading-[15px] text-[#525252]">Please enter your new password</p>
+            <form action="/set-newpassword" id="passform" method="post" name="passform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="userId" value="{{.userid}}" id="userId">
+
+                <div class="mt-[24px]">
+                    <label for="" class="text-[14px] font-normal leading-[17.5px] text-[#262626] block mb-[2px]">New Password</label>
+                    <div class="relative">
+                    <input type="password" id="pass" placeholder="Enter password" name="pass" 
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs border-[#EDEDED] p-[8px] rounded-[3px] text-[14px] font-normal leading-[17.5px] text-[#262626] placeholder:text-[#D2D2D2] block w-full focus:border-[#EDEDED] focus:ring-0 ">
+                        
+                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye1">
+                            <img id="img" src="/public/img/eye-closed.svg" alt="">
+
+                        </button>
+                    </div>
+                    </div>
+
+                <div class="mt-[24px]">
+                    <label for=""
+                        class="text-[14px] font-normal leading-[17.5px] text-[#262626] block mb-[2px]">Confirm Password</label>
+                   <div class="relative">
+                        <input type="password" placeholder="Confirm New Password" id="cpass" name="cpass"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs border-[#EDEDED] p-[8px] rounded-[3px] text-[14px] font-normal leading-[17.5px] text-[#262626] placeholder:text-[#D2D2D2] block w-full focus:ring-0 focus:border-[#EDEDED] ">
+                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye2">
+                            <img id="img" src="/public/img/eye-closed.svg" alt="">
+                        </button>
+                   </div>
+                    </div>
+
+                    <div class="mt-[24px]">
+                <button type="submit" id="passsave"
+                    class="bg-[#2FACD6] p-[10px] rounded-[3px] text-[14px] font-medium leading-[17.5px] text-[#FFFFFF] text-center h-[38px] block w-full hover:bg-[#069ec5]">Submit</button>
+                    </div>
+                    <div class="text-center mt-[12px]">
+                        <a href="/" class="text-center font-normal text-[#262626] text-[14px]">Back</a>
+                    </div>
+
+            </form>
+
+        </section>
+
+        <footer class="text-[12px] font-normal leading-[15px] text-[#525252] text-center">
+            Copyrights © 2024, Piccosoft Software labs India Private Limited.All Rights Reserved.
+        </footer>
+    </main>
+
+    <script src="/public/js/auth/Newpassword.js"></script>
+    {{template "authfooter" .}}

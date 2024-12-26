@@ -4,492 +4,399 @@
 {{$Namestring := .Menu.NameString}}
 {{$Channelslist := .channelslist}}
 {{$Entries := .newentries}}
-{{$Memberlist := .memberlist}}
+<!-- {{$Memberlist := .memberlist}} -->
 {{$Recentactivity := .recentactivity}}
 {{$Mostlyviewlist := .mostlyviewlist}}
 {{$Recentlyviewlist := .recentlyviewlist}}
 {{$Activemeberlist := .activememberlist}}
-<div class="page-wrapper">
+{{$Name :=.Menu.Name}}
+{{$Imagepath :=.Menu.ProfileImagePath}}
 
-    <div class="cms-dashboard">
-        <div class="admin-full-list">
-            <div class="admin-content">
-                {{if .Menu.ProfileImagePath}}
-                <img src="{{if .Menu.ProfileImagePath}}/{{ .Menu.ProfileImagePath }}{{else}}/public/img/admin-logo.png{{end}}"
-                    alt="">
-                {{else}}
-                <div class="activity-image"> <span> {{$Namestring}} </span> </div>
-                {{end}}
-                <div class="admin-details">
-                    <h3>{{.Menu.Name}}</h3>
-                    <p>{{$Translate.DashBoard.Lastactive}} : {{if .Lastlogin}} {{.Lastlogin}} {{else}} -- {{end}} </p>
-                </div>
-            </div>
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Dashboard}}
+            </h2>
         </div>
-        <div class="sep"></div>
-        <div class="dashboard-details">
-            <div class="dashboard-content">
-                <h3>{{$Translate.DashBoard.Welcome}} {{.Menu.Name}}</h3>
-                <p>{{$Translate.DashBoard.Userwelcome}}
+
+    </header>
+
+    <section>
+        <div class="pa-x-4 pa-y-3 flex space-x-[8px] items-center border-b border-[#EDEDED]">
+            <div class="w-10 h-10 rounded-full">
+                {{if .Menu.ProfileImagePath}}
+                <img src="{{if .Menu.ProfileImagePath}}{{ .Menu.ProfileImagePath }}{{else}}/public/img/admin-logo.png{{end}}"
+                    class="rounded-full w-full h-full" />
+                {{else}}
+
+                <div class="w-10 h-10 rounded-full flex justify-center items-center bg-[#F5F5F5]">
+                    <span class="text-[14px] text-[#222222] font-normal">{{$Namestring}}</span>
+                </div>
+
+                {{end}}
+            </div>
+            <div class="flex flex-col space-y-[4px]">
+                <h3 class="text-base font-normal text-bold-black mb-0">{{.Menu.Name}}</h3>
+                <p class="text-bold-gray text-xs font-normal mb-0 text-bold-gray">{{$Translate.DashBoard.Lastactive}} :
+                    <span class="text-bold-black">{{if .Lastlogin}} {{.Lastlogin}} {{else}} -- {{end}}</span>
                 </p>
             </div>
-            <a href="/settings/myprofile"><button class="btn-reg btn-sm primary">
-                    {{$Translate.DashBoard.Editprofile}}
-                </button></a>
         </div>
-        <div class="sep"></div>
-        <div class="dash-full-list">
-            <div class="dash-full-detail">
-                <div class="left-dash">
-                    <div class="dash-list-role">
-                        <div class="dash-role">
-                            <div class="role-content">
-                                <div class="img-role img-user">
-                                    <img src="/public/img/users--1.svg" alt="">
+        <div class="pa-x-4 pa-y-3 flex justify-between items-center space-x-[4px] border-b border-[#EDEDED]">
+            <div class="flex-col space-y-[4px] flex">
+                <h3 class="text-base font-normal text-bold-black mb-0">{{$Translate.DashBoard.Welcome}} {{.Menu.Name}}
+                </h3>
+                <p class="text-bold-gray text-xs font-normal mb-0 text-bold-gray">{{$Translate.DashBoard.Userwelcome}}
+                </p>
+            </div>
+            <a href="/settings/myprofile"
+                class="w-auto flex whitespace-nowrap gap-1.5 items-center justify-center pa-x-4 h-8  rounded-[3px]   bg-[#10A17F] hover:bg-[#148569]  text-white text-sm font-normal no-underline">
+                {{$Translate.DashBoard.Editprofile}}</a>
+        </div>
+        <div class="pa-4">
+            <div class="grid grid-cols-340 gap-[1rem] ma-b-4">
+                <div class="flex flex-col space-y-[16px]">
+                    <div class="grid grid-auto-fit gap-2  max-sm:grid-cols-1">
 
+                        <a href="/settings/users/" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188 space-y-[28px]">
+                           
+                            <div class="flex items-center space-x-[8px]">
+                                <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-orange-50">
+                                    <img src="/public/img/users.svg" />
                                 </div>
-                                <h3>{{$Translate.Users}}</h3>
+                                <h3 class="text-bold-black text-sm font-normal mb-0">{{$Translate.Users}}</h3>
                             </div>
                             {{if eq .usercount 0}}
-                            <div class="count-role">
-                                <h2>0</h2>
-                            </div>
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                0
+                            </h4>
+                            <p></p>
                             {{else}}
-                            <div class="count-role">
-                                <h2>{{.usercount}}</h2>
-                            </div>
-                            <div class="count-days">
-                                <p>
-                                    <span>+{{.Newusercount}}</span>
-                                    {{$Translate.DashBoard.Increased}}
-                                    <span>(10 {{$Translate.DashBoard.Days}})</span>
-                                </p>
-                            </div>
-                            {{end}}
-                        </div>
-                        <div class="dash-role">
-                            <div class="role-content">
-                                <div class="img-role img-member">
-                                    <img src="/public/img/members--1.svg" alt="">
 
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                {{.usercount}}
+                            </h4>
+                            <p
+                                class="flex space-x-[4px] justify-center flex-wrap font-normal text-bold-black items-baseline text-sm mb-0">
+                                <b class=" text-[#10A37F]  font-normal text-sm">+{{.Newusercount}}</b>
+                                <span>{{$Translate.DashBoard.Increased}} </span><span class="text-10 font-light">(10
+                                    {{$Translate.DashBoard.Days}})</span>
+                            </p>
+                            {{end}}
+                        </a>
+                        <a href="/member/" class=" border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188   space-y-[28px]">
+                            <div class="flex items-center space-x-[8px]">
+                                <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-violet-50">
+                                    <img src="/public/img/members.svg" />
                                 </div>
-                                <h3>{{$Translate.Memberss.Members}}</h3>
+                                <h3 class="text-bold-black text-sm font-normal mb-0">{{$Translate.Memberss.Members}}
+                                </h3>
                             </div>
                             {{if eq .membercount 0}}
-                            <div class="count-role">
-                                <h2>0</h2>
-                            </div>
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                0
+                            </h4>
+                            <p></p>
                             {{else}}
-                            <div class="count-role">
-                                <h2>{{.membercount}}</h2>
-                            </div>
-                            <div class="count-days">
-                                <p>
-                                    <span>+{{.Newmembercount}}</span>
-                                    {{$Translate.DashBoard.Increased}}
-                                    <span>(10 {{$Translate.DashBoard.Days}})</span>
-                                </p>
-                            </div>
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                {{.membercount}}
+                            </h4>
+                            <p
+                                class="flex space-x-[4px] justify-center flex-wrap font-normal text-bold-black items-baseline text-sm mb-0">
+                                <b class=" text-[#10A37F]  font-normal text-sm">+{{.Newmembercount}}</b>
+                                <span>{{$Translate.DashBoard.Increased}}</span><span class="text-10 font-light">(10
+                                    {{$Translate.DashBoard.Days}})</span>
+                            </p>
                             {{end}}
-                        </div>
-                        <div class="dash-role">
-                            <div class="role-content">
-                                <div class="img-role img-content">
-                                    <img src="/public/img/content.svg" alt="">
-
+                        </a>
+                        <a href="/channel/entrylist" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188    space-y-[28px]">
+                            <div class="flex items-center space-x-[8px]">
+                                <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-blue-50">
+                                    <img src="/public/img/content.svg" />
                                 </div>
-                                <h3>{{$Translate.ContentAccessControl.Content}}</h3>
+                                <h3 class="text-bold-black text-sm font-normal mb-0">
+                                    {{$Translate.ContentAccessControl.Content}}</h3>
                             </div>
                             {{if eq .entriscount 0}}
-                            <div class="count-role">
-                                <h2>0</h2>
-                            </div>
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                0
+                            </h4>
+                            <p></p>
                             {{else}}
-                            <div class="count-role">
-                                <h2>{{.entriscount}}</h2>
-                            </div>
-                            <div class="count-days">
-                                <p>
-                                    <span>+{{.Newentrycount}}</span>
-                                    {{$Translate.DashBoard.Increased}}
-                                    <span>(10 {{$Translate.DashBoard.Days}})</span>
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                {{.entriscount}}
+                            </h4>
+                            <p
+                                class="flex space-x-[4px] justify-center flex-wrap font-normal text-bold-black items-baseline text-sm  mb-0">
+                                <b class=" text-[#10A37F]  font-normal text-sm">+{{.Newentrycount}}</b>
+                               <span> {{$Translate.DashBoard.Increased}} </span><span class="text-10 font-light">(10
+                                    {{$Translate.DashBoard.Days}})</span>
+                            </p>
+                            {{end}}
+                        </a>
+                        
+                    </div>
+                    <div class="border border-[#ECECEC] container-type-inline-size h-full rounded">
+                        <div class="pa-x-4 pa-y-3 border-b border-[#ECECEC] ">
+                            <div class="flex flex-col space-y-[4px]">
+                                <h3 class="text-sm text-bold-black font-normal mb-0">
+                                    {{$Translate.DashBoard.Createnewcontent}}</h3>
+                                <p class="text-bold-gray text-xs font-normal mb-0">{{$Translate.DashBoard.Createdesc}}
                                 </p>
                             </div>
+                        </div>
+                        <div class="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-x-4 gap-y-2 pa-x-4 pa-y-3">
+                            {{range .Menu.TblModule}}
+                            {{range .SubModule}}
+                            {{if eq .ModuleName "Entries"}}
+                            {{if .Routes}}
+                            {{if $Channelslist}}
+                            {{range $Channelslist}}
+                            <a href="/channel/entrylist/{{.Id}}"
+                                class="grid-dash border border-[#ECECEC]  rounded-[3px]  pa-x-4 h-78 no-underline grid gird-temp  justify-between gap-6 items-center hover:bg-[#F5F5F5]">
+                                <h3 class="text-bold-black text-base font-normal mb-0 max-sm:text-xs line-clamp-1">{{.ChannelName}}</h3>
+                                <p class="text-bold-gray text-xs font-normal mb-0 whitespace-nowrap"><span
+                                        class="text-bold-black">{{.EntriesCount}}</span> {{$Translate.Recordsavailable}}
+                                </p>
+                                <img src="/public/img/right-arrow.svg" class="min-w-[6px]" />
+                            </a>
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
                             {{end}}
                         </div>
-                        <div class="dash-role">
-                            <div class="role-content">
-                                <div class="img-role img-page">
-                                    <img src="/public/img/page.svg" alt="">
+                    </div>
 
-                                </div>
-                                <h3>{{$Translate.Spaces.Pages}}</h3>
-                            </div>
-                            {{if eq .pagescount 0}}
-                            <div class="count-role">
-                                <h2>0</h2>
-                            </div>
-                            {{else}}
-                            <div class="count-role">
-                                <h2>{{.pagescount}}</h2>
-                            </div>
-                            <div class="count-days">
-                                <p><span>+{{.Newpagescount}}</span>
-                                    {{$Translate.DashBoard.Increased}}
-                                    <span>(10 {{$Translate.DashBoard.Days}})</span>
-                                </p>
-                            </div>
-                            {{end}}
-                        </div>
-                    </div>
-                  
-                    <div class="dash-create-content">
-                        <div class="create-list">
-                            <h3>{{$Translate.DashBoard.Createnewcontent}}</h3>
-                            <p>{{$Translate.DashBoard.Createdesc}}</p>
-                        </div>
-                        <div class="sep"></div>
-                        {{range .Menu.TblModule}}
-                        {{range .SubModule}}
-                        {{if eq .ModuleName "Entries"}}
-                        {{if .Routes}}
-                        {{if $Channelslist}}
-                        <div class="create-content">
-                            <div class="create-content-list">
-                                {{range $Channelslist}}
-                                <a href="/channel/entrylist/{{.Id}}" class="list-1" >
-                                    <h3>{{.ChannelName}}</h3>
-                                    <p>{{$Translate.Total}} {{$Translate.Entries}} : {{.EntriesCount}} <span></span></p>
-                                    <img src="/public/img/Vector-in-active.svg" alt="" class="in-active">
-                                    <img src="/public/img/Vector-active.svg" alt="" class="active">
-                                </a>
-                                {{end}}
-                            </div>
-                        </div>
-                        {{else}}
-                        <div class="new-content-no-data">
-                            <img src="/public/img/content-no.svg" alt="">
-                            <p>{{$Translate.DashBoard.Readyaddchannel}}</p>
-                            <p class="Nodata-con">{{$Translate.DashBoard.Readyaddchanneldesc}}</p>
-                            <a href="/channels/">{{$Translate.DashBoard.Clicktocreate}} >></a>
-                        </div>
-                        {{end}}
-                        {{else}}
-                        <div class="new-content-no-data">
-                            <img src="/public/img/content-no.svg" alt="">
-                            <p class="Nodata-con">{{$Translate.DashBoard.Accesspermission}}</p>
-                            <!-- <p class="Nodata-con">{{$Translate.DashBoard.Readyaddchanneldesc}}</p> -->
-                            <!-- <a href="/channels/">{{$Translate.DashBoard.Clicktocreate}} >></a> -->
-                        </div>
-                        {{end}}
-                        {{end}}
-                        {{end}}
-                        {{end}}
-                    </div>
-                 
-                    <!-- Nav tabs -->
-                    
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                                type="button" role="tab" aria-controls="home" aria-selected="true">
-                                {{$Translate.DashBoard.Recentlyadded}}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages"
-                                type="button" role="tab" aria-controls="messages" aria-selected="false">
-                                {{$Translate.DashBoard.Mostviewcontent}}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages2"
-                                type="button" role="tab" aria-controls="messages" aria-selected="false">
-                                {{$Translate.DashBoard.Recentlyviewedcontent}}
-                            </button>
-                        </li>
-                    </ul>
-                    {{range .Menu.TblModule}}
-                    {{range .SubModule}}
-                    {{if eq .ModuleName "Entries"}}
-                    {{if .Routes}}
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="article-tabel">
-                                <table class="table">
-                                    <thead>
+                    <div class="dash-board-tabs  border border-[#ECECEC] rounded">
+
+                        <div>
+                            <ul class="nav nav-tabs gap-a-2 max-sm:gap-[5px] max-sm:px-0 pa-x-2 border-0 " id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link  max-sm:text-[11px] !text-[#262626] !text-[16px]" id="home-tab"
+                            data-bs-toggle="tab" data-bs-target="#home"  role="tab"
+                            aria-controls="home" aria-selected="true" disabled>
+                            {{$Translate.DashBoard.Recentlyadded}}
+                        </button></li></ul></div>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs gap-a-2  max-sm:!gap-[8px] max-sm:px-0 pa-x-2" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active border-0 max-sm:text-[11px] max-sm:!p-[8px]" id="home-tab"
+                                    data-bs-toggle="tab" data-bs-target="#home"  role="tab"
+                                    aria-controls="home" aria-selected="true">
+                                    {{$Translate.Entries}}
+                                </button>
+                            </li>
+                            
+                        </ul>
+    
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="overflow-auto">
+                                    <table class="w-full">
                                         <tr>
-                                            <th>{{$Translate.ContentAccessControl.Title}}</th>
-                                            <th>{{$Translate.DashBoard.User}}</th>
-                                            <th>{{$Translate.Channell.Date}}</th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.ContentAccessControl.Title}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.DashBoard.User}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.Channell.Date}}
+                                            </th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
                                         {{if $Entries}}
                                         {{range $Entries}}
                                         <tr>
-                                            <td class="title">{{.Title}}</td>
-                                            <td>{{.Username}}</td>
-                                            <td>{{.CreatedDate}}</td>
+    
+                                            <td
+                                                class=" max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.Title}}
+                                            </td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.Username}}
+                                            </td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.CreatedDate}}
+                                            </td>
                                         </tr>
                                         {{end}}
                                         {{else}}
                                         <tr>
-                                            <td colspan="5">
-                                                <div class="added-items-empty">
-                                                    <img src="/public/img/items-no.svg" alt="">
-                                                    <p>{{$Translate.DashBoard.Nocontentfound}}</p>
+                                            <td colspan="5" class="p-[8px_16px]">
+                                                <div class="flex flex-col gap-[5px] justify-center items-center my-16">
+                                                    <img src="/public/img/items-no.svg" />
+                                                    <p class="text-[#222222] font-normal text-xs mb-0">{{$Translate.DashBoard.Nocontentfound}}</p>
                                                 </div>
                                             </td>
                                         </tr>
                                         {{end}}
-                                    </tbody>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <!-- <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            Recntly Added Content
-                        </div> -->
-                        <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-
-                            <div class="article-tabel">
-                                <table class="table">
-                                    <thead>
+                            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="overflow-auto">
+                                    <table class="w-full">
                                         <tr>
-                                            <th style="width: 29%;">{{$Translate.ContentAccessControl.Title}}</th>
-                                            <th >Category Name</th>
-                                            <th style="width: 22%;">View Count</th>
-                                            <th style="width: 20%;">{{$Translate.Channell.Date}}</th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.ContentAccessControl.Title}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.DashBoard.User}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.Channell.Date}}
+                                            </th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{if $Mostlyviewlist}}
-                                        {{range $Mostlyviewlist}}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="overflow-auto">
+                                    <table class="w-full">
                                         <tr>
-                                            <td class="title">{{.SpacesName}}</td>
-                                           
-                                            <td class="categorynametd"> 
-                                                
-                                                {{range $index,$value := .CategoryNames}}<span class="para categorysname"> {{.CategoryName}} </span>
-                                                <span class="para">&nbsp;/&nbsp;</span> {{end}}
-                                            
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.ContentAccessControl.Title}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.DashBoard.User}}
+                                            </th>
+                                            <th
+                                                class="text-black-200 p-[8px_16px] text-sm font-normal border-b border-[#ECECEC]">
+                                                {{$Translate.Channell.Date}}
+                                            </th>
+                                        </tr>
+                                        {{if .Formlist}}
+                                        {{range .Formlist}}
+                                        <tr>
+    
+                                            <td
+                                                class=" max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.FormTitle}}
                                             </td>
-                                                
-                                           
-                                            <td>{{if lt .ViewCount 10}}{{printf "%02d" .ViewCount}}{{else}}{{.ViewCount}}{{end}}</td>
-                                            <td>{{.CreatedDate}}</td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.Username}}
+                                            </td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.CreatedDate}}
+                                            </td>
                                         </tr>
                                         {{end}}
                                         {{else}}
                                         <tr>
-                                            <td colspan="5">
-                                                <div class="added-items-empty">
-                                                    <img src="/public/img/items-no.svg" alt="">
-                                                    <p>{{$Translate.DashBoard.Nocontentfound}}</p>
+                                            <td colspan="5" class="p-[8px_16px]">
+                                                <div class="flex flex-col gap-[5px] justify-center items-center my-16">
+                                                    <img src="/public/img/items-no.svg" />
+                                                    <p class="text-[#222222] font-normal text-xs mb-0">{{$Translate.DashBoard.Nocontentfound}}</p>
                                                 </div>
                                             </td>
                                         </tr>
                                         {{end}}
-                                    </tbody>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
-                            <!-- <div class="added-items-empty">
-                                <img src="/public/img/items-no.svg" alt="">
-                                <p>{{$Translate.DashBoard.Nocontentfound}}</p>
-                            </div> -->
                         </div>
-                        <div class="tab-pane" id="messages2" role="tabpanel" aria-labelledby="messages-tab">
-
-                            <div class="article-tabel">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 29%;">{{$Translate.ContentAccessControl.Title}}</th>
-                                            <th>Category Name</th>
-                                            <th style="width: 22%;">View Count</th>
-                                            <th style="width: 20%;">{{$Translate.Channell.Date}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{if $Recentlyviewlist}}
-                                        {{range $Recentlyviewlist}}
-                                        <tr>
-                                            <td class="title">{{.SpacesName}}</td>
-                                            <td class="categorynametd"> 
-                                                
-                                                {{range $index,$value := .CategoryNames}}<span class="para categorysname"> {{.CategoryName}} </span>
-                                                <span class="para">&nbsp;/&nbsp;</span> {{end}}
-                                            
-                                            </td>
-                                            <td>{{if lt .ViewCount 10}}{{printf "%02d" .ViewCount}}{{else}}{{.ViewCount}}{{end}}</td>
-                                            <td>{{.CreatedDate}}</td>
-                                        </tr>
-                                        {{end}}
-                                        {{else}}
-                                        <tr>
-                                            <td colspan="5">
-                                                <div class="added-items-empty">
-                                                    <img src="/public/img/items-no.svg" alt="">
-                                                    <p>{{$Translate.DashBoard.Nocontentfound}}</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        {{end}}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- <div class="added-items-empty">
-                                <img src="/public/img/items-no.svg" alt="">
-                                <p>{{$Translate.DashBoard.Nocontentfound}}</p>
-                            </div> -->
-                        </div>
-                        <!-- <div class="tab-pane" id="messages3" role="tabpanel" aria-labelledby="messages-tab">
-                            Recent Vistors Logs
-                        </div> -->
+    
                     </div>
-                    {{else}}
-                    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-                        <div class="added-items-empty">
-                            <img src="/public/img/items-no.svg" alt="">
-                            <p>{{$Translate.DashBoard.Accesspermission}}</p>
-                        </div>
-                    </div>
-                    {{end}}
-                    {{end}}
-                    {{end}}
-                    {{end}}
                 </div>
-
-                <div class="right-dash">
-
-                    <div class="recent-activites">
-                       
-                        <div class="activities-detail">
-                            <h3>{{$Translate.DashBoard.Recentactivities}}</h3>
-                            <p>{{$Translate.DashBoard.Recentactivitiesdesc}}</p>
-                        </div>
+                <div class="border border-[#ECECEC]  rounded-[3px]  container-type-inline-size">
+                    <div class="pa-x-4 pa-y-3 border-b border-[#ECECEC] space-y-[4px] flex flex-col">
+                        <h3 class="text-sm font-normal text-bold-black mb-0">{{$Translate.DashBoard.Recentactivities}}
+                        </h3>
+                        <p class="text-sm font-normal text-bold-gray mb-0">{{$Translate.DashBoard.Recentactivitiesdesc}}
+                        </p>
+                    </div>
+                    <div class=" h-481 overflow-auto">
                         {{range .Menu.TblModule}}
                         {{range .SubModule}}
                         {{if eq .ModuleName "Entries"}}
                         {{if .Routes}}
                         {{if $Recentactivity}}
-                        <div class="activity-line">
-                            {{range $Recentactivity}}
+                        {{range $Recentactivity}}
+                        <div class="pa-x-4 py-2.5 border-b border-[#ECECEC] flex space-x-[8px] items-center">
+                            {{if .Imagepath}}
+                            <div class="min-w-30 w-30 h-30 rounded-full">
+                                <img src="{{if .Imagepath}}{{.Imagepath}}{{else}}/public/img/profile-img.svg{{end}}"
+                                    class="w-full h-full rounded-full" />
+                            </div>
+                            {{else}}
 
-                            <div class="dash-recent-activities">
-                                {{if .Imagepath}}
-
-                                <div class="dash-recent-activities-img">
-                                    <img src="{{if .Imagepath}}/{{.Imagepath}}{{else}}/public/img/profile-img.svg{{end}}"
-                                        alt="">
-                                </div>
-                                {{else}}
-                                <div class="activity-image"> <span> {{$Namestring}} </span> </div>
-
-                                {{end}}
-                                <div class="dash-recent-activities-content">
-                                    {{if eq .Contenttype "channel"}}
-                                    <h4>{{.User}}<span class="text-normal"> {{$Translate.DashBoard.Contenttype}} </span>
-                                        <span class="text-medium">{{.Title}}</span>
-                                    </h4>
-                                    {{else}}
-                                    <h4>{{.User}} <span class="text-normal"> {{$Translate.DashBoard.Publishedan}}
-                                            {{.Channelname}} : </span>
-                                        <span class="text-medium"> {{.Title}} </span>
-                                    </h4>
-                                    {{end}}
-                                    <p>{{.Active}} {{$Translate.DashBoard.Ago}}</p>
-
-                                </div>
+                            <div class=" min-w-10  h-10 rounded-full flex justify-center items-center bg-[#F5F5F5]">
+                                <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
                             </div>
                             {{end}}
-                        </div>
-                        {{else}}
-                        <div class="no-activity">
-                            <img src="/public/img/no-actvity.svg" alt="">
-                            <p>{{$Translate.DashBoard.Emptyactivity}}</p>
-                        </div>
-                        {{end}}
-                        {{else}}
-                        <div class="no-activity">
-                            <img src="/public/img/no-actvity.svg" alt="">
-                            <p>{{$Translate.DashBoard.Accesspermission}}</p>
-                        </div>
-                        {{end}}
-                        {{end}}
-                        {{end}}
-                        {{end}}
-                    </div>
-
-
-                    <div class="logged-user">
-                        <div class="logged-list">
-                            <div class="logged-content">
-                                <h3>{{$Translate.Memberss.Members}}</h3>
-                                <p> {{$Translate.DashBoard.Memberscontent}} </p>
+                            <div class="flex flex-col space-y-[4px]">
+                                {{if eq .Contenttype "channel"}}
+                                <p class="text-bold-black font-light text-xs mb-0">{{.User}} <span
+                                        class="text-bold-black font-medium">{{$Translate.DashBoard.Contenttype}}</span>
+                                    <span class="font-medium  text-[#10A37F] ">{{.Title}}</span>
+                                </p>
+                                {{else}}
+                                <p class="text-bold-black font-light text-xs mb-0">{{.User}}<span
+                                        class="text-bold-black font-medium">
+                                        Added a {{.Channelname}} : </span> <span
+                                        class="font-medium  text-[#10A37F] ">{{.Title}}</span></p>{{end}}
+                                <p class="text-gray-20 mb-0 text-xs font-light">{{.Active}} {{$Translate.DashBoard.Ago}}
+                                </p>
                             </div>
-                            <!-- <a href="#">View All</a> -->
                         </div>
-                        {{range .Menu.TblModule}}
-                        {{if eq .ModuleName "Members"}}
-                        {{range .SubModule}}
-                        {{if eq .ModuleName "Member"}}
-                        {{if .Routes}}
-                        <div class="logged-data">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            {{$Translate.Name}}
-                                        </th>
-                                        <!-- <th>
-                                            Role
-                                        </th> -->
-                                        <th>
-                                            {{$Translate.Channell.Date}}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{if $Activemeberlist}}
-                                    {{range $Activemeberlist}}
-                                    <tr>
-                                        <td>{{.FirstName}} {{.LastName}}</td>
-                                        <!-- <td>User</td> -->
-                                        <td class="date">{{.DateString}}</td>
-                                    </tr>
-                                    {{end}}
-                                    {{else}}
-                                    <tr>
-                                        <td colspan="5">
-                                            <div class="no-logged">
-                                                <img src="/public/img/no-member.svg" alt="">
-                                                <p>{{$Translate.DashBoard.Emptymember}}</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {{end}}
-                                </tbody>
-                            </table>
-                        </div>
-                        {{else}}
-                        <div class="no-logged">
-                            <img src="/public/img/no-member.svg" alt="">
-                            <p>{{$Translate.DashBoard.Accesspermission}}</p>
-                        </div>
+
                         {{end}}
+                        {{else}}
+                        <div class="w-full justify-center flex-col items-center h-full flex space-y-[8px] p-[16px]">
+                            <img src="/public/img/no-actvity.svg" />
+                            <p class="text-[#222222] text-xs font-normal ">{{$Translate.DashBoard.Emptyactivity}}</p>
+                        </div>
+
+                        {{end}}
+                        {{else}}
+
+                        <div class="w-full justify-center flex-col items-center h-full flex space-y-[8px] p-[16px]">
+                            <img src="/public/img/no-actvity.svg" />
+                            <p class="text-[#222222] text-xs font-normal ">{{$Translate.DashBoard.Accesspermission}}
+                            </p>
+                        </div>
+
+
                         {{end}}
                         {{end}}
                         {{end}}
                         {{end}}
                     </div>
+
 
                 </div>
+
             </div>
+          
         </div>
-    </div>
-</div>
-{{template "footer" .}}
-<script src="/public/js/dashboard/dashboard.js"></script>
-{{template "footerclose" .}}
+
+
+
+
+
+
+
+        {{template "footer" .}}
+        <script src="/public/js/dashboard/dashboard.js"></script>
+        {{template "footerclose" .}}

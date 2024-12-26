@@ -11,10 +11,7 @@ $(document).ready(async function () {
 
 });
 
-$(document).on('click','#emailback',function(){
 
-    window.location.href="/settings/emails/emailconfig/"
-})
 
 // Email format validation
 $.validator.addMethod("email_validator", function (value) {
@@ -53,22 +50,22 @@ $.validator.addMethod("space", function (value) {
             },
             messages:{
                 email: {
-                    required: "* Please enter your the email " ,
+                    required: "* " + languagedata.Setting.emailerror,
                     space: "* " + languagedata.Spaces.spacergx,
                     
                 },
                 password: {
-                    required: "* Please enter your the password " ,
+                    required: "* " + languagedata.Setting.passworderr,
                     space: "* " + languagedata.spacergx,
                     
                 },
                 host: {
-                    required: "* Please enter your the host " ,
+                    required: "* " + languagedata.Setting.hosterr,
                     space: "* " + languagedata.spacergx,
                     
                 },
                 port: {
-                    required: "* Please enter your the port " ,
+                    required: "* " + languagedata.Setting.porterr,
                     space: "* " + languagedata.spacergx,
                     
                 },

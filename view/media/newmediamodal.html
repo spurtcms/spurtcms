@@ -1,0 +1,115 @@
+{{define "newmediamodal"}}
+{{$Translate := .translate}}
+
+{{$StorageType:=.StorageType}}
+   <!--media modal-->
+
+<div class="offcanvas offcanvas-end w-100 max-w-[840px] border-0  z-[9999] " tabindex="-1" id="mediaModal" aria-labelledby="offcanvasRightLabel">
+
+    <input type="hidden" name="" id="storagetype" value="aws">
+   <div class="offcanvas-header block p-0">
+       <div
+           class="flex justify-between items-center border-b border-[#ECECEC] max-sm:px-[16px] px-[24px] py-[8px]">
+           <div class="modalHeader-left">
+               <h1 class="text-base font-medium leading-5 text-[#262626]">Media</h1>
+           </div>
+           <div class="flex gap-3 items-center"  id="cancalmedia">
+            <a type="button"  data-bs-dismiss="offcanvas" aria-label="Close">
+                <img src="/public/img/blockModal-close.svg" alt="close">
+            </a>
+           </div>
+       </div>
+
+
+       <div class="flex items-center gap-[8px] justify-end border-b border-[#ECECEC] max-sm:px-[16px] p-[8px_24px]">
+           <div
+               class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px]">
+               <a href="javascript:void(0);"
+                   class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                   <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                   <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block ">
+               </a>
+               <input type="text" placeholder="Search (Ctrl + “k” to focus)" name="" id=""
+                   class="text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 hidden absolute right-0">
+           </div>
+
+
+
+           <a href="javascript:void(0);" id="Refreshdiv"
+               class=" group group w-[32px] h-[32px] rounded-[4px] grid place-items-center hover:bg-[#F0F0F0]">
+               <img src="/public/img/mediaRefresh.svg" alt="refresh" class="inline-block group-hover:hidden">
+               <img src="/public/img/mediaRefresh-active.svg" alt="refresh" class=" group-hover:inline-block hidden">
+           </a>
+
+           <a href="javascript:void(0);" data-bs-target="#addFolder" data-bs-toggle="modal" id=""
+               class="addfolderbtn  group w-[32px] h-[32px] rounded-[4px] grid place-items-center hover:bg-[#F0FFFB]">
+               <img src="/public/img/add-mediaFolder.svg" alt="add folder" class="inline-block group-hover:hidden">
+               <img src="/public/img/add-mediaFolder-active.svg" alt="add folder" class="hidden group-hover:inline-block">
+           </a>
+
+           <a href="javascript:void(0);" id="upload" class="bg-[#10A37F] flex gap-[6px] text-[white] items-center justify-center hover:bg-[#148569] text-[14px] font-[400] leading-[1] text-center p-[7px_16px] h-[32px] rounded-[4px] place-items-center tracking-[0.7px] w-fit whitespace-nowrap">
+               <img src="/public/img/media-upload.svg" alt="upload">
+               <span>
+                   Upload
+               </span>
+               
+           </a>
+           <input type="file" id="imgupload" class="hidden">
+       </div>
+
+   </div>
+
+   <div class="offcanvas-body p-[24px]  max-xl:p-[16px] scrollbar-thin flex flex-col ">
+
+       <div class="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-x-[12px] gap-y-[16px]  mb-[24px]" id="drivelist1">
+   
+        </div>
+
+       <div class="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-x-[12px] gap-y-[16px]" id="drivelist2">
+      
+       
+       </div>
+</div>
+</div>
+
+ <!--addFolder-->
+ <div class="modal fade" id="addFolder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog mt-[10%] max-w-[520px]">
+        <div class="modal-content rounded-[4px]">
+            <div class="modal-header flex justify-between items-center border-b border-[#EDEDED] p-[12px_24px]">
+                <h1 class="foldereditcon font-normal text-base text-[#262626] leading-6">Add Folder
+                </h1>
+                <a href="javascript:void(0)" data-bs-dismiss="modal" class="cursor-pointer">
+                    <img src="/public/img\modal-close.svg" alt="close" class="w-[12px] h-[12px]">
+                </a>
+            </div>
+            <div class="modal-body px-6 py-[16px]">
+                <label for="" class="mb-[12px] text-[#262626] text-[14px] font-[400] leading-[17.5px] ">Please enter
+                    a folder name:</label>
+                <input type="text" placeholder="Enter Name" name="foldername" id="foldername"
+                    class= "field p-[10px_12px] text-[11px] font-[400] leading-[13.75px] tracking-[0.005em] placeholder:text-[#444444] h-[34px] rounded-[4px] mb-[16px] block w-full bg-[#F7F7F5]">
+                    <label id="foldername-error" class="error" for="foldername" style="display: none;">*
+                        {{$Translate.Mediaa.Vailderr}} </label>
+                    <label for="" class="error" id="folderspec-error" style="display: none;">*Folder name
+                        cannot contain special characters</label>
+              
+                    <p class="text-xs font-normal leading-4 text-[#717171] mb-[16px]"><span class="text-[#262626]">
+                        Note: </span> </p>
+                <div class="flex gap-3 justify-end">
+                    <a href=" " data-bs-dismiss="modal"
+                        class="h-8 flex items-center justify-center px-[12px]  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline">Cancel</a>
+                    <a href=""
+                        class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline" id="newfileadd">Save</a>
+                        <a href=""
+                        class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline" id="updatefileadd">Update</a>
+              
+               
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{{end}}

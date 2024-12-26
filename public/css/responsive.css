@@ -1,82 +1,86 @@
-@import url(variables.css);
+@media only screen and (max-width:800px) {
 
-@media (min-width: 1680.2px) {
-    
-}
-@media (max-width: 1680.1px) {    
-   
-}
-
-@media (max-width: 1420px) {
-    .dash-list-role {
-        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    .sk-home-container .sk-aside {
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: all 0.3s ease-in-out !important;
+        min-width: 50%;
     }
-}
 
-@media (max-width: 992px) {
-  
-}
-@media (max-width: 768px) {
-  
-}
-@media (max-width: 1100px) {
- 
-}
-@media (max-width: 850px) {
-  
-}
-@media (max-width: 730px) {
-  
-}
-@media (max-width: 500px) {
-  
-}
-
-
-@media (max-width: 1440px) {
-    .admin-login-body {
-        padding: 3.4rem 6.25rem !important;
+    .sk-home-container .pg-wrapper {
+        margin-left: 0;
+        max-width: 100%;
     }
-}
 
-@media (max-width: 1100px) {}
+    .toggle-button {
+        display: grid !important;
+    }
 
-@media (max-width: 992px) {
-    .admin-login-body {
-        gap: 4.3125rem;
-        flex-direction: column;
-        align-items: center;
+    .sk-aside.active {
+        transform: translateX(0);
     }
-    .admin-login-body {
-        padding: 4.5rem 4.25rem !important;
-    }
-    .admin-form {
-        height: auto;
-    }
-}
 
 
-@media (max-width: 500px) {
-    .admin-login-body {
-        padding: 3.5rem 2.25rem !important;
-        gap: 2.3125rem;
+    .pogination {
+        width: 100%;
+
     }
-    .admin-form {
-        padding: 1.5rem;
-        height: auto;
+
+    .table-responsive {
+        overflow: auto;
+    }
+
+    .table-responsive caption p {
+        position: sticky;
+        left: 16px;
+        width: fit-content;
+    }
+
+    .pogination ul li a.next {
+        width: 33px;
+
+    }
+
+    .pogination {
+        gap: 1rem;
+    }
+
+    .pogination ul {
+        margin-left: 0;
+    }
+
+    .next span {
+        display: none;
+    }
+
+
+
+    .editor-bdg-grd.open .editor-bdy {
+        margin-right: 0 !important;
+    }
+
+    .pg-wrapper .editor-header {
+        width: 100%;
     }
 
 }
-@media (min-width: 1980.2px) {
-    .admin-login-body{
-        max-width: 120rem;
+
+
+@media only screen and (max-width:500px) {
+    .sk-home-container .sk-aside {
+        width: 100%;
+    }
+
+    .sk-aside.active::after {
+        display: none;
+    }
+
+    .pogination p {
         margin: auto;
     }
-}
 
-
-@media screen and (min-width: 1440px) and (max-width:1980px)  {
-    .admin-login-body {
-        padding: 0rem 6.25rem !important;
+    .pogination {
+        flex-direction: column;
     }
+
 }

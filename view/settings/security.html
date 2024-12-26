@@ -1,47 +1,77 @@
 {{template "header" .}}
-{{template "settingsmenu" .}}
 {{$Translate := .translate}}
 {{template "head" .}}
 
 
 
-<div class="page-wrapper settings-wrapper">
-    <div class="details-roles">
-        <div class="security-details">
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Security</h2>
+        </div>
+
+
+        <div class="flex gap-3">
+            <a href=""
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline ">Cancel</a>
+            <a href="javascript:void(0);"
+                class="passsave h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline ">Save</a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+        <!--accordion-->
+
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+
+        <div class="p-[24px] @container max-sm:p-[16px]">
+            <h3 class="text-[#262626] text-sm font-normal leading-[17.5px] mb-[6px]">Change Password</h3>
+            <p class="text-[#717171] text-xs font-normal leading-4 mb-[24px]">Change your Login Password</p>
             <form action="/settings/updatepassword" id="passform" method="post" name="passform">
                 <input type="hidden" name="csrf" value="{{.csrf}}">
-            <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Security.Changepassword}}</h4>
-            <p class="para-light">{{$Translate.Security.Changepasscontent}}</p>
+            <div class="max-w-[360px]">
+                <div class="mb-[16px] ">
+                    <label for="firstname"  class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">New
+                        Password</label>
+                        <div class="relative">
+                    <input type="password"  id="pass" name="pass" placeholder="{{$Translate.Security.Enternewpass}}"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] text-sm" >
+                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye1">
+                            <img id="img" src="/public/img/eye-closed.svg" alt="">
 
-            <div class="input-group" id="passgroup">
-                <label for="" class="input-label">{{$Translate.Security.Newpass}} *</label>
-                <div class="ig-row">
-                    <input type="password" id="pass" class="field" placeholder="{{$Translate.Security.Enternewpass}}" name="pass" autocomplete="off">
-                    <button class="eye" id="eye1" type="button" ><img  class="tooltip-icon-SR" id="eye-close1" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
-                        title="{{$Translate.Setting.Showpassword}}" src="/public/img/eye-closed.svg" alt=""><img  class="tooltip-icon-SR" id="eye-open1" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
-                        title="{{$Translate.Setting.Hidepassword}}" style="display: none;" src="/public/img/eye-opened.svg" alt="">
-                    </button>
-                </div>
+                        </button>
+                    </div>
+                    </div>
+                <div class="mb-[16px] relative">
+                    <label for="lastname"
+                        class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">Confirm
+                        Password</label>
+                        <div class="relative">
+                    <input type="password" id="cpass" name="cpass" placeholder="{{$Translate.Security.Confirmnewpass}}"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] text-sm" >
+                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye2">
+                            <img id="img" src="/public/img/eye-closed.svg" alt="">
+
+                        </button>
+                    </div>
+                    </div>
             </div>
-            <div class="input-group" id="cpassgroup">
-                <label for="" class="input-label">{{$Translate.Security.Confirmnewpass}} *</label>
-                <div class="ig-row">
-                    <input type="password" id="cpass" class="field" placeholder="{{$Translate.Security.Confirmnewpass}}" name="cpass" autocomplete="off">
-                    <button class="eye" id="eye2" type="button"><img  class="tooltip-icon-SR" id="eye-close2" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
-                        title="{{$Translate.Setting.Showpassword}}" src="/public/img/eye-closed.svg" alt="">
-                        <img  class="tooltip-icon-SR" id="eye-open2" data-bs-toggle="tooltip" data-bs-custom-class="lms-tooltip" data-bs-html="true" data-bs-placement="top"
-                        title="{{$Translate.Setting.Hidepassword}}" src="/public/img/eye-opened.svg" style="display: none;" alt=""></button>
-                </div>
-            </div>
+
+
+        </form>
         </div>
-       
     </div>
-    <div class="configurationContent-btm">
-        <!-- <button class="btn-reg btn-lg secondary passcancel">Cancel</button> -->
-        <button class="btn-reg btn-lg primary passsave" >{{$Translate.Save}}</button>
-    </div>
-</form>
-</div>
+
+
+</section>
 {{template "footer" .}}
 <script src="/public/js/settings/changepassword/changepassword.js"></script>
 {{template "footerclose" .}}

@@ -1,39 +1,92 @@
 var languagedata
 
-selectedcheckboxarr=[]
+selectedcheckboxarr = []
 /** */
 $(document).ready(async function () {
 
   var languagepath = $('.language-group>button').attr('data-path')
-  
+
   await $.getJSON(languagepath, function (data) {
-      
-      languagedata = data
+
+    languagedata = data
   })
-  
-   $('.Content').addClass('checked');
 
-   $('.category-path-list').each(function(){
+  $('.Content').addClass('checked');
 
-    var length = $(this).children('.categorylistname').length-1
+  $('.category-path-list').each(function () {
 
-      $(this).children('.categorylistname').each(function(index){
+    var length = $(this).children('.categorylistname').length - 1
 
-        if(length == index ){
-          
-          $(this).next().remove();
-        }
+    $(this).children('.categorylistname').each(function (index) {
 
-      })
+      if (length == index) {
+
+        $(this).next().remove();
+      }
+
+    })
   })
 
 });
 
-$(document).keydown(function(event) {
-  if (event.ctrlKey && event.key === '/') {
-      $(".search").focus().select();
-  }
+$(document).ready(function () {
+  var $textarea = $('#cdesc');
+  var $errorMessage = $('#error-messagedesc');
+  var maxLength = 250;
+
+  $textarea.on('input', function () {
+    if ($(this).val().length >= maxLength) {
+      // Show error message
+      $errorMessage.text(languagedata.Permission.descriptionchat);
+    } else {
+      // Clear error message if under the limit
+      $errorMessage.text('');
+    }
+  });
 });
+
+$(document).ready(function () {
+  var $inputfield = $('#cname');
+  var $errorMessagename = $('#error-messagename');
+  var maxLength = 50;
+
+  $inputfield.on('input', function () {
+    if ($(this).val().length >= maxLength) {
+      // Show error message
+      $errorMessagename.text("Maximum 50 character allowed");
+    } else {
+      // Clear error message if under the limit
+      $errorMessagename.text('');
+    }
+  });
+});
+
+
+$(document).ready(function (){
+  $('#form').on('keydown', function(event) {
+    if (event.key === 'Enter') {      
+      event.preventDefault();  
+    }
+  });
+})
+
+
+$(document).ready(function () {
+  $('#cdesc').on('input', function () {
+
+    let lines = $(this).val().split('\n').length;
+
+    if (lines > 5) {
+
+      let value = $(this).val();
+
+      let linesArray = value.split('\n').slice(0, 5);
+
+      $(this).val(linesArray.join('\n'));
+    }
+  });
+});
+
 
 $("#save").click(function () {
 
@@ -72,8 +125,7 @@ $("#save").click(function () {
         required: true,
         space: true,
         // category_desc: true
-        maxlength: 250,
-       
+
       },
       subcategoryid: {
         required: true
@@ -85,17 +137,16 @@ $("#save").click(function () {
       cname: {
         required: "* " + languagedata.Categoryy.catnamevalid,
         space: "* " + languagedata.spacergx,
-        duplicatename : "*" + languagedata.Categoryy.catnamevailderr
+        duplicatename: "*" + languagedata.Categoryy.catnamevailderr
 
       },
       cdesc: {
         required: "* " + languagedata.Categoryy.catdescvalid,
         space: "* " + languagedata.spacergx,
-        maxlength: "* "+languagedata?.Permission?.descriptionchat
 
       },
       subcategoryid: {
-        required: "*" +  languagedata.Categoryy.selectvaild
+        required: "* " + languagedata.Categoryy.selectvaild
       }
 
     }
@@ -114,10 +165,10 @@ $("#save").click(function () {
 
     if ($("#cid").hasClass('error')) {
       $('#availablecat').addClass('input-group-error');
-  
+
     } else {
       $('#availablecat').removeClass('input-group-error');
-  
+
     }
   }
 
@@ -138,16 +189,16 @@ $("body").on("click", "#edit", function () {
 
 
   edit = $(this).closest("tr");
-  var desc = edit.find("td:eq(1)").html();
+  var desc = edit.find("td:eq(2)").html();
   $("#triggerId").html(desc);
-  $("#triggerId").css("gap","5px")
+  $("#triggerId").css("gap", "5px")
 
   var url = window.location.search
   const urlpar = new URLSearchParams(url)
   pageno = urlpar.get('page')
 
   var data = $(this).attr("data-id");
-  $("#title").text(languagedata.Categoryy.updatecategory)
+  $("#exampleModalLabel").text(languagedata.Categoryy.updatecategory)
   $("#form").attr("action", "");
   $("#form").attr("name", "edit");
   $("#catpageno").val(pageno)
@@ -161,20 +212,20 @@ $("body").on("click", "#edit", function () {
       if (result.Id != 0) {
         var name = $("#cname").val(result.CategoryName);
         var desc = $("#cdesc").val(result.Description);
-        var image = $("#ctimagehide").attr("src", result.ImagePath)
+        var image = $("#ctimagehide").attr("src", "/image-resize?name=" + result.ImagePath)
 
         $("#cname").text(name);
         $("#cdesc").text(desc);
-        $("#categoryimage").val(result.ImagePath)
+        $("#categoryimages").val(result.ImagePath)
         $("#cid").val(result.ParentId)
-
+        $("#ctimagehide").attr("src", "/image-resize?name=" + result.ImagePath)
         $("#id").val(result.Id)
         $("#category_id").val(result.Id)
 
-        
+
         var keyword = $("#searchcatlists").val()
 
-        if(keyword != ""){
+        if (keyword != "") {
           $("#searchcatlists").val("")
           $(".noData-foundWrapper").hide()
 
@@ -182,16 +233,20 @@ $("body").on("click", "#edit", function () {
 
         if (result.ImagePath != "") {
           $("#browse").hide();
-          $("#mediadesc").hide();
+          $("#ctimagehide").show();
           $("#catdel-img").show()
+          $('#uploadLine').hide()
+          $('#uploadFormat').hide()
 
-        }else{
+        } else {
           $("#browse").show();
-          $("#mediadesc").show();
+          $("#ctimagehide").hide();
           $("#catdel-img").hide()
+          $('#uploadLine').show()
+          $('#uploadFormat').show()
 
         }
-    
+
 
         if ("form[name='edit']") {
           $(".drp").each(function (index, element) {
@@ -199,9 +254,6 @@ $("body").on("click", "#edit", function () {
             var id = $(element).attr("data-id")
             var categoryname = $(element).find("p").text().trim()
             var parentid = $(element).attr("data-parentid")
-
-
-            console.log("id",id,categoryname,parentid,result.Id);
 
             if (result.Id == id) {
               $(element).hide()
@@ -216,9 +268,8 @@ $("body").on("click", "#edit", function () {
           })
         }
       } else {
-        
-        notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast.internalserverr + '</span></div>';
-        $(notify_content).insertBefore(".breadcrumbs");
+        notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"> <li><div class="flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"><a href="javascript:void(0)" class="absolute right-[8px] top-[8px] "><img src="/public/img/close-toast.svg" alt="close"></a><div><img src="/public/img/toast-error.svg" alt="toast error"></div><div><h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] "> ` + languagedata.Toast.internalserverr + ` </p></div></div></li><ul>`;
+        $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
           $('.toast-msg').fadeOut('slow', function () {
             $(this).remove();
@@ -236,38 +287,38 @@ $(document).on('click', '#delete-btn', function () {
   var data = $(this).attr("data-id");
   var parent_id = $("#categoryid").val();
   var del = $(this).closest("tr");
-  var url=window.location.search
-    const urlpar= new URLSearchParams(url)
-    pageno = urlpar.get('page')
-  $.ajax({
-    url: "/categories/deletepopup",
-    type: "GET",
-    dataType: "json",
-    data: { "id": data },
-    success: function (results) {
-      if (results.Id == 0) {
-        $('#content').text(languagedata.Categoryy.delcategory);
-        $(".deltitle").text(languagedata.Categoryy.deltitle)
-        $('.delname').text(del.find('td:eq(0)').text())
-        $('#delid').show();
-        if (pageno == null){
-          $('#delete').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
+  var url = window.location.search
+  const urlpar = new URLSearchParams(url)
+  pageno = urlpar.get('page')
+  // $.ajax({
+  //   url: "/categories/deletepopup",
+  //   type: "GET",
+  //   dataType: "json",
+  //   data: { "id": data },
+  //   success: function (results) {
+  // if (results.Id == 0) {
+  $('#content').text(languagedata.Categoryy.delcategory);
+  $(".deltitle").text(languagedata.Categoryy.deltitle)
+  $('.delname').text(del.find('td:eq(1)').text())
+  $('#delid').show();
+  if (pageno == null) {
+    $('#delid').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
 
-        }else{
-          $('#delete').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id + "?page=" +pageno);
+  } else {
+    $('#delid').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id + "?page=" + pageno);
 
-        }
-        $('#btn3').text(languagedata.no);
+  }
+  $('#btn3').text(languagedata.no);
 
-      } else {
-        $('#content').text(languagedata.Categoryy.delcatinvalid);
-        $('#delete').attr('href', '');
-        $('#delid').hide();
-        $('#btn3').text(languagedata.ok)
+  // } else {
+  //   $('#content').text(languagedata.Categoryy.delcatinvalid);
+  //   $('#delete').attr('href', '');
+  //   $('#delid').hide();
+  //   $('#btn3').text(languagedata.ok)
 
-      }
-    }
-  });
+  // }
+  // }
+  // });
 });
 
 
@@ -275,7 +326,7 @@ $("#caddbtn , #clickadd").on("click", function () {
   $(".input-group").removeClass("input-group-error")
 
   var CategoryId = $("#categoryid").val()
-  $("#title").text(languagedata.Categoryy.addcategry)
+  $("#exampleModalLabel").text(languagedata.Categoryy.addcategry)
 
   $("#form").attr("action", "/categories/addsubcategory/" + CategoryId).attr("method", "POST")
 
@@ -289,12 +340,13 @@ $("#caddbtn , #clickadd").on("click", function () {
 
 
   $("#ctimagehide").attr("src", "");
-  $("#categoryimage").val("")
+  $("#categoryimages").val("")
 
   $("#save").show()
   $("#browse").show();
   $("#mediadesc").show();
   $("#update").hide()
+  $("#ctimagehide").hide()
   $("#catdel-img").hide()
 
   $("#form").attr("name", "")
@@ -302,16 +354,16 @@ $("#caddbtn , #clickadd").on("click", function () {
 
   var keyword = $("#searchcatlists").val()
 
-       
+
 
   if ("form[name='']") {
     $(".drp").each(function (index, element) {
-      if(keyword != ""){
+      if (keyword != "") {
         $("#searchcatlists").val("")
         $(".noData-foundWrapper").hide()
 
       }
-          $(element).show()
+      $(element).show()
     })
   }
 });
@@ -321,23 +373,22 @@ $('#categoryModal').on('hide.bs.modal', function (event) {
   $('.modal-backdrop').remove()
 })
 
-$(document).on("click", "#mediamodalclose", function () {
-  $("#categoryModal").modal('show')
-
-})
 
 $('#catdel-img').click(function () {
-  $('#categoryimage').val("")
+  $('#categoryimages').val("")
   $('#ctimagehide').attr('src', '')
-  $("#mediadesc").css("margin-top","1%")
+  $('#ctimagehide').hide()
+  $('#browse').show()
+  $("#mediadesc").css("margin-top", "1%")
 
-  $(this).siblings('h3,button').show()
+  $(this).siblings('p,button').show()
   $(this).hide()
 
 })
 
 
 $(document).on("click", "#cancel", function () {
+  $("#exampleModalLabel").text("")
   $("#catdel-img").hide();
   $("#cname-error").hide()
   $("#cdesc-error").hide()
@@ -346,6 +397,13 @@ $(document).on("click", "#cancel", function () {
   $('#catdes').removeClass('input-group-error');
   $('#availablecat').removeClass('input-group-error');
   $('.modal-backdrop').remove()
+  $('#ctimagehide').attr('src', '')
+  $('#categoryimages').val("")
+  $('#cid').val("")
+  $('#uploadLine').show()
+  $('#uploadFormat').show()
+  $("#error-messagename").html("")
+  $("#error-messagedesc").html("")
 
 })
 
@@ -362,7 +420,7 @@ $('#update').click(function () {
       url: "/categories/checksubcategoryname",
       type: "POST",
       async: false,
-      data: { "cname": value, "parentid": parent_id,"categoryid":categoryid, csrf: $("input[name='csrf']").val() },
+      data: { "cname": value, "parentid": parent_id, "categoryid": categoryid, csrf: $("input[name='csrf']").val() },
       datatype: "json",
       caches: false,
       success: function (data) {
@@ -390,7 +448,7 @@ $('#update').click(function () {
         // category_desc: true
       },
       subcategoryid: {
-        // required: true
+        required: true
 
       }
 
@@ -399,17 +457,17 @@ $('#update').click(function () {
       cname: {
         required: "* " + languagedata.Categoryy.catnamevalid,
         space: "* " + languagedata.spacergx,
-        duplicatename : "*" + languagedata.Categoryy.catnamevailderr,
+        duplicatename: "*" + languagedata.Categoryy.catnamevailderr,
 
       },
       cdesc: {
         required: "* " + languagedata.Categoryy.catdescvalid,
         space: "* " + languagedata.spacergx,
-        maxlength: "* "+languagedata?.Permission?.descriptionchat
+        maxlength: "* " + languagedata.Permission.descriptionchat
 
       },
       subcategoryid: {
-        // required: "* Please select the category"
+        required: "*" + languagedata.Categoryy.selectvaild
       }
 
     }
@@ -424,12 +482,11 @@ $('#update').click(function () {
     var cname = $("#cname").val();
     var cdesc = $("#cdesc").val();
     var pcategoryid = $("#cid").val();
-    console.log("pcategoryid",pcategoryid);
     var parentid = $("#categoryid").val();
-    var image = $("#categoryimage").val();
+    var image = $("#categoryimages").val();
     var pageno = $("#catpageno").val();
 
-  
+
     if ($("#form").valid()) {
       $.ajax({
         url: "/categories/editsubcategory",
@@ -437,28 +494,30 @@ $('#update').click(function () {
         datatype: "json",
         data: { "id": id, "cname": cname, "cdesc": cdesc, "pcategoryid": pcategoryid, "image": image, csrf: $("input[name='csrf']").val() },
         success: function (result) {
-          if (result) {
 
-            if (pageno == 0){
+
+          if (result.value == true) {
+
+            if (pageno == 0) {
               window.location.href = "/categories/addcategory/" + parentid;
 
-            }else{
-              window.location.href = "/categories/addcategory/" + parentid + "?page="+pageno;
+            } else {
+              window.location.href = "/categories/addcategory/" + parentid + "?page=" + pageno;
 
             }
-  
+
           } else {
-           
-            notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.Toast.internalserverr + '</span></div>';
-            $(notify_content).insertBefore(".breadcrumbs");
-            setTimeout(function () {
-              $('.toast-msg').fadeOut('slow', function () {
-                $(this).remove();
-              });
-            }, 5000); // 5000 milliseconds = 5 seconds
-  
+            // notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"> <li><div class="flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"><a href="javascript:void(0)" class="absolute right-[8px] top-[8px] "><img src="/public/img/close-toast.svg" alt="close"></a><div><img src="/public/img/toast-error.svg" alt="toast error"></div><div><h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] "> ` + languagedata.Toast.internalserverr + ` </p></div></div></li><ul>`;
+            // $(notify_content).insertBefore(".header-rht");
+            // setTimeout(function () {
+            //   $('.toast-msg').fadeOut('slow', function () {
+            //     $(this).remove();
+            //   });
+            // }, 5000); // 5000 milliseconds = 5 seconds
+            window.location.href = result.url
+
           }
-  
+
         }
       })
       $("#submit").show()
@@ -496,12 +555,12 @@ $(document).on('keyup', '#searchsubcategory', function () {
 
   var categoryid = $("#categoryid").val();
 
-  if (event.key === 'Backspace') {
-  if ($('.search').val() == "") {
-    window.location.href = "/categories/addcategory/" + categoryid
+  if (event.key === 'Backspace' && window.location.href.indexOf("keyword") > -1) {
+    if ($('.search').val() == "") {
+      window.location.href = "/categories/addcategory/" + categoryid
 
+    }
   }
-}
 })
 
 $(document).on('click', '#medcancel', function () {
@@ -509,11 +568,11 @@ $(document).on('click', '#medcancel', function () {
 })
 
 $("#addnewimageModal").on('show.bs.modal', function (event) {
-  $(this).css("background-color","rgba(30,41,44,0.46)")
+  $(this).css("background-color", "rgba(30,41,44,0.46)")
 })
 
 $("#categoryModal").on('show.bs.modal', function (event) {
-  $(this).css("background-color","rgba(30,41,44,0.46)")
+  $(this).css("background-color", "rgba(30,41,44,0.46)")
 })
 
 // Get dropdown values and id
@@ -522,12 +581,12 @@ $(".drp").on("click", function () {
 
   var id = $(this).attr("data-id")
   $(this).parents('.dropdown-menu').siblings('a').html($(this).html())
-  $(this).parent().siblings("input[name='subcategoryid']").val(id)
+  $("#cid").val(id)
 
   if (id == 0) {
     $("#availablecat").addClass('input-group-error')
 
-  }else {
+  } else {
     $("#availablecat").removeClass('input-group-error')
     $("#cid-error").css('display', 'none')
   }
@@ -538,20 +597,20 @@ $(".drp").on("click", function () {
 
 $("#searchcatlists").keyup(function () {
   var keyword = $(this).val().trim().toLowerCase()
-  $(".catrgory-dropdownlist button").each(function (index, element) {
-      var title = $(element).text().toLowerCase()
-      var categoryid = $("#category_id").val()
-      var currentid = $(element).attr("data-id")
-      if (title.includes(keyword) && categoryid != currentid) {
-          $(element).show()
-          $(".noData-foundWrapper").hide()
+  $(".catrgory-dropdownlist a").each(function (index, element) {
+    var title = $(element).text().toLowerCase()
+    var categoryid = $("#category_id").val()
+    var currentid = $(element).attr("data-id")
+    if (title.includes(keyword) && categoryid != currentid) {
+      $(element).show()
+      $(".noData-foundWrapper").hide()
 
-      } else {
-          $(element).hide()
-          if($('.catrgory-dropdownlist button:visible').length==0){
-            $(".noData-foundWrapper").show()
-        }
+    } else {
+      $(element).hide()
+      if ($('.catrgory-dropdownlist button:visible').length == 0) {
+        $(".noData-foundWrapper").show()
       }
+    }
   })
 })
 
@@ -567,126 +626,155 @@ GroupDesc.addEventListener('blur', () => {
   GroupDesc.closest('.input-group').classList.remove('input-group-focused');
 });
 
-$(document).on('click','.selectcheckbox',function(){
+$(document).on('click', '.selectcheckbox', function () {
 
-  categorygrbid =$(this).attr('data-id')
+  $('#unbulishslt').hide()
+  $('#seleccheckboxdelete').removeClass('border-r');
+
+  categorygrbid = $(this).attr('data-id')
+
+  if ($(this).prop('checked')) {
+
+    selectedcheckboxarr.push(categorygrbid)
+
+  } else {
+
+    const index = selectedcheckboxarr.indexOf(categorygrbid);
+
+    if (index !== -1) {
+
+      selectedcheckboxarr.splice(index, 1);
+    }
+
+    $('#Check').prop('checked', false)
+
+  }
 
 
- if ($(this).prop('checked')){
+  if (selectedcheckboxarr.length != 0) {
 
-     selectedcheckboxarr.push(categorygrbid)
- 
- }else{
+    $('.selected-numbers').removeClass('hidden')
 
-     const index = selectedcheckboxarr.indexOf(categorygrbid);
- 
-     if (index !== -1) {
+    var items
 
-         console.log(index,"sssss")
-         selectedcheckboxarr.splice(index, 1);
-     }
-    
-     $('#Check').prop('checked',false)
+    if (selectedcheckboxarr.length == 1) {
 
- }
+      items = "Item Selected"
+    } else {
+
+      items = languagedata.itemselected
+    }
+    $('.checkboxlength').text(selectedcheckboxarr.length + " " + items)
 
 
- if (selectedcheckboxarr.length !=0){
+    $('#seleccheckboxdelete').removeClass('border-end')
 
-     $('.selected-numbers').show()
+    $('.unbulishslt').html("")
 
-    
-     $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
+    if (selectedcheckboxarr.length > 1) {
 
-         $('#seleccheckboxdelete').removeClass('border-end')
+      $('#deselectid').text("Deselect All")
 
-         $('.unbulishslt').html("")
-     
- }else{
+    } else {
+      $('#deselectid').text("Deselect")
+    }
 
-     $('.selected-numbers').hide()
- }
 
-     var allChecked = true;
+  } else {
 
-      $('.selectcheckbox').each(function() {
+    $('.selected-numbers').addClass('hidden')
+  }
 
-          if (!$(this).prop('checked')) {
+  var allChecked = true;
 
-          allChecked = false;
+  $('.selectcheckbox').each(function () {
 
-         return false; 
-      }
- });
+    if (!$(this).prop('checked')) {
 
-       $('#Check').prop('checked', allChecked);
+      allChecked = false;
 
-  console.log(selectedcheckboxarr,"checkkkk")
+      return false;
+    }
+  });
+
+  $('#Check').prop('checked', allChecked);
+
 })
 
 //ALL CHECKBOX CHECKED FUNCTION//
 
-$(document).on('click','#Check',function(){
+$(document).on('click', '#Check', function () {
 
-  selectedcheckboxarr=[]
+  $('.selected-numbers').removeClass('hidden')
+  $('#unbulishslt').hide()
+
+  selectedcheckboxarr = []
 
   var isChecked = $(this).prop('checked');
 
-  if (isChecked){
+  if (isChecked) {
 
-      $('.selectcheckbox').prop('checked', isChecked);
+    $('.selectcheckbox').prop('checked', isChecked);
 
-      $('.selectcheckbox').each(function(){
-  
-         categorygrbid= $(this).attr('data-id')
+    $('.selectcheckbox').each(function () {
 
-         selectedcheckboxarr.push(categorygrbid)
-      })
+      categorygrbid = $(this).attr('data-id')
 
-      $('.selected-numbers').show()
+      selectedcheckboxarr.push(categorygrbid)
+    })
 
-     
-      $('.checkboxlength').text(selectedcheckboxarr.length+" " +'items selected')
-  
-  }else{
+    $('#seleccheckboxdelete').removeClass('border-r');
+
+    var items
+
+    if (selectedcheckboxarr.length == 1) {
+
+      items = "Item Selected"
+    } else {
+
+      items = languagedata.itemselected
+    }
+    $('.checkboxlength').text(selectedcheckboxarr.length + " " + items)
 
 
-      selectedcheckboxarr=[]
+  } else {
 
-      $('.selectcheckbox').prop('checked', isChecked);
 
-      $('.selected-numbers').hide()
+    selectedcheckboxarr = []
+
+    $('.selectcheckbox').prop('checked', isChecked);
+
+    $('.selected-numbers').addClass('hidden')
   }
-  if (selectedcheckboxarr.length ==0){
+  if (selectedcheckboxarr.length == 0) {
 
-    $('.selected-numbers').hide()
-}
+    $('.selected-numbers').addClass('hidden')
+  }
 
 })
-$(document).on('click','#seleccheckboxdelete',function(){
+$(document).on('click', '#seleccheckboxdelete', function () {
 
-  if (selectedcheckboxarr.length>1){
-       
-  $('.deltitle').text("Delete Categories?")
+  if (selectedcheckboxarr.length > 1) {
 
-  $('#content').text('Are you sure want to delete selected Categories?')
+    $('.deltitle').text("Delete Categories?")
 
-  }else {
+    $('#content').text('Are you sure want to delete selected Categories?')
 
-       $('.deltitle').text("Delete Category?")
 
-       $('#content').text('Are you sure want to delete selected Category?')
+  } else {
+
+    $('.deltitle').text("Delete Category?")
+
+    $('#content').text('Are you sure want to delete selected Category?')
   }
 
 
-  $('#delete').addClass('checkboxdelete')
+  $('#delid').addClass('checkboxdelete')
 })
 //MULTI SELECT DELETE FUNCTION//
-$(document).on('click','.checkboxdelete',function(){
+$(document).on('click', '.checkboxdelete', function () {
 
   var url = window.location.href;
-
-  console.log("url", url)
 
   var pageurl = window.location.search
 
@@ -699,48 +787,76 @@ $(document).on('click','.checkboxdelete',function(){
 
   $('.selected-numbers').hide()
   $.ajax({
-      url: '/categories/multiselectcategorydelete',
-      type: 'post',
-      dataType: 'json',
-      async: false,
-      data: {
-          "categoryids": selectedcheckboxarr,
-          csrf: $("input[name='csrf']").val(),
-          "page":pageno,
-          "parentid":parent_id
+    url: '/categories/multiselectcategorydelete',
+    type: 'post',
+    dataType: 'json',
+    async: false,
+    data: {
+      "categoryids": selectedcheckboxarr,
+      csrf: $("input[name='csrf']").val(),
+      "page": pageno,
+      "parentid": parent_id
 
-          
-      },
-      success: function (data) {
 
-          console.log(data,"result")
+    },
+    success: function (data) {
 
-          if (data.value==true){
+      if (data.value == true) {
 
-              setCookie("get-toast", "Category Deleted Successfully")
+        setCookie("get-toast", "Category Deleted Successfully")
 
-              window.location.href=data.url
-          }else{
+        window.location.href = data.url
+      } else {
 
-              setCookie("Alert-msg", "Internal Server Error")
-
-          }
+        // setCookie("Alert-msg", "Internal Server Error")
+        window.location.href = data.url
 
       }
+
+    }
   })
 
 })
 
 //Deselectall function//
 
-$(document).on('click','#deselectid',function(){
+$(document).on('click', '#deselectid', function () {
 
-  $('.selectcheckbox').prop('checked',false)
+  $('.selectcheckbox').prop('checked', false)
 
-  $('#Check').prop('checked',false)
+  $('#Check').prop('checked', false)
 
-  selectedcheckboxarr=[]
+  selectedcheckboxarr = []
 
-  $('.selected-numbers').hide()
-  
+  $('.selected-numbers').addClass('hidden')
+
+})
+
+$(document).on('click', '#categoryimage', function () {
+  $("#prof-crop").val("9")
+})
+
+$(document).on("click", ".Closebtn", function () {
+  $(".search").val('')
+  $(".Closebtn").addClass("hidden")
+  $(".srchBtn-togg").removeClass("pointer-events-none")
+})
+
+$(document).on("click", ".searchClosebtn", function () {
+  $(".search").val('')
+  var categoryid = $("#categoryid").val();
+  window.location.href = "/categories/addcategory/" + categoryid
+})
+
+$(document).ready(function () {
+
+  $('.search').on('input', function () {
+      if ($(this).val().length >= 1) {
+          $(".Closebtn").removeClass("hidden")
+          $(".srchBtn-togg").addClass("pointer-events-none")
+      } else {
+          $(".Closebtn").addClass("hidden")
+          $(".srchBtn-togg").removeClass("pointer-events-none")
+      }
+  });
 })

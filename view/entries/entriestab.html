@@ -1,0 +1,90 @@
+{{define "entriestab"}}
+{{$Translate := .translate}}
+
+
+<header
+    class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht z-[101]">
+    <div class="mr-auto flex items-center space-x-[6px]">
+        <a href="javascript:void(0);"
+            class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+            <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
+        <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Entries}}</h2>
+    </div>
+  
+    <div
+    class="{{if .filter.Keyword}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+    <a href="javascript:void(0);"
+        class="{{if .filter.Keyword}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+        <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+        <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
+    </a>
+    <form action="" method="get" class="filterform " autocomplete="off">
+        <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="searchkey" value="{{.filter.Keyword}}"
+            class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+            <input type="hidden" value="1" class="entryclosebutton">
+            {{if .filter.Keyword}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{else}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{end}}
+
+    </form>
+</div>
+   
+
+
+
+    <div class="dropdown">
+        <a href="javascript:void(0);"
+            class=" sm:min-w-[216px] space-x-[5px] bg-white border-[1px] border-solid border-[#10A37F] rounded-[4px] p-[7px_12px_7px_12px]  {{if .channelname}} p-[7px_32px_7px_12px]{{else}} p-[7px_12px_7px_12px]{{end}} h-[32px] flex items-center justify-between cursor-pointer "
+             data-bs-toggle="dropdown" aria-expanded="false">
+            {{if .channelname}}
+            <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#10A37F]  overflow-hidden text-ellipsis whitespace-nowrap"
+                data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top"
+                title="{{.channelname}}">{{.channelname}}</h4>
+            <p class=" text-[10px] font-light leading-[14px] text-[#262626] max-sm:hidden ">{{$Translate.Total}} {{if gt
+                .entrycount 1}}{{$Translate.Entries}} : {{.entrycount}}{{else}} {{$Translate.Channell.Entry}} :
+                {{.entrycount}} {{end}}</p>
+
+            {{else}}
+            <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#10A37F] ">
+                {{$Translate.Channell.Selectchannel}}</h4>
+            <img src="/public/img/avaliable-arrow.svg" alt="arrow" class="inline-block max-sm:hidden">
+            <img src="/public/img/avaliable-arrow-grn.svg" alt="arrow" class="hidden max-sm:inline-block">
+            {{end}}
+        </a>
+        {{if .channelname}}
+        <img id="removecategory" class="w-[10px] h-[10px] absolute right-[12px] top-[10px] cursor-pointer"
+            src="/public/img/close-drop.svg" alt="">{{end}}
+        <ul class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col [&amp;.show]:space-y-[6px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[300px] !mt-[6px]"
+            >
+            {{$ChannelId := .chnid}}
+            {{range .channellist}}
+            <li class="mb-[8px]"><a class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#F0FFF1] hover:border-[#C5E9C6]{{if eq $ChannelId .Id}} bg-[#F0FFF1] border-[#C5E9C6]{{else}} border-[#EDEDED] {{end}}"
+                    href="/channel/entrylist/{{.Id}}">
+                    <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}</h5>
+                    <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if gt
+                        .EntriesCount 1}}{{$Translate.Entries}} :{{.EntriesCount}}{{else}} {{$Translate.Channell.Entry}}
+                        :{{.EntriesCount}}{{end}}</p>
+                </a></li>
+
+            {{end}}
+
+        </ul>
+    </div>
+
+    <a href="/channel/newentry"
+        class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
+        <span class="hidden max-sm:block text-lg leading-none ">+</span>
+        <span class="max-sm:hidden">
+            {{$Translate.Channell.Createentry}}
+        </span>
+    </a>
+</header>
+
+{{end}}

@@ -1,184 +1,166 @@
 {{template "header" .}}
-{{template "settingsmenu" .}}
 {{$Translate := .translate}}
 {{template "head" .}}
-{{$THEMECOLOR := ""}}
-{{$TEXTCOLOR := ""}}
-{{$BORDERCOLOR := ""}}
 
-{{ if eq .Menu.Personalize.MenuBackgroundColor "rgb(242, 102, 116)"}}
-{{$THEMECOLOR = "bgclr1"}} {{$TEXTCOLOR = "txtclr1"}} {{$BORDERCOLOR = "brclr1"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(174, 62, 249)"}}
-{{$THEMECOLOR = "bgclr2"}} {{$TEXTCOLOR = "txtclr2"}} {{$BORDERCOLOR = "brclr2"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(130, 189, 244)"}}
-{{$THEMECOLOR = "bgclr3"}} {{$TEXTCOLOR = "txtclr3"}} {{$BORDERCOLOR = "brclr3"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(9, 171, 216)"}}
-{{$THEMECOLOR = "bgclr4"}} {{$TEXTCOLOR = "txtclr4"}} {{$BORDERCOLOR = "brclr4"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(255, 222, 118)"}}
-{{$THEMECOLOR = "bgclr5"}} {{$TEXTCOLOR = "txtclr5"}} {{$BORDERCOLOR = "brclr5"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(248, 131, 76)"}}
-{{$THEMECOLOR = "bgclr6"}} {{$TEXTCOLOR = "txtclr6"}} {{$BORDERCOLOR = "brclr6"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(181, 224, 140)"}}
-{{$THEMECOLOR = "bgclr7"}} {{$TEXTCOLOR = "txtclr7"}} {{$BORDERCOLOR = "brclr7"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(157, 204, 107)"}}
-{{$THEMECOLOR = "bgclr8"}} {{$TEXTCOLOR = "txtclr8"}} {{$BORDERCOLOR = "brclr8"}}
-{{else if eq .Menu.Personalize.MenuBackgroundColor "rgb(21, 32, 39)"}}
-{{$THEMECOLOR = "bgclr9"}} {{$TEXTCOLOR = "txtclr9"}} {{$BORDERCOLOR = "brclr9"}}
-{{else}}
-{{$THEMECOLOR = "bgclr-default"}} {{$TEXTCOLOR = "txtclr-default"}} {{$BORDERCOLOR = "brclr-default"}}
-{{end}}
-<form action="/settings/updateprofile" method="post" id="userform" name="userform" >
-<div class="page-wrapper settings-wrapper">
-    <div class="mx-3 ">
-        <div class="details-roles h-auto m-0 ">
-            <h2 class="heading mb-4">{{$Translate.Myprofile}}</h2>
-            <div class="myaccount-details profile-details myprofile-brd">
-                <div class="grd-1-2fr">
-                    <div class="update-profile-cont">
-                        <h4 class="heading-four">{{$Translate.Languages.Basicinfo}}</h4>
-                        <p class="para-light">{{$Translate.Myprofilequotes}}
-                        </p>
-                    </div>
-                   
-                        <input type="hidden" name="csrf" value="{{.csrf}}">
-                        <input type="hidden" value="{{.user.Id}}" name="id" id="id">
-                        <input type="hidden" name="crop_data">
-                    <div class="update-profile-img ">
-                        <input type="hidden" id="prof-crop">
-                        {{if .user.ProfileImagePath}}
-                    <img src="/{{ .user.ProfileImagePath }}" alt="" id="profpic" name="prof_pic">
-                    {{else}}
-                    <img src="/{{ .user.ProfileImagePath }}" alt="" id="profpic" name="prof_pic" style="display: none;">
-                    <div class="name-string"><span>{{.user.NameString}}</span></div>
-                    {{end}}
-                    <div class="profile-info profile-crop"></div>
-                    <button class="cam-logo" type="button">
-                        <input id="myfile" name="prof_pic" type="file"> 
-                        <img src="/public/img/cam-logo.svg" alt=""></button>
-                        <label id="myfile-error" class="error" for="myfile" style="display: none;
-                        font-size: 0.75rem;
-                        font-weight: 400;
-                        color: #F26674;position: absolute;
-    top: 100%;width: 500px;">* Please select jpg|png|jpeg files only</label>
-                        <!-- <img src="img/profile1.svg" alt="">
-                        <div class="profile-info"></div>
-                        <button class="cam-logo"><img src="img/cam-logo.svg" alt=""></button> -->
-                    </div>
-                </div>
-                <div class="update-account1">
-
-                    <div class="fill-account-details">
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Userss.Firstname}} *</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" name="user_fname" placeholder="{{$Translate.Userss.Labelfname}}" value="{{.user.FirstName}}">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Userss.Lastname}}</label>
-                                <div class="ig-row">
-                                    <input type="text"  name="user_lname" placeholder="{{$Translate.Userss.Labellname}}" value="{{.user.LastName}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Userss.Username}} *</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}" value="{{.user.Username}}">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Role}}</label>
-                                <div class="ig-row">
-                                    <input type="text" name="user_role" style="color: #d2d2d2; " disabled placeholder="role" value="{{.rolename}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-field-group">
-                            <div class="input-group">
-                                <label for="" class="input-label">{{$Translate.Email}} *</label>
-                                <div class="ig-row">
-                                    <input type="text"class="field" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}" value="{{.user.Email}}">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for=""  class="input-label">{{$Translate.Userss.Mobile}} *</label>
-                                <div class="ig-row">
-                                    <input type="text" class="field" name="user_mob" placeholder="{{$Translate.Userss.Labelmobile}}" value="{{.user.MobileNo}}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grd-1-2fr myprofile-brd">
-                <div class="update-profile-cont">
-                    <h4 class="heading-four" style="font-weight: 500;">{{$Translate.Personalize.Themebackground}}</h4>
-                    <p class="para-light">{{$Translate.Personalize.Themecontent}}</p>
-                </div>
-                <div class="back-colors">
-                    <a class="red circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="purple circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="blue circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="dark-blue circle-change" id="default-clr">
-                      <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <!-- <a class="yellow circle-change">
-                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
-                    </a> -->
-                    <a class="brown circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="orange circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <!-- <a class="light-green circle-change">
-                        <span class="clr" style="display: none;"><img src="/public/img/select-check.svg" alt=""></span>
-                    </a> -->
-                    <a class="green circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="teal-blue circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <a class="black circle-change">
-                        <img src="/public/img/theme.check.svg" alt="">
-                    </a>
-                    <input type="hidden" name="color-change" id="color-change"
-                        value="{{if .Menu.Personalize.MenuBackgroundColor}}{{.Menu.Personalize.MenuBackgroundColor}}{{else}}rgb(9, 171, 216){{end}}">
-                    <input type="hidden" name="csrf" value="{{.csrf}}">
-                </div>
-            </div>
-
-            
-
-        </div>
-        <div class="configurationContent-btm">
-            <button class="btn-reg btn-lg secondary" type="button" id="back">Cancel </button>
-            <button class="btn-reg btn-lg primary theme-color " type="button" id="uptprofile">{{$Translate.Update}}</button>
+<section
+    class="sectionclass  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Myprofile}}
+            </h2>
         </div>
 
+
+        <div class="flex space-x-[12px] header-rht">
+            <a href="/settings/myprofile"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
+            <a href="#"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline"
+                id="uptprofile">{{$Translate.Update}}</a>
+        </div>
+    </header>
+
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+
+        <!--accordion-->
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+
+        <div class=" max-sm:p-[16px] p-[24px] @container setConatiner ">
+            <h3 class="text-[#262626] text-sm font-normal leading-[17.5px] mb-[6px]">{{$Translate.Setting.Basicinfo}}
+            </h3>
+            <p class="text-[#717171] text-xs font-normal leading-4 mb-[24px]">{{$Translate.Setting.Myprofilesubheading}}
+            </p>
+            <form name="userform" id="userform" method="post" action="/settings/updateprofile">
+                <div class=" @[475px]:grid-cols-[120px_1fr] grid grid-cols-1 gap-[24px] max-w-[880px]  mainContainer">
+                    <div>
+                        <label
+                            class=" cursor-pointer w-[120px] h-[120px] rounded-full overflow-hidden bg-[#E5E5DD] flex items-center justify-center"
+                            for="profileImage" id="profileImg">
+                            <input type="file" name="" id="profileImage" class="hidden"
+                                accept="image/png, image/jpeg,image/jpg,image/svg">
+
+                            <img src="{{.user.ProfileImagePath}}" alt="" data-id="1" id="prof-crop" name="prof_pic">
+
+                            <p class="text-[22px] {{if .user.ProfileImagePath}} hidden {{end}}" id="myProfileImg">
+                                {{.user.NameString}}</p>
+
+                        </label>
+                        <p id="myfile-error" class="text-[12px] text-red-700 hidden text-center" for="profileImage">
+                            {{$Translate.Setting.Imagetypeerror}}</p>
+                        <p class="text-[12px] w-full pt-[10px] break-words text-[#8C929B]" id="profPicWarn">Choose only
+                            jpg/ jpeg/ png
+                            formats</p>
+                    </div>
+
+                    <div class="grid gap-[16px] @[475px]:grid-cols-2 grid-cols-1 innerContainer">
+                        <div>
+                            <label for="firstname"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px] ">{{$Translate.Setting.Firstname}}
+                                <span class="text-red-600">*</span></label>
+                            <input type="text" id="firstname" name="user_fname"
+                                class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] checklength"
+                                value="{{.user.FirstName}}" maxlength="25">
+                            </input>
+                            <p class="text-[12px] text-red-600 mt-2 hidden lengthErr">You have reached a maximum limit
+                                of 25
+                                characters
+                            </p>
+                        </div>
+                        <div>
+                            <label for="lastname"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Setting.Lastname}}
+                            </label>
+                            <input type="text" id="lastname" name="user_lname"
+                                class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] checklength"
+                                value="{{.user.LastName}}" maxlength="25">
+                            </input>
+                            <p class="text-[12px] text-red-600 mt-2 hidden lengthErr">You have reached a maximum limit
+                                of 25
+                                characters
+                            </p>
+                        </div>
+                        <div>
+                            <label for="username"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Setting.Username}}
+                                <span class="text-red-600">*</span></label>
+                            <input type="text" id="username" name="user_name"
+                                class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]"
+                                value="{{.user.Username}}">
+                        </div>
+                        <div>
+                            <label for="role"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Role}}
+                                <span class="text-red-600">*</span></label>
+                            <input type="text" id="role"
+                                class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] cursor-default text-[#717171] "
+                                value="{{.rolename}}" readonly>
+                        </div>
+                        <div>
+                            <label for="email"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Email}}
+                                <span class="text-red-600">*</span></label>
+                            <input type="text" id="email" name="user_email"
+                                class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]"
+                                value="{{.user.Email}}">
+                        </div>
+                        <div>
+                            <label for="mobile"
+                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Userss.Mobile}}
+                                <span class="text-red-600">*</span></label>
+                            <input type="number" id="mobile" name="user_mob"
+                                class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] mobileInput"
+                                value="{{.user.MobileNo}}" maxlength="10">
+                            </input>
+                            <p class="text-[12px] text-red-600 mt-2 hidden lengthErr">You have reached a maximum limit
+                                of 10
+                                characters
+                            </p>
+                        </div>
+                        <div>
+
+                            <input type="hidden" id="cropData" name="crop_data"
+                                class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px]" value="">
+                        </div>
+                        <div>
+
+                            <input type="hidden" id="id" name="id"
+                                class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px]" value="{{.user.Id}}">
+                        </div>
+
+                        <div>
+
+                            <input type="hidden" id="csrf"
+                                class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px]" value="{{.csrf}}"
+                                name='csrf'>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+
+
+        </div>
     </div>
 
-</div>
-</form>
+
+</section>
+
 {{template "mediamodal" .}}
 
 {{template "mediadecidemodal" .}}
 
-
-{{template "cropmodal" .}}
-
 {{template "footer" .}}
+
 <script src="/public/js/settings/myprofile/myprofile.js"></script>
 <script src="/public/js/settings/personalize/personalize.js"></script>
 <!-- <script src="/public/js/media/media.js"></script> -->

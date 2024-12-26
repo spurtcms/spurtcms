@@ -30,6 +30,11 @@
 {{$StorageType:=.StorageType}}
 
 <input type="hidden" id="storagetype" value="{{.StorageType}}" >
+<input type="hidden" id="nextcont" value="{{.Nextcont}}">
+<input type="hidden" id="offset" value="1">
+<input type="hidden" id="path" value="">
+<input type="hidden" id="mediacount" value="">
+<input type="hidden" id="totalmediacount" value="">
 
 <div class="modal fade right member-modal media-modal" id="addnewimageModal" data-bs-backdrop="static"
     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -55,9 +60,10 @@
                             style="width: 13px;">
                         {{$Translate.Mediaa.Refresh}}
                     </button>
-                    <button class="btn-reg btn-sm btn-outline  " id="addfolder"> <img src="{{$IMAGEPATH}}" alt="">
+                    <button class="btn-reg btn-sm btn-outline media-add-f " id="addfolder"> <img src="{{$IMAGEPATH}}" alt="">
                         {{$Translate.Mediaa.Folder}}
                     </button>
+
                     <div class="input-fixed  input-group">
                         <div class="input-field">
                             <input type="text" name="foldername" id="foldername" class="field"
@@ -96,6 +102,19 @@
          </div> -->
 
                 <div class="media-library-row">
+<!-- 
+                    <div class="media-library-header flexx" id="addfoldervalues" style="display: none;">
+                        <h4 id="path"><span></span></h4>
+                        <div class="input-group" id="namecheck">
+                            <div class="ig-row media-btn">
+                                <input type="text" name="foldername" class="field" id="foldername"
+                                    placeholder="{{$Translate.Mediaa.Plenterfolder}}">
+                                <button class="button-reg secondary" id="newfileadd">{{$Translate.Add}}</button>
+                            </div>
+                            <label id="foldername-error" class="error" for="foldername"
+                                style="display: none;margin-left: 50%;">*{{$Translate.Mediaa.Vailderr}} </label>
+                        </div>
+                    </div> -->
 
                     <div class="media-library-header flexx mediabreadcrumb tab-breadCrumb">
                         <ul class="media-innr-breadcrumbs flexx breadcrumb-container" style="list-style: none;">
@@ -105,27 +124,7 @@
                         </ul>
                     </div>
 
-
-
-                    <div id="errorhtml" class="media-error-design">
-                        {{ if .Media }}
-
-                        {{else}}
-                        <div class="noData-foundWrapper">
-
-                            <div class="empty-folder">
-                                <img src="/public/img/folder-sh.svg" alt="">
-                                <img src="/public/img/shadow.svg" alt="">
-                            </div>
-                            <h1 class="heading">{{$Translate.Oopsnodata}}</h1>
-
-                        </div>
-                        {{end}}
-                    </div>
-
-
-
-                    <div class="upload-files media-library-list" id="drivelist">
+                    <div class="upload-files media-library-list model-medialib" id="drivelist">
                         {{ if .Media }}
                         {{range .Media}}
                         {{if eq .File true}}

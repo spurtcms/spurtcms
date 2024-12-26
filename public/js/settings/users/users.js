@@ -9,16 +9,18 @@ $(document).ready(async function () {
         languagedata = data
     })
 
-    $("#myfile-error").hide()
-
-
 })
+
+// search focus function
 
 $(document).keydown(function (event) {
     if (event.ctrlKey && event.key === '/') {
         $(".search").focus().select();
     }
 });
+
+
+// status indication
 
 $("input[name=mem_activestat]").click(function () {
     if ($(this).prop('checked') == true) {
@@ -36,12 +38,15 @@ $("input[name=mem_data_access]").click(function () {
     }
 })
 
-//**Dropdown role//
-$(document).on('click', '.dropdown-item', function () {
 
+//**Dropdown role//
+
+$(document).on('click', '.dropdown-items', function () {
     role = $(this).text()
     roleid = $(this).attr('data-id')
-    $('#triggerId').text(role)
+    $('#showgroup').text(role)
+    $('#showgroup').removeClass('text-bold-gray');
+    $('#showgroup').addClass('text-bold');
     $('#rolen').val(roleid)
     if ($('#rolen').val() !== '') {
         $('#rolen-error').hide()
@@ -50,228 +55,246 @@ $(document).on('click', '.dropdown-item', function () {
     }
 })
 
+
 /* Create User */
+
 $("#saveuser").click(function () {
-    jQuery.validator.addMethod(
-        "email_validator",
-        function (value, element) {
-            if (/(^[a-zA-Z_0-9\.-]+)@([a-z]{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/.test(value))
-                return true;
-            else return false;
-        },
-        "* " + languagedata.Userss.usremailrgx
-    );
+    console.log($(this).text().trim(),"text lang save",languagedata.save);
 
+    if ($(this).text().trim() == languagedata.save) {
 
-
-    jQuery.validator.addMethod(
-        "pass_validator",
-        function (value, element) {
-            if (value != "") {
-                if (/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/.test(value))
+        jQuery.validator.addMethod(
+            "email_validator",
+            function (value, element) {
+                if (/(^[a-zA-Z_0-9\.-]+)@([a-z]{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/.test(value))
                     return true;
                 else return false;
-            }
-            else return true;
-        },
-        "* " + languagedata.Userss.usrpswdrgx
-    );
+            },
+            "* " + languagedata.Userss.usremailrgx
+        );
 
-    jQuery.validator.addMethod(
-        "mob_validator",
-        function (value, element) {
-            if (/^[6-9]{1}[0-9]{9}$/.test(value))
-                return true;
-            else return false;
-        },
-        "* " + languagedata.Userss.usrmobnumrgx
-    );
-    jQuery.validator.addMethod("duplicateemail", function (value) {
+        jQuery.validator.addMethod(
+            "pass_validator",
+            function (value, element) {
+                if (value != "") {
+                    if (/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/.test(value))
+                        return true;
+                    else return false;
+                }
+                else return true;
+            },
+            "* " + languagedata.Userss.usrpswdrgx
+        );
 
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checkemail",
-            type: "POST",
-            async: false,
-            data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
+        jQuery.validator.addMethod(
+            "mob_validator",
+            function (value, element) {
+                if (/^[6-9]{1}[0-9]{9}$/.test(value))
+                    return true;
+                else return false;
+            },
+            "* " + languagedata.Userss.usrmobnumrgx
+        );
+
+        jQuery.validator.addMethod("duplicateemail", function (value) {
+
+            var result;
+            user_id = $("#userid").val()
+            $.ajax({
+                url: "/settings/users/checkemail",
+                type: "POST",
+                async: false,
+                data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+                datatype: "json",
+                caches: false,
+                success: function (data) {
+                    console.log(data,"email");
+                    result = data.trim();
+                }
+            })
+            return result.trim() != "true"
+        })
+
+        // jQuery.validator.addMethod("duplicateusername", function (value) {
+
+            // var result;
+            // user_id = $("#userid").val()
+            // $.ajax({
+            //     url: "/settings/users/checkusername",
+            //     type: "POST",
+            //     async: false,
+            //     data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+            //     datatype: "json",
+            //     caches: false,
+            //     success: function (data) {
+            //         result = data.trim();
+            //     }
+            // })
+            // return result.trim() != "true"
+
+        // })
+
+        jQuery.validator.addMethod("duplicatenumber", function (value) {
+
+            var result;
+            user_id = $("#userid").val()
+            $.ajax({
+                url: "/settings/users/checknumber",
+                type: "POST",
+                async: false,
+                data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+                datatype: "json",
+                caches: false,
+                success: function (data) {
+                    result = data.trim();
+                }
+            })
+            return result.trim() != "true"
+        })
+
+        $("form[name='userform']").validate({
+
+            ignore: [],
+            rules: {
+                prof_pics: {
+
+                    extension: "jpg|png|jpeg|svg"
+                },
+                user_fname: {
+                    required: true,
+                    space: true,
+                },
+
+                user_email: {
+                    required: true,
+                    email_validator: true,
+                    duplicateemail: true
+                },
+                user_role: {
+                    required: true,
+                },
+                user_name: {
+                    required: true,
+                    // duplicateusername: true,
+                    space: true,
+                },
+                user_pass: {
+                    required: true,
+                    pass_validator: true,
+                },
+                user_mob: {
+                    required: true,
+                    mob_validator: true,
+                    duplicatenumber: true
+                },
+
+
+            },
+            messages: {
+                prof_pics: {
+                    extension: "* " + languagedata.profextension
+                },
+                user_fname: {
+                    required: "* " + languagedata.Userss.usrfname,
+                    space: "* " + languagedata.spacergx,
+                },
+                user_email: {
+                    required: "* " + languagedata.Userss.usrmail,
+                    duplicateemail: "* " + languagedata.Userss.emailexist
+                },
+                user_role: {
+                    required: "* " + languagedata.Userss.usrrole
+                },
+                user_name: {
+                    required: "* " + languagedata.Userss.usrname,
+                    // duplicateusername: "*" + languagedata.Userss.nameexist,
+                    space: "* " + languagedata.spacergx,
+                },
+                user_pass: {
+                    required: "* " + languagedata.Userss.usrpswd
+                },
+                user_mob: {
+                    required: "* " + languagedata.Userss.usrmobnum,
+                    duplicatenumber: "* " + languagedata.Userss.mobnumexist,
+                },
+
+
+
             }
         })
-        return result.trim() != "true"
-    })
-
-    jQuery.validator.addMethod("duplicateusername", function (value) {
-
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checkusername",
-            type: "POST",
-            async: false,
-            data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
-            }
-        })
-        return result.trim() != "true"
-    })
-
-    jQuery.validator.addMethod("duplicatenumber", function (value) {
-
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checknumber",
-            type: "POST",
-            async: false,
-            data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
-            }
-        })
-        return result.trim() != "true"
-    })
-    $("form[name='userform']").validate({
-
-        ignore: [],
-        rules: {
-            prof_pic: {
-
-                extension: "jpg|png|jpeg"
-            },
-            user_fname: {
-                required: true,
-                space: true,
-            },
-
-            user_email: {
-                required: true,
-                email_validator: true,
-                duplicateemail: true
-            },
-            user_role: {
-                required: true,
-            },
-            user_name: {
-                required: true,
-                duplicateusername: true,
-                space: true,
-            },
-            user_pass: {
-                required: true,
-                pass_validator: true,
-            },
-            user_mob: {
-                required: true,
-                mob_validator: true,
-                duplicatenumber: true
-            },
 
 
-        },
-        messages: {
-            prof_pic: {
-                extension: "* " + languagedata.profextension
-            },
-            user_fname: {
-                required: "* " + languagedata.Userss.usrfname,
-                space: "* " + languagedata.spacergx,
-            },
-            user_email: {
-                required: "* " + languagedata.Userss.usrmail,
-                duplicateemail: "* " + languagedata.Userss.emailexist
-            },
-            user_role: {
-                required: "* " + languagedata.Userss.usrrole
-            },
-            user_name: {
-                required: "* " + languagedata.Userss.usrname,
-                duplicateusername: "*" + languagedata.Userss.nameexist,
-                space: "* " + languagedata.spacergx,
-            },
-            user_pass: {
-                required: "* " + languagedata.Userss.usrpswd
-            },
-            user_mob: {
-                required: "* " + languagedata.Userss.usrmobnum,
-                duplicatenumber: "* " + languagedata.Userss.mobnumexist,
-            },
+        var formcheck = $("#userform").valid();
+        console.log(formcheck,"validat");
+        if (formcheck == true) {
+            $('#userform')[0].submit();
+            $('#saveuser').prop('disabled', true);
+            var email = $("#user_email").val()
+            var mob = $("#user_mob").val()
+            var uname = $('#user_name').val()
+            var user_id = $("#userid").val()
+            // $.ajax({
+            //     url: "/settings/users/checkuserdata",
+            //     type: "POST",
+            //     async: false,
+            //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
+            //     datatype: "json",
+            //     caches: false,
+            //     success: function (data) {
+            //         console.log("data", data);
+            //         if (data.email == true) {
+
+            //             $('#user_email-error').text("* " + languagedata.Userss.emailexist).show();
+            //             $('#emailgrp').addClass('input-group-error');
+            //         }
+
+            //         if (data.number == true) {
+            //             $('#user_mob-error').text("* " + languagedata.Userss.mobnumexist).show();
+            //             $('#mobilegrp').addClass('input-group-error');
+            //         }
+            //         if (data.user == true) {
+            //             $('#user_name-error').text("* " + languagedata.Userss.nameexist).show();
+            //             $('#usergrp').addClass('input-group-error');
+            //         }
+            //         if (data.user == false && data.email == false && data.number == false) {
+            //             $('#userform')[0].submit();
+            //             $('#saveuser').prop('disabled', true);
+            //         }
+
+            //     }
+            // })
+
+        } else {
+            $('#saveuser').prop('disabled', false);
+            $(document).on('keyup', ".field", function () {
+                Validationcheck()
+            })
+            $('.input-group').each(function () {
+                var inputField = $(this).find('input');
+                var inputName = inputField.attr('name');
 
 
+                if (!inputField.valid()) {
+                    $(this).addClass('input-group-error');
+
+                } else {
+                    $(this).removeClass('input-group-error');
+                }
+            });
+            // if ($('#rolen-error').css('display') !== 'none') {
+            //     $('.user-drop-down').removeClass('input-group-error')
+            // }
 
         }
-    })
-    var formcheck = $("#userform").valid();
-    if (formcheck == true) {
-        $('#userform')[0].submit();
-        $('#saveuser').prop('disabled', true);
-        // var email = $("#user_email").val()
-        // var mob = $("#user_mob").val()
-        // var uname = $('#user_name').val()
-        // var user_id = $("#userid").val()
-        // $.ajax({
-        //     url: "/settings/users/checkuserdata",
-        //     type: "POST",
-        //     async: false,
-        //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
-        //     datatype: "json",
-        //     caches: false,
-        //     success: function (data) {
-        //         console.log("data", data);
-        //         if (data.email == true) {
-
-        //             $('#user_email-error').text("* "+languagedata.Userss.emailexist).show();
-        //             $('#emailgrp').addClass('input-group-error');
-        //         }
-
-        //         if (data.number == true) {
-        //             $('#user_mob-error').text("* "+languagedata.Userss.mobnumexist).show();
-        //             $('#mobilegrp').addClass('input-group-error');
-        //         }
-        //         if (data.user == true) {
-        //             $('#user_name-error').text("* "+languagedata.Userss.nameexist).show();
-        //             $('#usergrp').addClass('input-group-error');
-        //         }
-        //         if (data.user == false && data.email == false && data.number == false) {
-        //             $('#userform')[0].submit();
-        //             $('#saveuser').prop('disabled', true);
-        //         }
-
-        //     }
 
 
-    } else {
-        $('#saveuser').prop('disabled', false);
-        $(document).on('keyup', ".field", function () {
-            Validationcheck()
-        })
-        $('.input-group').each(function () {
-            var inputField = $(this).find('input');
-            var inputName = inputField.attr('name');
 
-
-            if (!inputField.valid()) {
-                $(this).addClass('input-group-error');
-
-            } else {
-                $(this).removeClass('input-group-error');
-            }
-        });
-        // if ($('#rolen-error').css('display') !== 'none') {
-        //     $('.user-drop-down').removeClass('input-group-error')
-        // } 
-
+        return false;
     }
-    return false;
 });
+
+
+
 $(document).on('click', '.cancel', function () {
     $('#changepicModal').modal('hide');
 })
@@ -279,21 +302,24 @@ $(document).on('click', '.btn-close', function () {
     $('#changepicModal').modal('hide');
 })
 
-$(document).on('click', '#adduser', function () {
-    $('#heading').text(languagedata.Userss.addnewuser)
-    $(".name-string").hide()
-    $('#profpic').attr('src', '/public/img/default profile .svg').show()
-    $('#saveuser').show()
-    $('#updateuser').hide();
-    $("#userid").val("");
-    $('#userform').attr('action','/settings/users/createuser')
-})
-$(document).on('click', '#clickadd', function () {
-    $('#heading').text(languagedata.Userss.addnewuser)
-    $('#saveuser').show()
-    $('#updateuser').hide()
-})
+// $(document).on('click', '#adduser', function () {
+//     $('#heading').text(languagedata.Userss.addnewuser)
+//     $(".name-string").hide()
+//     $('#profpic').attr('src', '/public/img/default profile .svg').show()
+//     $('#saveuser').show()
+//     $('#updateuser').hide();
+//     $("#userid").val("");
+//     $('#userform').attr('action', '/settings/users/createuser')
+// })
+// $(document).on('click', '#clickadd', function () {
+//     $('#heading').text(languagedata.Userss.addnewuser)
+//     $('#saveuser').show()
+//     $('#updateuser').hide()
+// })
+
+
 // ** edituser*//
+
 $(document).on('click', '#edit-btn', function () {
 
     // paganation get the pagenumber
@@ -303,10 +329,9 @@ $(document).on('click', '#edit-btn', function () {
 
     $("#pageno").val(pageno)
 
-    $('#saveuser').hide()
-    $('#updateuser').show()
+    $('#saveuser').text(languagedata.update)
     var data = $(this).attr("data-id");
-    $('#heading').text(languagedata.Userss.updateuser)
+    $('#addmember-title').text(languagedata.Userss.updateuser)
     $("#userModal").show()
     $("#userModal").attr("action", "");
     $("#userModal").attr("name", "edit");
@@ -339,7 +364,8 @@ $(document).on('click', '#edit-btn', function () {
                 $('#rolen').text(result.RoleId)
                 $('#rolen').siblings('.dropdown-menu').find('button[data-id="' + result.RoleId + '"]').click();
                 if (result.ProfileImagePath != "") {
-                    $('#profpic').attr('src', result.ProfileImagePath.replace(/^/, '/')).show();
+                    console.log(result.ProfileImagePath);
+                    $('#profpic-user').attr('src', result.ProfileImagePath).show();
                     $(".name-string").hide()
                 } else {
                     $('#profpic').hide()
@@ -360,247 +386,303 @@ $(document).on('click', '#edit-btn', function () {
         }
     })
 })
+
+
+// remove data form add user input (cancel btn ckick function)
+
+$("#usermodelclose").on("click", function () {
+    $('#addmember-title').text(languagedata.Userss.addnewuser)
+    $("#profpic-user").attr('src', '/public/img/defaultprofile .svg');
+    $("#user_fname").val("");
+    $("#user_lname").val("");
+    $("#user_email").val("");
+    $("#user_mob").val("");
+    $('#user_name').val("");
+    $('#rolen').val("");
+    var active = $("#cb1").is(":checked");
+    if (active) {
+        $("#cb1").prop("checked", false);
+    }
+    $('#showgroup').text("Select Role")
+    $('#showgroup').addClass('text-bold-gray');
+    $('#showgroup').removeClass('text-bold');
+    $('#saveuser').text(languagedata.save)
+    $("#userform").attr('name', 'userform');
+    $("label.error").hide();
+    $("#myfile-error").hide();
+    $(".lengthErr").addClass("hidden");
+    $('#userid').val("")
+    $('#userform').attr("action", "/settings/users/createuser")
+});
+
+
+// delete model cancel function
+
+$("#deleteModal").on("hide.bs.modal", function () {
+    $('#delid').removeClass('checkboxdelete');
+    $('#delid').removeClass('selectedIsActive');
+    $('#delid').attr('href','');
+    $('.delname').text('')
+})
+
+
 /* Update User */
-$(document).on('click', '#updateuser', function () {
 
-    jQuery.validator.addMethod("duplicateemail", function (value) {
+$(document).on('click', '#saveuser', function () {
+    if ($(this).text().trim() == languagedata.update) {
 
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checkemail",
-            type: "POST",
-            async: false,
-            data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
-            }
+        jQuery.validator.addMethod("duplicateemail", function (value) {
+
+            var result;
+            user_id = $("#userid").val()
+            $.ajax({
+                url: "/settings/users/checkemail",
+                type: "POST",
+                async: false,
+                data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+                datatype: "json",
+                caches: false,
+                success: function (data) {
+                    result = data.trim();
+                }
+            })
+            return result.trim() != "true"
         })
-        return result.trim() != "true"
-    })
 
-    jQuery.validator.addMethod("duplicateusername", function (value) {
 
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checkusername",
-            type: "POST",
-            async: false,
-            data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
-            }
+        // jQuery.validator.addMethod("duplicateusername", function (value) {
+
+        //     var result;
+        //     user_id = $("#userid").val()
+        //     $.ajax({
+        //         url: "/settings/users/checkusername",
+        //         type: "POST",
+        //         async: false,
+        //         data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+        //         datatype: "json",
+        //         caches: false,
+        //         success: function (data) {
+        //             result = data.trim();
+        //         }
+        //     })
+        //     return result.trim() != "true"
+        // })
+
+
+        jQuery.validator.addMethod("duplicatenumber", function (value) {
+
+            var result;
+            user_id = $("#userid").val()
+            $.ajax({
+                url: "/settings/users/checknumber",
+                type: "POST",
+                async: false,
+                data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
+                datatype: "json",
+                caches: false,
+                success: function (data) {
+                    result = data.trim();
+                }
+            })
+            return result.trim() != "true"
         })
-        return result.trim() != "true"
-    })
-
-    jQuery.validator.addMethod("duplicatenumber", function (value) {
-
-        var result;
-        user_id = $("#userid").val()
-        $.ajax({
-            url: "/settings/users/checknumber",
-            type: "POST",
-            async: false,
-            data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-                result = data.trim();
-            }
-        })
-        return result.trim() != "true"
-    })
-    jQuery.validator.addMethod(
-        "email_validator",
-        function (value, element) {
-            if (/(^[a-zA-Z_0-9\.-]+)@([a-z]{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/.test(value))
-                return true;
-            else return false;
-        },
-        "* " + languagedata.Userss.usremailrgx
-    );
-
-    // jQuery.validator.addMethod(
-    //     "username_validator",
-    //     function (value, element) {
-    //         if (/^[\S+(?: \S+)]{3,15}$/.test(value))
-    //             return true;
-    //         else return false;
-    //     },
-    //     "* "+languagedata.usrnamergx
-    // );
-
-    jQuery.validator.addMethod(
-        "pass_validator",
-        function (value, element) {
-            if (value != "") {
-                if (/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/.test(value))
+        jQuery.validator.addMethod(
+            "email_validator",
+            function (value, element) {
+                if (/(^[a-zA-Z_0-9\.-]+)@([a-z]{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/.test(value))
                     return true;
                 else return false;
+            },
+            "* " + languagedata.Userss.usremailrgx
+        );
+
+
+
+
+        // jQuery.validator.addMethod(
+        //     "username_validator",
+        //     function (value, element) {
+        //         if (/^[\S+(?: \S+)]{3,15}$/.test(value))
+        //             return true;
+        //         else return false;
+        //     },
+        //     "* "+languagedata.usrnamergx
+        // );
+
+        jQuery.validator.addMethod(
+            "pass_validator",
+            function (value, element) {
+                if (value != "") {
+                    if (/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/.test(value))
+                        return true;
+                    else return false;
+                }
+                else return true;
+            },
+            "* " + languagedata.Userss.usrpswdrgx
+        );
+
+        jQuery.validator.addMethod(
+            "mob_validator",
+            function (value, element) {
+                if (/^[6-9]{1}[0-9]{9}$/.test(value))
+                    return true;
+                else return false;
+            },
+            "* " + languagedata.Userss.usrmobnumrgx
+        );
+        $("form[name='editform']").validate({
+
+            ignore: [],
+            rules: {
+                prof_pics: {
+
+                    extension: "jpg|png|jpeg|svg"
+                },
+                user_fname: {
+                    required: true,
+                    space: true,
+                },
+
+                user_email: {
+                    required: true,
+                    email_validator: true,
+                    duplicateemail: true
+                },
+                // user_role: {
+                //     required: true,
+                // },
+                user_name: {
+                    required: true,
+                    // duplicateusername: true,
+                    space: true,
+                },
+                user_pass: {
+                    // required: true,
+                    pass_validator: true,
+                },
+                user_mob: {
+                    required: true,
+                    mob_validator: true,
+                    duplicatenumber: true
+                },
+
+
+            },
+            messages: {
+                prof_pics: {
+                    extension: "* " + languagedata.profextension
+                },
+                user_fname: {
+                    required: "* " + languagedata.Userss.usrfname,
+                    space: "* " + languagedata.spacergx,
+                },
+                user_email: {
+                    required: "* " + languagedata.Userss.usrmail,
+                    duplicateemail: "* " + languagedata.Userss.emailexist
+                },
+                // user_role: {
+                //     required: "* " + languagedata.Userss.usrrole
+                // },
+                user_name: {
+                    required: "* " + languagedata.Userss.usrname,
+                    // duplicateusername: "*" + languagedata.Userss.nameexist,
+                    space: "* " + languagedata.spacergx,
+                },
+                // user_pass: {
+                //     required: "* " + languagedata.Userss.usrpswd
+                // },
+                user_mob: {
+                    required: "* " + languagedata.Userss.usrmobnum,
+                    duplicatenumber: "* " + languagedata.Userss.mobnumexist,
+                },
+
+
             }
-            else return true;
-        },
-        "* " + languagedata.Userss.usrpswdrgx
-    );
-
-    jQuery.validator.addMethod(
-        "mob_validator",
-        function (value, element) {
-            if (/^[6-9]{1}[0-9]{9}$/.test(value))
-                return true;
-            else return false;
-        },
-        "* " + languagedata.Userss.usrmobnumrgx
-    );
-    $("form[name='editform']").validate({
-
-        ignore: [],
-        rules: {
-            prof_pic: {
-
-                extension: "jpg|png|jpeg"
-            },
-            user_fname: {
-                required: true,
-                space: true,
-            },
-
-            user_email: {
-                required: true,
-                email_validator: true,
-                duplicateemail: true
-            },
-            // user_role: {
-            //     required: true,
-            // },
-            user_name: {
-                required: true,
-                duplicateusername: true,
-                space: true,
-            },
-            user_pass: {
-                // required: true,
-                pass_validator: true,
-            },
-            user_mob: {
-                required: true,
-                mob_validator: true,
-                duplicatenumber: true
-            },
 
 
-        },
-        messages: {
-            prof_pic: {
-                extension: "* " + languagedata.profextension
-            },
-            user_fname: {
-                required: "* " + languagedata.Userss.usrfname,
-                space: "* " + languagedata.spacergx,
-            },
-            user_email: {
-                required: "* " + languagedata.Userss.usrmail,
-                duplicateemail: "* " + languagedata.Userss.emailexist
-            },
-            // user_role: {
-            //     required: "* " + languagedata.Userss.usrrole
-            // },
-            user_name: {
-                required: "* " + languagedata.Userss.usrname,
-                duplicateusername: "*" + languagedata.Userss.nameexist,
-                space: "* " + languagedata.spacergx,
-            },
-            // user_pass: {
-            //     required: "* " + languagedata.Userss.usrpswd
-            // },
-            user_mob: {
-                required: "* " + languagedata.Userss.usrmobnum,
-                duplicatenumber: "* " + languagedata.Userss.mobnumexist,
-            },
+        })
+        $('input[name=user_pass]').rules('remove', 'required')
+        var formcheck = $("#userform").valid();
+        if (formcheck == true) {
 
+            $('#userform')[0].submit();
+            var email = $("#user_email").val()
+            var mob = $("#user_mob").val()
+            var uname = $('#user_name').val()
+            console.log("dfgh", email, mob, uname);
+            var user_id = $("#userid").val()
+
+            // $.ajax({
+            //     url: "/settings/users/checkuserdata",
+            //     type: "POST",
+            //     async: false,
+            //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
+            //     datatype: "json",
+            //     caches: false,
+            //     success: function (data) {
+            //         if (data.email == true) {
+
+            //             $('#user_email-error').text("* " + languagedata.Userss.emailexist).show();
+            //             $('#emailgrp').addClass('input-group-error');
+            //             $('#user_email').addClass('error')
+            //         }
+            //         if (data.number == true) {
+            //             $('#user_mob-error').text("* " + languagedata.Userss.mobnumexist).show();
+            //             $('#mobilegrp').addClass('input-group-error');
+            //             $('#user_mob').addClass('error')
+            //         }
+            //         if (data.user == true) {
+            //             $('#user_name-error').text("* " + languagedata.Userss.nameexist).show();
+            //             $('#usergrp').addClass('input-group-error');
+            //             $('#user_name').addClass('error')
+            //         }
+            //         if (data.user == false && data.email == false && data.number == false) {
+            //             $('#userform')[0].submit();
+            //         }
+
+            //     }
+            // })
+        } else {
+            $(document).on('keyup', ".field", function () {
+
+                $('.user-drop-down').removeClass('input-group-error')
+
+                Validationcheck()
+            })
+            Validationcheck()
+            // $('.input-group').each(function () {
+            //     var inputField = $(this).find('input');
+            //     var inputName = inputField.attr('name');
+
+
+            //     if (!inputField.valid()) {
+            //         $(this).addClass('input-group-error');
+
+            //     } else {
+            //         $(this).removeClass('input-group-error');
+            //     }
+            // });
+            // if ($('#rolen-error').css('display') !=='none'){
+            //     console.log("check")
+            //         $('.user-drop-down').addClass('input-group-error')
+            //     }
 
         }
-
-
-    })
-    $('input[name=user_pass]').rules('remove', 'required')
-    var formcheck = $("#userform").valid();
-    if (formcheck == true) {
-
-        $('#userform')[0].submit();
-        // var email = $("#user_email").val()
-        // var mob = $("#user_mob").val()
-        // var uname = $('#user_name').val()
-        // console.log("dfgh", email, mob, uname);
-        // var user_id = $("#userid").val()
-        // $.ajax({
-        //     url: "/settings/users/checkuserdata",
-        //     type: "POST",
-        //     async: false,
-        //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
-        //     datatype: "json",
-        //     caches: false,
-        //     success: function (data) {
-        //         if (data.email == true) {
-
-        //             $('#user_email-error').text("* "+languagedata.Userss.emailexist).show();
-        //             $('#emailgrp').addClass('input-group-error');
-        //             $('#user_email').addClass('error')
-        //         }
-        //         if (data.number == true) {
-        //             $('#user_mob-error').text("* "+languagedata.Userss.mobnumexist).show();
-        //             $('#mobilegrp').addClass('input-group-error');
-        //             $('#user_mob').addClass('error')
-        //         }
-        //         if (data.user == true) {
-        //             $('#user_name-error').text("* "+languagedata.Userss.nameexist).show();
-        //             $('#usergrp').addClass('input-group-error');
-        //             $('#user_name').addClass('error')
-        //         }
-        //         if (data.user == false && data.email == false && data.number == false) {
-        //             $('#userform')[0].submit();
-        //         }
-
-        //     }
-        // })
-    } else {
-        $(document).on('keyup', ".field", function () {
-
-            $('.user-drop-down').removeClass('input-group-error')
-
-            Validationcheck()
-        })
-        Validationcheck()
-        // $('.input-group').each(function () {
-        //     var inputField = $(this).find('input');
-        //     var inputName = inputField.attr('name');
-
-
-        //     if (!inputField.valid()) {
-        //         $(this).addClass('input-group-error');
-
-        //     } else {
-        //         $(this).removeClass('input-group-error');
-        //     }
-        // });
-        // if ($('#rolen-error').css('display') !=='none'){
-        //     console.log("check")
-        //         $('.user-drop-down').addClass('input-group-error')
-        //     }
+        return false;
 
     }
-    return false;
+
 })
+
+
+
+// delete btn function
 
 $(document).on('click', '#del-btn', function () {
 
     var userId = $(this).attr("data-id")
+    $(".deltitle").text(languagedata.Userss.deleteuser)
     $("#content").text(languagedata.Userss.deluser)
     var del = $(this).parents('tr');
     $('.delname').text(del.find('#username').text())
@@ -612,28 +694,20 @@ $(document).on('click', '#del-btn', function () {
     pageno = urlpar.get('page');
 
     if (pageno == null) {
-        $("#delete").attr("href", "/settings/users/delete-user/" + userId)
+        $("#delid").attr("href", "/settings/users/delete-user/" + userId)
 
     } else {
-        $("#delete").attr("href", "/settings/users/delete-user/" + userId + "?page=" + pageno)
+        $("#delid").attr("href", "/settings/users/delete-user/" + userId + "?page=" + pageno)
 
     }
 
 })
 
-/*search */
-$(document).on("click", "#filterformsubmit", function () {
-    var key = $(this).siblings().children(".search").val();
-    if (key == "") {
-        window.location.href = "/settings/users/"
-    } else {
-        $('.filterform').submit();
-    }
-})
 
 $('input[name=user_mob]').keyup(function () {
     this.value = this.value.replace(/[^0-9\.]/g, '');
 });
+
 
 $(document).on('click', '.newck-group', function () {
     var role = $(this).find('label>h4').text()
@@ -651,7 +725,7 @@ $(document).on('click', '.newck-group', function () {
     }
     $("#searchrole").val("");
     // $('#newdd-input').prop('checked',false)
-    // $(this).parents('.dd-c').css('display','none')  
+    // $(this).parents('.dd-c').css('display','none')
     refreshdiv()
 })
 
@@ -667,26 +741,6 @@ $('.page-wrapper').on('click', function (event) {
     }
 })
 
-// $(document).on('click', '#Eye', function () {
-
-//     var pass_field = $(this).parent().siblings('input')
-
-//     if ($(pass_field).attr('type') == 'password') {
-
-//         $(pass_field).attr('type', 'text')
-
-//         $(this).removeClass('fa-eye-slash').addClass('fa-eye')
-
-//     } else {
-
-//         $(pass_field).attr('type', 'password')
-
-//         $(this).removeClass('fa-eye').addClass('fa-eye-slash')
-
-//     }
-
-// })
-
 
 
 $('#triggerId').blur(function () {
@@ -697,6 +751,7 @@ $('#triggerId').blur(function () {
     $(this).parents('.input-group').removeClass('focus')
 
 })
+
 
 function Validationcheck() {
     let inputGro = document.querySelectorAll('.input-group');
@@ -720,6 +775,9 @@ function Validationcheck() {
     //     $('.user-drop-down').removeClass('input-group-error')
     // }
 }
+
+// edit user function
+
 $(document).on("click", "#edituser", function () {
 
     var url = window.location.search;
@@ -736,6 +794,9 @@ $(document).on("click", "#edituser", function () {
     window.location.href = editUrl + "?page=" + pageno;
 });
 
+
+// search role
+
 $("#searchrole").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
     $(".choose-rel-articles .newck-group").each(function (index, element) {
@@ -748,21 +809,63 @@ $("#searchrole").keyup(function () {
     })
 })
 
+
 function refreshdiv() {
     $('.choose-rel-articles').load(location.href + ' .choose-rel-articles');
 }
 
-$(document).on('keyup', '#searchroles', function () {
 
-    if (event.key === 'Backspace') {
+// search functions strat //
 
-    if ($('.search').val() === "") {
-        
-        window.location.href = "/settings/users/"
 
+/*search redirect home page */
+
+$(document).on('keyup', '#searchroles', function (event) {
+    const searchInput = $(this).val();
+
+    if (event.key === 'Backspace' && window.location.href.indexOf("keyword") > -1) {
+
+        if ($(this).val() == "") {
+
+            window.location.href = "/settings/users/";
+        }
     }
-    }
+
+    $('.searchClosebtn').toggleClass('hidden', searchInput === "");
+
 })
+
+
+$(document).on("click", ".Closebtn", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+    $(".srchBtn-togg").removeClass("pointer-events-none")
+})
+
+  $(document).on("click", ".searchClosebtn", function () {
+    $(".search").val('')
+    window.location.href = "/settings/users/"
+  })
+
+  $(document).ready(function () {
+
+    $('.search').on('input', function () {
+        if ($(this).val().length >= 1) {
+            $(".Closebtn").removeClass("hidden")
+            $(".srchBtn-togg").addClass("pointer-events-none")
+        } else {
+            $(".Closebtn").addClass("hidden")
+            $(".srchBtn-togg").removeClass("pointer-events-none")
+        }
+    });
+})
+
+  $(document).on("click", ".hovericon", function () {
+    $(".search").val('')
+    $(".Closebtn").addClass("hidden")
+  })
+
+
 
 //**close model */
 
@@ -793,11 +896,18 @@ $(document).on('click', '.close', function () {
 //     $(this).children('img').attr('src', "/public/img/eye-opened.svg")
 //     $(this).siblings('input').attr('type', "text")
 // })
+
+
 $(document).on('click', '#crop-button', function () {
     $(".name-string").hide()
     $('#profpic').show()
 })
+
+
+// eye icon open and close function
+
 $(document).on('click', '#eye', function () {
+    console.log("working");
 
     var This = $("#user_pass")
 
@@ -818,22 +928,23 @@ $(document).on('click', '#eye', function () {
 
 
 // dropdown filter input box search
+
 $("#searchdropdownrole").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
     console.log("keyword", keyword);
-    $(".dropdown-role .dropdown-filter-roles button").each(function (index, element) {
+    $(".dropdown-filter-roless").each(function (index, element) {
         var title = $(element).text().toLowerCase()
 
         console.log("title", title);
         if (title.includes(keyword)) {
             $(element).show()
-            $("#nodatafounddesign").hide()
+            $("#nodatafounddesign").addClass("hidden")
 
         } else {
             $(element).hide()
             if ($('.dropdown-filter-roles button:visible').length == 0) {
 
-                $("#nodatafounddesign").show()
+                $("#nodatafounddesign").removeClass("hidden")
 
             }
         }
@@ -862,21 +973,27 @@ $("#triggerId").on("click", function () {
 
 })
 
+
 $(document).on('click', '#myfile', function () {
-    $("#prof-crop").val("1")
+    $("#prof-crop").val("6")
 })
 
 // checkBox selection code below
 
 var selectedcheckboxarr = []
+var entryid
 
 $(document).on('click', '.selectcheckbox', function () {
+
+    $(".multidelete").addClass("responsive-width")
 
     entryid = $(this).attr('data-id')
 
     var status = $(this).parents('td').siblings('td').find('span.status').text().trim().replace(/\s+/g, ' ');
 
     var activeStatus = $(this).parents('td').siblings('td').find('.tgl-light').val();
+
+
 
     if ($(this).prop('checked')) {
 
@@ -898,71 +1015,36 @@ $(document).on('click', '.selectcheckbox', function () {
 
 
     if (selectedcheckboxarr.length != 0) {
+        $('.selected-numbers').removeClass("hidden")
 
-        $('.selected-numbers').show()
-
-        var allSame = selectedcheckboxarr.every(function (item) {
-            return item.status === selectedcheckboxarr[0].status;
-        });
-
-        var setstatus
-        var img;
-
-        if (selectedcheckboxarr[0].status === "All Users") {
-
-            setstatus = "User's Only";
-
-            img = "/public/img/User Only.svg";
-
-        } else if (selectedcheckboxarr[0].status === "User's Only") {
-
-            setstatus = "All Users";
-
-            img = "/public/img/All User.svg";
-
-        }
-        var htmlContent = '';
-
-        if (allSame) {
-
-            htmlContent = '<img src="' + img + '">' + setstatus;
-
-        } else {
-
-            htmlContent = '';
-
+       if (selectedcheckboxarr.length == 1){
+            $('#deselectid').text(languagedata.deselect)
+        }else if(selectedcheckboxarr.length > 1){
+            $('#deselectid').text(languagedata.deselectall)
         }
 
-        $('#unbulishslt').html(htmlContent);
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
 
-        $('.checkboxlength').text(selectedcheckboxarr.length + " " + 'items selected')
-
-        if (!allSame) {
-
-            $('#seleccheckboxdelete').removeClass('border-end')
-
-            $('.unbulishslt').html("")
-        } else {
-
-            $('#seleccheckboxdelete').addClass('border-end')
-        }
 
         var allActiveStatusSame = selectedcheckboxarr.every(function (item) {
             return item.activeStatus === selectedcheckboxarr[0].activeStatus;
         });
+
+
+
 
         var setActiveStatus
         var activeImg
 
         if (selectedcheckboxarr[0].activeStatus === '1') {
 
-            setActiveStatus = "Deactive";
+            setActiveStatus = languagedata.Userss.deactive;
 
             activeImg = "/public/img/In-Active.svg";
 
         } else if (selectedcheckboxarr[0].activeStatus === '0') {
 
-            setActiveStatus = "Active";
+            setActiveStatus = languagedata.Userss.active;
 
             activeImg = "/public/img/Active.svg";
 
@@ -972,27 +1054,26 @@ $(document).on('click', '.selectcheckbox', function () {
 
         if (allActiveStatusSame) {
 
-            activeStatusHtmlContent = '<img src="' + activeImg + '"" style="width:12px;height:14px">' + setActiveStatus;
+            activeStatusHtmlContent ='<img style="width: 14px; height: 14px;" src="' + activeImg + '" >'  + '<span class="max-sm:hidden @[550px]:inline-block hidden">'+setActiveStatus+'</span>';
+
 
         } else {
             activeStatusHtmlContent = ''
         }
 
-        $('#activeStatus').html(activeStatusHtmlContent);
+        $('#unbulishslt').html(activeStatusHtmlContent);
 
         if (!allActiveStatusSame) {
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
 
-            $('#unbulishslt').removeClass('border-end')
 
-            $('#activeStatus').html("")
         } else {
-
-            // $('#unbulishslt').addClass('border-end')
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
         }
 
     } else {
 
-        $('.selected-numbers').hide()
+        $('.selected-numbers').addClass("hidden")
     }
 
     var allChecked = true;
@@ -1015,6 +1096,8 @@ $(document).on('click', '.selectcheckbox', function () {
 
 $(document).on('click', '#Check', function () {
 
+    $(".multidelete").addClass("responsive-width")
+
     selectedcheckboxarr = []
 
     var isChecked = $(this).prop('checked');
@@ -1033,52 +1116,15 @@ $(document).on('click', '#Check', function () {
 
             selectedcheckboxarr.push({ "entryid": entryid, "status": status, "activeStatus": activeStatus })
         })
-
-        $('.selected-numbers').show()
-
-        var allSame = selectedcheckboxarr.every(function (item) {
-            return item.status === selectedcheckboxarr[0].status;
-        });
-
-        var setstatus
-
-        var img
-
-        if (selectedcheckboxarr.length !=0){
-
-        if (selectedcheckboxarr[0].status == "All Users") {
-
-            setstatus = "User's Only"
-
-            img = "/public/img/User Only.svg"
-
-        } else if (selectedcheckboxarr[0].status == "User's Only") {
-
-            setstatus = "All Users"
-
-            img = "/public/img/All User.svg"
-
+        
+        if (selectedcheckboxarr.length == 1){
+            $('#deselectid').text(languagedata.deselect)
+        }else if(selectedcheckboxarr.length > 1){
+            $('#deselectid').text(languagedata.deselectall)
         }
-    }
-        var htmlContent = '';
+        $('.selected-numbers').removeClass("hidden")
 
-        if (allSame) {
-
-            htmlContent = '<img src="' + img + '">' + setstatus;
-
-            $('#seleccheckboxdelete').addClass('border-end')
-
-        } else {
-
-            htmlContent = '';
-
-            $('#seleccheckboxdelete').removeClass('border-end')
-
-        }
-
-        $('#unbulishslt').html(htmlContent);
-
-        $('.checkboxlength').text(selectedcheckboxarr.length + " " + 'items selected')
+        $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
 
 
         var allActiveStatusSame = selectedcheckboxarr.every(function (item) {
@@ -1090,33 +1136,37 @@ $(document).on('click', '#Check', function () {
         var activeImg
 
 
-        if (selectedcheckboxarr.length !=0){
+        if (selectedcheckboxarr.length != 0) {
 
-        if (selectedcheckboxarr[0].activeStatus === '1') {
+            if (selectedcheckboxarr[0].activeStatus === '1') {
 
-            setActiveStatus = "Deactive";
+                setActiveStatus = languagedata.Userss.deactive;
 
-            activeImg = "/public/img/In-Active.svg";
+                activeImg = "/public/img/In-Active.svg";
 
-        } else if (selectedcheckboxarr[0].activeStatus === '0') {
+            } else if (selectedcheckboxarr[0].activeStatus === '0') {
 
-            setActiveStatus = "Active";
+                setActiveStatus = languagedata.Userss.active;
 
-            activeImg = "/public/img/Active.svg";
+                activeImg = "/public/img/Active.svg";
 
+            }
         }
-    }
         var activeStatusHtmlContent = '';
 
         if (allActiveStatusSame) {
-            activeStatusHtmlContent = '<img src="' + activeImg + '" style="width:12px;height:14px">' + setActiveStatus;
+            activeStatusHtmlContent ='<img style="width: 14px; height: 14px;" src="' + activeImg + '" >'  + '<span class="max-sm:hidden @[550px]:inline-block hidden">'+setActiveStatus+'</span>';
+
+            $('#seleccheckboxdelete').addClass('border-r border-[#717171] mr-[8px] pr-[8px]')
 
         }
         else {
             activeStatusHtmlContent = "";
+            $('#seleccheckboxdelete').removeClass('border-r border-[#717171] mr-[8px] pr-[8px]')
+
         }
 
-        $('#activeStatus').html(activeStatusHtmlContent)
+        $('#unbulishslt').html(activeStatusHtmlContent)
 
     } else {
 
@@ -1125,50 +1175,61 @@ $(document).on('click', '#Check', function () {
 
         $('.selectcheckbox').prop('checked', isChecked);
 
-        $('.selected-numbers').hide()
+        $('.selected-numbers').addClass("hidden")
     }
 
-    if (selectedcheckboxarr.length ==0){
+    if (selectedcheckboxarr.length == 0) {
 
-        $('.selected-numbers').hide()
+        $('.selected-numbers').addClass("hidden")
     }
 })
 
 
-// this is for giving data inside delete modal
+// delete model content update
 
 $(document).on('click', '#seleccheckboxdelete', function () {
 
-    $('.deltitle').text("Delete Users?")
+    if (selectedcheckboxarr.length>1){
 
-    $('#content').text('Are you sure want to delete selected Users?')
+    $('.deltitle').text(languagedata.Userss.deleteusers)
 
-    $('#delete').addClass('checkboxdelete')
+    $('#content').text(languagedata.Userss.delmsg)
+    }else{
+
+    $('.deltitle').text(languagedata.Userss.deleteuser)
+
+    $('#content').text(languagedata.Userss.delmsg)
+
+    }
+
+    $("#delid").text($(this).text());
+
+    $('#delid').addClass('checkboxdelete')
+
+
 })
 
-// this is for giving data inside publish modal
+
+// status model content update
 
 $(document).on('click', '#unbulishslt', function () {
 
-    $('.deltitle').text("Change Access Permission for User?")
+    if (selectedcheckboxarr.length>1){
+        $('.deltitle').text(languagedata.Userss.changestatususers)
 
-    $('#content').text("Are you sure want to change Access Permission to (" + $(this).text() + ") ?")
+        $('#content').text(languagedata.Userss.changestatuscontents)
+    }else{
+        $('.deltitle').text(languagedata.Userss.changestatususer)
 
-    $('#delete').addClass('selectedunpublish')
+        $('#content').text(languagedata.Userss.changestatuscontent)
+    }
 
-})
+    $("#delid").text($(this).text());
 
-//this for giving data inside the IsActive modal
-
-$(document).on('click', '#activeStatus', function () {
-
-    $('.deltitle').text("Change Active Status for User?")
-
-    $('#content').text("Are you sure want to change Access Status to (" + $(this).text() + ") ?")
-
-    $('#delete').addClass('selectedIsActive')
+    $('#delid').addClass('selectedIsActive')
 
 })
+
 
 //Deselectall function//
 
@@ -1180,13 +1241,16 @@ $(document).on('click', '#deselectid', function () {
 
     selectedcheckboxarr = []
 
-    $('.selected-numbers').hide()
+    $('.selected-numbers').addClass("hidden")
 
 })
+
 
 // Multi Delete users
 
 $(document).on('click', '.checkboxdelete', function () {
+
+    $(".multidelete").addClass("responsive-width")
 
     var url = window.location.href;
 
@@ -1225,6 +1289,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
 })
 
+
 // Multi select change Access Permission
 
 $(document).on('click', '.selectedunpublish', function () {
@@ -1253,7 +1318,7 @@ $(document).on('click', '.selectedunpublish', function () {
         },
         success: function (data) {
 
-            console.log(data);
+            console.log(data, "data");
 
             var dataStatus
 
@@ -1280,6 +1345,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
 })
 
+
 // Hide checkbox for spurtCms team Member
 
 $(document).ready(function () {
@@ -1295,6 +1361,7 @@ function UserStatus(id) {
         this.value = this.checked ? 1 : 0;
     }).change();
     var isActive = $('#cbox' + id).val();
+    console.log("isactive", isActive);
 
     $.ajax({
         url: '/settings/users/changeActiveStatus',
@@ -1307,7 +1374,7 @@ function UserStatus(id) {
 
             if (result) {
 
-                notify_content = '<div class="toast-msg sucs-green"> <a id="cancel-notify"> <img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a> <img src="/public/img/group-12.svg" alt="" class="left-img" /> <span>Member Status Updated Successfully</span></div>';
+                notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >User Status Updated Successfully</p ></div ></div ></li></ul> `;
                 $(notify_content).insertBefore(".header-rht");
                 setTimeout(function () {
                     $('.toast-msg').fadeOut('slow', function () {
@@ -1318,7 +1385,7 @@ function UserStatus(id) {
             } else {
 
                 notify_content = '<div class="toast-msg dang-red"><a id="cancel-notify" ><img src="/public/img/x-black.svg" alt="" class="rgt-img" /></a><img src="/public/img/danger-group-12.svg" alt="" class="left-img" /><span>' + languagedata.internalserverr + '</span></div>';
-                $(notify_content).insertBefore(".breadcrumbs");
+                $(notify_content).insertBefore(".header-rht");
                 setTimeout(function () {
                     $('.toast-msg').fadeOut('slow', function () {
                         $(this).remove();
@@ -1373,5 +1440,23 @@ $(document).on('click', '.selectedIsActive', function () {
 
         }
     })
+})
+
+
+ // Group name limit of 25 char
+ $(document).on('keyup', '.checklength', function () {
+    var inputVal = $(this).val()
+
+    // console.log(inputVal.length);
+
+    var inputLength = inputVal.length
+
+    if (inputLength == 25) {
+        $(this).siblings('.lengthErr').removeClass('hidden')
+    }else{
+        $(this).siblings('.lengthErr').addClass('hidden')
+    }
+
+
 })
 

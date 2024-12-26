@@ -1,324 +1,612 @@
 {{template "header" .}}
 {{template "head" .}}
 {{$Translate := .translate}}
+{{$ChannelId:=.ChannelId}}
 
-<div class="page-wrapper">
-    <input type="hidden" name="csrf" value="{{.csrf}}">
-    <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}"/>
-    <div class="tablst channel-tabList br-top br-btm">  
-        <ul class="nav entries-tab" id="myTab" role="tablist">
-            <li class="nav-itm" role="presentation">
-                <a class="nav-lnk heading-three active" data-bs-toggle="tab" data-bs-target="#configuration"
-                    type="button" role="tab" aria-controls="home-tab-pane" aria-selected="false" tabindex="-1">
-                    <img src="/public/img/channels.svg" alt="" />
-                    <span class="heading-three">{{$Translate.Channell.Channelconfiguration}}</span>
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{.linktitle}}</h2>
+        </div>
+
+
+        <div class="flex space-x-[12px]">
+            <a href="javascript:void(0)"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline"
+                id="previous-btn">{{$Translate.Previous}}</a>
+            <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline"
+                id="nextstep" href="javascript:void(0)">{{$Translate.Next}}</a>
+        </div>
+    </header>
+    <div class="flex flex-col h-full">
+        <input type="hidden" id="chn-step" value="1">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}" />
+        <input type="hidden" name="CurrentPage" id="CurrentPage" value="{{.CurrentPage}}" />
+        <div
+            class=" flex justify-between sm:flex-row flex-col items-start space-y-[12px] sm:space-y-[0] sm:space-x-[12px] sm:items-center border-b border-[#EDEDED] px-[16px] py-[12px]">
+            <div class=" flex items-center space-x-[12px]">
+                <a href="javascript:void(0)" class="flex flex-col space-y-[6px] items-start no-underline">
+                    <h5 class="text-[#10A37F] md:text-base text-sm font-normal leading-5 mb-0" id="tab-s1">
+                        {{$Translate.Channell.Channelname}}</h5>
+                    <p class="text-xs text-bold-gray font-normal leading-14 mb-0">
+                        {{$Translate.Channell.ChannelNamedesc}} </p>
                 </a>
-            </li>
-            <li class="nav-itm" role="presentation">
-                <a class="nav-lnk heading-three" data-bs-toggle="tab" data-bs-target="#categories" type="button"
-                    role="tab" aria-controls="home-tab-pane" aria-selected="false" tabindex="-1">
-                    <img src="/public/img/categories.svg" alt="" />
-                    <span class="heading-three">{{$Translate.Channell.Categories}} </span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-
-    <div class="tab-content" id="myTabContent">
-        <div class="all-tab-content tab-pane fade show active" id="configuration" role="tabpanel"
-            aria-labelledby="home-tab" tabindex="0">
-            <div class="configuration-contianer">
-                <form action="" id="channelcreate" name="channelform" method="post" >
-                    <div class="configuration-contentHead">
-                        <div class="input-group" id="cname">
-                            <label for="" class="input-label">{{$Translate.Channell.Channelname}} </label>
-                            <div class="ig-row">
-                                <input type="text" class="field" name="channelname" placeholder="Enter Name" id="channelname" value="{{.channel.ChannelName}}"/>
-                                <label id="channelname-error" class="error" for="channelname" style="display: none;">* Please enter the channel name</label>
-                            </div>
-                        </div>
-                        <div class="input-group" id="cdesc">
-                            <label for=" " class="input-label">{{$Translate.Description}} </label>
-                            <div class="ig-row">
-                                <input type="text" class="field" name="description" placeholder="Enter Description"  id="description" value="{{.channel.ChannelDescription}}"/>
-                                <label id="description-error" class="error" for="description" style="display: none;">* Please enter the Channel name</label>
-                            </div>
-                        </div>
-                        </div>
-                    </form>
-
-                <div class="configuration-contentBody">
-                    <div class="configurationContent-aside-lft">
-                        <div class="aside-lft-head">
-                            <h2 class="heading-second">{{$Translate.Channell.Addfield}}</h2>
-                            <!-- <div class="aside-magnifier">
-                                <img src="/public/img/white-magnifier.svg" alt="" />
-                            </div> -->
-                        </div>
-
-                        <div class="aside-lft-body">
-                            {{range .Fields}}
-                            {{if eq .TypeName "Label"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/Ab.svg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Label}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Text"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/T.svg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Text}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Link"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/link.svg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Link}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Date & Time"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/dateTime.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Datetime}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Select"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/select.svg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Select}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Date"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/date.svg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Date}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "TextBox"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/textbox.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Textbox}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "TextArea"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/textarea.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Textarea}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "CheckBox"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/checkbox.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Checkbox}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Text Editor"}}
-                            <!-- <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/texteditor.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Texteditor}} </h3>
-                            </a> -->
-                            {{end}}
-                            {{if eq .TypeName "Section"}}
-                            <a href="javascript:void(0)" class="field-tab section-drag-able" id="newsection" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/newsection.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">{{$Translate.Channell.Newsection}} </h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Radio Button"}}
-                            <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div"><img src="/public/img/radio.jpg" alt="" /></div>
-                                <h3 class="heading-three">{{$Translate.Channell.Radiobutton}}</h3>
-                            </a>
-                            {{end}}
-                            {{if eq .TypeName "Section Break"}}
-                            <!-- <a href="javascript:void(0)" class="field-tab drag-able" data-id="{{.Id}}">
-                                <div class="img-div">
-                                    <img src="/public/img/sectionbreak.svg" alt="" />
-                                </div>
-                                <h3 class="heading-three">Section Break</h3>
-                            </a> -->
-                            {{end}}
-                            {{end}}
-                            
-                        </div>
-                    </div>
-                    <div class="configurationContent-section-container">
-                        <div class="configurationContent-section">
-                            <div class="configurationContent-section-lft section-drop-able">
-                                <div class="section-fields" id="Sortsection">
-                                    <div class="fields-head">
-                                        <h2 class="heading-second">{{$Translate.Channell.Customfields}}</h2>
-                                    </div>
-
-                                  
-                                </div>
-                            </div>
-
-                            <div class="configurationContent-section-rgt" id="field-properties" style="display: none;">
-                                <div class="fields-head">
-                                    <h2 class="heading-second">Channel Properties</h2>
-                                </div>
-
-                                <div class="fields-body">
-                                    <input type="hidden" id="fieldid" data-fieldid="" data-newfieldid="" data-sectionid="" data-newsectionid="" data-sectionname=""/>
-                                    <div class="selected-property" id="title">
-                                        <div class="img-div fieldicon" id="fieldicon">
-                                            <img src="/public/img/Ab.svg" alt="" />
-                                        </div>
-                                        <h3 class="heading-three">{{$Translate.Channell.Label}}</h3>
-                                    </div>
-
-                                    <div class="input-group prop propinput" id="distext">
-                                        <label for="" class="input-label">{{$Translate.Channell.Fieldname}} </label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="{{$Translate.Channell.Plstypehere}}" id="ftext">
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group prop propinput" id="fcharallow">
-                                        <label for="" class="input-label">{{$Translate.Channell.Characterallow}}</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="{{$Translate.Channell.Plcharallow}}" id="fcharvalue">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="input-group prop propinput" id="url">
-                                        <label for="" class="input-label">{{$Translate.Channell.Url}} </label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="{{$Translate.Channell.Plurl}} " id="furl">
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group user-drop-down prop propdropdown" id="dateform">
-                                        <label for="" class="input-label">{{$Translate.Channell.Dateformat}}</label>
-                                        <input type="hidden" name="mem_role" class="fidvalinput" id="fdatefor" value="">
-                                        <a class="dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false"  >
-                                        {{$Translate.Channell.Dateformat}}
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="triggerId" style="height: auto;" >
-                                            <button type="button" class="dropdown-item" data-id="DD/MM/YYYY">DD/MM/YYYY</button>
-                                            <button type="button" class="dropdown-item" data-id="MM/DD/YYYY">MM/DD/YYYY</button>
-                                            <button type="button" class="dropdown-item" data-id="YYYY/MM/DD">YYYY/MM/DD</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group user-drop-down prop propdropdown" id="timefor">
-                                        <label for="" class="input-label ">{{$Translate.Channell.Timeformat}}</label>
-                                        <input type="hidden" name="mem_role" class="fidvalinput" id="ftimefor" value="">
-                                        <a class="dropdown-toggle" type="button" id="time-format" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        {{$Translate.Channell.Timeformat}}
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="time-format" style="height: auto;">
-                                            <button type="button" class="dropdown-item" data-id="12Hours">12{{$Translate.Channell.Hours}}</button>
-                                            <button type="button" class="dropdown-item" data-id="24Hours">24 {{$Translate.Channell.Hours}}</button>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- <div class="input-group prop propinput" id="desc">
-                                        <label for="" class="input-label">Description</label>
-                                        <div class="ig-row">
-                                            <textarea placeholder="Text Here..." id="fdesc" class="txtarea" style="resize: none;"></textarea>
-                                        </div>
-                                    </div> -->
-
-                                    <!-- <div class="input-group prop propinput" id="invalue">
-                                        <label for="" class="input-label">Initial Value</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="Initial Value...." id="finitialv">
-                                        </div>
-                                    </div> -->
-
-                                    <!-- <div class="input-group prop propinput" id="placehold">
-                                        <label for="" class="input-label">Placeholder</label>
-                                        <div class="ig-row">
-                                            <input type="text" placeholder="Placeholder..." id="fplacehold">
-                                        </div>
-                                    </div> -->
-
-                                    <div class="input-group prop propoptionbtn" id="option">
-                                        <label for="" class="input-label">{{$Translate.Channell.Option}}</label>
-                                        <div class="ig-row" style="display: flex;">
-                                            <input type="text" placeholder="{{$Translate.Channell.Plstypehere}}" id="foptname">
-                                            <button id="addvalue" type="button"> <img src="/public/img/plus.svg"
-                                                alt=""> </button>
-                                        </div>
-                                        <div class="options-added">
-                                            <!-- <div class="options-added-row flexx">ppp<button class="delval" id="delete1" data-id="0"> <img src="/public/img/trash-style2.svg" alt=""> </button> </div> -->
-                                        </div>
-                                    </div>
-
-                                    <!-- <button class="btn-reg btn-md primary"> Submit </button> -->
-                                </div>
-
-
-                            </div>
-                        </div>
-
-
-
-
-                        <!--btm-->
-                        <div class="configurationContent-btm">
-
-                            <button class="btn-reg btn-lg secondary channelcancel">{{$Translate.Cancel}}</button>
-                            {{if eq .Button "Update"}}
-                            <button class="btn-reg btn-lg primary channelupt ">{{$Translate.Update}}</button>
-                            {{else}}
-                            <button class="btn-reg btn-lg primary channelsave ">{{$Translate.Save}}</button>
-                            {{end}}
-
-                        </div>
-                    </div>
-
-
-
-
-
+                <div class=" bg-[#10A37F] min-w-6 h-0.5 rotate-90 transform sm:rotate-0  whitespace-nowrap"
+                    id="tb1-tb2">
                 </div>
+                <a href="javascript:void(0)" class="flex flex-col space-y-[6px] items-start no-underline">
+                    <h5 class="text-bold-gray md:text-base text-sm font-normal leading-5 mb-0" id="tab-s2">
+                        {{$Translate.Channell.Channelfield}}
+                    </h5>
+                    <p class="text-xs text-bold-gray font-normal leading-14 mb-0">
+                        {{$Translate.Channell.ChannelNamedesc}}</p>
+                </a>
+                <div class="min-w-6 h-0.5 rotate-90 transform sm:rotate-0 bg-bold-gray  whitespace-nowrap" id="tb2-tb3">
+                </div>
+                <a href="javascript:void(0)" class="flex flex-col space-y-[6px] items-start no-underline">
+                    <h5 class="text-bold-gray md:text-base text-sm font-normal leading-5 mb-0" id="tab-s3">
+                        {{$Translate.Channell.Challcategory}}
+                    </h5>
+                    <p class="text-xs text-bold-gray font-normal leading-14 mb-0">
+                        {{$Translate.Channell.ChannelCatdesc}}
+                    </p>
+                </a>
+            </div>
+            <div class="flex space-x-[16px] items-center">
+                <div class="h-34 min-w-[100px] px-[12px] text-[#10A37F] border rounded-32 bg-[#E9FFFA] border-[#10A37F4D] flex items-center justify-center text-sm font-normal"
+                    id="stp-lev">
+                    {{$Translate.Channell.Step}} 1 {{$Translate.Of}} 3
+                </div>
+
             </div>
         </div>
-        <!--2-->
-        <div class="all-tab-content tab-pane fade" id="categories" role="tabpanel" aria-labelledby="home-tab"
-            tabindex="0">
-            <div class="configuration-contianer">
-                <div class="configuration-contentBody">
-                    <div class="configurationContent-section-container">
-                        <div class="configurationContent-section">
-                            {{template "categoryselect" .}}
-                        </div>
 
-                        <!--btm-->
-                        <div class="configurationContent-btm">
-                            <button class="btn-reg btn-lg secondary channelcancel">{{$Translate.Cancel}} </button>
-                            {{if eq .Button "Update"}}
-                            <button class="btn-reg btn-lg primary channelupt ">{{$Translate.Update}} </button>
-                            {{else}}
-                            <button class="btn-reg btn-lg primary channelsave ">{{$Translate.Save}} </button>
-                            {{end}}
-                        </div>
+        <!-- step1 -->
+        <div class="p-[16px] sm:p-10 channelstep1">
+            <div>
+                <form id="channelcreate" name="channelform" class="flex flex-col space-y-[24px] max-w-640">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <div class="flex flex-col space-y-[6px] m-0">
+                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Channell.Channelname}} </p>
+                        <input type="text"
+                            class=" [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
+                            placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
+                            value="{{.channel.ChannelName}}" />
+                    </div>
+                    <div class="flex flex-col space-y-[6px]">
+                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Description}} </p>
+                        <textarea type="text" maxlength="250"
+                            class="scrollbar-none [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px]  bg-[#F7F7F5] placeholder:text-[#B2B2B2] resize-none h-[120px] text-bold-black text-sm text-start font-normal w-full border border-[#EDEDED]"
+                            placeholder="{{$Translate.Enterdescription}}" name="description"
+                            id="channeldesc">{{.channel.ChannelDescription}}</textarea>
+                        <div id="error-message" class="text-red-500 text-xs mt-1"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- step2 -->
+        <div class=" basis-full px-18 py-6 sm:py-4 bg-gray-100 channelstep2" style="display: none;">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="Sortsection">
+                <div class="dropdown open bg-white p-[8px_16px] relative flex items-center rounded-[4px] constant-item"
+                    id="add-field">
+                    <button type="button"
+                        class="inline-flex w-full justify-center h-[40px] items-center border-2 border-[#10A37F] hover:bg-[#10A37F] hover:text-white rounded-[4px] bg-[white] px-[12px] py-[10px] text-base font-semibold text-[#10A37F] leading-none"
+                        id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        + {{$Translate.Channell.AddFields}}
+                    </button>
+
+                    <div class="dropdown-menu min-w-full scrollbar-thin rounded-md bg-white !mt-[0px] transform-l-0 b-0 left-0 z-10 pa-4 max-h-[50vh] overflow-auto"
+                        aria-labelledby="triggerId">
+                        {{range .Fields}}
+                        {{if eq .TypeName "Text"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/text.svg" alt="">
+                           <span> Text</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Date & Time"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/date-time.svg" alt="">
+                          <span>  Date & Time</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Select"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/select.svg" alt="">
+                           <span> Select</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Date"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/date.svg" alt="">
+                           <span> Date</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "TextBox"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/input-box.svg" alt="">
+                            <span>Text Box</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "TextArea"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/text-area.svg" alt="">
+                            <span>Text Area</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Radio Button"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/radio.jpg" alt="">
+                           <span> Radio Button</span>
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "CheckBox"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/check-box.svg" alt="">
+                           <span> Check Box</span>
+                        </button>
+                        {{end}}
+
+                        {{end}}
+                        <!-- <h3 class="text-bold-black font-normal text-base may-4">
+                            Relational Fields
+                        </h3>
+                        {{range .Fields}}
+                        {{if eq .TypeName "Members"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/profile.svg" alt="">
+                            Members
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Media Gallery"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/img.svg" alt="">
+                            Media Gallery
+                        </button>
+                        {{end}}
+                        {{if eq .TypeName "Video URL"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/video.svg" alt="">
+                            Video URL
+                        </button>
+                        {{end}}
+                        {{end}} -->
                     </div>
                 </div>
             </div>
         </div>
+        <!-- step3 -->
+        <div class="pa-x-4 pa-y-6 channelstep3" style="display: none;">
+            <div class="grid grid-cols-2 max-[800px]:grid-cols-1 gap-8">
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-col space-y-[6px] mb-6">
+                        <h3 class="mb-0 font-semibold text-sm text-bold-black">
+                            {{$Translate.Channell.Availablecategories}}</h3>
+                        <p class="mb-0 font-normal text-sm text-bold-gray">
+                            {{$Translate.Channell.AvailableCatdesc}}
+                        </p>
+                    </div>
+                    <div class="relative ma-b-4">
+                        <input
+                            class="h-10 border border-[#ECECEC] rounded-[4px] w-full pl-10 text-bold-black text-sm parentwithchild"
+                            placeholder="{{$Translate.Csearch}}" />
+                        <img src="/public/img\search.svg" class="absolute left-4 top-3" />
+
+                    </div>
+                    <div
+                        class="border border-[#ECECEC] rounded-[4px] border-last-0 he-auto categories-list min-h-[calc(100vh-370px)]">
+                        {{range $index,$value := .AllCategories}}
+                        <div class="flex justify-between pa-x-4 pa-y-3 items-center border-b border-[#EDEDED] categorypdiv"
+                            id="category-{{range .Categories}}{{.Id}}{{end}}">
+                            <div class="flex items-center space-x-[6px] cal-list">
+                                {{range $index,$value := .Categories}}
+                                <p class="text-gray-900 text-xs font-normal mb-0 categoryname category-list"
+                                    data-id="{{.Id}}">{{.Category}}</p>
+                                <img src="/public/img/crumps.svg" class="category-list" />
+                                {{end}}
+                            </div>
+                            <button
+                                class="w-4 h-4 flex items-center justify-center  add-hover rounded-sm category-select-btn"
+                                data-categoryid="{{range .Categories}}{{.Id}}{{end}}"> <img src="/public/img/add.svg" />
+                            </button>
+                            <p class="forsearch" style="display: none;">{{range .Categories}}~{{.Category}}{{end}}</p>
+
+                        </div>
+                        {{end}}
+                        <li class="noData-foundWrapper" id="categorynodatafound" style="display: none; list-style: none;">
+                            <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                <div class="text-center mx-auto w-[48px]">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                    No data found with current filters</h2>
+                                <p
+                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    Try changing any other keywords </p>
+
+                            </div>
+                        </li>
+                    </div>
+                </div>
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-col space-y-[6px] mb-6">
+                        <h3 class="mb-0 font-semibold text-sm text-bold-black">
+                            {{$Translate.Channell.Selectedcategories}}</h3>
+                        <p class="mb-0 font-normal text-sm text-bold-gray">Manage selected categories. Search, filter,
+                            and review your choices.</p>
+                    </div>
+                    <div class="relative ma-b-4">
+                        <input class="h-10 border border-[#ECECEC] rounded-[4px] w-full pl-10 text-bold-black text-sm"
+                            placeholder="{{$Translate.Csearch}}" id="selectcategory" />
+                        <img src="/public/img\search.svg" class="absolute left-4 top-3" />
+                    </div>
+                    <div
+                        class="border border-[#ECECEC] rounded-[4px] border-last-0 he-auto sm:h-full selected_category">
+                        {{if .SelectedCategories}}
+                        {{range $index,$value := .SelectedCategories}}
+                        <div
+                            class="flex justify-between pa-x-4 pa-y-3 items-center border-b border-[#EDEDED] selectedcategorydiv">
+                            <div class="flex items-center space-x-[6px] cal-list">
+                                {{range .Categories}}
+                                <p class="text-gray-900 text-xs font-normal mb-0 categoryname category-list"
+                                    data-id="{{.Id}}">{{.Category}}</p>
+                                <img src="/public/img/crumps.svg" class="category-list">
+                                {{end}}
+                            </div>
+                            <button
+                                class="w-4 h-4 flex items-center justify-center add-hover rounded-sm category-unselect-btn"
+                                data-categoryid="{{range .Categories}}{{.Id}}{{end}}"> <img
+                                    src="/public/img/minus.svg" /> </button>
+                            <p class="forsearches" style="display: none;">{{range .Categories}}~{{.Category}}{{end}}</p>
+                        </div>
+                        {{end}}
+                        {{else}}
+                        <div class="flex flex-col space-y-[8px] justify-center items-center my-20 pa-x-4" id="no-data">
+                            <img src="/public/img\no-list.svg" />
+                            <p class="text-bold-gray text-xs font-normal text-center mb-0">You can map multiple
+                                categories to your Channel for better classification and visibility. Ensure your product
+                                is easily discoverable by selecting relevant categories.</p>
+                        </div>
+                        {{end}}
+                        <li class="noData-foundWrapper" id="selcategorynodatafound" style="display: none; list-style: none;">
+                            <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                <div class="text-center mx-auto w-[48px]">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                    No data found with current filters</h2>
+                                <p
+                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    Try changing any other keywords </p>
+
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{{template "footer" .}}
-<script src="/public/js/channels/channel.js"></script>
-{{template "footerclose" .}}
+
+    <!-- additional field property -->
+
+    <!--  <div class="modal fade" id="Id2" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+        aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable  max-w-608  pt-[5vh]" role="document">
+            <div class="modal-content">
+                <div class="flex justify-between items-center border-b border-[#ECECEC] px-6 py-1.5 max-sm:px-[16px] ">
+                    <h5 class="text-bold-black mb-0 font-semibold text-base fl-name" id="staticBackdropLabel">
+                        Properties - Date &amp; Time
+                    </h5>
+                    <div class="flex gap-3">
+                        <a href="javascript:void(0);"
+                            class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline"
+                            id="cln-modal">cancel</a>
+                        <a href="javascript:void(0);"
+                            class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white hover:bg-[#148569] bg-[#10A37F]  rounded-[4px] no-underline"
+                            id="flp-save">Save</a>
+                    </div>
+                </div>
+                <div class="overflow-auto scrollbar-thin">
+                    <div class="py-[16px]   px-6  max-sm:px-[16px] pb-[60px]">
+
+                        <div class="chk-group chk-group-label">
+                            <input type="checkbox" id="Check" class="hidden peer">
+                            <label for="Check"
+                                class=" h-[14px] relative cursor-pointer flex gap-[6px] w-fit ml-auto mb-[16px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">
+                                <p class="text-bold-black text-xs font-normal mb-0">Mandatory</p>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="relative">
+                                <div class="flex flex-col gap-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Field Name</p>
+                                    <input type="text"
+                                        class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-[#F7F7F5] pd-3 h-[36px] rounded-[4px] text-sm font-normal"
+                                        id="fl-input">
+                                    <label id="fl-input-error" class="error" for="fl-input"
+                                        style="display: none;">*Please enter the field name</label>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden dt-field">
+                                <div class="flex flex-col gap-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Date Format</p>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-[#F7F7F5] pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p id="dt-f" class="text-sm font-normal"></p>
+                                        </a>
+                                        <label id="dt-f-error" class="error" for="dt-f" style="display: none;">*Please
+                                            choose the date format</label>
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px]
+                                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">DD/MM/YYYY</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">MM/DD/YYYY</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">YYYY/MM/DD</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden ti-field">
+                                <div class="flex flex-col gap-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Time Format</p>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-[#F7F7F5] pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p id="tm-f" class="text-sm font-normal"></p>
+                                        </a>
+                                        <label id="tm-f-error" class="error" for="tm-f" style="display: none;">*Please
+                                            choose the time format</label>
+
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px]
+                                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] tm-format">12
+                                                    Hours</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] tm-format">24
+                                                    Hours</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden option-field">
+                                <div class="flex flex-col gap-[6px] add-fp">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Options</p>
+                                    <div
+                                        class="flex items-center gap-[12px] [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                                        <input type="text" id="opt-val"
+                                            class="border border-[#EDEDED] bg-[#F7F7F5] pd-3 h-[36px] rounded-[4px] block grow text-sm font-normal">
+                                        <a href="javascript:void(0);"
+                                            class="border bg-[#EDEDED] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0] "
+                                            id="add-options">
+                                            <img src="/public/img/add-options.svg" alt="add">
+                                        </a>
+                                    </div>
+                                    <label id="opt-val-error" class="error" for="opt-val" style="display: none;">*Please
+                                        enter the option</label>
+
+                                    <!-- <div class="flex items-center gap-[12px] ">
+
+                                        <div class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px] block grow text-xs font-normal leading-4 text-[#262626]">
+                                            Option 1
+                                        </div>
+                                        <a href="javascript:void(0);" class="border bg-[#EDEDED] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
+                                            <img src="/public/img/delete-options.svg" alt="delete">
+                                        </a>
+                                    </div>
+                                    <div class="flex items-center gap-[12px] ">
+                                        <div class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px] block grow text-xs font-normal leading-4 text-[#262626] ">
+                                            Option 2
+                                        </div>
+                                        <a href="javascript:void(0);" class="border bg-[#EDEDED] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
+                                            <img src="/public/img/delete-options.svg" alt="delete">
+                                        </a>
+                                    </div> -->
+    <!-- </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="modal right fade" id="Id2" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="modalTitleId" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable " role="document">
+            <div class="modal-content border-0">
+                <div
+                    class="flex justify-between items-center border-b border-[#ECECEC] px-6 py-[8px] max-sm:px-[16px] ">
+                    <h5 class="text-bold-black mb-0 font-medium text-base fl-name" id="staticBackdropLabel">
+                        Properties - Date &amp; Time
+                    </h5>
+                    <div class="flex space-x-[12px]">
+                        <a href="javascript:void(0);"
+                            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-bold-black bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline"
+                            data-bs-dismiss="modal" id="cln-modal">Cancel</a>
+                        <a href="javascript:void(0);"
+                            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white hover:bg-[#148569] bg-[#10A37F]  rounded-[4px] no-underline"
+                            id="flp-save">Save</a>
+                    </div>
+                </div>
+                <div class="overflow-auto scrollbar-thin h-full">
+                    <div class="py-[16px]  px-6  max-sm:px-[16px] ">
+
+                        <div class="chk-group chk-group-label">
+                            <input type="checkbox" id="Check" class="hidden peer">
+                            <label for="Check"
+                                class=" h-[14px] relative cursor-pointer flex  w-fit ml-auto mb-[16px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">
+                                <p class="text-bold-black text-xs font-normal mb-0 ml-[6px]">Mandatory</p>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="relative">
+                                <div class="flex flex-col gap-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Field Name</p>
+                                    <input type="text" id="fl-input"  class="checklength [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] text-bold-black text-sm font-normal">
+                                    <label id="fl-input-error" class="error" for="fl-input" style="display: none;">*Please enter the field name</label>
+                                    <p class="text-xs text-[#F26674] mt-2 hidden lengthErr">You have reached a maximum limit of 30 characters</p>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden dt-field h-full">
+                                <div class="flex flex-col space-y-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Date Format</p>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p id="dt-f" class="text-sm font-normal"></p>
+                                        </a>
+                                        <label id="dt-f-error" class="error" for="dt-f" style="display: none;">*Please
+                                            choose the date format</label>
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px]
+                                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">DD/MM/YYYY</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">MM/DD/YYYY</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] dt-format">YYYY/MM/DD</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden ti-field h-full">
+                                <div class="flex flex-col space-y-[6px]">
+                                    <p class="text-bold-black text-sm font-normal mb-0">Time Format</p>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                             data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p id="tm-f" class="text-sm font-normal"></p>
+                                        </a>
+                                        <label id="tm-f-error" class="error" for="tm-f" style="display: none;">*Please
+                                            choose the time format</label>
+                                        <ul
+                                            class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] tm-format">12
+                                                    Hours</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] tm-format">24
+                                                    Hours</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="relative hidden option-field">
+                                <div class="flex flex-col space-y-[12px] add-fp" id="Sortsection2">
+                                    <div class="constant-item">
+                                        <label class="text-bold-black text-sm font-normal mb-[6px]">Options</label>
+                                        <div
+                                            class="flex items-center space-x-[6px] [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                                            <input type="text" id="opt-val"
+                                                class="border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] block grow text-sm" placeholder="Add Option">
+                                            <a href="javascript:void(0);" id="add-options"
+                                                class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0] ">
+                                                <img src="/public/img/add-options.svg" alt="add">
+                                            </a>
+                                        </div>
+                                        <label id="opt-val-error" class="error" for="opt-val"
+                                            style="display: none;">*Please
+                                            enter the option</label>
+                                    </div>
+
+
+                                    <!-- <div class="flex items-center gap-[12px] ">
+                                        <div class="border border-[#F7F7F5] pd-3 h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] flex items-center justify-between ">
+                                            Option 2
+
+                                            <a href="javascript:void(0);">
+                                                <img src="/public/img/drag.svg" alt="drag">
+                                            </a>
+                                        </div>
+                                        <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
+                                            <img src="/public/img/delete-options.svg" alt="delete">
+                                        </a>
+                                    </div>
+                                    <div class="flex items-center gap-[12px] ">
+                                        <div class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] flex items-center justify-between ">
+                                            Option 3
+
+                                            <a href="javascript:void(0);">
+                                                <img src="/public/img/drag.svg" alt="drag">
+                                            </a>
+                                        </div>
+                                        <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
+                                            <img src="/public/img/delete-options.svg" alt="delete">
+                                        </a>
+                                    </div> -->
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{template "footer" .}}
+    <script src="/public/js/channels/channel.js"></script>
+    {{template "footerclose" .}}
