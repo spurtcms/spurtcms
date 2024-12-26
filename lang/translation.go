@@ -2,14 +2,17 @@ package lang
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"spurt-cms/models"
+
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spurtcms/team"
 )
 
 type Translation struct {
@@ -136,6 +139,15 @@ type Translation struct {
 	Memberaccess           string `json:"memberaccess"`
 	Csearch                string `json:"csearch"`
 	Deselectall            string `json:"deselectall"`
+	Activateclaim          string `json:"activateclaim"`
+	Companyprofile         string `json:"companyprofile"`
+	Others                 string `json:"others"`
+	Filtersearch           string `json:"filternodatafound"`
+	Filterkeyword          string `json:"filtertrykeyword"`
+	Itemselected           string `json:"itemselected"`
+	Dataconnect            string `json:"dataconnect"`
+	ChooseFormats          string `json:"chooseformats"`
+	Forms                  string `json:"forms"`
 
 	Permission struct {
 		Searchroles       string `json:"searchroles"`
@@ -161,6 +173,19 @@ type Translation struct {
 	} `json:"Rolecontent"`
 
 	Setting struct {
+		Title                 string `json:"title"`
+		Profiletitle          string `json:"profiletitle"`
+		Permissionstitle      string `json:"permissionstitle"`
+		Rolesandpermissions   string `json:"rolesandpermissions"`
+		Email                 string `json:"email"`
+		Emailcontent          string `json:"emailcontent"`
+		Data                  string `json:"data"`
+		Datacontent           string `json:"datacontent"`
+		Basicinfo             string `json:"basicinfo"`
+		Myprofilesubheading   string `json:"myprofilesubheading"`
+		Firstname             string `json:"firstname"`
+		Lastname              string `json:"lastname"`
+		Username              string `json:"username"`
 		Manageroles           string `json:"manageroles"`
 		Managepermissions     string `json:"managepermissions"`
 		Managechannels        string `json:"managechannels"`
@@ -220,6 +245,9 @@ type Translation struct {
 		Smtpemailplcholder    string `json:"smtpemailplcholder"`
 		Smtphostplcholder     string `json:"smtphostplcholder"`
 		Smtpportplcholder     string `json:"smtpportplcholder"`
+		Smtp                  string `json:"smtp"`
+		Environment           string `json:"environment"`
+		Imagetypeerror        string `json:"imagetypeerror"`
 	} `json:"Setting"`
 
 	Emailtemplate struct {
@@ -231,6 +259,17 @@ type Translation struct {
 		Templatecontent      string `json:"templatecontent"`
 		Entertemplatecontent string `json:"entertemplatecontent"`
 		Entertemplatename    string `json:"entertemplatename"`
+		EmailName            string `json:"emailname"`
+		EmailDesc            string `json:"emaildesc"`
+		EmailSub             string `json:"emailsub"`
+		EmailCont            string `json:"emailcont"`
+		Emailnameplcholder   string `json:"emailnameplcholder"`
+		Emaildesplcholder    string `json:"emaildesplcholder"`
+		Emailsubplcholder    string `json:"emailsubplcholder"`
+		Emailcontplcholder   string `json:"emailcontplcholder"`
+		Updatetemplateemail  string `json:"updatetemplateemail"`
+		Emailcount           string `json:"emailcount"`
+		Emailcounts          string `json:"emailcounts"`
 	} `json:"Emailtemplate"`
 
 	Channell struct {
@@ -389,6 +428,16 @@ type Translation struct {
 		Editchannel            string `json:"editchannel"`
 		Backtoprevious         string `json:"backtoprevious"`
 		Descriptionentry       string `json:"descriptionentry"`
+		MyChannels             string `json:"mychannels"`
+		ChannelNamedesc        string `json:"channelnamedesc"`
+		ChannelFieldsdesc      string `json:"channelfieldsdesc"`
+		ChannelCatdesc         string `json:"channelcatdesc"`
+		AvailableCatdesc       string `json:"availablecatdesc"`
+		SelectedCatdesc        string `json:"selectedcatdesc"`
+		Step                   string `json:"steps"`
+		AddFields              string `json:"addfields"`
+		ThisContainsEntries    string `json:"thischannelcontainsentries"`
+		Duplicate              string `json:"duplicate"`
 	} `json:"Channell"`
 
 	Userss struct {
@@ -431,6 +480,7 @@ type Translation struct {
 		Permission          string `json:"permission"`
 		Updateuser          string `json:"updateuser"`
 		Nameexist           string `json:"nameexist"`
+		Deactive            string `json:"deactive"`
 	} `json:"Userss"`
 
 	Personalize struct {
@@ -451,42 +501,67 @@ type Translation struct {
 	} `json:"Security"`
 
 	Memberss struct {
-		Addmember        string `json:"addmember"`
-		Searchmembers    string `json:"searchmembers"`
-		Entermemname     string `json:"entermemname"`
-		Entermememail    string `json:"entermememail"`
-		Entermemmobnum   string `json:"entermemmobnum"`
-		Enterusername    string `json:"enterusrname"`
-		Enterlastname    string `json:"enterlstname"`
-		Enterpswd        string `json:"enterpswd"`
-		Choosegroup      string `json:"choosegroup"`
-		Member           string `json:"member"`
-		Members          string `json:"members"`
-		Name             string `json:"name"`
-		Group            string `json:"group"`
-		Createdon        string `json:"createdon"`
-		Updatedon        string `json:"updatedon"`
-		Basicinfo        string `json:"basicinfo"`
-		Firstname        string `json:"firstname"`
-		Lastname         string `json:"lastname"`
-		Email            string `json:"email"`
-		Mobile           string `json:"mobile"`
-		Username         string `json:"username"`
-		Password         string `json:"password"`
-		Membergroup      string `json:"membergroup"`
-		Active           string `json:"active"`
-		Activetoggle     string `json:"activetoggle"`
-		Selectmemerr     string `json:"memselerr"`
-		Companyprofile   string `json:"companyprofile"`
-		Editmember       string `json:"editmember"`
-		Updatemember     string `json:"uptmember"`
-		Allowereg        string `json:"allowereg"`
-		Alloweregcont    string `json:"alloweregcont"`
-		Optionmeberlogin string `json:"optionmeberlogin"`
-		Optioncont       string `json:"optioncont"`
-		Receivenot       string `json:"receivenot"`
-		Reveivecont      string `json:"reveivecont"`
-		Selectusers      string `json:"selectusers"`
+		Alreadyclaimed     string `json:"alreadyclaimed"`
+		Activeclaim        string `json:"activeclaim"`
+		Addmember          string `json:"addmember"`
+		Searchmembers      string `json:"searchmembers"`
+		Entermemname       string `json:"entermemname"`
+		Entermememail      string `json:"entermememail"`
+		Entermemmobnum     string `json:"entermemmobnum"`
+		Enterusername      string `json:"enterusrname"`
+		Enterlastname      string `json:"enterlstname"`
+		Enterpswd          string `json:"enterpswd"`
+		Choosegroup        string `json:"choosegroup"`
+		Member             string `json:"member"`
+		Members            string `json:"members"`
+		Name               string `json:"name"`
+		Group              string `json:"group"`
+		Createdon          string `json:"createdon"`
+		Updatedon          string `json:"updatedon"`
+		Basicinfo          string `json:"basicinfo"`
+		Firstname          string `json:"firstname"`
+		Lastname           string `json:"lastname"`
+		Email              string `json:"email"`
+		Mobile             string `json:"mobile"`
+		Username           string `json:"username"`
+		Password           string `json:"password"`
+		Membergroup        string `json:"membergroup"`
+		Active             string `json:"active"`
+		Activetoggle       string `json:"activetoggle"`
+		Selectmemerr       string `json:"memselerr"`
+		Companyprofile     string `json:"companyprofile"`
+		Editmember         string `json:"editmember"`
+		Updatemember       string `json:"uptmember"`
+		Allowereg          string `json:"allowereg"`
+		Alloweregcont      string `json:"alloweregcont"`
+		Optionmeberlogin   string `json:"optionmeberlogin"`
+		Optioncont         string `json:"optioncont"`
+		Receivenot         string `json:"receivenot"`
+		Reveivecont        string `json:"reveivecont"`
+		Selectusers        string `json:"selectusers"`
+		Emailnotification  string `josn:"emailnotification"`
+		Companyname        string `json:"companyname"`
+		Location           string `json:"location"`
+		Profilename        string `json:"profilename"`
+		Profileslug        string `json:"profileslug"`
+		Emailid            string `json:"emailid"`
+		Mobilenumber       string `json:"mobilenumber"`
+		Dateofclaim        string `json:"dateofclaim"`
+		Companyinfo        string `json:"companyinfo"`
+		About              string `json:"about"`
+		Linkedin           string `json:"linkedin"`
+		Twitter            string `json:"twitter"`
+		Website            string `json:"website"`
+		Metainfo           string `json:"metainfo"`
+		Metatagtitle       string `json:"metatagtitle"`
+		Metatagkeyword     string `json:"metatagkeyword"`
+		Metatagdescription string `json:"metatagdescription"`
+		Companylocation    string `json:"companylocation"`
+		Enteryour          string `json:"enteryour"`
+		Membresupdate   string `json:"membresupdate"`
+		Deactive        string `json:"deactive"`
+		Membersavilable string `json:"membersavilable"`
+		Memberavilable  string `json:"memberavilable"`
 	} `json:"Memberss"`
 
 	MembersGroup struct {
@@ -504,6 +579,8 @@ type Translation struct {
 		Group                string `json:"group"`
 		Groups               string `json:"groups"`
 		Deletemembergroup    string `json:"delmembergrp"`
+		Membersgroupavilable string `json:"membersgroupavilable"`
+		Membergroupavilable  string `json:"membergroupavilable"`
 	} `json:"Members_Group"`
 
 	Categoryy struct {
@@ -577,36 +654,45 @@ type Translation struct {
 		Rolename      string `json:"rolename"`
 		Newrole       string `json:"newrole"`
 		Enterrolename string `json:"enterrolename"`
+		Enterroledesc string `json:"enterroledesc"`
 	} `json:"Roless"`
 
 	Languages struct {
-		Searchlanguages   string `json:"searchlanguages"`
-		Default           string `json:"default"`
-		Code              string `json:"code"`
-		Flag              string `json:"flag"`
-		Inactive          string `json:"inactive"`
-		Languagename      string `json:"languagename"`
-		Languagecode      string `json:"languagecode"`
-		Makedefault       string `json:"makedefault"`
-		Uploadjsonfile    string `json:"uploadjsonfile"`
-		Uploadflagpicture string `json:"uploadflagpicture"`
-		Addlanguage       string `json:"addlanguage"`
-		NewLanguage       string `json:"newlanguage"`
-		Languages         string `json:"languages"`
-		Language          string `json:"language"`
-		Lastupdatedon     string `json:"lastupdatedon"`
-		Status            string `json:"status"`
-		Upload            string `json:"upload"`
-		Jsonfile          string `json:"jsonfile"`
-		Flagpicture       string `json:"flagpicture"`
-		Active            string `json:"active"`
-		Addnewlanguage    string `json:"addnewlanguage"`
-		Basicinfo         string `json:"basicinfo"`
-		Uploadimg         string `json:"uploadimg"`
-		Uploadjson        string `json:"uploadjson"`
-		Selectlangcode    string `json:"selectlangcode"`
-		Searchpl          string `json:"searchpl"`
-		Langvailderr      string `json:"langcodevalid"`
+		Searchlanguages     string `json:"searchlanguages"`
+		Default             string `json:"default"`
+		Code                string `json:"code"`
+		Flag                string `json:"flag"`
+		Inactive            string `json:"inactive"`
+		Languagename        string `json:"languagename"`
+		Languagecode        string `json:"languagecode"`
+		Makedefault         string `json:"makedefault"`
+		Uploadjsonfile      string `json:"uploadjsonfile"`
+		Uploadflagpicture   string `json:"uploadflagpicture"`
+		Addlanguage         string `json:"addlanguage"`
+		NewLanguage         string `json:"newlanguage"`
+		Languages           string `json:"languages"`
+		Language            string `json:"language"`
+		Lastupdatedon       string `json:"lastupdatedon"`
+		Status              string `json:"status"`
+		Upload              string `json:"upload"`
+		Jsonfile            string `json:"jsonfile"`
+		Flagpicture         string `json:"flagpicture"`
+		Active              string `json:"active"`
+		Addnewlanguage      string `json:"addnewlanguage"`
+		Basicinfo           string `json:"basicinfo"`
+		Uploadimg           string `json:"uploadimg"`
+		Uploadjson          string `json:"uploadjson"`
+		Selectlangcode      string `json:"selectlangcode"`
+		Searchpl            string `json:"searchpl"`
+		Langvailderr        string `json:"langcodevalid"`
+		Choosefromdirectory string `json:"choosefromdirectory"`
+		Browse              string `json:"browse"`
+		Langcodeerr         string `json:"langcodeerr"`
+		Jsonfileerr         string `json:"jsonfileerr"`
+		Choosefrommedia     string `json:"choosefrommedia"`
+		Flagfileerr         string `json:"flagfileerr"`
+		Updatelanguage      string `json:"updatelanguage"`
+		Setasdefault        string `json:"setasdefault"`
 	} `json:"Languages"`
 
 	Spaces struct {
@@ -667,6 +753,9 @@ type Translation struct {
 		Spacedesc                 string `json:"spacedesc"`
 		Memberdesc                string `json:"memberdesc"`
 		Creatememberacc           string `json:"creatememberacc"`
+		Updatedon                 string `json:"updatedon"`
+		Memberrestrictsavailble   string `json:"memberrestrictsavailble"`
+		Memberretrictavailble     string `json:"memberretrictavailble"`
 	} `json:"ContentAccessControl"`
 
 	DashBoard struct {
@@ -739,115 +828,374 @@ type Translation struct {
 	} `json:"Datas"`
 
 	Ecommerce struct {
-		Ecommerce           string `json:"ecommerce"`
-		Orderid             string `json:"orderid"`
-		Customername        string `json:"customername"`
-		Price               string `json:"price"`
-		Orderedcreated      string `json:"orderedcreated"`
-		Orderedupdated      string `json:"orderedupdated"`
-		Memberid            string `json:"memberid"`
-		Emailid             string `json:"emailid"`
-		Ordercount          string `json:"ordercount"`
-		Status              string `json:"status"`
-		Customers           string `json:"customers"`
-		TotalCustomer       string `json:"totalcustomer"`
-		Info                string `json:"info"`
-		CustomerInfo        string `json:"customerinfo"`
-		Addressinfo         string `json:"addressinfo"`
-		Addcustomer         string `json:"Addcustomer"`
-		FirstName           string `json:"firstname"`
-		Lastname            string `json:"lastname"`
-		Email               string `json:"email"`
-		Mobile              string `json:"mobile"`
-		Username            string `json:"username"`
-		Password            string `json:"password"`
-		Streetadd           string `json:"streetaddress"`
-		City                string `json:"city"`
-		State               string `json:"state"`
-		Country             string `json:"country"`
-		Zipcode             string `json:"zipcode"`
-		Active              string `json:"active"`
-		StatusContent       string `json:"statuscontent"`
-		Firstnameerr        string `json:"firstnameerr"`
-		Emailerr            string `json:"emailerr"`
-		Mobileerr           string `json:"mobileerr"`
-		Usernameerr         string `json:"usernameerr"`
-		Passerr             string `json:"passerr"`
-		Updatecustomer      string `json:"updatecustomer"`
-		Customerinformation string `json:"customerinformation"`
-		Orderitems          string `json:"orderitems"`
-		Orderdate           string `json:"orderdate"`
-		Customer            string `json:"customer"`
-		Billingadd          string `json:"billingadd"`
-		Shippingadd         string `json:"shippingadd"`
-		Itemsordered        string `json:"itemsordered"`
-		Item                string `json:"item"`
-		Items               string `json:"items"`
-		Quantity            string `json:"quantity"`
-		Total               string `json:"total"`
-		Subtotal            string `json:"subtotal"`
-		Salestax            string `json:"salestax"`
-		Grandtotal          string `json:"grandtotal"`
-		Orderstatus         string `json:"orderstatus"`
-		Orderconfirmed      string `json:"orderconfirmed"`
-		Shipped             string `json:"shipped"`
-		Outofdelivery       string `json:"outofdelivery"`
-		Delivered           string `json:"delivered"`
-		Invoice             string `json:"invoice"`
-		Addplaceholder      string `json:"addplaceholder"`
-		Cityplaceholder     string `json:"cityplaceholder"`
-		Stateplaceholder    string `json:"stateplaceholder"`
-		Countryplaceholder  string `json:"countryplaceholder"`
-		Zipplaceholder      string `json:"zipplaceholder"`
-		Inactive            string `json:"inactive"`
-		Address             string `json:"address"`
-		Orders              string `json:"orders"`
-		Order               string `json:"order"`
-		Products            string `json:"products"`
-		Product             string `json:"product"`
-		Productname         string `json:"productname"`
-		Addproduct          string `json:"addproduct"`
-		Generalinfo         string `json:"generalinfo"`
-		Productnameplch     string `json:"productnameplch"`
-		Sku                 string `json:"sku"`
-		Skuplcholder        string `json:"skuplcholder"`
-		Skuerr              string `json:"skuerr"`
-		Skuexistserr        string `json:"skuexistserr"`
-		Selectstatus        string `json:"selectstatus"`
-		Moreinformation     string `json:"moreinformation"`
-		Pricing             string `json:"pricing"`
-		Videos              string `json:"videos"`
-		Productcost         string `json:"productcost"`
-		Enteramount         string `json:"enteramount"`
-		Productamterr       string `json:"productamterr"`
-		Tax                 string `json:"tax"`
-		Totalcost           string `json:"totalcost"`
-		Discount            string `json:"discount"`
-		Priceerr            string `json:"priceerr"`
-		Priority            string `json:"priority"`
-		Priorityerr         string `json:"priorityerr"`
-		Startdate           string `json:"startdate"`
-		Startdateerr        string `json:"startdateerr"`
-		Enddate             string `json:"enddate"`
-		Enddateerr          string `json:"enddateerr"`
-		Special             string `json:"special"`
-		Productimgerr       string `json:"productimgerr"`
-		Youtubeurl          string `json:"youtubeurl"`
-		Urlplcholder        string `json:"urlplcholder"`
-		Vimeourl            string `json:"vimeourl"`
-		Editproduct         string `json:"editproduct"`
-		Qty                 string `json:"qty"`
-		Orderinfo           string `json:"orderinfo"`
-		Catelogue           string `json:"catelogue"`
-		StoreInfo           string `json:"storeinfo"`
-		CurrencyInfo        string `json:"currencyinfo"`
-		PaymentInfo         string `json:"paymentinfo"`
-		StatusInfo          string `json:"statusinfo"`
-		Stock               string `json:"stock"`
-		DisplayStock        string `json:"displaystock"`
-		Warning             string `json:"warning"`
-		Checkout            string `json:"checkout"`
+		Ecommerce                 string `json:"ecommerce"`
+		Orderid                   string `json:"orderid"`
+		Customername              string `json:"customername"`
+		Price                     string `json:"price"`
+		Orderedcreated            string `json:"orderedcreated"`
+		Orderedupdated            string `json:"orderedupdated"`
+		Memberid                  string `json:"memberid"`
+		Emailid                   string `json:"emailid"`
+		Ordercount                string `json:"ordercount"`
+		Status                    string `json:"status"`
+		Customers                 string `json:"customers"`
+		TotalCustomer             string `json:"totalcustomer"`
+		Info                      string `json:"info"`
+		CustomerInfo              string `json:"customerinfo"`
+		Addressinfo               string `json:"addressinfo"`
+		Addcustomer               string `json:"Addcustomer"`
+		FirstName                 string `json:"firstname"`
+		Lastname                  string `json:"lastname"`
+		Email                     string `json:"email"`
+		Mobile                    string `json:"mobile"`
+		Username                  string `json:"username"`
+		Password                  string `json:"password"`
+		Streetadd                 string `json:"streetaddress"`
+		City                      string `json:"city"`
+		State                     string `json:"state"`
+		Country                   string `json:"country"`
+		Zipcode                   string `json:"zipcode"`
+		Active                    string `json:"active"`
+		StatusContent             string `json:"statuscontent"`
+		Firstnameerr              string `json:"firstnameerr"`
+		Emailerr                  string `json:"emailerr"`
+		Mobileerr                 string `json:"mobileerr"`
+		Usernameerr               string `json:"usernameerr"`
+		Passerr                   string `json:"passerr"`
+		Updatecustomer            string `json:"updatecustomer"`
+		Customerinformation       string `json:"customerinformation"`
+		Orderitems                string `json:"orderitems"`
+		Orderdate                 string `json:"orderdate"`
+		Customer                  string `json:"customer"`
+		Billingadd                string `json:"billingadd"`
+		Shippingadd               string `json:"shippingadd"`
+		Itemsordered              string `json:"itemsordered"`
+		Item                      string `json:"item"`
+		Items                     string `json:"items"`
+		Quantity                  string `json:"quantity"`
+		Total                     string `json:"total"`
+		Subtotal                  string `json:"subtotal"`
+		Salestax                  string `json:"salestax"`
+		Grandtotal                string `json:"grandtotal"`
+		Orderstatus               string `json:"orderstatus"`
+		Orderconfirmed            string `json:"orderconfirmed"`
+		Shipped                   string `json:"shipped"`
+		Outofdelivery             string `json:"outofdelivery"`
+		Delivered                 string `json:"delivered"`
+		Invoice                   string `json:"invoice"`
+		Addplaceholder            string `json:"addplaceholder"`
+		Cityplaceholder           string `json:"cityplaceholder"`
+		Stateplaceholder          string `json:"stateplaceholder"`
+		Countryplaceholder        string `json:"countryplaceholder"`
+		Zipplaceholder            string `json:"zipplaceholder"`
+		Inactive                  string `json:"inactive"`
+		Address                   string `json:"address"`
+		Orders                    string `json:"orders"`
+		Order                     string `json:"order"`
+		Products                  string `json:"products"`
+		Product                   string `json:"product"`
+		Productname               string `json:"productname"`
+		Addproduct                string `json:"addproduct"`
+		Generalinfo               string `json:"generalinfo"`
+		Productnameplch           string `json:"productnameplch"`
+		Sku                       string `json:"sku"`
+		Skuplcholder              string `json:"skuplcholder"`
+		Skuerr                    string `json:"skuerr"`
+		Skuexistserr              string `json:"skuexistserr"`
+		Selectstatus              string `json:"selectstatus"`
+		Moreinformation           string `json:"moreinformation"`
+		Pricing                   string `json:"pricing"`
+		Videos                    string `json:"videos"`
+		Productcost               string `json:"productcost"`
+		Enteramount               string `json:"enteramount"`
+		Productamterr             string `json:"productamterr"`
+		Tax                       string `json:"tax"`
+		Totalcost                 string `json:"totalcost"`
+		Discount                  string `json:"discount"`
+		Priceerr                  string `json:"priceerr"`
+		Priority                  string `json:"priority"`
+		Priorityerr               string `json:"priorityerr"`
+		Startdate                 string `json:"startdate"`
+		Startdateerr              string `json:"startdateerr"`
+		Enddate                   string `json:"enddate"`
+		Enddateerr                string `json:"enddateerr"`
+		Special                   string `json:"special"`
+		Productimgerr             string `json:"productimgerr"`
+		Youtubeurl                string `json:"youtubeurl"`
+		Urlplcholder              string `json:"urlplcholder"`
+		Vimeourl                  string `json:"vimeourl"`
+		Editproduct               string `json:"editproduct"`
+		Qty                       string `json:"qty"`
+		Orderinfo                 string `json:"orderinfo"`
+		Catelogue                 string `json:"catelogue"`
+		StoreInfo                 string `json:"storeinfo"`
+		CurrencyInfo              string `json:"currencyinfo"`
+		PaymentInfo               string `json:"paymentinfo"`
+		StatusInfo                string `json:"statusinfo"`
+		Stock                     string `json:"stock"`
+		DisplayStock              string `json:"displaystock"`
+		Warning                   string `json:"warning"`
+		Checkout                  string `json:"checkout"`
+		StoreInformation          string `json:"storeinformation"`
+		StoreName                 string `json:"storename"`
+		Currency                  string `json:"currency"`
+		CurrencyTitle             string `json:"currencytitle"`
+		Code                      string `json:"code"`
+		Symbol                    string `json:"symbol"`
+		LastUpdatedon             string `json:"lastupdatedon"`
+		Payment                   string `json:"payment"`
+		PaymentMethod             string `json:"paymentmethod"`
+		Method                    string `json:"method"`
+		OrderStatusTitle          string `json:"orderstatustitle"`
+		DisplayStockTitle         string `json:"displaystocktitle"`
+		ShowOutOfStockWarning     string `json:"showoutofstockwarning"`
+		StockCheckoutTitle        string `json:"stockcheckouttitle"`
+		AddCurrency               string `json:"addcurrency"`
+		CurrencyCode              string `json:"currencycode"`
+		CurrencySymbol            string `json:"currencysymbol"`
+		SetasDefault              string `json:"setasdefault"`
+		AddPaymentMethod          string `json:"addpaymentmethod"`
+		PaymentName               string `json:"paymentname"`
+		AddOrderStatus            string `json:"addorderstatus"`
+		StatusName                string `json:"statusname"`
+		ColorCode                 string `json:"colorcode"`
+		Productcaterr             string `json:"productcaterr"`
+		StockPlacholder           string `json:"stockplaceholder"`
+		StockErr                  string `json:"stockerr"`
+		PriceRange                string `json:"pricerange"`
+		Lowtohigh                 string `json:"lowtohigh"`
+		Hightolow                 string `json:"hightolow"`
+		StatusNamePlaceholder     string `json:"statusnameplholder"`
+		StatusDescPlaceholder     string `json:"statusdescplholder"`
+		StatusPriorityPlaceholder string `json:"statuspriorityplholder"`
+		PaymentDescPlaceholder    string `json:"paymentdescplholder"`
+		PaymentNamePlaceholder    string `json:"paymentnameplholder"`
+		CurrencyNamePlaceholder   string `json:"currencynameplholder"`
+		CurrencyTypePlaceholder   string `json:"currencytypeplholder"`
+		CurrencySymbolPlaceholder string `json:"currencysymbolplholder"`
+		StoreNamePlacholder       string `json:"storenameplac"`
+		ProductSlug               string `json:"productslug"`
+		ProductSlugPlaceholder    string `json:"productslugplaceholder"`
+		ProductDesc               string `json:"productdesc"`
 	} `json:"Ecommerce"`
+
+	Jobs struct {
+		AddNewJobs          string `json:"addnewjobs"`
+		JobId               string `json:"jobid"`
+		Categories          string `json:"categories"`
+		JobType             string `json:"jobtype"`
+		PostedDate          string `json:"posteddate"`
+		Status              string `json:"status"`
+		Info                string `json:"info"`
+		AddNewJob           string `json:"addnewjob"`
+		JobInfo             string `json:"jobinformation"`
+		JobTitle            string `json:"jobtitle"`
+		JobtitlePlcHolder   string `json:"jobtitleplcholder"`
+		Location            string `json:"location"`
+		JobLocPlcHolder     string `json:"joblocationplcholder"`
+		JobDesc             string `json:"jobdesc"`
+		JobDescPlcholder    string `json:"jobdescplcholder"`
+		Keywords            string `json:"keywords"`
+		KeywordPlcholder    string `json:"keywordplcholder"`
+		SkillContent        string `json:"skillcontent"`
+		Skill               string `json:"skill"`
+		SkilPlcholder       string `json:"skilplcholder"`
+		Yearsofexp          string `json:"yearsofexp"`
+		Expcontent          string `json:"expcontent"`
+		Minimumyrs          string `json:"minimumyrs"`
+		Miniplcholder       string `json:"miniplcholder"`
+		Maximumyrs          string `json:"maximumyrs"`
+		Maxplcholder        string `json:"maxplcholder"`
+		Salary              string `json:"salary"`
+		Salaryplcholder     string `json:"salaryplcholder"`
+		Salaryinlpa         string `json:"salaryinlpa"`
+		Salarycontent       string `json:"salarycontent"`
+		Qualification       string `json:"qualification"`
+		Qualificontent      string `json:"qualificontent"`
+		Education           string `json:"education"`
+		Educationplcholder  string `json:"educationplcholder"`
+		Jobperiod           string `json:"jobperiod"`
+		Jobperiodcontent    string `json:"jobperiodcontent"`
+		Validthrough        string `json:"validthrough"`
+		Jobstatus           string `json:"jobstatus"`
+		Jobstatuscontent    string `json:"jobstatuscontent"`
+		Active              string `json:"active"`
+		Activecontent       string `json:"activecontent"`
+		Editjob             string `json:"editjob"`
+		Jobinfo             string `json:"jobinfo"`
+		Back                string `json:"back"`
+		Applicants          string `json:"applicants"`
+		Applicantname       string `json:"applicantname"`
+		Userid              string `json:"userid"`
+		Emailid             string `json:"emailid"`
+		Jobcode             string `json:"jobcode"`
+		TotalJobs           string `json:"totaljobs"`
+		Totaljob            string `json:"totaljob"`
+		Totalapplicants     string `json:"totalapplicants"`
+		Totalapplicant      string `json:"totalapplicant"`
+		Name                string `json:"name"`
+		Nameplcholder       string `json:"nameplcholder"`
+		Addapplicants       string `json:"addapplicants"`
+		Personalinfo        string `json:"personalinfo"`
+		Mobile              string `json:"mobile"`
+		Mobileplcholder     string `json:"mobileplcholder"`
+		Password            string `json:"password"`
+		Appsalcontent       string `json:"appsalcontent"`
+		Currentsalary       string `json:"currentsalary"`
+		Currentsalplcholder string `json:"currentsalplcholder"`
+		Expectedsalary      string `json:"expectedsalary"`
+		Expecplcholder      string `json:"expecplcholder"`
+		Yrofgraduation      string `json:"yrofgraduation"`
+		Graplcholder        string `json:"graplcholder"`
+		Appquacontent       string `json:"appquacontent"`
+		Appstatus           string `json:"appstatus"`
+		Appstatuscontent    string `json:"appstatuscontent"`
+		Appactivecont       string `json:"appactivecont"`
+		Editapplicant       string `json:"editapplicant"`
+		Appinformation      string `json:"appinformation"`
+		Resume              string `json:"resume"`
+		Applieddate         string `json:"applieddate"`
+		Appliedjobs         string `json:"appliedjobs"`
+		Type                string `json:"type"`
+		Selectcategory      string `json:"selectcategory"`
+		Selectjobtype       string `json:"selectjobtype"`
+		Jobtypeval          string `json:"jobtypeval"`
+		Addapplicant        string `json:"addapplicant"`
+		Emailplcholder      string `json:"emailplcholder"`
+		Locationplcholder   string `json:"locationplcholder"`
+		Experienceplcholder string `json:"experiencecplcholder"`
+		Skills              string `json:"skills"`
+		Appskilplcholder    string `json:"appskilplcholder"`
+		About               string `json:"about"`
+		Applicantinfo       string `json:"applicantinfo"`
+		Job                 string `json:"job"`
+	} `json:"Jobs"`
+
+	Blocks struct {
+		Block                string `json:"block"`
+		NewBlock             string `json:"newblock"`
+		MyCollection         string `json:"mycollection"`
+		MyCollectionDesc     string `json:"mycollectiondesc"`
+		HowToUse             string `json:"howtouse"`
+		ExploreDocumentation string `json:"exploredocumentation"`
+		Setaspremium         string `json:"setaspremium"`
+		Blockhtml            string `json:"blockhtml"`
+		Blockcss             string `json:"blockcss"`
+		Tags                 string `json:"tags"`
+		Note                 string `json:"note"`
+		Notedesc             string `json:"notedesc"`
+		Titleplaceholder     string `json:"titleplaceholder"`
+		HtmlPlaceholder      string `json:"htmlplaceholder"`
+		CssPlaceholder       string `json:"cssplaceholder"`
+		TagPlaceholder       string `json:"tagplaceholder"`
+		AddCollectiontooltip string `json:"addcollectiontooltip"`
+		Removetooltip        string `json:"removetooltip"`
+		Blocks               string `json:"blocks"`
+	} `json:"Blocks"`
+
+	Templates struct {
+		Title                 string `json:"title"`
+		BannerHeading         string `json:"bannerheading"`
+		BannerDescription     string `json:"bannerdescription"`
+		PlayButtonDescription string `json:"playbuttondescription"`
+		BookButtonDescription string `json:"bookbuttondescription"`
+		GithubButton          string `json:"githubbutton"`
+		DeployButton          string `json:"deploybutton"`
+		TotalTemplates        string `json:"totaltemplates"`
+		TotalTemplate         string `json:"totaltemplate"`
+	} `json:"Templates"`
+
+	Graphql struct {
+		Title                   string `json:"title"`
+		NewUserHeading          string `json:"newuserheading"`
+		NewUserDescription      string `json:"newuserdescription"`
+		CreateToken             string `json:"createtoken"`
+		CancelButton            string `json:"cancelbutton"`
+		GenerateButton          string `json:"generatebutton"`
+		NameFieldHeading        string `json:"namefieldheading"`
+		NameFieldError          string `json:"namefielderror"`
+		DescriptionFieldHeading string `json:"descriptionfieldheading"`
+		DurationFieldHeading    string `json:"durationfieldheading"`
+		DurationFieldError      string `json:"durationfielderror"`
+		DurationSelect          string `json:"durationselect"`
+		SevenDays               string `json:"sevendays"`
+		FifteenDays             string `json:"fifteendays"`
+		ThirtyDays              string `json:"thirtydays"`
+		UnlimitedDays           string `json:"unlimiteddays"`
+		SubHeading              string `json:"subheading"`
+		RecordsHeading          string `json:"recordsheading"`
+		TableNameHeading        string `json:"tablenameheading"`
+		TableDescriptionHeading string `json:"tabledescriptionheading"`
+		TableDurationHeading    string `json:"tabledurationheading"`
+		TableLastHeading        string `json:"tablelastheading"`
+		TableActionHeading      string `json:"tableactionheading"`
+		ActionEditHeading       string `json:"actioneditheading"`
+		ActionDeleteHeading     string `json:"actiondeleteheading"`
+		PaginationBackButton    string `json:"paginationbackbutton"`
+		PaginationNextButton    string `json:"paginationnextbutton"`
+		Updatetokenheading      string `json:"updatetokenheading"`
+		Deletetoken             string `json:"deletetoken"`
+		Deletesubheading        string `json:"deletesubheading"`
+		Copied                  string `json:"copied"`
+		Copyheading             string `json:"copyheading"`
+		Copydetails             string `json:"copydetails"`
+		Notes                   string `json:"notes"`
+	} `json:"Graphql"`
+
+	Webhooks struct {
+		Webhook        string `json:"webhook"`
+		HeadingDesc    string `json:"headingDesc"`
+		NewWebhook     string `json:"newWebhook"`
+		Edit           string `json:"edit"`
+		Delete         string `json:"delete"`
+		Back           string `json:"back"`
+		Next           string `json:"next"`
+		EventEnable    string `json:"eventEnable"`
+		Cancel         string `json:"cancel"`
+		Update         string `json:"update"`
+		CreateWebhook  string `json:"createWebhook"`
+		Create         string `json:"create"`
+		WebhookName    string `json:"webhookName"`
+		Event          string `json:"event"`
+		EndpointUrl    string `json:"endpointUrl"`
+		Method         string `json:"method"`
+		PayloadType    string `json:"payloadType"`
+		Headers        string `json:"headers"`
+		PayloadFields  string `json:"payloadFields"`
+		EnableWebhook  string `json:"enableWebhook"`
+		FilterNoData   string `json:"filterNoData"`
+		ChangeKeywords string `json:"changeKeywords"`
+		Placeholders   struct {
+			Header           string `json:"header"`
+			Value            string `json:"value"`
+			FieldName        string `json:"fieldName"`
+			SlctFieldValue   string `json:"slctFieldValue"`
+			SlctPayloadType  string `json:"slctPayloadType"`
+			SlctMethod       string `json:"slctMethod"`
+			SlctEventType    string `json:"slctEventType"`
+			EnterEndpointUrl string `json:"endpoinUrl"`
+			EnterWebhookName string `json:"enterWebhookName"`
+		} `json:"placeholders"`
+		Dropdowns struct {
+			EntryCreate        string `json:"entryCreate"`
+			EntryPublish       string `json:"entryPublish"`
+			EntryUnpublish     string `json:"entryUnpublish"`
+			EntryDelete        string `json:"entryDelete"`
+			EntryTitle         string `json:"entryTitle"`
+			ChannelName        string `json:"channelName"`
+			EventInitiatorName string `json:"eventInitatorName"`
+			EventInitiatorRole string `json:"eventInitiatorRole"`
+		} `json:"dropdowns"`
+		ValidationErrors struct {
+			ReqWebhookName      string `json:"reqWebhookName"`
+			ReqUrl              string `json:"reqUrl"`
+			ReqMethod           string `json:"reqMethod"`
+			ReqEventType        string `json:"reqEventType"`
+			ReqFieldName        string `json:"reqFieldName"`
+			ReqFieldValue       string `json:"reqFieldValue"`
+			ValidateWebhookName string `json:"validateWebhookName"`
+		} `json:"validationErrors"`
+	} `json:"webhooks"`
 }
 
 func LoadTranslation(filepath string) (Translation, error) {
@@ -873,17 +1221,20 @@ func LoadTranslation(filepath string) (Translation, error) {
 
 func TranslateHandler(c *gin.Context) {
 
-	// userid := c.GetInt("userid")
-
 	json_folder := os.Getenv("LOCAL_LANGUAGE_PATH")
 
 	lan, _ := c.Cookie("lang")
 
-	tblgeneralsetting, _ := models.GetGeneralSettings()
+	userDetails, err := GetRequestScopedTenantDetails(c)
 
-	var default_lang models.TblLanguage
+	if err != nil {
 
-	err := models.GetLanguageById(&default_lang, tblgeneralsetting.LanguageId)
+		log.Println(err)
+	}
+
+	var defaultLanguage models.TblLanguage
+
+	err = models.GetLanguageById(&defaultLanguage, userDetails.DefaultLanguageId)
 
 	if err != nil {
 
@@ -892,7 +1243,7 @@ func TranslateHandler(c *gin.Context) {
 
 	if lan == "" {
 
-		translation, err := LoadTranslation(default_lang.JsonPath)
+		translation, err := LoadTranslation(defaultLanguage.JsonPath)
 
 		if err != nil {
 
@@ -906,7 +1257,7 @@ func TranslateHandler(c *gin.Context) {
 			}
 		}
 
-		c.Set("currentLanguage", default_lang)
+		c.Set("currentLanguage", defaultLanguage)
 
 		c.Set("translation", translation)
 
@@ -927,7 +1278,7 @@ func TranslateHandler(c *gin.Context) {
 
 		if err != nil {
 
-			translation, err = LoadTranslation(default_lang.JsonPath)
+			translation, err = LoadTranslation(defaultLanguage.JsonPath)
 
 			if err != nil {
 
@@ -944,5 +1295,18 @@ func TranslateHandler(c *gin.Context) {
 	}
 
 	c.Next()
+
+}
+
+func GetRequestScopedTenantDetails(c *gin.Context) (team.TblUser, error) {
+
+	userData, exists := c.Get("userDetails")
+
+	if !exists {
+
+		return team.TblUser{}, errors.New("failed to fetch tenant details")
+	}
+
+	return userData.(team.TblUser), nil
 
 }
