@@ -15,6 +15,7 @@ import (
 	"spurt-cms/config"
 	"spurt-cms/controllers"
 	"spurt-cms/lang"
+	"spurt-cms/middleware"
 	"spurt-cms/models"
 	"spurt-cms/routes"
 	"strings"
@@ -23,8 +24,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	spurtcore "github.com/spurtcms/pkgcore"
-	"github.com/spurtcms/pkgcore/auth"
 	csrf "github.com/utrack/gin-csrf"
 )
 
@@ -53,18 +52,10 @@ var DB = config.SetupDB()
 
 var Demotoken string
 
-var StaticDemoToken string
-
-func StaticToken() {
-
-	Demotoken, _, _ = auth.Checklogin(auth.LoginCheck{Username: "Admin", Password: "Admin@123"}, DB, os.Getenv("JWT_SECRET"))
-	StaticDemoToken = Demotoken
-
-}
-
 // Member group list
 func TestMemberGroupList(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -80,7 +71,7 @@ func TestMemberGroupList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	Demotoken, _, _ = controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -89,13 +80,10 @@ func TestMemberGroupList(t *testing.T) {
 	translation, err := lang.LoadTranslation(default_lang.JsonPath)
 
 	if err != nil {
-
 		translation, err = lang.LoadTranslation(json_folder + "en.json")
 
 		if err != nil {
-
-			c.AbortWithError(http.StatusInternalServerError, err)
-
+			t.Errorf("Failed to load translation: %v", err)
 			return
 		}
 	}
@@ -105,77 +93,82 @@ func TestMemberGroupList(t *testing.T) {
 		c.Next()
 	})
 
-	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
-
-	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY3"), store))
+	store := cookie.NewStore([]byte(os.Getenv("SESSION_KEY")))
+	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY"), store))
 
 	r.Use(csrf.Middleware(csrf.Options{
-
 		Secret: "secret123",
 		ErrorFunc: func(c *gin.Context) {
 			c.String(400, "CSRF token mismatch")
 			c.Abort()
-
 		},
 	}))
 
 	U := r.Group("/membersgroup") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.MemberGroupList)
+		U.GET("/", middleware.JWTAuth(), controllers.MemberGroupList)
 	}
 
 	req, err := http.NewRequest("GET", "/membersgroup/", nil)
-
 	if err != nil {
 		t.Fatal(err)
 	}
-	req.Header.Add("myspurtcms", token)
+	req.Header.Add("myspurtcms", Demotoken)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
+
+	// Set the token in the session
+	session.Values["token"] = Demotoken
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
 	// Check the HTTP status code
-	if w.Code != http.StatusOK { // Change the expected status code to http.StatusOK
+	if w.Code != http.StatusOK {
 		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
 	} else {
 		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
-
 	}
 
 	expectedMemberGroup := "newtodaygrp"
 	if !strings.Contains(w.Body.String(), expectedMemberGroup) {
 		t.Errorf("Expected member group %s not found in response body", expectedMemberGroup)
 	} else {
-
 		t.Logf("Expected member group %v  found in response body", expectedMemberGroup)
 	}
-
 }
+
 
 // Create member group
 
 func TestCreateNewMemberGroup(t *testing.T) {
-
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	MG := r.Group("/membersgroup") // Assuming your routes are under this group
 	{
-		MG.POST("/newgroup", controllers.CreateNewMemberGroup)
+		MG.POST("/newgroup", middleware.JWTAuth(), controllers.CreateNewMemberGroup)
 	}
-	req, err := http.NewRequest("POST", "/membersgroup/newgroup", strings.NewReader("membergroup_name=newtodaygrp&membergroup_desc=success"))
+	req, err := http.NewRequest("POST", "/membersgroup/newgroup", strings.NewReader("membergroup_name=newtodaygrp&membergroup_desc=success&1"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Add("myspurtcms", token)
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -194,22 +187,26 @@ func TestCreateNewMemberGroup(t *testing.T) {
 // Update Member group
 func TestUpdateMemberGroup(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	MG := r.Group("/membersgroup") // Assuming your routes are under this group
 	{
-		MG.POST("/updategroup", controllers.UpdateMemberGroup)
+		MG.POST("/updategroup", middleware.JWTAuth(), controllers.UpdateMemberGroup)
 	}
 	req, err := http.NewRequest("POST", "/membersgroup/updategroup", strings.NewReader("id=2&membergroup_name=newtodaygrp&membergroup_desc=success"))
+
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -229,6 +226,7 @@ func TestUpdateMemberGroup(t *testing.T) {
 
 func TestDeleteMemberGroup(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -244,7 +242,7 @@ func TestDeleteMemberGroup(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -285,7 +283,7 @@ func TestDeleteMemberGroup(t *testing.T) {
 
 	U := r.Group("/membersgroup") // Assuming your routes are under this group
 	{
-		U.GET("/deletegroup", controllers.DeleteMemberGroup)
+		U.GET("/deletegroup", middleware.JWTAuth(), controllers.DeleteMemberGroup)
 	}
 	var id = "13"
 	req, err := http.NewRequest("GET", "/membersgroup/deletegroup?id="+id, nil)
@@ -295,8 +293,20 @@ func TestDeleteMemberGroup(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -314,7 +324,8 @@ func TestDeleteMemberGroup(t *testing.T) {
 // user list
 func TestUserList(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -330,8 +341,8 @@ func TestUserList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-	fmt.Println(token, "token101")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -372,7 +383,7 @@ func TestUserList(t *testing.T) {
 
 	U := r.Group("/settings/users") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.Userlist)
+		U.GET("/", middleware.JWTAuth(), controllers.Userlist)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/users/", nil)
@@ -382,9 +393,20 @@ func TestUserList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
@@ -408,17 +430,16 @@ func TestUserList(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
-
-	fmt.Println(token, "token")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	U := r.Group("/settings/users") // Assuming your routes are under this group
 	{
-		U.GET("/delete-user/:id", controllers.DeleteUser)
+		U.GET("/delete-user/:id", middleware.JWTAuth(), controllers.DeleteUser)
 	}
 
 	id := "44"
@@ -429,8 +450,6 @@ func TestDeleteUser(t *testing.T) {
 	}
 
 	req.Header.Add("myspurtcms", token)
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -446,15 +465,17 @@ func TestDeleteUser(t *testing.T) {
 // Create user
 func TestCreateUser(t *testing.T) {
 
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings/users")
 	{
-		U.POST("/createuser", controllers.CreateUser)
+		U.POST("/createuser", middleware.JWTAuth(), controllers.CreateUser)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -480,15 +501,16 @@ func TestCreateUser(t *testing.T) {
 // Update User
 func TestUpdateUser(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings/users")
 	{
-		U.POST("/update-user", controllers.UpdateUser)
+		U.POST("/update-user", middleware.JWTAuth(), controllers.UpdateUser)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -514,6 +536,7 @@ func TestUpdateUser(t *testing.T) {
 // Member list
 func TestMemberList(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -529,7 +552,7 @@ func TestMemberList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -570,7 +593,7 @@ func TestMemberList(t *testing.T) {
 
 	U := r.Group("/member") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.MemberList)
+		U.GET("/", middleware.JWTAuth(), controllers.MemberList)
 	}
 
 	req, err := http.NewRequest("GET", "/member/", nil)
@@ -580,8 +603,20 @@ func TestMemberList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -607,15 +642,17 @@ func TestMemberList(t *testing.T) {
 // Create Member
 func TestCreateMember(t *testing.T) {
 
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/member")
 	{
-		U.POST("/newmember", controllers.CreateMember)
+		U.POST("/newmember", middleware.JWTAuth(), controllers.CreateMember)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -641,15 +678,16 @@ func TestCreateMember(t *testing.T) {
 // Update Member
 func TestUpdateMember(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/member")
 	{
-		U.POST("/updatemember", controllers.UpdateMember)
+		U.POST("/updatemember", middleware.JWTAuth(), controllers.UpdateMember)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -675,17 +713,18 @@ func TestUpdateMember(t *testing.T) {
 // Delete Member
 func TestDeleteMember(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	fmt.Println(token, "token")
 
 	U := r.Group("/member") // Assuming your routes are under this group
 	{
-		U.GET("/deletemember", controllers.DeleteMember)
+		U.GET("/deletemember", middleware.JWTAuth(), controllers.DeleteMember)
 	}
 
 	id := "44"
@@ -697,7 +736,7 @@ func TestDeleteMember(t *testing.T) {
 
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -714,7 +753,7 @@ func TestDeleteMember(t *testing.T) {
 
 func TestLanguageList(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -730,7 +769,7 @@ func TestLanguageList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	fmt.Println(token, "token101")
 	json_folder := "locales/"
 
@@ -772,7 +811,7 @@ func TestLanguageList(t *testing.T) {
 
 	U := r.Group("/settings/languages") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.LanguageList)
+		U.GET("/", middleware.JWTAuth(), controllers.LanguageList)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/languages/", nil)
@@ -782,9 +821,20 @@ func TestLanguageList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
@@ -808,7 +858,7 @@ func TestLanguageList(t *testing.T) {
 // Testing Function of Roleslist//
 func TestRolesList(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -824,8 +874,8 @@ func TestRolesList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-	fmt.Println(token, "token101")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -866,7 +916,7 @@ func TestRolesList(t *testing.T) {
 
 	U := r.Group("/settings/roles") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.RoleView)
+		U.GET("/", middleware.JWTAuth(), controllers.RoleView)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/roles/", nil)
@@ -876,9 +926,20 @@ func TestRolesList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
@@ -903,15 +964,16 @@ func TestRolesList(t *testing.T) {
 
 func TestRolesCreate(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings/roles")
 	{
-		U.POST("/createrole", controllers.RoleCreate)
+		U.POST("/createrole", middleware.JWTAuth(), controllers.RoleCreate)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -937,14 +999,15 @@ func TestRolesCreate(t *testing.T) {
 // Testing function of Rolesupdate//
 func TestRoleUpdate(t *testing.T) {
 
+	controllers.PackageInitialize()
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings/roles")
 	{
-		U.POST("/updaterole", controllers.RoleUpdate)
+		U.POST("/updaterole", middleware.JWTAuth(), controllers.RoleUpdate)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -970,17 +1033,17 @@ func TestRoleUpdate(t *testing.T) {
 
 func TestDeleteRole(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	fmt.Println(token, "token")
 
 	U := r.Group("/settings/roles") // Assuming your routes are under this group
 	{
-		U.GET("/deleterole", controllers.DeleteRole)
+		U.GET("/deleterole", middleware.JWTAuth(), controllers.DeleteRole)
 	}
 	id := "48"
 	req, err := http.NewRequest("GET", "/settings/roles/deleterole?id="+id, nil)
@@ -991,7 +1054,7 @@ func TestDeleteRole(t *testing.T) {
 
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1008,7 +1071,7 @@ func TestDeleteRole(t *testing.T) {
 
 func TestSpaceList(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1024,8 +1087,8 @@ func TestSpaceList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-	fmt.Println(token, "token101")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -1052,7 +1115,7 @@ func TestSpaceList(t *testing.T) {
 
 	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
 
-	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY3"), store))
+	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY"), store))
 
 	r.Use(csrf.Middleware(csrf.Options{
 
@@ -1064,11 +1127,6 @@ func TestSpaceList(t *testing.T) {
 		},
 	}))
 
-	// U := r.Group("/spaces") // Assuming your routes are under this group
-	// {
-	// 	U.GET("/", controllers.SpaceList)
-	// }
-
 	req, err := http.NewRequest("GET", "/spaces/", nil)
 
 	if err != nil {
@@ -1076,11 +1134,22 @@ func TestSpaceList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
-
 	w := httptest.NewRecorder()
+
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
+
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	r.ServeHTTP(w, req)
 
@@ -1101,16 +1170,11 @@ func TestSpaceList(t *testing.T) {
 // Test function for Createspace
 func TestCreateSpace(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
-
-	// Define a handler function for the CreateUser route
-	// U := r.Group("/spaces")
-	// {
-	// 	U.POST("/createspace", controllers.SpaceCreation)
-	// }
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Create a new HTTP request with the form data encoded
 	req, err := http.NewRequest("POST", "/spaces/createspace", strings.NewReader("spacename=&spacedescription=To develope web applications&catiddd=15"))
@@ -1136,13 +1200,11 @@ func TestCreateSpace(t *testing.T) {
 
 func TestDeleteSpace(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
-
-	fmt.Println(token, "token")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// U := r.Group("/spaces") // Assuming your routes are under this group
 	// {
@@ -1158,7 +1220,7 @@ func TestDeleteSpace(t *testing.T) {
 
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1175,10 +1237,11 @@ func TestDeleteSpace(t *testing.T) {
 
 func TestUpdateSpace(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	// U := r.Group("/spaces")
@@ -1210,7 +1273,7 @@ func TestUpdateSpace(t *testing.T) {
 
 func TestMyProfile(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1226,8 +1289,8 @@ func TestMyProfile(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-	fmt.Println(token, "token101")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -1271,7 +1334,7 @@ func TestMyProfile(t *testing.T) {
 
 	U := r.Group("/settings") // Assuming your routes are under this group
 	{
-		U.GET("/myprofile", controllers.MyProfile)
+		U.GET("/myprofile", middleware.JWTAuth(), controllers.MyProfile)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/myprofile", nil)
@@ -1281,9 +1344,20 @@ func TestMyProfile(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
@@ -1308,15 +1382,16 @@ func TestMyProfile(t *testing.T) {
 
 func TestUpdateProfile(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings")
 	{
-		U.POST("/updateprofile", controllers.UpdateProfile)
+		U.POST("/updateprofile", middleware.JWTAuth(), controllers.UpdateProfile)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -1343,15 +1418,16 @@ func TestUpdateProfile(t *testing.T) {
 
 func TestUptPassword(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings")
 	{
-		U.POST("/updatepassword", controllers.UptPassword)
+		U.POST("/updatepassword", middleware.JWTAuth(), controllers.UptPassword)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -1377,6 +1453,7 @@ func TestUptPassword(t *testing.T) {
 // Content Access list
 func TestContentAccessControlList(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1392,8 +1469,7 @@ func TestContentAccessControlList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -1433,7 +1509,7 @@ func TestContentAccessControlList(t *testing.T) {
 
 	U := r.Group("/memberaccess") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.ContentAccessControlList)
+		U.GET("/", middleware.JWTAuth(), controllers.ContentAccessControlList)
 	}
 
 	req, err := http.NewRequest("GET", "/memberaccess/", nil)
@@ -1443,8 +1519,20 @@ func TestContentAccessControlList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -1471,14 +1559,15 @@ func TestContentAccessControlList(t *testing.T) {
 
 func TestGrantContentAccessControl(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	MG := r.Group("/memberaccess") // Assuming your routes are under this group
 	{
-		MG.POST("/grant-accesscontrol", controllers.GrantContentAccessControl)
+		MG.POST("/grant-accesscontrol", middleware.JWTAuth(), controllers.GrantContentAccessControl)
 	}
 	formDate := url.Values{}
 
@@ -1499,7 +1588,7 @@ func TestGrantContentAccessControl(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1518,13 +1607,14 @@ func TestGrantContentAccessControl(t *testing.T) {
 // Update Content Access
 func TestUpdateContentAccessControl(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/memberaccess") // Assuming your routes are under this group
 	{
-		MG.POST("/update-accesscontrol", controllers.UpdateContentAccessControl)
+		MG.POST("/update-accesscontrol", middleware.JWTAuth(), controllers.UpdateContentAccessControl)
 	}
 
 	formDate := url.Values{}
@@ -1546,7 +1636,7 @@ func TestUpdateContentAccessControl(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1566,6 +1656,7 @@ func TestUpdateContentAccessControl(t *testing.T) {
 
 func TestDeleteAccessControl(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1581,7 +1672,7 @@ func TestDeleteAccessControl(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -1622,7 +1713,7 @@ func TestDeleteAccessControl(t *testing.T) {
 
 	U := r.Group("/memberaccess") // Assuming your routes are under this group
 	{
-		U.GET("/delete-accesscontrol/:accessId", controllers.DeleteAccessControl)
+		U.GET("/delete-accesscontrol/:accessId", middleware.JWTAuth(), controllers.DeleteAccessControl)
 	}
 	var id = "23"
 	req, err := http.NewRequest("GET", "/memberaccess/delete-accesscontrol/"+id, nil)
@@ -1632,8 +1723,20 @@ func TestDeleteAccessControl(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -1651,6 +1754,7 @@ func TestDeleteAccessControl(t *testing.T) {
 // Channel list
 func TestChannelList(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1666,7 +1770,7 @@ func TestChannelList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -1707,7 +1811,7 @@ func TestChannelList(t *testing.T) {
 
 	U := r.Group("/channels") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.ChannelList)
+		U.GET("/", middleware.JWTAuth(), controllers.ChannelList)
 	}
 
 	req, err := http.NewRequest("GET", "/channels/", nil)
@@ -1717,8 +1821,20 @@ func TestChannelList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -1752,14 +1868,15 @@ func TestChannelList(t *testing.T) {
 
 func TestCreateChannel(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	MG := r.Group("/channels") // Assuming your routes are under this group
 	{
-		MG.POST("/newchannel", controllers.CreateChannel)
+		MG.POST("/newchannel", middleware.JWTAuth(), controllers.CreateChannel)
 	}
 	formData := url.Values{}
 
@@ -1776,7 +1893,7 @@ func TestCreateChannel(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1795,13 +1912,14 @@ func TestCreateChannel(t *testing.T) {
 // Update Channel
 func TestUpdateChannel(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/channels") // Assuming your routes are under this group
 	{
-		MG.POST("/updatechannel", controllers.UpdateChannel)
+		MG.POST("/updatechannel", middleware.JWTAuth(), controllers.UpdateChannel)
 	}
 
 	formData := url.Values{}
@@ -1820,7 +1938,7 @@ func TestUpdateChannel(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -1840,6 +1958,7 @@ func TestUpdateChannel(t *testing.T) {
 
 func TestDeleteChannel(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1855,7 +1974,7 @@ func TestDeleteChannel(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -1896,7 +2015,7 @@ func TestDeleteChannel(t *testing.T) {
 
 	U := r.Group("/channels") // Assuming your routes are under this group
 	{
-		U.GET("/deletechannel", controllers.DeleteChannel)
+		U.GET("/deletechannel", middleware.JWTAuth(), controllers.DeleteChannel)
 	}
 	var id = "105"
 	req, err := http.NewRequest("GET", "/channels/deletechannel?id="+id, nil)
@@ -1906,8 +2025,20 @@ func TestDeleteChannel(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -1926,7 +2057,7 @@ func TestDeleteChannel(t *testing.T) {
 
 func TestPagesList(t *testing.T) {
 
-	var DB = config.SetupDB()
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -1942,8 +2073,8 @@ func TestPagesList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-	fmt.Println(token, "token101")
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -1994,9 +2125,20 @@ func TestPagesList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	// req.Header.Add("csrf","csrftoken")
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 
 	w := httptest.NewRecorder()
 
@@ -2021,10 +2163,11 @@ func TestPagesList(t *testing.T) {
 
 func TestInsertPage(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	// Define a handler function for the CreateUser route
 	// U := r.Group("/spaces")
@@ -2059,6 +2202,7 @@ func TestInsertPage(t *testing.T) {
 // Channel Entry list
 func TestAllEntries(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -2074,7 +2218,7 @@ func TestAllEntries(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -2115,7 +2259,7 @@ func TestAllEntries(t *testing.T) {
 
 	U := r.Group("/channel") // Assuming your routes are under this group
 	{
-		U.GET("/entrylist/", controllers.AllEntries)
+		U.GET("/entrylist/", middleware.JWTAuth(), controllers.AllEntries)
 	}
 
 	req, err := http.NewRequest("GET", "/channel/entrylist/", nil)
@@ -2125,8 +2269,20 @@ func TestAllEntries(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2152,6 +2308,7 @@ func TestAllEntries(t *testing.T) {
 // Channel Entry list
 func TestEntries(t *testing.T) {
 
+	controllers.PackageInitialize()
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -2167,7 +2324,7 @@ func TestEntries(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -2208,7 +2365,7 @@ func TestEntries(t *testing.T) {
 
 	U := r.Group("/channel") // Assuming your routes are under this group
 	{
-		U.GET("/entrylist/:id", controllers.Entries)
+		U.GET("/entrylist/:id", middleware.JWTAuth(), controllers.Entries)
 	}
 
 	id := "97"
@@ -2220,8 +2377,20 @@ func TestEntries(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2247,6 +2416,8 @@ func TestEntries(t *testing.T) {
 // Create Channel Entry
 func TestCreateEntry(t *testing.T) {
 
+	controllers.PackageInitialize()
+
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -2262,8 +2433,7 @@ func TestCreateEntry(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
-
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -2303,7 +2473,7 @@ func TestCreateEntry(t *testing.T) {
 
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
-		MG.GET("/newentry", controllers.EditEntry)
+		MG.GET("/newentry", middleware.JWTAuth(), controllers.EditEntry)
 	}
 
 	req, err := http.NewRequest("GET", "/channel/newentry", nil)
@@ -2313,8 +2483,20 @@ func TestCreateEntry(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2336,11 +2518,11 @@ func TestEntryStatus(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
-
+	controllers.PackageInitialize()
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
-		MG.POST("/changestatus/:id", controllers.EntryStatus)
+		MG.POST("/changestatus/:id", middleware.JWTAuth(), controllers.EntryStatus)
 	}
 
 	// status publish functionality
@@ -2354,7 +2536,7 @@ func TestEntryStatus(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -2388,7 +2570,8 @@ func TestEditDetails(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -2429,7 +2612,7 @@ func TestEditDetails(t *testing.T) {
 
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
-		MG.GET("/editentrydetails/:channelname/:id", controllers.EditDetails)
+		MG.GET("/editentrydetails/:channelname/:id", middleware.JWTAuth(), controllers.EditDetails)
 	}
 
 	id := "110"
@@ -2442,8 +2625,20 @@ func TestEditDetails(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2473,8 +2668,8 @@ func TestPublishEntry(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
-
+	controllers.PackageInitialize()
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
 		MG.POST("/publishentry/:id", controllers.PublishEntry)
@@ -2499,7 +2694,7 @@ func TestPublishEntry(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -2518,6 +2713,9 @@ func TestPublishEntry(t *testing.T) {
 // Edit Channel Entry
 func TestEditEntry(t *testing.T) {
 
+	controllers.PackageInitialize()
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -2532,8 +2730,6 @@ func TestEditEntry(t *testing.T) {
 		return nil
 	})
 	r.LoadHTMLFiles(htmlfiles...)
-
-	token := StaticDemoToken
 
 	json_folder := "locales/"
 
@@ -2574,7 +2770,7 @@ func TestEditEntry(t *testing.T) {
 
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
-		MG.GET("/copyentry/:id", controllers.EditEntry)
+		MG.GET("/copyentry/:id", middleware.JWTAuth(), controllers.EditEntry)
 	}
 
 	id := "108"
@@ -2586,8 +2782,20 @@ func TestEditEntry(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2606,6 +2814,9 @@ func TestEditEntry(t *testing.T) {
 
 func TestDeleteEntries(t *testing.T) {
 
+	controllers.PackageInitialize()
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	// Create a new Gin router
 	r := gin.Default()
 
@@ -2620,8 +2831,6 @@ func TestDeleteEntries(t *testing.T) {
 		return nil
 	})
 	r.LoadHTMLFiles(htmlfiles...)
-
-	token := StaticDemoToken
 
 	json_folder := "locales/"
 
@@ -2662,7 +2871,7 @@ func TestDeleteEntries(t *testing.T) {
 
 	U := r.Group("/channel") // Assuming your routes are under this group
 	{
-		U.GET("/deleteentries/", controllers.DeleteEntries)
+		U.GET("/deleteentries/", middleware.JWTAuth(), controllers.DeleteEntries)
 	}
 	var id = "105"
 	var cname = "NEW"
@@ -2674,8 +2883,20 @@ func TestDeleteEntries(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2685,178 +2906,6 @@ func TestDeleteEntries(t *testing.T) {
 		t.Errorf("Expected status code %d, got %d", http.StatusMovedPermanently, w.Code)
 	} else {
 		t.Logf("Expected status code %d, got %d", http.StatusMovedPermanently, w.Code)
-
-	}
-
-}
-
-// Media list
-func TestMediaList(t *testing.T) {
-
-	// Create a new Gin router
-	r := gin.Default()
-
-	r.Use(lang.TranslateHandler)
-
-	var htmlfiles []string
-
-	filepath.Walk("./", func(path string, info os.FileInfo, err error) error {
-		if strings.HasSuffix(path, ".html") {
-			htmlfiles = append(htmlfiles, path)
-		}
-		return nil
-	})
-	r.LoadHTMLFiles(htmlfiles...)
-
-	token := StaticDemoToken
-
-	json_folder := "locales/"
-
-	var default_lang models.TblLanguage
-
-	translation, err := lang.LoadTranslation(default_lang.JsonPath)
-
-	if err != nil {
-
-		translation, err = lang.LoadTranslation(json_folder + "en.json")
-
-		if err != nil {
-
-			c.AbortWithError(http.StatusInternalServerError, err)
-
-			return
-		}
-	}
-
-	r.Use(func(c *gin.Context) {
-		c.Set("translation", translation)
-		c.Next()
-	})
-
-	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
-
-	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY3"), store))
-
-	r.Use(csrf.Middleware(csrf.Options{
-
-		Secret: "secret123",
-		ErrorFunc: func(c *gin.Context) {
-			c.String(400, "CSRF token mismatch")
-			c.Abort()
-
-		},
-	}))
-
-	U := r.Group("/media") // Assuming your routes are under this group
-	{
-		U.GET("/", controllers.MediaList)
-	}
-
-	req, err := http.NewRequest("GET", "/media/", nil)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-	req.Header.Add("myspurtcms", token)
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
-
-	w := httptest.NewRecorder()
-
-	r.ServeHTTP(w, req)
-
-	// Check the HTTP status code
-	if w.Code != http.StatusOK { // Change the expected status code to http.StatusOK
-		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
-	} else {
-		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
-
-	}
-
-	expectedChannel := "deer(680*340)(2024-03-27T11:16:25.278Z).jpg"
-	if !strings.Contains(w.Body.String(), expectedChannel) {
-		t.Errorf("Expected Image %s not found in response body", expectedChannel)
-	} else {
-
-		t.Logf("Expected Image %v  found in response body", expectedChannel)
-	}
-
-}
-
-// Create Media Folder
-
-func TestAddFolder(t *testing.T) {
-
-	// Create a new Gin router
-	r := gin.Default()
-
-	token := StaticDemoToken
-
-	MG := r.Group("/media") // Assuming your routes are under this group
-	{
-		MG.POST("/createfolder", controllers.AddFolder)
-	}
-	req, err := http.NewRequest("POST", "/media/createfolder", strings.NewReader("foldername=New"))
-
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	if err != nil {
-		t.Fatal(err)
-	}
-	req.Header.Add("myspurtcms", token)
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
-
-	w := httptest.NewRecorder()
-
-	r.ServeHTTP(w, req)
-
-	// Check the HTTP status code
-	if w.Code != http.StatusOK { // Change the expected status code tohttp.StatusMovedPermanently
-		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
-	} else {
-		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
-
-	}
-
-}
-
-// Delete Media folder
-func TestDeleteFolderFile(t *testing.T) {
-
-	// Create a new Gin router
-	r := gin.Default()
-
-	token := StaticDemoToken
-
-	U := r.Group("/media") // Assuming your routes are under this group
-	{
-		U.POST("/deletefolfile", controllers.DeleteFolderFile)
-	}
-
-	// formData.Set("id", "['deer(680*340)(2024-03-27T11:16:25.278Z).jpg']")
-	formData := url.Values{}
-
-	formData.Set("id", "['deer.jpg']")
-
-	req, err := http.NewRequest("POST", "/media/deletefolfile", strings.NewReader(formData.Encode()))
-	// req, err := http.NewRequest("POST", "/media/deletefolfile", strings.NewReader("id=['New']"))
-
-	if err != nil {
-		t.Fatal(err)
-	}
-	req.Header.Add("myspurtcms", token)
-
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
-
-	w := httptest.NewRecorder()
-
-	r.ServeHTTP(w, req)
-
-	// Check the HTTP status code
-	if w.Code != http.StatusOK { // Change the expected status code to http.StatusOK
-		t.Errorf("Expected status code %d, got %d ", http.StatusOK, w.Code)
-	} else {
-		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
 
 	}
 
@@ -2880,7 +2929,9 @@ func TestCategoryGroupList(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -2921,7 +2972,7 @@ func TestCategoryGroupList(t *testing.T) {
 
 	U := r.Group("/categories") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.CategoryGroupList)
+		U.GET("/", middleware.JWTAuth(), controllers.CategoryGroupList)
 	}
 
 	req, err := http.NewRequest("GET", "/categories/", nil)
@@ -2931,8 +2982,20 @@ func TestCategoryGroupList(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -2962,11 +3025,13 @@ func TestCreateCategoryGroup(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	MG := r.Group("/categories") // Assuming your routes are under this group
 	{
-		MG.POST("/newcategory", controllers.CreateCategoryGroup)
+		MG.POST("/newcategory", middleware.JWTAuth(), controllers.CreateCategoryGroup)
 	}
 	req, err := http.NewRequest("POST", "/categories/newcategory", strings.NewReader("category_name=IPL&category_desc=success"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -2975,7 +3040,7 @@ func TestCreateCategoryGroup(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -2997,10 +3062,12 @@ func TestUpdateCategoryGroup(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/categories") // Assuming your routes are under this group
 	{
-		MG.POST("/updatecategory", controllers.UpdateCategoryGroup)
+		MG.POST("/updatecategory", middleware.JWTAuth(), controllers.UpdateCategoryGroup)
 	}
 	req, err := http.NewRequest("POST", "/categories/updatecategory", strings.NewReader("category_id=33&category_name=Today IPL&category_desc=success"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -3009,7 +3076,7 @@ func TestUpdateCategoryGroup(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -3044,8 +3111,9 @@ func TestDeleteCategoryGroup(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
 
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -3085,7 +3153,7 @@ func TestDeleteCategoryGroup(t *testing.T) {
 
 	U := r.Group("/categories") // Assuming your routes are under this group
 	{
-		U.GET("/deletecategory/:id", controllers.DeleteCategoryGroup)
+		U.GET("/deletecategory/:id", middleware.JWTAuth(), controllers.DeleteCategoryGroup)
 	}
 	var id = "33"
 	req, err := http.NewRequest("GET", "/categories/deletecategory/"+id, nil)
@@ -3095,8 +3163,20 @@ func TestDeleteCategoryGroup(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3117,10 +3197,12 @@ func TestCheckCategoryGroupName(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	MG := r.Group("/categories") // Assuming your routes are under this group
 	{
-		MG.POST("/checkcategoryname", controllers.CheckCategoryGroupName)
+		MG.POST("/checkcategoryname", middleware.JWTAuth(), controllers.CheckCategoryGroupName)
 	}
 	req, err := http.NewRequest("POST", "/categories/checkcategoryname", strings.NewReader("category_id=20&category_name=default"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -3129,7 +3211,7 @@ func TestCheckCategoryGroupName(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -3163,7 +3245,9 @@ func TestAddCategory(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -3204,7 +3288,7 @@ func TestAddCategory(t *testing.T) {
 
 	U := r.Group("/categories") // Assuming your routes are under this group
 	{
-		U.GET("/addcategory/:id", controllers.AddCategory)
+		U.GET("/addcategory/:id", middleware.JWTAuth(), controllers.AddCategory)
 	}
 	var pcid = "20"
 	req, err := http.NewRequest("GET", "/categories/addcategory/"+pcid, nil)
@@ -3214,8 +3298,20 @@ func TestAddCategory(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3245,11 +3341,13 @@ func TestAddSubCategory(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	MG := r.Group("/categories") // Assuming your routes are under this group
 	{
-		MG.POST("/addsubcategory/:categoryid", controllers.AddSubCategory)
+		MG.POST("/addsubcategory/:categoryid", middleware.JWTAuth(), controllers.AddSubCategory)
 	}
 	var pcid = "20"
 	req, err := http.NewRequest("POST", "/categories/addsubcategory/"+pcid, strings.NewReader("subcategoryid=20&cname=T20&cdesc=Enjoyment"))
@@ -3259,7 +3357,7 @@ func TestAddSubCategory(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -3281,10 +3379,13 @@ func TestUpdateSubCategory(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
 	MG := r.Group("/categories") // Assuming your routes are under this group
 	{
-		MG.POST("/editsubcategory", controllers.UpdateSubCategory)
+		MG.POST("/editsubcategory", middleware.JWTAuth(), controllers.UpdateSubCategory)
 	}
 	req, err := http.NewRequest("POST", "/categories/editsubcategory", strings.NewReader("id=36&pcategoryid=22&cname=Today IPL&cdesc=success"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -3293,7 +3394,7 @@ func TestUpdateSubCategory(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
 
 	w := httptest.NewRecorder()
 
@@ -3328,8 +3429,9 @@ func TestDeleteSubCategory(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
 
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -3369,7 +3471,7 @@ func TestDeleteSubCategory(t *testing.T) {
 
 	U := r.Group("/categories") // Assuming your routes are under this group
 	{
-		U.GET("/removecategory", controllers.DeleteSubCategory)
+		U.GET("/removecategory", middleware.JWTAuth(), controllers.DeleteSubCategory)
 	}
 	var id = "36"
 	var pcid = "20"
@@ -3380,8 +3482,20 @@ func TestDeleteSubCategory(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3415,8 +3529,9 @@ func TestDashboardView(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
 
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	json_folder := "locales/"
 
 	var default_lang models.TblLanguage
@@ -3456,7 +3571,7 @@ func TestDashboardView(t *testing.T) {
 
 	U := r.Group("/dashboard") // Assuming your routes are under this group
 	{
-		U.GET("/", controllers.DashboardView)
+		U.GET("/", middleware.JWTAuth(), controllers.DashboardView)
 	}
 
 	req, err := http.NewRequest("GET", "/dashboard/", nil)
@@ -3466,8 +3581,20 @@ func TestDashboardView(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3514,7 +3641,9 @@ func TestPersonalization(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -3556,7 +3685,7 @@ func TestPersonalization(t *testing.T) {
 
 	U := r.Group("/settings") // Assuming your routes are under this group
 	{
-		U.GET("/personalize/", controllers.Personalization)
+		U.GET("/personalize/", middleware.JWTAuth(), controllers.Personalization)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/personalize/", nil)
@@ -3566,8 +3695,20 @@ func TestPersonalization(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3592,12 +3733,14 @@ func TestPersonalizationUpdate(t *testing.T) {
 		c.Set("userid", 2)
 		c.Next()
 	})
-	token := StaticDemoToken
 
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 	// Define a handler function for the CreateUser route
 	U := r.Group("/settings/personalize")
 	{
-		U.POST("/update", controllers.PersonalizationUpdate)
+		U.POST("/update", middleware.JWTAuth(), controllers.PersonalizationUpdate)
 	}
 
 	// Create a new HTTP request with the form data encoded
@@ -3642,7 +3785,9 @@ func TestData(t *testing.T) {
 	})
 	r.LoadHTMLFiles(htmlfiles...)
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	json_folder := "locales/"
 
@@ -3684,7 +3829,7 @@ func TestData(t *testing.T) {
 
 	U := r.Group("/settings/data")
 	{
-		U.GET("/", controllers.Data)
+		U.GET("/", middleware.JWTAuth(), controllers.Data)
 	}
 
 	req, err := http.NewRequest("GET", "/settings/data/", nil)
@@ -3694,8 +3839,20 @@ func TestData(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -3722,7 +3879,9 @@ func TestImportData(t *testing.T) {
 		c.Next()
 	})
 
-	token := StaticDemoToken
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
 	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
 
@@ -3740,7 +3899,7 @@ func TestImportData(t *testing.T) {
 
 	U := r.Group("/settings/data")
 	{
-		U.POST("/importdata", controllers.ImportData)
+		U.POST("/importdata", middleware.JWTAuth(), controllers.ImportData)
 	}
 
 	req, err := http.NewRequest("POST", "/settings/data/importdata", nil)
@@ -3795,8 +3954,20 @@ func TestImportData(t *testing.T) {
 	}
 	req.Header.Add("myspurtcms", token)
 
-	controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
 
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
 	// Call the ImportData function
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
