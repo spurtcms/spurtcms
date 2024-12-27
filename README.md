@@ -10,14 +10,14 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/spurtcms/spurtcms-admin/releases">
+  <a href="https://github.com/spurtcms/spurtcms/releases">
     <img src="https://img.shields.io/github/last-commit/spurtcms/deployment" alt="GitHub last commit" />
   </a>
-  <a href="https://github.com/spurtcms/spurtcms-admin/issues">
+  <a href="https://github.com/spurtcms/spurtcms/issues">
     <img src="https://img.shields.io/github/issues/spurtcms/deployment" alt="GitHub issues" />
   </a>
 
-  <a href="https://github.com/spurtcms/spurtcms-admin/releases">
+  <a href="https://github.com/spurtcms/spurtcms/releases">
     <img src="https://img.shields.io/github/repo-size/spurtcms/deployment?color=orange" alt="GitHub repo size" />
   </a>
 </p>
