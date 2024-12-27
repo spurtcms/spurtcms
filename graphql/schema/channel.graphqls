@@ -1,0 +1,192 @@
+directive @auth on FIELD_DEFINITION
+
+scalar Time
+
+scalar CustomString
+
+type Channel{
+	id:                  Int!
+	channelName:         String!
+	channelDescription:  String!
+	slugName:            String!
+	fieldGroupId:        Int!
+	isActive:            Int!
+	createdOn:           Time!
+	createdBy:           Int!
+    isDeleted:           Int!
+	modifiedOn:          Time          
+	modifiedBy:          Int  
+	tenantId:            Int!                                            
+}
+
+type ChannelDetails{
+    channellist: [Channel!]!
+    count:       Int!
+}
+
+type ChannelEntryDetails{
+	channelEntriesList:  [ChannelEntries!]!
+	count:               Int!
+}
+
+type ChannelEntries{
+	id:                   Int!
+	title:                String! 
+	slug:                 String! 
+	description:          CustomString!
+	userId:               Int!
+	channelId:            Int!
+	status:               Int!
+	isActive:             Int!
+	createdOn:            Time!
+	createdBy:            Int!
+	modifiedBy:           Int     
+	modifiedOn:           Time 
+	coverImage:           String!
+	thumbnailImage:       String!
+	metaTitle:            String!
+	metaDescription:      String!
+	keyword:              String!
+	categoriesId:         String!
+	relatedArticles:      String!
+	featuredEntry:        Int!
+	viewCount:            Int!
+	author:               String
+	sortOrder:            Int
+	createTime:           Time
+	publishedTime:        Time
+	readingTime:          Int
+	tags:                 String
+	excerpt:              String
+	imageAltTag:          String
+	categories:           [[Category!]!]
+	additionalFields:     AdditionalFields
+	authorDetails:        Author
+	memberProfile:        MemberProfile
+	tenantId:             Int!
+	contentChunk:         Chunk
+}
+
+type Author{
+	id:                   Int! 
+	firstName:            String!
+	lastName:             String!
+	email:                String!
+	mobileNo:             String
+	isActive:             Int
+	profileImagePath:     String
+	createdOn:            Time!
+	createdBy:            Int! 
+	modifiedOn:           Time
+	modifiedBy:           Int 
+	tenantId:             Int!
+}
+
+type AdditionalFields{
+	sections:   [Section!]
+	fields:     [Field!]
+}
+
+type Section{
+	id:                Int!
+	sectionName:       String!
+	sectionTypeId:     Int!
+	createdOn:         Time!
+	createdBy:         Int!
+	modifiedOn:        Time
+	modifiedBY:        Int
+	orderIndex:        Int!
+	tenantId:          Int!
+}
+
+type Field{
+	id:                Int!
+	fieldName:         String!
+	fieldTypeId:       Int!
+	mandatoryField:    Int!
+	optionExist:       Int!
+	createdOn:         Time!
+	createdBy:         Int!
+	modifiedOn:        Time
+	modifiedBY:        Int
+	fieldDesc:         String!
+	orderIndex:        Int!
+	imagePath:         String!
+	datetimeFormat:    String
+	timeFormat:        String
+	sectionParentId:   Int
+	characterAllowed:  Int
+	fieldTypeName:     String!
+	fieldValue:        FieldValue
+	fieldOptions:      [FieldOptions!]
+	tenantId:          Int!
+}
+
+type FieldValue{
+	id:                Int!
+	fieldValue:        String!
+	createdOn:         Time!
+	createdBy:         Int!
+	modifiedOn:        Time
+	modifiedBY:        Int
+	tenantId:          Int!
+}
+
+type FieldOptions{
+	id:                Int!
+	optionName:        String!
+	optionValue:       String!
+	createdOn:         Time!
+	createdBy:         Int!
+	modifiedOn:        Time
+	modifiedBY:        Int
+	tenantId:          Int!
+}
+
+type CountUpdate{
+	count:      Int!
+	status:     Boolean! 
+}
+
+type Chunk{
+	data:       [String!]!
+	length:     Int!
+}
+
+extend type Query{
+    ChannelList(filter: Filter,sort: Sort): ChannelDetails! @auth
+	ChannelDetail(channelId: Int,channelSlug: String,isActive: Boolean): Channel @auth
+	ChannelEntriesList(commonFilter: Filter,sort: Sort,entryFilter: EntriesFilter,AdditionalData: EntriesAdditionalData): ChannelEntryDetails! @auth
+	ChannelEntryDetail(id: Int, slug: String,AdditionalData: EntriesAdditionalData,channelId:Int): ChannelEntries! @auth
+}
+
+extend type Mutation{
+	UpdateEntryViewCount(id: Int,slug: String): CountUpdate! @auth
+}
+
+input Filter{
+	limit:     Int
+	offset:    Int
+	isActive:  Boolean
+	keyword:   String
+}
+
+input EntriesFilter{
+	channelId:           Int
+	categoryId:          Int
+	categorySlug:        String
+	getChildCategories:  Boolean
+	Status:              String
+}
+
+input EntriesAdditionalData{
+	authorDetails:     Boolean
+	memberProfile:     Boolean
+	additionalFields:  Boolean
+	categories:        Boolean
+}
+
+input Sort{
+	sortBy:   String
+	order:    Int
+}

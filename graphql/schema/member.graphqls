@@ -1,0 +1,90 @@
+scalar Any
+
+type MemberProfile{
+	id:                Int!
+	memberId:          Int!
+	profileName:       String!
+	profileSlug:       String!
+	profilePage:       String
+	memberDetails:     Any
+	companyName:       String
+	companyLocation:   String
+	companyLogo:       String
+	about:             String
+	seoTitle:          String
+	seoDescription:    String
+	seoKeyword:        String
+	linkedin:          String
+	twitter:           String
+	website:           String
+	createdBy:         Int
+	createdOn:         Time
+	modifiedOn:        Time 
+	modifiedBy:        Int 
+	claimStatus:       Int 
+	IsActive:          Int  
+	tenantId:          Int! 
+	claimDate:         Time
+}
+
+type MemberSettings {
+    id:                  Int!
+    allowRegistration:   Int!     
+	memberLogin:         String!
+	modifiedBy:          Int       
+	modifiedOn:          Time 
+	notificationUsers:   String!  
+	tenantId:            Int!
+}
+
+extend type Mutation{
+	memberRegister(input: MemberDetails!,arguments: MemberArguments):Boolean!
+}
+
+input MemberDetails{
+    firstName:         String!
+    lastName:          String
+    mobile:            String
+    email:             String!
+    password:          String
+    isActive:          Int
+    profileImage:      String
+    profileImagePath:  String
+    username:          String
+    groupId:           Int 
+}
+
+input MemberArguments{
+	module:            Int
+	tenantId:          Int
+}
+
+type Members{
+	Id:         Int
+    firstName:         String!
+    lastName:          String
+    mobile:            String
+    email:             String!
+    password:          String
+    isActive:          Int
+    profileImage:      String
+    profileImagePath:  String
+    username:          String
+    groupId:           Int 
+	createdBy:         Int
+	createdOn:         Time
+	modifiedOn:        Time 
+	modifiedBy:        Int 
+	tenantId:          Int! 
+	isDeleted:           Int!
+}
+
+
+type MembersDetails{
+	membersList:  [Members!]!
+	count:               Int!
+}
+extend type Query{
+    MembersList(filter: Filter): MembersDetails! @auth
+
+}

@@ -1,0 +1,13 @@
+introspection:
+  schemaFile: ./spectaql/schema.graphqls
+
+info:
+  title: "Spurtcms API Documentation"
+  description: "This is the API documentation for spurtcms Admin"
+
+servers:
+  - url: http://dev.spurtcms.com:8084/query
+    description: Development Server
+
+spectaql:
+  logoFile: ./spectaql/logo.png

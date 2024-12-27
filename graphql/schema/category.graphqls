@@ -1,0 +1,33 @@
+type Category{
+	id:                 Int!
+	categoryName:       String!
+	categorySlug:       String!
+	description:        String!
+	imagePath:          String!
+	createdOn:          Time!
+	createdBy:          Int!
+	modifiedOn:         Time 
+	modifiedBy:         Int       
+	parentId:           Int!
+	tenantId:           Int!
+}
+
+type CategoryDetails{
+	categorylist: [Category!]!
+	count:        Int!
+}
+
+extend type Query{
+	CategoryList(categoryFilter: CategoryFilter,commonFilter: Filter): CategoryDetails! @auth
+}
+
+input CategoryFilter{
+	categoryGroupId:      Int
+	hierarchyLevel:       Int
+	excludeGroup:         Boolean
+	excludeParent:        Boolean
+	exactLevelOnly:       Boolean
+	checkEntriesPresence: Boolean
+	categoryGroupSlug:    String
+	channelSlug:          String
+}
