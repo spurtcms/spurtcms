@@ -20,8 +20,10 @@
   </a>
 
   <a href="https://github.com/spurtcms/spurtcms/releases">
-    <img src="https://img.shields.io/github/repo-size/spurtcms/spurtcms/main?color=orange" alt="GitHub repo size" />
+    <img src="https://img.shields.io/github/repo-size/spurtcms/main?color=orange" alt="GitHub repo size" />
   </a>
+  
+
 </p>
 <br />
 
