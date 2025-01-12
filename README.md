@@ -11,16 +11,16 @@
 <br />
 <p align="center">
   <a href="https://github.com/spurtcms/spurtcms/releases">
-    <img src="https://img.shields.io/github/last-commit/spurtcms/main" alt="GitHub last commit" />
-    https://img.shields.io/github/last-commit/spurtcms/spurtcms/main
+    <img src="https://img.shields.io/github/last-commit/spurtcms/spurtcms/main" alt="GitHub last commit" />
+    
 
   </a>
   <a href="https://github.com/spurtcms/spurtcms/issues">
-    <img src="https://img.shields.io/github/issues/spurtcms/main" alt="GitHub issues" />
+    <img src="https://img.shields.io/github/issues/spurtcms/spurtcms/main" alt="GitHub issues" />
   </a>
 
   <a href="https://github.com/spurtcms/spurtcms/releases">
-    <img src="https://img.shields.io/github/repo-size/spurtcms/main?color=orange" alt="GitHub repo size" />
+    <img src="https://img.shields.io/github/repo-size/spurtcms/spurtcms/main?color=orange" alt="GitHub repo size" />
   </a>
 </p>
 <br />
