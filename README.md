@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://github.com/spurtcms/spurtcms/releases">
     <img src="https://img.shields.io/github/last-commit/spurtcms/main" alt="GitHub last commit" />
-    
+    https://img.shields.io/github/last-commit/spurtcms/spurtcms/main
 
   </a>
   <a href="https://github.com/spurtcms/spurtcms/issues">
