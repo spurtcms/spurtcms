@@ -120,6 +120,13 @@ live demo of our intuitive Admin Panel .
 Username : spurtcmsAdmin
 Password : Admin@123
 ```
+## 💖 Support SpurtCMS
+
+SpurtCMS is a modern CMS built in Golang — open-source, fast, and developer-friendly. We're a small but passionate 8-member team building this with our own resources. 
+
+If you love what we're doing, help us build faster and go further. [Become a Sponsor](https://github.com/sponsors/spurtcms) and be part of shaping the future of content management.
+
+☕ Every contribution counts — big or small!
 
 
 ## 🤔 Support , Document and Help
