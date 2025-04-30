@@ -17,8 +17,7 @@ func ListTemplates(c *gin.Context) {
 
 	keyword := strings.TrimSpace(c.Request.URL.Query().Get("keyword"))
 
-	channelId := c.Request.URL.Query().Get("channel")
-
+	channelSlug := c.Request.URL.Query().Get("channel")
 	userLimit := c.Query("limit")
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
@@ -42,14 +41,19 @@ func ListTemplates(c *gin.Context) {
 		err                error
 		channelDetails     models.TblChannel
 	)
+	tempBannerValue, _ := c.Cookie("channelbanner")
 
-	templateModuleList, mainCount, err = models.GetTemplateModuleList(keyword, TenantId, channelId)
+	if tempBannerValue == "" {
+
+		tempBannerValue = "true"
+	}
+	templateModuleList, mainCount, err = models.GetTemplateModuleList(keyword, TenantId, channelSlug)
 	if err != nil {
 		ErrorLog.Printf("%v: %v", ErrGettingTemplateModuleList, err)
 
 	}
 
-	channelDetails, err = models.GetChannelDetailsWithTemplateCount(channelId, TenantId)
+	channelDetails, err = models.GetChannelDetailsWithTemplateCount(channelSlug, TenantId)
 	if err != nil {
 		ErrorLog.Printf("%v: %v", ErrGettingTemplateModuleList, err)
 
@@ -73,12 +77,16 @@ func ListTemplates(c *gin.Context) {
 		var count = 0
 		for _, template := range templateModule.Templates {
 
-			changedTempName := strings.ToTitle(template.TemplateName)
+			// changedTempName := strings.ToTitle(template.TemplateName)
+			var changedTempName string
+			if len(moduleName) > 0 {
+				changedTempName = strings.ToUpper(string(template.TemplateName[0])) + template.TemplateName[1:]
+			}
 			changedTempSlug := strings.ToTitle(template.TemplateSlug)
 
 			if template.ImagePath != "" {
 
-				imagePath = "/image-resize?name=" + template.ImagePath
+				imagePath = template.ImagePath
 
 			} else {
 				imagePath = ""
@@ -88,6 +96,9 @@ func ListTemplates(c *gin.Context) {
 			template.ImagePath = imagePath
 			template.TemplateName = changedTempName
 			template.TemplateSlug = changedTempSlug
+			if strings.Contains(template.DeployLink, "next_public_spurtcms_nextjs_starter_apikey") {
+				template.DeployLink = strings.Replace(template.DeployLink, "next_public_spurtcms_nextjs_starter_apikey", "NEXT_PUBLIC_SPURTCMS_NEXTJS_STARTER_APIKEY", -1)
+			}
 			finalTemplateList = append(finalTemplateList, template)
 		}
 
@@ -107,7 +118,7 @@ func ListTemplates(c *gin.Context) {
 
 	for _, chnList := range channelList {
 
-		templateCount, err := models.GetChannelBasedTemplateCount(strconv.Itoa(chnList.Id), TenantId)
+		templateCount, err := models.GetChannelBasedTemplateCount(chnList.SlugName, TenantId)
 		if err != nil {
 			ErrorLog.Printf("%v: %v", ErrGettingTemplateModuleList, err)
 
@@ -138,7 +149,7 @@ func ListTemplates(c *gin.Context) {
 	menu := NewMenuController(c)
 	translate, _ := TranslateHandler(c)
 
-	c.HTML(200, "template.html", gin.H{"csrf": csrf.GetToken(c), "linktitle": "Template", "Menu": menu, "translate": translate, "SettingsHead": true, "title": "Template", "TemplateModules": finalList, "Count": mainCount, "IsCountZero": allZeros, "Filter": keyword, "Previous": previous, "Next": next, "PageCount": pageCount, "CurrentPage": pageno, "Page": page, "Limit": limit, "Paginationendcount": paginationendcount, "ChannelList": finalChannelList, "ChannelDetail": channelDetails, "Paginationstartcount": paginationstartcount, "Pagination": PaginationData{
+	c.HTML(200, "template.html", gin.H{"csrf": csrf.GetToken(c), "tempBannerValue": tempBannerValue, "linktitle": "Next.js Templates", "Menu": menu, "translate": translate, "SettingsHead": true, "title": "Channels", "TemplateModules": finalList, "Count": mainCount, "IsCountZero": allZeros, "Filter": keyword, "Previous": previous, "Next": next, "PageCount": pageCount, "CurrentPage": pageno, "Page": page, "Limit": limit, "Paginationendcount": paginationendcount, "ChannelList": finalChannelList, "ChannelDetail": channelDetails, "Paginationstartcount": paginationstartcount, "Pagination": PaginationData{
 		NextPage:     pageno + 1,
 		PreviousPage: pageno - 1,
 		TotalPages:   pageCount,

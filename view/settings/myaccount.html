@@ -20,7 +20,7 @@
             <a href="/settings/myprofile"
                 class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
             <a href="#"
-                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[4px] no-underline"
                 id="uptprofile">{{$Translate.Update}}</a>
         </div>
     </header>
@@ -62,9 +62,14 @@
 
                     <div class="grid gap-[16px] @[475px]:grid-cols-2 grid-cols-1 innerContainer">
                         <div>
-                            <label for="firstname"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px] ">{{$Translate.Setting.Firstname}}
-                                <span class="text-red-600">*</span></label>
+                           
+                                <label for="firstname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">  {{$Translate.Memberss.Firstname}} <span class="text-red-600" >*</span> 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Setting.Firstnamelable}}</p>
+                                </div></label>
                             <input type="text" id="firstname" name="user_fname"
                                 class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] checklength"
                                 value="{{.user.FirstName}}" maxlength="25">
@@ -75,9 +80,14 @@
                             </p>
                         </div>
                         <div>
-                            <label for="lastname"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Setting.Lastname}}
-                            </label>
+
+                            <label for="lastname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">  {{$Translate.Setting.Lastname}} <span class="text-red-600" >*</span> 
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Setting.Lastlamelable}}</p>
+                            </div></label>
                             <input type="text" id="lastname" name="user_lname"
                                 class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] checklength"
                                 value="{{.user.LastName}}" maxlength="25">
@@ -88,40 +98,59 @@
                             </p>
                         </div>
                         <div>
-                            <label for="username"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Setting.Username}}
-                                <span class="text-red-600">*</span></label>
+                               
+                                <label for="username" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">  {{$Translate.Setting.Username}} <span class="text-red-600" >*</span> 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Setting.Usernamelable}}</p>
+                                </div></label>
                             <input type="text" id="username" name="user_name"
                                 class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]"
                                 value="{{.user.Username}}">
                         </div>
                         <div>
-                            <label for="role"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Role}}
-                                <span class="text-red-600">*</span></label>
+                    
+                                <label for="role" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]"> {{$Translate.Role}}<span class="text-red-600" >*</span> 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Setting.Rolelable}}</p>
+                                </div></label>
                             <input type="text" id="role"
                                 class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] cursor-default text-[#717171] "
                                 value="{{.rolename}}" readonly>
                         </div>
                         <div>
-                            <label for="email"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Email}}
-                                <span class="text-red-600">*</span></label>
+                                <label for="email" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]"> {{$Translate.Email}} <span class="text-red-600" >*</span> 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Setting.Emaillable}}</p>
+                                </div></label>
                             <input type="text" id="email" name="user_email"
                                 class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]"
                                 value="{{.user.Email}}">
                         </div>
                         <div>
-                            <label for="mobile"
-                                class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">{{$Translate.Userss.Mobile}}
-                                <span class="text-red-600">*</span></label>
-                            <input type="number" id="mobile" name="user_mob"
+                           
+                                <label for="mobile" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]"> {{$Translate.Userss.Mobile}} <span class="text-red-600" >*</span> 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Setting.Mobilelable}}</p>
+                                </div></label>
+                            <input type="number" id="mobile" name="user_mob" maxlength="15"
                                 class="block w-full h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] mobileInput"
-                                value="{{.user.MobileNo}}" maxlength="10">
+                                 value="{{.user.MobileNo}}" >
                             </input>
-                            <p class="text-[12px] text-red-600 mt-2 hidden lengthErr">You have reached a maximum limit
-                                of 10
-                                characters
+                            <p class="text-xs text-[#F26674] mt-1 hidden lengthErr">You have reached a maximum limit
+                                of 15
+                                digits
                             </p>
                         </div>
                         <div>

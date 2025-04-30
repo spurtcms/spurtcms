@@ -17,9 +17,9 @@
             <div
                 class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}} ">
                 <a href="javascript:void(0);"
-                    class=" {{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                    class=" {{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                     <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
-                    <img src="/public/img/search-icon-active.svg" alt="search" class="hidden hovericon group-hover:block ">
+                    <img src="/public/img/search-icon-active.svg" alt="search" class="hidden searchopen group-hover:block ">
                 </a>
                 <form action="/settings/users/" class="filterform" method="get" autocomplete="off">
 
@@ -34,6 +34,9 @@
                     <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                         <img src="/public/img/close.svg" alt="close">
                     </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
                     {{end}}
 
                 </form>
@@ -43,7 +46,7 @@
 
 
         <button data-bs-target="#userModal" data-bs-toggle="modal"
-            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:text-lg leading-none  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[#10A37F] flex items-center justify-center hover:bg-[#148569] text-sm font-normal text-white no-underline leading-0 space-x-[2px]">
+            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:text-lg leading-none  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[var(--btn-bg)] flex items-center justify-center hover:bg-[var(--btn-hover)] text-sm font-normal text-white no-underline leading-0 space-x-[2px]">
            <span class="max-sm:hidden">
             {{$Translate.Userss.Addnewuser}}
             </span><span class="hidden max-sm:block text-lg leading-none ">+</span>
@@ -291,7 +294,7 @@
                     {{.Pagination.PreviousPage}} </a> </li>
             {{end}}
 
-            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                     {{.CurrentPage}} </a> </li>
 
             {{if lt .CurrentPage .Pagination.TotalPages}}
@@ -350,10 +353,10 @@
                         <a href="#" data-bs-dismiss="modal" id="usermodelclose"
                             class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
                         <button type="submit" id="saveuser"
-                            class="flex items-center justify-center px-3  text-sm font-normal text-white bg-[#10A37F] hover:bg-[#148569] rounded-[4px] no-underline">{{$Translate.Save}}
+                            class="flex items-center justify-center px-3  text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">{{$Translate.Save}}
                         </button>
                         <!-- <button type="submit" id="updateuser"
-                        class="hidden h-8 flex items-center justify-center px-3  text-sm font-normal text-white bg-[#10A37F] hover:bg-[#148569] rounded-[4px] no-underline">Update
+                        class="hidden h-8 flex items-center justify-center px-3  text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">Update
                     </button> -->
                     </div>
                 </div>
@@ -413,7 +416,13 @@
 
                                 <div class=" grid-cols-1 grid w-full gap-[16px]">
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Userss.Firstname}}<span class="text-red-600" >*</span></p>
+                                        <label for="user_fname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Userss.Firstname}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Enter the member's first name as it should appear in records.</p>
+                                        </div></label>
                                         <input type="text" id="user_fname" name="user_fname"  placeholder="{{$Translate.Userss.Labelfname}}" maxlength="25"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full checklength" />
                                             <p class="text-xs text-[#F26674] mt-2 hidden lengthErr">You have reached a maximum limit
@@ -422,7 +431,13 @@
                                             </p>
                                         </div>
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Userss.Lastname}}</p>
+                                        <label for="user_lname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Userss.Lastname}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Provide the member's last name for proper identification.</p>
+                                        </div></label>
                                         <input type="text" id="user_lname" name="user_lname"  placeholder="{{$Translate.Userss.Labellname}}" maxlength="25"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full checklength" />
                                             <p class="text-xs text-[#F26674] mt-2 hidden lengthErr">You have reached a maximum limit
@@ -431,22 +446,46 @@
                                             </p>
                                         </div>
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Email}}  <span class="text-red-600" >*</span></p>
+                                        <label for="user_email" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Email}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Add the member’s email address for communication and login purposes.</p>
+                                        </div></label>
                                         <input type="text" id="user_email" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Userss.Mobile}}  <span class="text-red-600" >*</span></p>
-                                        <input type="text" id="user_mob" name="user_mob" maxlength="10" placeholder="{{$Translate.Userss.Entermobilelabel}}"
+                                        <label for="user_mob" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Userss.Mobile}}  <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Enter a valid phone number for verification and contact.</p>
+                                        </div></label>
+                                        <input type="text" id="user_mob" name="user_mob" maxlength="15" placeholder="{{$Translate.Userss.Entermobilelabel}}"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Userss.Username}}  <span class="text-red-600" >*</span></p>
+                                        <label for="user_name" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Userss.Username}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Create a unique username for the member to log in.</p>
+                                        </div></label>
                                         <input type="text" id="user_name" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
                                     </div>
                                     <div class="flex flex-col space-y-[6px]">
-                                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Userss.Password}}  <span class="text-red-600" >*</span></p>
+                                        <label for="user_pass" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Userss.Password}}  <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Set a secure password for account access and security.</p>
+                                        </div></label>
                                       <div class="relative">
                                         <input type="password" id="user_pass" name="user_pass" placeholder="{{$Translate.Userss.Enterpassword}}"
                                         class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  field rounded-[4px] p-[12px] h-[36px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full" />
@@ -459,7 +498,13 @@
                                     </div>
 
                                     <div class="dropdown open input-group" id="memgrp">
-                                        <p class="text-bold-black text-sm font-normal mb-1.5">{{$Translate.Role}}  <span class="text-red-600" >*</span></p>
+                                        <label for="user_fname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Role}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                Your role in the system, assigned by the admin, defining your access level.</p>
+                                        </div></label>
                                         <a  id="triggerId"
                                             class="rounded-[4px] p-[12px] h-9 border border-light-300 no-underline w-full flex justify-between items-center field cursor-pointer"
                                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -487,7 +532,7 @@
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button> -->
 
                                                 <button
-                                                class="{{if eq .Id 2 }}pointer-events-none opacity-50{{end}}
+                                                class="{{if  and (ne $.loggedinuser 1) (eq .CreatedBy 1)}}pointer-events-none opacity-50{{end}}
                                                 chk-group chk-group-label dropdown-items dropdown-item text-[14px] font-normal leading-[1] text-[#262626] dropdown-filter-roless cursor-pointer"
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button>
 

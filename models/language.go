@@ -61,6 +61,7 @@ type TblUser struct {
 	Otp                  int       `gorm:"column:otp"`
 	OtpExpiry            time.Time `gorm:"column:otp_expiry"`
 	TenantId             int
+	ArticleCount         int `gorm:"type:integer"`
 }
 
 type QUERY struct {
@@ -68,13 +69,13 @@ type QUERY struct {
 	DataAccess int
 }
 
-func (q QUERY) GetLanguageList(language *[]TblLanguage, limit, offset int, filter Filter, flag bool, tenantid int) ([]TblLanguage, int64) {
+func (q QUERY) GetLanguageList(language *[]TblLanguage, limit, offset int, filter Filter, flag bool, tenantid string) ([]TblLanguage, int64) {
 
 	var Total_languages int64
 
 	var emptyslice []TblLanguage
 
-	query := DB.Table("tbl_languages").Where("tbl_languages.is_deleted=? ", 0).Order("id desc")
+	query := DB.Table("tbl_languages").Where("tbl_languages.is_deleted=? and tbl_languages.is_status=? ", 0, 1).Order("id desc")
 
 	if filter.Keyword != "" {
 
@@ -111,7 +112,7 @@ func (q QUERY) GetLanguageList(language *[]TblLanguage, limit, offset int, filte
 
 }
 
-func GetLanguageDetails(langData *TblLanguage, langid, userid, tenantid int) error {
+func GetLanguageDetails(langData *TblLanguage, langid int, userid, tenantid string) error {
 
 	var userDetails TblUser
 
@@ -165,7 +166,7 @@ func AddNewLanguage(langData *TblLanguage, userid int) error {
 	return nil
 }
 
-func UpdateLanguage(langData *TblLanguage, userid int, tenantid int) error {
+func UpdateLanguage(langData *TblLanguage, userid int, tenantid string) error {
 
 	var default_lang TblLanguage
 
@@ -213,7 +214,7 @@ func UpdateLanguage(langData *TblLanguage, userid int, tenantid int) error {
 	return nil
 }
 
-func DeleteLanguage(langData *TblLanguage, tenantid int) error {
+func DeleteLanguage(langData *TblLanguage, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("id=? and (tenant_id is NULL or tenant_id = ?)", langData.Id, tenantid).UpdateColumns(map[string]interface{}{"is_deleted": langData.IsDeleted, "deleted_by": langData.DeletedBy, "deleted_on": langData.DeletedOn}).Error; err != nil {
 
@@ -223,7 +224,7 @@ func DeleteLanguage(langData *TblLanguage, tenantid int) error {
 	return nil
 }
 
-func FetchAllLanguage(languages *[]TblLanguage, tenantid int) error {
+func FetchAllLanguage(languages *[]TblLanguage, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("is_deleted=0 and (tenant_id is NULL or tenant_id = ?)", tenantid).Order("id desc").Find(&languages).Error; err != nil {
 
@@ -233,7 +234,7 @@ func FetchAllLanguage(languages *[]TblLanguage, tenantid int) error {
 	return nil
 }
 
-func GetDefaultLanguage(default_lang *TblLanguage, userid int, tenantid int) error {
+func GetDefaultLanguage(default_lang *TblLanguage, userid int, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Select("tbl_languages.*").Joins("inner join tbl_users on tbl_users.default_language_id = tbl_languages.id").Where("tbl_languages.is_deleted=0  and tbl_users.id=? and (tbl_languages.tenant_id is NULL or tbl_languages.tenant_id = ?)", userid, tenantid).First(&default_lang).Error; err != nil {
 
@@ -243,7 +244,7 @@ func GetDefaultLanguage(default_lang *TblLanguage, userid int, tenantid int) err
 	return nil
 }
 
-func GetLanguagebyLanguagecode(langData *TblLanguage, langCode string, tenantid int) error {
+func GetLanguagebyLanguagecode(langData *TblLanguage, langCode string, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("is_deleted = 0 and language_code=? and (tenant_id is NULL or tenant_id = ?)", langCode, tenantid).First(&langData).Error; err != nil {
 
@@ -253,7 +254,7 @@ func GetLanguagebyLanguagecode(langData *TblLanguage, langCode string, tenantid 
 	return nil
 }
 
-func MakeDefaultLanguage(userid int, tenantid int) error {
+func MakeDefaultLanguage(userid int, tenantid string) error {
 
 	var AutoDefaultLanguage TblLanguage
 
@@ -275,7 +276,7 @@ func MakeDefaultLanguage(userid int, tenantid int) error {
 	return nil
 }
 
-func EliminateDefaultMany(tenantid int) error {
+func EliminateDefaultMany(tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("is_deleted=0 and is_default=1 and language_code!=? and (tenant_id is NULL or tenant_id = ?)", "en", tenantid).Update("is_default", 0).Error; err != nil {
 
@@ -285,7 +286,7 @@ func EliminateDefaultMany(tenantid int) error {
 	return nil
 }
 
-func Checklang(language *TblLanguage, language_name string, langid int, tenantid int) error {
+func Checklang(language *TblLanguage, language_name string, langid int, tenantid string) error {
 
 	if langid == 0 {
 		if err := DB.Table("tbl_languages").Where("LOWER(TRIM(language_name))=LOWER(TRIM(?)) and is_deleted = 0 and (tenant_id is NULL or tenant_id = ?)", language_name, tenantid).First(&language).Error; err != nil {
@@ -302,7 +303,7 @@ func Checklang(language *TblLanguage, language_name string, langid int, tenantid
 	return nil
 }
 
-func GetIdByLanguageName(langData *TblLanguage, LangName string, tenantid int) error {
+func GetIdByLanguageName(langData *TblLanguage, LangName string, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("is_deleted = 0 and language_name=? and (tenant_id is NULL or tenant_id = ?)", LangName, tenantid).First(&langData).Error; err != nil {
 
@@ -322,7 +323,7 @@ func GetLanguageById(langData *TblLanguage, id int) error {
 	return nil
 }
 
-func Languageisactive(langData *TblLanguage, id, tenantid int) error {
+func Languageisactive(langData *TblLanguage, id, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("id=? and (tenant_id is NULL or tenant_id = ?)", id, tenantid).UpdateColumns(map[string]interface{}{"is_status": langData.IsStatus, "modified_by": langData.ModifiedBy, "modified_on": langData.ModifiedOn}).Error; err != nil {
 
@@ -332,7 +333,7 @@ func Languageisactive(langData *TblLanguage, id, tenantid int) error {
 	return nil
 }
 
-func RemoveLanguageImagePath(ImagePath string, tenantid int) error {
+func RemoveLanguageImagePath(ImagePath string, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("image_path=? and (tenant_id is NULL or tenant_id = ?)", ImagePath, tenantid).UpdateColumns(map[string]interface{}{"image_path": ""}).Error; err != nil {
 
@@ -341,7 +342,7 @@ func RemoveLanguageImagePath(ImagePath string, tenantid int) error {
 
 	return nil
 }
-func MultiSelectDeleteLanguage(langData *TblLanguage, languageid []int, tenantid int) error {
+func MultiSelectDeleteLanguage(langData *TblLanguage, languageid []int, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("id in (?) and (tenant_id is NULL or tenant_id = ?)", languageid, tenantid).UpdateColumns(map[string]interface{}{"is_deleted": langData.IsDeleted, "deleted_by": langData.DeletedBy, "deleted_on": langData.DeletedOn}).Error; err != nil {
 
@@ -351,7 +352,7 @@ func MultiSelectDeleteLanguage(langData *TblLanguage, languageid []int, tenantid
 	return nil
 }
 
-func MultiSelectLanguageisactive(langData *TblLanguage, id []int, tenantid int) error {
+func MultiSelectLanguageisactive(langData *TblLanguage, id []int, tenantid string) error {
 
 	if err := DB.Table("tbl_languages").Where("id in (?) and (tenant_id is NULL or tenant_id = ?)", id, tenantid).UpdateColumns(map[string]interface{}{"is_status": langData.IsStatus, "modified_by": langData.ModifiedBy, "modified_on": langData.ModifiedOn}).Error; err != nil {
 
@@ -361,7 +362,7 @@ func MultiSelectLanguageisactive(langData *TblLanguage, id []int, tenantid int) 
 	return nil
 }
 
-func SetDefaultLang(langId, defaultVal, tenantId int) (language TblLanguage, err error) {
+func SetDefaultLang(langId, defaultVal int, tenantId string) (language TblLanguage, err error) {
 	fmt.Println("Seumm")
 
 	if defaultVal != 1 {

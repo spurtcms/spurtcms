@@ -3,12 +3,21 @@ package controllers
 import (
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	chn "github.com/spurtcms/channels"
 	mem "github.com/spurtcms/member"
 	csrf "github.com/utrack/gin-csrf"
 )
+
+var LastUpdatedTime string
+
+func LastUpdated() string {
+	currentTime := time.Now()
+	LastUpdatedTime = time.Now().Format("2 Jan 2006")
+	return currentTime.Format("02-01-2006")
+}
 
 func DashboardView(c *gin.Context) {
 

@@ -205,11 +205,9 @@ func CreateUser(c *gin.Context) {
 
 			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
 			if uerr != nil {
-
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
 				c.Redirect(301, "/settings/users/")
 				return
-	
 			}
 		}
 
@@ -463,11 +461,9 @@ func UpdateUser(c *gin.Context) {
 
 			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
 			if uerr != nil {
-
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
 				c.Redirect(301, "/settings/users/")
 				return
-	
 			}
 		}
 

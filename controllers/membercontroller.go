@@ -118,7 +118,6 @@ func MemberList(c *gin.Context) {
 
 		dper, _ := NewAuth.IsGranted("Member", auth.Delete, TenantId)
 
-		fmt.Println("list", memberlist)
 
 		c.HTML(200, "members.html", gin.H{"csrf": csrf.GetToken(c), "Pagination": PaginationData{
 			NextPage:     pageno + 1,
@@ -149,7 +148,7 @@ func CreateMember(c *gin.Context) {
 
 	if storagetype.SelectedType == "local" {
 		if imagedata != "" {
-			imageName, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/member", "/"))
+			imageName, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/user", "/"))
 
 			if err != nil {
 				ErrorLog.Printf("error get storage type error: %s", err)
@@ -176,7 +175,7 @@ func CreateMember(c *gin.Context) {
 			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
 			if uerr != nil {
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
-				c.Redirect(301, "/member/")
+				c.Redirect(301, "/user/")
 				return
 			}
 		}
@@ -246,7 +245,7 @@ func CreateMember(c *gin.Context) {
 
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
-			c.Redirect(301, "/member/")
+			c.Redirect(301, "/user/")
 			return
 		}
 
@@ -254,13 +253,13 @@ func CreateMember(c *gin.Context) {
 			ErrorLog.Printf("memberprofile create error: %s", merr)
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
-			c.Redirect(301, "/member/")
+			c.Redirect(301, "/user/")
 			return
 		}
 
 		c.SetCookie("get-toast", "Member Created Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-		c.Redirect(301, "/member/")
+		c.Redirect(301, "/user/")
 
 		// var email models.TblEmailTemplate
 		// err = models.GetTemplates(&email, "Createmember", TenantId)
@@ -270,7 +269,7 @@ func CreateMember(c *gin.Context) {
 
 		if IsActive == 1 {
 
-			var web_url = os.Getenv("BASE_URL")
+			var web_url = os.Getenv("WEB_URL")
 			var url_prefix = os.Getenv("BASE_URL")
 			fname := c.PostForm("mem_name")
 			uname := c.PostForm("mem_email")
@@ -409,9 +408,9 @@ func UpdateMember(c *gin.Context) {
 
 	var url string
 	if pageno != "" {
-		url = "/member?page=" + pageno
+		url = "/user?page=" + pageno
 	} else {
-		url = "/member/"
+		url = "/user/"
 	}
 
 	var MemberGroupId, _ = strconv.Atoi(c.PostForm("membergroupvalue"))
@@ -433,7 +432,7 @@ func UpdateMember(c *gin.Context) {
 	if storagetype.SelectedType == "local" {
 
 		if imagedata != "" {
-			imageName, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/member", "/"))
+			imageName, imagePath, err = ConvertBase64(imagedata, strings.TrimPrefix(storagetype.Local+"/user", "/"))
 			if err != nil {
 				ErrorLog.Printf("update member convertbase64 error: %s", err)
 			}
@@ -441,7 +440,7 @@ func UpdateMember(c *gin.Context) {
 
 		if companylogo != "" {
 
-			_, companystoragepath, _ = ConvertBase64(companylogo, strings.TrimPrefix(storagetype.Local+"/member/company", "/"))
+			_, companystoragepath, _ = ConvertBase64(companylogo, strings.TrimPrefix(storagetype.Local+"/user/company", "/"))
 
 		}
 
@@ -467,11 +466,9 @@ func UpdateMember(c *gin.Context) {
 
 			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
 			if uerr != nil {
-
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
-				c.Redirect(301, "/member/")
+				c.Redirect(301, "/user/")
 				return
-
 			}
 		}
 
@@ -492,11 +489,9 @@ func UpdateMember(c *gin.Context) {
 
 			uerr := storagecontroller.UploadCropImageS3(imageName, companystoragepath, imageByte)
 			if uerr != nil {
-
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
-				c.Redirect(301, "/member/")
+				c.Redirect(301, "/user/")
 				return
-
 			}
 
 		}
@@ -625,9 +620,9 @@ func DeleteMember(c *gin.Context) {
 	var url string
 
 	if pageno != "" {
-		url = "/member?page=" + pageno
+		url = "/user?page=" + pageno
 	} else {
-		url = "/member/"
+		url = "/user/"
 	}
 
 	userid := c.GetInt("userid")
@@ -665,14 +660,14 @@ func DeleteMember(c *gin.Context) {
 
 	if currentPage > totalPages && totalPages > 0 {
 
-		url = "/member?page=" + strconv.Itoa(totalPages)
-	}
+		url = "/user?page=" + strconv.Itoa(totalPages)
+	} 
 
 	c.SetCookie("get-toast", "Member Deleted Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 
 	if totalRecords == 0 {
-		url = "/member?page=1"
+		url = "/user?page=1"
 	}
 
 	c.Redirect(301, url)
@@ -857,9 +852,9 @@ func MultiSelectDeleteMember(c *gin.Context) {
 
 	var url string
 	if pageno != "" {
-		url = "/member?page=" + pageno
+		url = "/user?page=" + pageno
 	} else {
-		url = "/member/"
+		url = "/user/"
 	}
 
 	permisison, perr := NewAuth.IsGranted("Member", auth.Delete, TenantId)
@@ -894,11 +889,11 @@ func MultiSelectDeleteMember(c *gin.Context) {
 
 		if currentPage > totalPages && totalPages > 0 {
 
-			url = "/member?page=" + strconv.Itoa(totalPages)
+			url = "/user?page=" + strconv.Itoa(totalPages)
 		}
-
+	
 		if totalRecords == 0 {
-			url = "/member?page=1"
+			url = "/user?page=1"
 		}
 		c.JSON(200, gin.H{"value": true, "url": url})
 	}
@@ -936,9 +931,9 @@ func MultiSelectMembersStatus(c *gin.Context) {
 
 	var url string
 	if pageno != "" {
-		url = "/member?page=" + pageno
+		url = "/user?page=" + pageno
 	} else {
-		url = "/member/"
+		url = "/user/"
 	}
 	userid := c.GetInt("userid")
 	permisison, perr := NewAuth.IsGranted("Member", auth.Update, TenantId)
@@ -1045,7 +1040,7 @@ func ActivateClaimStatus(c *gin.Context) {
 		ErrorLog.Println("member status not enable can't send mail")
 		c.SetCookie("get-toast", "Member Claim Updated Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-		c.Redirect(301, "/member")
+		c.Redirect(301, "/user")
 		return
 	}
 
@@ -1064,7 +1059,7 @@ func ActivateClaimStatus(c *gin.Context) {
 
 	c.SetCookie("get-toast", "Member Claim Updated Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-	c.Redirect(301, "/member")
+	c.Redirect(301, "/user")
 }
 
 // Get member profile
@@ -1156,3 +1151,15 @@ func SendMemberClaimEmail(email, memberName, companyName string, Token string, p
 	close(Chan)
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

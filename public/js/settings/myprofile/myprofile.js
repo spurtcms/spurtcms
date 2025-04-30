@@ -82,6 +82,13 @@ $(document).on('click', '#uptprofile', function () {
         "* " + languagedata.Userss.usrmobnumrgx
     );
 
+    jQuery.validator.addMethod("mob_validator", function(value, element) {
+    if (value.length >= 7)
+    return true;
+    else return false;
+}, "* Mobile number must be at least 7 digits.");
+
+
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
     }, '* ' + languagedata.Userss.usremailrgx);
@@ -212,13 +219,11 @@ $(document).on('click', '#crop-button', function () {
     $('#profpic').show()
 })
 
+
 $('input[name=user_mob]').keyup(function () {
     this.value = this.value.replace(/[^0-9\.]/g, '');
 });
 
-// $(document).on('change', '#myfile', function () {
-//    $("#prof-crop").val("2")
-// })
 
 $(document).on('click', '#back', function () {
 
@@ -258,11 +263,9 @@ $(document).on('keyup', '.checklength', function (e) {
 $(document).on('keypress', '.mobileInput', function () {
     var inputVal = $(this).val()
 
-    // console.log(inputVal.length);
-
     var inputLength = inputVal.length
 
-    if (inputLength == 10) {
+    if (inputLength == 15) {
         $(this).siblings('.lengthErr').removeClass('hidden')
         $(this).prop('readonly', true)
     }
@@ -272,13 +275,15 @@ $(document).on('keypress', '.mobileInput', function () {
 
 
 $(document).on('keyup', '.mobileInput', function (e) {
+    
 
     if (e.which == 8) {
+        
         var inputVal = $(this).val()
 
         var inputLength = inputVal.length
 
-        if (inputLength <= 10) {
+        if (inputLength <= 15) {
             $(this).siblings('.lengthErr').addClass('hidden')
             $(this).prop('readonly', false)
         }

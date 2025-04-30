@@ -61,13 +61,13 @@
       <p class="text-[#717171] text-xs leading-4 font-normal  ">{{$Translate.Setting.Permissionscontent}}</p>
       <ul
         class="grid   row-gap-3 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] py-[32px] mb-[32px] border-b border-[#EDEDED]">
-       
+
         {{range .Menu.TblModule}}
         {{if eq .ModuleName "Settings"}}
         {{range .SubModule}}
         {{if eq .ModuleName "Roles & Permissions"}}
         {{if .Routes}}
-       
+
         <li><a href="/settings/roles/"
             class=" h-[64px] p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
             <div class="min-w-[32px] min-h-[32px]">
@@ -81,17 +81,17 @@
                 {{$Translate.Setting.Rolescontent}}</p>
             </div>
           </a></li>
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
 
-          {{range .Menu.TblModule}}
-          {{if eq .ModuleName "Settings"}}
-          {{range .SubModule}}
-          {{if eq .ModuleName "Team"}}
-          {{if .Routes}}
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Team"}}
+        {{if .Routes}}
 
         <li><a href="/settings/users/"
             class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
@@ -106,12 +106,12 @@
             </div>
           </a></li>
 
-         
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
+
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
 
       </ul>
     </div>
@@ -121,7 +121,7 @@
       <p class="text-[#717171] text-xs leading-4 font-normal">{{$Translate.Setting.Systemcontent}}</p>
       <ul
         class="grid  gap-x-4  grid-cols-[repeat(auto-fill,_minmax(228px,_1fr))] py-[32px] mb-[32px] border-b border-[#EDEDED]">
-        
+
         {{range .Menu.TblModule}}
         {{if eq .ModuleName "Settings"}}
         {{range .SubModule}}
@@ -140,18 +140,23 @@
                 {{$Translate.Setting.Generalsettings}}</p>
             </div>
           </a></li>
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
 
-          
+        {{range .Menu.TblModule}}
 
-          {{range .Menu.TblModule}}
-          {{range .SubModule}}
-          {{if eq .ModuleName "Languages"}}
-          {{if .Routes}}
+        {{range .SubModule}}
+        
+        {{end}}
+        {{end}}
+
+        {{range .Menu.TblModule}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Languages"}}
+        {{if .Routes}}
         <li><a href="/settings/languages/"
             class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
             <div class="min-w-[32px] min-h-[32px]">
@@ -166,15 +171,15 @@
             </div>
           </a></li>
 
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          {{range .Menu.TblModule}}
-          {{if eq .ModuleName "Settings"}}
-          {{range .SubModule}}
-          {{if eq .ModuleName "Email"}}
-          {{if .Routes}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Email"}}
+        {{if .Routes}}
         <li><a href="/settings/emails/"
             class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
             <div class="min-w-[32px] min-h-[32px]">
@@ -188,14 +193,62 @@
                 {{$Translate.Setting.Emailcontent}}</p>
             </div>
           </a></li>
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          {{end}}
-          
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "Data"}}
+        {{if .Routes}}
+        <li><a href="/settings/data/"
+            class=" h-[64px]  p-[16px] rounded-[4px] space-x-[12px]  group hover:bg-[#F5F5F5] max-sm:bg-[#F5F5F5] flex items-center">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/myData.svg" alt="my data">
+            </div>
+            <div class="flex flex-col space-y-[6px]">
+              <h3 class="text-[#262626] text-sm font-normal leading-[17.5px]">{{$Translate.Setting.Data}}</h3>
+              <p
+                class="text-[#717171] text-xs leading-[16px] font-normal hidden max-sm:line-clamp-1 group-hover:line-clamp-1  ">
+                {{$Translate.Setting.Datacontent}}</p>
+            </div>
+          </a></li>
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+
+
+        {{range .Menu.TblModule}}
+        {{if eq .ModuleName "Settings"}}
+        {{range .SubModule}}
+        {{if eq .ModuleName "AI Settings"}}
+        {{if .Routes}}
+        <li><a href="/settings/aisettings/"
+            class="group flex items-center gap-[12px] max-sm:bg-[#F5F5F5] hover:bg-[#F5F5F5] p-[16px] rounded-[4px] h-[64px]">
+            <div class="min-w-[32px] min-h-[32px]">
+              <img src="/public/img/open-ai.svg" alt="ai settings">
+            </div>
+            <div class="flex flex-col gap-[6px]">
+              <h3 class="font-normal text-[#262626] text-sm leading-[17.5px]">AI Module Settings</h3>
+              <p
+                class="hidden font-normal text-[#717171] text-xs max-sm:line-clamp-1 group-hover:line-clamp-1 leading-[16px]">
+                AI Module Settings
+              </p>
+            </div>
+          </a></li>
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
+
 
       </ul>
+
     </div>
 
 

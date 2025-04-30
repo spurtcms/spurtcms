@@ -20,15 +20,15 @@
 
 
         <div
-            class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] header-rht {{if .Filter.Keyword}}langSearchDiv{{end}}">
+            class="transitionSearch w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] header-rht {{if .Filter.Keyword}}langSearchDiv{{end}}">
             <a href="javascript:void(0);" id="langSearchlink"
-                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search"
-                    class="hidden group-hover:block langHoverIcon">
+                    class="hidden group-hover:block searchopen">
             </a>
             <input type="text" placeholder={{$Translate.Csearch}} name="" id="langSearchBar"
-                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 {{if .Filter.Keyword}} w-[calc(100%-36px)] h-full block {{else}} hidden {{end}}"
+                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0  w-[calc(100%-36px)] h-full block "
                 value="{{.Filter.Keyword}}">
             </input>
             {{if .Filter.Keyword}}
@@ -37,6 +37,9 @@
             </div>
             {{else}}
             <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
                 <img src="/public/img/close.svg" alt="close">
             </div>
             {{end}}
@@ -227,7 +230,7 @@
         <!--pagination-->
         <div
             class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
-            <ul class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex">
+            <ul class="@[500px]:ml-auto justify-center items-center gap-[8px] flex">
                 {{if gt .Count .Limit}}
 
                 <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
@@ -266,7 +269,7 @@
                 {{end}}
 
                 <li> <a href=""
-                        class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                        class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                         {{.CurrentPage}} </a> </li>
 
                 {{if lt .CurrentPage .Pagination.TotalPages}}
@@ -299,7 +302,7 @@
                 </li>
                 {{end}}
             </ul>
-            <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <p class="@[500px]:ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
                 {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
             </p>
         </div>

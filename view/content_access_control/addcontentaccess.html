@@ -36,7 +36,15 @@ class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto 
     <div class="px-[16px] py-[12px] flex items-start space-x-[16px] border-b border-[#EDEDED]">
         <input type="hidden" id="csrf-input" value="{{.csrf}}">
         <input type="hidden" id="route-type" value="{{.Button}}">
-            <h3 class="text-[#262626] text-sm font-normal mb-0 mt-[8px]">{{$Translate.ContentAccessControl.Title}}</h3>
+            <!-- <h3 class="text-[#262626] text-sm font-normal mb-0 mt-[8px]">{{$Translate.ContentAccessControl.Title}}</h3> -->
+            <label for="ca-inpt" class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px]">{{$Translate.ContentAccessControl.Title}}
+                <span class="text-red-600" >*</span>
+                <div class="cursor-pointer group">
+                <img src="/public/img/inputdesc.svg" alt="">
+                <p
+                    class=" hidden group-hover:block absolute left-0  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]" style="width: 500px; z-index: 999;">
+                    {{$Translate.ContentAccessControl.Titlelable}} </p>
+            </div></label>
 
           <div class="w-full">
             <input type="text"  value="{{.AccessControl.AccessControlName}}" id="ca-inpt" maxlength="25"
@@ -88,7 +96,7 @@ class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto 
                     <div
                         class=" w-[32px]  h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px]">
                         <a href="javascript:void(0);"
-                            class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                            class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                             <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                             <img src="/public/img/search-icon-active.svg" alt="search"
                                 class="hidden group-hover:block ">
@@ -150,7 +158,7 @@ class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto 
                 {{end}}
                 {{else}}
                 <tr>
-                    <td colspan="9">
+                    <!-- <td colspan="9">
                         <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
                             <div class="text-center w-fit mx-auto">
                                 <img src="/public/img/noData.svg" alt="nodate">
@@ -162,7 +170,21 @@ class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto 
                                 {{$Translate.Gobackhome}}</p>
                         </div>
 
-                    </td>
+                    </td> -->
+
+                    <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                        <div class="mb-[30px]">
+                            <img src="/public/img/no-data-channels.svg" alt="" >
+                        </div>
+                        <div class="flex flex-col items-center space-y-8 w-full">
+                            <div class="flex flex-col space-y-[16px] w-full">
+                                <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">{{$Translate.Channell.Nochannelsyet}}</h3>
+                                <p class="font-light text-[#717171] text-center mb-2 text-base">{{$Translate.Channell.Nochannels}}</p>
+                            </div>
+                            <a href="/channels/create"
+                                class="inline-flex items-center bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.Channell.Createfirstchannels}}</a>
+                        </div>
+                    </div>
                 </tr>
                 {{end}}
             </div>

@@ -155,7 +155,7 @@ function CKEDITORS() {
                             const formData = new FormData();
                             formData.append('file', file);
                             formData.append('csrf', $("input[name='csrf']").val())
-                            fetch(url + '/channel/imageupload', {
+                            fetch(url + '/entries/imageupload', {
                                 method: 'POST',
                                 body: formData
                             })
@@ -211,7 +211,7 @@ $(document).on('click','#update',function(){
 
 $(document).on('click','#cancel',function(){
 
-    window.location.href="/channel/settings"
+    window.location.href="/entries/settings"
  })
 
 

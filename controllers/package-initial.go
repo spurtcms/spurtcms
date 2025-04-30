@@ -4,8 +4,10 @@ import (
 	"os"
 
 	newauth "github.com/spurtcms/auth"
+	"github.com/spurtcms/blocks"
 	cat "github.com/spurtcms/categories"
 	chn "github.com/spurtcms/channels"
+	forms "github.com/spurtcms/forms-builders"
 	mem "github.com/spurtcms/member"
 	memaccess "github.com/spurtcms/member-access"
 	"github.com/spurtcms/team"
@@ -24,7 +26,8 @@ var (
 	MemberConfig       *mem.Member
 	MemberConfigWP     *mem.Member
 	MemberaccessConfig *memaccess.AccessControl
-
+	BlockConfig        *blocks.Block
+	FormConfig         *forms.Formbuilders
 )
 
 // AuthCofing
@@ -182,6 +185,30 @@ func GetMemberaccessInstance() *memaccess.AccessControl {
 	return MemberaccessConfig
 }
 
+func GetBlockInstance() *blocks.Block {
+
+	BlockConfig = blocks.BlockSetup(blocks.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+	})
+
+	return BlockConfig
+}
+
+func GetFormInstance() *forms.Formbuilders {
+
+	FormConfig = forms.FormSetup(forms.Config{
+		DB:               DB,
+		AuthEnable:       true,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+	})
+
+	return FormConfig
+}
+
 func PackageInitialize() {
 	AuthConfig()
 	GetTeamInstance()
@@ -194,4 +221,6 @@ func PackageInitialize() {
 	GetRoleInstanceWithoutPermission()
 	GetMemberInstanceWithoutPermission()
 	GetChannelInstanceWithoutPermission()
+	GetBlockInstance()
+	GetFormInstance()
 }

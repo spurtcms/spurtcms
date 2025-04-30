@@ -4,23 +4,29 @@
 {{$Viewbaseurl := .Viewbaseurl}}
 {{$Namestring := .Menu.NameString}}
 {{$Channelfilter := .channelfilter}}
-<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
     <header
-        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht">
-        <div class="mr-auto flex items-center space-x-[6px]">
+        class="  max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+
+        <div class="mr-auto flex items-center gap-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Entries}}
-            </h2>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Entries}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.Channell.Entryheadingcont}}</p>
+            </div>
         </div>
         <div
             class="{{if .filter.Keyword}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
             <a href="javascript:void(0);"
-                class="{{if .filter.Keyword}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                class="{{if .filter.Keyword}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
-                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="hidden group-hover:block hovericon searchopen">
             </a>
             <form action="" method="get" class="filterform " autocomplete="off">
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="searchkey"
@@ -35,17 +41,75 @@
                 <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                     <img src="/public/img/close.svg" alt="close">
                 </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
                 {{end}}
 
             </form>
         </div>
+
+        <div class="dropdown">
+
+            <a href="javascript:void(0);"
+                class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA]  border-[1px] border-[#ECECEC] [&amp;.show]:bg-[#F0FFFB] [&amp;.show]:border-[#10A37F]"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <img src="/public/img/sort.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                <img src="/public/img/sort-active.svg" alt="filter-active"
+                    class="hidden group-hover:block group-focus:block">
+            </a>
+            <div
+                class="dropdown-menu  dropdown-menu-start w-[160px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014] !mt-[4px]">
+                <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[4px]">
+                    <h3 class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center gap-[4px] ">
+                        <img src="/public/img/sort-black.svg" alt="filter" class="block">
+                        Sort By
+                    </h3>
+
+                </div>
+                <form action="" method="get" class="SortFunction " autocomplete="off">
+                    <input type="hidden" name="sort" id="SortFunction">
+                </form>
+                <ul>
+                    <li class="flex items-center space-x-[8px] py-[8px] cursor-pointer">
+                        <input type="radio" name="radio" id="lastUpdated" value="lastUpdated"
+                            class="accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default">
+                        <label for="lastUpdated"
+                            class=" block text-[#717171] text-[12px] font-normal hover:text-[#262626] cursor-pointer">Last
+                            Updated</label>
+                    </li>
+                    <li class="flex items-center space-x-[8px] py-[8px] cursor-pointer">
+                        <input type="radio" name="radio" id="createdDate" value="createdDate"
+                            class="accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default">
+                        <label for="createdDate" class="block text-[#717171] text-[12px] font-normal 
+                    hover:text-[#262626] cursor-pointer">Created date</label>
+                    </li>
+                    <li class="flex items-center space-x-[8px] py-[8px] cursor-pointer">
+                        <input type="radio" name="radio" id="ascending" value="asc"
+                            class="accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default">
+                        <label for="ascending"
+                            class=" block text-[#717171] text-[12px] font-normal hover:text-[#262626] cursor-pointer">Ascending</label>
+                    </li>
+                    <li class="flex items-center space-x-[8px] p-[8px_0_4px_0] cursor-pointer">
+                        <input type="radio" name="radio" id="descending" value="desc"
+                            class="accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default">
+                        <label for="descending"
+                            class=" block text-[#717171] text-[12px] font-normal hover:text-[#262626] cursor-pointer">Descending</label>
+                    </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+
 
 
 
         <div class="dropdown">
             <a href="javascript:void(0);"
                 class=" sm:min-w-[216px] space-x-[6px] bg-white border-[1px] border-solid border-[#10A37F] rounded-[4px] p-[7px_12px_7px_12px]  {{if .channelname}} p-[7px_32px_7px_12px]{{else}} p-[7px_12px_7px_12px]{{end}} h-[32px] flex items-center justify-between cursor-pointer"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-expanded="false">
                 {{if .channelname}}
                 <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#10A37F]  overflow-hidden text-ellipsis whitespace-nowrap"
                     data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
@@ -69,8 +133,9 @@
                 style="">
                 {{$ChannelId := .chnid}}
                 {{range .channellist}}
-                <li class="mb-[8px]"><a class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#F0FFF1] hover:border-[#C5E9C6]{{if eq $ChannelId .Id}} bg-[#F0FFF1] border-[#C5E9C6]{{else}} border-[#EDEDED] {{end}}"
-                        href="/channel/unpublishentrieslist/{{.Id}}">
+                <li class="mb-[8px]"><a
+                        class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .Id}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
+                        href="/entries/unpublishentrieslist/{{.Id}}">
                         <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}</h5>
                         <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if gt
                             .EntriesCount 1}}{{$Translate.Entries}} :{{.EntriesCount}}{{else}}
@@ -82,13 +147,48 @@
             </ul>
         </div>
 
-        <a href="/channel/newentry"
-            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
+        <!-- <a href="/entries/create/{{.chnid}}"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D] ">
             <span class="hidden max-sm:block text-lg leading-none ">+</span>
             <span class="max-sm:hidden">
                 {{$Translate.Channell.Createentry}}
             </span>
-        </a>
+        </a> -->
+        <div class="dropdown">
+            <a href="/entries/create/{{.chnid}}"
+                class=" flex  space-x-1 items-center text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[10px] h-[32px] rounded-[4px] place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D] ">
+                <span class="hidden max-sm:block text-lg leading-none ">+</span>
+                <span class="max-sm:hidden">
+                    {{$Translate.Channell.Createentry}}
+                </span>
+                <span class=" grid place-items-center">
+                    <img src="/public/img/create-arrow.svg" alt="arrow">
+                </span>
+            </a>
+
+            <!-- <ul
+                class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col space-y-[8px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[170px] !mt-[6px]">
+
+                <div id="ai-content-entry"
+                    class='grid grid-cols-[16px_1fr] items-center space-x-[6px] mb-[8px] last-of-type:mb-0 '>
+                    <input type="radio" name="entry-radio" id="ai-content-entry-input" data-id="/aiassistance/"
+                        class='accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default' />
+                    <label class='text-[#262626] text-[12px] font-normal hover:text-[#262626] cursor-pointer'>AI
+                        Writing</label>
+                </div>
+                <div class="border-b  border-[#EDEDED] -mx-[16px] my-1 "></div>
+                <div id="manual-content-entry"
+                    class='grid grid-cols-[16px_1fr] items-center space-x-[6px] mb-[8px] last-of-type:mb-0 '>
+                    <input type="radio" name="entry-radio" id="manual-content-entry-input"
+                        data-id="/entries/create/{{.chnid}}"
+                        class='accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default' />
+                    <label class='text-[#262626] text-[12px] font-normal hover:text-[#262626] cursor-pointer'>Own
+                        Writing</label>
+                </div>
+
+
+            </ul> -->
+        </div>
     </header>
     <input type="hidden" name="csrf" value="{{.csrf}}">
 
@@ -97,13 +197,13 @@
             {{$Filter := .filter.Keyword}}
 
             <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
-                <li><a href="{{if .publishroute}}{{.publishroute}}{{else if $Filter}}/channel/entrylist?keyword={{$Filter}}{{else}}/channel/entrylist{{end}}"
+                <li><a href="{{if .publishroute}}{{.publishroute}}{{else if $Filter}}/entries/entrylist?keyword={{$Filter}}{{else}}/entries/entrylist{{end}}"
                         class=" max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626] ">{{$Translate.Channell.Published}}</a>
                 </li>
-                <li><a href="{{if .unpublishroute}} {{.unpublishroute}}{{else if $Filter}} /channel/unpublishentries?keyword={{$Filter}}{{else}}/channel/unpublishentries{{end}}"
+                <li><a href="{{if .unpublishroute}} {{.unpublishroute}}{{else if $Filter}} /entries/unpublishentries?keyword={{$Filter}}{{else}}/entries/unpublishentries{{end}}"
                         class=" max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 pb-tab">{{$Translate.Channell.Unpublished}}</a>
                 </li>
-                <li><a href="{{if .draftroute}}{{.draftroute}}{{else if $Filter}}/channel/draftentries?keyword={{$Filter}}{{else}}/channel/draftentries{{end}}"
+                <li><a href="{{if .draftroute}}{{.draftroute}}{{else if $Filter}}/entries/draftentries?keyword={{$Filter}}{{else}}/entries/draftentries{{end}}"
                         class="max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]  ">{{$Translate.Channell.Draft}}</a>
                 </li>
 
@@ -118,7 +218,7 @@
 
             </ul>
         </div>
-        <div class="px-[16px] overflow-auto publish-tab">
+        <div class="px-[16px] overflow-auto publish-tab pb-[60px]">
             {{if .ChanEntrtlist}}
             {{$Chnid :=.chnid}}
             {{$Pageno := .CurrentPage}}
@@ -134,8 +234,8 @@
                 </div>
 
                 <div>
-                    <a {{if .ChannelName}} href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
-                        {{else}}href="/channel/editsentry/{{.Id}}?page={{$Pageno}}" {{end}}>
+                    <a {{if .ChannelName}} href="/entries/edit/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
+                        {{else}}href="/entries/edits/{{.Id}}?page={{$Pageno}}" {{end}}>
                         <h3 class="text-[#262626] text-sm font-medium leading-[17.5px] mb-[8px] w-[90%] ">{{.Title}}
                         </h3>
                     </a>
@@ -195,14 +295,13 @@
                             data-bs-placement="bottom" data-bs-html="true" data-bs-custom-class="custom-tooltip"
                             data-bs-title="Copy Link">
                     </a> -->
-                    <a href="{{$Viewbaseurl}}/{{.Slug}}-{{.Uuid}}" target="_blank" data-bs-toggle="tooltip"
-                    data-bs-placement="bottom" data-bs-html="true" data-bs-custom-class="custom-tooltip"
-                    data-bs-title="Preview" class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5]">
+                    <a href="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}-{{.Uuid}}" target="_blank"
+                        class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5]">
                         <img src="/public/img/Eye.svg" alt="global">
                     </a>
 
                     <div class="btn-group language-group position-static">
-                        <a href="javascript:void(0);"  
+                        <a href="javascript:void(0);"
                             class=" border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] [&.show]:bg-[#F5F5F5] "
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="/public/img/action-btn-active.svg" alt="dropdown"
@@ -213,42 +312,44 @@
 
 
                         <ul
-                            class="dropdown-menu dropdown-menu-end min-w-[180px] rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[12px] border-0">
+                            class="dropdown-menu dropdown-menu-end min-w-[180px] rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[8px] border-0">
 
                             <li class="mb-[4px] last-of-type:mb-[0]">
                                 <a href="javascript:void(0);" data-id="{{.Id}}" id="publish"
                                     data-bs-target="#deleteModal" data-bs-toggle="modal"
                                     data-channelname="{{.ChannelName}}" data-status="1"
-                                    class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
-                                     >
-                                    <span class="w-[16px] h-[16px] grid place-items-center"><img
-                                            src="/public/img/publish.png" alt="publish"></span>
+                                    class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                    <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                            src="/public/img/publish.png" alt="publish"
+                                            class="w-full h-full object-contain"></span>
                                     {{$Translate.Channell.Publish}}</a>
                             </li>
 
 
                             <li class="mb-[4px] last-of-type:mb-[0]"><a {{if .ChannelName}}
-                                    href="/channel/editentry/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
-                                    {{else}}href="/channel/editsentry/{{.Id}}?page={{$Pageno}}" {{end}}
-                                    class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
-                                     >
-                                    <span><img src="/public/img/edit.svg" alt=""></span>{{$Translate.Edit}} </a></li>
+                                    href="/entries/edit/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
+                                    {{else}}href="/entries/edits/{{.Id}}?page={{$Pageno}}" {{end}}
+                                    class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                    <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                            src="/public/img/edit.svg" alt=""
+                                            class="w-full h-full object-contain"></span>{{$Translate.Edit}} </a></li>
 
 
-                            <li class="mb-[4px] last-of-type:mb-[0]"><a href="/channel/copyentry/{{.Id}}"
-                                    class="dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
-                                     >
-                                    <span><img src="/public/img/duplicate.svg"
-                                            alt=""></span>{{$Translate.Channell.Duplicate}}
+                            <li class="mb-[4px] last-of-type:mb-[0]"><a href="/entries/copyentry/{{.Id}}"
+                                    class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                    <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                            src="/public/img/duplicate.svg" alt=""
+                                            class="w-full h-full object-contain"></span>{{$Translate.Channell.Duplicate}}
                                 </a>
                             </li>
 
                             <li class="mb-[4px] last-of-type:mb-[0]"><a data-bs-target="#deleteModal"
                                     data-bs-toggle="modal" data-page="{{$Pageno}}" data-id="{{.Id}}"
                                     data-name="{{.ChannelName}}"
-                                    class="deleteentry dropdown-item h-[35px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[12px] hover:bg-[#F5F5F5]"
-                                     >
-                                    <span><img src="/public/img/delete.svg" alt=""></span>{{$Translate.Delete}} </a>
+                                    class="deleteentry dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                    <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                            src="/public/img/delete.svg" alt=""
+                                            class="w-full h-full object-contain"></span>{{$Translate.Delete}} </a>
                             </li>
                         </ul>
                     </div>
@@ -279,7 +380,7 @@
 
             <tr>
                 <td colspan="9">
-                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                    <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
                         <div class="text-center w-fit mx-auto">
                             <img src="/public/img/noData.svg" alt="nodate">
                         </div>
@@ -288,10 +389,27 @@
                         <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
                             {{$Translate.Pagesorry}}
                             {{$Translate.Gobackhome}}</p>
-                        <a href="/channel/newentry"
+                        <a href="/entries/create"
                             class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
                             {{$Translate.Clickadd}} >></a>
+                    </div> -->
+
+                    <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                        <div class="mb-[30px]">
+                            <img src="/public/img/no-data-entries.svg" alt="">
+
+                        </div>
+                        <div class="flex flex-col items-center space-y-8 w-full">
+                            <div class="flex flex-col space-y-[16px] w-full">
+                                <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center"></h3>
+                                <p class="font-light text-[#717171] text-center text-base mb-2">
+                                    {{$Translate.Channell.Nounpublished}}</p>
+                            </div>
+                            <a href="/entries/create/{{.chnid}}"
+                                class="inline-flex items-center bg-[#000000] hover:bg-[#2D2D2D] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.Channell.Createfirstunpublished}}</a>
+                        </div>
                     </div>
+
 
                 </td>
             </tr>
@@ -341,7 +459,7 @@
                 {{end}}
 
                 <li> <a href=""
-                        class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                        class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#000000] hover:bg-[#2D2D2D] font-bold {{end}}">
                         {{.CurrentPage}} </a> </li>
 
                 {{if lt .CurrentPage .Pagination.TotalPages}}
@@ -374,9 +492,33 @@
                 </li>
                 {{end}}
             </ul>
-            <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
-                {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}
-            </p>
+            <div class="@[500px]:!ml-auto flex items-center space-x-[8px]">
+                <div class="flex items-center space-x-[4px]">
+                    <p class="text-[12px] font-light text-[#717171] leading-normal">Rows per page</p>
+
+                    <div class="dropdown">
+                        <button
+                            class="flex space-x-[8px] items-center justify-center border-[1px] border-solid border-[#ECECEC] rounded-[4px] h-[36px] w-[60px]"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="text-[14px] text-[#222222] font-normal" id="PaginationUpdatedValue">10</span>
+                            <img src="/public/img/pagination-select.svg" alt="arrow">
+                        </button>
+                        <form action="" method="get" class="PaginationLimit " autocomplete="off">
+                            <input type="hidden" name="limit" id="PaginationLimit">
+                        </form>
+                        <ul
+                            class="dropdown-menu text-[14px] text-[#222222] font-normal w-[60px] min-w-[60px] border-[1px] border-solid border-[#ECECEC]">
+                            <li><a class="dropdown-item pagination-dropdown" href="#" data-value="10">10</a></li>
+                            <li><a class="dropdown-item pagination-dropdown" href="#" data-value="20">20</a></li>
+                            <li><a class="dropdown-item pagination-dropdown" href="#" data-value="50">50</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+                <p class=" text-[14px] font-normal text-[#222222] leading-[14px]">
+                    {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}}
+                </p>
+            </div>
         </div>
 
     </div>

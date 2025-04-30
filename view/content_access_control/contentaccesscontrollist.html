@@ -16,9 +16,9 @@
         <div
             class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
             <a href="javascript:void(0);"
-                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB] {{if eq .Searchtrue true}} pointer-events-none {{end}}">
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA] {{if eq .Searchtrue true}} pointer-events-none {{end}}">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
-                <img src="/public/img/search-icon-active.svg" alt="search" class="hovericon hidden group-hover:block ">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="searchopen hidden group-hover:block ">
             </a>
             <form action="/memberaccess/" method="get" name="contentaccess-form">
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="memberrestrictsearch"
@@ -32,6 +32,9 @@
                     <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                         <img src="/public/img/close.svg" alt="close">
                     </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
                     {{end}}
 
 
@@ -40,7 +43,7 @@
 
 
         <a href="/memberaccess/newcontentaccesscontrol"
-            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569]">
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
             <span class="hidden max-sm:block text-lg leading-none ">+</span> <span class="max-sm:hidden"> {{$Translate.ContentAccessControl.Contentaccess}}</span></a>
 
     </header>
@@ -173,7 +176,7 @@
                 {{else}}
                 <tr>
                     <td colspan="9">
-                        <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                        <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
                             <div class="text-center w-fit mx-auto">
                                 <img src="/public/img/noData.svg" alt="nodate">
                             </div>
@@ -185,6 +188,20 @@
                             <a href="/memberaccess/newcontentaccesscontrol"
                                 class="cursor-pointer text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
                                 {{$Translate.Clickadd}} >></a>
+                        </div> -->
+
+                        <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] max-[1300px]:pt-0">
+                            <div class="mb-[30px]">
+                                <img src="/public/img/no-data-member.svg" alt="" class="">
+
+                             </div>                            <div class="flex flex-col items-center space-y-8 w-full">
+                                <div class="flex flex-col space-y-[16px] w-full">
+                                    <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">{{$Translate.ContentAccessControl.Norestrictyet}}</h3>
+                                    <p class="font-light text-[#717171] text-center mb-2 text-base">{{$Translate.ContentAccessControl.Norestrict}}</p>
+                                </div>
+                                <a href="/memberaccess/newcontentaccesscontrol"
+                                    class="inline-flex items-center bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.ContentAccessControl.Createfirstrestrict}}</a>
+                            </div>
                         </div>
 
                     </td>
@@ -240,7 +257,7 @@
                     {{.Pagination.PreviousPage}} </a> </li>
             {{end}}
 
-            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[4px]border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[4px]border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                     {{.CurrentPage}} </a> </li>
 
             {{if lt .CurrentPage .Pagination.TotalPages}}

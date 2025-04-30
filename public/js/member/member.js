@@ -67,6 +67,7 @@ $("#modalId2").on("hide.bs.modal", function () {
 })
 
 // only allow numbers (mobile number validation)
+
 $('#mem_mobile').keyup(function () {
     this.value = this.value.replace(/[^0-9\.]/g, '');
 });
@@ -75,6 +76,7 @@ $('#mem_mobile').keyup(function () {
 // delete btn
 $(document).on('click', '#del', function () {
     var MemberId = $(this).attr("data-id")
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
     $(".deltitle").text(languagedata.Memberss.deltitle)
     $('.delname').text($(this).parents('tr').find('#membername').text())
     $("#content").text(languagedata.Memberss.delmember)
@@ -84,85 +86,13 @@ $(document).on('click', '#del', function () {
 
     if (pageno == null) {
         console.log("varuthu");
-        $('#delid').attr('href', '/member/deletemember?id=' + MemberId);
+        $('#delid').attr('href', '/user/deletemember?id=' + MemberId);
 
     } else {
-        $('#delid').attr('href', '/member/deletemember?id=' + MemberId + "&page=" + pageno);
+        $('#delid').attr('href', '/user/deletemember?id=' + MemberId + "&page=" + pageno);
 
     }
 })
-
-// editbtn (not use now)
-
-// var edit
-// $(document).on('click', '#editmem', function () {
-// console.log("edit dffgdg");
-//     $(".input-group").removeClass("input-group-error")
-//     $("#mem_name-error").hide()
-//     $("#mem_lname-error").hide()
-//     $("#mem_email-error").hide()
-//     $("#mem_usrname-error").hide()
-//     $("#membergroupvalue-error").hide()
-//     $("#memberimg-error").hide()
-//     $("#mem_pass-error").hide()
-//     $("#myfile-error").css("display", "none")
-
-
-//     var url = window.location.search
-//     const urlpar = new URLSearchParams(url)
-//     pageno = urlpar.get('page')
-//     $("#memgrbpageno").val(pageno)
-
-//     var data = $(this).attr("data-id");
-//     $("#title").text(languagedata.Memberss.uptmember)
-//     $("#save").hide()
-//     $("#update").show()
-//     // $("#memberprofileform").attr("action", "/member/updatemember");
-//     // $("#memberprofileform").attr("name", languagedata.Memberss.upttitle);
-//     var id = $("#mem_id").val(data)
-
-//     edit = $(this).closest("tr");
-//     var desc = edit.find("td:eq(1)").text();
-//     console.log("desc",desc);
-//     $("#triggerId").text(desc);
-
-//     $.ajax({
-//         url: "/member/updatemember",
-//         type: "GET",
-//         dataType: "json",
-//         data: { "id": data },
-//         success: function (result) {
-//             $("#mem_id").val(result.Member.Id)
-//             $("#mem_name").val(result.Member.FirstName)
-//             $("#mem_lname").val(result.Member.LastName)
-//             $("#mem_email").val(result.Member.Email)
-//             $("#mem_mobile").val(result.Member.MobileNo)
-//             $("#mem_usrname").val(result.Member.Username)
-//             $("#membergroupvalue").val(result.Member.MemberGroupId)
-//             // $("#profpic").attr("src", "/" + result.Member.ProfileImagePath)
-
-//             if (result.Member.ProfileImagePath != "") {
-//                 $('#profpic').attr('src', result.Member.ProfileImagePath.replace(/^/, '/')).show();
-//                 $(".name-string").hide()
-//             } else {
-//                 $('#profpic').hide()
-//                 $(".name-string").text(result.Member.NameString).show()
-//             }
-
-//             $("#triggerId").val(result.Group.Name)
-
-//             var isactive = $("#cb1").val(result.Member.IsActive)
-//             $('.tgl-btn').val(isactive)
-
-//             if ($("#cb1").val() == 1) {
-//                 $('input[name=mem_activestat]').prop('checked', true)
-
-//             }
-
-//         }
-//     })
-
-// })
 
 
 
@@ -175,7 +105,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checkemailinmember",
+            url: "/user/checkemailinmember",
             type: "POST",
             async: false,
             data: { "email": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -195,7 +125,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checknumberinmember",
+            url: "/user/checknumberinmember",
             type: "POST",
             async: false,
             data: { "number": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -215,7 +145,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checknameinmember",
+            url: "/user/checknameinmember",
             type: "POST",
             async: false,
             data: { "name": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -229,11 +159,17 @@ $(document).on('click', '#update', function () {
         return result.trim() != "true"
     })
 
-    $.validator.addMethod("mob_validator", function (value) {
-        if (/^[6-9]{1}[0-9]{9}$/.test(value))
-            return true;
+    // $.validator.addMethod("mob_validator", function (value) {
+    //     if (/^[6-9]{1}[0-9]{9}$/.test(value))
+    //         return true;
+    //     else return false;
+    // }, "*" + languagedata.Memberss.memmobnumrgx);
+
+    jQuery.validator.addMethod("mob_validator", function(value, element) {
+        if (value.length >= 7)
+        return true;
         else return false;
-    }, "*" + languagedata.Memberss.memmobnumrgx);
+    }, "*"+ languagedata.Memberss.memmobnumrgx);
 
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
@@ -386,7 +322,7 @@ $(document).on('click', '#update', function () {
     var profileflg
 
     $.ajax({
-        url: "/member/checkprofilesluginmember",
+        url: "/user/checkprofilesluginmember",
         type: "POST",
         async: false,
         data: { "name": $("input[name='profilepage']").val(), "id": $("#mem_id").val(), csrf: $("input[name='csrf']").val() },
@@ -490,7 +426,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checkemailinmember",
+            url: "/user/checkemailinmember",
             type: "POST",
             async: false,
             data: { "email": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -511,7 +447,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checknumberinmember",
+            url: "/user/checknumberinmember",
             type: "POST",
             async: false,
             data: { "number": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -531,7 +467,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/member/checknameinmember",
+            url: "/user/checknameinmember",
             type: "POST",
             async: false,
             data: { "name": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -545,11 +481,17 @@ $("#Save").click(function () {
         return result.trim() != "true"
     })
 
-    $.validator.addMethod("mob_validator", function (value) {
-        if (/^[6-9]{1}[0-9]{9}$/.test(value))
-            return true;
+    // $.validator.addMethod("mob_validator", function (value) {
+    //     if (/^[6-9]{1}[0-9]{9}$/.test(value))
+    //         return true;
+    //     else return false;
+    // }, "*" + languagedata.Memberss.memmobnumrgx);
+    
+    jQuery.validator.addMethod("mob_validator", function(value, element) {
+        if (value.length >= 7)
+        return true;
         else return false;
-    }, "*" + languagedata.Memberss.memmobnumrgx);
+    }, "*"+ languagedata.Memberss.memmobnumrgx);
 
     $.validator.addMethod("email_validator", function (value) {
         return /(^[a-zA-Z_0-9\.-]+)@([a-z]+)\.([a-z]+)(\.[a-z]+)?$/.test(value);
@@ -639,7 +581,6 @@ $("#Save").click(function () {
     var formcheck = $("#memberform").valid();
 
     if (formcheck == true) {
-        console.log("hi");
         $('#memberform')[0].submit();
         $('#Save').prop('disabled', true);
     }
@@ -721,7 +662,7 @@ $(document).on('keyup', '#searchmember', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/member/";
+            window.location.href = "/user/";
         }
     }
 
@@ -730,15 +671,15 @@ $(document).on('keyup', '#searchmember', function (event) {
 })
 
 $(document).on("click", ".Closebtn", function () {
-    $(".Searchmem").val('')
+    $(".search").val('')
     $(".Closebtn").addClass("hidden")
+    $(".SearchClosebtn").removeClass("hidden")
     $(".srchBtn-togg").removeClass("pointer-events-none")
-
   })
 
   $(document).on("click", ".searchClosebtn", function () {
     $(".Searchmem").val('')
-    window.location.href = "/member/"
+    window.location.href = "/user/"
   })
 
   $(document).ready(function () {
@@ -757,9 +698,34 @@ $(document).on("click", ".Closebtn", function () {
     });
   })
 
-  $(document).on("click", ".hovericon", function () {
-    $(".Searchmem").val('')
-    $(".Closebtn").addClass("hidden")
+  $(document).ready(function () {
+
+    $('.search').on('input', function () {
+        if ($(this).val().length >= 1) {
+            var value=$(".search").val();
+            $(".Closebtn").removeClass("hidden")
+            $(".srchBtn-togg").addClass("pointer-events-none")
+            $(".SearchClosebtn").addClass("hidden")
+        } else {
+            $(".SearchClosebtn").removeClass("hidden")
+            $(".Closebtn").addClass("hidden")
+            $(".srchBtn-togg").removeClass("pointer-events-none")
+        }
+    });
+  })
+  
+  $(document).on("click", ".SearchClosebtn", function () {
+    $(".SearchClosebtn").addClass("hidden")
+    $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+    $(".transitionSearch").addClass("w-[32px]")
+  
+    
+  })
+  
+  $(document).on("click", ".searchopen", function () {
+  
+    $(".SearchClosebtn").removeClass("hidden")
+    
   })
 
 
@@ -768,7 +734,7 @@ $(document).on("click", ".Closebtn", function () {
 
 // cancel btn
 $("#cancel").click(function () {
-    window.location.href = "/member/";
+    window.location.href = "/user/";
 })
 
 $(document).on('click', '#newdd-input', function () {
@@ -869,7 +835,7 @@ function refreshdiv() {
 $(document).on('click', '.closemember', function () {
 
 
-    window.location.href = "/member/"
+    window.location.href = "/user/"
 })
 
 // pasword show and close
@@ -949,7 +915,7 @@ $(document).on('change', '#profileImgLabel', function () {
 // async function profilenamevalidator(){
 
 //     $.ajax({
-//         url: "/member/checkprofilenameinmember",
+//         url: "/user/checkprofilenameinmember",
 //         type: "POST",
 //         async: false,
 //         data: { "name": $("input[name='profilename']").val(), "id":  $("#mem_id").val(), csrf: $("input[name='csrf']").val() },
@@ -963,6 +929,8 @@ $(document).on('change', '#profileImgLabel', function () {
 //     })
 
 //  }
+
+
 function MemberStatus(id) {
     $('#cbox' + id).on('change', function () {
         console.log("printf");
@@ -973,7 +941,7 @@ function MemberStatus(id) {
     console.log("check", isactive, id)
 
     $.ajax({
-        url: '/member/memberisactive',
+        url: '/user/memberisactive',
         type: 'POST',
         async: false,
         data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -1244,6 +1212,7 @@ $(document).on('click', '#seleccheckboxdelete', function () {
 
         $('#content').text(languagedata.Memberss.deletecontent)
     }
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
 
     $("#delid").text($(this).text());
     $('#delid').addClass('checkboxdelete')
@@ -1265,6 +1234,8 @@ $(document).on('click', '#unbulishslt', function () {
 
         $('#content').text(languagedata.Memberss.memberstatuscontent + " " + $(this).text() + " " + languagedata.Memberss.selectedmember)
     }
+    $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
+
     $("#delid").text($(this).text());
 
     $('#delid').addClass('selectedunpublish')
@@ -1297,7 +1268,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/member/deleteselectedmember',
+        url: '/user/deleteselectedmember',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1361,7 +1332,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/member/multiselectmemberstatus',
+        url: '/user/multiselectmemberstatus',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1423,7 +1394,7 @@ function GetMemberDetails(memberid) {
     console.log("work");
 
     $.ajax({
-        url: '/member/getmemberdetails',
+        url: '/user/getmemberdetails',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1432,8 +1403,6 @@ function GetMemberDetails(memberid) {
             csrf: $("input[name='csrf']").val()
         },
         success: function (data) {
-            console.log("sjdfk,jsd");
-            console.log(data, "result")
 
             if (data.flg == false) {
 

@@ -66,10 +66,10 @@ func init() {
 	}
 }
 
-func ErrorLOG() *log.Logger {
+func ErrorLog()*log.Logger{
 	return logger.ErrorLogger
 }
 
-func WarnLOG() *log.Logger {
-	return logger.WarnLogger
+func WarnLog()*log.Logger{
+	return logger.ErrorLogger
 }

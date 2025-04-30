@@ -86,15 +86,22 @@ $("#saveuser").click(function () {
             "* " + languagedata.Userss.usrpswdrgx
         );
 
-        jQuery.validator.addMethod(
-            "mob_validator",
-            function (value, element) {
-                if (/^[6-9]{1}[0-9]{9}$/.test(value))
-                    return true;
-                else return false;
-            },
-            "* " + languagedata.Userss.usrmobnumrgx
-        );
+        // jQuery.validator.addMethod(
+        //     "mob_validator",
+        //     function (value, element) {
+        //         if (/^[6-9]{1}[0-9]{9}$/.test(value))
+        //             return true;
+        //         else return false;
+        //     },
+        //     "* " + languagedata.Userss.usrmobnumrgx
+        // );
+
+
+    jQuery.validator.addMethod("mob_validator", function(value, element) {
+        if (value.length >= 7)
+        return true;
+        else return false;
+    }, "* " + languagedata.Userss.usrmobnumrgx);
 
         jQuery.validator.addMethod("duplicateemail", function (value) {
 
@@ -522,15 +529,23 @@ $(document).on('click', '#saveuser', function () {
             "* " + languagedata.Userss.usrpswdrgx
         );
 
-        jQuery.validator.addMethod(
-            "mob_validator",
-            function (value, element) {
-                if (/^[6-9]{1}[0-9]{9}$/.test(value))
-                    return true;
-                else return false;
-            },
-            "* " + languagedata.Userss.usrmobnumrgx
-        );
+        // jQuery.validator.addMethod(
+        //     "mob_validator",
+        //     function (value, element) {
+        //         if (/^[6-9]{1}[0-9]{9}$/.test(value))
+        //             return true;
+        //         else return false;
+        //     },
+        //     "* " + languagedata.Userss.usrmobnumrgx
+        // );
+
+
+    jQuery.validator.addMethod("mob_validator", function(value, element) {
+        if (value.length >= 7)
+        return true;
+        else return false;
+    }, "* " + languagedata.Userss.usrmobnumrgx);
+
         $("form[name='editform']").validate({
 
             ignore: [],
@@ -682,6 +697,7 @@ $(document).on('click', '#saveuser', function () {
 $(document).on('click', '#del-btn', function () {
 
     var userId = $(this).attr("data-id")
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
     $(".deltitle").text(languagedata.Userss.deleteuser)
     $("#content").text(languagedata.Userss.deluser)
     var del = $(this).parents('tr');
@@ -839,8 +855,9 @@ $(document).on('keyup', '#searchroles', function (event) {
 $(document).on("click", ".Closebtn", function () {
     $(".search").val('')
     $(".Closebtn").addClass("hidden")
+    $(".SearchClosebtn").removeClass("hidden")
     $(".srchBtn-togg").removeClass("pointer-events-none")
-})
+  })
 
   $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
@@ -851,18 +868,30 @@ $(document).on("click", ".Closebtn", function () {
 
     $('.search').on('input', function () {
         if ($(this).val().length >= 1) {
+            var value=$(".search").val();
             $(".Closebtn").removeClass("hidden")
             $(".srchBtn-togg").addClass("pointer-events-none")
+            $(".SearchClosebtn").addClass("hidden")
         } else {
+            $(".SearchClosebtn").removeClass("hidden")
             $(".Closebtn").addClass("hidden")
             $(".srchBtn-togg").removeClass("pointer-events-none")
         }
     });
-})
-
-  $(document).on("click", ".hovericon", function () {
-    $(".search").val('')
-    $(".Closebtn").addClass("hidden")
+  })
+  
+  $(document).on("click", ".SearchClosebtn", function () {
+    $(".SearchClosebtn").addClass("hidden")
+    $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+    $(".transitionSearch").addClass("w-[32px]")
+  
+    
+  })
+  
+  $(document).on("click", ".searchopen", function () {
+  
+    $(".SearchClosebtn").removeClass("hidden")
+    
   })
 
 
@@ -1201,6 +1230,8 @@ $(document).on('click', '#seleccheckboxdelete', function () {
     $('#content').text(languagedata.Userss.delmsg)
 
     }
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
+
 
     $("#delid").text($(this).text());
 
@@ -1223,6 +1254,8 @@ $(document).on('click', '#unbulishslt', function () {
 
         $('#content').text(languagedata.Userss.changestatuscontent)
     }
+    $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
+
 
     $("#delid").text($(this).text());
 

@@ -457,6 +457,10 @@ function IntegrateMediaImages(src) {
 
         BindCropImageInLanguage(src)
 
+    }else if (window.location.href.indexOf("courses") != -1) {
+
+        BindCropImageInCourses(src)
+
     }
 }
 
@@ -740,7 +744,7 @@ function BindCropImageInSpace(src) {
 
         // $(".heading-three").hide();
 
-        $("#browse").hide();
+        $("crop is worked").hide();
 
         $("#spimagehide").attr("src", src).show()
 
@@ -839,6 +843,29 @@ function BindCropImageInCategory(src) {
 
     $("#categoryModal").modal('show')
 
+}
+
+function BindCropImageInCourses(src){
+
+    $("#courseimg").val(src)
+
+    var data = $("#ctimagehide").attr("src", src);
+
+    if (data != "") {
+
+        $("h3[id=mediadesc]").hide();
+
+        $("#browse").hide();
+
+        $("#ctimagehide").attr("src", src).show()
+
+        $("#catdel-img").show()
+
+    }
+
+    $("#addnewimageModal").hide()
+
+    $("#create-course-modal").modal('show')
 }
 
 function BindCropImageInBlock(src) {

@@ -170,7 +170,7 @@ func RoleCreate(c *gin.Context) {
 		}
 	}
 
-	idi = append(idi, 1)
+	idi = append(idi, 1, 21)
 
 	userid := c.GetInt("userid")
 	fmt.Println("dtetet1")

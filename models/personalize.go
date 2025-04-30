@@ -15,7 +15,7 @@ type TblUserPersonalize struct {
 	TenantId            int
 }
 
-func GetPersonalize(personalize *TblUserPersonalize, id, tenantid int) error {
+func GetPersonalize(personalize *TblUserPersonalize, id int, tenantid string) error {
 
 	if err := DB.Table("tbl_user_personalizes").Select("tbl_user_personalizes.*").Where("user_id=? and tenant_id = ?", id, tenantid).First(&personalize).Error; err != nil {
 
@@ -36,7 +36,7 @@ func CreatePersonalize(personalize *TblUserPersonalize) error {
 
 }
 
-func UpdatePersonalize(personalize *TblUserPersonalize, id int, tenantid int) error {
+func UpdatePersonalize(personalize *TblUserPersonalize, id int, tenantid string) error {
 
 	if err := DB.Table("tbl_user_personalizes").Where("user_id=? and tenant_id=?", id, tenantid).UpdateColumns(map[string]interface{}{"menu_background_color": personalize.MenuBackgroundColor, "logo_path": personalize.LogoPath, "expand_logo_path": personalize.ExpandLogoPath, "modified_on": personalize.ModifiedOn}).Error; err != nil {
 

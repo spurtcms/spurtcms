@@ -279,5 +279,5 @@ func PlaygroundView(c *gin.Context) {
 	menu := NewMenuController(c)
 	translate, _ := TranslateHandler(c)
 
-	c.HTML(http.StatusOK, "playground.html", gin.H{"url": url, "Menu": menu, "translate": translate, "title": "Graphql Playground", "linktitle": "Graphql Playground"})
+	c.HTML(http.StatusOK, "playground.html", gin.H{"url": url, "Menu": menu, "translate": translate, "title": "Graphql Playground", "linktitle": "Graphql Playground","Baseurl":"https://spurtcms.com/play/query"})
 }

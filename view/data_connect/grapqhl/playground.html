@@ -2,23 +2,56 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
     <header
-        class="max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+ 
         <div class="mr-auto flex items-center gap-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
-                <img src="/public/img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Graphql Playground
-            </h2>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    Graphql Playground</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.Graphql.Graphqlplayheading}}
+                </p>
+            </div>
         </div>
 
     </header>
-    <section>
+    <section class="p-[16px] space-y-[16px]">
+        <!-- <div class="flex items-center space-x-[16px]  max-[576px]:space-y-[10px]  max-[576px]:space-x-0 max-[576px]:flex-col max-[576px]:items-start ">
+            <label for="" class="text-[14px] font-normal text-[#262626] whitespace-nowrap">Base URL</label>
+            <input type="text" value="{{.Baseurl}}" id="endpoint-data"  class="border-[1px] text-[14px] font-normal text-[#262626] border-solid !border-[#EDEDED] rounded h-[36px] w-full block p-[5px] outline-none" readonly> -->
+            <!-- <button
+            class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center items-center"
+            id="copy-graphqlendpoint"><img src="/public/img/copy-green.svg">
+            <span>{{$Translate.Copy}}</span></button>   -->
+              <!-- </div> -->
+
+              <div class="flex flex-col w-full">
+                <div class="relative flex max-[576px]:flex-col items-center max-[576px]:items-start mb-[8px]">
+                    <div  data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom"
+                    title="Base url" class="top-[9px] left-[16px] absolute cursor-pointer">
+                        <img src="/public/img/copy-trigger.svg" alt="">
+                    </div>
+                    <input type="text"  id="endpoint-data"
+                        class="block border-[#EDEDED] border-[1px] bg-[#F7F7F5] p-[5px] pr-[100px] pl-[60px] border-solid rounded w-full h-[50px] font-normal text-[#525252] !border-[#EDEDED] text-[14px] outline-none" readonly
+                        value="{{.Baseurl}}" />
+                    <button id="copy-graphqlendpoint"
+                        class="top-[8px] right-[16px] absolute flex justify-center items-center gap-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded w-auto h-[34px] font-normal text-[#FFFFFF] text-sm pa-x-3"><img
+                            src="/public/img/copy-white.svg" /> Copy</button>
+                </div>
+
+                <!-- <p class="font-normal text-[#717171] text-xs"><span class="text-[#262626]">Notes:</span>
+                    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit!</p> -->
+            </div>
         <iframe src="{{.url}}" style="width: 100%;height: calc(100vh - 50px);"></iframe>
     </section>
 </section>
 
 {{template "footer" .}}
+<script src="/public/js/data-connect/graphql-settings.js"></script>
 {{template "footerclose" .}}

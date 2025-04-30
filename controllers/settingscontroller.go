@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	storagecontroller "spurt-cms/storage-controller"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spurtcms/team"
@@ -66,17 +64,17 @@ func MyProfile(c *gin.Context) {
 	var Name = firstn + lastn
 	users.NameString = Name
 
-	Role, err := NewRole.GetRoleById(users.RoleId, 0)
+	Role, err := NewRole.GetRoleById(users.RoleId, users.TenantId)
 	if err != nil {
 		log.Println(err)
 	}
 
 	translate, _ := TranslateHandler(c)
 	menu := NewMenuController(c)
-	Folder, File, Media, _, _ := GetMedia()
+	// Folder, File, Media, _, _ := GetMedia()
 	selectedtype, _ := GetSelectedType()
 
-	c.HTML(200, "myaccount.html", gin.H{"Menu": menu, "title": "My Account", "linktitle": "My Account", "csrf": csrf.GetToken(c), "HeadTitle": translate.Myprofile, "translate": translate, "user": users, "rolename": Role.Name, "SettingsHead": true, "Myprofmenu": true, "Tooltiptitle": translate.Setting.Myprofiletooltip, "Folder": Folder, "File": File, "Media": Media, "StorageType": selectedtype.SelectedType})
+	c.HTML(200, "myaccount.html", gin.H{"Menu": menu, "title": "My Account", "linktitle": "My Account", "csrf": csrf.GetToken(c), "HeadTitle": translate.Myprofile, "translate": translate, "user": users, "rolename": Role.Name, "SettingsHead": true, "Myprofmenu": true, "Tooltiptitle": translate.Setting.Myprofiletooltip, "StorageType": selectedtype.SelectedType})
 }
 
 func ChangePassword(c *gin.Context) {
@@ -102,7 +100,11 @@ func UpdateProfile(c *gin.Context) {
 	)
 
 	storageType, err := GetSelectedType()
+
+	fmt.Println("storageType:", storageType.SelectedType)
+	fmt.Println("storageType:", storageType)
 	if err != nil {
+
 		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
 		c.Redirect(301, "/settings/myprofile/")
@@ -139,11 +141,10 @@ func UpdateProfile(c *gin.Context) {
 
 			err = storagecontroller.UploadCropImageS3(imageName, tempString, imageByte)
 			if err != nil {
-
+				fmt.Println("ERRORAWScredentialsnotfound:")
 				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
 				c.Redirect(301, "/settings/myprofile/")
 				return
-	
 			}
 
 			imgPath = tempString
@@ -238,58 +239,48 @@ func UptPassword(c *gin.Context) {
 		c.Redirect(301, "/settings/changepassword")
 
 	}
-	id := c.GetInt("userid")
+	// id := c.GetInt("userid")
 
-	userdet, _, _ := NewTeamWP.GetUserById(id, []int{})
+	// userdet, _, _ := NewTeamWP.GetUserById(id, []int{})
 
-	fname := userdet.FirstName
+	// fname := userdet.FirstName
 
-	email := userdet.Email
+	// email := userdet.Email
 
-	var url_prefix = os.Getenv("BASE_URL")
+	// var url_prefix = os.Getenv("BASE_URL")
 
-	// if os.Getenv("BASE_URL") != "" {
+	// linkedin := os.Getenv("LINKEDIN")
+	// facebook := os.Getenv("FACEBOOK")
+	// twitter := os.Getenv("TWITTER")
+	// youtube := os.Getenv("YOUTUBE")
+	// insta := os.Getenv("INSTAGRAM")
 
-	// 	url_prefix = os.Getenv("BASE_URL")
+	// data := map[string]interface{}{
 
-	// } else {
-
-	// 	url_prefix = os.Getenv("DOMAIN_URL")
-
+	// 	"fname":         fname,
+	// 	"admin_logo":    url_prefix + "public/img/SpurtCMSlogo.png",
+	// 	"fb_logo":       url_prefix + "public/img/email-icons/facebook.png",
+	// 	"linkedin_logo": url_prefix + "public/img/email-icons/linkedin.png",
+	// 	"twitter_logo":  url_prefix + "public/img/email-icons/x.png",
+	// 	"youtube_logo":  url_prefix + "public/img/email-icons/youtube.png",
+	// 	"insta_log":     url_prefix + "public/img/email-icons/instagram.png",
+	// 	"facebook":      facebook,
+	// 	"instagram":     insta,
+	// 	"youtube":       youtube,
+	// 	"linkedin":      linkedin,
+	// 	"twitter":       twitter,
+	// 	"password":      cpswd,
 	// }
 
-	linkedin := os.Getenv("LINKEDIN")
-	facebook := os.Getenv("FACEBOOK")
-	twitter := os.Getenv("TWITTER")
-	youtube := os.Getenv("YOUTUBE")
-	insta := os.Getenv("INSTAGRAM")
+	// var wg sync.WaitGroup
 
-	data := map[string]interface{}{
+	// wg.Add(1)
 
-		"fname":         fname,
-		"admin_logo":    url_prefix + "public/img/SpurtCMSlogo.png",
-		"fb_logo":       url_prefix + "public/img/email-icons/facebook.png",
-		"linkedin_logo": url_prefix + "public/img/email-icons/linkedin.png",
-		"twitter_logo":  url_prefix + "public/img/email-icons/x.png",
-		"youtube_logo":  url_prefix + "public/img/email-icons/youtube.png",
-		"insta_log":     url_prefix + "public/img/email-icons/instagram.png",
-		"facebook":      facebook,
-		"instagram":     insta,
-		"youtube":       youtube,
-		"linkedin":      linkedin,
-		"twitter":       twitter,
-		"password":      cpswd,
-	}
+	// Chan := make(chan string, 1)
 
-	var wg sync.WaitGroup
+	// go ChangePasswordEmail(Chan, &wg, data, email, "changepassword")
 
-	wg.Add(1)
-
-	Chan := make(chan string, 1)
-
-	go ChangePasswordEmail(Chan, &wg, data, email, "changepassword")
-
-	close(Chan)
+	// close(Chan)
 
 }
 

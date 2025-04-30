@@ -14,6 +14,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: "Lexend", sans-serif !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,7 +28,7 @@
     <div class="mx-auto" id="page">
         <input type="hidden" value="{{.FormId}}" id="FormId">
         <input type="hidden" value="{{.Userid}}" id="Userid">
-        <form-builder mode="fill" content="{{.FormData}}">
+        <form-builder mode="fill" content="{{.FormData}}" uploadurl="{{.uploadurl}}">
 
         </form-builder>
     </div>
@@ -29,7 +36,7 @@
     <section class="w-full overflow-hidden pt-[48px] min-h-screen">
 
 
-    
+
         <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
             <div class="text-center w-fit mx-auto mb-[32px]">
                 <img src="/public/img/cms404-img.svg" alt="noFilter">
@@ -41,7 +48,7 @@
                 is temporarily unavailable.</p>
         </div>
 
-    
+
     </section>
     {{end}}
 
@@ -51,7 +58,19 @@
         crossorigin="anonymous"></script>
 
     <script>
+
+        $(document).ready(function(){
+            var url = new URL(window.location.href);
+var params = new URLSearchParams(url.search);
+
+   entryid =params.get("id")
+
+
+        })
+   
         document.addEventListener('formSubmit', function (event) {
+
+               console.log("kkk")
             if (event.detail.data) {
 
                 // console.log(JSON.stringify(event.detail.data));
@@ -59,9 +78,11 @@
 
                 FormId = $("#FormId").val()
                 Userid = $("#Userid").val()
+             
+
 
                 $.ajax({
-                    url: "{{.URL}}",
+                    url: "{{.URL}}?id="+entryid,
                     type: "POST",
                     async: false,
                     data: { "data": JSON.stringify(event.detail.data), "Id": FormId, "UserId": Userid },

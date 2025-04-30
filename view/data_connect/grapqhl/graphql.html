@@ -3,31 +3,37 @@
 {{$Translate := .translate}}
 {{$Totalcount := .totalcount}}
 
-<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
     <header
-        class="max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 header-rht z-[101]">
-        <div class="mr-auto flex items-center space-x-[6px]">
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+  
+        <div class="mr-auto flex items-center gap-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
-                {{$Translate.Graphql.Title}}
-            </h2>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Graphql.Title}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                   {{$Translate.Graphql.Graphqlapiheading}}
+                </p>
+            </div>
         </div>
+       
         {{if gt .totalcount 0}}
         <div
-            class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}} langSearchDiv {{end}}">
+            class="transitionSearch w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}} langSearchDiv {{end}}">
 
             <a href="#" id="graphqlSearchlink"
-                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search"
-                    class="hidden group-hover:block graphqlHoverIcon">
+                    class="hidden group-hover:block  searchopen">
             </a>
             <input type="text" placeholder={{$Translate.Csearch}} name="keyword" id="graphqlSearchBar"
                 value="{{.filter}}"
-                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 {{if .filter}} w-[calc(100%-36px)] h-full block {{else}} hidden {{end}}">
+                class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0  w-[calc(100%-36px)] h-full block ">
             <input type="text" name="csrf" value={{.csrf}} hidden>
             {{if .filter}}
             <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
@@ -37,10 +43,13 @@
             <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                 <img src="/public/img/close.svg" alt="close">
             </div>
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
             {{end}}
         </div>
         <a href="#"
-            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline min-w-[32px]"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] text-white text-sm font-normal no-underline min-w-[32px]"
             data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
             <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
             </span>
@@ -51,7 +60,7 @@
             class=" w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}} langSearchDiv {{end}}">
 
             <a href="#" id="graphqlSearchlink"
-                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search"
                     class="hidden group-hover:block graphqlHoverIcon ">
@@ -72,7 +81,7 @@
 
         </div>
         <a href="#"
-            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline min-w-[32px]"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] text-white text-sm font-normal no-underline min-w-[32px]"
             data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
             <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
             </span>
@@ -304,7 +313,7 @@
             {{end}}
 
             <li> <a href=""
-                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                     {{.CurrentPage}} </a> </li>
             {{if lt .CurrentPage .Pagination.TotalPages}}
             <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
@@ -356,7 +365,7 @@
                     <a href="javascript:void(0)" data-bs-dismiss="modal" id="tokenCancelBtn"
                         class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline">{{$Translate.Graphql.CancelButton}}</a>
                     <a href="javascript:void(0)" id="genTokenBtn" data-status="0"
-                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white rounded-[3px]  hover:bg-[#148569] bg-[#10A37F] no-underline">{{$Translate.Graphql.GenerateButton}}
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white rounded-[3px] bg-[var(--btn-bg)] no-underline">{{$Translate.Graphql.GenerateButton}}
                     </a>
                     <!-- <a href="#" id="genTokenBtn" data-status="0"
                         class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white hover:bg-[#7f7e7e] bg-[#D1D1D1] rounded-[3px] no-underline">{{$Translate.Graphql.GenerateButton}}</a>-->
@@ -366,19 +375,30 @@
                 <div class="p-6 max-sm:px-[16px] h-full">
                     <div class="flex flex-col space-y-[16px]">
                         <div class="flex flex-col space-y-[6px] tokenInputGrp">
-                            <p class="text-[#152027] text-sm font-normal mb-0">{{$Translate.Graphql.NameFieldHeading}}
-                                <span class="text-red-600">*</span>
-                            </p>
+                          
+                            <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">  {{$Translate.Graphql.NameFieldHeading}} <span class="text-red-600" >*</span> 
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Graphql.Apitokennamelable}}</p>
+                            </div></label>
                             <input type="text" name="tokenName" id="tokenName"
                                 class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-[#EDEDED] text-bold-black text-sm font-normal w-full apitoken-data" />
                             </input>
-                            <label for="tokenName"
-                                class="hidden apiTokenErr  text-red-600 text-[13px]">{{$Translate.Graphql.NameFieldError}}</label>
+                            <!-- <label for="tokenName"
+                                class="hidden apiTokenErr  text-red-600 text-[13px]"> {{$Translate.Graphql.DescriptionFieldHeading}}</label>
+                                 -->
                         </div>
                         <div class="flex flex-col space-y-[6px] tokenInputGrp" id="tok-desc">
-                            <p class="text-[#152027] text-sm font-normal mb-0">
-                                {{$Translate.Graphql.DescriptionFieldHeading}}
-                            </p>
+                           
+                            <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Graphql.DescriptionFieldHeading}}
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Graphql.Descriptionlable}}</p>
+                            </div></label>                           
                             <textarea type="text" name="tokenDesc" id="tokenDesc"
                                 class="rounded-[4px] p-[12px] border border-[#EDEDED] resize-none  bg-[#EDEDED] h-120 text-bold-black text-sm text-start font-normal w-full apitoken-data scrollbar-none"
                                 maxlength="250"></textarea>
@@ -391,10 +411,14 @@
 
                         </div>
                         <div class="dropdown open tokenInputGrp">
-                            <p class="text-[#152027] text-sm font-normal mb-[6px] " id="tknDuration">
-                                {{$Translate.Graphql.DurationFieldHeading}}
-                                <span class="text-red-600">*</span>
-                            </p>
+
+                            <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-1.5">   {{$Translate.Graphql.DurationFieldHeading}}<span class="text-red-600" >*</span> 
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Graphql.Tokendurationlable}}</p>
+                            </div></label>
                             <a class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED]   no-underline  w-full flex justify-between items-center apitoken-data selectVal cursor-pointer"
                                  id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" name="duration">
@@ -425,8 +449,7 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-800 text-xs font-normal mb-0 break-all" id="tokeninsideContent">
-                                        Lorem ipsum dolor sit amet.Lorem
-                                        ipsum dolor sit amet.
+                                       
                                     </p>
                                 </div>
                             </div>
@@ -436,8 +459,8 @@
                                         class="text-[#717171] text-xs font-normal">{{$Translate.Graphql.Copydetails}}</span>
                                 </p>
                                 <button
-                                    class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center items-center"
-                                    id="copy-insidebtn"><img src="/public/img/copy-green.svg">
+                                    class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#FFFFFF] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center"
+                                    id="copy-insidebtn"><img src="/public/img/copy.svg">
                                     <span>{{$Translate.Copy}}</span></button>
                             </div>
                         </div>
@@ -508,10 +531,10 @@
                         class="h-[30px] flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline"
                         id="graphqlCopyCancel"><span>{{$Translate.Cancel}}</span></a>
                     <button id="copy-btn"
-                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white hover:bg-[#148569] bg-[#10A37F] justify-center items-center"><img
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center"><img
                             src="/public/img/copy-white.svg" /> <span>{{$Translate.Copy}}</span></button>
                     <button id="copied-btn"
-                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#10A37F] hover:bg-[#c2f0c4] bg-green justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#FFFFFF] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
                 </div>
             </div>
             <div class="overflow-auto">

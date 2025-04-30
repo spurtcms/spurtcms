@@ -44,6 +44,13 @@ func WebsiteLogin(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{"csrf": csrf.GetToken(c), "Menu": NewMenuController(c)})
 }
 
+func Download(c *gin.Context) {
+
+	fmt.Println("hhhh")
+
+	c.HTML(200, "download.html", gin.H{"linktitle": "SpurtCMS Download | Golang cms open source code", "description": "Get started with SpurtCMS – Download Golang CMS open source code. Access the foundation for your content management system and kickstart your development journey.", "keywords": "CMS source code, Download Spurtcms source code, Golang with CMS, content management system source code, open source content management system, Develop cms website with open source, Golang cms open source code."})
+}
+
 func NewPassword(c *gin.Context) {
 
 	token := c.Query("token")
@@ -113,7 +120,7 @@ func SendLinkForForgotPass(c *gin.Context) {
 
 	Chan := make(chan string, 1)
 
-	go ForgetPasswordEmail(Chan, &wg, data, email, "Forgot Password")
+	go ForgetPasswordEmail(Chan, &wg, data, email, "Forgot Password", "1")
 
 	close(Chan)
 

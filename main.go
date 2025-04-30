@@ -35,6 +35,9 @@ func main() {
 
 	controllers.PackageInitialize() //initialize all spurtcms packages
 
+	controllers.LastUpdated()
+
+
 	var wg sync.WaitGroup
 
 	wg.Add(3)

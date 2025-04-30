@@ -29,6 +29,38 @@ var joindata
 var spurtdata
 var Channelcategories
 var newcatarray = []
+var formid
+var entryctaid
+
+
+var mapentryandmembershiplevel = []
+
+$(document).ready(function () {
+    $(document).on('click', '.mapmembershiplevels', function () {
+        var membershiplevelId = $(this).data('id')
+        if ($(this).prop('checked')) {
+
+            mapentryandmembershiplevel.push(membershiplevelId)
+
+        } else {
+
+            mapentryandmembershiplevel.pop(membershiplevelId)
+
+            $('#Check').prop('checked', false)
+
+        }
+    })
+
+    $(document).on('click', function (event) {
+
+
+        if (!$(event.target).closest('.userlistdiv').length) {
+
+            $('.userlistdiv').removeClass('show').removeClass('nouserdata');
+        }
+    });
+})
+
 // logout dropdwon
 $(document).on("click", "#lg-btn", function () {
     $("#log-btn").toggle("show")
@@ -38,9 +70,11 @@ $(document).ready(async function () {
 
     var gurl = window.location.href;
 
+    var channelid = $("#chnid").val()
+
     if (gurl.includes('generatearticle')) {
 
-        var newUrl = '/channel/newentry';
+        var newUrl = '/entries/create/' + channelid + '/';
 
         window.history.pushState({}, '', newUrl);
     }
@@ -61,12 +95,94 @@ $(document).ready(async function () {
         if ($("#savetype").val() == "draft") {
             var url = window.location.href;
 
+            var pageurl = window.location.search
+            const urlpar = new URLSearchParams(pageurl)
+            pageno = urlpar.get('page')
+
+            if (url.includes('edit') || url.includes("edits")) {
+
+                // var urlvalue = url.split('#')[0]
+                // console.log("urlvalue",urlvalue);
+
+                var eid = $("#eid").val()
+
+            }
+            console.log("pageno", pageno);
+
+            var urlredirect = $("#dltCancelBtn").data('save')
+
+            if (urlredirect == "save") {
+
+                homeurl = $("#dltCancelBtn").attr('href')
+
+            } else {
+
+                if (pageno == null) {
+                    homeurl = "/entries/entrylist"
+                } else {
+                    homeurl = "/entries/entrylist?page=" + pageno;
+                }
+
+            }
+
+
+            Getselectedcatagories()
+            if (categoryIds.length == 0) {
+                categoryIds.push($("#cat0").attr("data-id"));
+            }
+            channelname = $("#slchannel").val()
+            if ($.trim(spurtdata.title) === "") {
+
+                spurtdata.title = "Untitled Entries"
+            }
+            if (spurtdata.title != "") {
+                if (containsHtmlElements(spurtdata.title)) {
+
+                    spurtdata.title = "Untitled Entries"
+
+                    console.log("The string contains HTML elements");
+                } else {
+
+                    var wordsArray = spurtdata.title.split(' ');
+
+                    var first30Words = wordsArray.slice(0, 20);
+
+                    spurtdata.title = first30Words.join(' ');
+
+                    console.log("The string does not contain HTML elements");
+                }
+                Getseodetails()
+                ChannelFieldsGet()
+                authername = $("#author").val()
+                createtime = $("#cdtime").val()
+                publishtime = $("#publishtime").val()
+                createtime = createtime.replace(" ", "T")
+                publishtime = publishtime.replace(" ", "T")
+                readingtime = $("#readingtime").val()
+                orderindex = $("#orderindex").val()
+                // sortorder = $("#article").val()
+                tagname = $("#tagname").val()
+                extxt = $("#extxt").val()
+                $.ajax({
+                    url: "/entries/draftentry/" + eid,
+                    type: "POST",
+                    dataType: "json",
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
+                    success: function (result) {
+                        window.location.href = homeurl;
+                    }
+                })
+            }
+        }
+
+        if ($("#savetype").val() == "savePreview") {
+            var url = window.location.href;
 
             var pageurl = window.location.search
             const urlpar = new URLSearchParams(pageurl)
             pageno = urlpar.get('page')
 
-            if (url.includes('editentry') || url.includes("editsentry")) {
+            if (url.includes('edit') || url.includes("edits")) {
 
                 // var urlvalue = url.split('#')[0]
                 // console.log("urlvalue",urlvalue);
@@ -77,9 +193,9 @@ $(document).ready(async function () {
             console.log("pageno", pageno);
 
             if (pageno == null) {
-                homeurl = "/channel/draftentries"
+                homeurl = "/entries/entrylist"
             } else {
-                homeurl = "/channel/draftentries?page=" + pageno;
+                homeurl = "/entries/entrylist?page=" + pageno;
             }
             Getselectedcatagories()
             if (categoryIds.length == 0) {
@@ -107,21 +223,32 @@ $(document).ready(async function () {
                     console.log("The string does not contain HTML elements");
                 }
                 Getseodetails()
+                ChannelFieldsGet()
                 authername = $("#author").val()
                 createtime = $("#cdtime").val()
                 publishtime = $("#publishtime").val()
+                createtime = createtime.replace(" ", "T")
+                publishtime = publishtime.replace(" ", "T")
                 readingtime = $("#readingtime").val()
                 orderindex = $("#orderindex").val()
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
                 $.ajax({
-                    url: "/channel/draftentry/" + eid,
+                    url: "/entries/draftentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
                     success: function (result) {
+
+                        var anchor = document.createElement('a');
+                        anchor.href = result.previewurl; // Replace with your desired link
+                        anchor.target = '_blank'; // Open in a new tab/window
+                        document.body.appendChild(anchor);
+                        anchor.click(); // Simulate a click on the anchor
+
                         window.location.href = homeurl;
+
                     }
                 })
             }
@@ -137,15 +264,15 @@ $(document).ready(async function () {
             pageno = urlpar.get('page')
 
 
-            if (url.includes('editentry') || url.includes("editsentry")) {
+            if (url.includes('edit') || url.includes("edits")) {
 
                 var eid = $("#eid").val()
             }
 
             if (pageno == null) {
-                homeurl = "/channel/entrylist"
+                homeurl = "/entries/entrylist"
             } else {
-                homeurl = "/channel/entrylist?page=" + pageno;
+                homeurl = "/entries/entrylist?page=" + pageno;
             }
             channelname = $("#slchannel").val()
             Getselectedcatagories()
@@ -154,14 +281,14 @@ $(document).ready(async function () {
             }
             if ($("#slchannel").attr("data-id") == "") {
                 $("#sl-chn-error").show()
-                $('.editor-tabs').removeClass('translate-x-[100%]');
-                $('#editingArea').addClass('mr-[387px] w-full ');
+                $('.editor-tabs').removeClass('translate-x-[120%]');
+                $('#editingArea').addClass(' w-full ');
             }
 
             if (categoryIds.length == 0) {
                 $("#sl-cat-error").show()
-                $('.editor-tabs').removeClass('translate-x-[100%]');
-                $('#editingArea').addClass('mr-[387px] w-full ');
+                $('.editor-tabs').removeClass('translate-x-[120%]');
+                $('#editingArea').addClass(' w-full ');
 
             }
             if ($.trim(spurtdata.title) === "" && $("#slchannel").attr("data-id") != "") {
@@ -186,10 +313,12 @@ $(document).ready(async function () {
                 }
 
                 Getseodetails()
-
+                ChannelFieldsGet()
                 authername = $("#author").val()
                 createtime = $("#cdtime").val()
                 publishtime = $("#publishtime").val()
+                createtime = createtime.replace(" ", "T")
+                publishtime = publishtime.replace(" ", "T")
                 readingtime = $("#readingtime").val()
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
@@ -197,10 +326,10 @@ $(document).ready(async function () {
                 orderindex = $("#orderindex").val()
 
                 $.ajax({
-                    url: "/channel/publishentry/" + eid,
+                    url: "/entries/publishentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
                     success: function (result) {
                         window.location.href = homeurl;
                     }
@@ -238,17 +367,17 @@ $(document).ready(async function () {
 
     if (channelname == "") {
         if (pageno == null) {
-            editurl = "/channel/editentrydetails/" + channelname + "/" + id
+            editurl = "/entries/editentrydetails/" + channelname + "/" + id
         } else {
-            editurl = "/channel/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
+            editurl = "/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
         }
 
     } else {
 
         if (pageno == null) {
-            editurl = "/channel/editentrydetail/" + id
+            editurl = "/entries/editentrydetail/" + id
         } else {
-            editurl = "/channel/editentrydetail/" + id + "?page=" + pageno
+            editurl = "/entries/editentrydetail/" + id + "?page=" + pageno
         }
     }
 
@@ -263,7 +392,8 @@ $(document).ready(async function () {
 
                 var currentDate = new Date();
                 var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                console.log("formattedDate", formattedDate);
+
+
 
                 $('#metatitle').val(result.Entries.MetaTitle)
                 $('#metadesc').val(result.Entries.MetaDescription)
@@ -273,12 +403,25 @@ $(document).ready(async function () {
                 $("#tagname").val(result.Entries.Tags)
                 $("#extxt").val(result.Entries.Excerpt)
                 $("#orderindex").val(result.Entries.OrderIndex)
+                formid = result.Entries.CtaId
                 if (result.Entries.Author != "") {
                     $("#author").val(result.Entries.Author)
                 }
                 if (result.Createtime != "") {
 
-                    $("#cdtime").val(result.Createtime)
+                    const date = new Date(result.Createtime);
+                    function formatDate(date) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                        return `${year}-${month}-${day} ${hours}:${minutes}`;
+                    }
+                    const datetime = formatDate(date);
+
+                    $("#cdtime").val(datetime)
 
                 } else {
 
@@ -288,7 +431,21 @@ $(document).ready(async function () {
 
                 if (result.Publishedtime != "") {
 
-                    $("#publishtime").val(result.Publishedtime)
+                    const date = new Date(result.Publishedtime);
+                    function formatDate(date) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                        return `${year}-${month}-${day} ${hours}:${minutes}`;
+                    }
+                    const datetime = formatDate(date);
+
+
+
+                    $("#publishtime").val(datetime)
 
 
                 } else {
@@ -306,34 +463,80 @@ $(document).ready(async function () {
                     newcatarray = result.Entries.CategoriesId.split(",")
 
                 }
+                if (result.Entries.MemebrshipLevelIds != "") {
+                    mapentryandmembershiplevel = result.Entries.MemebrshipLevelIds.split(",")
+
+                }
+
+
+                for (let x of mapentryandmembershiplevel) {
+
+                    $('.mapmembershiplevels').each(function () {
+
+                        const $this = $(this);
+
+                        if ($this.attr('data-id') === x) {
+
+                            $this.prop('checked', true);
+
+                        }
+
+
+                    });
+                }
+
+                if (result.Entries.CtaId != 0) {
+
+                    entryctaid=result.Entries.CtaId
+                    console.log("ctacheck",result.Entries.CtaId)
+                 
+                }
 
                 for (const [index, y] of result.CategoryName.entries()) {
 
-                    var div = ""
+                    // var div = ""
 
-                    var id = ""
+                    // var id = ""
 
-                    div += `<li class="cursor-pointer rounded-[4px] p-[8px_12px] border border-[#EDEDED] flex space-x-[6px] justify-between mb-[8px] last-of-type:mb-[0] sl-cat sl-cat` + index + `" data-id="` + index + `">
-                    <div class="relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] line-clamp-1 flex-wrap">`
 
-                    for (let x of y.Categories) {
-                        div += `<span class="inline-flex items-center  text-[12px] font-normal leading-none text-[#555555]
-            after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center last-of-type:after:hidden" data-id ="` + x.Id + `">
-            `+ x.Category + `</span>`
+                    //     div += `<li class="p-[9px_24px] border-b border-[#EDEDED] sl-cat sl-cat` + index + `" data-id="` + index + `">
+                    //    <div class="chk-group chk-group-label"> <input type="checkbox" id="Check` + index + `" class="hidden peer " checked data-id="` + index + `">
+                    //                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
+                    //                 before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
+                    //                     ">`
 
-                        id = x.Id
+                    //     div += `<li class="p-[9px_24px] border-b border-[#EDEDED] sl-cat sl-cat` + index + `" data-id="` + index + `">
+                    //    <div class="chk-group chk-group-label"> <input type="checkbox" id="Check` + index + `" class="hidden peer " checked data-id="` + index + `">
+                    //                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
+                    //                 before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
+                    //                     ">`
+
+                    // for (let x of y.Categories) {
+
+                    //     div += `<span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
+                    // after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                    // last-of-type:after:hidden" data-id="` + x.Id + `"> ` + x.Category + `</span>`
+
+                    // id = x.Id
+                    // }
+                    //         div += `
+                    //    <input type="hidden" data-id="`+ id + `" class="cat-val">
+                    //     </li>`
+
+                    // id = x.Id
+                    // }
+                    //         div += `
+                    //    <input type="hidden" data-id="`+ id + `" class="cat-val">
+                    //     </li>`
+
+
+
+                    if (newcatarray.length != 0) {
+                        $('.itemselecteddiv').removeClass('hidden')
+                        $('#catcount').text(newcatarray.length)
                     }
-                    div += `</div><a href="javascript:void(0);" class="bg-[#F7F7F5]  p-[3px] rounded-[3px] min-w-[16px] w-[16px] h-[16px] grid place-items-center hover:bg-[#F0F0F0] rsl-cat">
-                    <img src="/public/img/remove-categories.svg" alt="remove">
-                </a>
-                <input type="hidden" data-id="`+ id + `" class="cat-val">
-                </li>`
-                    for (let x of newcatarray) {
-                        if (x == id) {
-                            $(".selected-cat").append(div)
-                            $("#Check" + index).prop("checked", true)
-                        }
-                    }
+
+
                 }
                 if (result.Entries.TblChannelEntryField != null) {
                     result.Entries.TblChannelEntryField.forEach(function (field) {
@@ -431,6 +634,19 @@ $(document).on("click", "#sl-chn", function () {
     $("#chn-list").toggleClass("show")
 })
 
+
+$(document).on('click','.tab-togg55',function(){
+
+    $('.ctacard').each(function () {
+        if ($(this).attr('data-id') == entryctaid) {
+            console.log("ctacheck")
+            $(this).find('h5').removeClass('text-[#717171]').addClass('text-[#10A37F]')
+            $(this).removeClass('border-[#EDEDED]')
+            $(this).addClass('border-[#10A37F]')
+        }
+    })
+
+})
 // Get channel fields
 $(document).on('click', '.select-chn', function () {
 
@@ -452,12 +668,16 @@ $(document).on('click', '.select-chn', function () {
     $("#chn-name").attr("data-id", chanid)
     $("#slchannel").val($(this).text())
     $("#slchannel").attr("data-id", chanid)
+    $('.itemselecteddiv').addClass('hidden')
+
+    $('#catcount').text("")
     $.ajax({
-        url: "/channel/channelfields/" + chanid,
+        url: "/entries/channelfields/" + chanid,
         type: "GET",
         dataType: "json",
         data: { "id": chanid },
         success: function (result) {
+
             cateogryarr = []
             $(".getvalue").remove()
             //category section//
@@ -477,7 +697,7 @@ $(document).on('click', '.select-chn', function () {
 
                     div +=
                         `
-                <li class="p-[9px_24px] border-b border-[#EDEDED]">
+                <li class="p-[9px_24px] border-b border-[#EDEDED]" data-id="`+ index + `">
                    <div class="chk-group chk-group-label">
                   <input type="checkbox" id="Check` + index + `" class="hidden peer selectcheckbox" data-id="` + index + `">
                                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
@@ -497,7 +717,7 @@ $(document).on('click', '.select-chn', function () {
                         id = x.Id
                     }
                     div += ` </label>
-                    <input type="hidden" id="cat` + index + `" data-id="` + id + `">
+                    <input type="hidden" class="ncati" id="cat` + index + `" data-id="` + id + `">
                 </div>
               </li>`
                 }
@@ -516,12 +736,84 @@ $(document).on('click', '.select-chn', function () {
             if (result.FieldValue !== null) {
                 GetDaynamicChannelFields(result.FieldValue)
             }
+            $('.ctacard').remove()
+            $('.listempydes').remove()
+            $('.ctanodata').addClass('hidden')
+            $('.initaildatadiv').addClass('hidden')
+            if (result.ctalist !== null && result.ctalist !== "" && result.ctalist.length != 0) {
 
+                console.log(result.ctalist, "listcta")
+
+                for (let x of result.ctalist) {
+                    console.log("x", x.Id)
+                    let str = `<div class="flex flex-col items-center space-y-2  border-[1px]  p-[12px] rounded-[4px] cursor-pointer ctacard" data-id="${x.Id}">`;
+
+                    if (x.FormImagePath != "") {
+                        console.log("jjjjiii")
+                        str += `   <img src="${x.FormImagePath}" alt="meta title">`;
+                    }
+
+                    str += `   <h5 class="mt-[8px] mb-[4px] font-normal text-[#717171] text-center text-sm">${x.FormTitle}</h5>
+                              <p class="font-light text-[#717171] text-[10px] text-center">${x.FormDescription}</p>
+                          </div>`;
+                    if ($('.calltoactdiv').is(':visible')) {
+
+                        $('.calltoactdiv').append(str);
+                    } else {
+
+                        const newDiv = $('<div class="gap-[12px] grid grid-cols-2 max-[350px]:grid-cols-1 calltoactdiv"></div>');
+                        newDiv.append(str);
+                        $('.ctalistdiv').append(newDiv);
+                    }
+
+                }
+
+
+                // $('.calltoactdiv').append(str)
+            } else {
+                nodata = `  <div
+            class="noData-foundWrapper flex flex-col justify-content-center items-center h-full listempydes ">
+
+            <div class="empty-folder mb-[10px]">
+                <img style="max-width: 50px;" src="/public/img/Formsnodata.svg" alt="">
+                <img src="/public/img/shadow.svg" alt="">
+            </div>
+            <h1 style="text-align: center;font-size: 15px;" class="heading">
+                 No CTA's yet?</h1>
+
+        </div>`
+                $('.ctalistdiv').append(nodata)
+            }
         }
     })
 
 })
 
+
+$(document).on('click', '#availblecate', function () {
+
+    // $('.tabclose').hide()
+
+    for (let x of newcatarray) {
+
+
+        $('.ncati').each(function () {
+
+            const $this = $(this);
+
+            if ($this.attr('data-id') === x) {
+
+                $this.closest('li').find(".selectcheckbox").prop('checked', true);
+                $this.addClass('cat-val');
+                const $li = $this.closest('li');
+                $li.prependTo($('.categry-lst'));
+            }
+
+
+        });
+
+    }
+})
 // publish btn
 $(document).on("click", "#publishbtn", function () {
 
@@ -548,52 +840,120 @@ function containsHtmlElements(str) {   // check the string contains html element
     var regex = /<[^>]*>/;
     return regex.test(str);
 }
+$(document).ready(function () {
+    $(document).on('click', '.selectcheckbox', function () {
 
-// select categories using check box
-$(document).on('click', '.selectcheckbox', function () {
-    cid = $(this).attr("data-id")
-    catid = $("#cat" + cid).attr("data-id")
-    if ($(this).prop('checked')) {
-        var div = ""
-        $("#sl-cat-error").hide()
-        for (const [index, y] of Channelcategories.entries()) {
-            if (index == cid) {
-                $(".sl-list").removeClass("hidden")
-                div += `<li class="cursor-pointer rounded-[4px] p-[8px_12px] border border-[#EDEDED] flex space-x-[6px] justify-between mb-[8px] last-of-type:mb-[0] sl-cat sl-cat` + index + `" data-id="` + index + `">
-                                        <div class="relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] line-clamp-1 flex-wrap">`
+        const $this = $(this);
+        const cid = $this.attr("data-id");
+        const $li = $this.closest('li');
+        const $ul = $li.parent('ul');
+        const $hiddenInput = $("#cat" + cid);
+        const catid = $hiddenInput.attr("data-id");
 
-                for (let x of y.Categories) {
-                    div += `<span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
-                                after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center last-of-type:after:hidden" data-id ="` + x.Id + `">
-                                `+ x.Category + `</span>`
+
+        if ($this.prop('checked')) {
+
+            $('.itemselecteddiv').removeClass("hidden")
+            $ul.prepend($li);
+            $hiddenInput.addClass('cat-val');
+        } else {
+
+            const originalIndex = $li.data('order-index');
+
+            if (originalIndex !== undefined) {
+                let $lis = $ul.children('li');
+                if (originalIndex === 0) {
+                    $ul.prepend($li);
+                } else {
+                    if (originalIndex >= $lis.length) {
+                        $ul.append($li);
+                    } else {
+                        $li.insertBefore($lis.eq(originalIndex));
+                    }
                 }
-                div += `</div><a href="javascript:void(0);" class="bg-[#F7F7F5]  p-[3px] rounded-[3px] min-w-[16px] w-[16px] h-[16px] grid place-items-center hover:bg-[#F0F0F0] rsl-cat">
-                    <img src="/public/img/remove-categories.svg" alt="remove">
-                </a>
-                <input type="hidden" data-id="`+ catid + `" class="cat-val">
-                </li>`
+            } else {
+
+                $ul.append($li);
             }
-        }
-        $(".selected-cat").append(div)
 
-    } else {
-        $(".sl-cat" + cid).remove()
 
-        if ($(".selected-cat").find('li').length === 0) {
-            $(".sl-list").addClass("hidden"); // Hide the empty category div
+            $hiddenInput.removeClass('cat-val');
+
         }
+        updateCategoryCount();
+    });
+
+    // Store original order on page load: very important
+    $('.categry-lst > li').each(function (index) {
+        $(this).data('order-index', index);
+    });
+
+
+    updateCategoryCount();
+    if ($('.selectcheckbox:checked').length === 0) {
+        console.log("lll")
+        $('.itemselecteddiv').addClass("hidden");
     }
-})
+});
+function updateCategoryCount() {
+    const count = $('.selectcheckbox:checked').length;
+    $('#catcount').text(count);
+    if (count > 0) {
+        $('.itemselecteddiv').removeClass('hidden');
+    } else {
+        $('.itemselecteddiv').addClass('hidden');
+    }
+}
+
 
 $(document).on('click', '.sl-cat', function () {
+
+    console.log("removesdfdsfdsfdsfd")
     cid = $(this).attr("data-id")
     $(this).remove()
+    console.log("cid", cid)
     $("#Check" + cid).prop("checked", false)
+    $("#Check" + cid).parents("li").removeClass("hidden")
     if ($(".selected-cat").find('li').length === 0) {
         $(".sl-list").addClass("hidden"); // Hide the empty category div
     }
-})
+    let liCount = 0;
+    $('.sl-cat').each(function () {
+        liCount++;
 
+    })
+
+    $('#catcount').text(liCount)
+})
+$(document).on('click', '.catclearbtn', function () {
+
+    $('.selectcheckbox:checked').each(function () {
+        const $checkbox = $(this);
+        const cid = $checkbox.attr("data-id");
+        const $hiddenInput = $("#cat" + cid);
+
+        $checkbox.prop('checked', false);
+        $hiddenInput.removeClass('cat-val');
+    });
+
+    const $ul = $('.categry-lst');
+    const $listItems = $ul.children('li');
+
+    $listItems.sort(function (a, b) {
+        const dataIdA = parseInt($(a).find('.selectcheckbox').data('id'));
+        const dataIdB = parseInt($(b).find('.selectcheckbox').data('id'));
+        return dataIdA - dataIdB;
+    });
+
+    $ul.empty().append($listItems);
+    $('.itemselecteddiv').addClass('hidden');
+    $('#catcount').text("")
+});
+
+// $(document).on('click','.catclearbtn',function(){
+
+//     $('.sl-cat').click()
+// })
 function Getselectedcatagories() {   // check the string contains html elements
     $('.cat-val').each(function () {
         categoryIds.push($(this).attr("data-id"));
@@ -763,10 +1123,10 @@ $(document).on('click', '.checkboxid', function () {
     else {
         var option = $(this).next('label').text();
         checkboxarr.splice(checkboxarr.indexOf(option), 1);
-        console.log(checkboxarr,"checkboxarray")
+        console.log(checkboxarr, "checkboxarray")
         $(this).parents(".getvalue").find('.checkfieldid').val(checkboxarr.join(','));
         // $(this).parents(".getvalue").find('.manerr').show()
-      
+
 
     }
 
@@ -788,7 +1148,7 @@ $(document).on('click', '.radbtn', function () {
 
 $(document).on('click', '#optionsid', function () {
     option = $(this).text()
-    
+
     $('.fieldid').val(option)
     $('#selectval').text(option)
 
@@ -799,7 +1159,9 @@ $(document).on('click', '#optionsid', function () {
     }
 
 })
-$(document).on("click", "#fieldsave", function () {
+// $(document).on("click", "#fieldsave", function () {
+
+function ChannelFieldsGet() {
     channeldata = []
     GetFieldValue()
     var flag = channelfieldvalidation()
@@ -829,11 +1191,11 @@ $(document).on("click", "#fieldsave", function () {
     channelfieldkeyup()
     console.log("new", channeldata);
 
-})
+}
 
 function channelfieldvalidation() {
 
-  
+
 
     var flag = true;
     $('.getvalue').each(function () {
@@ -847,7 +1209,7 @@ function channelfieldvalidation() {
         }
         if (($(this).find('input,textarea').val() !== '') && charallowed != 0) {
             if ($(this).find('input,textarea').val().length > charallowed) {
-              
+
                 $(this).find('.cerr').show()
                 flag = false
             }
@@ -862,18 +1224,18 @@ function channelfieldkeyup() {
         $(this).find('input,textarea').keyup(function () {
             if (($(this).val() !== '') || ($(this).text() !== '')) {
 
-           
+
                 $(this).siblings('.error').hide()
-            } 
-         
+            }
+
 
         })
         $(this).find('.date').change(function () {
             if (($(this).val() !== '')) {
 
                 $(this).siblings('.error').hide()
-            } 
-            
+            }
+
 
         })
 
@@ -928,60 +1290,62 @@ $(document).on("click", "#field-cancel", function () {
 $(document).on("keyup", "#author", function () {
 
     // dropdown filter input box search
-    $("#author").keyup(function () {
+    // $("#author").keyup(function () {
 
-        var keyword = $(this).val().trim().toLowerCase()
+    var keyword = $(this).val().trim().toLowerCase()
 
 
-        if (keyword != "") {
+    if (keyword != "") {
 
-            fetch(`/channel/userdetails/?keyword=${keyword}`, {
-                method: "GET"
+        fetch(`/entries/userdetails/?keyword=${keyword}`, {
+            method: "GET"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            .then(data => {
+                // Handle the data received from the API
+
+                $('.userlistdiv li:not(.nodata-userlistdiv)').remove();
+
+                if (data == null) {
+                    $(".nodata-userlistdiv").removeClass("hidden")
+                    $(".userlistdiv").addClass("show nouserdata")
+                }
+                if (data != null) {
+                    $(".nodata-userlistdiv").addClass("hidden")
+                    $(".userlistdiv").addClass("show").removeClass("nouserdata")
+
+
+                    for (let x of data) {
+
+                        console.log(x);
+
+                        $('.userlistdiv').append(`<li style="width: 100%"><a class="optionsid2 dropdown-item p-[12px_16px] border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] hover:bg-[#F5F5F5]" href="javascript:void(0);" data-id=${x.Id}>${x.FirstName} ${x.LastName}</a></li>`)
+
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    // Handle the data received from the API
+                }
 
-                    $('.optionsid2').remove();
+            })
+            .catch(error => {
+                console.error('There was a problem with your fetch operation:', error);
+            });
+    } else {
 
-                    if (data == null) {
+        $(".userlistdiv").removeClass("show nouserdata")
 
-                        $(".nodata-userlistdiv").removeClass("hidden")
-                        $(".userlistdiv").addClass("show nouserdata")
-                    }
-                    if (data != null) {
+        $(".nodata-userlistdiv").addClass("hidden")
 
-                        $(".nodata-userlistdiv").addClass("hidden")
+        $('.userlistdiv li:not(.nodata-userlistdiv)').remove();
 
-                        $(".userlistdiv").addClass("show").removeClass("nouserdata")
 
-                        for (let x of data) {
-
-                            console.log(x);
-
-                            $('.userlistdiv').append(`<li><a class="optionsid2 dropdown-item p-[12px_16px] border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] hover:bg-[#F5F5F5]" href="javascript:void(0);" data-id=${x.Id}>${x.FirstName} ${x.LastName}</a></li>`)
-
-                        }
-                    }
-
-                })
-                .catch(error => {
-                    console.error('There was a problem with your fetch operation:', error);
-                });
-        } else {
-
-            $(".userlistdiv").removeClass("show nouserdata")
-
-            $(".nodata-userlistdiv").addClass("hidden")
-        }
-    })
-
+    }
 })
+
+// })
 
 $(document).on('click', '.optionsid2', function () {
 
@@ -998,21 +1362,59 @@ $(document).on('click', '.optionsid2', function () {
 // dropdown filter data categories
 $("#Searchcategorie").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
+    var found = false;
     $(".categry-lst > li").each(function (index, element) {
         var title = $(element).text().toLowerCase()
         if (title.includes(keyword)) {
             $(element).show()
-            $("#nodatafounddesign").addClass("hidden")
+            $('.selected-cat').addClass('hidden')
+            found = true;
 
         } else {
+
             $(element).hide()
 
-            $("#nodatafounddesign").removeClass("hidden")
+        }
+        if (found) {
+            updateCategoryCount()
+            $('.itemselecteddiv').removeClass('hidden')
+            $("#nodatafounddesign").addClass("hidden");
+        } else {
+
+            $('.itemselecteddiv').addClass('hidden')
+            $("#nodatafounddesign").removeClass("hidden");
         }
     })
-
 })
 
+
+// dropdown filter Membership level
+$("#Searchmembership").keyup(function () {
+    var keyword = $(this).val().trim().toLowerCase()
+    var found = false;
+    $(".chk-group-label > div").each(function (index, element) {
+        var title = $(element).text().toLowerCase()
+        if (title.includes(keyword)) {
+            $(element).show()
+            // $('.selected-cat').addClass('hidden')
+            found = true;
+
+        } else {
+
+            $(element).hide()
+
+        }
+        if (found) {
+            // updateCategoryCount()
+            // $('.itemselecteddivs').removeClass('hidden')
+            $("#membership_nodatafound").addClass("hidden");
+        } else {
+
+            // $('.itemselecteddivs').addClass('hidden')
+            $("#membership_nodatafound").removeClass("hidden");
+        }
+    })
+})
 
 
 
@@ -1049,46 +1451,46 @@ $(document).on("click", '#field-update', function () {
                 "deleteoptions": JSON.stringify({ deleteoption }),
                 "fiedlvalue": JSON.stringify({ fiedlvalue }),
                 csrf: $("input[name='csrf']").val(),
-                "entryid":$('#eid').val()
+                "entryid": $('#eid').val()
             },
             success: function (result) {
 
-              
+
                 $(".select-chn").each(function () {
                     if ($(this).attr("data-id") == $("#slchannel").attr("data-id")) {
                         $(this).click()
-                        
+
                         if (result && result.TblChannelEntryField) {
-                           setTimeout(() => {
-                            bindData(result.TblChannelEntryField)
-                           }, 100);
+                            setTimeout(() => {
+                                bindData(result.TblChannelEntryField)
+                            }, 100);
                         } else {
                             console.error("No data available to bind.");
                         }
-                        
+
                     }
                 })
 
-           
+
                 $("#field-section").addClass("hidden")
                 $("#ed-section").removeClass("hidden")
-            
+
             }
         })
 
-       
+
     }
 })
 
 function bindData(fields) {
     fields.forEach(function (field) {
-     
+
         $("#" + field.FieldId).val(field.FieldValue);
         $("#" + field.FieldId).attr('data-id', field.Id);
 
     });
 
- 
+
     var radval = $('.radioval').val();
     $('.radbtn').each(function () {
         if ($(this).next('label').text() === radval) {
@@ -1096,15 +1498,15 @@ function bindData(fields) {
         }
     });
 
-   
+
     var selectval = $('.fieldid').val();
     $('#selectval').text(selectval);
 
-  
+
     var cheval = $('.checkfieldid').val();
     if (cheval && cheval !== "") {
-        var values = cheval.split(','); 
-       
+        var values = cheval.split(',');
+
         $('.checkboxdiv').each(function () {
             var labelText = $(this).find('label').text();
             var inputDataId = $(this).find('input').attr('data-id');
@@ -1155,16 +1557,201 @@ $(document).ready(function () {
 });
 
 
-$(document).on('click','.canceladditional',function(){
+$(document).on('click', '.canceladditional', function () {
+
+    $('.tabclose').show()
 
 
-    $('.getvalue').each(function () {
-        $(this).find('input,textarea,.fieldid').val('')
-        // $(this).find('a').text('')
-        $(this).find('.radbtn').prop('checked', false)
-        $(this).find('.checkboxid').prop('checked', false)
+    // $('.getvalue').each(function () {
+    //     $(this).find('input,textarea,.fieldid').val('')
+    //     // $(this).find('a').text('')
+    //     $(this).find('.radbtn').prop('checked', false)
+    //     $(this).find('.checkboxid').prop('checked', false)
+
+    // })
+
+    $('.error').hide()
+})
+
+$(document).on('click', '#save-preview', function () {
+
+    $("#savetype").val("savePreview")
+    //use this in the submit button 
+    const event = new CustomEvent("getHTML", {
+    });
+    document.dispatchEvent(event);
+
+})
+
+$(document).on('click', '#cancel-entry', function () {
+
+    $('#content').text("Your changes will be lost. Do you wish to continue?");
+    $(".deltitle").text("Discard Unsaved Entry?")
+    $("#delid").text("Continue")
+    $('#delid').attr('href', '/entries/entrylist');
+    $("#dynamicImage").attr('src', "/public/img/Cancel.svg")
+
+})
+
+
+// $(document).on('click', '#chn-list .dropdown-item', function () {
+
+//     $('#chn-list li').click(function () {
+//         notify_content = `<ul class="toast-msg fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px]  border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/delete-icon.svg" alt = "toast success"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Info !</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " > ` + "Switching channels will reset selected categories" + `</p ></div ></div ></li></ul> `;
+//         $(notify_content).insertBefore(".header-rht");
+
+//         setTimeout(function () {
+//             $('.toast-msg').fadeOut('slow', function () {
+//                 $(this).remove();
+
+//             });
+//         }, 5000);
+//     });
+// })
+
+
+// $(document).on('click','.ctacard',function(){
+
+//     $('.ctacard h5').removeClass('text-[#10A37F]').addClass('text-[#717171]');
+//     $('.ctacard').removeClass('border-[#10A37F]').addClass('border-[#EDEDED]');
+//     formid =$(this).attr('data-id')
+
+//     $(this).find('h5').removeClass('text-[#717171]').addClass('text-[#10A37F]')
+//     $(this).removeClass('border-[#EDEDED]').addClass('border-[#10A37F]')
+
+// })
+
+$(document).on('click', '.ctacard', function () {
+
+    formid = $(this).attr('data-id');
+
+    $(this).addClass("bg-[#FBFFFE]")
+    if ($(this).find('h5').hasClass('text-[#10A37F]')) {
+
+        $(this).find('h5').removeClass('text-[#10A37F]').addClass('text-[#717171]');
+        $(this).removeClass('border-[#10A37F]').addClass('border-[#EDEDED]');
+        formid = 0;
+    } else {
+
+        $('.ctacard h5').removeClass('text-[#10A37F]').addClass('text-[#717171]');
+        $('.ctacard').removeClass('border-[#10A37F]').addClass('border-[#EDEDED]');
+
+
+        $(this).find('h5').removeClass('text-[#717171]').addClass('text-[#10A37F]');
+        $(this).removeClass('border-[#EDEDED]').addClass('border-[#10A37F]');
+    }
+
+
+});
+$(document).on('keyup', '.ctasearch', function () {
+    var keyword = $(this).val().toLowerCase();
+
+    var $ctacards = $('.ctacard');
+    var hasVisibleCards = false;
+
+    if (keyword !== "") {
+
+        $ctacards.each(function () {
+            var title = $(this).find('h5').text().toLowerCase();
+            if (title.includes(keyword)) {
+                $(this).removeClass('hidden');
+                hasVisibleCards = true;
+            } else {
+                $(this).addClass('hidden');
+            }
+        });
+
+
+        if (hasVisibleCards) {
+            $('.ctanodata').addClass('hidden');
+        } else {
+            $('.ctanodata').removeClass('hidden');
+            $('.listempydes').addClass('hidden')
+        }
+    } else {
+
+        $ctacards.removeClass('hidden');
+        $('.ctanodata').addClass('hidden');
+        $('.listempydes').removeClass('hidden')
+    }
+});
+
+
+flatpickr("#publishtime", {
+    enableTime: true,
+    dateFormat: "d M Y h:i K",
+});
+
+
+flatpickr("#cdtime", {
+    enableTime: true,
+    dateFormat: "d M Y h:i K",
+});
+
+
+$(document).on('click', '#AltText', function () {
+
+    $('body').addClass('overflow-hidden')
+})
+
+$(document).on('click', '.altSave', function () {
+
+    $('body').removeClass('overflow-hidden')
+})
+
+$(document).on('click', '.altCancel', function () {
+
+    $('body').removeClass('overflow-hidden')
+})
+
+$(document).ready(function () {
+
+    $(document).on('click', ".doc-lst", function (event) {
+
+        value = $("#editingArea").data('edited')
+
+        if ($('#editingArea').hasClass('data-edited')) {
+
+            event.preventDefault();
+
+            $("#deleteModal").modal('show')
+
+            $('#dltCancelBtn').removeAttr('data-bs-dismiss');
+
+            tablurl = $(this).find("a").attr("href")
+
+            $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
+
+            $('.deldesc').removeClass("text-center")
+
+            $('.deldesc').html(`
+                <div class="text-center">Are you sure you want to leave this page?</div><br>
+                <p style="margin-left:36px;">- Click 'Save' to save it as draft.</p><br>
+                <p style="margin-left:36px;">- Click 'Cancel' to proceed without saving.</p>
+            `);
+            
+              
+            $('.deltitle').text("Exit Entry")
+            $("#delid").text("Save")
+            $("#delid").addClass("featurebtn")
+            $("#delcancel2").text(value)
+            $('#delid').attr('id', 'save-entry');
+            var currentUrl = window.location.href;
+
+            // Remove the specific part of the URL
+            var index = currentUrl.indexOf('/entries/');
+
+            var newUrl = currentUrl.substring(0, index);
+
+            $("#dltCancelBtn").attr('href', newUrl + tablurl)
+            $('#dltCancelBtn').attr('data-save', 'save');
+        }
+
 
     })
 
-    $('.error').hide()
+});
+
+$(document).on('click','.membershipclose',function(){
+    $('.tabclose').show()
 })

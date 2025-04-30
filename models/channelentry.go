@@ -107,7 +107,31 @@ type TblModule struct {
 	GroupFlg             int
 }
 
-func Exportentriesdata(exportdata *[]chn.Tblchannelentries, id []int, tenantid int) error {
+type TblMstrchannel struct {
+	Id                 int       `gorm:"column:id"`
+	ChannelName        string    `gorm:"column:channel_name"`
+	ChannelDescription string    `gorm:"column:channel_description"`
+	SlugName           string    `gorm:"column:slug_name"`
+	FieldGroupId       int       `gorm:"column:field_group_id"`
+	IsActive           int       `gorm:"column:is_active"`
+	IsDeleted          int       `gorm:"column:is_deleted"`
+	CreatedOn          time.Time `gorm:"column:created_on"`
+	CreatedBy          int       `gorm:"column:created_by"`
+	ModifiedOn         time.Time `gorm:"column:modified_on;DEFAULT:NULL"`
+	ModifiedBy         int       `gorm:"column:modified_by;DEFAULT:NULL"`
+	DateString         string    `gorm:"-"`
+	ProfileImagePath   string    `gorm:"<-:false"`
+	AuthorDetails      TblUser   `gorm:"foreignKey:Id;references:CreatedBy"`
+	ChannelType        string    `gorm:"column:channel_type"`
+	TenantId           int       `gorm:"column:tenant_id"`
+	Username           string    `gorm:"<-:false"`
+	FirstName          string    `gorm:"<-:false"`
+	LastName           string    `gorm:"<-:false"`
+	NameString         string    `gorm:"<-:false"`
+	ImagePath          string    `gorm:"column:image_path"`
+}
+
+func Exportentriesdata(exportdata *[]chn.Tblchannelentries, id []int, tenantid string) error {
 
 	if err := DB.Table("tbl_channel_entries").Select("tbl_channel_entries.*,tbl_users.username,tbl_channels.channel_name").Joins("inner join tbl_users on tbl_users.id = tbl_channel_entries.created_by").Joins("inner join tbl_channels on tbl_channels.id = tbl_channel_entries.channel_id").Where("tbl_channel_entries.is_deleted=0 and tbl_channel_entries.id IN ? and (tbl_channel_entries.tenant_id is NULL or tbl_channel_entries.tenant_id = ?)", id, tenantid).Order("tbl_channel_entries.id desc").Preload("TblChannelEntryField", func(db *gorm.DB) *gorm.DB {
 		return db.Select("tbl_channel_entry_fields.*,tbl_fields.field_type_id").Joins("inner join tbl_fields on tbl_fields.Id = tbl_channel_entry_fields.field_id")
@@ -119,7 +143,7 @@ func Exportentriesdata(exportdata *[]chn.Tblchannelentries, id []int, tenantid i
 
 }
 
-func Entryid(entry string, tenantid int) (Id int, err error) {
+func Entryid(entry string, tenantid string) (Id int, err error) {
 
 	var modules TblModule
 

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"spurt-cms/config"
@@ -70,6 +71,8 @@ type USR struct {
 	LogoPath          string
 	ExpandLogoPath    string
 	TblPageTypes      []TablePageType
+	ChannelID         int
+	LastUpdatedOn     string
 }
 
 type TblModulePermission struct {
@@ -234,7 +237,7 @@ func NewMenuController(c *gin.Context) USR {
 				GetModulePermissions(&rout, tab.Id, permissionid)
 
 				for _, url := range rout {
-					if strings.Contains(url.RouteName, "/channel/entrylist/") {
+					if strings.Contains(url.RouteName, "/entries/entrylist/") {
 						flg = true
 						break
 					}
@@ -242,19 +245,19 @@ func NewMenuController(c *gin.Context) USR {
 
 				for _, url := range rout {
 					if url.ModuleId == tab.Id {
-						if url.RouteName != "/channel/entrylist" {
+						if url.RouteName != "/entries/entrylist" {
 
 							var urll URL
-							if strings.Contains(url.RouteName, "/channel/entrylist/") {
+							if strings.Contains(url.RouteName, "/entries/entrylist/") {
 
-								url.RouteName = "/channel/entrylist"
+								url.RouteName = "/entries/entrylist"
 							}
 							urll.Id = url.Id
 							urll.DisplayName = url.DisplayName
 							urll.RouteName = url.RouteName
 							Url = append(Url, urll)
 
-						} else if flg && url.RouteName == "/channel/entrylist" {
+						} else if flg && url.RouteName == "/entries/entrylist" {
 
 							var urll URL
 							urll.Id = url.Id
@@ -270,7 +273,7 @@ func NewMenuController(c *gin.Context) USR {
 
 					var urll URL
 					urll.DisplayName = "Entries"
-					urll.RouteName = "/channel/entrylist"
+					urll.RouteName = "/entries/entrylist"
 					Url = append(Url, urll)
 				}
 
@@ -407,6 +410,11 @@ func NewMenuController(c *gin.Context) USR {
 
 	}
 
+	ChannelId, err := ChannelConfig.DefaultChannel("default_channel", TenantId)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	Mod := USR{
 		TblModule:         Final,
 		Name:              user.FirstName + " " + user.LastName,
@@ -424,6 +432,8 @@ func NewMenuController(c *gin.Context) USR {
 		LogoPath:        LogoPath,
 		ExpandLogoPath:  ExpantLogoPath,
 		TblPageTypes:    pagetype,
+		ChannelID:       ChannelId,
+		LastUpdatedOn:   LastUpdatedTime,
 	}
 
 	return Mod

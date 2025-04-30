@@ -9,8 +9,8 @@ import (
 	"log"
 	"mime/multipart"
 	"os"
+	"path"
 	"spurt-cms/models"
-	"strconv"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -22,12 +22,12 @@ import (
 )
 
 var (
-	AWSID       string
-	AWSKEY      string
-	AWSREGION   string
-	AWSBUCKET   string
-	Tanentid    = os.Getenv("TENANT_ID")
-	TenantId, _ = strconv.Atoi(Tanentid)
+	AWSID     string
+	AWSKEY    string
+	AWSREGION string
+	AWSBUCKET string
+	Tanentid  = os.Getenv("TENANT_ID")
+	TenantId  = Tanentid
 )
 
 type S3Service struct {
@@ -228,11 +228,60 @@ func UploadCropImageS3(fileName string, filePath string, imagebyte []byte) error
 			return fmt.Errorf("failed to upload file, %v", aerr.Message())
 		}
 	}
-	fmt.Println("file uploaded to", aws.StringValue(&result.Location), result)
+	fmt.Printf("file uploaded to, %s\n", aws.StringValue(&result.Location), result)
 
 	return nil
 }
 
+/*upload files from s3 */
+func UploadDocumentS3(fileName string, filePath string, fileBytes []byte) error {
+	sess := CreateS3Sess()
+
+	uploader := s3manager.NewUploader(sess)
+	reader := bytes.NewReader(fileBytes)
+
+	var contentType string
+	extension := path.Ext(fileName)
+	switch extension {
+	case ".pdf":
+		contentType = "application/pdf"
+	case ".doc":
+		contentType = "application/msword"
+	case ".docx":
+		contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+	case ".txt":
+		contentType = "text/plain"
+	case ".png":
+		contentType = "image/png"
+	case ".jpg":
+		contentType = "image/jpg"
+	case ".jpeg":
+		contentType = "image/jpeg"
+	case ".gif":
+		contentType = "image/gif"
+
+	default:
+		return fmt.Errorf("unsupported file type: %s", extension)
+	}
+
+	result, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket:      aws.String(AWSBUCKET),
+		Key:         aws.String(filePath),
+		Body:        reader,
+		ContentType: aws.String(contentType),
+		ACL:         aws.String("public-read"),
+	})
+
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			return fmt.Errorf("failed to upload file, %v", aerr.Message())
+		}
+		return fmt.Errorf("failed to upload file, %v", err)
+	}
+
+	fmt.Printf("File uploaded to: %s\n", aws.StringValue(&result.Location))
+	return nil
+}
 func CreateFolderToS3(foldername string, folderpath string) (folderPath string, err error) {
 
 	if foldername != "" {
@@ -248,7 +297,12 @@ func CreateFolderToS3(foldername string, folderpath string) (folderPath string, 
 		})
 
 		if err != nil {
-			return "", fmt.Errorf("failed to create folder, %v", err)
+
+			if aerr, ok := err.(awserr.Error); ok {
+
+				return "", fmt.Errorf("failed to create folder, %v", aerr.Message())
+			}
+			// return "", fmt.Errorf("failed to create folder, %v", err)
 		}
 
 		fmt.Printf("create folder to, %s\n", put)

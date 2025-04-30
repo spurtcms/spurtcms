@@ -6,28 +6,63 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Entry.Slug}}</title>
+    <link rel="stylesheet" href="/public/css/form.css">
+    <link rel="stylesheet" href="/public/css/formstyle.css">
     <meta name="description" content="{{.Entry.MetaDescription}}">
     <meta name="keyword" content="{{.Entry.Keyword}}">
     <meta property="og:title" content="{{.Entry.Slug}}">
     <meta property="og:description" content="{{.Entry.MetaDescription}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: "Lexend", sans-serif !important;
+        }
+    </style>
 </head>
 
 <body>
+    <header class="p-[24px_60px_10px] max-md:p-[32px_16px] bg-white sticky top-0 z-50">
+        <div class="max-[576px]:!max-w-[100%] mx-auto flex items-center justify-between space-x-4">
+            <a href=""><img src="/public/img/logo.svg" alt="logo"></a>
+            <a href="https://spurtcms.com/" target="_blank"
+                class="bg-[#10A37F] hover:bg-[#148569] place-items-center grid max-sm:p-[8px] px-[16px] py-[8px] rounded-[4px] w-fit h-[36px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">Login</a>
+        </div>
+    </header>
+    <input type="hidden" value="{{.Entry.Id}}" id="entryid">
     {{if ne .Entries ""}}
-    <div>
-        <div
+    <div class="min-h-[100vh]">
+        <!-- <div
             class="fixed bottom-0 left-0 shadow-[2px_-1px_4px_0px_#0000001A] flex justify-end items-center px-6 py-[12px] w-full bg-white z-50">
             <a href="#"
                 class="h-9 flex items-center justify-center px-6 text-base font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline w-auto ">Submit</a>
-        </div>
-        <div class="max-w-[800px] mx-auto pb-[65px]"> {{.Entries}}</div>
+        </div> -->
+        <div class=" mx-auto pb-[65px]"> {{.Entries}}</div>
+
+
+
 
     </div>
+    <div
+        class="p-[24px_60px_10px] max-md:p-[32px_16px] bg-white sticky top-0 z-50 flex items-center space-x-[24px] mt-[100px] mb-[24px]">
+        <a href="" class="inline-block text-base font-normal leading-[20px] text-[#D6D6D6] hover:underline">Terms of
+            Service</a><a href=""
+            class="inline-block text-base font-normal leading-[20px] text-[#D6D6D6] hover:underline">Privacy Policy</a>
+    </div>
+
+    <div style="margin-left: 60px;"
+        class="flex items-center space-x-[6px] mb-[80px]  p-[8px_16px] max-md:p-[32px_16px] border bprder-solid border-[#ECECEC] rounded-[4px] w-fit">
+        <p class="text-[14px] font-normal leading-[17.5px] text-[#262626]">Powered By</p>
+        <div> <img src="/public/img/logo.svg" alt="logo"></div>
+    </div>
     {{else}}
-    <section class="w-full overflow-hidden pt-[48px] min-h-screen">
+    <section class="w-full overflow-hidden pt-[48px] ">
 
 
-    
+
         <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
             <div class="text-center w-fit mx-auto mb-[32px]">
                 <img src="/public/img/cms404-img.svg" alt="noFilter">
@@ -39,9 +74,190 @@
                 is temporarily unavailable.</p>
         </div>
 
-    
+
     </section>
     {{end}}
+    {{if .FormData}}
+    <section class="   shadow-[1px_0px_12px_3px_#75EB0080] sticky bottom-0 z-[1080] ">
+        <div
+            class=" p-[16px] bg-[#000000] shadow-[-3px_-4px_20px_3px_#00BCDC99] flex items-center max-[1280px]:space-x-[32px] space-x-[60px] max-[600px]:flex-col max-[600px]:space-x-[0] max-[600px]:items-start ">
+            <a href="" class="min-w-[162px] max-[768px]:hidden">
+                <img src="/public/img\powered-logo.svg" alt="logo">
+            </a>
+            <p
+                class="text-[24px] font-normal text-[#FFFFFF] max-[1280px]:text-[20px] max-[768px]:text-base max-[768px]:!ms-0 leading-7 me-auto max-[600px]:hidden">
+                Review the details to ensure everything is perfect, then click to proceed. Your next step is just one
+                click away!</p>
+
+            <a href="#offcanvasBottom" data-bs-toggle="offcanvas"
+                class="bg-[#FBB629] max-[768px]:p-[12px] p-[12px_24px] rounded inline-block hover:bg-[#eea000] whitespace-nowrap max-[600px]:w-full text-center ctapreviewmodel">
+                {{.Formtitle}}
+            </a>
+
+        </div>
+    </section>
+    {{end}}
+
+
+    <!--subscribe modal-->
+
+    <div class="offcanvas offcanvas-bottom  !border-t-0 rounded-[12px_12px_0_0] !h-fit !bottom-[80px]" tabindex="-1"
+        id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header !p-[40px_16px_0_16px] max-[600px]:!p-[16px_16px_0_16px]">
+            <div
+                class=" max-w-[1120px] mx-auto w-full flex items-center justify-between border-b p-[0_0_16px_0] mb-[24px] border-solid border-[#EDEDED]">
+                <h5 class="text-[24px] font-medium text-[#262626] leading-7 line-clamp-1 max-[600px]:text-xl"
+                    id="offcanvasBottomLabel ">Details
+                </h5>
+                <button type="button" class="btn-close p-0 shadow-none" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="offcanvas-body !p-[0_16px_40px_16px] h-[calc(100vh-300px)] scrollbar-thin">
+            <div class=" max-w-[1120px] mx-auto w-full">
+
+                {{if .FormData}}
+                <div class="mx-auto" id="page">
+                    <input type="hidden" value="{{.FormId}}" id="FormId">
+                    <input type="hidden" value="{{.Userid}}" id="Userid">
+                    <form-builder mode="fill" content="{{.FormData}}" uploadurl="{{.uploadurl}}">
+
+                    </form-builder>
+                </div>{{else}}
+                <section class="w-full overflow-hidden pt-[48px] min-h-screen">
+
+
+
+                    <div class="max-w-[600px] mx-auto text-center m-[120px_16px]">
+                        <div class="text-center w-fit mx-auto mb-[32px]">
+                            <img src="/public/img/cms404-img.svg" alt="noFilter">
+                        </div>
+                        <h2 class="text-[24px] font-semibold text-[#262626] mb-[8px] leading-[30px]">
+                            PAGE NOT FOUND</h2>
+                        <p class="text-[#262626] mb-[24px] text-center text-[16px] font-normal leading-[15px]  ">
+                            The page you are looking for might have been removed had its name changed or
+                            is temporarily unavailable.</p>
+                    </div>
+
+
+                </section>
+                {{end}}
+
+                <!-- <div class="mb-[24px]">
+                    <label for="" class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[4px]">Full
+                        Name</label>
+                    <input type="text"
+                        class="border-[1px] border-solid border-[#EDEDED] h-[36px] p-[5px] rounded block w-full">
+                </div>
+                <div class="mb-[24px]">
+                    <label for="" class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[4px]">Email</label>
+                    <input type="text"
+                        class="border-[1px] border-solid border-[#EDEDED] h-[36px] p-[5px] rounded block w-full">
+                </div>
+                <div class="mb-[24px]">
+                    <label for=""
+                        class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[4px]">Mobile</label>
+                    <input type="text"
+                        class="border-[1px] border-solid border-[#EDEDED] h-[36px] p-[5px] rounded block w-full">
+                </div>
+                <div class="mb-[24px]">
+                    <label for=""
+                        class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[4px]">Message</label>
+                    <textarea name="" id=""
+                        class="border-[1px] resize-none border-solid border-[#EDEDED] h-[222px] p-[5px] rounded block w-full "></textarea>
+                </div>
+                <button id="openSecondOffcanvas"
+                    class="bg-[#000000] grid leading-none place-items-center border-0 p-[8px_32px] rounded w-[104px] h-[36px] mx-auto text-[#FFFFFF] text-base font-normal hover:bg-[#2D2D2D] min-[1280px]:mt-[40px]">Save</button> -->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="offcanvas offcanvas-bottom  !border-t-0 rounded-[12px_12px_0_0] !min-h-[60vh] !h-fit !bottom-[80px]"
+        tabindex="-1" id="offcanvasBottom1" aria-labelledby="offcanvasBottomLabel">
+
+        <div
+            class="offcanvas-body !p-[120px_16px_40px_16px] max-[1300px]:!p-[40px_16px_40px_16px] h-[calc(100vh-300px)] scrollbar-thin">
+            <div class="flex items-center flex-col max-w-[550px] mx-auto ">
+                <div>
+                    <img src="/public/img/submit-check.svg" alt="submitted">
+                </div>
+                <h1 class="text-[24px] mt-[24px] font-medium text-[#262626] mb-[8px] text-center">
+                    Thank You for Reaching Out!
+                </h1>
+                <p class="text-[16px] mt-[8px] font-normal text-[#717171] text-center ">
+                    We’ve received your request and our team will get back to you shortly. We’re excited to assist you
+                    and explore how we can support your goals.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!--boostrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!--jqurey-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/public/js/form.js"></script>
+
+    <script>
+        document.getElementById('openSecondOffcanvas').addEventListener('click', function () {
+            // Close the first offcanvas
+            const offcanvasBottom = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasBottom'));
+            offcanvasBottom.hide();
+
+            // Wait for the first offcanvas to hide before opening the second
+            document.getElementById('offcanvasBottom').addEventListener('hidden.bs.offcanvas', function () {
+                const offcanvasBottom1 = new bootstrap.Offcanvas(document.getElementById('offcanvasBottom1'));
+                offcanvasBottom1.show();
+            }, { once: true }); // Ensures the event listener is called only once
+        });
+
+
+    </script>
+
+
+    <script>
+
+        $(document).on('click', '.ctapreviewmodel', function () {
+
+            $('.ctaSubmit').removeClass('fixed')
+
+        })
+        document.addEventListener('formSubmit', function (event) {
+            if (event.detail.data) {
+
+                // console.log(JSON.stringify(event.detail.data));
+                // console.log(JSON.stringify(event.detail));
+
+                FormId = $("#FormId").val()
+                Userid = $("#Userid").val()
+                EntryId = $("#entryid").val()
+
+                $.ajax({
+                    url: "{{.URL}}",
+                    type: "POST",
+                    async: false,
+                    data: { "data": JSON.stringify(event.detail.data), "Id": FormId, "UserId": Userid, "EntryId": EntryId },
+                    datatype: "json",
+                    caches: false,
+                    success: function (data) {
+
+                        console.log(data.message);
+
+                        htmlcontent = '<div class="flex items-center flex-col gap-[12px] mt-5"><div class="w-[42px] h-[42px] rounded-full bg-[#E0FFEC] flex items-center justify-center"><img src="/public/img/vector-tick.svg" alt=""></div><div class="flex flex-col gap-[6px] items-center text-center"><h3 class="text-[#262626] text-base font-medium m-0 text-center">Successfully Registered!</h3><p class="text-[#717171] text-xs font-light m-0 text-center">Thanks you for your Response!</p></div></div>'
+
+
+                        $("#page").html(htmlcontent)
+
+                    }
+                })
+
+            }
+        });
+    </script>
 </body>
 
 </html>

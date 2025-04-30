@@ -1,0 +1,462 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$NameString := .NameString}}
+{{$Viewbaseurl := .Viewbaseurl}}
+{{$ResponseCounts:=.ResponseCount}}
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="header-rht z-[101] max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Forms}}
+            </h2>
+        </div>
+
+        <div
+            class="{{if eq .SearchTrues true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC] {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px]{{end}}">
+
+            <!-- Search button (icon) -->
+            <a href="javascript:void(0);"
+                class="{{if eq .SearchTrues true}} pointer-events-none {{end}}  srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0 hover:bg-[#FAFAFA]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
+            </a>
+
+            <!-- Search form -->
+            <form action="/formsbuilder/draft" method="get" class="filterform" autocomplete="off">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="formsearch"
+                    value="{{.Filter.Keyword}}" class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block
+              {{if eq .SearchTrues true}} w-[calc(100%-36px)] p-[0_24px_0_0] {{else}} w-0 p-0 {{end}}">
+            </form>
+
+            <!-- Close button (only visible when search is open) -->
+            <input type="hidden" value="3" class="formclosebutton">
+            {{if eq .SearchTrues true}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{else}}
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
+            {{end}}
+
+
+        </div>
+
+        <div class="dropdown">
+
+            <a href="javascript:void(0);"
+                class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA]  border-[1px] border-[#ECECEC] [&amp;.show]:bg-[#F0FFFB] [&amp;.show]:border-[#10A37F]"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <img src="/public/img/filter.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                <img src="/public/img/filter-active.svg" alt="filter-active"
+                    class="hidden group-hover:block group-focus:block">
+            </a>
+            <div
+                class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[12px]">
+                    <h3 class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center space-x-[4px]">
+                        <img src="/public/img/filter-black.svg" alt="filter" class="block">
+                        <span>{{$Translate.FormBuilder.SelectFilters}}</span>
+                    </h3>
+
+                </div>
+
+                <form action="" id="filterform" method="get">
+                    <div class="block mb-[16px]">
+                        <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                            {{$Translate.FormBuilder.FromDate}}</p>
+                        <div class="flter-option">
+                            <input type="date" placeholder="Enter From Date" data-date="MM/DD/YYYY" name="fromdate"
+                                value="{{.Filter.FromDate}}"
+                                class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                            <label id="fromdate-error" class="error hidden" for="fromdate"
+                                style="font-size: 10px; font-weight: 400; color: rgb(242, 102, 116); position: absolute;left: 12px;">*
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="block mb-[16px]">
+                        <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                            {{$Translate.FormBuilder.ToDate}}</p>
+                        <div class="flter-option">
+                            <input type="date" placeholder="Enter To Date" data-date="MM/DD/YYYY" name="todate"
+                                value="{{.Filter.ToDate}}"
+                                class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                            <label id="todate-error" class="error hidden " for="todate"
+                                style="font-size: 10px; font-weight: 400; color: rgb(242, 102, 116); position: absolute;left: 12px;">*
+                            </label>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex align-items-center space-x-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                        <a href="/formsbuilder/draft" id="clearbtn"
+                            class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">{{$Translate.FormBuilder.Clear}}</a>
+                        <button type="submit"
+                            class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D]">
+                            {{$Translate.FormBuilder.ApplyFilter}}
+                        </button>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+
+        <a href="/formsbuilder/create-form"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D]">
+            <span class="hidden max-sm:block text-lg leading-none ">+</span> <span class="max-sm:hidden">
+                {{$Translate.FormBuilder.CreateForms}}
+            </span></a>
+    </header>
+
+    <div class="pb-[60px]">
+        <div class="block overflow-auto">
+            <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                <li><a href="/formsbuilder/" class="Published max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative  text-[#717171] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 after:opacity-0 
+                    [&.active]:after:opacity-100 [&.active]:text-[#262626] ">{{$Translate.Channell.Published}}</a>
+                </li>
+                <li><a href="/formsbuilder/unpublished" class="Unpublished  max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 after:opacity-0 
+                    [&.active]:after:opacity-100 [&.active]:text-[#262626]  ">{{$Translate.Channell.Unpublished}}</a>
+                </li>
+                <li><a href="/formsbuilder/draft" class="Draft active max-sm:px-[6px] max-sm:text-[12px] text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative  text-[#717171] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 after:opacity-0 
+            [&.active]:after:opacity-100 [&.active]:text-[#262626] ">{{$Translate.Channell.Draft}}</a>
+                </li>
+
+                <li class="ms-auto">
+                    <p class="text-[12px] font-normal leading-[16px] text-[#A1A1A1] w-fit sticky left-[16px]">
+                        <span class="font-semibold text-[#262626]  "> {{.Count}} </span>
+                        {{if gt .Count 1}}
+                        {{$Translate.FormBuilder.FormsAvailable}}
+                        {{else}}
+                        {{$Translate.FormBuilder.FormAvailable}}
+                        {{end}}
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+
+        <div class="overflow-x-auto ">
+            <table class="w-full min-w-[768px]">
+                {{if .Formlist}}
+                <thead>
+                    <tr>
+                        <th class="px-[16px] py-[12px] pr-0 w-[30px] border-b border-[#EDEDED]">
+
+                        </th>
+                        <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                            <p class="text-[#222222] text-sm font-normal mb-0">{{$Translate.Channell.Published}}</p>
+                        </th>
+                        <th
+                            class="text-center text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] max-xl:w-[150px] w-[30%] ">
+                            {{$Translate.FormBuilder.TotalResponse}}
+                        </th>
+
+                        <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                            {{$Translate.FormBuilder.CreatedBy}}
+                        </th>
+
+                        <th
+                            class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center ">
+                            {{$Translate.FormBuilder.Action}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Formlist}}
+                    <tr>
+                        <td class="p-[16px] pr-0 border-b border-[#EDEDED] align-middle">
+                            <div class="chk-group-label flex justify-center">
+                                <input type="checkbox" id="Check{{.Id}}" class="selectcheckbox hidden peer"
+                                    id="Check{{.Id}}" data-id="{{.Id}}">
+                                <label for="Check{{.Id}}"
+                                    class="z-[100] before:z-[100] w-[14px] h-[14px] relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                        before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                            </div>
+                        </td>
+                        <td class="p-[16px]  border-b border-[#EDEDED] align-middle ">
+                            <a href="javascript:void(0);" class="text-[#152027] text-sm font-normal">
+                                {{.FormTitle}}
+                            </a>
+                        </td>
+                        <td
+                            class=" text-center p-[16px]  border-b border-[#EDEDED] text-sm font-medium text-[#10A37F] align-middle responsecount">
+                            {{$formid:=.Id}}
+                            {{range $index,$value:=$ResponseCounts}}
+                            {{if eq $value.ID $formid}}
+                            {{$value.ResponseCount}}
+                            {{end}}
+                            {{end}}
+                        </td>
+                        <td class="p-[16px]  border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                            <div class="grid grid-cols-[40px_1fr] gap-[8px] items-center">
+                                <div
+                                    class="w-[40px] h-[40px] min-w-[40px] overflow-hidden rounded-full grid place-items-center bg-[#F5F5F5]">
+                                    {{if .ProfileImagePath}}
+                                    <img src="/image-resize?name={{.ProfileImagePath}}" alt="{{.ProfileImagePath}}">
+                                    {{else}}
+                                    <span class="text-[14px] text-[#222222] font-normal">{{$NameString}}</span>
+                                    {{end}}
+                                </div>
+                                <div>
+                                    <h4 class="text-[#262626] text-xs font-normal leading-4 mb-[8px]">
+                                        {{.Username}}</h4>
+                                    <p class="text-[#717171] text-xs font-normal leading-4">Created on:
+                                        <span class="text-[#262626] whitespace-nowrap">
+                                            {{.DateString}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-[16px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center ">
+                            <div class="flex space-x-[8px] items-center justify-center">
+                                <!-- <label for="toggleTwo"
+                                    class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                                    <div class="relative">
+                                        <input type="checkbox" id="toggleTwo" class="peer sr-only">
+                                        <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                        </div>
+                                        <div
+                                            class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                        </div>
+                                    </div>
+                                </label> -->
+                                <!-- <a href="javascript:void(0);"
+                                    class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5] copyButton"
+                                    data-id="{{$Viewbaseurl}}/forms/{{.FormSlug}}-{{.Uuid}}">
+                                    <img src="/public/img/entries-link.svg" alt="copyLink" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-html="true"
+                                        data-bs-custom-class="custom-tooltip" data-bs-title="Copy Link">
+                                </a> -->
+                                <a href="{{$Viewbaseurl}}/forms/{{.FormSlug}}-{{.Uuid}}" target="_blank"
+                                    class="grid place-items-center w-[24px] h-[24px] rounded-[4px] hover:bg-[#F5F5F5]">
+                                    <img src="/public/img/Eye.svg" alt="global">
+                                </a>
+
+                                <div class="btn-group language-group position-static">
+                                    <a href="javascript:void(0);"
+                                        class=" border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] [&amp;.show]:bg-[#F5F5F5] "
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                            class="hidden group-hover:block">
+                                        <img src="/public/img/action-btn.svg" alt="dropdown"
+                                            class="block group-hover:hidden">
+                                    </a>
+
+                                    <ul
+                                        class="dropdown-menu dropdown-menu-end min-w-[180px] rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[8px] border-0">
+
+                                        <li class="last-of-type:mb-[0]">
+                                            <a href="javascript:void(0);" id="publish" data-status="{{.Status}}"
+                                                data-id="{{.Id}}" data-name="{{.FormTitle}}"
+                                                data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                                class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                                <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                                        src="/public/img/publish.png" alt="publish"
+                                                        class="w-full h-full object-contain"></span>{{$Translate.Channell.Publish}}</a>
+                                        </li>
+
+
+                                        <!-- <li class="last-of-type:mb-[0]">
+                                            <a href="javascript:void(0);"
+                                                class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]"
+                                                type="button">
+                                                <span class="w-[16px] h-[16px] grid place-items-center"><img
+                                                        src="/public/img/featured-drop.svg"
+                                                        alt="publish"></span>Featured</a>
+                                        </li> -->
+
+                                        <li class="last-of-type:mb-[0]"><a href="/formsbuilder/formedit/{{.Id}}"
+                                                class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                                <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                                        src="/public/img/edit.svg" alt=""
+                                                        class="w-full h-full object-contain"></span>{{$Translate.Edit}}
+                                            </a></li>
+
+
+                                        <li class="last-of-type:mb-[0]"><a href="/formsbuilder/formduplicate/{{.Id}}"
+                                                class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5]">
+                                                <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                                        src="/public/img/duplicate.svg" alt=""
+                                                        class="w-full h-full object-contain"></span>{{$Translate.Channell.Duplicate}}
+                                            </a>
+                                        </li>
+
+                                        <li class="last-of-type:mb-[0]"><a data-id="{{.Id}}" data-name="{{.FormTitle}}"
+                                                data-status="{{.Status}}" data-bs-target="#deleteModal"
+                                                data-bs-toggle="modal" id="delete-btn"
+                                                class="dropdown-item w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[4px_16px] leading-[12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                                <span class="w-[12px] h-[16px] grid place-items-center"><img
+                                                        src="/public/img/delete.svg" alt=""
+                                                        class="w-full h-full object-contain"></span>{{$Translate.Delete}}
+                                            </a></li>
+
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{ else if eq .SearchTrues true}}
+                    <tr>
+                        <td colspan="8">
+
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    {{$Translate.Filtersearch}}</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    {{$Translate.Filterkeyword}} </p>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{else }}
+                    <tr>
+                        <td colspan="9">
+                            <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noData.svg" alt="nodate">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    {{$Translate.Oopsnodata}}</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    {{$Translate.Pagesorry}}
+                                    {{$Translate.Gobackhome}}</p>
+                                <a href="/formsbuilder/create-form"
+                                    class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                                    {{$Translate.Clickadd}} >></a>
+                            </div> -->
+
+                            <div
+                                class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                                <div class="mb-[30px]">
+                                    <img src="/public/img/Formsnodata.svg" alt="" class="">
+
+                                </div>
+                                <div class="flex flex-col items-center space-y-8 w-full">
+                                    <div class="flex flex-col space-y-[16px] w-full">
+                                        <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">
+                                            {{$Translate.FormBuilder.Nodraftsyet}}</h3>
+                                        <p class="font-light text-[#717171] text-center mb-2 text-base">
+                                            {{$Translate.FormBuilder.Nodraft}}</p>
+                                    </div>
+                                    <a href="/formsbuilder/create-form"
+                                        class="inline-flex items-center bg-[#000000] hover:bg-[#2D2D2D] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.FormBuilder.Createfirstdraft}}</a>
+                                </div>
+                            </div>
+
+
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--fullpagination-->
+    <input type="hidden" value="{{.Limit}}" id="limit">
+    <input type="hidden" value="{{.Count}}" id="count">
+
+    <!--pagination-->
+    <div
+        class="@container space-x-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+        <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#000000] hover:bg-[#2D2D2D] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+     @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/form-builder/formList.js"></script>
+
+    {{template "footerclose" .}}

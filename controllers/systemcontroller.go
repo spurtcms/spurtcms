@@ -16,11 +16,11 @@ func Personalization(c *gin.Context) {
 	var logo = personalize_data.LogoPath
 
 	menu := NewMenuController(c)
-	Folder, File, Media, _, _ := GetMedia()
+	// Folder, File, Media, _, _ := GetMedia()
 	translate, _ := TranslateHandler(c)
 	selectedtype, _ := GetSelectedType()
 
-	c.HTML(200, "personalize.html", gin.H{"Menu": menu,"linktitle":"Personalize", "title": "Personalize", "csrf": csrf.GetToken(c), "HeadTitle": translate.Setting.Personalize, "translate": translate, "Folder": Folder, "File": File, "Media": Media, "logo": logo, "SettingsHead": true, "Personalizemenu": true, "Tooltiptitle": translate.Setting.Personalizetooltip, "StorageType": selectedtype.SelectedType})
+	c.HTML(200, "personalize.html", gin.H{"Menu": menu,"linktitle":"Personalize", "title": "Personalize", "csrf": csrf.GetToken(c), "HeadTitle": translate.Setting.Personalize, "translate": translate,  "logo": logo, "SettingsHead": true, "Personalizemenu": true, "Tooltiptitle": translate.Setting.Personalizetooltip, "StorageType": selectedtype.SelectedType})
 }
 
 func PersonalizationUpdate(c *gin.Context) {

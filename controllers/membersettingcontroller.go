@@ -80,7 +80,7 @@ func MemberSettingUpdate(c *gin.Context) {
 
 	c.SetCookie("get-toast", "Member Settings Updated Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-	c.Redirect(301, "/member/settings/")
+	c.Redirect(301, "/user/settings/")
 
 }
 
@@ -100,7 +100,7 @@ func UpdateMemberSettingTemplate(c *gin.Context) {
 
 	if c.PostForm("tempname") == "" || c.PostForm("tempdesc") == "" || c.PostForm("tempsub") == "" || c.PostForm("temcont") == "" {
 		c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
-		c.Redirect(301, "/member/settings/")
+		c.Redirect(301, "/user/settings/")
 
 		return
 	}
@@ -120,13 +120,13 @@ func UpdateMemberSettingTemplate(c *gin.Context) {
 
 		c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 
-		c.Redirect(301, "/member/settings/")
+		c.Redirect(301, "/user/settings/")
 
 		return
 	}
 
 	c.SetCookie("get-toast", "Templateupdatedsuccessfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-	c.Redirect(301, "/member/settings/")
+	c.Redirect(301, "/user/settings/")
 
 }

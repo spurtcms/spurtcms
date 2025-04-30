@@ -675,7 +675,7 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 					CreatedBy:  field.FieldValue.CreatedBy,
 					ModifiedOn: &fieldValueModon,
 					ModifiedBy: &fieldValueModBy,
-					TenantID:   field.FieldValue.TenantId,
+					TenantId:   field.FieldValue.TenantId,
 				}
 
 				conv_fieldOptions := make([]model.FieldOptions, len(field.FieldOptions))
@@ -980,7 +980,7 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 				CreatedBy:  field.FieldValue.CreatedBy,
 				ModifiedOn: &fieldValueModon,
 				ModifiedBy: &fieldValueModBy,
-				TenantID:   field.FieldValue.TenantId,
+				TenantId:   field.FieldValue.TenantId,
 			}
 
 			conv_fieldOptions := make([]model.FieldOptions, len(field.FieldOptions))

@@ -4,25 +4,31 @@
 {{$permission :=.permission}}
 {{$dper :=.dpermission}}
 
-<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
 
     <header
-        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0 z-[101]">
+        class="header-rht  max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+
         <div class="mr-auto flex items-center gap-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{.HeadTitle}}
-                {{$Translate.Categoryy.Newgroup}}</h2>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{.HeadTitle}} {{$Translate.Categoryy.Newgroup}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    Organize related categories under one group.</p>
+            </div>
         </div>
 
         <div
             class="{{if eq .Searchtrue true}} transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
             <a href="javascript:void(0);"
-                class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px]  place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]">
+                class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px]  place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
-                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon ">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="hidden group-hover:block hovericon searchopen">
             </a>
             <form action="/categories/" method="get" class="filterform " autocomplete="off">
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="" value="{{.Filter.Keyword}}"
@@ -35,9 +41,13 @@
                 <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                     <img src="/public/img/close.svg" alt="close">
                 </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
                 {{end}}
 
             </form>
+
         </div>
 
 
@@ -51,7 +61,7 @@
         {{range .Routes}}
         {{if eq .DisplayName "Create"}}
         <a href="#categoryGrp" data-bs-toggle="modal" id="add-btn"
-            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569]">
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
             <span class="hidden max-sm:block text-lg leading-none ">+</span> <span class="max-sm:hidden">
                 {{$Translate.Create}} {{$Translate.Categoryy.Newgroup}}
             </span></a>
@@ -167,8 +177,11 @@
 
                         <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
                             <a href="/categories/addcategory/{{$Id}}"
-                                class=" border-[1px] border-solid border-[#10A37F] flex items-center justify-center h-[32px] text-[13px] font-normal text-[#10A37F] leading-[17.5px] w-[108px] rounded-[4px] p-[7px_14px] hover:bg-[#10A37F] hover:text-[#ffffff]">
-                                + {{$Translate.Categoryy.Category}}</a>
+                                class="bordered-btn-normal">
+                                    <img src="/public/img/plus.svg" alt="..." />
+                                    <span>{{$Translate.Categoryy.Category}}</span>
+                            </a>
+
                         </td>
                         {{else}}
                         {{end}}
@@ -181,53 +194,56 @@
                         <td
                             class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
                             <div class="btn-group position-static">
-                                <a href="javascript:void(0);"
-                                    class="border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] focus:bg-[#F5F5F5] show"
-                                    data-bs-toggle="dropdown" aria-expanded="true">
-                                    <img src="/public/img/action-btn-active.svg" alt="dropdown"
-                                        class="hidden group-hover:block">
-                                    <img src="/public/img/action-btn.svg" alt="dropdown"
-                                        class="block group-hover:hidden">
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent shadow-[2px_3px_8px_1px_#00000026] min-w-[180px] py-[12px]"
-                                    aria-labelledby="triggerId">
-
-                                    {{$Id := .Id}}
-
-                                    {{range $MENU.TblModule}}
-                                    {{if eq .ModuleName "Categories"}}
-                                    {{range .SubModule}}
-                                    {{if eq .ModuleName "Categories Group"}}
-                                    {{range .Routes}}
-                                    {{if eq .DisplayName "Update"}}
-                                    <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-[12px] hover:bg-[#F5F5F5] cursor-pointer"
-                                        data-id="{{$Id}}" id="edit" data-bs-toggle="modal"
-                                        data-bs-target="#categoryGrp"><img
-                                            src="/public/img/edit.svg" />{{$Translate.Edit}}</a>
-                                    <!-- <div class="w-full h-px bg-gray-100 ma-y-2"></div> -->
-
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{range $MENU.TblModule}}
-                                    {{if eq .ModuleName "Categories"}}
-                                    {{range .SubModule}}
-                                    {{if eq .ModuleName "Categories Group"}}
-                                    {{range .Routes}}
-                                    {{if eq .DisplayName "Delete"}}
-                                    <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-[12px] hover:bg-[#F5F5F5] cursor-pointer "
-                                        data-bs-target="#deleteModal" data-bs-toggle="modal" id="delete-btn"
-                                        data-id="{{$Id}}"> <img src="/public/img/delete.svg">{{$Translate.Delete}}
+                                <div class="btn-group language-group position-static">
+                                    <a href="javascript:void(0);" type="button"
+                                        class="group items-center place-items-center gap-[5px] grid [&.show]:border [&.show]:border-[#ECECEC] [&.show]:border-solid rounded-[4px] w-[24px] h-[24px]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="/public/img/action-btn-active.svg" alt="dropdown" />
                                     </a>
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
-                                    {{end}}
+
+                                    <ul
+                                        class="bg-[#FFF] shadow-[0px_4px_8px_0px_#00000026] p-[8px] border-0 rounded-[12px] min-w-[132px] dropdown-menu dropdown-menu-end">
+
+                                        {{$Id := .Id}}
+
+                                        {{range $MENU.TblModule}}
+                                        {{if eq .ModuleName "Categories"}}
+                                        {{range .SubModule}}
+                                        {{if eq .ModuleName "Categories Group"}}
+                                        {{range .Routes}}
+                                        {{if eq .DisplayName "Update"}}
+                                        <li class="mb-[2px] last-of-type:mb-[0]">
+                                            <a class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item"
+                                                data-id="{{$Id}}" id="edit" data-bs-toggle="modal"
+                                                data-bs-target="#categoryGrp"><img
+                                                    src="/public/img/edit.svg" />{{$Translate.Edit}}</a>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{range $MENU.TblModule}}
+                                        {{if eq .ModuleName "Categories"}}
+                                        {{range .SubModule}}
+                                        {{if eq .ModuleName "Categories Group"}}
+                                        {{range .Routes}}
+                                        {{if eq .DisplayName "Delete"}}
+                                        <li class="mb-[2px] last-of-type:mb-[0]">
+                                            <a class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[#A01910] text-[14px] leading-[20px] dropdown-item"
+                                                data-bs-target="#deleteModal" data-bs-toggle="modal" id="delete-btn"
+                                                data-id="{{$Id}}"> <img
+                                                    src="/public/img/delete-drop.svg">{{$Translate.Delete}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+                                    </ul>
                                 </div>
                             </div>
                         </td>
@@ -253,7 +269,7 @@
                     {{else }}
                     <tr>
                         <td colspan="9">
-                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                            <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
                                 <div class="text-center w-fit mx-auto">
                                     <img src="/public/img/noData.svg" alt="nodate">
                                 </div>
@@ -267,6 +283,24 @@
                                     data-bs-target="#categoryGrp"
                                     class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
                                     {{$Translate.Clickadd}} >></a>
+                            </div> -->
+
+                            <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                                <div class="mb-[30px]">
+                                    <img src="/public/img/no-data-categories.svg" alt="">
+
+                                </div>
+                                <div class="flex flex-col items-center w-full">
+                                    <div class="flex flex-col w-full">
+                                        <h3 class="mb-2 font-semibold text-[#262626] text-2xl text-center">
+                                            {{$Translate.Categoryy.Nocategorygroupyet}}</h3>
+                                        <p class="font-light text-[#717171] text-center  text-base">
+                                            {{$Translate.Categoryy.Nocategorygroup}}</p>
+                                    </div>
+                                    <a href="javascript:void(0)" id="clickadd" data-bs-toggle="modal"
+                                        data-bs-target="#categoryGrp"
+                                        class="inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline">{{$Translate.Categoryy.Createfirstcategorygroup}}</a>
+                                </div>
                             </div>
 
                         </td>
@@ -326,7 +360,7 @@
             {{end}}
 
             <li> <a href=""
-                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                     {{.CurrentPage}} </a> </li>
 
             {{if lt .CurrentPage .Pagination.TotalPages}}
@@ -375,7 +409,7 @@
             <div class="modal-dialog modal-dialog-scrollable mx-auto" role="document">
                 <div class="modal-content b-0 rounded-[4px]">
                     <div
-                        class="px-6 py-1.5 border-b border-[#EDEDED] flex justify-between items-center max-sm:p-[6px_16px]">
+                        class="px-6 py-1.5 border-b border-[#EDEDED] flex justify-between items-center max-sm:p-[6px_16px] sticky top-0 bg-white !z-[5]">
                         <h5 class="mb-0 text-bold-black font-medium text-base" id="category-title">
                             {{$Translate.Categoryy.Addnewcategorygrp}}
                         </h5>
@@ -383,30 +417,45 @@
                             <a href="#" data-bs-dismiss="modal"
                                 class="cancel-btn h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-bold-black  bg-[#FAFAFA] hover:bg-[#e0e0e0]  rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
                             <button id="save"
-                                class=" h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white  bg-[#10A37F] hover:bg-[#148569] rounded-[4px] no-underline">{{$Translate.Save}}
+                                class=" h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">{{$Translate.Save}}
                             </button>
                             <button id="update-btn" style="display: none;"
-                                class="h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white bg-[#10A37F]  hover:bg-[#148569]  rounded-[4px] no-underline">{{$Translate.Update}}
+                                class="h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]  rounded-[4px] no-underline">{{$Translate.Update}}
                             </button>
                         </div>
                     </div>
-                    <div class="overflow-auto scrollbar-thin">
+                    <div class="scrollbar-thin">
                         <div class="p-6 flex flex-col space-y-[16px] max-sm:p-[16px]">
                             <div class="flex flex-col space-y-[6px]">
-                                <p class="text-bold-black text-sm font-normal mb-0">
-                                    {{$Translate.Categoryy.Categorygrpname}}
-                                    <span class="text-red-600">*</span>
-                                </p>
+
+                                <label for="category_name"
+                                    class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                                    {{$Translate.Categoryy.Categorygrpname}} <span class="text-red-600">*</span>
+                                    <div class="cursor-pointer group">
+                                        <img src="/public/img/inputdesc.svg" alt="">
+                                        <p
+                                            class="!z-[10] hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            {{$Translate.Categoryy.Categorygrouplable}}</p>
+                                    </div>
+                                </label>
+
                                 <input type="text" name="category_name" id="category_name" maxlength="50"
                                     placeholder="{{$Translate.Categoryy.Entercategoryname}}"
                                     class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  rounded-[4px]  p-[8px] h-[34px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]" />
                                 <div id="error-messagename" class="text-red-500 text-xs mt-1"></div>
                             </div>
                             <div class="flex flex-col space-y-[6px]">
-                                <p class="text-bold-black text-sm font-normal mb-0">
-                                    {{$Translate.Categoryy.Categorygrpdescription}}
-                                    <span class="text-red-600">*</span>
-                                </p>
+
+                                <label for="category_desc"
+                                    class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                                    {{$Translate.Categoryy.Categorygrpdescription}} <span class="text-red-600">*</span>
+                                    <div class="cursor-pointer group">
+                                        <img src="/public/img/inputdesc.svg" alt="">
+                                        <p
+                                            class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            {{$Translate.Categoryy.Categorygroupdescriptionlable}}</p>
+                                    </div>
+                                </label>
                                 <textarea type="text" name="category_desc" id="category_desc" maxlength="250"
                                     placeholder="{{$Translate.Categoryy.Entercategorydescription}}"
                                     class="scrollbar-none [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  rounded-[4px]  p-[8px] h-[120px] bg-[#F7F7F5] text-bold-black text-sm font-normal resize-none w-full border border-[#EDEDED]"></textarea>
@@ -420,6 +469,6 @@
     </div>
 
     {{template "footer" .}}
-    <script src="/public/js/categories/categorygroup.js"></script>    
+    <script src="/public/js/categories/categorygroup.js"></script>
 
     {{template "footerclose" .}}

@@ -28,7 +28,7 @@ func MemberRegister(ctx context.Context, memberData *model.MemberDetails, argume
 	}
 
 	tenantDetails := c.GetStringMap("tenant")
-	tenantId := tenantDetails["TenantId"].(int)
+	tenantId := tenantDetails["TenantId"].(string)
 
 	var (
 		memberSettings member.TblMemberSetting

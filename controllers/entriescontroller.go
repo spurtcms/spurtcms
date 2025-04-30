@@ -1,17 +1,25 @@
 package controllers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
+	"spurt-cms/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/spurtcms/auth"
+	"github.com/spurtcms/blocks"
+	"github.com/spurtcms/channels"
 	chn "github.com/spurtcms/channels"
+	forms "github.com/spurtcms/forms-builders"
 	mem "github.com/spurtcms/member"
 	"github.com/spurtcms/team"
 	csrf "github.com/utrack/gin-csrf"
@@ -73,17 +81,25 @@ func Entries(c *gin.Context) {
 	)
 
 	id, _ := strconv.Atoi(c.Param("id"))
+	fmt.Println("id:", id)
 	limit := c.Query("limit")
 	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
 	if pageno == 0 {
 		pageno = 1
 	}
+	sorting := strings.TrimSpace(c.Query("sort"))
+	channelname := strings.TrimSpace(c.Query("channelname"))
+	entriestitle := strings.TrimSpace(c.Query("entriestitle"))
+	status := strings.TrimSpace(c.Query("status"))
 
 	filters.Keyword = strings.TrimSpace(c.Query("keyword"))
 	filters.Status = strings.TrimSpace(c.Query("Status"))
 	filters.ChannelName = strings.TrimSpace(c.Query("ChannelName"))
 	filters.Title = strings.TrimSpace(c.Query("Title"))
+
+	filters.ChannelName = channelname
+	filters.Status = status
 
 	if limit == "" {
 		limt = Limit
@@ -107,29 +123,29 @@ func Entries(c *gin.Context) {
 		ErrorLog.Printf("channellist error :%s", clerr)
 	}
 
-	routeName := c.FullPath()
+	// routeName := c.FullPath()
 
 	var htmlname string
 
-	if strings.Contains(routeName, "entrylist") {
+	// if strings.Contains(routeName, "entrylist") {
 
-		filters.Status = "Published"
+	// 	filters.Status = "Published"
 
-		htmlname = "entries.html"
+	// 	htmlname = "entries.html"
 
-	}
-	if strings.Contains(routeName, "unpublishentrieslist") {
+	// }
+	// if strings.Contains(routeName, "unpublishentrieslist") {
 
-		filters.Status = "Unpublished"
+	// 	filters.Status = "Unpublished"
 
-		htmlname = "entryunpublish.html"
-	}
-	if strings.Contains(routeName, "draftentrieslist") {
+	// 	htmlname = "entryunpublish.html"
+	// }
+	// if strings.Contains(routeName, "draftentrieslist") {
 
-		filters.Status = "Draft"
+	// 	filters.Status = "Draft"
 
-		htmlname = "entrydraft.html"
-	}
+	// 	htmlname = "entrydraft.html"
+	// }
 
 	var chnallist []chn.Tblchannel
 
@@ -156,14 +172,14 @@ func Entries(c *gin.Context) {
 	ChannelConfig.DataAccess = c.GetInt("dataaccess")
 	ChannelConfig.Userid = c.GetInt("userid")
 
-	chnentry, filtercount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: limt, Offset: offset, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: filters.Status}, TenantId)
+	chnentry, filtercount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: limt, Offset: offset, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: filters.Status, Sorting: sorting, EntriesTitle: entriestitle}, TenantId)
 
 	// _, filtercount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: 0, Offset: 0, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: filters.Status})
 
 	_, entrcount, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: 0, Offset: 0}, TenantId)
 
 	var allchnentry []chn.Tblchannelentries
-
+	var responseCount []forms.FormResponseCount
 	for index, entry := range chnentry {
 		entry.Cno = strconv.Itoa((offset + index) + 1)
 		entry.CreatedDate = entry.CreatedOn.In(TZONE).Format(Datelayout)
@@ -176,14 +192,21 @@ func Entries(c *gin.Context) {
 		if entry.ProfileImagePath != "" {
 			entry.ProfileImagePath = "/image-resize?name=" + entry.ProfileImagePath
 		}
-
+		_, _, responseCount, _ = FormConfig.FormBuildersList(limt, offset, forms.Filter{}, TenantId, 0, entry.Id, "", 0)
 		// entry.ChannelName = ""
 		allchnentry = append(allchnentry, entry)
 
 	}
 
+	var searchflag bool
+	if filters.Keyword != "" {
+		searchflag = true
+	} else {
+		searchflag = false
+	}
+
 	var filterflag bool
-	if filters.Keyword == "" && filters.Status == "" {
+	if filters.Status != "" || entriestitle != "" || channelname != "" {
 		filterflag = true
 	} else {
 		filterflag = false
@@ -200,31 +223,32 @@ func Entries(c *gin.Context) {
 
 	viewurl := os.Getenv("VIEW_BASE_URL")
 
-	if filters.Keyword == "" {
+	// if filters.Keyword == "" {
 
-		unpublishroute = "/channel/unpublishentrieslist/" + c.Param("id")
+	// 	unpublishroute = "/entries/unpublishentrieslist/" + c.Param("id")
 
-		draftroute = "/channel/draftentrieslist/" + c.Param("id")
+	// 	draftroute = "/entries/draftentrieslist/" + c.Param("id")
 
-		publishroute = "/channel/entrylist/" + c.Param("id")
+	// 	publishroute = "/entries/entrylist/" + c.Param("id")
 
-	} else {
+	// } else {
 
-		unpublishroute = "/channel/unpublishentrieslist/" + c.Param("id") + "?keyword=" + filters.Keyword
+	// 	unpublishroute = "/entries/unpublishentrieslist/" + c.Param("id") + "?keyword=" + filters.Keyword
 
-		draftroute = "/channel/draftentrieslist/" + c.Param("id") + "?keyword=" + filters.Keyword
+	// 	draftroute = "/entries/draftentrieslist/" + c.Param("id") + "?keyword=" + filters.Keyword
 
-		publishroute = "/channel/entrylist/" + c.Param("id") + "?keyword=" + filters.Keyword
-	}
+	// 	publishroute = "/entries/entrylist/" + c.Param("id") + "?keyword=" + filters.Keyword
+	// }
+	fmt.Println("htmlname", htmlname)
 
-	c.HTML(200, htmlname, gin.H{"Pagination": PaginationData{
+	c.HTML(200, "entrieslist.html", gin.H{"Pagination": PaginationData{
 		NextPage:     pageno + 1,
 		PreviousPage: pageno - 1,
 		TotalPages:   PageCount,
 		TwoAfter:     pageno + 2,
 		TwoBelow:     pageno - 2,
 		ThreeAfter:   pageno + 3,
-	}, "Viewbaseurl": viewurl, "Menu": menu, "linktitle": ModuleName, "chcount1": entrcount, "csrf": csrf.GetToken(c), "channelname": chnanem.ChannelName, "chnid": id, "ChanEntrtlist": allchnentry, "entrycount": entrcount, "Next": Next, "Previous": Previous, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "title": ModuleName, "heading": chnanem.ChannelName, "translate": translate, "channellist": chnallist, "Page": Page, "HeadTitle": translate.Channell.Channels, "chentrycount": filtercount, "Cmsmenu": true, "filterflag": filterflag, "Entriestab": true, "Tabmenu": TabName, "StorageType": selectedtype.SelectedType, "unpublishroute": unpublishroute, "draftroute": draftroute, "publishroute": publishroute, "channelfilter": "true"})
+	}, "Viewbaseurl": viewurl, "Menu": menu, "linktitle": ModuleName, "chcount1": entrcount, "csrf": csrf.GetToken(c), "channelname": chnanem.ChannelName, "chnid": id, "ChanEntrtlist": allchnentry, "entrycount": entrcount, "Next": Next, "Previous": Previous, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "title": ModuleName, "heading": chnanem.ChannelName, "translate": translate, "channellist": chnallist, "Page": Page, "HeadTitle": translate.Channell.Channels, "chentrycount": filtercount, "Cmsmenu": true, "searchflag": searchflag, "filterflag": filterflag, "Entriestab": true, "Tabmenu": TabName, "StorageType": selectedtype.SelectedType, "unpublishroute": unpublishroute, "draftroute": draftroute, "publishroute": publishroute, "channelfilter": "true", "responseCount": responseCount, "ChannelName": channelname, "EntriesTitle": entriestitle, "Status": status})
 
 	// }
 
@@ -251,6 +275,7 @@ func CreateEntry(c *gin.Context) {
 		ErrorLog.Printf("create Entry listchannel error: %s", clerr)
 	}
 
+	channeldetails, _, _ := ChannelConfig.GetChannelsById(id, TenantId)
 	_, entrcount, _, cherr := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: id, Limit: 0, Offset: 0}, TenantId)
 	if cherr != nil {
 		ErrorLog.Printf("createEntry entrylist error: %s", cherr)
@@ -281,13 +306,210 @@ func CreateEntry(c *gin.Context) {
 	}
 
 	parsedTime, err := time.Parse("2006-01-02 15:04:05", time.Now().UTC().Format("2006-01-02 15:04:05"))
-	cdate := parsedTime.In(TZONE).Format("2006-01-02T15:04")
+	cdate := parsedTime.In(TZONE).Format(Datelayout)
 	translate, _ := TranslateHandler(c)
 	menu := NewMenuController(c)
 
+	// Folder, File, Media, NextCont, merr := GetMedia()
+	// if merr != nil {
+	// 	ErrorLog.Printf("createEntry media error: %s", perr)
+	// }
+	var (
+		filter blocks.Filter
+		// collectionlist []blocks.TblBlock
+	)
+
+	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+
+	permisison, perr := NewAuth.IsGranted("Blocks", auth.CRUD, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("block collection list authorization error: %s", perr)
+	}
+
+	if perr != nil {
+		ErrorLog.Printf("block authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	var bytedata1 []byte
+
+	var bytedata2 []byte
+
+	if permisison {
+
+		var finalblocklist []blocks.TblBlock
+
+		blocklist, _, err := BlockConfig.BlockList(0, 0, blocks.Filter(filter), TenantId)
+
+		if err != nil {
+			fmt.Println("collection list", err)
+		}
+
+		for _, val := range blocklist {
+			var first = val.FirstName
+			var last = val.LastName
+			var firstn = strings.ToUpper(first[:1])
+			var lastn string
+			if val.LastName != "" {
+				lastn = strings.ToUpper(last[:1])
+			}
+
+			val.ChannelNames = strings.Split(val.ChannelSlugname, ",")
+
+			var Name = firstn + lastn
+			val.NameString = Name
+
+			tagname := strings.Split(val.TagValue, ",")
+
+			val.TagValueArr = append(val.TagValueArr, tagname...)
+			img := val.CoverImage
+			imgcontain := "/image-resize?name="
+			flag := strings.Contains(img, imgcontain)
+			if !flag {
+				val.CoverImage = "/image-resize?name=" + val.CoverImage
+			}
+			if val.ProfileImagePath != "" {
+				userimg := val.ProfileImagePath
+				imgflag := strings.Contains(userimg, imgcontain)
+				if !imgflag {
+					val.ProfileImagePath = "/image-resize?name=" + val.ProfileImagePath
+				}
+			}
+
+			finalblocklist = append(finalblocklist, val)
+
+		}
+
+		data := map[string]interface{}{"data": finalblocklist}
+
+		bytedata1, _ = json.Marshal(data)
+
+	}
+
+	if permisison {
+
+		endurl := os.Getenv("MASTER_BLOCKS_ENDPOINTURL")
+		req, err := http.NewRequest("GET", endurl, nil)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request: " + err.Error()})
+			return
+		}
+
+		query := req.URL.Query()
+
+		req.URL.RawQuery = query.Encode()
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Accept", "application/json")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+
+		masterconnect := true
+
+		if err != nil || resp.StatusCode != http.StatusOK {
+			fmt.Println("Error connecting to master server:", err)
+			masterconnect = false
+		} else {
+			defer resp.Body.Close()
+		}
+
+		var responseData ResponseData
+		if masterconnect {
+			bodyBytes, err := io.ReadAll(resp.Body)
+			if err == nil {
+				fmt.Println("Error response:", err)
+				resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+				err = json.NewDecoder(resp.Body).Decode(&responseData)
+				if err != nil {
+					masterconnect = false
+				}
+			} else {
+				masterconnect = false
+			}
+		}
+
+		if !masterconnect {
+			responseData = ResponseData{
+				DefaultList:    []models.TblMstrBlocks{},
+				AllList:        []models.TblMstrBlocks{},
+				FinalblockList: []models.TblMstrBlocks{},
+				BlockCount:     0,
+			}
+		}
+
+		permisison, perr := NewAuth.IsGranted("Blocks", auth.CRUD, TenantId)
+		if perr != nil {
+			ErrorLog.Printf("block collection list authorization error: %s", perr)
+			c.Redirect(301, "/403-page")
+			return
+		}
+		if !permisison {
+
+			ErrorLog.Printf("Block authorization error: %s", perr)
+			c.Redirect(301, "/403-page")
+			return
+		}
+
+		blockBannerValue, _ := c.Cookie("blockbanner")
+		if blockBannerValue == "" {
+			blockBannerValue = "true"
+		}
+		data := map[string]interface{}{"data": responseData.FinalblockList}
+
+		bytedata2, _ = json.Marshal(data)
+	}
+
+	var (
+		lastn string
+	)
+
+	var FormsBuidlersList []forms.TblForms
+	if permisison {
+
+		var filter forms.Filter
+
+		filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+		filter.FromDate = c.Query("fromdate")
+		filter.ToDate = c.Query("todate")
+		FormConfig.DataAccess = c.GetInt("dataaccess")
+		FormConfig.UserId = c.GetInt("userid")
+
+		Formlist, TotalFormsCount, responseCount, err := FormConfig.FormBuildersList(100, 0, forms.Filter(filter), TenantId, 3, 0, channeldetails.SlugName, 0)
+
+		fmt.Println(TotalFormsCount, responseCount)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		for _, val := range Formlist {
+
+			val.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
+
+			if val.FirstName != "" {
+				lastn = strings.ToUpper(val.FirstName[:1])
+			}
+			if val.LastName != "" {
+				lastn += strings.ToUpper(val.LastName[:1])
+			}
+			fmt.Println(val.FormImagePath, val.FormDescription, "getdetailsforms")
+			// NameString = firstn + lastn
+
+			FormsBuidlersList = append(FormsBuidlersList, val)
+
+			//NameString if profileimage is not there
+
+		}
+	}
+
 	selectedtype, _ := GetSelectedType()
 
-	urlpath := map[string]interface{}{"path": os.Getenv("BASE_URL") + "uploadb64image", "payload": "imagedata", "success": map[string]interface{}{"imagepath": "imagepath", "imagename": "imagename"}}
+	baseurl := os.Getenv("BASE_URL")
+
+	urlpath := map[string]interface{}{"path": baseurl + "uploadb64image", "payload": "imagedata", "success": map[string]interface{}{"imagepath": "imagepath", "imagename": "imagename"}}
+
+	newpath := os.Getenv("BASE_URL")
 
 	ubyte, _ := json.Marshal(urlpath)
 
@@ -297,7 +519,9 @@ func CreateEntry(c *gin.Context) {
 
 	slchannelid := selectedchannel.Id
 
-	c.HTML(200, "addentry.html", gin.H{"Menu": menu, "linktitle": "Create Entry", "title": ModuleName, "Fields": field, "translate": translate, "csrf": csrf.GetToken(c), "channellist": channelist, "CategoryName": FinalSelectedCategories, "entrycount": entrcount, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "Entriestab": true, "currentdate": cdate, "StorageType": selectedtype.SelectedType, "Mode": "create", "Slchannelid": slchannelid, "Storagepath": string(ubyte)})
+	channelslist, _, err := ChannelConfig.ListChannel(chn.Channels{IsActive: false, CreateOnly: true, TenantId: TenantId})
+
+	c.HTML(200, "addentry.html", gin.H{"Menu": menu, "Ctalist": FormsBuidlersList, "EntryId": id, "linktitle": "Create Entry", "title": ModuleName, "Fields": field, "translate": translate, "csrf": csrf.GetToken(c), "channellist": channelist, "CategoryName": FinalSelectedCategories, "entrycount": entrcount, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "Entriestab": true, "currentdate": cdate, "StorageType": selectedtype.SelectedType, "blocks": string(bytedata1), "defaultblocks": string(bytedata2), "channel": channelslist, "Mode": "create", "Slchannelid": slchannelid, "Storagepath": string(ubyte), "uploadurl": newpath})
 
 	return
 
@@ -326,14 +550,26 @@ func AllEntries(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
+	sorting := strings.TrimSpace(c.Query("sort"))
+	channelname := strings.TrimSpace(c.Query("channelname"))
+	entriestitle := strings.TrimSpace(c.Query("entriestitle"))
+	status := strings.TrimSpace(c.Query("status"))
+
 	var filters EntriesFilter
 	filters.Keyword = strings.TrimSpace(c.Query("keyword"))
 	filters.Status = strings.TrimSpace(c.Query("Status"))
 	filters.ChannelName = strings.TrimSpace(c.Query("ChannelName"))
 	filters.Title = strings.TrimSpace(c.Query("Title"))
 
+	var searchflag bool
+	if filters.Keyword != "" {
+		searchflag = true
+	} else {
+		searchflag = false
+	}
+
 	var filterflag bool
-	if filters.Keyword == "" {
+	if status != "" || entriestitle != "" || channelname != "" {
 		filterflag = true
 	} else {
 		filterflag = false
@@ -349,37 +585,40 @@ func AllEntries(c *gin.Context) {
 	ChannelConfig.DataAccess = c.GetInt("dataaccess")
 	ChannelConfig.Userid = c.GetInt("userid")
 
-	routeName := c.FullPath()
+	// routeName := c.FullPath()
 
 	var entrystatus string
 
+	entrystatus = status
+	filters.ChannelName = channelname
+
 	var htmlname string
 
-	if strings.Contains(routeName, "entrylist") {
+	// if strings.Contains(routeName, "entrylist") {
 
-		entrystatus = "Published"
+	// 	entrystatus = "Published"
 
-		htmlname = "entries.html"
+	// 	htmlname = "entries.html"
 
-	}
-	if strings.Contains(routeName, "unpublishentries") {
+	// }
+	// if strings.Contains(routeName, "unpublishentries") {
 
-		entrystatus = "Unpublished"
+	// 	entrystatus = "Unpublished"
 
-		htmlname = "entryunpublish.html"
-	}
-	if strings.Contains(routeName, "draftentries") {
+	// 	htmlname = "entryunpublish.html"
+	// }
+	// if strings.Contains(routeName, "draftentries") {
 
-		entrystatus = "Draft"
+	// 	entrystatus = "Draft"
 
-		htmlname = "entrydraft.html"
-	}
+	// 	htmlname = "entrydraft.html"
+	// }
 
-	_, Totalentris, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: 0, Limit: 0, Offset: 0, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: entrystatus}, TenantId)
+	_, Totalentris, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: 0, Limit: 0, Offset: 0, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: entrystatus, Sorting: sorting, EntriesTitle: entriestitle}, TenantId)
 
 	_, Totalentris1, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{}, TenantId)
 
-	chlist, _, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: 0, Limit: limt, Offset: offset, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: entrystatus}, TenantId)
+	chlist, _, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{ChannelId: 0, Limit: limt, Offset: offset, Keyword: filters.Keyword, ChannelName: filters.ChannelName, Title: filters.Title, Status: entrystatus, Sorting: sorting, EntriesTitle: entriestitle}, TenantId)
 
 	var chlist1 []chn.Tblchannelentries
 
@@ -387,9 +626,14 @@ func AllEntries(c *gin.Context) {
 
 	var childrenlist1 []chn.Tblchannelentries
 
+	var responseCount []forms.FormResponseCount
+
 	for index, entry := range chlist {
 
 		newentrylist, _ = ChannelConfig.EntrylistByParentId(entry.Id, TenantId)
+
+		_, _, responseCount, _ = FormConfig.FormBuildersList(limt, offset, forms.Filter{}, TenantId, 0, entry.Id, "", 0)
+		fmt.Println("responseCount:", responseCount)
 
 		// fmt.Println(newentrylist, "newentrylist")
 
@@ -453,18 +697,20 @@ func AllEntries(c *gin.Context) {
 
 	viewurl := os.Getenv("VIEW_BASE_URL")
 
-	c.HTML(200, htmlname, gin.H{"Pagination": PaginationData{
+	id, err := ChannelConfig.DefaultChannel("default_channel", TenantId)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("htmlname:", htmlname)
+
+	c.HTML(200, "entrieslist.html", gin.H{"Pagination": PaginationData{
 		NextPage:     pageno + 1,
 		PreviousPage: pageno - 1,
 		TotalPages:   PageCount,
 		TwoAfter:     pageno + 2,
 		TwoBelow:     pageno - 2,
 		ThreeAfter:   pageno + 3,
-	}, "Viewbaseurl": viewurl, "Menu": menu, "translate": translate, "Page": Page, "chentrycount": Totalentris, "linktitle": ModuleName, "entrycount": Totalentris1, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "ChanEntrtlist": chlist1, "csrf": csrf.GetToken(c), "channellist": channelist, "title": ModuleName, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "filterflag": filterflag, "Entriestab": true, "Tabmenu": tabname, "StorageType": selectedtype.SelectedType, "chnid": -1, "Membergroup": membergroup})
-
-	// }
-
-	// c.Redirect(301, "/403-page")
+	}, "Viewbaseurl": viewurl, "Menu": menu, "translate": translate, "Page": Page, "chentrycount": Totalentris, "linktitle": ModuleName, "entrycount": Totalentris1, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "limit": limt, "paginationendcount": paginationendcount, "paginationstartcount": paginationstartcount, "filter": filters, "ChanEntrtlist": chlist1, "csrf": csrf.GetToken(c), "channellist": channelist, "title": ModuleName, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "searchflag": searchflag, "filterflag": filterflag, "Entriestab": true, "Tabmenu": tabname, "StorageType": selectedtype.SelectedType, "chnid": id, "Membergroup": membergroup, "responseCount": responseCount, "Sorting": sorting, "ChannelName": channelname, "EntriesTitle": entriestitle, "Status": status})
 
 }
 
@@ -487,17 +733,17 @@ func DeleteEntries(c *gin.Context) {
 
 	if pagename == "publish" {
 
-		route = "/channel/entrylist/"
+		route = "/entries/entrylist/"
 
 	}
 	if pagename == "unpublish" {
 
-		route = "/channel/unpublishentries/"
+		route = "/entries/unpublishentries/"
 
 	}
 	if pagename == "draft" {
 
-		route = "/channel/draftentries/"
+		route = "/entries/draftentries/"
 
 	}
 
@@ -524,14 +770,27 @@ func DeleteEntries(c *gin.Context) {
 		return
 	}
 
+	_, totalRecords, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{}, TenantId)
+	recordsPerPage := Limit
+	totalPages := (int(totalRecords) + recordsPerPage - 1) / recordsPerPage
+
+	currentPage := 1
+	if pageno != "" {
+		currentPage, _ = strconv.Atoi(pageno)
+	}
+
+	if currentPage > totalPages && totalPages > 0 {
+		url = route + "?page=" + strconv.Itoa(totalPages)
+	}
 	c.SetCookie("get-toast", "Entry Deleted Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 
+	if totalRecords == 0 {
+		url = route + "?page=1"
+	}
+
 	c.Redirect(301, url)
 
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -555,11 +814,6 @@ func EntryStatus(c *gin.Context) {
 		return
 	}
 
-	json.NewEncoder(c.Writer).Encode(true)
-
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -583,7 +837,12 @@ func PublishEntry(c *gin.Context) {
 	orderindex, _ := strconv.Atoi(c.Request.PostFormValue("orderindex"))
 	status, _ := strconv.Atoi(c.Request.PostFormValue("status"))
 	categoryids := c.PostFormArray("categoryids[]")
+	membershiplevels := c.PostFormArray("membershiplevels[]")
+
 	userid := c.GetInt("userid")
+	ctaid, _ := strconv.Atoi(c.PostForm("ctaid"))
+
+	fmt.Println(ctaid)
 
 	layout := "2006-01-02T15:04"
 
@@ -594,6 +853,8 @@ func PublishEntry(c *gin.Context) {
 	fmt.Println("ctpt", ctTime, pbTime)
 
 	categoryidsStr := strings.Join(categoryids, ",")
+
+	membershiplevelIdsStr := strings.Join(membershiplevels, ",")
 
 	var seodetails map[string]string
 
@@ -610,20 +871,22 @@ func PublishEntry(c *gin.Context) {
 
 	entries := chn.EntriesRequired{
 
-		Title:       title,
-		Content:     text,
-		ChannelId:   cid,
-		CoverImage:  img,
-		CategoryIds: categoryidsStr,
-		Status:      status,
-		Author:      authorname,
-		CreateTime:  ctTime,
-		PublishTime: pbTime,
-		ReadingTime: readingtime,
-		SortOrder:   sortorder,
-		Tag:         tagname,
-		Excerpt:     extxt,
-		OrderIndex:  orderindex,
+		Title:              title,
+		Content:            text,
+		ChannelId:          cid,
+		CoverImage:         img,
+		CategoryIds:        categoryidsStr,
+		MembershipLevelids: membershiplevelIdsStr,
+		Status:             status,
+		Author:             authorname,
+		CreateTime:         ctTime,
+		PublishTime:        pbTime,
+		ReadingTime:        readingtime,
+		SortOrder:          sortorder,
+		Tag:                tagname,
+		Excerpt:            extxt,
+		OrderIndex:         orderindex,
+		CtaId:              ctaid,
 
 		SEODetails: chn.SEODetails{
 
@@ -698,7 +961,15 @@ func PublishEntry(c *gin.Context) {
 			c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		}
 
-		c.JSON(200, gin.H{"Channelname": cname, "id": eid})
+		var entries *channels.TblChannelEntries
+
+		entries, _ = ChannelConfig.GetChannelEntriesById(eid, TenantId)
+
+		viewurl := os.Getenv("VIEW_BASE_URL")
+
+		previewurl := viewurl + "/" + cname + "/" + entries.Slug + "-" + entries.Uuid
+
+		c.JSON(200, gin.H{"Channelname": cname, "id": eid, "previewurl": previewurl})
 
 	} else {
 		if status == 1 {
@@ -729,13 +1000,18 @@ func PublishEntry(c *gin.Context) {
 			c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 		}
 
-		c.JSON(200, gin.H{"Channelname": channeldet.ChannelName, "id": chenid.Id})
+		var entries *channels.TblChannelEntries
+
+		entries, _ = ChannelConfig.GetChannelEntriesById(chenid.Id, TenantId)
+
+		viewurl := os.Getenv("VIEW_BASE_URL")
+
+		previewurl := viewurl + "/" + cname + "/" + entries.Slug + "-" + entries.Uuid
+
+		c.JSON(200, gin.H{"Channelname": channeldet.ChannelName, "id": chenid.Id, "previewurl": previewurl})
 
 	}
 
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -767,10 +1043,101 @@ func EditEntry(c *gin.Context) {
 
 	translate, _ := TranslateHandler(c)
 	selectedtype, _ := GetSelectedType()
+	var (
+		filter         blocks.Filter
+		collectionlist []blocks.TblBlock
+	)
 
-	urlpath := map[string]interface{}{"path": os.Getenv("BASE_URL") + "uploadb64image", "payload": "imagedata", "success": map[string]interface{}{"imagepath": "imagepath", "imagename": "imagename"}}
+	permisison, perr := NewAuth.IsGranted("Blocks", auth.CRUD, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("block collection list authorization error: %s", perr)
+	}
+
+	if perr != nil {
+		ErrorLog.Printf("block authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+	var finalcollectionlist []blocks.TblBlock
+
+	if permisison {
+
+		BlockConfig.DataAccess = c.GetInt("dataaccess")
+		BlockConfig.UserId = c.GetInt("userid")
+
+		collectionlist, _, err = BlockConfig.CollectionList(blocks.Filter(filter), TenantId, strconv.Itoa(id))
+
+		for _, value := range collectionlist {
+
+			img := value.CoverImage
+			imgcontain := "/image-resize?name="
+			flag := strings.Contains(img, imgcontain)
+			if !flag {
+				value.CoverImage = "/image-resize?name=" + value.CoverImage
+			}
+
+			finalcollectionlist = append(finalcollectionlist, value)
+		}
+
+		if err != nil {
+			fmt.Println("collection list", err)
+		}
+
+	}
+	var (
+		lastn string
+	)
+
+	var FormsBuidlersList []forms.TblForms
+	if permisison {
+
+		var filter forms.Filter
+
+		filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+		filter.FromDate = c.Query("fromdate")
+		filter.ToDate = c.Query("todate")
+		FormConfig.DataAccess = c.GetInt("dataaccess")
+		FormConfig.UserId = c.GetInt("userid")
+		channeldetails, _, _ := ChannelConfig.GetChannelsById(id, TenantId)
+		Formlist, TotalFormsCount, responseCount, err := FormConfig.FormBuildersList(100, 0, forms.Filter(filter), TenantId, 1, 0, channeldetails.SlugName, 0)
+
+		fmt.Println(TotalFormsCount, responseCount)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		for _, val := range Formlist {
+
+			val.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
+
+			if val.FirstName != "" {
+				lastn = strings.ToUpper(val.FirstName[:1])
+			}
+			if val.LastName != "" {
+				lastn += strings.ToUpper(val.LastName[:1])
+			}
+
+			// NameString = firstn + lastn
+
+			FormsBuidlersList = append(FormsBuidlersList, val)
+
+			//NameString if profileimage is not there
+
+		}
+	}
+
+	data := map[string]interface{}{"data": finalcollectionlist}
+
+	baseurl := os.Getenv("BASE_URL")
+
+	urlpath := map[string]interface{}{"path": baseurl + "uploadb64image", "payload": "imagedata", "success": map[string]interface{}{"imagepath": "imagepath", "imagename": "imagename"}}
+
+	newpath := os.Getenv("BASE_URL")
 
 	ubyte, _ := json.Marshal(urlpath)
+
+	bytedata, _ := json.Marshal(data)
 
 	ModuleName, _, _ := ModuleRouteName(c)
 
@@ -787,7 +1154,7 @@ func EditEntry(c *gin.Context) {
 	}
 	viewurl := os.Getenv("VIEW_BASE_URL")
 
-	c.HTML(200, "addentry.html", gin.H{"Menu": menu, "Viewbaseurl": viewurl, "linktitle": "Edit Entry", "title": ModuleName, "Entries": entries, "Fields": field, "translate": translate, "csrf": csrf.GetToken(c), "channellist": channelist, "AllCategories": AllCategorieswithSubCategories, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "Entriestab": true, "StorageType": selectedtype.SelectedType, "editbread": "Edit Entry", "Mode": "edit", "Slchannelid": slchannelid, "Storagepath": string(ubyte)})
+	c.HTML(200, "addentry.html", gin.H{"Menu": menu, "Ctalist": FormsBuidlersList, "Viewbaseurl": viewurl, "linktitle": "Edit Entry", "title": ModuleName, "Entries": entries, "Fields": field, "translate": translate, "csrf": csrf.GetToken(c), "channellist": channelist, "AllCategories": AllCategorieswithSubCategories, "HeadTitle": translate.Channell.Channels, "Cmsmenu": true, "Entriestab": true, "StorageType": selectedtype.SelectedType, "editbread": "Edit Entry", "blocks": string(bytedata), "Mode": "edit", "Slchannelid": slchannelid, "EntryId": slchannelid, "Storagepath": string(ubyte), "uploadurl": newpath})
 
 	return
 
@@ -812,6 +1179,8 @@ func EditDetails(c *gin.Context) {
 	// if permisison {
 
 	entries, err := ChannelConfig.EntryDetailsById(chn.IndivEntriesReq{ChannelName: cname, EntryId: id}, TenantId)
+
+	fmt.Println("entries::", entries.MemebrshipLevelIds)
 
 	layout := "2006-01-02T15:04"
 
@@ -912,7 +1281,47 @@ func ChannelFields(c *gin.Context) {
 		idstr = append(idstr, str)
 	}
 
-	json.NewEncoder(c.Writer).Encode(gin.H{"Section": Section, "FieldValue": Fieldvalue, "SelectedCategory": idstr, "CategoryName": FinalSelectedCategories, "Categorycount": len(FinalSelectedCategories)})
+	var (
+		filter         blocks.Filter
+		collectionlist []blocks.TblBlock
+	)
+
+	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+
+	var finalcollectionlist []blocks.TblBlock
+
+	BlockConfig.DataAccess = c.GetInt("dataaccess")
+	BlockConfig.UserId = c.GetInt("userid")
+	chid := strconv.Itoa(id)
+
+	collectionlist, _, _ = BlockConfig.CollectionList(blocks.Filter(filter), TenantId, chid)
+
+	for _, value := range collectionlist {
+
+		img := value.CoverImage
+		imgcontain := "/image-resize?name="
+		flag := strings.Contains(img, imgcontain)
+		if !flag {
+			value.CoverImage = "/image-resize?name=" + value.CoverImage
+		}
+
+		finalcollectionlist = append(finalcollectionlist, value)
+	}
+
+	data := map[string]interface{}{"data": finalcollectionlist}
+
+	bytedata, _ := json.Marshal(data)
+
+	filter.Keyword = strings.Trim(c.DefaultQuery("keyword", ""), " ")
+	channeldetails, _, _ := ChannelConfig.GetChannelsById(id, TenantId)
+	Formlist, TotalFormsCount, responseCount, err := FormConfig.FormBuildersList(100, 0, forms.Filter{}, TenantId, 3, 0, channeldetails.SlugName, 0)
+
+	fmt.Println(TotalFormsCount, responseCount)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	json.NewEncoder(c.Writer).Encode(gin.H{"Section": Section, "blocks": string(bytedata), "FieldValue": Fieldvalue, "SelectedCategory": idstr, "CategoryName": FinalSelectedCategories, "ctalist": Formlist, "Categorycount": len(FinalSelectedCategories)})
 
 	return
 
@@ -999,6 +1408,7 @@ func Updatechannelfields(c *gin.Context) {
 	}
 
 	channelname := channeldetails.ChannelName
+	channeluniqueid := channeldetails.ChannelUniqueId
 	channeldesc := channeldetails.ChannelDescription
 	sectionvalue := c.Request.FormValue("sections")
 	deletesection := c.Request.FormValue("deletesections")
@@ -1006,6 +1416,7 @@ func Updatechannelfields(c *gin.Context) {
 	fval := c.Request.PostFormValue("fiedlvalue")
 	deletefval := c.Request.PostFormValue("deletefields")
 	categoryvalue := c.PostFormArray("categoryvalue[]")
+	entryid, _ := strconv.Atoi(c.PostForm("entryid"))
 
 	type sections struct {
 		Fiedlvalue []Section `json:"sections"`
@@ -1159,15 +1570,16 @@ func Updatechannelfields(c *gin.Context) {
 	fmt.Println("efcfe", FieldValuess)
 	userid := c.GetInt("userid")
 
-	if ederr := ChannelConfig.EditChannel(channelname, channeldesc, userid, channelid, categoryvalue, TenantId); ederr != nil {
+	if ederr := ChannelConfig.EditChannel(channelname, channeluniqueid, channeldesc, userid, channelid, categoryvalue, TenantId); ederr != nil {
 		ErrorLog.Printf("update channel error: %s", ederr)
 	}
 
 	if updatechn := ChannelConfig.UpdateChannelField(chn.ChannelUpdate{Sections: Sectionss, FieldValues: FieldValuess, Deletesections: DeleteSectionss, DeleteFields: DeleteFieldValuess, DeleteOptionsvalue: DeleteOptionsvalues, CategoryIds: categoryvalue, ModifiedBy: userid}, channelid, TenantId); updatechn != nil {
 		ErrorLog.Printf("update channelfield error: %s", updatechn)
 	}
+	entries, _ := ChannelConfig.EntryDetailsById(chn.IndivEntriesReq{ChannelName: channelname, EntryId: entryid}, TenantId)
 
-	json.NewEncoder(c.Writer).Encode(true)
+	json.NewEncoder(c.Writer).Encode(entries)
 
 	return
 
@@ -1204,10 +1616,6 @@ func MakeFeature(c *gin.Context) {
 	c.SetCookie("get-toast", "Entry Updated Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 	return
-
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -1354,11 +1762,25 @@ func DeleteSelectedEntry(c *gin.Context) {
 		return
 	}
 
+	_, totalRecords, _, _ := ChannelConfig.ChannelEntriesList(chn.Entries{}, TenantId)
+	recordsPerPage := Limit
+	totalPages := (int(totalRecords) + recordsPerPage - 1) / recordsPerPage
+
+	currentPage := 1
+	if pageno != "" {
+		currentPage, _ = strconv.Atoi(pageno)
+	}
+
+	if currentPage > totalPages && totalPages > 0 {
+		url = pname + "?page=" + strconv.Itoa(totalPages)
+	}
+
+	if totalRecords == 0 {
+		url = pname + "?page=1"
+	}
+
 	c.JSON(200, gin.H{"value": true, "url": url})
 
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -1425,9 +1847,6 @@ func UnpublishSelectedEntry(c *gin.Context) {
 
 	c.JSON(200, gin.H{"value": true, "status": statusint, "url": url})
 
-	// }
-
-	// c.Redirect(301, "/403-page")
 
 }
 
@@ -1620,4 +2039,37 @@ func UpdateAccPermissionMembergroupId(c *gin.Context) {
 
 		json.NewEncoder(c.Writer).Encode(true)
 	}
+}
+func FormDetails(c *gin.Context) {
+
+	fname := c.Query("keyword")
+	NewTeam.Dataaccess = c.GetInt("dataaccess")
+	NewTeam.Userid = c.GetInt("userid")
+	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("cta detaisl authorization error: %s", perr)
+	}
+
+	if permisison {
+
+		if fname != "" {
+
+			Formlist, _, _, err := FormConfig.FormBuildersList(10, 0, forms.Filter{Keyword: fname}, TenantId, 1, 0, "", 0)
+
+			// userlist, _, err := NewTeam.ListUser(10, 0, team.Filters{FirstName: fname}, TenantId)
+			if err != nil {
+				ErrorLog.Printf("get form details error: %s", perr)
+			}
+
+			c.JSON(200, Formlist)
+			return
+		}
+
+		c.JSON(200, "")
+		return
+
+	}
+
+	c.Redirect(301, "/403-page")
+
 }

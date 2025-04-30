@@ -29,58 +29,79 @@ $(document).ready(async function () {
     'data-bs-placement': 'bottom',
     'data-bs-custom-class': 'custom-tooltip',
     'data-bs-title': 'Drag & Drop'
-});
+  });
 
-$('.edit-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Edit'
-});
+  $('.edit-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Edit'
+  });
 
-$('.duplicate-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Clone'
-});
+  $('.duplicate-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Clone'
+  });
 
-$('.remove-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Remove'
-});
+  $('.remove-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Remove'
+  });
 
-$('[data-bs-toggle="tooltip"]').tooltip();
+  $('[data-bs-toggle="tooltip"]').tooltip();
 })
 
 // Create channel Next btn
 $(document).on('click', '#nextstep', function () {
   var currentindex = $("#chn-step").val()
+
   if (currentindex == 1) {
 
+    jQuery.validator.addMethod("duplicatetitle", function (value) {
+
+      var result;
+      id = $("#channelid").val()
+      $.ajax({
+        url: "/channels/checktitle",
+        type: "POST",
+        async: false,
+        data: { "channel_title": value, "channel_id": id, csrf: $("input[name='csrf']").val() },
+        datatype: "json",
+        caches: false,
+        success: function (data) {
+
+          result = data.trim();
+        }
+      })
+      return result.trim() != "true"
+    })
     $("form[name='channelform']").validate({   // channel name and deiscription validation
       rules: {
         channelname: {
           required: true,
           space: true,
+          duplicatetitle: true
 
         },
         description: {
           required: true,
-          maxlength: 250,
+          // maxlength: 250,
         }
       },
       messages: {
         channelname: {
           required: "*" + languagedata.Channell.channamevalid,
-          space: "* " + languagedata.spacergx
+          space: "* " + languagedata.spacergx,
+          duplicatetitle: "* Channel name already exits"
 
         },
         description: {
           required: "*" + languagedata.Channell.chandescvalid,
-          maxlength: "*" + languagedata.Permission.descriptionchat
+          // maxlength: "*" + languagedata.Permission.descriptionchat
         },
       }
     });
@@ -93,7 +114,7 @@ $(document).on('click', '#nextstep', function () {
       $('#tab-s1').removeClass("text-[#10A37F]").addClass("text-bold-gray");
       $("#stp-lev").text(languagedata.Channell.steps + " 2 " + languagedata.of + " 3")
       $('.channelstep2').show()
-      $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+      $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#000000]");
     }
   }
 
@@ -102,7 +123,7 @@ $(document).on('click', '#nextstep', function () {
     if (isvalied == false) {
       $("#chn-step").val(3)
       $('.channelstep2').hide()
-      $('#tab-s2').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+      $('#tab-s2').removeClass("text-[#000000]").addClass("text-bold-gray");
       $('#tb1-tb2').removeClass("bg-[#10A37F]").addClass("bg-bold-gray");
       $("#stp-lev").text(languagedata.Channell.steps + " 3 " + languagedata.of + " 3")
       $('.channelstep3').show()
@@ -111,8 +132,8 @@ $(document).on('click', '#nextstep', function () {
       } else {
         $("#nextstep").text(languagedata.update).addClass("channelsave")
       }
-      $('#tab-s3').removeClass("text-bold-gray").addClass("text-[#10A37F]");
-      $('#tb2-tb3').removeClass("bg-bold-gray").addClass("bg-[#10A37F]");
+      $('#tab-s3').removeClass("text-bold-gray").addClass("text-[#000000]");
+      $('#tb2-tb3').removeClass("bg-bold-gray").addClass("bg-[#000000]");
     }
   }
 })
@@ -123,19 +144,19 @@ $(document).on('click', '#previous-btn', function () {
   if (currentindex == 3) {
     $("#chn-step").val(2)
     $('.channelstep3').hide()
-    $('#tab-s3').removeClass("text-[#10A37F]").addClass("text-bold-gray");
-    $('#tb2-tb3').removeClass("bg-[#10A37F]").addClass("bg-bold-gray");
+    $('#tab-s3').removeClass("text-[#000000]").addClass("text-bold-gray");
+    $('#tb2-tb3').removeClass("bg-[#000000]").addClass("bg-bold-gray");
     $("#stp-lev").text(languagedata.Channell.steps + " 2 " + languagedata.of + " 3")
     $("#nextstep").text(languagedata.next).removeClass("channelsave")
     $('.channelstep2').show()
-    $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#10A37F]");
+    $('#tab-s2').removeClass("text-bold-gray").addClass("text-[#000000]");
     $('#tb1-tb2').removeClass("bg-bold-gray").addClass("bg-[#10A37F]");
     fiedlvalue = []
   }
   if (currentindex == 2) {
     $("#chn-step").val(1)
     $('.channelstep2').hide()
-    $('#tab-s2').removeClass("text-[#10A37F]").addClass("text-bold-gray");
+    $('#tab-s2').removeClass("text-[#000000]").addClass("text-bold-gray");
     $("#stp-lev").text(languagedata.Channell.steps + " 1 " + languagedata.of + " 3")
     $('.channelstep1').show()
     $('#tab-s1').removeClass("text-bold-gray").addClass("text-[#10A37F]");
@@ -214,9 +235,34 @@ $(document).on('click', '.duplicate-field', function () {
 
 // field string
 function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, timeformat, mandatoryfd, optval, id) {
+  var div
+  if ( fieldname=="Duration In(mins)" || fieldname=="Short Description") {
+
+     div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
+    <div class="flex items-center space-x-[8px]">
+        <img src="`+ imgicon + `" class="field-icon" alt="text">
+        <p class="text-bold-black text-sm font-normal mb-0 field-name" opt-val="`+ optval + `" dt-format="` + dformat + `" fl-mandatory="` + mandatoryfd + `" tm-format="` + timeformat + `" master-fieldid="` + masterfieldid + `" field-id="` + fieldid + `">` + fieldname + `</p>
+    </div>
+    <div class="absolute right-3 flex edit opacity-50">
+        <button class="rounded-[4px] h-6 px-1.5 bg-white drag-btn pointer-events-none " >
+            <img src="/public/img/fields-drag.svg">
+        </button>
+        <button class="rounded-[4px] h-6 px-1.5 bg-white edit-field pointer-events-none">
+            <img src="/public/img/fields-edit.svg">
+        </button>
+        <button class="rounded-[4px] h-6 px-1.5 bg-white duplicate-field pointer-events-none">
+            <img src="/public/img/fields-copy.svg">
+        </button>
+        <button class="rounded-[4px] h-6 px-1.5 bg-white remove-field pointer-events-none">
+            <img src="/public/img/fields-delete.svg">
+        </button>
+    </div>
+</div>`
+
+  }else{
 
 
-  var div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
+   div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
                             <div class="flex items-center space-x-[8px]">
                                 <img src="`+ imgicon + `" class="field-icon" alt="text">
                                 <p class="text-bold-black text-sm font-normal mb-0 field-name" opt-val="`+ optval + `" dt-format="` + dformat + `" fl-mandatory="` + mandatoryfd + `" tm-format="` + timeformat + `" master-fieldid="` + masterfieldid + `" field-id="` + fieldid + `">` + fieldname + `</p>
@@ -236,7 +282,7 @@ function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, tim
                                 </button>
                             </div>
                         </div>`
-
+  }
   $(div).insertBefore("#add-field")
   // if (id == 1) {
   //   $('.sl-fields').find('button').attr('disabled', 'true');
@@ -253,36 +299,36 @@ function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, tim
     'data-bs-placement': 'bottom',
     'data-bs-custom-class': 'custom-tooltip',
     'data-bs-title': 'Drag & Drop'
-});
+  });
 
-$('.edit-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Edit'
-});
+  $('.edit-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Edit'
+  });
 
-$('.duplicate-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Clone'
-});
+  $('.duplicate-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Clone'
+  });
 
-$('.remove-field').attr({
-  'data-bs-toggle': 'tooltip',
-  'data-bs-placement': 'bottom',
-  'data-bs-custom-class': 'custom-tooltip',
-  'data-bs-title': 'Remove'
-});
+  $('.remove-field').attr({
+    'data-bs-toggle': 'tooltip',
+    'data-bs-placement': 'bottom',
+    'data-bs-custom-class': 'custom-tooltip',
+    'data-bs-title': 'Remove'
+  });
 
-$('[data-bs-toggle="tooltip"]').tooltip();
+  $('[data-bs-toggle="tooltip"]').tooltip();
 }
 
 
-$(document).on('click','.remove-field', function() {
+$(document).on('click', '.remove-field', function () {
   $('#deleteModal').modal('show')
-  });
+});
 
 
 
@@ -394,6 +440,13 @@ function FieldBasedProperties(id) {
   } else if (id == "16") {
 
     $(".fl-name").text("Properties - Video URL")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+  }
+  else if (id == "17") {
+
+    $(".fl-name").text("Properties - Number")
     $(".dt-field").hide()
     $(".ti-field").hide()
     $(".option-field").hide()
@@ -519,7 +572,7 @@ $(document).on('click', "#flp-save", function () {
       $(".new-field" + fieldindex).find(".field-name").attr("opt-val", 1)
       $(".new-field" + fieldindex).find(".field-name").append(intext)
     })
-    $("#Check").prop("checked",false)
+    $("#Check").prop("checked", false)
     $("#Id2").modal("hide")
 
   }
@@ -542,11 +595,12 @@ $(document).on("click", "#cln-modal", function () {
 
 // chn save and update
 $(document).on('click', '.channelsave', function () {
-  fiedlvalue=[]
+  fiedlvalue = []
   GetfieldsValue()  //get field value
   console.log("myfields", fiedlvalue);
 
   var name = $('#channelname').val();
+  var channeluniqueid = $('#channeluniqueid').val();
   var desc = $('#channeldesc').val();
   var url = window.location.search
   const urlpar = new URLSearchParams(url)
@@ -571,13 +625,14 @@ $(document).on('click', '.channelsave', function () {
 
     $.ajax({
 
-      url: '/channels/newchannel',
+      url: '/channels/create',
       type: 'post',
       dataType: 'json',
       async: false,
       data: {
         "channelname": name,
         "channeldesc": desc,
+        "channeluniqueid": channeluniqueid,
         "sections": JSON.stringify({ sections }),
         "fiedlvalue": JSON.stringify({ fiedlvalue }),
         "categoryvalue": SelectedCategoryValue,
@@ -617,6 +672,7 @@ $(document).on('click', '.channelsave', function () {
         "id": $("#channelid").val(),
         "channelname": name,
         "channeldesc": desc,
+        "channeluniqueid": channeluniqueid,
         "sections": JSON.stringify({ sections }),
         "deletesections": JSON.stringify({ deletesecion }),
         "deletefields": JSON.stringify({ deletefields }),
@@ -753,7 +809,7 @@ function FieldBasedPropertiesValidation() {
 /**Edit URL */
 $(document).ready(function () {
 
-  if (window.location.href.indexOf("editchannel") > -1) {
+  if (window.location.href.indexOf("edit") > -1) {
 
     var id = $('#channelid').val();
 
@@ -795,22 +851,22 @@ $(document).ready(function () {
   }
 })
 
-$(document).ready(function () {
-  var $textarea = $('#channeldesc');
-  var $errorMessage = $('#error-message');
-  var maxLength = 250;
+// $(document).ready(function () {
+//   var $textarea = $('#channeldesc');
+//   var $errorMessage = $('#error-message');
+//   var maxLength = 250;
 
-  $textarea.on('input', function () {
-    if ($(this).val().length >= maxLength) {
-      // Show error message
-      $errorMessage.text(languagedata.Permission.descriptionchat);
-    } else {
-      // Clear error message if under the limit
-      $errorMessage.text('');
-    }
-  });
+//   $textarea.on('input', function () {
+//     if ($(this).val().length >= maxLength) {
+//       // Show error message
+//       $errorMessage.text(languagedata.Permission.descriptionchat);
+//     } else {
+//       // Clear error message if under the limit
+//       $errorMessage.text('');
+//     }
+//   });
 
-});
+// });
 
 $(document).ready(function () {
   $('#channeldesc').on('input', function () {
@@ -863,9 +919,142 @@ $(document).on('keyup', '.checklength', function () {
   var inputLength = inputVal.length
 
   if (inputLength == 30) {
-       $(this).siblings('.lengthErr').removeClass('hidden')
+    $(this).siblings('.lengthErr').removeClass('hidden')
   } else {
-       $(this).siblings('.lengthErr').addClass('hidden')
+    $(this).siblings('.lengthErr').addClass('hidden')
   }
 
 })
+
+$(document).ready(function () {
+
+  $("#tab-s1").click(function () {
+
+    $("#chn-step").val(1)
+
+    $("#stp-lev").text(languagedata.Channell.steps + " 1 " + languagedata.of + " 3")
+
+    $("#nextstep").text(languagedata.next).removeClass("channelsave")
+
+    $("#tab-s1").removeClass("text-bold-gray").addClass("text-[#000000]")
+    $("#tab-s2").removeClass("text-[#000000]").addClass("text-bold-gray")
+    $("#tab-s3").removeClass("text-[#000000]").addClass("text-bold-gray")
+    $(".channelstep1").show()
+    $(".channelstep2").hide()
+    $(".channelstep3").hide()
+
+  })
+
+})
+
+$(document).ready(function () {
+  $("#tab-s2").click(function () {
+
+    $.validator.addMethod("duplicatetitle", function (value, element) {
+
+      return true;
+    });
+
+    $("form[name='channelform']").validate({
+      rules: {
+        channelname: {
+          required: true,
+          space: true,
+          duplicatetitle: true
+        },
+        description: {
+          required: true,
+        }
+      },
+      messages: {
+        channelname: {
+          required: "*" + languagedata.Channell.channamevalid,
+          space: "* " + languagedata.spacergx,
+          duplicatetitle: "* Channel name already exists"
+        },
+        description: {
+          required: "*" + languagedata.Channell.chandescvalid,
+        },
+      }
+    });
+
+    // Validate the form and check the result
+    var formvalids = $("form[name='channelform']").valid();
+
+    if (formvalids) {
+
+      $("#nextstep").text(languagedata.next).removeClass("channelsave");
+
+
+      $("#chn-step").val(2);
+      $("#stp-lev").text(languagedata.Channell.steps + " 2 " + languagedata.of + " 3");
+
+      $("#tab-s2").removeClass("text-bold-gray").addClass("text-[#000000]")
+      $("#tab-s1").removeClass("text-[#000000]").addClass("text-bold-gray")
+      $("#tab-s3").removeClass("text-[#000000]").addClass("text-bold-gray")
+
+      $(".channelstep2").show()
+      $(".channelstep1").hide()
+      $(".channelstep3").hide()
+    }
+  });
+});
+
+
+$(document).ready(function () {
+  $("#tab-s3").click(function () {
+
+    $.validator.addMethod("duplicatetitle", function (value, element) {
+
+      return true;
+    });
+
+    $("form[name='channelform']").validate({
+      rules: {
+        channelname: {
+          required: true,
+          space: true,
+          duplicatetitle: true
+        },
+        description: {
+          required: true,
+        }
+      },
+      messages: {
+        channelname: {
+          required: "*" + languagedata.Channell.channamevalid,
+          space: "* " + languagedata.spacergx,
+          duplicatetitle: "* Channel name already exists"
+        },
+        description: {
+          required: "*" + languagedata.Channell.chandescvalid,
+        },
+      }
+    });
+
+    // Validate the form and check the result
+    var formvalids = $("form[name='channelform']").valid();
+
+    if (formvalids) {
+      if ($("#channelid").val() == "") {
+        $("#nextstep").text(languagedata.save).addClass("channelsave");
+      } else {
+        $("#nextstep").text(languagedata.update).addClass("channelsave");
+      }
+
+      $("#chn-step").val(3);
+      $("#stp-lev").text(languagedata.Channell.steps + " 3 " + languagedata.of + " 3");
+
+      $("#tab-s3").removeClass("text-bold-gray").addClass("text-[#000000]");
+      $("#tab-s1").removeClass("text-[#000000]").addClass("text-bold-gray");
+      $("#tab-s2").removeClass("text-[#000000]").addClass("text-bold-gray");
+
+      $(".channelstep3").show();
+      $(".channelstep1").hide();
+      $(".channelstep2").hide();
+    }
+  });
+});
+
+
+

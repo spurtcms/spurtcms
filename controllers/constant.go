@@ -34,10 +34,10 @@ var (
 	CompanyProfilePath = os.Getenv("COMPANY_PROFILE_PATH")
 )
 
-var TenantId int
+var TenantId string
 
 func Tenant_Id(c *gin.Context) {
-	TenantId = c.GetInt("tenant_id")
+	TenantId = c.GetString("tenant_id")
 }
 
 func RemoveSpecialCharacter(str string) string {

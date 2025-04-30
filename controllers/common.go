@@ -8,18 +8,16 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"image"
-	"image/jpeg"
-	"image/png"
 	"io"
+	"io/ioutil"
 	"log"
 	"math"
+	"mime/multipart"
 	"net/http"
 	"net/smtp"
 	"net/url"
 	"os"
-	"path"
-	"sort"
+	"path/filepath"
 	"spurt-cms/lang"
 	"spurt-cms/models"
 	storagecontroller "spurt-cms/storage-controller"
@@ -28,9 +26,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
-	"github.com/nfnt/resize"
+	"github.com/google/uuid"
 	"github.com/spurtcms/team"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -72,7 +69,6 @@ func GenerateEmail(email, subject string, data map[string]interface{}, message s
 		"YoutubeLink":   data["youtube"].(string),
 		"LinkedinLink":  data["linkedin"].(string),
 		"TwitterLink":   data["twitter"].(string),
-		"FirstName":     data["fname"].(string),
 	}
 
 	t, err2 := template.ParseFiles("view/email/email-template.html")
@@ -263,6 +259,43 @@ func ConvertBase64(imageData string, storagepath string) (imgname string, path s
 	return imageName, storagePath, err
 }
 
+func AudioConvertBase64toByte(Data string, storagepath, routename string) (audioname string, path string, audiobyte []byte, err error) {
+
+	extEndIndex := strings.Index(Data, ";base64,")
+	base64data := Data[strings.IndexByte(Data, ',')+1:]
+	var ext = Data[11:extEndIndex]
+	rand_num := strconv.Itoa(int(time.Now().Unix()))
+	AudioName := "Audio-" + rand_num + "." + ext
+	storagePath := storagepath + "/Audio-" + rand_num + "." + ext
+
+	decode, err := base64.StdEncoding.DecodeString(base64data)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return AudioName, storagePath, decode, nil
+}
+func DocumentConvertBase64toByte(file *multipart.FileHeader) (documentName string, path string, fileBytes []byte, err error) {
+
+	fileContent, err := file.Open()
+	if err != nil {
+		return "", "", nil, fmt.Errorf("failed to open file: %w", err)
+	}
+	defer fileContent.Close()
+
+	fileBytes = make([]byte, file.Size)
+	if _, err := fileContent.Read(fileBytes); err != nil {
+		return "", "", nil, fmt.Errorf("failed to read file: %w", err)
+	}
+
+	ext := strings.ToLower(strings.Split(file.Filename, ".")[1])
+	randNum := strconv.Itoa(int(time.Now().Unix()))
+	documentName = "Document-" + randNum + "." + ext
+	path = "documents/" + documentName
+
+	return documentName, path, fileBytes, nil
+}
 func ConvertBase64toByte(imageData string, storagepath string) (imgname string, path string, imagebyte []byte, err error) {
 
 	extEndIndex := strings.Index(imageData, ";base64,")
@@ -337,102 +370,175 @@ func UserCreateMail(wg *sync.WaitGroup, data map[string]interface{}, email, acti
 	var templates models.TblEmailTemplate
 	models.GetTemplates(&templates, "createuser", TenantId)
 
-	sub := templates.TemplateSubject
-	msg := templates.TemplateMessage
+	if templates.IsActive == 1 {
 
-	replacer := strings.NewReplacer(
-		"{FirstName}", data["fname"].(string),
-		"{UserName}", data["uname"].(string),
-		"{Password}", data["Pass"].(string),
-		"{Loginurl}", data["login_url"].(string),
-		"{AdminLogo}", data["admin_logo"].(string),
-		"{FbLogo}", data["fb_logo"].(string),
-		"{LinkedinLogo}", data["linkedin_logo"].(string),
-		"{TwitterLogo}", data["twitter_logo"].(string),
-		"{InstaLogo}", data["insta_log"].(string),
-		"{YoutubeLogo}", data["youtube_logo"].(string),
-		"{FacebookLink}", data["facebook"].(string),
-		"{InstagramLink}", data["instagram"].(string),
-		"{YoutubeLink}", data["youtube"].(string),
-		"{LinkedinLink}", data["linkedin"].(string),
-		"{TwitterLink}", data["twitter"].(string),
-	)
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
 
-	msg = replacer.Replace(msg)
-	err := GenerateEmail(email, sub, data, msg, wg)
-	if err != nil {
-		ErrorLog.Printf("Cann't send UserCreate Email to %s error: %s", data["fname"].(string), err)
+		replacer := strings.NewReplacer(
+			"{FirstName}", data["fname"].(string),
+			"{UserName}", data["uname"].(string),
+			"{Password}", data["Pass"].(string),
+			"{Loginurl}", data["login_url"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+		)
+
+		msg = replacer.Replace(msg)
+		err := GenerateEmail(email, sub, data, msg, wg)
+		if err != nil {
+			ErrorLog.Printf("Cann't send UserCreate Email to %s error: %s", data["fname"].(string), err)
+		}
 	}
 
 }
 
-func SendUserOtp(wg *sync.WaitGroup, data map[string]interface{}, email, action string) {
+func SendUserOtp(wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string, action string) {
 
 	var templates models.TblEmailTemplate
-	models.GetTemplates(&templates, "OTPGenerate", -1)
+	models.GetTemplates(&templates, "OTPGenerate", tenantid)
+	if templates.IsActive == 1 {
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
 
-	sub := templates.TemplateSubject
-	msg := templates.TemplateMessage
+		replacer := strings.NewReplacer(
+			"{FirstName}", data["firstname"].(string),
+			"{OTP}", data["otp"].(string),
+			"{Loginurl}", data["login_url"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+			"{Expirytime}", data["expiry"].(string),
+		)
 
-	replacer := strings.NewReplacer(
-		"{FirstName}", data["firstname"].(string),
-		"{OTP}", data["otp"].(string),
-		"{Loginurl}", data["login_url"].(string),
-		"{AdminLogo}", data["admin_logo"].(string),
-		"{FbLogo}", data["fb_logo"].(string),
-		"{LinkedinLogo}", data["linkedin_logo"].(string),
-		"{TwitterLogo}", data["twitter_logo"].(string),
-		"{YoutubeLogo}", data["youtube_logo"].(string),
-		"{InstaLogo}", data["insta_log"].(string),
-		"{FacebookLink}", data["facebook"].(string),
-		"{InstagramLink}", data["instagram"].(string),
-		"{YoutubeLink}", data["youtube"].(string),
-		"{LinkedinLink}", data["linkedin"].(string),
-		"{TwitterLink}", data["twitter"].(string),
-		"{Expirytime}", data["expiry"].(string),
-	)
-
-	msg = replacer.Replace(msg)
-	err := GenerateEmail(email, sub, data, msg, wg)
-	if err != nil {
-		ErrorLog.Printf("Cann't send OtpCreate Email to %s error:", err)
+		msg = replacer.Replace(msg)
+		err := GenerateEmail(email, sub, data, msg, wg)
+		if err != nil {
+			ErrorLog.Printf("Cann't send OtpCreate Email to %s error:", err)
+		}
 	}
 
 }
 
-func Loginedsuccessfully(wg *sync.WaitGroup, data map[string]interface{}, email, action string) {
+func Superadminnotificatin(wg *sync.WaitGroup, data map[string]interface{}, email string) {
 	var templates models.TblEmailTemplate
-	models.GetTemplates(&templates, "Logined successfully", -1)
+	models.GetTemplates(&templates, "Superadminnotification", "")
 
-	sub := templates.TemplateSubject
-	msg := templates.TemplateMessage
+	fmt.Println("new template", templates)
+	if templates.IsActive == 1 {
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
 
-	replacer := strings.NewReplacer(
-		"{FirstName}", data["firstname"].(string),
-		"{AdminLogo}", data["admin_logo"].(string),
-		"{FbLogo}", data["fb_logo"].(string),
-		"{LinkedinLogo}", data["linkedin_logo"].(string),
-		"{TwitterLogo}", data["twitter_logo"].(string),
-		"{YoutubeLogo}", data["youtube_logo"].(string),
-		"{InstaLogo}", data["insta_log"].(string),
-		"{FacebookLink}", data["facebook"].(string),
-		"{InstagramLink}", data["instagram"].(string),
-		"{YoutubeLink}", data["youtube"].(string),
-		"{LinkedinLink}", data["linkedin"].(string),
-		"{TwitterLink}", data["twitter"].(string),
-	)
+		replacer := strings.NewReplacer(
+			"{FirstName}", data["firstname"].(string),
+			"{Useremail}", data["useremail"].(string),
+			"{Timestamp}", data["timestamp"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+		)
 
-	msg = replacer.Replace(msg)
-	err := GenerateEmail(email, sub, data, msg, wg)
-	if err != nil {
-		ErrorLog.Printf("Cann't login your account Email %s error:", err)
+		msg = replacer.Replace(msg)
+		err := GenerateEmail(email, sub, data, msg, wg)
+		if err != nil {
+			ErrorLog.Printf("Cann't login your account Email %s error:", err)
+		}
+	}
+}
+func Registereduserloginalert(wg *sync.WaitGroup, data map[string]interface{}, email string) {
+	var templates models.TblEmailTemplate
+	models.GetTemplates(&templates, "registereduserlogin", "")
+
+	fmt.Println("new template", templates)
+	if templates.IsActive == 1 {
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
+
+		replacer := strings.NewReplacer(
+			"{FirstName}", data["firstname"].(string),
+			"{Useremail}", data["useremail"].(string),
+			"{Timestamp}", data["timestamp"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+		)
+
+		msg = replacer.Replace(msg)
+
+		fmt.Println(email, data, msg, "meassage")
+		err := GenerateEmail(email, sub, data, msg, wg)
+		if err != nil {
+			ErrorLog.Printf("Cann't login your account Email %s error:", err)
+		}
+	}
+}
+func Loginedsuccessfully(wg *sync.WaitGroup, data map[string]interface{}, email string, tenant_id string, action string) {
+	var templates models.TblEmailTemplate
+	models.GetTemplates(&templates, "Logined successfully", tenant_id)
+	if templates.IsActive == 1 {
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
+
+		replacer := strings.NewReplacer(
+			"{FirstName}", data["firstname"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+		)
+
+		msg = replacer.Replace(msg)
+		err := GenerateEmail(email, sub, data, msg, wg)
+		if err != nil {
+			ErrorLog.Printf("Cann't login your account Email %s error:", err)
+		}
 	}
 }
 
 func ChangePasswordEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email, action string) {
 
 	var templates models.TblEmailTemplate
-	models.GetTemplates(&templates, "changepassword", TenantId)
+	models.GetTemplates(&templates, "Changepassword", TenantId)
 
 	sub := templates.TemplateSubject
 	msg := templates.TemplateMessage
@@ -443,22 +549,13 @@ func ChangePasswordEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string
 		"{FbLogo}", data["fb_logo"].(string),
 		"{LinkedinLogo}", data["linkedin_logo"].(string),
 		"{TwitterLogo}", data["twitter_logo"].(string),
-		"{InstaLogo}", data["insta_log"].(string),
-		"{YoutubeLogo}", data["youtube_logo"].(string),
-		"{FacebookLink}", data["facebook"].(string),
-		"{InstagramLink}", data["instagram"].(string),
-		"{YoutubeLink}", data["youtube"].(string),
-		"{LinkedinLink}", data["linkedin"].(string),
-		"{TwitterLink}", data["twitter"].(string),
-		"{Password}", data["password"].(string),
 	)
 
-	fmt.Println(email, sub, msg, replacer, "alldatamail")
 	msg = replacer.Replace(msg)
-	GenerateEmail(email, sub, data, msg, wg)
+	GenerateEmail(email, sub, nil, msg, wg)
 }
 
-func MemberCreateEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid int, action string) {
+func MemberCreateEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string, action string) {
 
 	var templates models.TblEmailTemplate
 	models.GetTemplates(&templates, "Createmember", tenantid)
@@ -480,6 +577,43 @@ func MemberCreateEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]i
 			"{YoutubeLogo}", data["youtube_logo"].(string),
 			"{InstaLogo}", data["insta_log"].(string),
 			"{ContactEmail}", data["contactemail"].(string),
+			"{FacebookLink}", data["facebook"].(string),
+			"{InstagramLink}", data["instagram"].(string),
+			"{YoutubeLink}", data["youtube"].(string),
+			"{LinkedinLink}", data["linkedin"].(string),
+			"{TwitterLink}", data["twitter"].(string),
+		)
+
+		msg = replacer.Replace(msg)
+		GenerateEmail(email, sub, data, msg, wg)
+	}
+
+}
+
+func SupportuserEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string) {
+
+	var templates models.TblEmailTemplate
+	models.GetTemplates(&templates, "SupportuserverificationEmail", "")
+
+	if templates.IsActive == 1 {
+
+		sub := templates.TemplateSubject
+		msg := templates.TemplateMessage
+
+		replacer := strings.NewReplacer(
+			"{Service}", data["service"].(string),
+			"{FirstName}", data["fname"].(string),
+			"{Useremail}", data["email"].(string),
+			"{Number}", data["number"].(string),
+			"{Timestamp}", data["timezone"].(string),
+			"{Country}", data["Country"].(string),
+			"{Describe}", data["describe"].(string),
+			"{AdminLogo}", data["admin_logo"].(string),
+			"{FbLogo}", data["fb_logo"].(string),
+			"{LinkedinLogo}", data["linkedin_logo"].(string),
+			"{TwitterLogo}", data["twitter_logo"].(string),
+			"{YoutubeLogo}", data["youtube_logo"].(string),
+			"{InstaLogo}", data["insta_log"].(string),
 			"{FacebookLink}", data["facebook"].(string),
 			"{InstagramLink}", data["instagram"].(string),
 			"{YoutubeLink}", data["youtube"].(string),
@@ -522,50 +656,39 @@ func MemberActivationEmail(Chan chan<- string, wg *sync.WaitGroup, data map[stri
 	GenerateEmail(email, sub, nil, msg, wg)
 
 }
-func ForgetPasswordEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email, action string) {
+func ForgetPasswordEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email, action string, tenantid string) {
 
 	var templates models.TblEmailTemplate
 
-	models.GetTemplates(&templates, action, TenantId)
+	models.GetTemplates(&templates, action, tenantid)
 
 	sub := templates.TemplateSubject
 
 	msg := templates.TemplateMessage
 
 	replacer := strings.NewReplacer(
-		"{FirstName}", safeGetString(data, "fname"),
-		"{Passwordurl}", safeGetString(data, "resetpassword"),
-		"{Passwordurlpath}", safeGetString(data, "restpassurl"),
-		"{AdminLogo}", safeGetString(data, "admin_logo"),
-		"{FbLogo}", safeGetString(data, "fb_logo"),
-		"{LinkedinLogo}", safeGetString(data, "linkedin_logo"),
-		"{TwitterLogo}", safeGetString(data, "twitter_logo"),
-		"{YoutubeLogo}", safeGetString(data, "youtube_logo"),
-		"{InstaLogo}", safeGetString(data, "insta_log"),
-		"{FacebookLink}", safeGetString(data, "facebook"),
-		"{InstagramLink}", safeGetString(data, "instagram"),
-		"{YoutubeLink}", safeGetString(data, "youtube"),
-		"{LinkedinLink}", safeGetString(data, "linkedin"),
-		"{TwitterLink}", safeGetString(data, "twitter"),
+
+		"{FirstName}", data["fname"].(string),
+		"{Passwordurl}", data["resetpassword"].(string),
+		"{Passwordurlpath}", data["restpassurl"].(string),
+		"{AdminLogo}", data["admin_logo"].(string),
+		"{FbLogo}", data["fb_logo"].(string),
+		"{LinkedinLogo}", data["linkedin_logo"].(string),
+		"{TwitterLogo}", data["twitter_logo"].(string),
+		"{YoutubeLogo}", data["youtube_logo"].(string),
+		"{InstaLogo}", data["insta_log"].(string),
+		"{FacebookLink}", data["facebook"].(string),
+		"{InstagramLink}", data["instagram"].(string),
+		"{YoutubeLink}", data["youtube"].(string),
+		"{LinkedinLink}", data["linkedin"].(string),
+		"{TwitterLink}", data["twitter"].(string),
 	)
+
 	msg = replacer.Replace(msg)
 
-	fmt.Println(email, sub, data, "emaildetails")
 	GenerateEmail(email, sub, data, msg, wg)
 }
-func safeGetString(data map[string]interface{}, key string) string {
 
-	fmt.Println("safestring")
-	if value, exists := data[key]; exists {
-		if strValue, ok := value.(string); ok {
-			return strValue
-		}
-		fmt.Printf("Warning: Value for key '%s' is not a string\n", key)
-	} else {
-		fmt.Printf("Warning: Key '%s' does not exist in data\n", key)
-	}
-	return "" // Return an empty string if the key doesn't exist or is not a string
-}
 func OwndeskmemberEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email, action string) error {
 
 	var templates models.TblEmailTemplate
@@ -715,14 +838,13 @@ func ModuleRouteName(c *gin.Context) (modulename string, tabname string, modulei
 
 	if strings.Contains(routeName, "entry") {
 
-		routeName = "/channel/entrylist"
+		routeName = "/channels/"
 	}
 
-	if strings.Contains(routeName, "/updatemember/") {
+	if strings.Contains(routeName, "/user/") {
 
-		routeName = "/member/"
+		routeName = "/user/"
 	}
-
 	if strings.Contains(routeName, "/channels/") {
 
 		routeName = "/channels/"
@@ -758,27 +880,62 @@ func ModuleRouteName(c *gin.Context) (modulename string, tabname string, modulei
 		routeName = "/ecommerce/order"
 	}
 
-	if strings.Contains(routeName, "/entrylist") {
+	if strings.Contains(routeName, "/entries") {
 
-		routeName = "/channel/entrylist"
-	}
-	if strings.Contains(routeName, "/unpublishentries") {
-
-		routeName = "/channel/entrylist"
-	}
-	if strings.Contains(routeName, "/draftentries") {
-
-		routeName = "/channel/entrylist"
+		routeName = "/channels/"
 	}
 
-	if strings.HasPrefix(routeName, "/aiassistance") {
+	// if strings.HasPrefix(routeName, "/aiassistance") {
 
-		routeName = "/aiassistance"
+	// 	routeName = "/aiassistance"
+	// }
+	if strings.HasPrefix(routeName, "/blocks/defaultlist") {
+
+		routeName = "/blocks"
+	}
+	if strings.Contains(routeName, "/defaultlist") {
+
+		routeName = "/blocks"
+	}
+	if strings.HasPrefix(routeName, "/formbuilder") {
+
+		routeName = "/cta"
 	}
 
-	if strings.HasPrefix(routeName, "/formsbuilder") {
+	if strings.Contains(routeName, "order") {
 
-		routeName = "/formsbuilder"
+		routeName = "/members"
+
+	}
+
+	if strings.Contains(routeName, "subscription") {
+
+		routeName = "/members"
+
+	}
+
+	if strings.Contains(routeName, "membershiplevel") {
+
+		routeName = "/members"
+
+	}
+
+	if strings.Contains(routeName, "membershipgroup") {
+
+		routeName = "/members"
+
+	}
+
+	if strings.Contains(routeName, "membership") {
+
+		routeName = "/members"
+
+	}
+
+	if strings.Contains(routeName, "courses") {
+
+		routeName = "/courses"
+
 	}
 
 	for _, val := range menu.TblModule {
@@ -887,48 +1044,157 @@ func SaveFileInLocal(c *gin.Context) {
 
 func EditroImageSave(c *gin.Context) {
 
-	var imageName, imagePath string
+	fmt.Println("checkdssss")
 
-	imagedata := c.PostForm("imagedata")
+	routename := c.FullPath()
+
+	var imageName, imagePath, audioName, audioPath, data, documentName, documentPath string
+
+	var docdata *multipart.FileHeader
+
+	if strings.Contains(routename, "uploadb64audio") {
+
+		data = c.PostForm("audiodata")
+
+	} else if strings.Contains(routename, "uploadb64image") {
+
+		data = c.PostForm("imagedata")
+
+	} else if strings.Contains(routename, "uploadb64document") {
+		fileheader, err := c.FormFile("documentdata")
+		if err != nil {
+			c.JSON(400, gin.H{"error": "Invalid file upload: " + err.Error()})
+			return
+		}
+		docdata = fileheader
+	}
 
 	baseurl := os.Getenv("BASE_URL")
 
 	tenantDetails, _ := NewTeam.GetTenantDetails(TenantId)
 
-	if imagedata != "" {
+	if data != "" || docdata.Filename != "" {
 
 		var (
-			imageByte []byte
-			err       error
+			imageByte    []byte
+			audioByte    []byte
+			documentByte []byte
+			err          error
+			// document multipart.File
 		)
 
-		imageName, imagePath, imageByte, err = ConvertBase64toByte(imagedata, "entries")
-		if err != nil {
-			ErrorLog.Printf("convert base 64 to byte error : %s", err)
+		if strings.Contains(routename, "uploadb64audio") {
+
+			audioName, audioPath, audioByte, err = AudioConvertBase64toByte(data, "entries", routename)
+			if err != nil {
+				ErrorLog.Printf("convert base 64 to byte error : %s", err)
+			}
+
+			audioPath = tenantDetails.S3FolderName + audioPath
+
+			uerr := storagecontroller.UploadCropImageS3(audioName, audioPath, audioByte)
+
+			if uerr != nil {
+				c.JSON(500, gin.H{"Error": "Upload failed: Check S3 credentials and try again."})
+
+				return
+			}
+
+			audioPath = baseurl + "audio-resize?name=" + audioPath
+
+			c.JSON(200, gin.H{"Audiopath": audioPath, "Audioname": audioName})
+
+		} else if strings.Contains(routename, "uploadb64image") {
+
+			imageName, imagePath, imageByte, err = ConvertBase64toByte(data, "entries")
+			if err != nil {
+				ErrorLog.Printf("convert base 64 to byte error : %s", err)
+			}
+
+			imagePath = tenantDetails.S3FolderName + imagePath
+
+			uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
+
+			if uerr != nil {
+				c.JSON(500, gin.H{"Error": "Upload failed: Check S3 credentials and try again."})
+
+				return
+			}
+
+			imagePath = baseurl + "image-resize?name=" + imagePath
+
+			c.JSON(200, gin.H{"imagepath": imagePath, "imgname": imageName})
+		} else if strings.Contains(routename, "uploadb64document") {
+
+			fmt.Println("checkdocumentsddff:")
+
+			extension := filepath.Ext(docdata.Filename)
+
+			documentName, documentPath, documentByte, err = DocumentConvertBase64toByte(docdata)
+			if err != nil {
+				ErrorLog.Printf("convert base 64 to byte error : %s", err)
+			}
+
+			documentPath = tenantDetails.S3FolderName + documentPath
+
+			uerr := storagecontroller.UploadDocumentS3(documentName, documentPath, documentByte)
+			if uerr != nil {
+				c.JSON(500, gin.H{"Error": "Upload failed: Check S3 credentials and try again."})
+				return
+			}
+
+			if extension == ".pdf" || extension == ".doc" || extension == ".docx" || extension == ".txt" {
+
+				documentPath = baseurl + "document-access?name=" + documentPath
+
+				c.JSON(200, gin.H{"documentpath": documentPath, "documentname": documentName})
+
+			} else if extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif" {
+
+				documentPath = baseurl + "image-resize?name=" + documentPath
+
+				c.JSON(200, gin.H{"documentpath": documentPath, "documentname": documentName})
+
+			}
+
 		}
-
-		imagePath = tenantDetails.S3FolderName + imagePath
-
-		uerr := storagecontroller.UploadCropImageS3(imageName, imagePath, imageByte)
-
-		if uerr != nil {
-
-			c.JSON(200, gin.H{"Error": "Invalid or missing S3 credentials. Please verify your configuration and try again."})
-
-			return
-		}
-		imagePath = baseurl + "image-resize?name=" + imagePath
+	} else {
+		c.JSON(400, gin.H{"Error": "No data provided"})
 	}
-
-	c.JSON(200, gin.H{"imagepath": imagePath, "imgname": imageName})
 
 }
 
-func CreateTenantDefaultData(userId, tenantId int) error {
+type Field struct {
+	FieldName   string
+	FieldTypeId int
+	OrderIndex  int
+	ImagePath   string
+	TenantID    string
+	CreatedBy   int
+	CreatedOn   time.Time
+}
+type FieldOption struct {
+	ID          int
+	FieldID     int
+	OptionName  string
+	OptionValue string
+	CreatedOn   time.Time
+	TenantID    string
+	CreatedBy   int
+}
+type ChannelCategory struct {
+	ChannelID  int    `gorm:"column:channel_id"`
+	CategoryID string `gorm:"column:category_id"`
+	CreatedAt  int    `gorm:"column:created_at"`
+	TenantID   string `gorm:"column:tenant_id"`
+	CreatedOn  time.Time
+}
+
+func CreateTenantDefaultData(userId int, tenantId string) error {
 
 	var err error
 
-	file, err := os.Open("defaults.sql")
+	file, err := os.Open("tenant-defaults.sql")
 
 	if err != nil {
 
@@ -938,9 +1204,9 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 	scanner := bufio.NewScanner(file)
 
 	var (
-		defChildCatId, defParentCatId, tagId, defChanId, parentKnowledgeBaseId, parentBlogId, parentjobsId, templateModuleId, channelId, moduleId int
-		defBlockIds                                                                                                                               []int
-		blockDynamicRetrieve                                                                                                                      bool
+		defChildCatId, defParentCatId, tagId, defChanId, subparentid, parentKnowledgeBaseId, parentBlogId, parentjobsId, templateModuleId, channelId, moduleId, blogChanId, jobsChanId int
+		defBlockIds                                                                                                                                                                    []int
+		blockDynamicRetrieve                                                                                                                                                           bool
 	)
 
 	for scanner.Scan() {
@@ -954,6 +1220,12 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 			parts := strings.Fields(fmt.Sprint(currentTime))
 
 			timeStamp := fmt.Sprintf("%s %s", parts[0], parts[1])
+
+			uuid := (uuid.New()).String()
+
+			arr := strings.Split(uuid, "-")
+
+			Uuid := arr[len(arr)-1]
 
 			lowerQuery := strings.ToLower(query)
 
@@ -973,6 +1245,115 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 					query = strings.ReplaceAll(query, "pid", strconv.Itoa(defParentCatId))
 
 				}
+
+				// Step 2: Get Child Category ID (Fashion & Clothing)
+				if strings.Contains(lowerQuery, "sp_id") {
+					err = db.Table("tbl_categories").Where("is_deleted=0 AND tenant_id=? AND parent_id=?", tenantId, defParentCatId).Pluck("id", &subparentid).Error
+					if err != nil && err != gorm.ErrRecordNotFound {
+						return err
+					}
+					query = strings.ReplaceAll(query, "sp_id", strconv.Itoa(defParentCatId))
+				}
+
+				err = db.Debug().Table("tbl_categories").Where("category_slug='fashion_clothing' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				fmt.Println(subparentid, "categorysubid")
+				if strings.Contains(lowerQuery, "sub_id") {
+					query = strings.ReplaceAll(query, "sub_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='electronics' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				fmt.Println(subparentid, "categorysubid")
+				if strings.Contains(lowerQuery, "e_id") {
+					query = strings.ReplaceAll(query, "e_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='home_furniture' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "h_id") {
+					query = strings.ReplaceAll(query, "h_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='beauty_personal_care' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "b_id") {
+					query = strings.ReplaceAll(query, "b_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='sports_outdoors' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "so_id") {
+					query = strings.ReplaceAll(query, "so_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='politics' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "po_id") {
+					query = strings.ReplaceAll(query, "po_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='finance' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "bc_id") {
+					query = strings.ReplaceAll(query, "bc_id", strconv.Itoa(subparentid))
+				}
+				// err = db.Debug().Table("tbl_categories").Where("category_slug='technology' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				// if err != nil && err != gorm.ErrRecordNotFound {
+				// 	return err
+				// }
+
+				// if strings.Contains(lowerQuery, "tc_id") {
+				// 	query = strings.ReplaceAll(query, "tc_id", strconv.Itoa(subparentid))
+				// }
+
+				err = db.Debug().Table("tbl_categories").Where("category_slug='tech_insights' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "tc_id") {
+					query = strings.ReplaceAll(query, "tc_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='health' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "hc_id") {
+					query = strings.ReplaceAll(query, "hc_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='sports' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "sc_id") {
+					query = strings.ReplaceAll(query, "sc_id", strconv.Itoa(subparentid))
+				}
+				err = db.Debug().Table("tbl_categories").Where("category_slug='worldnews' and tenant_id=?", tenantId).Pluck("id", &subparentid).Error
+				if err != nil && err != gorm.ErrRecordNotFound {
+					return err
+				}
+
+				if strings.Contains(lowerQuery, "w_id") {
+					query = strings.ReplaceAll(query, "w_id", strconv.Itoa(subparentid))
+				}
 			case strings.Contains(lowerQuery, "tbl_module_permissions") && strings.Contains(lowerQuery, "insert into"):
 
 				err = db.Table("tbl_channels").Where("is_deleted = 0 and is_active = 1").Pluck("id", &channelId).Error
@@ -984,7 +1365,7 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 
 				if strings.Contains(lowerQuery, "rname") {
 
-					query = strings.ReplaceAll(lowerQuery, "rname", fmt.Sprintf("/channel/entrylist/%d ", channelId))
+					query = strings.ReplaceAll(lowerQuery, "rname", fmt.Sprintf("/entries/entrylist/%d ", channelId))
 				}
 
 				err = db.Table("tbl_modules").Where(" is_active = 1 and parent_id != 0 and module_name = ?", "Entries").Pluck("id", &moduleId).Error
@@ -1003,7 +1384,12 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 
 			case strings.Contains(lowerQuery, "tbl_channel_categories") && strings.Contains(lowerQuery, "insert into"):
 
-				if err = db.Table("tbl_categories").Where("is_deleted=0 and tenant_id=? and parent_id=?", tenantId, defParentCatId).Pluck("id", &defChildCatId).Error; err != nil {
+				if err = db.Debug().Table("tbl_categories").Where("is_deleted=0 and tenant_id=? and parent_id=0 and category_slug=?", tenantId, "default_category").Pluck("id", &defParentCatId).Error; err != nil {
+
+					return err
+				}
+
+				if err = db.Debug().Table("tbl_categories").Where("is_deleted=0 and tenant_id=?  and category_slug=?", tenantId, "default1").Pluck("id", &defChildCatId).Error; err != nil {
 
 					return err
 				}
@@ -1057,19 +1443,6 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 					query = strings.ReplaceAll(query, "chid", strconv.Itoa(defChanId))
 
 				}
-			case (strings.Contains(lowerQuery, "tbl_block_tags") || strings.Contains(lowerQuery, "tbl_block_collections")) && strings.Contains(lowerQuery, "insert into") && !blockDynamicRetrieve:
-
-				if err = db.Table("tbl_block_mstr_tags").Select("id").Where("tenant_id=?", tenantId).Pluck("id", &tagId).Error; err != nil {
-
-					return err
-				}
-
-				if err = db.Table("tbl_blocks").Select("id").Where("is_deleted=0 and tenant_id=?", tenantId).Scan(&defBlockIds).Error; err != nil {
-
-					return err
-				}
-
-				blockDynamicRetrieve = true
 
 			case strings.Contains(lowerQuery, "tbl_graphql_settings") && strings.Contains(lowerQuery, "insert into"):
 
@@ -1119,10 +1492,54 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 				if strings.Contains(lowerQuery, "pid") {
 					query = strings.ReplaceAll(query, "pid", strconv.Itoa(parentjobsId))
 				}
+			case (strings.Contains(lowerQuery, "tbl_blocks") && strings.Contains(lowerQuery, "insert into")):
+
+				if err = db.Debug().Table("tbl_channels").Where("is_deleted=0 and tenant_id = ? and channel_name=?", tenantId, "Default Channel").Pluck("id", &blogChanId).Error; err != nil {
+
+					return err
+				}
+				if err = db.Debug().Table("tbl_channels").Where("is_deleted=0 and tenant_id = ? and channel_name=?", tenantId, "Jobs").Pluck("id", &jobsChanId).Error; err != nil {
+
+					return err
+				}
+
+				if strings.Contains(query, "dch_id") {
+					query = strings.ReplaceAll(query, "dch_id", strconv.Itoa(blogChanId))
+
+				}
+				if strings.Contains(query, "jch_id") {
+					query = strings.ReplaceAll(query, "jch_id", strconv.Itoa(jobsChanId))
+
+				}
+			case (strings.Contains(lowerQuery, "tbl_block_tags") || strings.Contains(lowerQuery, "tbl_block_collections")) && strings.Contains(lowerQuery, "insert into") && !blockDynamicRetrieve:
+
+				if err = db.Table("tbl_block_mstr_tags").Select("id").Where("tenant_id=?", tenantId).Pluck("id", &tagId).Error; err != nil {
+
+					return err
+				}
+
+				if err = db.Table("tbl_blocks").Select("id").Where("is_deleted=0 and tenant_id=?", tenantId).Scan(&defBlockIds).Error; err != nil {
+
+					return err
+				}
+
+				blockDynamicRetrieve = true
 
 			}
 
-			replacer := strings.NewReplacer("uid", strconv.Itoa(userId), "tid", strconv.Itoa(tenantId), "current-time", timeStamp)
+			if strings.Contains(query, "tbl_forms") {
+
+				err = db.Table("tbl_channels").Where("channel_name= ? and tenant_id=?", "Default Channel", tenantId).Pluck("id", &channelId).Error
+				if err != nil {
+					return err
+				}
+
+				query = strings.ReplaceAll(query, "uu_id", Uuid)
+
+				query = strings.ReplaceAll(query, "ch_id", strconv.Itoa(channelId))
+			}
+
+			replacer := strings.NewReplacer("u_id", strconv.Itoa(userId), "tid", tenantId, "current-time", timeStamp, "duid", Uuid)
 
 			finalQuery := replacer.Replace(query)
 
@@ -1164,8 +1581,151 @@ func CreateTenantDefaultData(userId, tenantId int) error {
 						return err
 					}
 				}
+
 			}
 
+			var channelIds []int
+			err := db.Table("tbl_channels").Where("is_deleted = 0 AND tenant_id = ?", tenantId).Pluck("id", &channelIds).Error
+			if err != nil {
+				return err
+			}
+
+			fmt.Println("Fetched Channel IDs:", channelIds)
+
+			channelFields := map[string][]Field{
+				"blog": {
+					{"Excerpt", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Author Bio", 2, 2, "/public/img/text.svg", tenantId, userId, currentTime},
+				},
+				"ecommerce": {
+					{"Price", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Special Price", 2, 2, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"SKU", 2, 3, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Quantity", 2, 4, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Stock", 5, 5, "/public/img/select.svg", tenantId, userId, currentTime},
+				},
+				"appointment": {
+					{"Date", 6, 1, "/public/img/date.svg", tenantId, userId, currentTime},
+					{"Time", 4, 2, "/public/img/date-time.svg", tenantId, userId, currentTime},
+					{"contact number", 2, 3, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Email", 2, 4, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"DOB/Age", 4, 5, "/public/img/date-time.svg", tenantId, userId, currentTime},
+				},
+
+				"event": {
+					{"Event Title", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Event Date", 6, 2, "/public/img/date.svg", tenantId, userId, currentTime},
+					{"Event Time", 4, 3, "/public/img/date-time.svg", tenantId, userId, currentTime},
+					{"Event type", 5, 4, "/public/img/select.svg", tenantId, userId, currentTime},
+					{"Event Description", 8, 5, "/public/img/text-area.svg", tenantId, userId, currentTime},
+				},
+				"jobs": {
+					{"Key Responsibilities", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Job Type", 5, 2, "/public/img/select.svg", tenantId, userId, currentTime},
+					{"Salary Range", 2, 3, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Experiance", 2, 5, "/public/img/text.svg", tenantId, userId, currentTime},
+				},
+				"news": {
+					{"Frequency", 5, 1, "/public/img/select.svg", tenantId, userId, currentTime},
+					{"Anchor/Host Details", 8, 2, "/public/img/text-area.svg", tenantId, userId, currentTime},
+					{"Coverage Scope", 5, 3, "/public/img/select.svg", tenantId, userId, currentTime},
+					{"Special Features", 5, 4, "/public/img/select.svg", tenantId, userId, currentTime},
+					{"Multimedia Support", 5, 5, "/public/img/select.svg", tenantId, userId, currentTime},
+				},
+				"knowledge-base": {
+					{"Version", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+					{"Summary", 2, 1, "/public/img/text.svg", tenantId, userId, currentTime},
+				},
+			}
+			fieldOptionsMap := map[string][]string{
+				"Stock":            {"In Stock", "Out of Stock"},
+				"Event type":       {"Webinar", "Conference", "Workshop"},
+				"Job Type":         {"Full-Time", "Part-Time", "Contract", "Internship"},
+				"Frequency":        {"24/7", "Daily", "Weekly"},
+				"Coverage Scope":   {"Local", "International"},
+				"Special Features": {"Debates", "Expert Panels", "Investigative Reports"},
+			}
+			var fieldIds []int
+
+			for _, channelId := range channelIds {
+				var channelSlug string
+
+				err = db.Table("tbl_channels").Where("id = ? and tenant_id=?", channelId, tenantId).Pluck("slug_name", &channelSlug).Error
+				if err != nil {
+					return err
+				}
+
+				var categoryId int
+				err = db.Table("tbl_categories").Where("tenant_id = ? AND category_slug = ?", tenantId, channelSlug).Pluck("id", &categoryId).Error
+				if err != nil {
+					return err
+				}
+
+				if categoryId != 0 {
+					if err := insertCategoryHierarchy(db, tenantId, categoryId, channelId, userId, currentTime); err != nil {
+						return err
+					}
+				}
+
+				fields := channelFields[channelSlug]
+				if len(fields) == 0 {
+					fmt.Printf("No fields  Channel ID %d (%s)\n", channelId, channelSlug)
+					continue
+				}
+
+				fieldIds = nil
+
+				for _, field := range fields {
+
+					var existingFieldId int
+					err = db.Table("tbl_fields").Where("tenant_id = ? AND field_name = ?", tenantId, field.FieldName).
+						Pluck("id", &existingFieldId).Error
+
+					if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+						return err
+					}
+
+					if existingFieldId == 0 {
+
+						if err = db.Table("tbl_fields").Create(&field).Error; err != nil {
+							return err
+						}
+
+						err = db.Table("tbl_fields").Where("tenant_id = ?", tenantId).Order("id desc").Limit(1).Pluck("id", &existingFieldId).Error
+						if err != nil {
+							return err
+						}
+
+						if options, exists := fieldOptionsMap[field.FieldName]; exists {
+							if err := InsertFieldOptions(db, existingFieldId, options, userId, tenantId, currentTime); err != nil {
+								return (err)
+							}
+						}
+					}
+
+					fieldIds = append(fieldIds, existingFieldId)
+				}
+
+				for _, fieldId := range fieldIds {
+					groupField := map[string]interface{}{
+						"channel_id": channelId,
+						"field_id":   fieldId,
+						"tenant_id":  tenantId,
+					}
+					var existingGroupField int64
+					err = db.Table("tbl_group_fields").Where(groupField).Count(&existingGroupField).Error
+					if err != nil {
+						return err
+					}
+
+					if existingGroupField == 0 {
+						if err = db.Debug().Table("tbl_group_fields").Create(&groupField).Error; err != nil {
+							return err
+						}
+					}
+				}
+
+			}
 		}
 
 	}
@@ -1242,233 +1802,121 @@ func UploadFilesToS3(c *gin.Context) {
 	c.JSON(200, gin.H{"messgae": "file uploaded sucessfully", "status": 1, "path": path + multipartHeader.Filename})
 }
 
-// view image
-func ResizeImage(c *gin.Context) {
+//sitemap file//
 
-	fileName := c.Query("name")
-	filePath := c.Query("path")
-	width, _ := strconv.ParseUint(c.Query("width"), 10, 64)
-	height, _ := strconv.ParseUint(c.Query("height"), 10, 64)
-	extention := path.Ext(fileName)
-
-	rawObject, err := storagecontroller.GetObjectFromS3(filePath + fileName)
-
+func Sitemap(c *gin.Context) {
+	data, err := ioutil.ReadFile("./sitemap.xml")
 	if err != nil {
-		fmt.Println(err)
+		c.String(http.StatusInternalServerError, "Unable to read sitemap.xml")
 		return
 	}
 
-	var buf bytes.Buffer
-
-	buf.ReadFrom(rawObject.Body)
-
-	if extention == ".svg" {
-		svgData := buf.String()
-		c.Data(http.StatusOK, "image/svg+xml", []byte(svgData))
-		return
-	}
-
-	Image, _, erri := image.Decode(bytes.NewReader(buf.Bytes()))
-	if erri != nil {
-		fmt.Println(erri)
-		return
-	}
-
-	newImage := resize.Resize(uint(width), uint(height), Image, resize.Lanczos3)
-	if extention == ".png" {
-		png.Encode(c.Writer, newImage)
-		return
-	}
-
-	if extention == ".jpeg" || extention == ".jpg" {
-		_ = jpeg.Encode(c.Writer, newImage, nil)
-	}
-
+	// Serve the content as XML
+	c.Data(http.StatusOK, "application/xml", data)
 }
-
-// Media selected type
-func GetSelectedType() (storagetyp models.TblStorageType, err error) {
-
-	storagetype, err := models.GetStorageValue(TenantId)
-
-	if err != nil {
-
-		fmt.Println(err)
-
-		return models.TblStorageType{}, err
+func InsertFieldOptions(db *gorm.DB, existingFieldId int, options []string, userid int, tenantid string, currentime time.Time) error {
+	if len(options) == 0 {
+		return errors.New("no options provided")
 	}
 
-	return storagetype, nil
-
-}
-
-func GetMedia() (Folders []storagecontroller.Medias, Files []storagecontroller.Medias, TotalMedia []storagecontroller.Medias, Nextcontin string, err error) {
-
-	var (
-		MediaErr error
-		Media    []storagecontroller.Medias
-		Folder   []storagecontroller.Medias
-		File     []storagecontroller.Medias
-		nextcont string
-		search   string
-	)
-
-	selectedtype, _ := GetSelectedType()
-
-	if selectedtype.SelectedType == "local" {
-
-		Folder, File, MediaErr = storagecontroller.MediaLocalList(search, "")
-
-		if MediaErr != nil {
-
-			ErrorLog.Println(MediaErr)
+	for _, option := range options {
+		optionRecord := &FieldOption{
+			FieldID:     existingFieldId,
+			OptionValue: option,
+			OptionName:  option,
+			CreatedOn:   currentime,
+			CreatedBy:   userid,
+			TenantID:    tenantid,
 		}
 
-	} else if selectedtype.SelectedType == "aws" {
+		if err := db.Table("tbl_field_options").Create(optionRecord).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+func insertCategoryHierarchy(db *gorm.DB, tenantId string, parentId int, channelId int, userId int, currentTime time.Time) error {
 
-		// resp, _ := storagecontroller.ListS3Bucket()
+	var childCategoryIds []int
+	err := db.Table("tbl_categories").Where("tenant_id = ? AND parent_id = ?", tenantId, parentId).Pluck("id", &childCategoryIds).Error
+	if err != nil {
+		return err
+	}
 
-		resp1, err := storagecontroller.ListS3BucketWithPath("media/")
+	for _, childCategoryId := range childCategoryIds {
+		if childCategoryId == 0 {
+			continue
+		}
 
-		nextcont = *resp1.NextContinuationToken
+		categoryIDString := fmt.Sprintf("%d,%d", parentId, childCategoryId)
 
+		var existingRecord ChannelCategory
+		err = db.Table("tbl_channel_categories").Where("channel_id = ? AND category_id = ?", channelId, categoryIDString).First(&existingRecord).Error
+
+		if err == nil {
+			continue
+		} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return err
+		}
+
+		channelCategoryRecord := ChannelCategory{
+			ChannelID:  channelId,
+			CategoryID: categoryIDString,
+			CreatedAt:  userId,
+			TenantID:   tenantId,
+			CreatedOn:  currentTime,
+		}
+
+		err = db.Table("tbl_channel_categories").Create(&channelCategoryRecord).Error
 		if err != nil {
-
-			fmt.Println("please check the aws fields")
-
-			return []storagecontroller.Medias{}, []storagecontroller.Medias{}, []storagecontroller.Medias{}, nextcont, err
+			return err
 		}
 
-		Folder, File = MakeFolderandFileArr(resp1, "media/", "")
-
+		if err := insertSubCategories(db, tenantId, childCategoryId, channelId, userId, currentTime, parentId); err != nil {
+			return err
+		}
 	}
 
-	sort.SliceStable(Folder, func(i, j int) bool {
-
-		return Folder[i].ModTime.Unix() > Folder[j].ModTime.Unix()
-	})
-
-	sort.SliceStable(File, func(i, j int) bool {
-
-		return File[i].ModTime.Unix() > File[j].ModTime.Unix()
-	})
-
-	Media = append(Media, Folder...)
-
-	Media = append(Media, File...)
-
-	return Folder, File, Media, nextcont, nil
-
+	return nil
 }
 
-// make folder and file array
-func MakeFolderandFileArr(resp1 *s3.ListObjectsV2Output, parentfoldername string, searchfilter string) (folders []storagecontroller.Medias, files []storagecontroller.Medias) {
+func insertSubCategories(db *gorm.DB, tenantId string, parentId int, channelId int, userId int, currentTime time.Time, grandParentId int) error {
+	var subChildCategoryIds []int
 
-	var (
-		Folder []storagecontroller.Medias
-		File   []storagecontroller.Medias
-	)
-
-	if searchfilter != "" {
-
-		for _, val := range resp1.CommonPrefixes {
-
-			if strings.Contains(strings.ToLower(RemoveSpecialCharacter(strings.Replace(*val.Prefix, parentfoldername, "", 1))), strings.ToLower(searchfilter)) {
-
-				// obj, _ := storagecontroller.GetObjectFromS3(*val.Prefix)
-
-				var Folde storagecontroller.Medias
-				filename := RemoveSpecialCharacter(strings.Replace(*val.Prefix, parentfoldername, "", 1))
-				Folde.File = true
-				Folde.Path = filename
-				Folde.AliaseName = *val.Prefix
-				Folde.Name = filename
-				// Folde.ModTime = *obj.LastModified
-				Folder = append(Folder, Folde)
-			}
-
-		}
-
-		for _, val := range resp1.Contents {
-
-			if strings.Contains(strings.ToLower(*val.Key), strings.ToLower(searchfilter)) {
-
-				if strings.Contains(*val.Key, ".jpeg") || strings.Contains(*val.Key, ".png") || strings.Contains(*val.Key, ".jpg") || strings.Contains(*val.Key, ".svg") {
-
-					var file storagecontroller.Medias
-					filename := strings.Replace(*val.Key, parentfoldername, "", 1)
-					Lastupdate := *val.LastModified
-					file.File = false
-					file.Name = filename
-					file.AliaseName = *val.Key
-					file.Path = parentfoldername
-					file.ModTime = Lastupdate
-					File = append(File, file)
-
-				}
-			}
-
-		}
-
-	} else {
-
-		for _, val := range resp1.CommonPrefixes {
-
-			folderPrefix := *val.Prefix
-			var folderCount, imageCount int
-			// List objects in the current folder
-			resp2, err := storagecontroller.ListS3BucketWithPath(folderPrefix)
-			if err != nil {
-				// Handle error
-				continue
-			}
-
-			for _, obj := range resp2.Contents {
-
-				if strings.HasSuffix(*obj.Key, "/") {
-					// Increment folder count
-					folderCount++
-				} else {
-					// Increment image count
-					imageCount++
-				}
-			}
-			folderCount = len(resp2.CommonPrefixes)
-
-			// obj, _ := storagecontroller.GetObjectFromS3(*val.Prefix)
-
-			var Folde storagecontroller.Medias
-			filename := RemoveSpecialCharacter(strings.Replace(*val.Prefix, parentfoldername, "", 1))
-			Folde.File = true
-			Folde.Path = filename
-			Folde.AliaseName = *val.Prefix
-			Folde.Name = filename
-			Folde.TotalSubMedia = folderCount + imageCount
-
-			// Folde.ModTime = *obj.LastModified
-			Folder = append(Folder, Folde)
-
-		}
-
-		for _, val := range resp1.Contents {
-
-			if strings.Contains(*val.Key, ".jpeg") || strings.Contains(*val.Key, ".png") || strings.Contains(*val.Key, ".jpg") || strings.Contains(*val.Key, ".svg") {
-
-				var file storagecontroller.Medias
-				filename := strings.Replace(*val.Key, parentfoldername, "", 1)
-				Lastupdate := *val.LastModified
-				file.File = false
-				file.Name = filename
-				file.AliaseName = *val.Key
-				file.Path = parentfoldername
-				file.ModTime = Lastupdate
-				File = append(File, file)
-
-			}
-
-		}
-
+	err := db.Table("tbl_categories").Where("tenant_id = ? AND parent_id = ?", tenantId, parentId).Pluck("id", &subChildCategoryIds).Error
+	if err != nil {
+		return err
 	}
 
-	return Folder, File
+	for _, subChildCategoryId := range subChildCategoryIds {
+		if subChildCategoryId == 0 {
+			continue
+		}
+
+		categoryIDString := fmt.Sprintf("%d,%d,%d", grandParentId, parentId, subChildCategoryId)
+
+		var existingRecord ChannelCategory
+		err = db.Table("tbl_channel_categories").Where("channel_id = ? AND category_id = ?", channelId, categoryIDString).First(&existingRecord).Error
+
+		if err == nil {
+			continue
+		} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return err
+		}
+
+		channelCategoryRecord := ChannelCategory{
+			ChannelID:  channelId,
+			CategoryID: categoryIDString,
+			CreatedAt:  userId,
+			TenantID:   tenantId,
+			CreatedOn:  currentTime,
+		}
+
+		err = db.Table("tbl_channel_categories").Create(&channelCategoryRecord).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

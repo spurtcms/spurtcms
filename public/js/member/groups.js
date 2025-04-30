@@ -63,7 +63,7 @@ $('#save').click(function () {
           id = $("#membergroup_id").val()
           console.log("check", id)
           $.ajax({
-               url: "/membersgroup/checknameinmembergrp",
+               url: "/usergroup/checknameinmembergrp",
                type: "POST",
                async: false,
                data: { "membergroup_name": value, "membergroup_id": id, csrf: $("input[name='csrf']").val() },
@@ -145,7 +145,7 @@ $(".editmembergroup").click(function () {
      $("#title").text(languagedata.Members_Group.updmemgrp)
      var data = $(this).attr("data-id");
      edit = $(this).closest("tr");     
-     $("#membergroup_form").attr("action", "/membersgroup/updategroup")
+     $("#membergroup_form").attr("action", "/usergroup/updategroup")
      var name = edit.find("td:eq(1)").text().trim()
      var desc = edit.find("td:eq(2)").text().trim()
 
@@ -174,7 +174,7 @@ $('#groupcalcelbtn').on('click', function () {
 
 $(document).on("click", "#add-btn , #clickadd", function () {
      $("#title").text(languagedata.Members_Group.addmembergrp)
-     $("#membergroup_form").attr("action", "/membersgroup/newgroup")
+     $("#membergroup_form").attr("action", "/usergroup/newgroup")
      $(".input-group").removeClass("input-group-error")
 
      $("#membergroup_name-error").hide();
@@ -197,13 +197,14 @@ $(document).on('click', '#delete-btn', function () {
 
      var del = $(this).closest("tr");
      $.ajax({
-          url: '/membersgroup/chkmemgrphavemember',
+          url: '/usergroup/chkmemgrphavemember',
           type: 'POST',
           async: false,
           data: { "id": MemberGroupId,csrf: $("input[name='csrf']").val()},
           dataType: 'json',
           success: function (data){
                if(data.value){
+                    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
                     $('#delid').addClass("hidden");
                     $('#dltCancelBtn').text(languagedata.ok);
                     $("#content").text(languagedata.Members_Group.membergrprestrictmsg)
@@ -225,10 +226,10 @@ $(document).on('click', '#delete-btn', function () {
 
      if (pageno == null) {
 
-          $('#delid').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId);
+          $('#delid').attr('href', '/usergroup/deletegroup?id=' + MemberGroupId);
 
      } else {
-          $('#delid').attr('href', '/membersgroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
+          $('#delid').attr('href', '/usergroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
 
      }
 
@@ -254,7 +255,7 @@ function MemberStatus(id) {
      var isactive = $('#cb' + id).val();
 
      $.ajax({
-          url: '/membersgroup/groupisactive',
+          url: '/usergroup/groupisactive',
           type: 'POST',
           async: false,
           data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -321,7 +322,7 @@ $('#update').click(function () {
           id = $("#membergroup_id").val()
           console.log("check", id)
           $.ajax({
-               url: "/membersgroup/checknameinmembergrp",
+               url: "/usergroup/checknameinmembergrp",
                type: "POST",
                async: false,
                data: { "membergroup_name": value, "membergroup_id": id, csrf: $("input[name='csrf']").val() },
@@ -410,7 +411,7 @@ $(document).on('keyup', '#searchmemgroup', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/membersgroup/";
+            window.location.href = "/usergroup/";
         }
     }
 
@@ -421,34 +422,43 @@ $(document).on('keyup', '#searchmemgroup', function (event) {
 $(document).on("click", ".Closebtn", function () {
      $(".search").val('')
      $(".Closebtn").addClass("hidden")
+     $(".SearchClosebtn").removeClass("hidden")
      $(".srchBtn-togg").removeClass("pointer-events-none")
-
    })
 
    $(document).on("click", ".searchClosebtn", function () {
      $(".search").val('')
-     window.location.href = "/membersgroup/"
+     window.location.href = "/usergroup/"
    })
 
    $(document).ready(function () {
 
      $('.search').on('input', function () {
-
          if ($(this).val().length >= 1) {
+             var value=$(".search").val();
              $(".Closebtn").removeClass("hidden")
              $(".srchBtn-togg").addClass("pointer-events-none")
-
-         }else{
-           $(".Closebtn").addClass("hidden")
-           $(".srchBtn-togg").removeClass("pointer-events-none")
-
+             $(".SearchClosebtn").addClass("hidden")
+         } else {
+             $(".SearchClosebtn").removeClass("hidden")
+             $(".Closebtn").addClass("hidden")
+             $(".srchBtn-togg").removeClass("pointer-events-none")
          }
      });
    })
-
-   $(document).on("click", ".hovericon", function () {
-     $(".search").val('')
-     $(".Closebtn").addClass("hidden")
+   
+   $(document).on("click", ".SearchClosebtn", function () {
+     $(".SearchClosebtn").addClass("hidden")
+     $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+     $(".transitionSearch").addClass("w-[32px]")
+   
+     
+   })
+   
+   $(document).on("click", ".searchopen", function () {
+   
+     $(".SearchClosebtn").removeClass("hidden")
+     
    })
 
 // search functions end //
@@ -470,7 +480,7 @@ $('form[class=filterform]>img').click(function () {
 
           var keyword = $(this).siblings('input[name=keyword]').val()
 
-          window.location.href = "/member/?keyword=" + keyword
+          window.location.href = "/user/?keyword=" + keyword
      }
 })
 
@@ -724,7 +734,7 @@ $(document).on('click', '#Check', function () {
 $(document).on('click','#seleccheckboxdelete', function () {
 
      $.ajax({
-          url: '/membersgroup/chkmemgrphavemember',
+          url: '/usergroup/chkmemgrphavemember',
           type: 'POST',
           async: false,
           data: { "membergrpids": JSON.stringify(selectedcheckboxarr),
@@ -745,6 +755,8 @@ $(document).on('click','#seleccheckboxdelete', function () {
 
                          $('#content').text(languagedata.Members_Group.membergrprestrictmsg)
                     }
+                    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
+
 
                      $('#delid').addClass("hidden");
                     $('#dltCancelBtn').text(languagedata.ok);
@@ -763,6 +775,8 @@ $(document).on('click','#seleccheckboxdelete', function () {
 
                          $('#content').text(languagedata.Members_Group.deletemembergroupscontent)
                     }
+                    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
+
                     $('#delid').removeClass("hidden")
                     $('#dltCancelBtn').text(languagedata.cancel);
 
@@ -792,6 +806,8 @@ $(document).on('click', '#unbulishslt', function () {
 
           $('#content').text(languagedata.Members_Group.areyousurewantto + $(this).text() + " " + languagedata.Members_Group.selectedmembergroup)
      }
+     $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
+
      $("#delid").text($(this).text());
      $('#delid').addClass('selectedunpublish')
 
@@ -814,7 +830,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
      $('.selected-numbers').hide()
      $.ajax({
-          url: '/membersgroup/deleteselectedmembergroup',
+          url: '/usergroup/deleteselectedmembergroup',
           type: 'post',
           dataType: 'json',
           async: false,
@@ -827,7 +843,6 @@ $(document).on('click', '.checkboxdelete', function () {
           },
           success: function (data) {
 
-               console.log(data, "result")
 
                if (data.value == true) {
 
@@ -877,7 +892,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
      $('.selected-numbers').hide()
      $.ajax({
-          url: '/membersgroup/multiselectmembergroup',
+          url: '/usergroup/multiselectmembergroup',
           type: 'post',
           dataType: 'json',
           async: false,
@@ -890,7 +905,6 @@ $(document).on('click', '.selectedunpublish', function () {
           },
           success: function (data) {
 
-               console.log(data, "result")
 
                if (data.value == true) {
 

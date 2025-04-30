@@ -24,7 +24,7 @@ type Azure struct {
 	ContainerName  string `json:"containername"`
 }
 
-func UpdateStorageType(stype TblStorageType, _ int) (TblStorageType, error) {
+func UpdateStorageType(stype TblStorageType, _ string) (TblStorageType, error) {
 
 	query := DB.Debug().Model(TblStorageType{}).Where("id=1")
 
@@ -56,7 +56,7 @@ func UpdateStorageType(stype TblStorageType, _ int) (TblStorageType, error) {
 	return stype, nil
 }
 
-func GetStorageValue(_ int) (tblstorgetype TblStorageType, err error) {
+func GetStorageValue(_ string) (tblstorgetype TblStorageType, err error) {
 
 	if err := DB.Model(TblStorageType{}).Where("id=1").First(&tblstorgetype).Error; err != nil {
 

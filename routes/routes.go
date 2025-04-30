@@ -51,6 +51,10 @@ func SetupRoutes() *gin.Engine {
 
 	r.POST("/uploadb64image", controllers.EditroImageSave)
 
+	r.POST("/uploadb64audio", controllers.EditroImageSave)
+
+	r.POST("/uploadform64image", controllers.EditroImageSave)
+
 	r.POST("/s3upload", controllers.UploadFilesToS3)
 
 	// r.POST("gqlSaveB64Local", controllers.SaveB64InLocal)
@@ -62,6 +66,10 @@ func SetupRoutes() *gin.Engine {
 	r.Use(limitRequestBodySize(20 << 20)) // 20 MB
 
 	r.GET("/image-resize", controllers.ResizeImage)
+
+	r.GET("/audio-resize", controllers.AudioResize)
+
+	r.GET("/sitemap.xml", controllers.Sitemap)
 
 	r.Use(middleware.CSRFAuth())
 
@@ -104,17 +112,18 @@ func SetupRoutes() *gin.Engine {
 	C := r.Group("")
 
 	/* Dashboard */
-
+	C.GET("/download-cms-open-source-code", controllers.Download)
+	
 	DH := C.Group("/dashboard")
 
 	DH.GET("/", controllers.DashboardView)
 
 	/*entries module*/
-	CE := C.Group("/channel")
+	CE := C.Group("/entries")
 
 	CE.GET("/entrylist/:id", controllers.Entries)
 
-	CE.GET("/newentry", controllers.CreateEntry)
+	CE.GET("/create/:id", controllers.CreateEntry)
 
 	CE.GET("/entrylist", controllers.AllEntries)
 
@@ -126,11 +135,11 @@ func SetupRoutes() *gin.Engine {
 
 	CE.POST("/publishentry/:id", controllers.PublishEntry)
 
-	CE.GET("/editentry/:channelname/:id", controllers.EditEntry)
+	CE.GET("/edit/:channelname/:id", controllers.EditEntry)
 
 	CE.GET("/editentrydetails/:channelname/:id", controllers.EditDetails)
 
-	CE.GET("/editsentry/:id", controllers.EditEntry)
+	CE.GET("/edits/:id", controllers.EditEntry)
 
 	CE.GET("/editentrydetail/:id", controllers.EditDetails)
 
@@ -176,6 +185,44 @@ func SetupRoutes() *gin.Engine {
 
 	CE.POST("/updatepermissionmembergroupid", controllers.UpdateAccPermissionMembergroupId)
 
+	// Form Builder
+
+	FB := C.Group("/cta")
+
+	FB.GET("/", controllers.FormbuilderList)
+
+	FB.GET("/form-detail/:id", controllers.Formdetail)
+
+	FB.GET("/create", controllers.AddForms)
+
+	FB.GET("/unpublished", controllers.FormbuilderList)
+
+	FB.GET("/draft", controllers.FormbuilderList)
+
+	FB.POST("/createforms", controllers.CreateForms)
+
+	FB.GET("/formstatus", controllers.Status)
+
+	FB.GET("/deleteform", controllers.DeleteForm)
+
+	FB.GET("/edit/:id", controllers.FormEdit)
+
+	FB.POST("/updateforms", controllers.FormUpdate)
+
+	FB.POST("/multiselectformdelete", controllers.MultiDelete)
+
+	FB.POST("/multiselectstatuschange", controllers.MultiSelectStatusChange)
+
+	FB.GET("/formduplicate/:id", controllers.FormDuplicate)
+
+	FB.POST("/isactive", controllers.FormIsactive)
+
+	FB.GET("/defaultctalist", controllers.DefaultCtaList)
+
+	FB.POST("/addtomycollection", controllers.AddCollection)
+
+	FB.GET("/removecta/:id", controllers.RemoveCta)
+
 	/*channels module*/
 	CH := C.Group("/channels")
 
@@ -183,11 +230,11 @@ func SetupRoutes() *gin.Engine {
 
 	CH.POST("/newcategory", controllers.CreateCategoryGroup)
 
-	CH.GET("/newchannel", controllers.CreateChannelPage)
+	CH.GET("/create", controllers.CreateChannelPage)
 
-	CH.POST("/newchannel", controllers.CreateChannel)
+	CH.POST("/create", controllers.CreateChannel)
 
-	CH.GET("/editchannel/:id", controllers.EditChannel)
+	CH.GET("/edit/:id", controllers.EditChannel)
 
 	CH.POST("/updatechannel", controllers.UpdateChannel)
 
@@ -202,6 +249,12 @@ func SetupRoutes() *gin.Engine {
 	CH.POST("/Updatechannelfields", controllers.Updatechannelfields)
 
 	CH.GET("/channeltype", controllers.ChannelType)
+
+	CH.GET("/defaultchannels", controllers.DefaultChannelList)
+
+	CH.GET("/addtomycollection/:id", controllers.AddChannelTomyCollection)
+
+	CH.POST("/checktitle", controllers.CheckChannelName)
 
 	/* Category Module*/
 	CS := r.Group("/categories")
@@ -262,13 +315,13 @@ func SetupRoutes() *gin.Engine {
 	CA.GET("/get-channels", controllers.GetChannelsAndItsEntries)
 
 	/*Member Module*/
-	M := C.Group("/member")
+	M := C.Group("/user")
 
 	M.GET("/", controllers.MemberList)
 
 	M.POST("/newmember", controllers.CreateMember)
 
-	M.GET("/updatemember/:id", controllers.EditMember)
+	M.GET("/edit/:id", controllers.EditMember)
 
 	M.POST("/updatemember", controllers.UpdateMember)
 
@@ -301,7 +354,7 @@ func SetupRoutes() *gin.Engine {
 	M.POST("/getmemberdetails", controllers.GetMemberProfileByMemberId)
 
 	/*Member group Module*/
-	MG := C.Group("/membersgroup")
+	MG := C.Group("/usergroup")
 
 	MG.GET("/", controllers.MemberGroupList)
 
@@ -467,20 +520,6 @@ func SetupRoutes() *gin.Engine {
 
 	DT.GET("/exportpage", controllers.ExportPage)
 
-	// GR.GET("/", controllers.GraphqlTokenApi)
-
-	// GR.GET("/create", controllers.CreateTokenGrapqhl)
-
-	// GR.POST("/create", controllers.CreateToken)
-
-	// GR.GET("/edit/:id", controllers.UpdateGraphqlApi)
-
-	// GR.POST("/update", controllers.UpdateGraphqlToken)
-
-	// GR.GET("/delete/:id", controllers.DeleteToken)
-
-	// GR.POST("/multideletegraphtoken", controllers.MultiDeleteGraphqlToken)
-
 	G := C.Group("/graphql")
 
 	G.GET("/", controllers.GraphqlTokenApi)
@@ -500,6 +539,32 @@ func SetupRoutes() *gin.Engine {
 	T := C.Group("/templates")
 
 	T.GET("/", controllers.ListTemplates)
+
+	B := C.Group("/blocks")
+
+	B.GET("", controllers.BlockList)
+
+	B.GET("/collection", controllers.CollectionList)
+
+	B.GET("/defaultlist", controllers.DefaultBlockList)
+
+	B.POST("/create", controllers.CreateBlock)
+
+	B.GET("/blockdetails", controllers.EditBlock)
+
+	B.POST("/update", controllers.UpdateBlock)
+
+	B.GET("/deleteblock", controllers.DeleteBlock)
+
+	B.POST("/checktitle", controllers.CheckTitleInBlock)
+
+	B.POST("/blockisactive", controllers.BlockIsActive)
+
+	B.POST("/createcollection", controllers.CreateCollection)
+
+	B.GET("/removecollection", controllers.CollectionRemove)
+
+	B.POST("/addtomycollection", controllers.Addtomycollection)
 
 	return r
 

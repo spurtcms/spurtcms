@@ -1,4 +1,42 @@
 
+
+//copy func//
+
+$(document).on("click",'#copybtn',function(){
+
+    var snap= $(this).parent('a').siblings('p').text()
+
+    navigator.clipboard.writeText(snap).then(function() {
+        $('#copiedbtn').removeClass("hidden")
+        $('#copybtn').addClass("hidden")
+
+        setTimeout(function() {
+            $('#copiedbtn').addClass("hidden");
+            $('#copybtn').removeClass("hidden"); 
+        }, 2000); 
+    }).catch(function(err) {
+        console.error("Could not copy text: ", err);
+        
+    });
+  })
+ 
+  $(document).on("click", '.copybtn', function() {
+    var snap = $(this).siblings('p').text();
+    var $this = $(this); 
+
+    navigator.clipboard.writeText(snap).then(function() {
+        $this.siblings('.copiedbtn').removeClass("hidden");
+        $this.addClass("hidden");
+
+        setTimeout(function() {
+            $this.siblings('.copiedbtn').addClass("hidden");
+            $this.removeClass("hidden");
+        }, 2000); 
+    }).catch(function(err) {
+        console.error("Could not copy text: ", err);
+    });
+});
+
 /*accordion*/
 $(document).ready(function () {
     $('.accord-bt').click(function () {
@@ -47,13 +85,13 @@ $(document).ready(function () {
 });
 
 /*search*/
-$(document).ready(function () {
-    $(".srchBtn-togg").click(function () {
-        $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
-        $(this).next('input').toggleClass('hidden ');
-        $(this).parent('div').toggleClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
-    });
-});
+// $(document).ready(function () {
+//     $(".srchBtn-togg").click(function () {
+//         $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
+//         $(this).next('input').toggleClass('hidden ');
+//         $(this).parent('div').toggleClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
+//     });
+// });
 
 /*create entires right side tab open*/
 
@@ -65,11 +103,13 @@ $(document).ready(function () {
 });
 
 /*block hide and show*/
-$(document).ready(function () {
-    $('.hd-crd-btn').click(function () {
-        $('#hd-crd, .hd-crd-btn').toggleClass('hide');
-    });
-});
+// $(document).ready(function () {
+//     $('.hd-crd-btn').click(function () {
+//         $('#hd-crd, .hd-crd-btn').toggleClass('hide');
+//     });
+// });
+
+
 
 /*07-10-24*/
 
@@ -88,8 +128,23 @@ document.addEventListener('DOMContentLoaded', function () {
 // hover-tab
 
 function hovertab(evt, tabid) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-pane");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("nav-link-tab");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    
+    document.getElementById(tabid).style.display = "block";
+    if (evt.currentTarget.classList.contains('active')) {
+        evt.currentTarget.classList.remove('active'); // Remove active class if it exists
+    } else  {
+        evt.currentTarget.classList.add('active'); // Add active class if it doesn't exist
+    }
 
-   
     if (tabid=="home2"){
        
         $(".homehead").addClass("before:w-[66%]");
@@ -112,21 +167,7 @@ function hovertab(evt, tabid) {
         $("#home-tab3").addClass("active")
 
     }
-    // var i, tabcontent, tablinks;
-    // tabcontent = document.getElementsByClassName("tab-pane");
-    // for (i = 0; i < tabcontent.length; i++) {
-    //     tabcontent[i].style.display = "none";
-    // }
-    // tablinks = document.getElementsByClassName("nav-link-tab");
-    // for (i = 0; i < tablinks.length; i++) {
-    //     tablinks[i].className = tablinks[i].className.replace(" active", "");
-    // }
-    // document.getElementById(tabid).style.display = "block";
-    // if (evt.currentTarget.classList.contains('active')) {
-    //     evt.currentTarget.classList.remove('active'); // Remove active class if it exists
-    // } else {
-    //     evt.currentTarget.classList.add('active'); // Add active class if it doesn't exist
-    // }
+
  }
 
 // 
@@ -158,6 +199,10 @@ const nextButton = document.getElementById('next');
 
 let currentIndex = 0;
 
+if (prevButton){
+
+
+
 prevButton.addEventListener('click', () => {
   if (currentIndex > 0) {
     currentIndex--;
@@ -166,6 +211,10 @@ prevButton.addEventListener('click', () => {
   }
   updateTabs();
 });
+}
+
+if (nextButton){
+
 
 nextButton.addEventListener('click', () => {
   if (currentIndex < tabPanes.length - 1) {
@@ -198,11 +247,11 @@ nextButton.addEventListener('click', () => {
   }
   updateTabs();
 });
-
+}
 function updateTabs() {
   tabPanes.forEach((tabPane, index) => {
     if (index === currentIndex) {
-        console.log("index",index);
+        
       tabPane.style.display = "block";
       if (index == 0){
         $("#home-tab").addClass("active")
@@ -247,4 +296,14 @@ $(document).on("mouseenter", '#home-tab2', function() {
     $(".homehead").removeClass("before:w-[66%]");
     $(".homehead").addClass("before:w-[33%]");
 });
-
+function TokenCopy(token) {
+    navigator.clipboard.writeText(token)
+}
+$(document).on('click', '#copybtn', function () {
+    
+    TokenCopy($('#copiedvalue').attr("data-copy").trim())
+    $(this).text("Copied")
+    setTimeout(() => {
+        $(this).html('<img src="/public/img/copy-green.svg">' + "Copied")
+    }, 1000)
+})

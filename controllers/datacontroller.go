@@ -164,7 +164,7 @@ func ExportPage(c *gin.Context) {
 			ErrorLog.Printf("getchannellist error: %s", err)
 		}
 
-		c.HTML(200, "data-export.html", gin.H{"Menu": menu,"Channellist":channelslist, "title": "Data", "csrf": csrf.GetToken(c), "translate": translate})
+		c.HTML(200, "data-export.html", gin.H{"Menu": menu, "Channellist": channelslist, "title": "Data", "csrf": csrf.GetToken(c), "translate": translate})
 	}
 
 }
@@ -1160,7 +1160,7 @@ func DownloaderrXlsx(c *gin.Context) {
 
 			}
 		}
-		c.Redirect(301, "/channel/entrylist/")
+		c.Redirect(301, "/entries/entrylist/")
 
 	}
 

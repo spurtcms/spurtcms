@@ -222,6 +222,8 @@ func UpdateGeneralSettings(c *gin.Context) {
 			if err != nil {
 				ErrorLog.Println(err)
 
+				c.SetCookie("Alert-msg", "ERRORAWScredentialsnotfound", 3600, "", "", false, false)
+
 				response["status"] = 0
 				c.AbortWithStatusJSON(500, response)
 

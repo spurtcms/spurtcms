@@ -3,11 +3,17 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"io"
+	"log"
+	"net/http"
+	"os"
 	"spurt-cms/models"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/spurtcms/auth"
 	chn "github.com/spurtcms/channels"
 	csrf "github.com/utrack/gin-csrf"
@@ -54,11 +60,32 @@ func ChannelList(c *gin.Context) {
 		c.Redirect(301, "/403-page")
 		return
 	}
+	channelBannervalue, _ := c.Cookie("channelbanner")
 
+	if channelBannervalue == "" {
+
+		channelBannervalue = "true"
+	}
 	ChannelConfig.DataAccess = c.GetInt("dataaccess")
 	ChannelConfig.Userid = c.GetInt("userid")
 
-	channelslist, channelcount, err := ChannelConfig.ListChannel(chn.Channels{Limit: Limit, Offset: offset, Keyword: keyword, IsActive: false, CreateOnly: true, TenantId: TenantId, Count: true})
+	routename := c.FullPath()
+
+	var htmlname string
+
+	if strings.Contains(routename, "defaultchannels") {
+
+		htmlname = "defaultchannel.html"
+
+		TenantId = ""
+
+	} else {
+
+		htmlname = "channels.html"
+
+	}
+
+	channelslist, channelcount, err := ChannelConfig.ListChannel(chn.Channels{Limit: Limit, Offset: offset, Keyword: keyword, IsActive: false, CreateOnly: true, TenantId: TenantId, Count: true, AuthorDetail: true})
 	var Finalchannelslist []chn.Tblchannel
 
 	for _, val := range channelslist {
@@ -71,6 +98,29 @@ func ChannelList(c *gin.Context) {
 			list.DateString = val.CreatedOn.In(TZONE).Format(Datelayout)
 		} else {
 			list.DateString = val.ModifiedOn.In(TZONE).Format(Datelayout)
+		}
+
+		var first = val.AuthorDetails.FirstName
+		var last = val.AuthorDetails.LastName
+		var firstn = strings.ToUpper(first[:1])
+		var lastn string
+		if val.LastName != "" {
+			lastn = strings.ToUpper(last[:1])
+		}
+		var Name = firstn + lastn
+		list.NameString = Name
+		list.Username = val.AuthorDetails.Username
+
+		// firstname= val.AuthorDetails.FirstName
+
+		imgcontain := "/image-resize?name="
+
+		if val.AuthorDetails.ProfileImagePath != "" {
+			userimg := val.AuthorDetails.ProfileImagePath
+			imgflag := strings.Contains(userimg, imgcontain)
+			if !imgflag {
+				list.ProfileImagePath = "/image-resize?name=" + val.AuthorDetails.ProfileImagePath
+			}
 		}
 		Finalchannelslist = append(Finalchannelslist, list)
 	}
@@ -89,14 +139,87 @@ func ChannelList(c *gin.Context) {
 	ModuleName, TabName, _ := ModuleRouteName(c)
 	CurrentPage = pageno
 
-	c.HTML(200, "channels.html", gin.H{"Pagination": PaginationData{
+	c.HTML(200, htmlname, gin.H{"Pagination": PaginationData{
 		NextPage:     pageno + 1,
 		PreviousPage: pageno - 1,
 		TotalPages:   PageCount,
 		TwoAfter:     pageno + 2,
 		TwoBelow:     pageno - 2,
 		ThreeAfter:   pageno + 3,
-	}, "Menu": menu, "csrf": csrf.GetToken(c), "channel": Finalchannelslist, "Searchtrue": filterflag, "count": channelcount, "HeadTitle": translate.Channell.Channels, "filter": keyword, "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "title": ModuleName, "Tabmenu": TabName, "linktitle": ModuleName, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Paginationstartcount": paginationstartcount, "Limit": limt})
+	}, "channelbanner": channelBannervalue, "Menu": menu, "csrf": csrf.GetToken(c), "channel": Finalchannelslist, "Searchtrue": filterflag, "count": channelcount, "HeadTitle": translate.Channell.Channels, "filter": keyword, "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "title": ModuleName, "Tabmenu": TabName, "linktitle": ModuleName, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Paginationstartcount": paginationstartcount, "Limit": limt})
+
+}
+func DefaultChannelList(c *gin.Context) {
+
+	var (
+		limt   int
+		offset int
+	)
+
+	// get data from html form data
+	limit := c.Query("limit")
+	keyword := strings.TrimSpace(c.DefaultQuery("keyword", ""))
+	pageno, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+
+	var filterflag bool
+	if keyword != "" {
+		filterflag = true
+	} else {
+		filterflag = false
+	}
+
+	if limit == "" {
+		limt = Limit
+	} else {
+		limt, _ = strconv.Atoi(limit)
+	}
+
+	if pageno != 0 {
+		offset = (pageno - 1) * limt
+	}
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("channellist authorization error: %s", perr)
+	}
+
+	if !permisison { //check permission if permission false redirect to 403 page
+		c.Redirect(301, "/403-page")
+		return
+	}
+	channelBannervalue, _ := c.Cookie("channelbanner")
+
+	if channelBannervalue == "" {
+
+		channelBannervalue = "true"
+	}
+	ChannelConfig.DataAccess = c.GetInt("dataaccess")
+	ChannelConfig.Userid = c.GetInt("userid")
+
+	endurl := os.Getenv("MASTER_CHANNELS_ENDPOINTURL")
+
+	responseData, err := ChannelConfig.DefaultChannelList(endurl, Limit, offset, chn.Filter{Keyword: keyword})
+
+	fmt.Println(responseData)
+	var paginationendcount = responseData.BlockCount + offset
+	paginationstartcount := offset + 1
+	Previous, Next, PageCount, Page := Pagination(pageno, int(responseData.BlockCount), limt)
+	menu := NewMenuController(c)
+	ModuleName, TabName, _ := ModuleRouteName(c)
+	translate, _ := TranslateHandler(c)
+
+	if err != nil {
+		fmt.Printf("blocklist getting storagetype error: %s", err)
+	}
+
+	c.HTML(200, "defaultchannel.html", gin.H{"Pagination": PaginationData{
+		NextPage:     pageno + 1,
+		PreviousPage: pageno - 1,
+		TotalPages:   PageCount,
+		TwoAfter:     pageno + 2,
+		TwoBelow:     pageno - 2,
+		ThreeAfter:   pageno + 3,
+	}, "channelbanner": channelBannervalue, "Menu": menu, "csrf": csrf.GetToken(c), "channel": template.HTML(responseData.Channelliststring), "Searchtrue": filterflag, "count": responseData.BlockCount, "HeadTitle": translate.Channell.Channels, "filter": keyword, "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "title": ModuleName, "Tabmenu": TabName, "linktitle": ModuleName, "Paginationendcount": paginationendcount, "Previous": Previous, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Page": Page, "Paginationstartcount": paginationstartcount, "Limit": limt})
 
 }
 
@@ -121,7 +244,13 @@ func CreateChannelPage(c *gin.Context) {
 		ModuleName, _, _ := ModuleRouteName(c)
 		translate, _ := TranslateHandler(c)
 
-		c.HTML(200, "addchannel.html", gin.H{"Menu": menu, "linktitle": "Create Channel", "title": ModuleName, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Save", "AllCategories": AllCategorieswithSubCategories, "Title": "Create Channel", "Back": "/settings/channels/channellist", "HeadTitle": "Create Channel", "translate": translate, "Channelsmenu": true, "Cmsmenu": true})
+		uuid := (uuid.New()).String()
+
+		arr := strings.Split(uuid, "-")
+
+		UniqueId := arr[len(arr)-1]
+
+		c.HTML(200, "addchannel.html", gin.H{"Menu": menu, "linktitle": "Create Channel", "title": ModuleName, "csrf": csrf.GetToken(c), "Fields": field, "Button": "Save", "AllCategories": AllCategorieswithSubCategories, "Title": "Create Channel", "Back": "/settings/channels/channellist", "HeadTitle": "Create Channel", "translate": translate, "Channelsmenu": true, "Cmsmenu": true, "UniqueId": UniqueId})
 
 		return
 
@@ -135,6 +264,7 @@ func CreateChannel(c *gin.Context) {
 
 	//get data from html
 	channelname := c.Request.PostFormValue("channelname")
+	channeluniqueid := c.Request.PostFormValue("channeluniqueid")
 	channeldesc := c.Request.PostFormValue("channeldesc")
 	sectionvalue := c.Request.FormValue("sections")
 	fval := c.Request.PostFormValue("fiedlvalue")
@@ -201,7 +331,7 @@ func CreateChannel(c *gin.Context) {
 			fieldval.SectionNewId = val.SectionNewId
 			fieldval.TimeFormat = val.TimeFormat
 			fieldval.Url = val.Url
-			fieldval.Mandatory=val.Mandatory
+			fieldval.Mandatory = val.Mandatory
 
 			var choptions []chn.OptionValues
 			for _, opt := range val.OptionValue {
@@ -226,7 +356,7 @@ func CreateChannel(c *gin.Context) {
 			fmt.Println(err)
 		}
 
-		newchannel, cerr := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: channelname, ChannelDescription: channeldesc, CategoryIds: categoryvalue, CreatedBy: userid}, moduleid, TenantId)
+		newchannel, cerr := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: channelname, ChannelUniqueId: channeluniqueid, ChannelDescription: channeldesc, CategoryIds: categoryvalue, CreatedBy: userid}, moduleid, TenantId)
 
 		if cerr != nil {
 			ErrorLog.Printf("channelcreate error: %s", cerr)
@@ -279,6 +409,8 @@ func EditChannel(c *gin.Context) {
 		}
 
 		AllCategorieswithSubCategories, _ := CategoryConfig.AllCategoriesWithSubList(TenantId)
+		fmt.Println("AllCategorieswithSubCategories:", AllCategorieswithSubCategories)
+		fmt.Println("FinalSelectedCategories:", FinalSelectedCategories)
 
 		menu := NewMenuController(c)
 		translate, _ := TranslateHandler(c)
@@ -349,6 +481,8 @@ func UpdateChannel(c *gin.Context) {
 	//get data from html form data
 	channelid, _ := strconv.Atoi(c.Request.PostFormValue("id"))
 	channelname := c.Request.PostFormValue("channelname")
+	channeluniqueid := c.Request.PostFormValue("channeluniqueid")
+	fmt.Println("channeluniqueid:", channeluniqueid)
 	channeldesc := c.Request.PostFormValue("channeldesc")
 	sectionvalue := c.Request.FormValue("sections")
 	deletesection := c.Request.FormValue("deletesections")
@@ -512,7 +646,7 @@ func UpdateChannel(c *gin.Context) {
 			DeleteOptionsvalues = append(DeleteOptionsvalues, DeleteOptionsvalue)
 
 		}
-		if cerr := ChannelConfig.EditChannel(channelname, channeldesc, userid, channelid, categoryvalue, TenantId); cerr != nil {
+		if cerr := ChannelConfig.EditChannel(channelname, channeluniqueid, channeldesc, userid, channelid, categoryvalue, TenantId); cerr != nil {
 			ErrorLog.Printf("edit channel error: %s", cerr)
 		}
 
@@ -563,7 +697,7 @@ func DeleteChannel(c *gin.Context) {
 
 		ModuleName := strconv.Itoa(channelid)
 
-		routename := "/channel/entrylist/" + ModuleName
+		routename := "/entries/entrylist/" + ModuleName
 
 		err := ChannelConfig.DeleteChannel(channelid, userid, routename, TenantId)
 
@@ -674,4 +808,453 @@ func ChannelType(c *gin.Context) {
 	c.SetCookie("get-toast", "ChannelType Changed Successfully", 3600, "", "", false, false)
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 	c.Redirect(301, "/channels/")
+}
+
+func AddChannelTomyCollection(c *gin.Context) {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Channels authorization error :%s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Channels authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	endurl := os.Getenv("MASTER_CHANNELS_ENDPOINTURL")
+
+	req, err := http.NewRequest("GET", endurl, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request: " + err.Error()})
+		return
+	}
+	query := req.URL.Query()
+
+	query.Add("id", strconv.Itoa(id))
+	req.URL.RawQuery = query.Encode()
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+
+	masterconnect := true
+
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Println("Error connecting to master server:", err)
+		masterconnect = false
+	} else {
+		defer resp.Body.Close()
+	}
+
+	type channeldetailsresponse struct {
+		Channeldetail models.TblMstrchannel `json:"channeldetail"`
+	}
+	var responseData channeldetailsresponse
+	var bodyBytes []byte
+	if masterconnect {
+		bodyBytes, err = io.ReadAll(resp.Body)
+		if err != nil {
+			masterconnect = false
+			fmt.Println("Error reading response body:", err)
+		} else {
+
+			err = json.Unmarshal(bodyBytes, &responseData)
+			if err != nil {
+				masterconnect = false
+				fmt.Println("Error decoding JSON:", err)
+			}
+		}
+	}
+
+	if !masterconnect {
+		responseData = channeldetailsresponse{
+			Channeldetail: models.TblMstrchannel{},
+		}
+	}
+	Entry := "Entries"
+	moduleid, err := models.Entryid(Entry, TenantId)
+	if err != nil {
+		fmt.Println(err)
+	}
+	var fieldValuesMap = map[string][]chn.Fiedlvalue{
+		"blog": {
+			{FieldName: "Excerpt", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Author Bio", FieldId: 2, IconPath: "/public/img/text.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 2},
+		},
+		"ecommerce": {
+			{FieldName: "Price", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Special Price", FieldId: 2, IconPath: "/public/img/text.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "SKU", FieldId: 3, IconPath: "/public/img/text.svg", OrderIndex: 3, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Quantity", FieldId: 4, IconPath: "/public/img/text.svg", OrderIndex: 4, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Stock", FieldId: 5, IconPath: "/public/img/select.svg", OrderIndex: 5, Mandatory: 0, MasterFieldId: 5},
+		},
+		"appointment": {
+			{FieldName: "Date", FieldId: 1, IconPath: "/public/img/date.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 6},
+			{FieldName: "Time", FieldId: 2, IconPath: "/public/img/date-time.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Contact Number", FieldId: 3, IconPath: "/public/img/text.svg", OrderIndex: 3, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Email", FieldId: 4, IconPath: "/public/img/text.svg", OrderIndex: 4, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "DOB/Age", FieldId: 5, IconPath: "/public/img/date-time.svg", OrderIndex: 5, Mandatory: 0, MasterFieldId: 2},
+		},
+		"event": {
+			{FieldName: "Event Title", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Event Date", FieldId: 2, IconPath: "/public/img/date.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 6},
+			{FieldName: "Event Time", FieldId: 3, IconPath: "/public/img/date-time.svg", OrderIndex: 3, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Event Type", FieldId: 4, IconPath: "/public/img/select.svg", OrderIndex: 4, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Event Description", FieldId: 5, IconPath: "/public/img/text-area.svg", OrderIndex: 5, Mandatory: 0, MasterFieldId: 8},
+		},
+		"jobs": {
+			{FieldName: "Key Responsibilities", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Job Type", FieldId: 2, IconPath: "/public/img/select.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Salary Range", FieldId: 3, IconPath: "/public/img/text.svg", OrderIndex: 3, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Experience", FieldId: 5, IconPath: "/public/img/text.svg", OrderIndex: 5, Mandatory: 0, MasterFieldId: 2},
+		},
+		"news": {
+			{FieldName: "Frequency", FieldId: 1, IconPath: "/public/img/select.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Anchor/Host Details", FieldId: 2, IconPath: "/public/img/text-area.svg", OrderIndex: 2, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Coverage Scope", FieldId: 3, IconPath: "/public/img/select.svg", OrderIndex: 3, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Special Features", FieldId: 4, IconPath: "/public/img/select.svg", OrderIndex: 4, Mandatory: 0, MasterFieldId: 5},
+			{FieldName: "Multimedia Support", FieldId: 5, IconPath: "/public/img/select.svg", OrderIndex: 5, Mandatory: 0, MasterFieldId: 2},
+		},
+		"knowledge-base": {
+			{FieldName: "Version", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+			{FieldName: "Summary", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 2},
+		},
+		"1:1call": {
+			{FieldName: "Duration In(mins)", FieldId: 1, IconPath: "/public/img/text.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 17},
+			{FieldName: "Short Description", FieldId: 5, IconPath: "/public/img/text-area.svg", OrderIndex: 1, Mandatory: 0, MasterFieldId: 8},
+		},
+	}
+
+	// Define a map to store option values for select fields
+	var fieldOptionsMap = map[string][]string{
+		"Stock":            {"In Stock", "Out of Stock"},
+		"Event Type":       {"Webinar", "Conference", "Workshop"},
+		"Job Type":         {"Full-Time", "Part-Time", "Contract", "Internship"},
+		"Frequency":        {"24/7", "Daily", "Weekly"},
+		"Coverage Scope":   {"Local", "International"},
+		"Special Features": {"Debates", "Expert Panels", "Investigative Reports"},
+	}
+
+	type field struct {
+		Fiedlvalue []Fiedlvalue `json:"fiedlvalue"`
+	}
+
+	// channeldetails, _, err := ChannelConfig.GetChannelsById(id, -1)
+	channeldetails := responseData.Channeldetail
+	channellist, _ := ChannelConfig.GetchannelByName(channeldetails.ChannelName, TenantId)
+	var CollectionCount int
+
+	if channeldetails.ChannelName == channellist.ChannelName {
+
+		CollectionCount = channellist.CollectionCount + 1
+		CollectionCountstring := strconv.Itoa(CollectionCount)
+		channeldetails.ChannelName = "Copy of " + channellist.ChannelName + " " + "(" + CollectionCountstring + ")"
+
+		Channels := chn.Tblchannel{
+			Id:              channellist.Id,
+			CollectionCount: CollectionCount,
+		}
+		err := ChannelConfig.ChannelType(Channels)
+
+		if err != nil {
+
+			ErrorLog.Printf("channel Type error: %s", err)
+		}
+	} else {
+
+		CollectionCount = 1
+
+	}
+
+	var FieldValuesss []chn.Fiedlvalue
+
+	// Check if the channel slug exists in the map
+	if fieldValues, ok := fieldValuesMap[channeldetails.SlugName]; ok {
+		for _, val := range fieldValues {
+			var fieldval chn.Fiedlvalue
+			fieldval.CharacterAllowed = 0 // Assign default if needed
+			fieldval.DateFormat = ""      // Assign default if needed
+			fieldval.FieldId = val.FieldId
+			fieldval.FieldName = val.FieldName
+			fieldval.IconPath = val.IconPath
+			fieldval.MasterFieldId = val.MasterFieldId // Assign default if needed
+			fieldval.NewFieldId = 0                    // Assign default if needed
+			fieldval.OrderIndex = val.OrderIndex
+			fieldval.SectionId = 0    // Assign default if needed
+			fieldval.SectionNewId = 0 // Assign default if needed
+			fieldval.TimeFormat = ""  // Assign default if needed
+			fieldval.Url = ""         // Assign default if needed
+			fieldval.Mandatory = val.Mandatory
+
+			// Assign option values if applicable
+			if options, ok := fieldOptionsMap[fieldval.FieldName]; ok {
+
+				fmt.Println("checkoptionssd")
+				var choptions []chn.OptionValues
+				for _, opt := range options {
+					var optss chn.OptionValues
+					optss.Value = opt
+					choptions = append(choptions, optss)
+				}
+				fieldval.OptionValue = choptions
+			}
+
+			FieldValuesss = append(FieldValuesss, fieldval)
+		}
+	}
+
+	categoryvalue, _ := getCategoryIds(channeldetails.SlugName, TenantId)
+
+	if permisison {
+
+		userid := c.GetInt("userid")
+
+		uuid := (uuid.New()).String()
+
+		arr := strings.Split(uuid, "-")
+
+		UniqueId := arr[len(arr)-1]
+
+		newchannel, _ := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: channeldetails.ChannelName, ChannelUniqueId: UniqueId, ChannelDescription: channeldetails.ChannelDescription, CategoryIds: categoryvalue, CreatedBy: userid, CollectionCount: CollectionCount, ImagePath: channeldetails.ImagePath}, moduleid, TenantId)
+
+		ferr := ChannelConfig.CreateAdditionalFields(chn.ChannelAddtionalField{FieldValues: FieldValuesss, CreatedBy: userid}, newchannel.Id, TenantId)
+
+		if ferr != nil {
+			ErrorLog.Printf("channelcreate additional field error: %s", ferr)
+		}
+
+		if err != nil {
+			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+			c.JSON(200, false)
+			return
+		}
+
+		c.SetCookie("get-toast", "Collection Added Successfully", 3600, "", "", false, false)
+		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
+		c.Redirect(301, "/channels")
+
+	}
+}
+
+func CloneChannels(c *gin.Context) {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.CRUD, TenantId)
+
+	if perr != nil {
+		ErrorLog.Printf("Channels authorization error :%s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Channels authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	Entry := "Entries"
+	moduleid, err := models.Entryid(Entry, TenantId)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, Fieldvalue, ferr := ChannelConfig.GetChannelsFieldsById(id, TenantId)
+
+	if ferr != nil {
+		ErrorLog.Printf("getfieldata error: %s", perr)
+	}
+
+	channeldetails, _, _ := ChannelConfig.GetChannelsById(id, TenantId)
+	fmt.Println("channeldetails:", channeldetails.CloneCount)
+	CloneCount := channeldetails.CloneCount + 1
+
+	Channels := chn.Tblchannel{
+		Id:         channeldetails.Id,
+		CloneCount: CloneCount,
+	}
+	cerr := ChannelConfig.ChannelType(Channels)
+
+	if cerr != nil {
+
+		ErrorLog.Printf("channel Type error: %s", err)
+	}
+
+	var Count string
+
+	if channeldetails.CloneCount != 0 {
+
+		Count = "(" + strconv.Itoa(channeldetails.CloneCount) + ")"
+
+	}
+
+	var FieldValuesss []chn.Fiedlvalue
+
+	// Check if the channel slug exists in the map
+
+	for _, val := range Fieldvalue {
+		var fieldval chn.Fiedlvalue
+		fieldval.CharacterAllowed = 0 // Assign default if needed
+		fieldval.DateFormat = ""      // Assign default if needed
+		fieldval.FieldId = val.FieldId
+		fieldval.FieldName = val.FieldName
+		fieldval.IconPath = val.IconPath
+		fieldval.MasterFieldId = val.MasterFieldId // Assign default if needed
+		fieldval.NewFieldId = 0                    // Assign default if needed
+		fieldval.OrderIndex = val.OrderIndex
+		fieldval.SectionId = 0    // Assign default if needed
+		fieldval.SectionNewId = 0 // Assign default if needed
+		fieldval.TimeFormat = ""  // Assign default if needed
+		fieldval.Url = ""         // Assign default if needed
+		fieldval.Mandatory = val.Mandatory
+
+		// Assign option values if applicable
+
+		fmt.Println("checkoptionssd")
+		var choptions []chn.OptionValues
+		for _, opt := range val.OptionValue {
+			var optss chn.OptionValues
+			optss.Value = opt.Value
+			choptions = append(choptions, optss)
+		}
+		fieldval.OptionValue = choptions
+
+		FieldValuesss = append(FieldValuesss, fieldval)
+	}
+
+	fmt.Println("FieldValuesss:", FieldValuesss)
+
+	_, FinalSelectedCategories, cerr := ChannelConfig.GetChannelsById(id, TenantId)
+
+	if cerr != nil {
+		ErrorLog.Printf("getchannel error: %s", perr)
+	}
+
+	var categoryvalue []string
+
+	for _, val := range FinalSelectedCategories {
+
+		var str string
+
+		for index, cat := range val.Categories {
+			if index+1 != len(val.Categories) {
+				str += strconv.Itoa(cat.Id) + ","
+			} else {
+				str += strconv.Itoa(cat.Id)
+			}
+		}
+
+		categoryvalue = append(categoryvalue, str)
+	}
+
+	if permisison {
+
+		userid := c.GetInt("userid")
+
+		uuid := (uuid.New()).String()
+
+		arr := strings.Split(uuid, "-")
+
+		UniqueId := arr[len(arr)-1]
+
+		newchannel, _ := ChannelConfig.CreateChannel(chn.ChannelCreate{ChannelName: "Clone of " + channeldetails.ChannelName + Count, ChannelUniqueId: UniqueId, ChannelDescription: channeldetails.ChannelDescription, CategoryIds: categoryvalue, CreatedBy: userid, ImagePath: channeldetails.ImagePath}, moduleid, TenantId)
+
+		ferr := ChannelConfig.CreateAdditionalFields(chn.ChannelAddtionalField{FieldValues: FieldValuesss, CreatedBy: userid}, newchannel.Id, TenantId)
+
+		if ferr != nil {
+			ErrorLog.Printf("channelcreate additional field error: %s", ferr)
+		}
+
+		if err != nil {
+			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
+			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
+			c.JSON(200, false)
+			return
+		}
+
+		c.SetCookie("get-toast", "Collection Cloned Successfully", 3600, "", "", false, false)
+		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
+		c.Redirect(301, "/channels")
+
+	}
+}
+
+func CheckChannelName(c *gin.Context) {
+
+	channelid, _ := strconv.Atoi(c.PostForm("channel_id"))
+
+	name := c.PostForm("channel_title")
+
+	permisison, perr := NewAuth.IsGranted("Channels", auth.Read, TenantId)
+	if perr != nil {
+		ErrorLog.Printf("Channels check name authorization error: %s", perr)
+	}
+
+	if !permisison {
+		ErrorLog.Printf("Channels authorization error: %s", perr)
+		c.Redirect(301, "/403-page")
+		return
+	}
+
+	if permisison {
+
+		flg, err := ChannelConfig.CheckNameInChannel(channelid, name, TenantId)
+
+		if err != nil {
+			ErrorLog.Printf("Channels checkname error: %s", err)
+			json.NewEncoder(c.Writer).Encode(false)
+			return
+		}
+
+		json.NewEncoder(c.Writer).Encode(flg)
+
+	}
+
+}
+
+// Get category during add to collection function//
+func getCategoryIds(channelSlug string, tenantId string) ([]string, error) {
+	var categoryId int
+	err := db.Table("tbl_categories").Where("tenant_id = ? AND category_slug = ?", tenantId, channelSlug).Pluck("id", &categoryId).Error
+	if err != nil {
+		return nil, err
+	}
+
+	if categoryId == 0 {
+		return []string{}, nil
+	}
+
+	var categoryValue []string
+
+	var childCategoryIds []int
+	err = db.Table("tbl_categories").Where("tenant_id = ? AND parent_id = ?", tenantId, categoryId).Pluck("id", &childCategoryIds).Error
+	if err != nil {
+		return nil, err
+	}
+
+	for _, childId := range childCategoryIds {
+		if childId != 0 {
+			categoryValue = append(categoryValue, fmt.Sprintf("%d,%d", categoryId, childId))
+
+			var subCategoryIds []int
+			err = db.Table("tbl_categories").Where("tenant_id = ? AND parent_id = ?", tenantId, childId).Pluck("id", &subCategoryIds).Error
+			if err != nil {
+				log.Println(err)
+			} else {
+				for _, subCategoryId := range subCategoryIds {
+					if subCategoryId != 0 {
+						categoryValue = append(categoryValue, fmt.Sprintf("%d,%d,%d", categoryId, childId, subCategoryId))
+					}
+				}
+			}
+		}
+	}
+
+	return categoryValue, nil
 }

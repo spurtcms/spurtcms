@@ -31,12 +31,12 @@ type TblGraphqlSettings struct {
 	Token       string
 	ExpiryTime  time.Time
 	IsDefault   int `gorm:"Default:NULl"`
-	TenantId    int
+	TenantId    string
 }
 
 type TblMstrTenant struct {
 	Id        int `gorm:"primaryKey;auto_increment"`
-	TenantId  int
+	TenantId  string
 	IsDeleted int `gorm:"DEFAULT:0"`
 	DeletedBy int `gorm:"DEFAULT:NULL"`
 	DeletedOn time.Time
@@ -48,8 +48,8 @@ type TblStorageTypes struct {
 	Aws          datatypes.JSONMap
 	Azure        datatypes.JSONMap
 	Drive        datatypes.JSONMap
-	SelectedType string 
-	TenantId     int   
+	SelectedType string
+	TenantId     int
 }
 
 func init() {
@@ -66,7 +66,7 @@ func (model ModelConfig) GetApiSettings(apikey string, graphqlsettings *TblGraph
 	return nil
 }
 
-func (model ModelConfig) GetTenantDetails(tenantId int, tenantDetails *TblMstrTenant) error {
+func (model ModelConfig) GetTenantDetails(tenantId string, tenantDetails *TblMstrTenant) error {
 
 	if err := model.DB.Debug().Model(TblMstrTenant{}).Where("is_deleted=0 and id=?", tenantId).First(&tenantDetails).Error; err != nil {
 

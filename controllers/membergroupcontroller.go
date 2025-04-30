@@ -145,20 +145,20 @@ func CreateNewMemberGroup(c *gin.Context) {
 
 		if strings.Contains(fmt.Sprint(err), "given some values is empty") {
 			c.SetCookie("Alert-msg", "Pleaseenterthemandatoryfields", 3600, "", "", false, false)
-			c.Redirect(301, "/membersgroup/")
+			c.Redirect(301, "/usergroup/")
 			return
 		}
 
 		if err != nil {
 			c.SetCookie("Alert-msg", ErrInternalServerError, 3600, "", "", false, false)
 			c.SetCookie("Alert-msg", "alert", 3600, "", "", false, false)
-			c.Redirect(301, "/membersgroup/")
+			c.Redirect(301, "/usergroup/")
 			return
 		}
 
 		c.SetCookie("get-toast", "Member Group Created Successfully", 3600, "", "", false, false)
 		c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
-		c.Redirect(301, "/membersgroup/")
+		c.Redirect(301, "/usergroup/")
 
 	} else {
 		c.Redirect(301, "/403-page")
@@ -174,9 +174,9 @@ func UpdateMemberGroup(c *gin.Context) {
 	id, _ := strconv.Atoi(c.PostForm("membergroup_id"))
 	pageno := c.PostForm("memgrbpageno")
 	if pageno != "" {
-		url = "/membersgroup?page=" + pageno
+		url = "/usergroup?page=" + pageno
 	} else {
-		url = "/membersgroup/"
+		url = "/usergroup/"
 	}
 	userid := c.GetInt("userid")
 
@@ -233,9 +233,9 @@ func DeleteMemberGroup(c *gin.Context) {
 	MemberGroupId, _ := strconv.Atoi(c.Query("id"))
 	pageno := c.Query("page")
 	if pageno != "" {
-		url = "/membersgroup?page=" + pageno
+		url = "/usergroup?page=" + pageno
 	} else {
-		url = "/membersgroup/"
+		url = "/usergroup/"
 	}
 	userid := c.GetInt("userid")
 
@@ -273,7 +273,7 @@ func DeleteMemberGroup(c *gin.Context) {
 	}
 
 	if currentPage > totalPages && totalPages > 0 {
-		url = "/membersgroup?page=" + strconv.Itoa(totalPages)
+		url = "/usergroup?page=" + strconv.Itoa(totalPages)
 	} 
 
 	fmt.Println("url",url)
@@ -378,9 +378,9 @@ func MultiSelectDeleteMembergroup(c *gin.Context) {
 	pageno := c.PostForm("page")
 
 	if pageno != "" {
-		url = "/membersgroup?page=" + pageno
+		url = "/usergroup?page=" + pageno
 	} else {
-		url = "/membersgroup/"
+		url = "/usergroup/"
 	}
 
 	userid := c.GetInt("userid")
@@ -420,7 +420,7 @@ func MultiSelectDeleteMembergroup(c *gin.Context) {
 	}
 
 	if currentPage > totalPages && totalPages > 0 {
-		url = "/membersgroup?page=" + strconv.Itoa(totalPages)
+		url = "/usergroup?page=" + strconv.Itoa(totalPages)
 	} 
 
 		c.JSON(200, gin.H{"value": true, "url": url})
@@ -462,9 +462,9 @@ func MultiSelectMembersgroupStatus(c *gin.Context) {
 
 	var url string
 	if pageno != "" {
-		url = "/membersgroup?page=" + pageno
+		url = "/usergroup?page=" + pageno
 	} else {
-		url = "/membersgroup/"
+		url = "/usergroup/"
 	}
 
 	userid := c.GetInt("userid")

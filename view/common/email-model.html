@@ -84,20 +84,37 @@
                     <input type="hidden" id="input-tempid" name="userid" value="">
                     <div class="p-6 flex flex-col space-y-[24px] max-sm:p-[16px]">
                         <div id="namegrb">
-                            <label
-                                class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Emailtemplate.EmailName}}</label>
+                            
+                                <label for="emailname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Emailtemplate.EmailName}}
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        Choose the LLM model for your agent</p>
+                                </div></label>
                             <input type="text" placeholder="Enter Name" name="tempname" id="emailname"
                                 class="field bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2]">
                         </div>
                         <div id="subgrb">
-                            <label
-                                class="text-[14px] font-[400] leading-[17.5px] text-[#262626] mb-[6px]">{{$Translate.Emailtemplate.EmailSub}}</label>
+                                <label for="emailsub" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Emailtemplate.EmailSub}}
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        Choose the LLM model for your agent</p>
+                                </div></label>
                             <input type="text" placeholder="Enter Subject" name="tempsub" id="emailsub"
                                 class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-[400] leading-[17.5px] tracking-[0.005em] border-none outline-none h-[42px] block w-full placeholder:text-[#B2B2B2] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
                         </div>
                         <div id="desgrb">
-                            <label
-                                class="text-[14px] font-normal leading-[17.5px] text-[#152027] mb-[6px]">{{$Translate.Emailtemplate.EmailDesc}}</label>
+                            
+                                <label for="emaildesc" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Emailtemplate.EmailDesc}}
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        Choose the LLM model for your agent</p>
+                                </div></label>
                             <textarea name="tempdesc" id="emaildesc"
                                 class="bg-[#F7F7F5] p-2 px-3 rounded-[4px] text-[14px] border border-[#EDEDED] font-normal leading-[17.5px] tracking-[0.005em]  outline-none h-[120px] block w-full resize-none scrollbar-none [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
                                 placeholder="Enter mail subject "></textarea>
@@ -105,8 +122,13 @@
                         <div class="input-group email-con-module" id="contgrb">
                             <input type="hidden" id="ckeditor-data" name="temcont" value="">
                             <div class="channel-editor">
-                                <label
-                                    class="text-[14px] font-normal leading-[17.5px] text-[#152027] mb-[6px]">{{$Translate.Emailtemplate.EmailCont}}</label>
+                                    <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]">{{$Translate.Emailtemplate.EmailCont}}
+                                        <div class="cursor-pointer group">
+                                        <img src="/public/img/inputdesc.svg" alt="">
+                                        <p
+                                            class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            Choose the LLM model for your agent</p>
+                                    </div></label>
                                 <div name="temcont" id="text"
                                     class="bg-[#F7F7F5] p-2 px-3 rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em]  outline-none h-[240px] block w-full resize-none scrollbar-none [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"></div>
                             </div>

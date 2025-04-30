@@ -148,6 +148,13 @@ type Translation struct {
 	Dataconnect            string `json:"dataconnect"`
 	ChooseFormats          string `json:"chooseformats"`
 	Forms                  string `json:"forms"`
+	Aiwriting              string `json:"aiwriting"`
+	Formbuilder            string `json:"formbuilder"`
+	Notification           string `json:"notification"`
+	Contentwriting         string `json:"contentwriting"`
+	Getsupport             string `json:"getsupport"`
+	Explore                string `json:"explore"`
+	Aiwritingheading       string `json:"aiwritingheading"`
 
 	Permission struct {
 		Searchroles       string `json:"searchroles"`
@@ -248,6 +255,13 @@ type Translation struct {
 		Smtp                  string `json:"smtp"`
 		Environment           string `json:"environment"`
 		Imagetypeerror        string `json:"imagetypeerror"`
+
+		Firstnamelable string `json:"firstnamelable"`
+		Lastlamelable  string `json:"lastlamelable"`
+		Usernamelable  string `json:"usernamelable"`
+		Rolelable      string `json:"rolelable"`
+		Emaillable     string `json:"emaillable"`
+		Mobilelable    string `json:"mobilelable"`
 	} `json:"Setting"`
 
 	Emailtemplate struct {
@@ -273,162 +287,173 @@ type Translation struct {
 	} `json:"Emailtemplate"`
 
 	Channell struct {
-		Newchannel             string `json:"newchannel"`
-		Searchchannelname      string `json:"searchchannelname"`
-		Channelconfiguration   string `json:"channelconfiguration"`
-		Channelname            string `json:"channelname"`
-		Fields                 string `json:"fields"`
-		Properties             string `json:"properties"`
-		Label                  string `json:"label"`
-		Text                   string `json:"text"`
-		Datetime               string `json:"datetime"`
-		Link                   string `json:"link"`
-		Select                 string `json:"select"`
-		Date                   string `json:"date"`
-		Textarea               string `json:"textarea"`
-		Textbox                string `json:"textbox"`
-		Checkbox               string `json:"checkbox"`
-		Texteditor             string `json:"texteditor"`
-		Radiobutton            string `json:"radiobutton"`
-		Section                string `json:"section"`
-		Break                  string `json:"break"`
-		Sectionbreak           string `json:"sectionbreak"`
-		Displaytext            string `json:"displaytext"`
-		Mandatory              string `json:"mandatory"`
-		Initialvalue           string `json:"initialvalue"`
-		Placeholder            string `json:"placeholder"`
-		Customisable           string `json:"customisable"`
-		Options                string `json:"options"`
-		Dateformat             string `json:"dateformat"`
-		Timeformat             string `json:"timeformat"`
-		Small                  string `json:"small"`
-		Long                   string `json:"long"`
-		Externallink           string `json:"externallink"`
-		Slug                   string `json:"slug"`
-		Multitext              string `json:"multitext"`
-		Multiselectoption      string `json:"multiselectoption"`
-		Headertext             string `json:"headertext"`
-		Withformatting         string `json:"withformatting"`
-		Hours                  string `json:"hours"`
-		Visibility             string `json:"visibility"`
-		Optionslist            string `json:"optionslist"`
-		Grouping               string `json:"grouping"`
-		Searchchanentryname    string `json:"searchchanentryname"`
-		Id                     string `json:"id"`
-		Filter                 string `json:"filter"`
-		Filterby               string `json:"filterby"`
-		Daterange              string `json:"daterange"`
-		Fromdate               string `json:"fromdate"`
-		Todate                 string `json:"todate"`
-		Applyfilters           string `json:"applyfilters"`
-		Clearfilter            string `json:"clearfilters"`
-		Newentry               string `json:"newentry"`
-		Createddatetime        string `json:"createddatetime"`
-		Time                   string `json:"time"`
-		Title                  string `json:"title"`
-		Channelselect          string `json:"channelselect"`
-		Publish                string `json:"publish"`
-		Unpublish              string `json:"unpublish"`
-		Published              string `json:"published"`
-		Unpublished            string `json:"unpublished"`
-		Copy                   string `json:"copy"`
-		Status                 string `json:"status"`
-		Draft                  string `json:"draft"`
-		Contentc               string `json:"contentc"`
-		Categoryc              string `json:"categoryc"`
-		Additionalfields       string `json:"additionalfields"`
-		Clear                  string `json:"clear"`
-		Relatedarticles        string `json:"relatedarticles"`
-		Choosearticlefromlist  string `json:"choosearticlefromlist"`
-		Arthur                 string `json:"arthur"`
-		Article                string `json:"article"`
-		Entryinformation       string `json:"entryinformation"`
-		Createddate            string `json:"createddate"`
-		Entrypublished         string `json:"entrypublished"`
-		Entrynotpublished      string `json:"entrynotpublished"`
-		Selectedrelatedarticle string `json:"selectedrelatedarticle"`
-		Content                string `json:"content"`
-		Category               string `json:"category"`
-		Required               string `json:"required"`
-		Metatitle              string `json:"metatitle"`
-		Metadescription        string `json:"metadescription"`
-		Metakeyword            string `json:"metakeyword"`
-		Metaslug               string `json:"metaslug"`
-		Titletooltip           string `json:"titletooltip"`
-		Desctooltip            string `json:"desctooltip"`
-		Keywordtooltip         string `json:"keywordtooltip"`
-		Slugtooltip            string `json:"slugtooltip"`
-		Keywords               string `json:"keywords"`
-		Selectedcategories     string `json:"selectedcategories"`
-		Availablecategories    string `json:"availablecategories"`
-		Lastupdate             string `json:"lastupdate"`
-		Channel                string `json:"channel"`
-		Entrylist              string `json:"entrylist"`
-		Entry                  string `json:"entry"`
-		Channels               string `json:"channels"`
-		Createentry            string `json:"createentry"`
-		Blogavailable          string `json:"blogavailable"`
-		Addcategories          string `json:"addcategories"`
-		Additionaldata         string `json:"additionaldata"`
-		Seo                    string `json:"seo"`
-		Saveasdraft            string `json:"savedraft"`
-		Generateai             string `json:"generateai"`
-		Uploadordragging       string `json:"choosedirectory"`
-		Pltypehere             string `json:"pltypehere"`
-		Draftsave              string `json:"draftsave"`
-		Grade                  string `json:"grade"`
-		Searchentries          string `json:"searchentries"`
-		Entriestitle           string `json:"entriestitle"`
-		Entriesavailable       string `json:"entriesavailable"`
-		Createchannel          string `json:"createchannel"`
-		Pltitle                string `json:"pltitle"`
-		Pldesc                 string `json:"pldesc"`
-		Plkeyword              string `json:"plkeyword"`
-		Plslug                 string `json:"plslug"`
-		Plsearchcategory       string `json:"plsearchcategory"`
-		Categoriesavailable    string `json:"categoryavailable"`
-		Titlevaild             string `json:"titleerrvaild"`
-		Descerrvaild           string `json:"descerrvaild"`
-		Aititle                string `json:"aititle"`
-		Articletitle           string `json:"articeltitle"`
-		Heading                string `json:"heading"`
-		Generate               string `json:"generate"`
-		Articlestitle          string `json:"articlestitle"`
-		Articlename            string `json:"articlename"`
-		Plarticle              string `json:"plarticle"`
-		Selectlanguage         string `json:"selectlanguage"`
-		Noofheading            string `json:"noofheading"`
-		Customheading          string `json:"customheading"`
-		Plstypehere            string `json:"pltexthere"`
-		Option                 string `json:"option"`
-		Url                    string `json:"url"`
-		Plurl                  string `json:"plurl"`
-		Addfield               string `json:"addfield"`
-		Newsection             string `json:"newsection"`
-		Challcategory          string `json:"challcategory"`
-		Challdesc              string `json:"challdesc"`
-		Pladdoption            string `json:"pladdoption"`
-		Characterallow         string `json:"characterallow"`
-		Fieldname              string `json:"fieldname"`
-		Plcharallow            string `json:"plcharallow"`
-		Channelfield           string `json:"channelproperty"`
-		Chosefld               string `json:"chosefld"`
-		Channeldesc            string `json:"channeldesc"`
-		Plchlname              string `json:"plchlname"`
-		Createdesc             string `json:"createchldesc"`
-		Createchl              string `json:"createchl"`
-		Dateerr                string `json:"dateerr"`
-		Timeerr                string `json:"timeerr"`
-		Optionerr              string `json:"optionerr"`
-		Optionserr             string `json:"optionserr"`
-		Fielderr               string `json:"fielderr"`
-		Urlerr                 string `json:"urlerr"`
-		Selectchannel          string `json:"selectchannel"`
-		Configtooltip          string `json:"configtooltip"`
-		Editchannel            string `json:"editchannel"`
-		Backtoprevious         string `json:"backtoprevious"`
-		Descriptionentry       string `json:"descriptionentry"`
-		MyChannels             string `json:"mychannels"`
+		Headingcontent           string `json:"headingcontent"`
+		Entryheadingcont         string `json:"entryheadingcont"`
+		Newchannel               string `json:"newchannel"`
+		Searchchannelname        string `json:"searchchannelname"`
+		Channelconfiguration     string `json:"channelconfiguration"`
+		Channelname              string `json:"channelname"`
+		Fields                   string `json:"fields"`
+		Properties               string `json:"properties"`
+		Label                    string `json:"label"`
+		Text                     string `json:"text"`
+		Datetime                 string `json:"datetime"`
+		Link                     string `json:"link"`
+		Select                   string `json:"select"`
+		Date                     string `json:"date"`
+		Textarea                 string `json:"textarea"`
+		Textbox                  string `json:"textbox"`
+		Checkbox                 string `json:"checkbox"`
+		Texteditor               string `json:"texteditor"`
+		Radiobutton              string `json:"radiobutton"`
+		Section                  string `json:"section"`
+		Break                    string `json:"break"`
+		Sectionbreak             string `json:"sectionbreak"`
+		Displaytext              string `json:"displaytext"`
+		Mandatory                string `json:"mandatory"`
+		Initialvalue             string `json:"initialvalue"`
+		Placeholder              string `json:"placeholder"`
+		Customisable             string `json:"customisable"`
+		Options                  string `json:"options"`
+		Dateformat               string `json:"dateformat"`
+		Timeformat               string `json:"timeformat"`
+		Small                    string `json:"small"`
+		Long                     string `json:"long"`
+		Externallink             string `json:"externallink"`
+		Slug                     string `json:"slug"`
+		Multitext                string `json:"multitext"`
+		Multiselectoption        string `json:"multiselectoption"`
+		Headertext               string `json:"headertext"`
+		Withformatting           string `json:"withformatting"`
+		Hours                    string `json:"hours"`
+		Visibility               string `json:"visibility"`
+		Optionslist              string `json:"optionslist"`
+		Grouping                 string `json:"grouping"`
+		Searchchanentryname      string `json:"searchchanentryname"`
+		Id                       string `json:"id"`
+		Filter                   string `json:"filter"`
+		Filterby                 string `json:"filterby"`
+		Daterange                string `json:"daterange"`
+		Fromdate                 string `json:"fromdate"`
+		Todate                   string `json:"todate"`
+		Applyfilters             string `json:"applyfilters"`
+		Clearfilter              string `json:"clearfilters"`
+		Newentry                 string `json:"newentry"`
+		Createddatetime          string `json:"createddatetime"`
+		Time                     string `json:"time"`
+		Title                    string `json:"title"`
+		Channelselect            string `json:"channelselect"`
+		Publish                  string `json:"publish"`
+		Unpublish                string `json:"unpublish"`
+		Published                string `json:"published"`
+		Unpublished              string `json:"unpublished"`
+		Copy                     string `json:"copy"`
+		Status                   string `json:"status"`
+		Draft                    string `json:"draft"`
+		Contentc                 string `json:"contentc"`
+		Categoryc                string `json:"categoryc"`
+		Additionalfields         string `json:"additionalfields"`
+		Clear                    string `json:"clear"`
+		Relatedarticles          string `json:"relatedarticles"`
+		Choosearticlefromlist    string `json:"choosearticlefromlist"`
+		Arthur                   string `json:"arthur"`
+		Article                  string `json:"article"`
+		Entryinformation         string `json:"entryinformation"`
+		Createddate              string `json:"createddate"`
+		Entrypublished           string `json:"entrypublished"`
+		Entrynotpublished        string `json:"entrynotpublished"`
+		Selectedrelatedarticle   string `json:"selectedrelatedarticle"`
+		Content                  string `json:"content"`
+		Category                 string `json:"category"`
+		Required                 string `json:"required"`
+		Metatitle                string `json:"metatitle"`
+		Metadescription          string `json:"metadescription"`
+		Metakeyword              string `json:"metakeyword"`
+		Metaslug                 string `json:"metaslug"`
+		Titletooltip             string `json:"titletooltip"`
+		Desctooltip              string `json:"desctooltip"`
+		Keywordtooltip           string `json:"keywordtooltip"`
+		Slugtooltip              string `json:"slugtooltip"`
+		Keywords                 string `json:"keywords"`
+		Selectedcategories       string `json:"selectedcategories"`
+		Availablecategories      string `json:"availablecategories"`
+		Lastupdate               string `json:"lastupdate"`
+		Channel                  string `json:"channel"`
+		Entrylist                string `json:"entrylist"`
+		Entry                    string `json:"entry"`
+		Channels                 string `json:"channels"`
+		Createentry              string `json:"createentry"`
+		Blogavailable            string `json:"blogavailable"`
+		Addcategories            string `json:"addcategories"`
+		Additionaldata           string `json:"additionaldata"`
+		Seo                      string `json:"seo"`
+		Saveasdraft              string `json:"savedraft"`
+		Generateai               string `json:"generateai"`
+		Uploadordragging         string `json:"choosedirectory"`
+		Pltypehere               string `json:"pltypehere"`
+		Draftsave                string `json:"draftsave"`
+		Grade                    string `json:"grade"`
+		Searchentries            string `json:"searchentries"`
+		Entriestitle             string `json:"entriestitle"`
+		Entriesavailable         string `json:"entriesavailable"`
+		Createchannel            string `json:"createchannel"`
+		Pltitle                  string `json:"pltitle"`
+		Pldesc                   string `json:"pldesc"`
+		Plkeyword                string `json:"plkeyword"`
+		Plslug                   string `json:"plslug"`
+		Plsearchcategory         string `json:"plsearchcategory"`
+		Categoriesavailable      string `json:"categoryavailable"`
+		Titlevaild               string `json:"titleerrvaild"`
+		Descerrvaild             string `json:"descerrvaild"`
+		Aititle                  string `json:"aititle"`
+		Articletitle             string `json:"articeltitle"`
+		Heading                  string `json:"heading"`
+		Generate                 string `json:"generate"`
+		Articlestitle            string `json:"articlestitle"`
+		Articlename              string `json:"articlename"`
+		Plarticle                string `json:"plarticle"`
+		Selectlanguage           string `json:"selectlanguage"`
+		Noofheading              string `json:"noofheading"`
+		Customheading            string `json:"customheading"`
+		Plstypehere              string `json:"pltexthere"`
+		Option                   string `json:"option"`
+		Url                      string `json:"url"`
+		Plurl                    string `json:"plurl"`
+		Addfield                 string `json:"addfield"`
+		Newsection               string `json:"newsection"`
+		Challcategory            string `json:"challcategory"`
+		Challdesc                string `json:"challdesc"`
+		Pladdoption              string `json:"pladdoption"`
+		Characterallow           string `json:"characterallow"`
+		Fieldname                string `json:"fieldname"`
+		Plcharallow              string `json:"plcharallow"`
+		Channelfield             string `json:"channelproperty"`
+		Chosefld                 string `json:"chosefld"`
+		Channeldesc              string `json:"channeldesc"`
+		Plchlname                string `json:"plchlname"`
+		Createdesc               string `json:"createchldesc"`
+		Createchl                string `json:"createchl"`
+		Dateerr                  string `json:"dateerr"`
+		Timeerr                  string `json:"timeerr"`
+		Optionerr                string `json:"optionerr"`
+		Optionserr               string `json:"optionserr"`
+		Fielderr                 string `json:"fielderr"`
+		Urlerr                   string `json:"urlerr"`
+		Selectchannel            string `json:"selectchannel"`
+		Configtooltip            string `json:"configtooltip"`
+		Editchannel              string `json:"editchannel"`
+		Backtoprevious           string `json:"backtoprevious"`
+		Descriptionentry         string `json:"descriptionentry"`
+		Mychannel                string `json:"mychannel"`
+		MyChannels               string `json:"mychannels"`
+		Mycollectiondescst       string `json:"mycollectiondescst"`
+		Mycollectiondescentry    string `json:"mycollectiondescentry"`
+		Mycollectiondescmid      string `json:"mycollectiondescmid"`
+		Mycollectiondescchannel  string `json:"mycollectiondescchannel"`
+		Mycollectiondescmidnext  string `json:"mycollectiondescmidnext"`
+		Mycollectiondescategorie string `json:"mycollectiondescategorie"`
+		Mycollectiondescend      string `json:"mycollectiondescend"`
+
 		ChannelNamedesc        string `json:"channelnamedesc"`
 		ChannelFieldsdesc      string `json:"channelfieldsdesc"`
 		ChannelCatdesc         string `json:"channelcatdesc"`
@@ -438,6 +463,20 @@ type Translation struct {
 		AddFields              string `json:"addfields"`
 		ThisContainsEntries    string `json:"thischannelcontainsentries"`
 		Duplicate              string `json:"duplicate"`
+		Nochannelsyet          string `json:"nochannelsyet"`
+		Createfirstchannels    string `json:"createfirstchannels"`
+		Nochannels             string `json:"nochannels"`
+		Noentrysyet            string `json:"noentrysyet"`
+		Noentrys               string `json:"noentrys"`
+		Createfirstentry       string `json:"createfirstentry"`
+		Nodraftsyet            string `json:"nodraftsyet"`
+		Nodraft                string `json:"nodraft"`
+		Createfirstdraft       string `json:"createfirstdraft"`
+		Nounpublished          string `json:"nounpublished"`
+		Createfirstunpublished string `json:"createfirstunpublished"`
+		Channelhead            string `json:"channelhead"`
+		Channelnamelable       string `json:"channelnamelable"`
+		Descriptionlable       string `json:"descriptionlable"`
 	} `json:"Channell"`
 
 	Userss struct {
@@ -501,6 +540,9 @@ type Translation struct {
 	} `json:"Security"`
 
 	Memberss struct {
+		Membershipheading  string `json:"membershipheading"`
+		Usersheading       string `json:"usersheading"`
+		Settings           string `json:"settings"`
 		Alreadyclaimed     string `json:"alreadyclaimed"`
 		Activeclaim        string `json:"activeclaim"`
 		Addmember          string `json:"addmember"`
@@ -558,32 +600,63 @@ type Translation struct {
 		Metatagdescription string `json:"metatagdescription"`
 		Companylocation    string `json:"companylocation"`
 		Enteryour          string `json:"enteryour"`
-		Membresupdate   string `json:"membresupdate"`
-		Deactive        string `json:"deactive"`
-		Membersavilable string `json:"membersavilable"`
-		Memberavilable  string `json:"memberavilable"`
+		Membresupdate      string `json:"membresupdate"`
+		Deactive           string `json:"deactive"`
+		Membersavilable    string `json:"membersavilable"`
+		Memberavilable     string `json:"memberavilable"`
+		Nomemberyet        string `json:"nomemberyet"`
+		Nomember           string `json:"nomember"`
+		Createfirstmember  string `json:"createfirstmember"`
+
+		Firstnamelable   string `json:"firstnamelable"`
+		Lastmamelable    string `json:"lastmamelable"`
+		Emaillable       string `json:"emaillable"`
+		Mobilelable      string `json:"mobilelable"`
+		Usernamelable    string `json:"usernamelable"`
+		Passwordlable    string `json:"passwordlable"`
+		Membergrouplable string `json:"membergrouplable"`
+
+		Companynamelable     string `json:"companynamelable"`
+		Profilenamelable     string `json:"profilenamelable"`
+		Companysluglable     string `json:"companysluglable"`
+		Companylocationlable string `json:"companylocationlable"`
+		Aboutlable           string `json:"aboutlable"`
+		LinkedInlable        string `json:"linkedInlable"`
+		Twitterlable         string `json:"twitterlable"`
+		Websitelable         string `json:"websitelable"`
+		Metatagtitlelable    string `json:"metatagtitlelable"`
+		Metatagkeywordlable  string `json:"metatagkeywordlable"`
+		Metadescriptionlable string `json:"metadescriptionlable"`
 	} `json:"Memberss"`
 
 	MembersGroup struct {
-		Searchgrpname        string `json:"searchgrpname"`
-		Membergrpname        string `json:"membergrpname"`
-		Membergrpdesc        string `json:"membergrpdesc"`
-		Membergroup          string `json:"membergroup"`
-		Updategroup          string `json:"updmemgrp"`
-		Addmembergrp         string `json:"addmembergrp"`
-		Plmembergrpname      string `json:"plmembergrpname"`
-		Plmembergrpdesc      string `json:"plmembergrpdesc"`
-		MemberGroupNameValid string `json:"memgrpnamevalid"`
-		Lastupdatedon        string `json:"lastupdatedon"`
-		Status               string `json:"status"`
-		Group                string `json:"group"`
-		Groups               string `json:"groups"`
-		Deletemembergroup    string `json:"delmembergrp"`
-		Membersgroupavilable string `json:"membersgroupavilable"`
-		Membergroupavilable  string `json:"membergroupavilable"`
+		Membersgroup           string `json:"membersgroup"`
+		Searchgrpname          string `json:"searchgrpname"`
+		Membergrpname          string `json:"membergrpname"`
+		Membergrpdesc          string `json:"membergrpdesc"`
+		Membergroup            string `json:"membergroup"`
+		Updategroup            string `json:"updmemgrp"`
+		Addmembergrp           string `json:"addmembergrp"`
+		Plmembergrpname        string `json:"plmembergrpname"`
+		Plmembergrpdesc        string `json:"plmembergrpdesc"`
+		MemberGroupNameValid   string `json:"memgrpnamevalid"`
+		Lastupdatedon          string `json:"lastupdatedon"`
+		Status                 string `json:"status"`
+		Group                  string `json:"group"`
+		Groups                 string `json:"groups"`
+		Deletemembergroup      string `json:"delmembergrp"`
+		Membersgroupavilable   string `json:"membersgroupavilable"`
+		Membergroupavilable    string `json:"membergroupavilable"`
+		Nomembergroupyet       string `json:"nomembergroupyet"`
+		Nomembergroup          string `json:"nomembergroup"`
+		Createfirstmembergroup string `json:"createfirstmembergroup"`
+
+		Membergroupnamelable        string `json:"membergroupnamelable"`
+		Membergroupdescriptionlable string `json:"membergroupdescriptionlable"`
 	} `json:"Members_Group"`
 
 	Categoryy struct {
+		Headingcontent           string `json:"headingcont"`
 		Newgroup                 string `json:"newgroup"`
 		Searchcategoryname       string `json:"searchcategoryname"`
 		Addnewcategorygrp        string `json:"addnewcategorygrp"`
@@ -604,6 +677,19 @@ type Translation struct {
 		Categories               string `json:"categories"`
 		Availablecategory        string `json:"availablecategory"`
 		Selcatvailderr           string `json:"selcaterr"`
+
+		Nocategoryyet                 string `json:"nocategoryyet"`
+		Nocategory                    string `json:"nocategory"`
+		Createfirstcategory           string `json:"createfirstcategory"`
+		Nocategorygroupyet            string `json:"nocategorygroupyet"`
+		Nocategorygroup               string `json:"nocategorygroup"`
+		Createfirstcategorygroup      string `json:"createfirstcategorygroup"`
+		Categorynamelable             string `json:"categorynamelable"`
+		Descriptionlable              string `json:"descriptionlable"`
+		Availablecategorylable        string `json:"availablecategorylable"`
+		Uploadimagelable              string `json:"uploadimagelable"`
+		Categorygrouplable            string `json:"categorygrouplable"`
+		Categorygroupdescriptionlable string `json:"categorygroupdescriptionlable"`
 	} `json:"Categoryy"`
 
 	Mediaa struct {
@@ -735,6 +821,7 @@ type Translation struct {
 	} `json:"Spaces"`
 
 	ContentAccessControl struct {
+		Memberrestrict            string `json:"memberrestrict"`
 		Contentaccess             string `json:"contentaccess"`
 		Grantaccess               string `json:"grantaccess"`
 		Accessgrantedmembergroups string `json:"accessgrantedmember"`
@@ -756,6 +843,11 @@ type Translation struct {
 		Updatedon                 string `json:"updatedon"`
 		Memberrestrictsavailble   string `json:"memberrestrictsavailble"`
 		Memberretrictavailble     string `json:"memberretrictavailble"`
+		Norestrictyet             string `json:"norestrictyet"`
+		Norestrict                string `json:"norestrict"`
+		Createfirstrestrict       string `json:"createfirstrestrict"`
+
+		Titlelable string `json:"titlelable"`
 	} `json:"ContentAccessControl"`
 
 	DashBoard struct {
@@ -1072,40 +1164,137 @@ type Translation struct {
 	} `json:"Jobs"`
 
 	Blocks struct {
-		Block                string `json:"block"`
-		NewBlock             string `json:"newblock"`
-		MyCollection         string `json:"mycollection"`
-		MyCollectionDesc     string `json:"mycollectiondesc"`
-		HowToUse             string `json:"howtouse"`
-		ExploreDocumentation string `json:"exploredocumentation"`
-		Setaspremium         string `json:"setaspremium"`
-		Blockhtml            string `json:"blockhtml"`
-		Blockcss             string `json:"blockcss"`
-		Tags                 string `json:"tags"`
-		Note                 string `json:"note"`
-		Notedesc             string `json:"notedesc"`
-		Titleplaceholder     string `json:"titleplaceholder"`
-		HtmlPlaceholder      string `json:"htmlplaceholder"`
-		CssPlaceholder       string `json:"cssplaceholder"`
-		TagPlaceholder       string `json:"tagplaceholder"`
-		AddCollectiontooltip string `json:"addcollectiontooltip"`
-		Removetooltip        string `json:"removetooltip"`
-		Blocks               string `json:"blocks"`
+		Blockheading            string `json:"blockheading"`
+		Block                   string `json:"block"`
+		NewBlock                string `json:"newblock"`
+		MyCollection            string `json:"mycollection"`
+		Mycollectiondescst      string `json:"mycollectiondescst"`
+		Mycollectiondescentry   string `json:"mycollectiondescentry"`
+		Mycollectiondescmid     string `json:"mycollectiondescmid"`
+		Mycollectiondescchannel string `json:"mycollectiondescchannel"`
+		Mycollectiondescend     string `json:"mycollectiondescend"`
+		HowToUse                string `json:"howtouse"`
+		ExploreDocumentation    string `json:"exploredocumentation"`
+		Setaspremium            string `json:"setaspremium"`
+		Blockhtml               string `json:"blockhtml"`
+		Blockcss                string `json:"blockcss"`
+		Tags                    string `json:"tags"`
+		Note                    string `json:"note"`
+		Notedesc                string `json:"notedesc"`
+		Titleplaceholder        string `json:"titleplaceholder"`
+		HtmlPlaceholder         string `json:"htmlplaceholder"`
+		CssPlaceholder          string `json:"cssplaceholder"`
+		TagPlaceholder          string `json:"tagplaceholder"`
+		AddCollectiontooltip    string `json:"addcollectiontooltip"`
+		Removetooltip           string `json:"removetooltip"`
+		Blocks                  string `json:"blocks"`
+		Noblockyet              string `json:"noblockyet"`
+		Noblock                 string `json:"noblock"`
+		Createfirstblock        string `json:"createfirstblock"`
+		MyCollections           string `json:"mycollections"`
+		Customblocks            string `json:"customblocks"`
+
+		Titlelable            string `json:"titlelable"`
+		Blockhtmllable        string `json:"blockhtmllable"`
+		Selectchannellable    string `json:"selectchannellable"`
+		Uploadcoverimagelable string `json:"uploadcoverimagelable"`
 	} `json:"Blocks"`
 
-	Templates struct {
-		Title                 string `json:"title"`
-		BannerHeading         string `json:"bannerheading"`
-		BannerDescription     string `json:"bannerdescription"`
-		PlayButtonDescription string `json:"playbuttondescription"`
-		BookButtonDescription string `json:"bookbuttondescription"`
-		GithubButton          string `json:"githubbutton"`
-		DeployButton          string `json:"deploybutton"`
-		TotalTemplates        string `json:"totaltemplates"`
-		TotalTemplate         string `json:"totaltemplate"`
-	} `json:"Templates"`
+	FormBuilder struct {
+		Ctaheading             string `json:"ctaheading"`
+		Cta                    string `json:"cta"`
+		FormAvailable          string `json:"formavailable"`
+		FormsAvailable         string `json:"formsavailable"`
+		FormName               string `json:"formname"`
+		TotalResponse          string `json:"totalresponse"`
+		CreatedBy              string `json:"createdby"`
+		Action                 string `json:"action"`
+		CreateForms            string `json:"createforms"`
+		Save                   string `json:"save"`
+		Publish                string `json:"publish"`
+		CreateForm             string `json:"createform"`
+		UpdateForm             string `json:"updateform"`
+		SelectFilters          string `json:"selectfilter"`
+		FromDate               string `json:"fromdate"`
+		ToDate                 string `json:"todate"`
+		Clear                  string `json:"clear"`
+		ApplyFilter            string `json:"applyfilter"`
+		DeleteForm             string `json:"deleteform"`
+		Delete                 string `json:"delete"`
+		AreyouSureWantDelete   string `json:"areyousurewantdelete"`
+		Noformyet              string `json:"noformyet"`
+		Noform                 string `json:"noform"`
+		Createfirstform        string `json:"createfirstform"`
+		Nodraftsyet            string `json:"nodraftsyet"`
+		Nodraft                string `json:"nodraft"`
+		Createfirstdraft       string `json:"createfirstdraft"`
+		Nounpublished          string `json:"nounpublished"`
+		Createfirstunpublished string `json:"createfirstunpublished"`
+		Ctadesc                string `json:"ctadesc"`
+		Fbanner                string `json:"fbanner"`
+		Sbanner                string `json:"sbanner"`
+		Tbanner                string `json:"tbanner"`
+		Fobanner               string `json:"fobanner"`
+	} `json:"FormBuilder"`
 
+	Support struct {
+		Supporthead  string `json:"supporthead"`
+		Title        string `json:"title"`
+		Supportdec   string `json:"supportdec"`
+		Servicehead  string `json:"servicehead"`
+		Servicelist1 string `json:"servicelist1"`
+		Servicelist2 string `json:"servicelist2"`
+		Servicelist3 string `json:"servicelist3"`
+		Servicelist4 string `json:"servicelist4"`
+
+		Namehead        string `json:"namehead"`
+		Nameplaceholder string `json:"nameplaceholder"`
+
+		Emailhead         string `json:"emailplaceholder"`
+		Emailplaceholders string `json:"emailplaceholders"`
+
+		Contanthead        string `json:"contenthead"`
+		Contactplaceholder string `json:"contactplaceholder"`
+
+		Timezonehead        string `json:"timezonehead"`
+		Timezoneplaceholder string `json:"timezoneplaceholder"`
+
+		Countryhead        string `json:"countryhead"`
+		Countryplaceholder string `json:"countryplaceholder"`
+
+		Dechead        string `json:"dechead"`
+		Decplaceholder string `json:"decplaceholder"`
+
+		Submitbtn string `json:"submitbtn"`
+	} `json:"Support"`
+
+	Templates struct {
+		Templatesheading        string `json:"templatesheading"`
+		Title                   string `json:"title"`
+		BannerHeading           string `json:"bannerheading"`
+		Mycollectiondescst      string `json:"mycollectiondescst"`
+		Mycollectiondescentry   string `json:"mycollectiondescentry"`
+		Mycollectiondescmid     string `json:"mycollectiondescmid"`
+		Mycollectiondescchannel string `json:"mycollectiondescchannel"`
+		Mycollectiondescend     string `json:"mycollectiondescend"`
+		PlayButtonDescription   string `json:"playbuttondescription"`
+		BookButtonDescription   string `json:"bookbuttondescription"`
+		GithubButton            string `json:"githubbutton"`
+		DeployButton            string `json:"deploybutton"`
+		TotalTemplates          string `json:"totaltemplates"`
+		TotalTemplate           string `json:"totaltemplate"`
+		Helpcenter              string `json:"helpcenter"`
+		Helpcenterdes           string `json:"helpcenterdes"`
+		Jobs                    string `json:"jobs"`
+		Jobsdes                 string `json:"jobsdes"`
+		Blogs                   string `json:"blogs"`
+		Blogdes                 string `json:"blogdes"`
+		News                    string `json:"news"`
+		Newsdes                 string `json:"newsdes"`
+	} `json:"Templates"`
 	Graphql struct {
+		Graphqlplayheading      string `json:"graphqlplayheading"`
+		Graphqlapiheading       string `json:"graphqlapiheading"`
 		Title                   string `json:"title"`
 		NewUserHeading          string `json:"newuserheading"`
 		NewUserDescription      string `json:"newuserdescription"`
@@ -1140,9 +1329,16 @@ type Translation struct {
 		Copyheading             string `json:"copyheading"`
 		Copydetails             string `json:"copydetails"`
 		Notes                   string `json:"notes"`
+		Apikey                  string `json:"apikey"`
+		Graphqlplayground       string `json:"graphqlplayground"`
+
+		Apitokennamelable  string `json:"apitokennamelable"`
+		Descriptionlable   string `json:"descriptionlable"`
+		Tokendurationlable string `json:"tokendurationlable"`
 	} `json:"Graphql"`
 
 	Webhooks struct {
+		Webhookheading string `json:"webhookheading"`
 		Webhook        string `json:"webhook"`
 		HeadingDesc    string `json:"headingDesc"`
 		NewWebhook     string `json:"newWebhook"`
@@ -1165,7 +1361,16 @@ type Translation struct {
 		EnableWebhook  string `json:"enableWebhook"`
 		FilterNoData   string `json:"filterNoData"`
 		ChangeKeywords string `json:"changeKeywords"`
-		Placeholders   struct {
+
+		Webhooknamelable   string `json:"webhooknamelable"`
+		Eventlable         string `json:"eventlable"`
+		Endpointurllable   string `json:"endpointurllable"`
+		Methodlable        string `json:"methodlable"`
+		Payloadtypelable   string `json:"payloadtypelable"`
+		Headerslable       string `json:"headerslable"`
+		Payloadfieldslable string `json:"payloadfieldslable"`
+
+		Placeholders struct {
 			Header           string `json:"header"`
 			Value            string `json:"value"`
 			FieldName        string `json:"fieldName"`

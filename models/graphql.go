@@ -18,14 +18,14 @@ type TblGraphqlSettings struct {
 	DeletedBy   int       `gorm:"DEFAULT:NULL"`
 	DeletedOn   time.Time `gorm:"DEFAULT:NULL"`
 	IsDeleted   int       `gorm:"DEFAULT:0"`
-	Token       string    
-	IsDefault   int      `gorm:"DEFAULT:0"`
+	Token       string
+	IsDefault   int    `gorm:"DEFAULT:0"`
 	DateString  string `gorm:"-"`
 	ExpiryTime  time.Time
-	TenantId    int
+	TenantId    string
 }
 
-func GetListOfTokens(limit int, offset int, keyword string, tenantid int) (grpahqlsett []TblGraphqlSettings, count int64, err error) {
+func GetListOfTokens(limit int, offset int, keyword string, tenantid string) (grpahqlsett []TblGraphqlSettings, count int64, err error) {
 
 	query := DB.Debug().Table("tbl_graphql_settings").Where("is_deleted = 0 and tenant_id = ?", tenantid)
 
@@ -84,7 +84,7 @@ func CreateApiToken(graphqlapi TblGraphqlSettings) error {
 
 }
 
-func GetTokenDetailsById(id int, tenantid int) (graphql TblGraphqlSettings, err error) {
+func GetTokenDetailsById(id int, tenantid string) (graphql TblGraphqlSettings, err error) {
 
 	if err := DB.Table("tbl_graphql_settings").Where("id=? and tenant_id = ?", id, tenantid).First(&graphql).Error; err != nil {
 
@@ -94,7 +94,7 @@ func GetTokenDetailsById(id int, tenantid int) (graphql TblGraphqlSettings, err 
 	return graphql, nil
 }
 
-func UpdateApiToken(graphqlapi map[string]interface{}, id int, tenantid int) error {
+func UpdateApiToken(graphqlapi map[string]interface{}, id int, tenantid string) error {
 
 	query := DB.Debug().Table("tbl_graphql_settings").Where("id=? and tenant_id = ?", id, tenantid).UpdateColumns(graphqlapi)
 
@@ -106,7 +106,7 @@ func UpdateApiToken(graphqlapi map[string]interface{}, id int, tenantid int) err
 	return nil
 }
 
-func DeleteApiToken(id int, deletedby int, deletedon time.Time, tenantid int) error {
+func DeleteApiToken(id int, deletedby int, deletedon time.Time, tenantid string) error {
 
 	if err := DB.Debug().Table("tbl_graphql_settings").Where("id=? and tenant_id = ?", id, tenantid).UpdateColumns(map[string]interface{}{"is_deleted": 1, "deleted_by": deletedby, "deleted_on": deletedon}).Error; err != nil {
 
@@ -116,7 +116,7 @@ func DeleteApiToken(id int, deletedby int, deletedon time.Time, tenantid int) er
 	return nil
 }
 
-func MultiDeleteGraphqltoken(graph *TblGraphqlSettings, ids []int, tenantid int) error {
+func MultiDeleteGraphqltoken(graph *TblGraphqlSettings, ids []int, tenantid string) error {
 
 	if err := DB.Table("tbl_graphql_settings").Where("id in (?) and tenant_id = ?", ids, tenantid).UpdateColumns(map[string]interface{}{"is_deleted": graph.IsDeleted, "deleted_by": graph.DeletedBy, "deleted_on": graph.DeletedOn}).Error; err != nil {
 

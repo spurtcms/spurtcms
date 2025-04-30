@@ -79,6 +79,7 @@
                     </thead>
                     <tbody>
                         {{range .Template}}
+                        {{if ne .TemplateName `OTP Generation`}}  
                         <tr>
                             <td
                                 class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle text-[#262626] text-xs font-normal">
@@ -92,7 +93,7 @@
 
                             <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
                                 <label for="toggle{{.Id}}"
-                                    class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white {{if eq .TemplateName `OTP Generation`}} pointer-events-none opacity-25 {{end}}">
+                                    class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white  pointer-events-none opacity-25 ">
                                     <div class="relative">
                                         <input type="checkbox" id="toggle{{.Id}}" class="peer sr-only emailStatusBtn"
                                             {{if eq .IsActive 1}} checked {{end}} value="" data-id="{{.Id}}" />
@@ -122,7 +123,7 @@
                                     <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-180 py-[12px]"
                                         aria-labelledby="triggerId">
 
-                                        <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] emailEditBtn"
+                                        <a class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5] pointer-events-none opacity-25 emailEditBtn"
                                             href="javascript:void(0);" data-bs-toggle="modal"
                                             data-bs-target="#emailtemplateModal" data-id="{{.Id}}"><img
                                                 src="/public/img/edit.svg" />
@@ -135,6 +136,7 @@
 
                         </tr>
                         {{end}}
+                        {{end}}
 
                     </tbody>
                 </table>
@@ -146,7 +148,7 @@
 
         <div
             class=" max-sm:flex-col max-sm:gap-[1rem] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
-            <ul class="!ml-auto    max-sm:mx-auto  justify-center items-center gap-[8px] flex flex-wrap">
+            <ul class="ml-auto    max-sm:mx-auto  justify-center items-center gap-[8px] flex flex-wrap">
                 {{if gt .Count .Limit}}
 
                 <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
@@ -184,7 +186,7 @@
 
                 <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
                                     text-[14px] w-[33px] h-[36px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
-                                    bg-[#10A37F] hover:bg-[#148569] font-bold {{end}}">
+                                    bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
                         {{.CurrentPage}} </a> </li>
                 {{if lt .CurrentPage .Pagination.TotalPages}}
                 <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
@@ -213,7 +215,7 @@
                 </li>
                 {{end}}
             </ul>
-            <p class="!ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <p class="ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
                 <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
                 {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
             </p>

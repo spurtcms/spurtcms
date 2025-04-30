@@ -21,7 +21,11 @@ func RunTemplateView(wg *sync.WaitGroup) {
 
 	r.LoadHTMLGlob("view/**/*.html")
 
-	r.GET("/:id", viewcontroller.PageView)
+	r.GET("/:dynamicString/:id", viewcontroller.PageView)
+
+	r.GET("/forms/:id", viewcontroller.FormsView)
+
+	r.POST("/cta/formresponse", viewcontroller.FormResponse)
 
 	r.GET("/404-pageview", viewcontroller.FileNotFound)
 

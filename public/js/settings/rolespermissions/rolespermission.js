@@ -290,7 +290,7 @@ $(document).on('click', '#deleterole-btn', function () {
         success: function (data) {
             if (data.value) {
                 console.log("trrrrr", data.value);
-
+                $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
                 $('#delid').addClass("hidden");
                 $('#dltCancelBtn').text(languagedata.ok);
                 $("#content").text(languagedata.Roless.rolesrestrictmsg)
@@ -346,9 +346,9 @@ $(document).on('keyup', '#searchroles', function (event) {
 $(document).on("click", ".Closebtn", function () {
     $(".search").val('')
     $(".Closebtn").addClass("hidden")
+    $(".SearchClosebtn").removeClass("hidden")
     $(".srchBtn-togg").removeClass("pointer-events-none")
-
-})
+  })
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
@@ -358,23 +358,32 @@ $(document).on("click", ".searchClosebtn", function () {
 $(document).ready(function () {
 
     $('.search').on('input', function () {
-
         if ($(this).val().length >= 1) {
+            var value=$(".search").val();
             $(".Closebtn").removeClass("hidden")
             $(".srchBtn-togg").addClass("pointer-events-none")
-
+            $(".SearchClosebtn").addClass("hidden")
         } else {
+            $(".SearchClosebtn").removeClass("hidden")
             $(".Closebtn").addClass("hidden")
             $(".srchBtn-togg").removeClass("pointer-events-none")
-
         }
     });
-})
-
-$(document).on("click", ".hovericon", function () {
-    $(".search").val('')
-    $(".Closebtn").addClass("hidden")
-})
+  })
+  
+  $(document).on("click", ".SearchClosebtn", function () {
+    $(".SearchClosebtn").addClass("hidden")
+    $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+    $(".transitionSearch").addClass("w-[32px]")
+  
+    
+  })
+  
+  $(document).on("click", ".searchopen", function () {
+  
+    $(".SearchClosebtn").removeClass("hidden")
+    
+  })
 
 //   end
 
@@ -812,6 +821,7 @@ $(document).on('click', '#seleccheckboxdelete', function () {
             }
         }
     })
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
 
 
     $("#delid").text($(this).text());
@@ -835,6 +845,8 @@ $(document).on('click', '#unbulishslt', function () {
 
         $('#content').text(languagedata.Roless.statusupdaterole + " " + $(this).text() + " " + languagedata.Roless.selectedrole)
     }
+    $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
+
     $("#delid").text($(this).text());
 
     $('#delid').addClass('selectedunpublish')

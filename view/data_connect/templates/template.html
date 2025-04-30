@@ -2,22 +2,29 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
 
     {{$keyword := .Filter}}
     <header
-        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
-        <div class="mr-auto flex items-center space-x-[6px]">
+        class="  max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
-                {{$Translate.Templates.Title}}</h2>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Templates.Title}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                   {{$Translate.Templates.Templatesheading}}
+                </p>
+            </div>
         </div>
+       
+     
 
         <a href="javascript:void(0);"
-            class=" hd-crd-btn [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] h-[32px] grid place-content-center   hover:bg-[#F0FFFB] ">
+            class=" hd-crd-btn [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] h-[32px] grid place-content-center   hover:bg-[#FAFAFA] ">
             <img src="/public/img/bt-show.svg" alt="show" class="
                                 hidden" id="infoShowBtn">
             <img src="/public/img/bt-hide.svg" alt="hide" id="infoHideBtn">
@@ -25,16 +32,16 @@
         <div
             class="{{if .Filter}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
             <a href="javascript:void(0);"
-                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#F0FFFB]"
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]"
                 id="templateSearchLink">
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search"
-                    class="hidden group-hover:block tempHoverIcon">
+                    class="hidden group-hover:block searchopen ">
             </a>
 
             <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="templateSearchBar"
                 value="{{.Filter}}"
-                class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 {{if .Filter}} w-[calc(100%-36px)] h-full block {{else}} hidden{{end}}">
+                class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0  w-[calc(100%-36px)] h-full block ">
             </input>
             {{if .Filter}}
             <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
@@ -44,18 +51,22 @@
             <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
                 <img src="/public/img/close.svg" alt="close">
             </div>
+            <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                <img src="/public/img/close.svg" alt="close">
+            </div>
 
             {{end}}
 
 
 
         </div>
+        
         <div class="dropdown">
             <a href="javascript:void(0);"
-                class="bg-white border-[1px] border-solid border-[#10A37F] rounded-[4px] max-sm:p-[7px] max-sm:w-[65px] {{if  .ChannelDetail.ChannelName}} p-[7px_30px_7px_12px]{{else}}  p-[7px_12px_7px_12px]{{end}} h-[32px] flex items-center justify-between w-[216px] "
+                class="bg-white border-[1px] border-solid border-[#000000] rounded-[4px] max-sm:p-[7px] max-sm:w-[65px] {{if  .ChannelDetail.ChannelName}} p-[7px_30px_7px_12px]{{else}}  p-[7px_12px_7px_12px]{{end}} h-[32px] flex items-center justify-between w-[216px] "
                 data-bs-toggle="dropdown" aria-expanded="false">
                 {{if .ChannelDetail.ChannelName}}
-                <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#10A37F] max-w-[5rem] overflow-hidden text-ellipsis whitespace-nowrap"
+                <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#000000] max-w-[5rem] overflow-hidden text-ellipsis whitespace-nowrap"
                     data-bs-custom-class="lms-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-placement="top" title="{{.ChannelDetail.ChannelName}}">{{.ChannelDetail.ChannelName}}
                 </h4>
@@ -65,7 +76,7 @@
                 </p>
 
                 {{else}}
-                <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#10A37F] ">
+                <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#000000] ">
                     {{$Translate.Channell.Selectchannel}}</h4>
                 <img src="/public/img/avaliable-arrow.svg" alt="arrow" class="inline-block max-sm:hidden">
                 <img src="/public/img/avaliable-arrow-grn.svg" alt="arrow" class="hidden max-sm:inline-block">
@@ -78,8 +89,8 @@
                 style="">
                 {{$ChannelId := .ChannelDetail.Id}}
                 {{range .ChannelList}}
-                <li><a class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#F0FFF1] hover:border-[#C5E9C6]{{if eq $ChannelId .Id}} bg-[#F0FFF1] border-[#C5E9C6]{{else}} border-[#EDEDED] {{end}}"
-                        href="/templates?channel={{.Id}}">
+                <li><a class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .Id}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
+                        href="/templates?channel={{.SlugName}}">
                         <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
                         </h5>
                         <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{if
@@ -100,13 +111,10 @@
 
 
     <div class="px-[16px] py-[11px]">
-        <!-- <div class="flex items-center justify-between mb-[24px]">
-            <h2 class="text-[24px] font-medium text-[#252525] leading-[30px]">{{$Translate.Templates.Title}}</h2>
-
-        </div> -->
+   
 
         <div id="hd-crd"
-            class=" [&.hide]:hidden  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#EBF9F5] rounded-[12px] relative mb-[24px]">
+            class=" {{if eq .tempBannerValue `false`}}hidden{{end}} [&.hide]:hidden  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#FAFAFA] rounded-[12px] relative mb-[24px]">
 
             <a href="javascript:void(0);"
                 class="  hd-crd-btn  absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
@@ -125,14 +133,22 @@
                     {{$Translate.Templates.BannerHeading}}
                 </h3>
                 <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
-                    {{$Translate.Templates.BannerDescription}}</p>
+                    {{$Translate.Templates.Mycollectiondescst}}
+                    <a href="/channels" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    </a>
+                    {{$Translate.Templates.Mycollectiondescmid}}
+                    <a href="/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    </a>
+                    
+                    {{$Translate.Templates.Mycollectiondescend}}
+                 </p>
                 <div class="flex items-center min-[426px]:space-x-[24px] max-[425px]:items-start max-[425px]:space-y-[24px] max-[425px]:flex-col">
                     <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
                         <img src="/public/img/how-to.svg" alt="How to use">
                         <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
                             {{$Translate.Templates.PlayButtonDescription}}</p>
                     </a>
-                    <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                    <a href="javascript:void(0);"  class="flex items-center space-x-[8px] hover:underline">
                         <img src="/public/img/explore-documentation.svg" alt="Explore Documentation">
                         <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
                             {{$Translate.Templates.BookButtonDescription}}</p>
@@ -144,56 +160,230 @@
         </div>
 
 
-
+        <!-- <section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
+            <header
+                class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        
+                <div class="mr-auto flex items-center gap-[6px]">
+                    <a href="javascript:void(0);"
+                        class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                        <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                    </a>
+                    <div class="max-w-[640px]">
+                        <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                            {{$Translate.Channell.Channelhead}}</h2>
+                        <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                            {{$Translate.Channell.Headingcontent}}</p>
+                    </div>
+                </div>
+        
+        
+                <a href="javascript:void(0);"
+                    class=" hd-crd-btn [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] min-w-[32px] h-[32px] grid place-content-center   hover:bg-[#FAFAFA] ">
+                    <img src="/public/img\bt-show.svg" alt="show" class="hidden" id="show">
+                    <img src="/public/img\bt-hide.svg" alt="hide" id="hide">
+                </a>
+        
+                <div
+                    class="{{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+                    <a href="javascript:void(0);"
+                        class="{{if eq .Searchtrue true}} pointer-events-none {{end}}  srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                        <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                        <img src="/public/img/search-icon-active.svg" alt="search"
+                            class="hidden group-hover:block hovericon searchopen">
+                    </a>
+                    <form action="/channels/" method="get" class="filterform " autocomplete="off">
+                        <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="search"
+                            value="{{if .filter}}{{.filter}}{{end}}"
+                            class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                        {{if eq .Searchtrue true}}
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        {{else}}
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        {{end}}
+        
+                    </form>
+                </div>
+        
+                <a href="/channels/create" id="create-channel-btn"
+                    class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                    <span class="hidden max-sm:block text-lg leading-none ">+</span>
+                    <span class="max-sm:hidden">
+                        {{$Translate.Create}} {{$Translate.Channell.Channel}}
+                    </span>
+                </a>
+        
+            </header>
+            <div class="px-[16px] py-[11px]" style="padding-bottom: 80px;">
+            
+        
+                <div id="hd-crd"
+                    class="{{if eq .channelbanner `false`}}hidden{{end}}  [&.hide]:hidden  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#FAFAFA] rounded-[12px] relative mb-[24px]">
+        
+                    <a href="javascript:void(0);"
+                        class="  hd-crd-btn  absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
+                        <img src="/public/img/block-close.svg" alt="close" id="videoclose"></a>
+        
+                    <div class="relative grid place-items-center">
+                        <img src="/public/img/Channel.jpg" alt="video" class="w-full  ">
+                        <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                            <img src="/public/img/play-video.svg" alt="play">
+                        </a>
+                    </div>
+        
+        
+                    <div>
+                        <h3 class="mb-[12px] text-base text-[#252525] font-medium leading-[20px]">
+                            {{$Translate.Channell.MyChannels}}</h3>
+                        <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
+                            {{$Translate.Channell.Mycollectiondescst}}
+                            <a href="/entries/entrylist"
+                                class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                                href="">{{$Translate.Channell.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg"
+                                        alt=""></span>
+                            </a>
+                            {{$Translate.Channell.Mycollectiondescmid}}
+                            <a href="/templates"
+                                class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                                href="">{{$Translate.Channell.Mycollectiondescchannel}} <span><img
+                                        src="/public/img/link_icon.svg" alt=""></span>
+                            </a>
+                            {{$Translate.Channell.Mycollectiondescmidnext}}
+        
+                            <a href="/categories"
+                                class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                                href="">{{$Translate.Channell.Mycollectiondescategorie}} <span><img
+                                        src="/public/img/link_icon.svg" alt=""></span>
+                            </a>
+        
+                            {{$Translate.Channell.Mycollectiondescend}}
+                        </p>
+                        <div class="flex items-center space-x-[24px] flex-wrap">
+                            <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                                <img src="/public/img\how-to.svg" alt="How to use">
+                                <p class="text-sm text-[#262626] font-normal leading-[17.5px]">{{$Translate.Blocks.HowToUse}}
+                                </p>
+                            </a>
+                            <a href="https://github.com/spurtcms/channels" target="_blank"
+                                class="flex items-center space-x-[8px] hover:underline">
+                                <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                                <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
+                                    {{$Translate.Blocks.ExploreDocumentation}}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        
+        
+              
+         -->
         <!--1-->
-
+        <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
+                    id="collection-tab" href="/channels/" aria-controls="collection"
+                    aria-selected="true">{{$Translate.Channell.Mychannel}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
+                    id="work-tab" href="/channels/defaultchannels" role="tab" aria-controls="work" aria-selected="false"
+                    tabindex="-1">{{$Translate.Explore}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="active hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
+                    id="work-tab" href="/templates" role="tab" aria-controls="work" aria-selected="false"
+                    tabindex="-1">Templates</a>
+            </li>
+          
+        </ul>
         {{$Iszero := true}}
         {{if ne .IsCountZero $Iszero}}
 
+       
         {{range .TemplateModules}}
         <div class="mb-[24px]">
-            {{if ne .TemplateCount 0}}
+            <!-- <div class="mb-[24px]">
+                <h3 class="mb-[6px] font-medium text-[#252525] text-base">Ecommerce</h3>
+                <p class="font-light text-[#717171] text-sm leading-[17.5px]">Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit, sed do</p>
+            </div> -->
             <div class="mb-[24px]">
-                <h3 class="mb-[6px] text-base font-medium text-[#252525]">{{.TemplateModuleName}}</h3>
-                <p class="text-[#717171] text-sm font-light leading-[17.5px]">{{.Description}}</p>
-            </div>
+                {{if ne .TemplateCount 0}}
+                <div class="mb-[24px]">
+                    <h3 class="mb-[6px] text-base font-medium text-[#252525]">
+                        {{if eq .TemplateModuleName "HELP CENTER"}}{{$Translate.Templates.Helpcenter}}{{end}}
+                        {{if eq .TemplateModuleName "BLOG"}}{{$Translate.Templates.Blogs}}{{end}}
 
-            <div
-                class="grid max-xl:grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))]  xl:grid-cols-[repeat(auto-fill,_minmax(282px,_1fr))] gap-[16px] ">
+                        {{if eq .TemplateModuleName "JOBS"}}{{$Translate.Templates.Jobs}}{{end}}
+                        {{if eq .TemplateModuleName "NEWS"}}{{$Translate.Templates.News}}{{end}}
+    
+                    </h3>
+                    <p class="text-[#717171] text-sm font-light leading-[17.5px]">
+                        {{if eq .Description "help center templates"}}{{$Translate.Templates.Helpcenterdes}}{{end}}
+                        {{if eq .Description "blog templates"}}{{$Translate.Templates.Blogdes}}{{end}}
 
+                        {{if eq .Description "jobs templates"}}{{$Translate.Templates.Jobsdes}}{{end}}
+                        {{if eq .Description "news templates"}}{{$Translate.Templates.Newsdes}}{{end}}
+    
+                    </p>
+                </div>
+            <div class="gap-[16px] grid grid-cols-[repeat(auto-fill,_minmax(376px,_1fr))]">
                 {{range .Templates}}
-                <div class="border border-[#ECECEC] rounded-[12px] overflow-hidden flex flex-col">
 
-                    <div class="relative group border-b border-[#ECECEC] grow aspect-[16/10] ">
-                        <img src="{{.ImagePath}}" alt="sample one" class="w-full h-full object-contain">
+                <div class="flex flex-col border-[#ECECEC] border rounded-[12px] overflow-hidden">
 
+                    <div class="relative border-[#ECECEC] border-b aspect-[15/11.1] group grow grid place-items-center">
+                        <img src="{{.ImagePath}}" alt="sample one"
+                            class="w-full h-full object-contain">
+
+                            <div
+                            class=" absolute flex justify-center items-center opacity-[0] group-hover:opacity-100 ">
+                          
+                          
+                            <a {{if .Preview}} href="{{.Preview}}" {{end}}
+                           data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            target="_blank"
+                                class="flex justify-center items-center space-x-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-6 rounded-[40px] w-auto h-[42px] font-normal text-[#FFFFFF] text-sm">
+                                <img src="/public/img/eye-white.svg" alt="...">
+                                <span>Preview</span>
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="p-[12px]  ">
-                        <h3 class="text-[#262626] text-sm font-normal leading-5 mb-[8px]">{{.TemplateName}}
+                    <div class="p-[16px]">
+                        <h3 class="mb-[24px] font-black font-RecoletaBlack text-[#262626] text-2xl text-center leading-5">{{.TemplateName}}
                         </h3>
-                        <div class="flex items-center space-x-[8px]">
+                        <div class="flex items-center gap-[24px]">
                             <a href="{{.GithubLink}}"
-                                class=" group/git border-[1px] border-solid border-[#252525]  rounded-[4px] flex space-x-[8px] items-center justify-center grow h-[30px] p-[6px_8px] text-[#252525] leading-[17.5px] text-sm font-normal bg-[#F8F8F8] hover:bg-white"
-                                target="_blank">
+                                class="flex justify-center items-center gap-[8px] border-[#252525] border-[1px] bg-[#F8F8F8] hover:bg-white p-[6px_8px] border-solid rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-sm leading-[17.5px] group/git grow" target="_blank">
 
                                 <img src="/public/img/template-git.svg" alt="Github">
-                                <span>{{$Translate.Templates.GithubButton}}</span></a>
+                                {{$Translate.Templates.GithubButton}}</a>
 
                             <a href="{{.DeployLink}}"
-                                class=" bg-[#252525] flex space-x-[24px] h-[30px] grow p-[6px_8px] items-cente  rounded-[4px] text-[#FFFFFF] font-normal text-sm leading-[17.5px] hover:bg-[#2f2f2f]"
-                                target="_blank">
-                                <img src="/public/img/template-deploy.svg"
-                                    alt="Deploy"><span>{{$Translate.Templates.DeployButton}}</span></a>
+                                class="flex items-cente gap-[16px] bg-[#252525] hover:bg-[#2f2f2f] p-[6px_8px] rounded-[4px] w-full h-[30px] font-normal text-[#FFFFFF] text-sm leading-[17.5px] grow" target="_blank">
+                                <img src="/public/img/up-arrow-deploy.svg" alt="Deploy" class="w-[16px]"> <span class="bg-[#5A5A5A80] w-[2px] h-[20px]"></span> <span class="mx-auto">{{$Translate.Templates.DeployButton}}</span></a>
                         </div>
                     </div>
                 </div>
                 {{end}}
             </div>
-
-            {{end}}
+            
         </div>
+
+
+
         {{end}}
+    </div>
+    {{end}}
+    
         {{else}}
         <div class="max-w-[328px] mx-auto text-center m-[120px_16px] ui-sortable-handle">
             <div class="text-center w-fit mx-auto">

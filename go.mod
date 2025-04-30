@@ -11,21 +11,22 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.10.0
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.2.2
 	github.com/joho/godotenv v1.5.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/spurtcms/auth v0.0.33
-	github.com/spurtcms/categories v0.0.25
-	github.com/spurtcms/channels v0.0.63
-	github.com/spurtcms/member v0.0.20
-	github.com/spurtcms/member-access v0.0.9
-	github.com/spurtcms/team v0.0.32
-	github.com/spurtcms/team-roles v0.0.20
+	github.com/spurtcms/auth v0.0.37
+	github.com/spurtcms/blocks v0.0.59
+	github.com/spurtcms/categories v0.0.26
+	github.com/spurtcms/channels v0.0.96
+	github.com/spurtcms/member v0.0.23
+	github.com/spurtcms/member-access v0.0.10
+	github.com/spurtcms/team v0.0.33
+	github.com/spurtcms/team-roles v0.0.21
 	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca
 	github.com/vektah/gqlparser/v2 v2.5.16
 	golang.org/x/crypto v0.26.0
 	golang.org/x/net v0.28.0
-	golang.org/x/oauth2 v0.22.0
 	gorm.io/datatypes v1.2.0
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/driver/postgres v1.5.9
@@ -33,7 +34,6 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2 // indirect
@@ -53,7 +53,6 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -79,6 +78,7 @@ require (
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sosodev/duration v1.3.1 // indirect
+	github.com/spurtcms/forms-builders v0.0.27 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/urfave/cli/v2 v2.27.2 // indirect

@@ -106,5 +106,5 @@ func ChannelSettingUpdate(c *gin.Context) {
 
 	c.SetCookie("Alert-msg", "success", 3600, "", "", false, false)
 
-	c.Redirect(301, "/channel/settings")
+	c.Redirect(301, "/entries/settings")
 }

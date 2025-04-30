@@ -7,11 +7,11 @@
 
     <div class=" sm:hidden accordion-item !rounded-none  border-none overflow-hidden ">
         <a class="accordion-button !bg-[#fafafa] !shadow-none   hover:!bg-[#fafafa] flex justify-between items-center leading-none  p-[16px_auto_4px_16px] after:!h-[16px] after:!w-[16px]  after:!bg-contain   after:!inline-block  after:!bg-[url('/public/img/accord-arrow.svg')] [&.collapsed]:!after:rotate-180  [&.collapsed]:!bg-white border-b border-solid  [&.collapsed]:border-[#EDEDED] border-transparent"
-           data-bs-toggle="collapse" href="#collapseCategoriesGroup1" aria-expanded="true"
+            data-bs-toggle="collapse" href="#collapseCategoriesGroup1" aria-expanded="true"
             aria-controls="collapseCategoriesGroup1">
             <div class="flex items-center  space-x-[8px] text-[#262626] text-sm font-normal leading-none">
                 <img src="/public/img/setting.svg" alt="category group">
-              <span>  Settings</span>
+                <span> Settings</span>
             </div>
         </a>
     </div>
@@ -30,12 +30,12 @@
                     </h3>
                     <ul class="max-sm:flex   gap-[8px] flex-wrap">
                         <li><a href="/settings/myprofile"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="myProfileLink"><img src="/public/img/my-account.svg" alt="my Account">
                                 <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">
                                     {{$Translate.Setting.Myaccount}}</span></a></li>
                         <li><a href="/settings/changepassword"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="changePasswordLink"><img src="/public/img/my-security.svg" alt="my Security">
                                 <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Security}}
@@ -61,7 +61,7 @@
                         {{if eq .ModuleName "Roles & Permissions"}}
                         {{if .Routes}}
                         <li><a href="/settings/roles/"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="rolesLink"><img src="/public/img/roles.svg" alt="roles and permission">
                                 <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Rolesandpermissions}}</span></a>
@@ -71,7 +71,7 @@
                         {{if eq .ModuleName "Team"}}
                         {{if .Routes}}
                         <li><a href="/settings/users/"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="usersLink"><img src="/public/img/teams.svg" alt="teams">
                                 <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Teams}}
@@ -101,7 +101,7 @@
                         {{if eq .ModuleName "General Settings"}}
                         {{if .Routes}}
                         <li><a href="/settings/general-settings/"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative  before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative  before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="genSettingsLink"><img src="/public/img/general.svg" alt="general">
                                 <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Generalsettings}}
@@ -111,13 +111,13 @@
                         {{end}}
                         {{end}}
                         {{end}}
-                        
+                       
                         {{range .Menu.TblModule}}
                         {{range .SubModule}}
                         {{if eq .ModuleName "Languages"}}
                         {{if .Routes}}
                         <li><a href="/settings/languages/"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="langPageLink"><img src="/public/img/language-setting.svg" alt="language"> <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Languages.Language}}</span></a>
                         </li>
@@ -130,7 +130,7 @@
                         {{if eq .ModuleName "Email"}}
                         {{if .Routes}}
                         <li><a href="/settings/emails/"
-                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
                                 id="emailPageLink"><img src="/public/img/email-setting.svg" alt="email"> <span
                                     class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Email}}</span></a>
                         </li>
@@ -138,9 +138,40 @@
                         {{end}}
                         {{end}}
                         {{end}}
-                        
-                        
-                      
+
+                        {{range .Menu.TblModule}}
+                        {{range .SubModule}}
+                        {{if eq .ModuleName "Data"}}
+                        {{if .Routes}}
+                        <li><a href="/settings/data/"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                id="dataPageLink"><img src="/public/img/data-setting.svg" alt="data"> <span
+                                    class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Data}}</span></a>
+                        </li>
+                        {{end}}
+                        {{end}}
+
+                        {{end}}
+                        {{end}}
+
+                        {{range .Menu.TblModule}}
+                        {{range .SubModule}}
+                        {{if eq .ModuleName "AI Settings"}}
+                        {{if .Routes}}
+
+                        <li><a href="/settings/aisettings/"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[var(--btn-bg)] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                id="aiPageLink"><img src="/public/img/open-ai-back.svg" alt="data"> <span
+                                    class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">AI Module
+                                    Settings</span>
+                            </a>
+                        </li>
+
+                        {{end}}
+                        {{end}}
+                        {{end}}
+                        {{end}}
+
                     </ul>
                 </div>
 

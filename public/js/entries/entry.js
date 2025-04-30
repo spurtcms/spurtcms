@@ -25,6 +25,7 @@ var urlvalues
 var youtubelinks = []
 var finalyoutubelinks = []
 var joindata
+
 var newOrder = [];
 var access_granted_memgrps = []
 var pentryid
@@ -42,9 +43,9 @@ $(".searchentry").click(function () {
 
     if ($(this).is(':checked')) {
 
-        window.location.href = "/channel/entrylist/" + id
+        window.location.href = "/entries/entrylist/" + id
     } else {
-        window.location.href = "/channel/entrylist/"
+        window.location.href = "/entries/entrylist/"
     }
 
 })
@@ -56,20 +57,31 @@ $(document).on('click', '#removecategory', function () {
 
     if (currentLocation.includes("unpublishentrieslist")) {
 
-        window.location.href = "/channel/unpublishentries"
+        window.location.href = "/entries/unpublishentries"
 
     } else if (currentLocation.includes("draftentrieslist")) {
 
-        window.location.href = "/channel/draftentries"
+        window.location.href = "/entries/draftentries"
 
     } else if (currentLocation.includes("entrylist")) {
 
-        window.location.href = "/channel/entrylist"
+        window.location.href = "/entries/entrylist"
     }
 
 
 })
+document.querySelectorAll('.no-drag').forEach(element => {
+    element.setAttribute('draggable', 'false');
 
+    console.log("draggg")
+    element.addEventListener('dragstart', (event) => {
+        console.log("chekcdragg")
+        event.preventDefault();
+    });
+    element.addEventListener('mousedown', (event) => {
+        event.stopPropagation();
+    });
+});
 $(document).on("keyup", "#article", function () {
 
 
@@ -137,17 +149,17 @@ $(document).ready(async function () {
 
     if (channelname != "") {
         if (pageno == null) {
-            editurl = "/channel/editentrydetails/" + channelname + "/" + id
+            editurl = "/entries/editentrydetails/" + channelname + "/" + id
         } else {
-            editurl = "/channel/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
+            editurl = "/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
         }
 
     } else {
 
         if (pageno == null) {
-            editurl = "/channel/editentrydetail/" + id
+            editurl = "/entries/editentrydetail/" + id
         } else {
-            editurl = "/channel/editentrydetail/" + id + "?page=" + pageno
+            editurl = "/entries/editentrydetail/" + id + "?page=" + pageno
         }
     }
 
@@ -242,7 +254,7 @@ $(document).ready(async function () {
                 $("#tagname").val(result.Entries.Tags)
                 $("#extxt").val(result.Entries.Excerpt)
                 membername = result.Memberlist
-                // $('#configbtn').attr('href', '/channels/editchannel/' + result.Entries.ChannelId)
+                // $('#configbtn').attr('href', '/channels/edit/' + result.Entries.ChannelId)
 
                 seodetails = { title: result.Entries.MetaTitle, desc: result.Entries.MetaDescription, keyword: result.Entries.Keyword, slug: result.Entries.Slug, imgtag: result.Entries.ImageAltTag }
 
@@ -686,7 +698,7 @@ $(document).ready(async function () {
                         $('.closemember').show()
                     }
 
-                    fetch(`/channel/memberdetails/?keyword=${keyword}`, {
+                    fetch(`/entries/memberdetails/?keyword=${keyword}`, {
                         method: "GET"
                     })
                         .then(response => {
@@ -827,15 +839,15 @@ $(document).on('keyup', '#searchkey', function () {
 
             if (currentLocation.includes("unpublish")) {
 
-                window.location.href = "/channel/unpublishentries"
+                window.location.href = "/entries/unpublishentries"
 
             } else if (currentLocation.includes("draft")) {
 
-                window.location.href = "/channel/draftentries"
+                window.location.href = "/entries/draftentries"
 
             } else if (currentLocation.includes("entrylist")) {
 
-                window.location.href = "/channel/entrylist"
+                window.location.href = "/entries/entrylist"
             }
 
 
@@ -904,6 +916,9 @@ $(document).on('click', '.deleteentry', function () {
 
     $('.delname').text(del.find('td:eq(4)').text())
 
+    
+    $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
+
     $('.deltitle').text(languagedata.Channell.delentrytitle)
 
     $('.deldesc').text(languagedata.Channell.delentrycontent)
@@ -917,16 +932,16 @@ $(document).on('click', '.deleteentry', function () {
     var pageno = $(this).attr("data-page")
 
     if (pageno == "") {
-        $('#delid').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname);
+        $('#delid').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname);
 
     } else {
-        $('#delid').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname + "&page=" + pageno);
+        $('#delid').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname + "&page=" + pageno);
 
     }
 
-    // $('#delid').parent('#delete').attr('href', "/channel/deleteentries/?id=" + entryId + "&cname=" + channame + "&page="+pageno);
+    // $('#delid').parent('#delete').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&page="+pageno);
 
-    // $('#delid').parent('#delete').attr('href', "/channel/deleteentries/"+ entryId + "/" + channelname);
+    // $('#delid').parent('#delete').attr('href', "/entries/deleteentries/"+ entryId + "/" + channelname);
 
 
 })
@@ -949,7 +964,7 @@ $(document).on("click", "#publish", function () {
 
     $.ajax({
 
-        url: "/channel/checkmandatoryfields/" + entryid,
+        url: "/entries/checkmandatoryfields/" + entryid,
         datatype: "json",
         type: "GET",
         data: {
@@ -961,21 +976,22 @@ $(document).on("click", "#publish", function () {
 
             if (result.Title == "" || result.Description == "" || result.CategoriesId == "") {
 
+                $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
                 $('#content').text("You could not Publish this entry please add mandatory fields");
                 $('.delname').text(channelname)
                 $('.deltitle').text("Add Mandatory Fields")
                 $("#delid").text("Edit Entry")
                 $("#delcancel").text(languagedata.cancel)
                 if (channelname != "") {
-                    $('#delid').attr('href', "/channel/editentry/" + channelname + "/" + entryid)
+                    $('#delid').attr('href', "/entries/edit/" + channelname + "/" + entryid)
 
                 } else {
 
-                    $('#delid').attr('href', "/channel/editsentry/" + entryid)
+                    $('#delid').attr('href', "/entries/edits/" + entryid)
                 }
 
             } else {
-
+                $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
                 $('#content').text(languagedata.Channell.publishcontent);
                 $('.delname').text(channelname)
                 $('.deltitle').text(languagedata.Channell.publishtitle)
@@ -1003,6 +1019,7 @@ $(document).on("click", "#unpublish", function () {
     channelname = $(this).attr("data-channelname")
     chlstatus = $(this).attr("data-status")
 
+    $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
     $('#content').text(languagedata.Channell.unpublishcontent);
     $('.delname').text(channelname)
     $('.deltitle').text(languagedata.Channell.unpublishtitle)
@@ -1016,13 +1033,11 @@ $(document).on("click", "#unpublish", function () {
 
 $(document).on("click", "#feature", function () {
 
-    console.log("feature")
-
-    // entryid = $(this).attr("data-id")
-    // channelname = $(this).attr("data-channelname")
-
+    entrytitle = $(this).attr("data-entrytitle")
+    $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
     $('.deldesc').text("Are you Sure you Want to Feature this Entries into Website?");
-    $('.delname').text(channelname)
+    $('.delname').text(entrytitle)
+    console.log("entrytitle:",entrytitle)
     $('.deltitle').text("Feature Entry")
     $("#delid").text("Feature")
     $("#delid").addClass("featurebtn")
@@ -1033,11 +1048,9 @@ $(document).on("click", "#feature", function () {
 
 $(document).on("click", "#Unfeature", function () {
 
-    // entryid = $(this).attr("data-id")
-    // channelname = $(this).attr("data-channelname")
-
+    entrytitle = $(this).attr("data-entrytitle")
     $('#content').text("Are you Sure you Want to Unfeature this Entries into Website?");
-    $('.delname').text(channelname)
+    $('.delname').text(entrytitle)
     $('.deltitle').text("Unfeature Entry")
     $("#delid").text("Unfeature")
     $("#delid").addClass("featurebtn")
@@ -1052,7 +1065,7 @@ $(document).on("click", ".featurebtn", function () {
     featurestatus = $(this).attr("data-feature")
 
     $.ajax({
-        url: "/channel/feature",
+        url: "/entries/feature",
         type: "post",
         data: {
             entryid: entryid,
@@ -1069,10 +1082,10 @@ $(document).on("click", ".featurebtn", function () {
 })
 
 $(document).on("click", ".entrystatuschange", function () {
-    // if (window.location.href.includes('/channel/entrylist')) {
+    // if (window.location.href.includes('/entries/entrylist')) {
 
     $.ajax({
-        url: "/channel/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
+        url: "/entries/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
         type: "post",
         data: {
             entryid: entryid,
@@ -1180,9 +1193,9 @@ $('#draftbtn').click(function () {
     var drafturl
 
     if (pageno == null) {
-        drafturl = "/channel/draftentry/" + eid
+        drafturl = "/entries/draftentry/" + eid
     } else {
-        drafturl = "/channel/draftentry/" + eid + "?page=" + pageno
+        drafturl = "/entries/draftentry/" + eid + "?page=" + pageno
 
     }
     var data = ckeditor1.getData();
@@ -1325,10 +1338,10 @@ $('#draftbtn').click(function () {
 
                     if (result.Channelname == "") {
                         if (pageno == null) {
-                            window.location.href = "/channel/editsentry/" + result.id
+                            window.location.href = "/entries/edits/" + result.id
 
                         } else {
-                            window.location.href = "/channel/editsentry/" + result.id + "?page=" + pageno
+                            window.location.href = "/entries/edits/" + result.id + "?page=" + pageno
 
                         }
 
@@ -1337,10 +1350,10 @@ $('#draftbtn').click(function () {
 
 
                         if (pageno == null) {
-                            window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id
+                            window.location.href = "/entries/edit/" + result.Channelname + "/" + result.id
 
                         } else {
-                            window.location.href = "/channel/editentry/" + result.Channelname + "/" + result.id + "?page=" + pageno
+                            window.location.href = "/entries/edit/" + result.Channelname + "/" + result.id + "?page=" + pageno
 
                         }
                     }
@@ -1411,9 +1424,9 @@ $('#publishbtn').click(function () {
     var homeurl
 
     if (pageno == null) {
-        homeurl = "/channel/entrylist/"
+        homeurl = "/entries/entrylist/"
     } else {
-        homeurl = "/channel/entrylist/?page=" + pageno;
+        homeurl = "/entries/entrylist/?page=" + pageno;
     }
 
     if (url.includes('editentry') || url.includes('editsentry')) {
@@ -1522,7 +1535,7 @@ $('#publishbtn').click(function () {
         extxt = $("#extxt").val()
 
         $.ajax({
-            url: "/channel/publishentry/" + eid,
+            url: "/entries/publishentry/" + eid,
             type: "POST",
             dataType: "json",
             data: { "id": entryId, "cname": channelname, "image": img, "title": title, "status": 1, "text": data, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": sortorder, "tagname": tagname, "extxt": extxt },
@@ -1539,6 +1552,9 @@ $('#publishbtn').click(function () {
 //ENTRY SELECTED FUNCTION//
 
 $(document).on('click', '.selectcheckbox', function () {
+
+    $('#unbulishslt').hide()
+    $('#seleccheckboxdelete').removeClass('border-r');    
 
     entryid = $(this).attr('data-id')
 
@@ -1575,42 +1591,42 @@ $(document).on('click', '.selectcheckbox', function () {
         var setstatus
         var img;
 
-        if (selectedcheckboxarr[0].status === "Unpublished") {
+        // if (selectedcheckboxarr[0].status === "Unpublished") {
 
-            setstatus = "Publish";
+        //     setstatus = "Publish";
 
-            img = "/public/img/publish.png";
+        //     img = "/public/img/publish.png";
 
-        } else if (selectedcheckboxarr[0].status === "Published") {
+        // } else if (selectedcheckboxarr[0].status === "Published") {
 
-            setstatus = "Unpublish";
+        //     setstatus = "Unpublish";
 
-            img = "/public/img/unpublish-select.svg";
+        //     img = "/public/img/unpublish-select.svg";
 
-        }
-        else if (selectedcheckboxarr[0].status === "Draft") {
+        // }
+        // else if (selectedcheckboxarr[0].status === "Draft") {
 
-            htmlContent = '';
+        //     htmlContent = '';
 
-        }
-
-
-        if (allSame) {
-
-            console.log("checksame")
-
-            htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">' + setstatus + '</span>';
+        // }
 
 
-        } else {
+        // if (allSame) {
 
-            htmlContent = '';
+        //     console.log("checksame")
 
-        }
+        //     htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">' + setstatus + '</span>';
 
-        console.log(htmlContent, "htmlcontent")
 
-        $('#unbulishslt').html(htmlContent);
+        // } else {
+
+        //     htmlContent = '';
+
+        // }
+
+        // console.log(htmlContent, "htmlcontent")
+
+        // $('#unbulishslt').html(htmlContent);
 
 
         var items
@@ -1629,15 +1645,15 @@ $(document).on('click', '.selectcheckbox', function () {
 
         $('#deselectid').addClass("selectall")
 
-        if (!allSame || selectedcheckboxarr[0].status === "Draft") {
+        // if (!allSame || selectedcheckboxarr[0].status === "Draft") {
 
-            $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
+        //     $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
 
-            $('#unbulishslt').html("")
-        } else {
+        //     $('#unbulishslt').html("")
+        // } else {
 
-            $('#seleccheckboxdelete').addClass('border-r border-[#717171]')
-        }
+        //     $('#seleccheckboxdelete').addClass('border-r border-[#717171]')
+        // }
 
     } else {
 
@@ -1675,6 +1691,10 @@ $(document).on('click', '.selectcheckbox', function () {
 
 $(document).on('click', '#Check', function () {
 
+    $('#unbulishslt').hide()
+    $('#seleccheckboxdelete').removeClass('border-r');
+    $("#deselectid").addClass("deselectid")
+
     selectedcheckboxarr = []
 
     var htmlContent = '';
@@ -1706,45 +1726,46 @@ $(document).on('click', '#Check', function () {
 
         var img
 
-        if (selectedcheckboxarr.length != 0 && allSame) {
+        // if (selectedcheckboxarr.length != 0 && allSame) {
 
-            if (selectedcheckboxarr[0].status == "Unpublished") {
+        //     if (selectedcheckboxarr[0].status == "Unpublished") {
 
-                setstatus = "Published"
+        //         setstatus = "Published"
 
-                img = "/public/img/publish.png"
-
-
-                htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">"' + setstatus + '"</span>';
+        //         img = "/public/img/publish.png"
 
 
-            } else if (selectedcheckboxarr[0].status == "Published") {
-
-                setstatus = "Unpublished"
-
-                img = "/public/img/unpublish-select.svg";
+        //         htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">"' + setstatus + '"</span>';
 
 
-                htmlContent = '<img src="' + img + '">' + setstatus;
+        //     } else if (selectedcheckboxarr[0].status == "Published") {
+
+        //         setstatus = "Unpublished"
+
+        //         img = "/public/img/unpublish-select.svg";
 
 
-            }
-            else if (selectedcheckboxarr[0].status == "Draft") {
-
-                $('#unbulishslt').html("")
-
-                htmlContent = "";
-            }
-
-        } else {
+        //         htmlContent = '<img src="' + img + '">' + setstatus;
 
 
-            htmlContent = '';
+        //     }
+        //     else if (selectedcheckboxarr[0].status == "Draft") {
 
-            $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
-        }
+        //         $('#unbulishslt').html("")
 
-        $('#unbulishslt').html(htmlContent);
+        //         htmlContent = "";
+        //     }
+
+        // } else {
+
+
+        //     htmlContent = '';
+
+        //     $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
+        // }
+
+        // $('#unbulishslt').html(htmlContent);
+
 
         $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
 
@@ -1811,11 +1832,11 @@ $(document).on('click', '.checkboxdelete', function () {
 
     pageno = urlpar.get('page')
 
-    var newUrl = window.location.pathname; 
+    var newUrl = window.location.pathname;
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/channel/deleteselectedentry',
+        url: '/entries/deleteselectedentry',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1874,7 +1895,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/channel/unpublishselectedentry',
+        url: '/entries/unpublishselectedentry',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -2047,7 +2068,7 @@ $(document).on('click', '#editbtn', function () {
 //                             const formData = new FormData();
 //                             formData.append('file', file);
 //                             formData.append('csrf', $("input[name='csrf']").val())
-//                             fetch(url + '/channel/imageupload', {
+//                             fetch(url + '/entries/imageupload', {
 //                                 method: 'POST',
 //                                 body: formData
 //                             })
@@ -2338,7 +2359,7 @@ $(document).on('click', '#channelfieldsave', function () {
         }
 
         $.ajax({
-            url: "/channel/checkentriesorder",
+            url: "/entries/checkentriesorder",
             type: "POST",
             async: false,
             data: { "chid": $("#chanid").val(), csrf: $("input[name='csrf']").val(), "order": sortorder, "eid": eid },
@@ -3512,7 +3533,7 @@ $(document).on("keyup", "#author", function () {
 
             $("#cn-user").show()
 
-            fetch(`/channel/userdetails/?keyword=${keyword}`, {
+            fetch(`/entries/userdetails/?keyword=${keyword}`, {
                 method: "GET"
             })
                 .then(response => {
@@ -3690,7 +3711,7 @@ $(document).on('click', '#previewbtn', function () {
     entryid = $(this).attr('data-id')
 
     $.ajax({
-        url: "/channel/previewdetails/" + entryid,
+        url: "/entries/previewdetails/" + entryid,
         type: "GET",
         dataType: "json",
         data: { "id": entryid, csrf: $("input[name='csrf']").val() },
@@ -3763,7 +3784,7 @@ function EntryStatus(id) {
     console.log("check", isactive, id)
 
     $.ajax({
-        url: '/channel/entryisactive',
+        url: '/entries/entryisactive',
         type: 'POST',
         async: false,
         data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -3797,6 +3818,9 @@ function EntryStatus(id) {
 
 $(document).on("click", ".selectall", function () {
 
+    $('#unbulishslt').hide()
+    $('#seleccheckboxdelete').removeClass('border-r');
+
     $(this).removeClass('selectall')
 
     $('#deselectid').addClass('deselectid')
@@ -3804,6 +3828,8 @@ $(document).on("click", ".selectall", function () {
     $(this).text(languagedata.deselectall)
 
     $('.selectcheckbox').prop('checked', true);
+
+    $('#Check').prop('checked', true);
 
     $('.selectcheckbox').each(function () {
 
@@ -3869,21 +3895,21 @@ $(document).on("click", ".selectall", function () {
 
         console.log(htmlContent, "htmlcontent")
 
-        $('#unbulishslt').html(htmlContent);
+        // $('#unbulishslt').html(htmlContent);
 
         $('.checkboxlength').text(selectedcheckboxarr.length + " " + languagedata.itemselected)
 
 
 
-        if (!allSame || selectedcheckboxarr[0].status === "Draft") {
+        // if (!allSame || selectedcheckboxarr[0].status === "Draft") {
 
-            $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
+        //     $('#seleccheckboxdelete').removeClass('border-r border-[#717171]')
 
-            $('#unbulishslt').html("")
-        } else {
+        //     $('#unbulishslt').html("")
+        // } else {
 
-            $('#seleccheckboxdelete').addClass('border-r border-[#717171]')
-        }
+        //     $('#seleccheckboxdelete').addClass('border-r border-[#717171]')
+        // }
 
     } else {
 
@@ -3891,29 +3917,38 @@ $(document).on("click", ".selectall", function () {
     }
 })
 
+$(function () {
+    $(".sortable").sortable({
+        containment: "parent",
+        cursor: "move",
+        handle: "img[src='/public/img/entries-drag.svg']",
+        scroll: false,
 
-$(".sortable").sortable({
+        update: function (event, ui) {
+            newOrder = $(this).sortable('toArray', { attribute: 'data-id' });
+            var pageno = $(".pagno").attr("data-page");
 
-    update: function (event, ui) {
+            console.log(pageno, "pageno");
 
-        newOrder = $(this).sortable('toArray', { attribute: 'data-id' })
+            $.ajax({
+                url: '/entries/reorder',
+                method: 'POST',
+                dataType: 'application/json',
+                data: { "neworder": newOrder, csrf: $("input[name='csrf']").val(), pageno: pageno },
+                success: function (response) {
+                    console.log("response"); // Corrected typo
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("AJAX error:", textStatus, errorThrown);
+                }
+            });
+        }
+    });
 
-        var pageno = $(".pagno").attr("data-page")
 
-        console.log(pageno, "pageno")
-
-        $.ajax({
-            url: '/channel/reorder',
-            method: 'POST',
-            dataType: 'application/json',
-            data: { "neworder": newOrder, csrf: $("input[name='csrf']").val(), pageno: pageno },
-            success: function (response) {
-                console.log("resposne")
-            },
-
-        });
-    }
+    $(".sortable").disableSelection();
 });
+
 
 $(document).on('click', '#memgrp-slctall', function () {
 
@@ -4051,7 +4086,7 @@ $(document).on('click', '#makeprivate', function () {
     pentryid = $(this).attr('data-id')
 
     $.ajax({
-        url: "/channel/previewdetails/" + pentryid,
+        url: "/entries/previewdetails/" + pentryid,
         type: "GET",
         dataType: "json",
         data: { "id": pentryid, csrf: $("input[name='csrf']").val() },
@@ -4105,7 +4140,7 @@ $(document).on('click', '#permissionupdate', function () {
 
 
     $.ajax({
-        url: "/channel/updatepermissionmembergroupid",
+        url: "/entries/updatepermissionmembergroupid",
         type: "POST",
         dataType: "json",
         data: { "entryid": pentryid, csrf: $("input[name='csrf']").val(), "memgrpids": access_granted_memgrps },
@@ -4144,6 +4179,7 @@ $(document).on('click', '#permissionupdate', function () {
 $(document).on("click", ".Closebtn", function () {
     $(".search").val('')
     $(".Closebtn").addClass("hidden")
+    $(".SearchClosebtn").removeClass("hidden")
     $(".srchBtn-togg").removeClass("pointer-events-none")
 })
 
@@ -4152,11 +4188,11 @@ $(document).on("click", ".searchClosebtn", function () {
     var value = $(".entryclosebutton").val()
     console.log("value:", value);
     if (value == 1) {
-        window.location.href = "/channel/entrylist"
+        window.location.href = "/entries/entrylist"
     } else if (value == 2) {
-        window.location.href = "/channel/unpublishentries"
+        window.location.href = "/entries/unpublishentries"
     } else if (value == 3) {
-        window.location.href = "/channel/draftentries"
+        window.location.href = "/entries/draftentries"
     }
 })
 
@@ -4164,12 +4200,100 @@ $(document).ready(function () {
 
     $('.search').on('input', function () {
         if ($(this).val().length >= 1) {
+            var value = $(".search").val();
             $(".Closebtn").removeClass("hidden")
             $(".srchBtn-togg").addClass("pointer-events-none")
+            $(".SearchClosebtn").addClass("hidden")
         } else {
+            $(".SearchClosebtn").removeClass("hidden")
             $(".Closebtn").addClass("hidden")
             $(".srchBtn-togg").removeClass("pointer-events-none")
         }
     });
 })
+
+$(document).on("click", ".SearchClosebtn", function () {
+    $(".SearchClosebtn").addClass("hidden")
+    $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+    $(".transitionSearch").addClass("w-[32px]")
+
+
+})
+
+$(document).on("click", ".searchopen", function () {
+
+    $(".SearchClosebtn").removeClass("hidden")
+
+})
+
+$(document).ready(function () {
+
+    $('input[name="radio"]').on('change', function () {
+
+        var selectedValue = $(this).val();
+
+        $('#SortFunction').val(selectedValue);
+
+        $('.SortFunction').submit();
+    });
+
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    var sortValue = getQueryParameter('sort');
+
+    if (sortValue) {
+        $('input[name="radio"][value="' + sortValue + '"]').prop('checked', true);
+    }
+
+    $('.pagination-dropdown').on('click', function (e) {
+
+        e.preventDefault();
+
+        var selectedValue = $(this).data('value');
+
+        $('#PaginationLimit').val(selectedValue);
+
+        $('.PaginationLimit').submit();
+    });
+
+    var limitValue = getQueryParameter('limit');
+
+    if (limitValue == null) {
+        limitValue = 10
+    }
+
+    $("#PaginationUpdatedValue").text(limitValue)
+
+    updatePaginationLinks(limitValue);
+
+    function updatePaginationLinks(limit) {
+        $('a[href^="?page="]').each(function () {
+            var href = $(this).attr('href');
+            if (href.includes('limit=')) {
+                // If the URL already has a limit parameter, update it
+                href = href.replace(/(limit=)[^\&]*/, '$1' + limit);
+            } else {
+                // If it doesn't have a limit parameter, append it
+                href += (href.includes('?') ? '&' : '?') + 'limit=' + limit;
+            }
+            $(this).attr('href', href);
+        });
+    }
+
+    $(".statusdropdown .option").on('click', function () {
+
+        var value=$(this).data('value');
+        
+        $("#statusid").text(value)
+
+        $(".statusdropdown").removeClass("show")
+
+        $("#statushidden").val(value)
+    })
+
+})
+
 

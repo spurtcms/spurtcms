@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (content != "") {
         $("input[name=emailid]").val("")
 
-        notify_content = ` <span id="" class="para" for="emailid" style="color:green; font-size:0.75rem">Thank you! A link to reset your password will be sent to your registered 
+        notify_content = ` <span id="" class="para" for="emailid" style="color:green">Thank you! A link to reset your password will be sent to your registered 
         email shortly</span>`
         $(notify_content).insertAfter(".ig-row");
 

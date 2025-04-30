@@ -10,7 +10,7 @@
       <div class="modal-body p-0">
         <div class="p-[12px] border-b border-[#F4F4F4]">
           <div class="mb-[12px] w-fit mx-auto">
-            <img src="/public/img/delete-icon.svg" alt="delete">
+            <img src="/public/img/delete-icon.svg" alt="delete" id="dynamicImage">
           </div>
           <h3 class="text-base font-normal text-[#262626] leading-5 mb-[8px] text-center deltitle">
           </h3>
@@ -24,7 +24,7 @@
             id="dltCancelBtn">{{$Translate.Webhooks.Cancel}}</a>
 
           <a href="javascript:void(0)"
-            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[3px] no-underline max-w-[130px] w-full deleteBtn"
+            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[3px] no-underline max-w-[130px] w-full deleteBtn"
             id="delid" data-id="">{{$Translate.Webhooks.Delete}}</a>
         </div>
       </div>
@@ -123,6 +123,10 @@
 <!-- Zip reader -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 
+<!-- datepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+
+
 <script>
   // Initialize tooltips
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -196,23 +200,12 @@
 
 </script>
 
-<!--search-->
-<!-- <script>
-      $(document).ready(function () {
-          $(".srchBtn-togg").click(function () {
-              $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
-              $(this).next('input').toggleClass('hidden ');
-              $(this).parent('div').toggleClass('w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
-          });
-      });
-  </script> -->
-
 <script>
   $(document).ready(function () {
     $(".srchBtn-togg").click(function () {
-      $(this).next('input').toggleClass('w-[calc(100%-36px)] h-full block ');
-      $(this).next('input').toggleClass('hidden ');
-      $(this).parent('div').toggleClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
+      $(this).next('input').addClass('w-[calc(100%-36px)] h-full block ');
+      // $(this).next('input').addClass('hidden ');
+      $(this).parent('div').addClass('w-[32px] w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden ');
     });
   });
 

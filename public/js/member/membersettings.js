@@ -11,7 +11,7 @@ $(document).ready(function(){
 $(document).on('click','.open-emailtemp',function(){
 
 console.log("email tem");
-    $('#mailtemplate_form').attr('action','/member/settings/updatetemplate')
+    $('#mailtemplate_form').attr('action','/user/settings/updatetemplate')
     console.log("checkclick")
     tempid = $(this).attr('data-id')
     $('#userid').val(tempid)
@@ -20,7 +20,7 @@ console.log("email tem");
     pageno = urlpar.get('page');
     $("#pageno").val(pageno)
     $.ajax({
-      url: "/member/settings/edittemplate",
+      url: "/user/settings/edittemplate",
       type: "GET",
       dataType: "json",
       data: { "id": tempid },
@@ -164,7 +164,7 @@ function CKEDITORS() {
                             const formData = new FormData();
                             formData.append('file', file);
                             formData.append('csrf', $("input[name='csrf']").val())
-                            fetch(url + '/channel/imageupload', {
+                            fetch(url + '/entries/imageupload', {
                                 method: 'POST',
                                 body: formData
                             })
@@ -391,7 +391,7 @@ console.log(userids,"useridsss")
 
  $(document).on('click','#cancel',function(){
 
-    window.location.href="/member/settings"
+    window.location.href="/user/settings"
  })
 
 

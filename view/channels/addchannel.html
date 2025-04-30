@@ -11,7 +11,7 @@
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{.linktitle}}</h2>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Channell.Createchannel}}</h2>
         </div>
 
 
@@ -19,32 +19,32 @@
             <a href="javascript:void(0)"
                 class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline"
                 id="previous-btn">{{$Translate.Previous}}</a>
-            <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[#148569] bg-[#10A37F] rounded-[4px] no-underline"
+            <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline"
                 id="nextstep" href="javascript:void(0)">{{$Translate.Next}}</a>
         </div>
     </header>
     <div class="flex flex-col h-full">
         <input type="hidden" id="chn-step" value="1">
         <input type="hidden" name="csrf" value="{{.csrf}}">
-        <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}" />
+        <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}" />      
         <input type="hidden" name="CurrentPage" id="CurrentPage" value="{{.CurrentPage}}" />
         <div
             class=" flex justify-between sm:flex-row flex-col items-start space-y-[12px] sm:space-y-[0] sm:space-x-[12px] sm:items-center border-b border-[#EDEDED] px-[16px] py-[12px]">
             <div class=" flex items-center space-x-[12px]">
                 <a href="javascript:void(0)" class="flex flex-col space-y-[6px] items-start no-underline">
-                    <h5 class="text-[#10A37F] md:text-base text-sm font-normal leading-5 mb-0" id="tab-s1">
+                    <h5 class="text-[#000000] md:text-base text-sm font-normal leading-5 mb-0" id="tab-s1">
                         {{$Translate.Channell.Channelname}}</h5>
                     <p class="text-xs text-bold-gray font-normal leading-14 mb-0">
                         {{$Translate.Channell.ChannelNamedesc}} </p>
                 </a>
-                <div class=" bg-[#10A37F] min-w-6 h-0.5 rotate-90 transform sm:rotate-0  whitespace-nowrap"
+                <div class=" bg-[var(--btn-bg)] min-w-6 h-0.5 rotate-90 transform sm:rotate-0  whitespace-nowrap"
                     id="tb1-tb2">
                 </div>
                 <a href="javascript:void(0)" class="flex flex-col space-y-[6px] items-start no-underline">
                     <h5 class="text-bold-gray md:text-base text-sm font-normal leading-5 mb-0" id="tab-s2">
                         {{$Translate.Channell.Channelfield}}
                     </h5>
-                    <p class="text-xs text-bold-gray font-normal leading-14 mb-0">
+                    <p class="text-xs text-bold-gray font-normal leading-14 mb-0 ">
                         {{$Translate.Channell.ChannelNamedesc}}</p>
                 </a>
                 <div class="min-w-6 h-0.5 rotate-90 transform sm:rotate-0 bg-bold-gray  whitespace-nowrap" id="tb2-tb3">
@@ -59,7 +59,7 @@
                 </a>
             </div>
             <div class="flex space-x-[16px] items-center">
-                <div class="h-34 min-w-[100px] px-[12px] text-[#10A37F] border rounded-32 bg-[#E9FFFA] border-[#10A37F4D] flex items-center justify-center text-sm font-normal"
+                <div class="h-34 min-w-[100px] px-[12px] text-[#000000] border rounded-32 bg-[#FAFAFA] border-[#000000] flex items-center justify-center text-sm font-normal"
                     id="stp-lev">
                     {{$Translate.Channell.Step}} 1 {{$Translate.Of}} 3
                 </div>
@@ -72,16 +72,42 @@
             <div>
                 <form id="channelcreate" name="channelform" class="flex flex-col space-y-[24px] max-w-640">
                     <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="channelslug" id="channelslug" value="{{.channel.SlugName}}">
                     <div class="flex flex-col space-y-[6px] m-0">
-                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Channell.Channelname}} </p>
+                        <label for="channelname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channelname}}  <span class="text-red-600" >*</span> 
+                            <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Channell.Channelnamelable}}</p>
+                        </div></label>
                         <input type="text"
-                            class=" [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
-                            placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
+                            class=" {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs")))))}}opacity-[50%]{{end}} [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
+                            {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs")))))}}readonly{{end}}  placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
                             value="{{.channel.ChannelName}}" />
                     </div>
                     <div class="flex flex-col space-y-[6px]">
-                        <p class="text-bold-black text-sm font-normal mb-0">{{$Translate.Description}} </p>
-                        <textarea type="text" maxlength="250"
+                        <label for="channelname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channel}} {{$Translate.Channell.Id}}
+                            <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                A system-generated unique identifier for the channel, used internally for tracking and integration purposes.</p>
+                        </div></label>
+                        <input type="text" readonly
+                            class=" [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
+                            placeholder="Enter ChannelId" name="channeluniqueid" id="channeluniqueid"  
+                            value="{{if .channel}}{{.channel.ChannelUniqueId}}{{else}}{{.UniqueId}}{{end}}" />
+                    </div>
+                    <div class="flex flex-col space-y-[6px]">
+                        <label for="channeldesc" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Description}} <span class="text-red-600" >*</span> 
+                            <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Channell.Descriptionlable}}</p>
+                        </div></label>
+                        <textarea type="text" 
                             class="scrollbar-none [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px]  bg-[#F7F7F5] placeholder:text-[#B2B2B2] resize-none h-[120px] text-bold-black text-sm text-start font-normal w-full border border-[#EDEDED]"
                             placeholder="{{$Translate.Enterdescription}}" name="description"
                             id="channeldesc">{{.channel.ChannelDescription}}</textarea>
@@ -96,7 +122,7 @@
                 <div class="dropdown open bg-white p-[8px_16px] relative flex items-center rounded-[4px] constant-item"
                     id="add-field">
                     <button type="button"
-                        class="inline-flex w-full justify-center h-[40px] items-center border-2 border-[#10A37F] hover:bg-[#10A37F] hover:text-white rounded-[4px] bg-[white] px-[12px] py-[10px] text-base font-semibold text-[#10A37F] leading-none"
+                        class="bordered-btn inline-flex w-full justify-center h-[40px] items-center border-2  rounded-[4px] bg-[white] px-[12px] py-[10px] text-base font-semibold  leading-none"
                         id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         + {{$Translate.Channell.AddFields}}
                     </button>
@@ -136,7 +162,7 @@
                            <span> Date</span>
                         </button>
                         {{end}}
-                        {{if eq .TypeName "TextBox"}}
+                        <!-- {{if eq .TypeName "TextBox"}}
                         <button
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
@@ -144,6 +170,15 @@
                             <span>Text Box</span>
                         </button>
                         {{end}}
+                        {{if eq .TypeName "TextBox"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/input-box.svg" alt="">
+                            <span>Text Box</span>
+                        </button>
+                        {{end}}    
+                      -->
                         {{if eq .TypeName "TextArea"}}
                         <button
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
@@ -162,13 +197,20 @@
                         {{end}}
                         {{if eq .TypeName "CheckBox"}}
                         <button
-                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/check-box.svg" alt="">
                            <span> Check Box</span>
                         </button>
                         {{end}}
-
+                        {{if eq .TypeName "Number"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/input-box.svg" alt="">
+                            <span>Number</span>
+                        </button>
+                        {{end}}
                         {{end}}
                         <!-- <h3 class="text-bold-black font-normal text-base may-4">
                             Relational Fields

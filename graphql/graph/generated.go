@@ -7704,7 +7704,7 @@ func (ec *executionContext) _FieldValue_tenantId(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.TenantID, nil
+		return obj.TenantId, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)

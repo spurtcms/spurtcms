@@ -2,11 +2,39 @@ var languagedata
 
 
 /*block hide and show*/
-$(document).ready(function () {
+// $(document).ready(function () {
+//   $('.hd-crd-btn').click(function () {
+//     $('#hd-crd, .hd-crd-btn').toggleClass('hide');
+//   });
+// });
+
+// $(document).ready(function () {
+
+//   if(localStorage.getItem("channelbanner")=="true"){
+//       $('#hd-crd').removeClass('hidden')
+
+//   }else if(localStorage.getItem("channelbanner")=="false"){
+//       $('#hd-crd').addClass('hidden')
+//   }else{
+//       localStorage.setItem('channelbanner', true);
+//   }
+
+
+// });
+
+
+
   $('.hd-crd-btn').click(function () {
-    $('#hd-crd, .hd-crd-btn').toggleClass('hide');
-  });
+  
+    if ($('#hd-crd').is(':visible')) {
+        $('#hd-crd').addClass('hidden').removeClass("show"); 
+        document.cookie = `channelbanner=false; path=/;`;
+    } else {
+        $('#hd-crd').addClass("show").removeClass('hidden');
+        document.cookie = `channelbanner=true; path=/;`; 
+    }
 });
+
 
 /** */
 $(document).ready(async function () {
@@ -173,7 +201,7 @@ function ChannelStatus(id) {
 //                               </button>
 //                               <ul class="dropdown-menu dropdown-menu-end">
 //                                   <li>
-//                                       <a href="/channels/editchannel/`+ x.Id + `">
+//                                       <a href="/channels/edit/`+ x.Id + `">
 //                                           <button class="dropdown-item" type="button">
 //                                               <span><img src="/public/img/channel-configuration.svg" alt="" /></span>
 //                                               Configuration
@@ -211,8 +239,8 @@ $(document).on('click', "#work-tab", function () {
   $('#create-channel-btn').addClass('hidden')
   $('#records').addClass('hidden')
   $('.pagination').addClass('hidden')
-  
-  
+
+
 })
 
 $(document).on('click', "#collection-tab", function () {
@@ -232,6 +260,7 @@ $(document).on('click', '.delete-toast-btn', function () {
 $(document).on("click", ".Closebtn", function () {
   $(".search").val('')
   $(".Closebtn").addClass("hidden")
+  $(".SearchClosebtn").removeClass("hidden")
   $(".srchBtn-togg").removeClass("pointer-events-none")
 })
 
@@ -244,13 +273,30 @@ $(document).ready(function () {
 
   $('.search').on('input', function () {
       if ($(this).val().length >= 1) {
+          var value=$(".search").val();
           $(".Closebtn").removeClass("hidden")
           $(".srchBtn-togg").addClass("pointer-events-none")
+          $(".SearchClosebtn").addClass("hidden")
       } else {
+          $(".SearchClosebtn").removeClass("hidden")
           $(".Closebtn").addClass("hidden")
           $(".srchBtn-togg").removeClass("pointer-events-none")
       }
   });
+})
+
+$(document).on("click", ".SearchClosebtn", function () {
+  $(".SearchClosebtn").addClass("hidden")
+  $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+  $(".transitionSearch").addClass("w-[32px]")
+
+  
+})
+
+$(document).on("click", ".searchopen", function () {
+
+  $(".SearchClosebtn").removeClass("hidden")
+  
 })
 
 

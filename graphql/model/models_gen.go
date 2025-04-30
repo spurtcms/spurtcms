@@ -26,7 +26,7 @@ type Author struct {
 	CreatedBy        int        `json:"createdBy"`
 	ModifiedOn       *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy       *int       `json:"modifiedBy,omitempty"`
-	TenantID         int        `json:"tenantId"`
+	TenantID         string        `json:"tenantId"`
 }
 
 type Category struct {
@@ -40,7 +40,7 @@ type Category struct {
 	ModifiedOn   *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy   *int       `json:"modifiedBy,omitempty"`
 	ParentID     int        `json:"parentId"`
-	TenantID     int        `json:"tenantId"`
+	TenantID     string        `json:"tenantId"`
 }
 
 type CategoryDetails struct {
@@ -71,7 +71,7 @@ type Channel struct {
 	IsDeleted          int        `json:"isDeleted"`
 	ModifiedOn         *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy         *int       `json:"modifiedBy,omitempty"`
-	TenantID           int        `json:"tenantId"`
+	TenantID           string        `json:"tenantId"`
 }
 
 type ChannelDetails struct {
@@ -113,7 +113,7 @@ type ChannelEntries struct {
 	AdditionalFields *AdditionalFields    `json:"additionalFields,omitempty"`
 	AuthorDetails    *Author              `json:"authorDetails,omitempty"`
 	MemberProfile    *MemberProfile       `json:"memberProfile,omitempty"`
-	TenantID         int                  `json:"tenantId"`
+	TenantID         string                  `json:"tenantId"`
 	ContentChunk     *Chunk               `json:"contentChunk,omitempty"`
 }
 
@@ -167,7 +167,7 @@ type Field struct {
 	FieldTypeName    string         `json:"fieldTypeName"`
 	FieldValue       *FieldValue    `json:"fieldValue,omitempty"`
 	FieldOptions     []FieldOptions `json:"fieldOptions,omitempty"`
-	TenantID         int            `json:"tenantId"`
+	TenantID         string            `json:"tenantId"`
 }
 
 type FieldOptions struct {
@@ -178,7 +178,7 @@ type FieldOptions struct {
 	CreatedBy   int        `json:"createdBy"`
 	ModifiedOn  *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy  *int       `json:"modifiedBY,omitempty"`
-	TenantID    int        `json:"tenantId"`
+	TenantID    string        `json:"tenantId"`
 }
 
 type FieldValue struct {
@@ -188,7 +188,7 @@ type FieldValue struct {
 	CreatedBy  int        `json:"createdBy"`
 	ModifiedOn *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy *int       `json:"modifiedBY,omitempty"`
-	TenantID   int        `json:"tenantId"`
+	TenantId  string        `json:"tenantId"`
 }
 
 type Filter struct {
@@ -239,7 +239,7 @@ type MemberProfile struct {
 	ModifiedBy      *int       `json:"modifiedBy,omitempty"`
 	ClaimStatus     *int       `json:"claimStatus,omitempty"`
 	IsActive        *int       `json:"IsActive,omitempty"`
-	TenantID        int        `json:"tenantId"`
+	TenantID        string        `json:"tenantId"`
 	ClaimDate       *time.Time `json:"claimDate,omitempty"`
 }
 
@@ -250,7 +250,7 @@ type MemberSettings struct {
 	ModifiedBy        *int       `json:"modifiedBy,omitempty"`
 	ModifiedOn        *time.Time `json:"modifiedOn,omitempty"`
 	NotificationUsers string     `json:"notificationUsers"`
-	TenantID          int        `json:"tenantId"`
+	TenantID          string        `json:"tenantId"`
 }
 
 type Members struct {
@@ -269,7 +269,7 @@ type Members struct {
 	CreatedOn        *time.Time `json:"createdOn,omitempty"`
 	ModifiedOn       *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy       *int       `json:"modifiedBy,omitempty"`
-	TenantID         int        `json:"tenantId"`
+	TenantID         string        `json:"tenantId"`
 	IsDeleted        int        `json:"isDeleted"`
 }
 
@@ -293,7 +293,7 @@ type Section struct {
 	ModifiedOn    *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy    *int       `json:"modifiedBY,omitempty"`
 	OrderIndex    int        `json:"orderIndex"`
-	TenantID      int        `json:"tenantId"`
+	TenantID      string        `json:"tenantId"`
 }
 
 type Sort struct {

@@ -1,12 +1,14 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type MembersListReq struct {
 	Limit    int
 	Offset   int
 	Keyword  string
-	TenantId int
+	TenantId string
 	Count    bool
 }
 
@@ -15,7 +17,7 @@ func (model ModelConfig) MembersList(inputs MembersListReq) (members []Members, 
 	fmt.Println(model.DB, inputs.Count, inputs.Limit, "dbvalue")
 	query := model.DB.Debug().Table("tbl_members").Where("tbl_members.is_deleted = 0").Order("id desc")
 
-	if inputs.TenantId != -1 {
+	if inputs.TenantId != "" {
 
 		query = query.Where("tbl_members.tenant_id=?", inputs.TenantId)
 

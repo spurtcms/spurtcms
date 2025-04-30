@@ -212,7 +212,7 @@ $(document).on('click', '#nextstep', function () {
         if ($("#fileInput").val() != "" & $("#select_channel").attr("data-id") != "" & $("#img-Input").val() != "") {
 
             $.ajax({
-                url: "/channel/channelfields/" + $("#select_channel").attr("data-id"),
+                url: "/entries/channelfields/" + $("#select_channel").attr("data-id"),
                 type: "GET",
                 dataType: "json",
                 data: { "id": $("#select_channel").attr("data-id") },

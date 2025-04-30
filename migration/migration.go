@@ -6,11 +6,13 @@ import (
 	"log"
 	"os"
 	"spurt-cms/config"
-	"spurt-cms/controllers"
 	"spurt-cms/migration/mysql"
 	"spurt-cms/migration/postgres"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func TableMigration() {
@@ -54,47 +56,54 @@ func InsertDefaultValues() {
 			continue
 		}
 
-		// bucketName := os.Getenv("AWS_BUCKET")
-		// accessId := os.Getenv("AWS_ACCESS_KEY_ID")
-		// accessKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
-		// Region := os.Getenv("AWS_DEFAULT_REGION")
-
-		// // Create a JSON string for the AWS configuration
-		// awsConfig := map[string]string{
-		// 	"Region":     Region,
-		// 	"AccessId":   accessId,
-		// 	"AccessKey":  accessKey,
-		// 	"BucketName": bucketName,
-		// }
-		// awsConfigJSON, err := json.Marshal(awsConfig)
-		// if err != nil {
-		// 	log.Fatalf("Error marshaling AWS config: %v", err)
-		// }
-
 		currentTime, _ := time.Parse("2006-01-02 15:04:05", time.Now().UTC().Format("2006-01-02 15:04:05"))
 
 		parts := strings.Fields(fmt.Sprint(currentTime))
 
 		timeStamp := fmt.Sprintf("%s %s", parts[0], parts[1])
 
-		var apiKey string
+		uuid := (uuid.New()).String()
 
-		apiKey, err = controllers.GenerateTenantApiToken(64)
+		arr := strings.Split(uuid, "-")
 
-		if err != nil {
+		Uuid := arr[len(arr)-1]
 
-			return
+		query = strings.ReplaceAll(query, "current_time", timeStamp)
+
+		if strings.Contains(query, "tbl_forms") {
+
+			query = strings.ReplaceAll(query, "uu_id", Uuid)
 		}
 
-		// replacer := strings.NewReplacer("current-time", timeStamp, "apikey", apiKey, "awsConfig", string(awsConfigJSON))
+		if strings.Contains(query, "tbl_block_tags") {
 
-		replacer := strings.NewReplacer("current-time", timeStamp, "apikey", apiKey)
+			var defBlockIds []int
 
-		finalQuery := replacer.Replace(query)
-		// Execute the SQL query
-		err1 := db.Exec(finalQuery).Error
+			if err = db.Table("tbl_blocks").Select("id").Where("is_deleted=0 and tenant_id is NULL and block_description=?", "spurtcms").Scan(&defBlockIds).Error; err != nil {
+				log.Println(err)
+			}
 
-		if err1 != nil {
+			for _, val := range defBlockIds {
+				modifiedQuery := strings.ReplaceAll(query, "blo_id", strconv.Itoa(val))
+
+				var exists bool
+				db.Table("tbl_block_tags").Select("count(*) > 0").Where("block_id = ?", val).Scan(&exists)
+
+				if !exists {
+
+					err := db.Exec(modifiedQuery).Error
+					if err != nil {
+						fmt.Println("Error executing query: \nQuery:", modifiedQuery, "\nError:", err)
+					}
+				} else {
+				}
+			}
+			continue
+		}
+
+		err := db.Exec(query).Error
+
+		if err != nil {
 
 			fmt.Println("Error executing query: \nQuery:", err, query)
 		}
@@ -113,9 +122,7 @@ func InsertDefaultValues() {
 
 			blocktag_count, blockcolln_count, gensetting_count int64
 
-			graphqlsetting_count, template_count, tempmodule_count, emailConf_count int64
-
-			emailTemp_count int64
+			graphqlsetting_count, template_count, tempmodule_count, emailConf_count, emailTemp_count, form_count, Subscription_count int64
 		)
 
 		if err := db.Table("tbl_modules").Count(&module_count).Error; err != nil {
@@ -188,16 +195,14 @@ func InsertDefaultValues() {
 			log.Println(err)
 		}
 
-		if err := db.Table("tbl_graphql_settings").Count(&graphqlsetting_count).Error; err != nil {
-
-			log.Println(err)
-		}
-
 		if err := db.Table("tbl_templates").Count(&template_count).Error; err != nil {
 
 			log.Println(err)
 		}
+		if err := db.Table("tbl_graphql_settings").Count(&graphqlsetting_count).Error; err != nil {
 
+			log.Println(err)
+		}
 		if err := db.Table("tbl_template_modules").Count(&tempmodule_count).Error; err != nil {
 
 			log.Println(err)
@@ -212,6 +217,16 @@ func InsertDefaultValues() {
 
 			log.Println(err)
 		}
+		if err := db.Table("tbl_forms").Count(&form_count).Error; err != nil {
+
+			log.Println(err)
+		}
+
+		if err := db.Table("tbl_mstr_membershiplevels").Count(&Subscription_count).Error; err != nil {
+
+			log.Println(err)
+		}
+
 		if module_count > 0 {
 
 			var moduleId int
@@ -407,19 +422,6 @@ func InsertDefaultValues() {
 
 		}
 
-		if graphqlsetting_count > 0 {
-
-			var GraphqlSettingMaxId int
-
-			if err := db.Raw("SELECT COALESCE((select max(id) from tbl_graphql_settings),0)").Scan(&GraphqlSettingMaxId); err != nil {
-				// Handle error
-				log.Println(err)
-			}
-
-			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_graphql_settings_id_seq RESTART WITH %v", GraphqlSettingMaxId+1))
-
-		}
-
 		if template_count > 0 {
 
 			var TemplateMaxId int
@@ -445,7 +447,18 @@ func InsertDefaultValues() {
 			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_template_modules_id_seq RESTART WITH %v", templateModuleMaxId+1))
 
 		}
+		if graphqlsetting_count > 0 {
 
+			var GraphqlSettingMaxId int
+
+			if err := db.Raw("SELECT COALESCE((select max(id) from tbl_graphql_settings),0)").Scan(&GraphqlSettingMaxId); err != nil {
+				// Handle error
+				log.Println(err)
+			}
+
+			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_graphql_settings_id_seq RESTART WITH %v", GraphqlSettingMaxId+1))
+
+		}
 		if emailConf_count > 0 {
 
 			var emailConfMaxId int
@@ -470,8 +483,19 @@ func InsertDefaultValues() {
 			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_email_templates_id_seq RESTART WITH %v", emailTempMaxId+1))
 		}
 
+		if Subscription_count > 0 {
+
+			var subscriptionMaxId int
+
+			if err := db.Raw("SELECT COALESCE((select max(id) from tbl_mstr_membershiplevels),0)").Scan(&subscriptionMaxId); err != nil {
+				// Handle error
+				log.Println(err)
+			}
+
+			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_mstr_membershiplevels_id_seq RESTART WITH %v", subscriptionMaxId+1))
+		}
+
 	}
 
-	// S3folderCreation()
 	fmt.Println("SQL file loaded successfully.")
 }
