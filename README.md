@@ -32,7 +32,7 @@
 <br />
 
 > [!IMPORTANT]
-> 🎉 <strong>Spurtcms V1.2.0 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.[![GoDoc](https://godoc.org/github.com/spurtcms/block?status.svg)](https://pkg.go.dev/search?q=spurtcms)
+> 🎉 <strong>Spurtcms V1.2.1 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.[![GoDoc](https://godoc.org/github.com/spurtcms/block?status.svg)](https://pkg.go.dev/search?q=spurtcms)
 <br />
 <p>
 spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful tools for content creation, management, and defining CMS workspaces. Administrators have precise control over member access, ensuring streamlined member management. Dynamic channel management allows effective content structuring, enhancing the overall user experience. Administrators effortlessly create and manage channels and templates, providing a comprehensive, user-centric content management solution for personalized and organized web environments.
