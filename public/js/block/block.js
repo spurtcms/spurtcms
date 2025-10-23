@@ -119,7 +119,7 @@ $("#createblock").on("click", function () {
         var result;
         id = $("#blockid").val()
         $.ajax({
-            url: "/blocks/checktitle",
+            url: "/admin/blocks/checktitle",
             type: "POST",
             async: false,
             data: { "block_title": value, "block_id": id, csrf: $("input[name='csrf']").val() },
@@ -198,7 +198,7 @@ $("#createblock").on("click", function () {
         // Create a FormData object from the form
         const formData = new FormData(form);
 
-        fetch('/blocks/create', {
+        fetch('/admin/blocks/create', {
             method: 'POST',
             body: formData
 
@@ -238,7 +238,7 @@ $("#updateblock").on("click", function () {
         id = $("#blockid").val()
 
         $.ajax({
-            url: "/blocks/checktitle",
+            url: "/admin/blocks/checktitle",
             type: "POST",
             async: false,
             data: { "block_title": value, "block_id": id, csrf: $("input[name='csrf']").val() },
@@ -327,7 +327,7 @@ $("#updateblock").on("click", function () {
         // Create a FormData object from the form
         const formData = new FormData(form);
 
-        fetch('/blocks/update', {
+        fetch('/admin/blocks/update', {
             method: 'POST',
             body: formData
 
@@ -480,7 +480,7 @@ $(document).on("click", "#collectionblock", function () {
     blockid = $(this).attr("data-blockid")
 
     $.ajax({
-        url: "/blocks/createcollection",
+        url: "/admin/blocks/createcollection",
         type: "POST",
         async: false,
         data: { "blockid": blockid, csrf: $("input[name='csrf']").val() },
@@ -569,7 +569,7 @@ $(document).on("click", ".deleteblock", function () {
     id = $(this).attr("data-id")
   console.log(id,"dataid");
   
-    fetch(`/blocks/deleteblock?id=${id}`, {
+    fetch(`/admin/blocks/deleteblock?id=${id}`, {
         method: "GET"
     })
         .then(response => response.json())
@@ -627,8 +627,6 @@ function BlockPremium() {
 
 // block modal cancel button functionlaity
 $(document).on("click", "#Closeblockmodal,#CreateBlock", function () {
-    console.log("close all re works");
-
     $(".coverimgblock").remove()
     $("#createModal").addClass('hidden')
     $("#createModal").removeClass('show')
@@ -664,7 +662,6 @@ $(document).on("click", "#Closeblockmodal,#CreateBlock", function () {
 
 // new block button functionality
 $(document).on("click", "#CreateBlock", function () {
-    
     $("#createModal").removeClass('hidden')
     $("#createModal").addClass('show')
     $("#blockform").attr("action", "/blocks/create")
@@ -755,7 +752,7 @@ $(document).on("click", "#editblock", function () {
 
 
     $.ajax({
-        url: "/blocks/blockdetails",
+        url: "/admin/blocks/blockdetails",
         type: "GET",
         async: false,
         data: { "id": blockid },
@@ -882,7 +879,7 @@ $(document).on("click", "#collectionremove", function () {
     blockid = $(this).attr("data-blockid")
 
     $.ajax({
-        url: "/blocks/removecollection",
+        url: "/admin/blocks/removecollection",
         type: "GET",
         async: false,
         data: { "blockid": blockid },
@@ -924,7 +921,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/blocks"
+    window.location.href = "/admin/blocks"
 })
 
 $(document).ready(function () {
@@ -1036,7 +1033,7 @@ $(document).on('click', '#addtocollect', function () {
 
 
     $.ajax({
-        url: "/blocks/addtomycollection",
+        url: "/admin/blocks/addtomycollection",
         type: "POST",
         async: false,
         data: { csrf: $("input[name='csrf']").val(), "blocktitle": blocktitle, "blockimg": blockimg, "blockslug": blockslug, "blockdata": blockdata, "blockchannel": blockchannelname },
@@ -1060,7 +1057,7 @@ $(document).on('click', '#addtocollect', function () {
                 }, 5000);
 
                 setTimeout(() => {
-                    window.location.href = "/blocks"
+                    window.location.href = "/admin/blocks"
                 }, 2000);
 
             } else if (result.data == "channelmissing") {

@@ -88,7 +88,7 @@ type TblChannel struct {
 	TemplatesCount     int `gorm:"-"`
 }
 
-func GetTemplateModuleList(keyword string, tenantid string, channelSlug string) (tempModuleList []TblTemplateModules, count int64, err error) {
+func GetTemplateModuleList(keyword string, tenantId string, channelSlug string) (tempModuleList []TblTemplateModules, count int64, err error) {
 
 	query := DB.Debug().Preload("Templates", "is_active = 1 and is_deleted = 0 and lower(trim(template_name)) like lower(trim(?)) ", "%"+keyword+"%")
 
@@ -122,7 +122,7 @@ type TemplatesCount struct {
 	TemplateCount int
 }
 
-func GetChannelBasedTemplateCount(slugName string, tenantid string) (templatesCount TemplatesCount, err error) {
+func GetChannelBasedTemplateCount(slugName string, tenantId string) (templatesCount TemplatesCount, err error) {
 
 	var count TemplatesCount
 

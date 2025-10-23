@@ -21,7 +21,7 @@
                     <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                     <img src="/public/img/search-icon-active.svg" alt="search" class="hidden searchopen group-hover:block ">
                 </a>
-                <form action="/settings/users/" class="filterform" method="get" autocomplete="off">
+                <form action="/admin/settings/users/" class="filterform" method="get" autocomplete="off">
 
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="searchroles"
                     value="{{ .Filter.Keyword }}"
@@ -46,7 +46,7 @@
 
 
         <button data-bs-target="#userModal" data-bs-toggle="modal"
-            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:text-lg leading-none  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[var(--btn-bg)] flex items-center justify-center hover:bg-[var(--btn-hover)] text-sm font-normal text-white no-underline leading-0 space-x-[2px]">
+            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:text-lg leading-none  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] flex items-center justify-center  text-sm font-normal text-white no-underline leading-0 space-x-[2px]">
            <span class="max-sm:hidden">
             {{$Translate.Userss.Addnewuser}}
             </span><span class="hidden max-sm:block text-lg leading-none ">+</span>
@@ -361,7 +361,7 @@
                     </div>
                 </div>
                 <div class="overflow-auto scrollbar-thin flex-grow-1">
-                    <form action="/settings/users/createuser"  method="post" id="userform" name="userform">
+                    <form action="/admin/settings/users/createuser"  method="post" id="userform" name="userform">
                         <input type="hidden" name="csrf" value="{{.csrf}}">
                         <input type="hidden" name="userid" value="" id="userid">
                         <input type="hidden" name="pageno" value="" id="pageno">
@@ -420,7 +420,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Enter the member's first name as it should appear in records.</p>
                                         </div></label>
                                         <input type="text" id="user_fname" name="user_fname"  placeholder="{{$Translate.Userss.Labelfname}}" maxlength="25"
@@ -435,7 +435,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[280px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Provide the member's last name for proper identification.</p>
                                         </div></label>
                                         <input type="text" id="user_lname" name="user_lname"  placeholder="{{$Translate.Userss.Labellname}}" maxlength="25"
@@ -450,7 +450,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Add the member’s email address for communication and login purposes.</p>
                                         </div></label>
                                         <input type="text" id="user_email" name="user_email" placeholder="{{$Translate.Userss.Labelemail}}"
@@ -461,7 +461,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Enter a valid phone number for verification and contact.</p>
                                         </div></label>
                                         <input type="text" id="user_mob" name="user_mob" maxlength="15" placeholder="{{$Translate.Userss.Entermobilelabel}}"
@@ -472,7 +472,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Create a unique username for the member to log in.</p>
                                         </div></label>
                                         <input type="text" id="user_name" name="user_name" placeholder="{{$Translate.Userss.Labeluname}}"
@@ -483,7 +483,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Set a secure password for account access and security.</p>
                                         </div></label>
                                       <div class="relative">
@@ -502,7 +502,7 @@
                                             <div class="cursor-pointer group">
                                             <img src="/public/img/inputdesc.svg" alt="">
                                             <p
-                                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                                 Your role in the system, assigned by the admin, defining your access level.</p>
                                         </div></label>
                                         <a  id="triggerId"
@@ -530,9 +530,9 @@
                                                 class="{{if or (and (ne $.loggedinuser 1) (eq .Name `Admin`)) (and (ne $.loggedinuser 1) (eq .Name `admin`))}}pointer-events-none opacity-50{{end}}
                                                 chk-group chk-group-label dropdown-items dropdown-item text-[14px] font-normal leading-[1] text-[#262626] dropdown-filter-roless cursor-pointer"
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button> -->
-
+                                            
                                                 <button
-                                                class="{{if  and (ne $.loggedinuser 1) (eq .CreatedBy 1)}}pointer-events-none opacity-50{{end}}
+                                                class="{{if  (eq .Name `Admin`)}}pointer-events-none opacity-50{{end}}
                                                 chk-group chk-group-label dropdown-items dropdown-item text-[14px] font-normal leading-[1] text-[#262626] dropdown-filter-roless cursor-pointer"
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button>
 

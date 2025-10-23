@@ -1,0 +1,484 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$CurrentPage := .CurrentPage}}
+{{$User_Name := ""}}
+
+
+<section
+    class="sectionclass max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen pb-[68px]">
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Blocks.Customblocks}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.Blocks.Blockheading}}
+                </p>
+            </div>
+        </div>
+
+
+        <a href="javascript:void(0);"
+            class="hd-crd-btn [&.hide>img:first-of-type]:block   [&.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] h-[32px] grid place-content-center hover:bg-[#FAFAFA]">
+            <img src="/public/img/bt-show.svg" alt="show" class="hidden">
+            <img src="/public/img/bt-hide.svg" alt="hide">
+        </a>
+
+
+
+        <div
+            class="{{if eq .keywordtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+                class="{{if eq .keywordtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block searchopen">
+            </a>
+            <form action="/blocks/defaultlist" method="get" class="filterform " autocomplete="off">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="blocksearch"
+                    value="{{.Filter.Keyword}}"
+                    class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                {{if eq .keywordtrue true}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <a href="/admin/blocks/defaultlist"> <img src="/public/img/close.svg" alt="close"></a>
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <a href="/admin/blocks/defaultlist"></a> <img src="/public/img/close.svg" alt="close"></a>
+                </div>
+                {{end}}
+
+            </form>
+        </div>
+        <div class="dropdown filter-dropDown static">
+
+            <a href="javascript:void(0);"
+                class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <img src="/public/img/filter.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                <img src="/public/img/filter-active.svg" alt="filter-active"
+                    class="hidden group-hover:block group-focus:block">
+            </a>
+            <ul
+                class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col space-y-[8px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[300px] !mt-[6px]">
+                {{$ChannelId := .chnid}}
+                {{range .channelist}}
+                <li class="mb-[8px]"><a
+                        class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .ChannelName}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
+                        href="/admin/blocks/defaultlist?channel={{.ChannelName}}">
+                        <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
+                        </h5>
+                        <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if
+                            gt
+                            .EntriesCount 1}}{{$Translate.Entries}} :{{.EntriesCount}}{{else}}
+                            {{$Translate.Channell.Entry}}
+                            :{{.EntriesCount}}{{end}}</p>
+                    </a></li>
+
+                {{end}}
+
+            </ul>
+
+        </div>
+        <!-- <a href="#createModal" data-bs-toggle="offcanvas" id="CreateBlock"
+        class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] flex items-center space-x-[5px] justify-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D]">
+        <span class="max-sm:text-lg max-sm:leading-none "> + </span> <span class="max-sm:hidden">
+            {{$Translate.Blocks.NewBlock}} </span></a> -->
+
+
+    </header>
+
+    <div class="px-[16px] py-[11px]">
+
+        <div id="hd-crd"
+            class="{{if eq .blockBannerValue `false` }} hidden{{end}} [&.hide]:hidden transition-all  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#FAFAFA] rounded-[12px] relative mb-[24px]">
+
+            <a href="javascript:void(0);"
+                class=" hd-crd-btn absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
+                <img src="/public/img/block-close.svg" alt="close"></a>
+
+            <div class="relative grid place-items-center">
+                <img src="/public/img/Blocks.jpg" alt="video" class="w-full ">
+                <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                    <img src="/public/img/play-video.svg" alt="play">
+                </a>
+            </div>
+
+
+            <div>
+                <h3 class="mb-[12px] text-base text-[#252525] font-medium leading-[20px]">
+                    {{$Translate.Blocks.MyCollection}}</h3>
+                <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
+                    {{$Translate.Blocks.Mycollectiondescst}}
+                    <a href="/admin/entries/entrylist"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Blocks.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg"
+                                alt=""></span>
+                    </a>
+                    {{$Translate.Blocks.Mycollectiondescmid}}
+                    <a href="/admin/channels"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Blocks.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg"
+                                alt=""></span>
+                    </a>
+
+                    {{$Translate.Blocks.Mycollectiondescend}}
+                </p>
+                <div
+                    class="flex items-center min-[426px]:space-x-[24px] max-[425px]:items-start max-[425px]:space-y-[24px] max-[425px]:flex-col">
+                    <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img/how-to.svg" alt="How to use">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">{{$Translate.Blocks.HowToUse}}
+                        </p>
+                    </a>
+                    <a href="https://github.com/spurtcms/blocks" target="_blank"
+                        class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
+                            {{$Translate.Blocks.ExploreDocumentation}}</p>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+
+
+        <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                    href="/admin/blocks">{{$Translate.Blocks.MyCollections}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="active hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                    href="/admin/blocks/defaultlist"> {{$Translate.Explore}} </a>
+            </li>
+
+            <li class="ms-auto">
+                <p class="text-sm text-[#A1A1A1] font-normal max-[400px]:text-xs"> <span class="text-[#262626]"
+                        id="defaultcount">{{.Count}} </span> {{if gt .Count 9}} {{$Translate.Blocks.Block}} {{else}}
+                    {{$Translate.Blocks.Blocks}} {{end}} {{$Translate.Available}}</p>
+            </li>
+        </ul>
+
+        {{$UserId := .UserId}}
+        {{$Collectionidlist := .Collectionid}}
+        <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="work">
+                {{if .Defaultlist}}
+                <div class="grid gap-[16px] grid-cols-[repeat(auto-fill,_minmax(282px,_1fr))]">
+
+                    {{range .Defaultlist}}
+                    <div class=" rounded-[12px]  shadow-[-1px_1px_5px_0px_#0000001A]">
+                        <div
+                            class="p-[12px] bg-[#F9F9F9] group grid place-items-center relative overflow-hidden imgblock">
+                            <div class="h-[170px] bg-white">
+                                <img id="blockcoverimage" src="{{.CoverImage}}" alt="sample image "
+                                    style="height: 100%;background: #fff;width: auto;margin: auto;object-fit: contain;"
+                                    class="">
+
+                            </div>
+                            <div
+                                class=" absolute flex justify-center items-center opacity-[0] group-hover:opacity-100 ">
+                                <a href="javascript:void(0);" data-bs-target="#previewModal" data-bs-toggle="offcanvas"
+                                    id="blockpreview" data-blockimg="{{.CoverImage}}" data-title="{{.Title}}"
+                                    data-userimg="{{.ProfileImagePath}}" data-namestring="{{.NameString}}"
+                                    data-username="{{.Username}}" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-custom-class="custom-tooltip" data-bs-title="Preview"
+                                    class="flex justify-center items-center space-x-2 bg-[#000000b3] hover:bg-[#000000] px-6 rounded-[40px] w-auto h-[42px] font-normal text-[#FFFFFF] text-sm">
+                                    <img src="/public/img/eye-white.svg" alt="...">
+                                    <span>Preview</span>
+                                </a>
+                            </div>
+                            {{if eq .Prime 1}}
+                            <a href="javascript:void(0);"
+                                class="hover:scale-[1.05] transition-all w-[32px] h-[32px] bg-white rounded-[4px] grid place-items-center shadow-[0px_1px_8px_0px_#00000033] absolute top-[8px] right-[8px]  ">
+                                <img src="/public/img/premium.svg" alt="premium">
+                            </a>
+                            {{end}}
+                        </div>
+
+                        <div class="p-[16px_12px] flex flex-col space-y-[12px]  border-t border-[#ECECEC]">
+                            <div class="flex items-center justify-between space-x-[8px]">
+                                <h2 id="blocktitle"
+                                    class="text-[14px]  font-normal text-[#262626] leading-[17.5px] line-clamp-1">
+                                    {{.Title}}
+                                </h2>
+
+
+                            </div>
+                            <ul class="flex items-center space-x-[8px] flex-wrap">
+
+                                <li
+                                    class="rounded-[39px] bg-[#EBEBEB] p-[4px_8px] text-[12px] font-normal leading-[14px] text-[#262626] grid place-items-center">
+                                    {{.ChannelSlugname}} </li>
+
+                            </ul>
+                            <div>
+                                <div class="flex items-center space-x-[8px] justify-between">
+                                    <div class="flex items-center space-x-[8px]">
+                                        {{if .ProfileImagePath}}
+                                        <div class=" min-w-6 w-6 h-6 rounded-full overflow-hidden">
+                                            <img id="userimage" src="{{.ProfileImagePath}}" alt="profile">
+                                        </div>
+                                        {{else}}
+                                        <div
+                                            class="grid place-items-center bg-[#F5F5F5] min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden text-sm ">
+                                            <span id="namestring" class="text-[#252525]"> {{.NameString}} </span>
+                                        </div>
+                                        {{end}}
+                                        <p id="blockusername"
+                                            class="text-sm font-normal leading-5 text-[#252525] overflow-hidden truncate whitespace-nowrap">
+                                            {{.Username}}</p>
+
+                                    </div>
+
+                                    <div class="flex items-center space-x-[8px]">
+
+                                        <!-- <label for="block{{.Id}}"
+                                            class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white {{if and (ne .Id 1)  (eq .IsActive 1) }} pointer-events-none {{end}} ">
+                                            <div class="relative">
+                                                <input type="checkbox" value="{{.IsActive}}"
+                                                    onclick="BlockStatus('{{.Id}}')" {{if eq .IsActive 1}}checked{{end}}
+                                                    data-id="{{.Id}}" id="block{{.Id}}" class="peer sr-only">
+                                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                                </div>
+                                                <div
+                                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                                </div>
+                                            </div>
+                                        </label> -->
+                                        <div class="flex space-x-[8px] items-center">
+                                            <!-- <a href="javascript:void(0);" data-bs-target="#previewModal"
+                                                data-bs-toggle="offcanvas" id="blockpreview"
+                                                data-blockimg="{{.CoverImage}}" data-title="{{.Title}}"
+                                                data-userimg="{{.ProfileImagePath}}" data-namestring="{{.NameString}}"
+                                                data-username="{{.Username}}" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" data-bs-custom-class="custom-tooltip"
+                                                data-bs-title="Preview"
+                                                class=" toggle-trigger w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-[4px] relative group ">
+                                                <img src="/public/img/preview.svg" alt="preview">
+                                            </a> -->
+                                            {{if eq .Prime 0}}
+
+                                            <a href="javascript:void(0);" data-blockimg="{{.CoverImage}}"
+                                                id="addtocollect" data-title="{{.Title}}" data-slugname="{{.SlugName}}"
+                                                data-content="{{.BlockContent}}" data-channelname="{{.ChannelSlugname}}"
+                                                data-isactive="{{.IsActive}}" data-blockid="{{.Id}}"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-custom-class="custom-tooltip"
+                                                data-bs-title="{{$Translate.Blocks.AddCollectiontooltip}}"
+                                                class=" w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-[4px] relative group ">
+                                                <img src="/public/img/block-add.svg" alt="add">
+                                            </a>
+
+                                            {{end}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{end}}
+                    {{else}}
+                    {{if eq .DefaultCount 0}}
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noFilter.svg" alt="noFilter">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Filtersearch}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Filterkeyword}} </p>
+
+                    </div>
+                    {{else}}
+                    <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noData.svg" alt="nodate">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Oopsnodata}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Pagesorry}}
+                            {{$Translate.Gobackhome}}</p>
+
+                    </div> -->
+
+                    <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] max-[1300px]:pt-0">
+                        <div class="mb-[30px]">
+                            <img src="/public/img/Blocksnodata.svg" alt="" class=" max-[1300px]:h-[200px]">
+
+                        </div>
+                        <div class="flex flex-col items-center space-y-8 w-full">
+                            <div class="flex flex-col space-y-[16px] w-full">
+                                <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">
+                                    {{$Translate.Blocks.Noblockyet}}</h3>
+                                <p class=" font-light text-[#717171] mb-2 text-center text-base">
+                                    {{$Translate.Blocks.Noblock}}</p>
+                            </div>
+                            <a href="#createModal" id="CreateBlock" data-bs-toggle="offcanvas"
+                                class="inline-flex items-center bg-[#000000] hover:bg-[#2D2D2D] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.Blocks.Createfirstblock}}</a>
+                        </div>
+                    </div>
+
+                    {{end}}
+
+
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {{if .Defaultlist}}
+    <div
+        class=" max-sm:flex-col max-sm:space-y-[16px] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+        <ul class="ml-auto    max-sm:mx-auto  justify-center items-center space-x-[8px] flex flex-wrap">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .Filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+                    text-[14px] w-[33px] h-[36px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+                    bg-[#000000] hover:bg-[#2D2D2D] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+
+    {{end}}
+
+
+
+
+    <!-- Preview -->
+    <div class="offcanvas offcanvas-end w-100 max-w-[820px] border-0  " tabindex="-1" id="previewModal"
+        aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header  border-0 flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
+         py-[24px_16px]">
+            <div class="modalHeader-left">
+                <h1 class="text-base font-normal leading-5 text-[#262626]">{{$Translate.Preview}}</h1>
+            </div>
+            <div class="flex gap-3 items-center" id="previewclose">
+                <a type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                    <img src="/public/img/blockModal-close.svg" alt="close">
+                </a>
+            </div>
+
+        </div>
+        <div class=" border-b border-[#ECECEC] mx-[24px]">
+
+        </div>
+        <div class="offcanvas-body p-[24px]  max-[1300px]:p-[8px_12px] scrollbar-thin ">
+
+            <div class="mb-[24px]">
+                <h3 id="previewtitle" class="text-[#262626] text-base font-normal  leading-[20px] mb-[12px]">
+                </h3>
+                <div class="flex items-center gap-[8px] ">
+                    <div class=" min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden previewimgblock">
+                        <img id="previewuserimg" src="" alt="profile">
+                    </div>
+                    <div
+                        class="previewusername  grid place-items-center bg-[#F5F5F5] min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden text-[16px] font-medium">
+                        <span id="previewnamestring"></span>
+                    </div>
+                    <p id="previewname"
+                        class="text-sm font-normal leading-5 text-[#252525] overflow-hidden truncate whitespace-nowrap">
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="mb-[24px]">
+                <img id="previewblogimg" src="" alt="preview image" class="w-full">
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div id="backgroundfade"></div>
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/block/block.js"></script>
+
+    <script src="/public/js/media/media.js"></script>
+
+    {{template "footerclose" .}}

@@ -19,11 +19,11 @@ $("#Save").on("click", function (event) {
         },
         messages: {
             apikey: {
-                required: "Please Enter Api Key"
+                required: languagedata.AImodulesettings.apikeyplaceholder
 
             },
             apimodel: {
-                required: "Please Select AI Model"
+                required: languagedata.AImodulesettings.aimodelerr
 
             }
 
@@ -44,7 +44,7 @@ $("#Cancel").on("click", function () {
 
     $("#modalTitleId").text("Create New AI Module")
 
-    $("#aisettingscreate").attr("action", "/settings/aisettings/create");
+    $("#aisettingscreate").attr("action", "/admin/settings/aisettings/create");
 
     $("#Save").text("Save")
 
@@ -67,6 +67,11 @@ $("#Cancel").on("click", function () {
     $('.dropdown-item1').text('gpt-4o-mini');
 
     $('.dropdown-item2').text('gpt-3.5');
+
+    $('#aisettingscreate')[0].reset()
+
+    $('#apikey-error').hide()
+    $('#apimodel-error').hide()
 
 })
 
@@ -152,7 +157,7 @@ $(document).on("click", "#editmodule", function () {
 
     $("#Save").text("Update")
 
-    $("#aisettingscreate").attr("action", "/settings/aisettings/update");
+    $("#aisettingscreate").attr("action", "/admin/settings/aisettings/update");
 
     var id = $(this).data("id")
 
@@ -225,7 +230,7 @@ function SubscriptionStatus(id) {
     console.log("isactive:", isactive, id);
 
     $.ajax({
-        url: '/settings/aisettings/status',
+        url: '/admin/settings/aisettings/status',
         type: 'POST',
         async: false,
         data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -268,11 +273,11 @@ $(document).on('click', '#delete-btn', function () {
 
     if (pageno == null) {
 
-        $('#delid').attr('href', "/settings/aisettings/delete/" + Id);
+        $('#delid').attr('href', "/admin/settings/aisettings/delete/" + Id);
 
     } else {
 
-        $('#delid').attr('href', "/settings/aisettings/delete/" + Id + "?page=" + pageno);
+        $('#delid').attr('href', "/admin/settings/aisettings/delete/" + Id + "?page=" + pageno);
 
     }
     $(".deltitle").text("Delete AI Settings Module?")
@@ -455,7 +460,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/settings/aisettings/multiselectdelete',
+        url: '/admin/settings/aisettings/multiselectdelete',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -519,7 +524,7 @@ $(document).on("click", ".searchClosebtn", function () {
 
     $(".search").val('')
 
-    window.location.href = "/settings/aisettings/"
+    window.location.href = "/admin/settings/aisettings/"
 
 })
 

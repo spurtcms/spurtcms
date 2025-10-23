@@ -94,12 +94,13 @@ $("#save").click(function () {
 
     var result;
     category_id = $("#categoryid").val()
+    parent_id = $("#categoryid").val()
 
     $.ajax({
-      url: "/categories/checksubcategoryname",
+      url: "/admin/categories/checksubcategoryname",
       type: "POST",
       async: false,
-      data: { "cname": value, "categoryid": category_id, csrf: $("input[name='csrf']").val() },
+      data: { "cname": value,"parentid": parent_id, "categoryid": category_id, csrf: $("input[name='csrf']").val() },
       datatype: "json",
       caches: false,
       success: function (data) {
@@ -121,12 +122,12 @@ $("#save").click(function () {
         duplicatename: true
 
       },
-      cdesc: {
-        required: true,
-        space: true,
-        // category_desc: true
+      // cdesc: {
+      //   required: true,
+      //   space: true,
+      //   // category_desc: true
 
-      },
+      // },
       subcategoryid: {
         required: true
 
@@ -140,11 +141,11 @@ $("#save").click(function () {
         duplicatename: "*" + languagedata.Categoryy.catnamevailderr
 
       },
-      cdesc: {
-        required: "* " + languagedata.Categoryy.catdescvalid,
-        space: "* " + languagedata.spacergx,
+      // cdesc: {
+      //   required: "* " + languagedata.Categoryy.catdescvalid,
+      //   space: "* " + languagedata.spacergx,
 
-      },
+      // },
       subcategoryid: {
         required: "* " + languagedata.Categoryy.selectvaild
       }
@@ -204,7 +205,7 @@ $("body").on("click", "#edit", function () {
   $("#catpageno").val(pageno)
   var id = $("#category_id").val(data)
   $.ajax({
-    url: "/categories/editsubcategory",
+    url: "/admin/categories/editsubcategory",
     type: "GET",
     dataType: "json",
     data: { "id": data },
@@ -302,10 +303,10 @@ $(document).on('click', '#delete-btn', function () {
   $('.delname').text(del.find('td:eq(1)').text())
   $('#delid').show();
   if (pageno == null) {
-    $('#delid').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
+    $('#delid').attr('href', '/admin/categories/removecategory?id=' + data + "&&categoryid=" + parent_id);
 
   } else {
-    $('#delid').attr('href', '/categories/removecategory?id=' + data + "&&categoryid=" + parent_id + "?page=" + pageno);
+    $('#delid').attr('href', '/admin/categories/removecategory?id=' + data + "&&categoryid=" + parent_id + "?page=" + pageno);
 
   }
   $('#btn3').text(languagedata.no);
@@ -328,7 +329,7 @@ $("#caddbtn , #clickadd").on("click", function () {
   var CategoryId = $("#categoryid").val()
   $("#exampleModalLabel").text(languagedata.Categoryy.addcategry)
 
-  $("#form").attr("action", "/categories/addsubcategory/" + CategoryId).attr("method", "POST")
+  $("#form").attr("action", "/admin/categories/addsubcategory/" + CategoryId).attr("method", "POST")
 
   $("#cname").val("");
   $("#cdesc").val("");
@@ -417,7 +418,7 @@ $('#update').click(function () {
     categoryid = $("#category_id").val()
 
     $.ajax({
-      url: "/categories/checksubcategoryname",
+      url: "/admin/categories/checksubcategoryname",
       type: "POST",
       async: false,
       data: { "cname": value, "parentid": parent_id, "categoryid": categoryid, csrf: $("input[name='csrf']").val() },
@@ -441,12 +442,12 @@ $('#update').click(function () {
         duplicatename: true,
         space: true
       },
-      cdesc: {
-        required: true,
-        space: true,
-        maxlength: 250,
-        // category_desc: true
-      },
+      // cdesc: {
+      //   required: true,
+      //   space: true,
+      //   maxlength: 250,
+      //   // category_desc: true
+      // },
       subcategoryid: {
         required: true
 
@@ -460,12 +461,12 @@ $('#update').click(function () {
         duplicatename: "*" + languagedata.Categoryy.catnamevailderr,
 
       },
-      cdesc: {
-        required: "* " + languagedata.Categoryy.catdescvalid,
-        space: "* " + languagedata.spacergx,
-        maxlength: "* " + languagedata.Permission.descriptionchat
+      // cdesc: {
+      //   required: "* " + languagedata.Categoryy.catdescvalid,
+      //   space: "* " + languagedata.spacergx,
+      //   maxlength: "* " + languagedata.Permission.descriptionchat
 
-      },
+      // },
       subcategoryid: {
         required: "*" + languagedata.Categoryy.selectvaild
       }
@@ -489,7 +490,7 @@ $('#update').click(function () {
 
     if ($("#form").valid()) {
       $.ajax({
-        url: "/categories/editsubcategory",
+        url: "/admin/categories/editsubcategory",
         type: "POST",
         datatype: "json",
         data: { "id": id, "cname": cname, "cdesc": cdesc, "pcategoryid": pcategoryid, "image": image, csrf: $("input[name='csrf']").val() },
@@ -499,10 +500,10 @@ $('#update').click(function () {
           if (result.value == true) {
 
             if (pageno == 0) {
-              window.location.href = "/categories/addcategory/" + parentid;
+              window.location.href = "/admin/categories/addcategory/" + parentid;
 
             } else {
-              window.location.href = "/categories/addcategory/" + parentid + "?page=" + pageno;
+              window.location.href = "/admin/categories/addcategory/" + parentid + "?page=" + pageno;
 
             }
 
@@ -557,7 +558,7 @@ $(document).on('keyup', '#searchsubcategory', function () {
 
   if (event.key === 'Backspace' && window.location.href.indexOf("keyword") > -1) {
     if ($('.search').val() == "") {
-      window.location.href = "/categories/addcategory/" + categoryid
+      window.location.href = "/admin/categories/addcategory/" + categoryid
 
     }
   }
@@ -783,7 +784,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
   $('.selected-numbers').hide()
   $.ajax({
-    url: '/categories/multiselectcategorydelete',
+    url: '/admin/categories/multiselectcategorydelete',
     type: 'post',
     dataType: 'json',
     async: false,
@@ -842,7 +843,7 @@ $(document).on("click", ".Closebtn", function () {
 $(document).on("click", ".searchClosebtn", function () {
   $(".search").val('')
   var categoryid = $("#categoryid").val();
-  window.location.href = "/categories/addcategory/" + categoryid
+  window.location.href = "/admin/categories/addcategory/" + categoryid
 })
 
 $(document).ready(function () {

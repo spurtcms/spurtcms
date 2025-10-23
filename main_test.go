@@ -104,12 +104,12 @@ func TestMemberGroupList(t *testing.T) {
 		},
 	}))
 
-	U := r.Group("/membersgroup") // Assuming your routes are under this group
+	U := r.Group("/usergroup") // Assuming your routes are under this group
 	{
 		U.GET("/", middleware.JWTAuth(), controllers.MemberGroupList)
 	}
 
-	req, err := http.NewRequest("GET", "/membersgroup/", nil)
+	req, err := http.NewRequest("GET", "/usergroup/", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,6 @@ func TestMemberGroupList(t *testing.T) {
 	}
 }
 
-
 // Create member group
 
 func TestCreateNewMemberGroup(t *testing.T) {
@@ -159,11 +158,11 @@ func TestCreateNewMemberGroup(t *testing.T) {
 
 	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
-	MG := r.Group("/membersgroup") // Assuming your routes are under this group
+	MG := r.Group("/usergroup") // Assuming your routes are under this group
 	{
 		MG.POST("/newgroup", middleware.JWTAuth(), controllers.CreateNewMemberGroup)
 	}
-	req, err := http.NewRequest("POST", "/membersgroup/newgroup", strings.NewReader("membergroup_name=newtodaygrp&membergroup_desc=success&1"))
+	req, err := http.NewRequest("POST", "/usergroup/newgroup", strings.NewReader("membergroup_name=newtodaygrp&membergroup_desc=success&1"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Fatal(err)
@@ -193,11 +192,11 @@ func TestUpdateMemberGroup(t *testing.T) {
 
 	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
 
-	MG := r.Group("/membersgroup") // Assuming your routes are under this group
+	MG := r.Group("/usergroup") // Assuming your routes are under this group
 	{
 		MG.POST("/updategroup", middleware.JWTAuth(), controllers.UpdateMemberGroup)
 	}
-	req, err := http.NewRequest("POST", "/membersgroup/updategroup", strings.NewReader("id=2&membergroup_name=newtodaygrp&membergroup_desc=success"))
+	req, err := http.NewRequest("POST", "/usergroup/updategroup", strings.NewReader("id=2&membergroup_name=newtodaygrp&membergroup_desc=success"))
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -281,12 +280,12 @@ func TestDeleteMemberGroup(t *testing.T) {
 		},
 	}))
 
-	U := r.Group("/membersgroup") // Assuming your routes are under this group
+	U := r.Group("/usergroup") // Assuming your routes are under this group
 	{
 		U.GET("/deletegroup", middleware.JWTAuth(), controllers.DeleteMemberGroup)
 	}
 	var id = "13"
-	req, err := http.NewRequest("GET", "/membersgroup/deletegroup?id="+id, nil)
+	req, err := http.NewRequest("GET", "/usergroup/deletegroup?id="+id, nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -596,7 +595,7 @@ func TestMemberList(t *testing.T) {
 		U.GET("/", middleware.JWTAuth(), controllers.MemberList)
 	}
 
-	req, err := http.NewRequest("GET", "/member/", nil)
+	req, err := http.NewRequest("GET", "/user/", nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -656,7 +655,7 @@ func TestCreateMember(t *testing.T) {
 	}
 
 	// Create a new HTTP request with the form data encoded
-	req, err := http.NewRequest("POST", "/member/newmember", strings.NewReader("mem_name=IPL&mem_email=ipl@gmail.com&mem_mobile=8824003212&mem_usrname=welcome&mem_pass=mempassword123&mem_activestat=1&membergroupvalue=1"))
+	req, err := http.NewRequest("POST", "/user/newmember", strings.NewReader("mem_name=IPL&mem_email=ipl@gmail.com&mem_mobile=8824003212&mem_usrname=welcome&mem_pass=mempassword123&mem_activestat=1&membergroupvalue=1"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -691,7 +690,7 @@ func TestUpdateMember(t *testing.T) {
 	}
 
 	// Create a new HTTP request with the form data encoded
-	req, err := http.NewRequest("POST", "/member/updatemember", strings.NewReader("mem_name=IPL 2024&mem_email=ipl@gmail.com&mem_mobile=8824003212&mem_usrname=welcome&mem_pass=mempassword123&mem_activestat=1&membergroupvalue=1"))
+	req, err := http.NewRequest("POST", "/user/updatemember", strings.NewReader("mem_name=IPL 2024&mem_email=ipl@gmail.com&mem_mobile=8824003212&mem_usrname=welcome&mem_pass=mempassword123&mem_activestat=1&membergroupvalue=1"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -728,7 +727,7 @@ func TestDeleteMember(t *testing.T) {
 	}
 
 	id := "44"
-	req, err := http.NewRequest("GET", "/member/deletemember?id="+id, nil)
+	req, err := http.NewRequest("GET", "/user/deletemember?id="+id, nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -1885,7 +1884,7 @@ func TestCreateChannel(t *testing.T) {
 	formData.Set("sectionvalue", `{"sections":[{"SectionId":"13","SectionNewId":"34","SectionName":"New Section","MasterFieldId":"0","OrderIndex":"0"}]}`)
 	// formData.Set("fval", `{"fiedlvalue":[{"MasterFieldId":"0","FieldId":"14","NewFieldId":"34","MasterFieldId":"0","FieldName":"Text"}]}`)
 	formData.Set("categoryvalue", "[12]")
-	req, err := http.NewRequest("POST", "/channels/newchannel", strings.NewReader(formData.Encode()))
+	req, err := http.NewRequest("POST", "/channels/create", strings.NewReader(formData.Encode()))
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
@@ -2262,7 +2261,7 @@ func TestAllEntries(t *testing.T) {
 		U.GET("/entrylist/", middleware.JWTAuth(), controllers.AllEntries)
 	}
 
-	req, err := http.NewRequest("GET", "/channel/entrylist/", nil)
+	req, err := http.NewRequest("GET", "/entries/entrylist/", nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -2370,7 +2369,7 @@ func TestEntries(t *testing.T) {
 
 	id := "97"
 
-	req, err := http.NewRequest("GET", "/channel/entrylist/"+id, nil)
+	req, err := http.NewRequest("GET", "/entries/entrylist/"+id, nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -2473,10 +2472,10 @@ func TestCreateEntry(t *testing.T) {
 
 	MG := r.Group("/channel") // Assuming your routes are under this group
 	{
-		MG.GET("/newentry", middleware.JWTAuth(), controllers.EditEntry)
+		MG.GET("/create", middleware.JWTAuth(), controllers.EditEntry)
 	}
 
-	req, err := http.NewRequest("GET", "/channel/newentry", nil)
+	req, err := http.NewRequest("GET", "/entries/create", nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Fatal(err)
@@ -2528,7 +2527,7 @@ func TestEntryStatus(t *testing.T) {
 	// status publish functionality
 	id := "102"
 
-	req, err := http.NewRequest("POST", "/channel/changestatus/"+id, strings.NewReader("entryid=111&cname=Blog&status=0"))
+	req, err := http.NewRequest("POST", "/entries/changestatus/"+id, strings.NewReader("entryid=111&cname=Blog&status=0"))
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
@@ -2618,7 +2617,7 @@ func TestEditDetails(t *testing.T) {
 	id := "110"
 	channelname := "Blog"
 
-	req, err := http.NewRequest("GET", "/channel/editentrydetails/"+channelname+"/"+id, nil)
+	req, err := http.NewRequest("GET", "/entries/editentrydetails/"+channelname+"/"+id, nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Fatal(err)
@@ -2677,16 +2676,16 @@ func TestPublishEntry(t *testing.T) {
 
 	// status publish functionality
 	id := "108"
-	// req, err := http.NewRequest("POST", "/channel/publishentry/"+id, strings.NewReader("id=105&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
+	// req, err := http.NewRequest("POST", "/entries/publishentry/"+id, strings.NewReader("id=105&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
 
-	req, err := http.NewRequest("POST", "/channel/draftentry/"+id, strings.NewReader("id=105&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
+	req, err := http.NewRequest("POST", "/entries/draftentry/"+id, strings.NewReader("id=105&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
 
 	//  create entry
 	// id := "undefined"
-	// req, err := http.NewRequest("POST", "/channel/publishentry/"+id, strings.NewReader("id=98&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
+	// req, err := http.NewRequest("POST", "/entries/publishentry/"+id, strings.NewReader("id=98&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=1"))
 
 	// draft functionality
-	// req, err := http.NewRequest("POST", "/channel/publishentry/"+id, strings.NewReader("id=98&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=0"))
+	// req, err := http.NewRequest("POST", "/entries/publishentry/"+id, strings.NewReader("id=98&cname=Welcome&title=Today&text=today test case pass&image=/storage/media/deer(680*340)(2024-03-27T11:08:49.783Z).jpg&status=0"))
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
@@ -2775,7 +2774,7 @@ func TestEditEntry(t *testing.T) {
 
 	id := "108"
 
-	req, err := http.NewRequest("GET", "/channel/copyentry/"+id, nil)
+	req, err := http.NewRequest("GET", "/entries/copyentry/"+id, nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Fatal(err)
@@ -2876,7 +2875,7 @@ func TestDeleteEntries(t *testing.T) {
 	var id = "105"
 	var cname = "NEW"
 	var page = "1"
-	req, err := http.NewRequest("GET", "/channel/deleteentries/?id="+id+"&cname="+cname+"&page"+page, nil)
+	req, err := http.NewRequest("GET", "/entries/deleteentries/?id="+id+"&cname="+cname+"&page"+page, nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -2906,6 +2905,194 @@ func TestDeleteEntries(t *testing.T) {
 		t.Errorf("Expected status code %d, got %d", http.StatusMovedPermanently, w.Code)
 	} else {
 		t.Logf("Expected status code %d, got %d", http.StatusMovedPermanently, w.Code)
+
+	}
+
+}
+
+// Media list
+func TestMediaList(t *testing.T) {
+
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+	// Create a new Gin router
+	r := gin.Default()
+
+	r.Use(lang.TranslateHandler)
+
+	var htmlfiles []string
+
+	filepath.Walk("./", func(path string, info os.FileInfo, err error) error {
+		if strings.HasSuffix(path, ".html") {
+			htmlfiles = append(htmlfiles, path)
+		}
+		return nil
+	})
+	r.LoadHTMLFiles(htmlfiles...)
+
+	json_folder := "locales/"
+
+	var default_lang models.TblLanguage
+
+	translation, err := lang.LoadTranslation(default_lang.JsonPath)
+
+	if err != nil {
+
+		translation, err = lang.LoadTranslation(json_folder + "en.json")
+
+		if err != nil {
+
+			c.AbortWithError(http.StatusInternalServerError, err)
+
+			return
+		}
+	}
+
+	r.Use(func(c *gin.Context) {
+		c.Set("translation", translation)
+		c.Next()
+	})
+
+	store := cookie.NewStore([]byte(os.Getenv("CSRF_SECRET")))
+
+	r.Use(sessions.Sessions(os.Getenv("SESSION_KEY3"), store))
+
+	r.Use(csrf.Middleware(csrf.Options{
+
+		Secret: "secret123",
+		ErrorFunc: func(c *gin.Context) {
+			c.String(400, "CSRF token mismatch")
+			c.Abort()
+
+		},
+	}))
+
+	U := r.Group("/media") // Assuming your routes are under this group
+	{
+		U.GET("/", middleware.JWTAuth(), controllers.MediaList)
+	}
+
+	req, err := http.NewRequest("GET", "/media/", nil)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Add("myspurtcms", token)
+
+	// Create a new session
+	session, err := store.Get(req, os.Getenv("SESSION_KEY"))
+	if err != nil {
+		t.Errorf("Failed to get session: %v", err)
+		return
+	}
+
+	// Set the token in the session
+	session.Values["token"] = token
+	err = session.Save(req, httptest.NewRecorder())
+	if err != nil {
+		t.Errorf("Failed to save session: %v", err)
+		return
+	}
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	// Check the HTTP status code
+	if w.Code != http.StatusOK { // Change the expected status code to http.StatusOK
+		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
+	} else {
+		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
+
+	}
+
+	expectedChannel := "deer(680*340)(2024-03-27T11:16:25.278Z).jpg"
+	if !strings.Contains(w.Body.String(), expectedChannel) {
+		t.Errorf("Expected Image %s not found in response body", expectedChannel)
+	} else {
+
+		t.Logf("Expected Image %v  found in response body", expectedChannel)
+	}
+
+}
+
+// Create Media Folder
+
+func TestAddFolder(t *testing.T) {
+
+	// Create a new Gin router
+	r := gin.Default()
+
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+	MG := r.Group("/media") // Assuming your routes are under this group
+	{
+		MG.POST("/createfolder", middleware.JWTAuth(), controllers.AddFolder)
+	}
+	req, err := http.NewRequest("POST", "/media/createfolder", strings.NewReader("foldername=New"))
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Add("myspurtcms", token)
+
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	// Check the HTTP status code
+	if w.Code != http.StatusOK { // Change the expected status code tohttp.StatusMovedPermanently
+		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
+	} else {
+		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
+
+	}
+
+}
+
+// Delete Media folder
+func TestDeleteFolderFile(t *testing.T) {
+
+	// Create a new Gin router
+	r := gin.Default()
+
+	controllers.PackageInitialize()
+
+	token, _, _ := controllers.NewAuth.Checklogin("Admin", "Admin@123", controllers.TenantId)
+
+	U := r.Group("/media") // Assuming your routes are under this group
+	{
+		U.POST("/deletefolfile", middleware.JWTAuth(), controllers.DeleteFolderFile)
+	}
+
+	// formData.Set("id", "['deer(680*340)(2024-03-27T11:16:25.278Z).jpg']")
+	formData := url.Values{}
+
+	formData.Set("id", "['deer.jpg']")
+
+	req, err := http.NewRequest("POST", "/media/deletefolfile", strings.NewReader(formData.Encode()))
+	// req, err := http.NewRequest("POST", "/media/deletefolfile", strings.NewReader("id=['New']"))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Add("myspurtcms", token)
+
+	// controllers.AUTH = spurtcore.NewInstance(&auth.Option{DB: DB, Token: token, Secret: os.Getenv("JWT_SECRET")})
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	// Check the HTTP status code
+	if w.Code != http.StatusOK { // Change the expected status code to http.StatusOK
+		t.Errorf("Expected status code %d, got %d ", http.StatusOK, w.Code)
+	} else {
+		t.Logf("Expected status code %d, got %d", http.StatusOK, w.Code)
 
 	}
 

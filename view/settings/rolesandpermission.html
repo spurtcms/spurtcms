@@ -24,7 +24,7 @@
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search" class="hidden searchopen group-hover:block ">
             </a>
-            <form action="/settings/roles/" method="get" class="filterform " autocomplete="off">
+            <form action="/admin/settings/roles/" method="get" class="filterform " autocomplete="off">
                 <input type="text" placeholder="{{$Translate.Csearch}}" id="searchroles" name="keyword"
                     value="{{.keyword}}" value="{{.Filter.Keyword}}"
                     class="top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block search shadow-none">
@@ -46,7 +46,7 @@
 
 
         <a href="#newroles" data-bs-toggle="modal" disabled
-            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:leading-none max-sm:text-lg  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[var(--btn-bg)] flex items-center justify-center hover:bg-[var(--btn-hover)] text-sm font-normal text-white no-underline leading-0 space-x-[2px] max-sm:leading-none">
+            class="add-new h-8 px-[12px]  max-sm:px-[7px] max-sm:leading-none max-sm:text-lg  max-sm:grid place-items-center max-sm:h-[32px] max-sm:min-w-[32px] rounded-[4px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] flex items-center justify-center hover:bg-[#2D2D2D] text-sm font-normal text-white no-underline leading-0 space-x-[2px] max-sm:leading-none">
             <span class="max-sm:hidden">
                 {{$Translate.Rolecontent.Addnewrole}}
             </span><span class="hidden max-sm:block text-lg leading-none ">+</span> </a>
@@ -328,7 +328,7 @@
                                 class="h-8 flex items-center  justify-center px-3 text-sm font-normal text-[#222222] bg-[#FAFAFA] hover:bg-[#e0e0e0] rounded-[4px] no-underline"
                                 data-bs-dismiss="modal">cancel</a>
                             <a href="javascript:void(0);"
-                                class="saverolperm h-8 flex items-center justify-center px-3 text-sm font-normal text-white hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)]  rounded-[4px] no-underline">Save</a>
+                                class="saverolperm h-8 flex items-center justify-center px-3 text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]  rounded-[4px] no-underline">Save</a>
                         </div>
                     </div>
 
@@ -349,7 +349,7 @@
                                     <div class="cursor-pointer group">
                                         <img src="/public/img/inputdesc.svg" alt="">
                                         <p
-                                            class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            class=" hidden group-hover:block absolute left-0 w-[280px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                             Enter a unique name for the Role & Permissions.</p>
                                     </div>
                                 </label>
@@ -372,7 +372,7 @@
                                     <div class="cursor-pointer group">
                                         <img src="/public/img/inputdesc.svg" alt="">
                                         <p
-                                            class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            class=" hidden group-hover:block absolute left-0 w-[300px]  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                             Provide a brief description of the Role & Permissions for better
                                             identification.</p>
                                     </div>

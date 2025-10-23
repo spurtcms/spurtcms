@@ -27,7 +27,10 @@ import (
 	newauth "github.com/spurtcms/auth"
 	"github.com/spurtcms/categories"
 	chn "github.com/spurtcms/channels"
+	"github.com/spurtcms/courses"
+	forms "github.com/spurtcms/forms-builders"
 	"github.com/spurtcms/member"
+	membership "github.com/spurtcms/membership"
 	"github.com/spurtcms/team"
 	role "github.com/spurtcms/team-roles"
 )
@@ -47,10 +50,13 @@ var (
 	NewTeam              *team.Teams
 	NewTeamWP            *team.Teams
 	MemberInstance       *member.Member
+	MembershipConfigWP   *membership.Membership
 	MemberAuthInstance   *member.Member
 	CategoryInstance     *categories.Categories
 	CategoryAuthInstance *categories.Categories
 	MaxChunkLength       int = 8388573 //max size of a string response
+	FormConfigwp         *forms.Formbuilders
+	CoursesInstance      *courses.Courses
 )
 
 func init() {
@@ -81,6 +87,12 @@ func init() {
 	GetCategoryInstance()
 
 	GetCategoryAuthInstance()
+
+	GetMembershipInstanceWithoutPermission()
+
+	GetFormInstance()
+
+	GetCoursesInstance()
 }
 
 // AuthCofing
@@ -121,6 +133,20 @@ func GetChannelInstanceWithoutPermission() *chn.Channel {
 	})
 
 	return ChannelConfigWP
+}
+
+// channel config without permission
+func GetMembershipInstanceWithoutPermission() *membership.Membership {
+
+	MembershipConfigWP = membership.MembershipSetup(membership.Config{
+		DB:               models.DB,
+		AuthEnable:       false,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+		// DataBaseType:     os.Getenv("DATABASE_TYPE"),
+	})
+
+	return MembershipConfigWP
 }
 
 // TeamConfig
@@ -209,6 +235,30 @@ func GetCategoryAuthInstance() *categories.Categories {
 	})
 
 	return CategoryAuthInstance
+}
+
+func GetFormInstance() *forms.Formbuilders {
+
+	FormConfigwp = forms.FormSetup(forms.Config{
+		DB:               models.DB,
+		AuthEnable:       false,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+	})
+
+	return FormConfigwp
+}
+
+func GetCoursesInstance() *courses.Courses {
+
+	CoursesInstance = courses.CoursesSetup(courses.Config{
+		DB:               models.DB,
+		AuthEnable:       true,
+		PermissionEnable: false,
+		Auth:             NewAuth,
+	})
+
+	return CoursesInstance
 }
 
 func ImageResize(c *gin.Context) {

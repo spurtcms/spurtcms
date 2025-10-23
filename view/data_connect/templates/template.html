@@ -90,7 +90,7 @@
                 {{$ChannelId := .ChannelDetail.Id}}
                 {{range .ChannelList}}
                 <li><a class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .Id}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
-                        href="/templates?channel={{.SlugName}}">
+                        href="/admin/templates?channel={{.SlugName}}">
                         <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
                         </h5>
                         <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{if
@@ -134,10 +134,10 @@
                 </h3>
                 <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
                     {{$Translate.Templates.Mycollectiondescst}}
-                    <a href="/channels" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    <a href="/admin/channels" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                     </a>
                     {{$Translate.Templates.Mycollectiondescmid}}
-                    <a href="/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    <a href="/admin/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Templates.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                     </a>
                     
                     {{$Translate.Templates.Mycollectiondescend}}
@@ -288,17 +288,17 @@
         <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="collection-tab" href="/channels/" aria-controls="collection"
+                    id="collection-tab" href="/admin/channels/" aria-controls="collection"
                     aria-selected="true">{{$Translate.Channell.Mychannel}}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="work-tab" href="/channels/defaultchannels" role="tab" aria-controls="work" aria-selected="false"
+                    id="work-tab" href="/admin/channels/defaultchannels" role="tab" aria-controls="work" aria-selected="false"
                     tabindex="-1">{{$Translate.Explore}}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="active hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="work-tab" href="/templates" role="tab" aria-controls="work" aria-selected="false"
+                    id="work-tab" href="/admin/templates" role="tab" aria-controls="work" aria-selected="false"
                     tabindex="-1">Templates</a>
             </li>
           
@@ -334,7 +334,7 @@
     
                     </p>
                 </div>
-            <div class="gap-[16px] grid grid-cols-[repeat(auto-fill,_minmax(376px,_1fr))]">
+              <div class="gap-[16px] grid grid-cols-[repeat(auto-fill,_minmax(376px,_1fr))]">
                 {{range .Templates}}
 
                 <div class="flex flex-col border-[#ECECEC] border rounded-[12px] overflow-hidden">

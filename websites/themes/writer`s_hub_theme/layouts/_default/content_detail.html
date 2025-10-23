@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+
+    <main class="container min-h-screen mx-auto max-w-screen-xl md:lg-0 px-4">
+        <div class="my-10">
+            <div class="flex justify-start flex-wrap items-center gap-x-4">
+                <p class="text-base text-[#B6B6B7]">{{.entrydetail.CreatedDate}}</p>
+       
+                <div class="flex items-center gap-2">
+                    <div
+                        class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300">
+                        {{if ne .entrydetail.AuthorDetail.ProfileImagePath ""}}
+                        <img alt="Picture of the author" loading="lazy" width="32" height="32" decoding="async"
+                            data-nimg="1" srcset="" src="{{.entrydetail.AuthorDetail.ProfileImagePath}}"
+                            class="h-[34px] rounded-3xl">
+                        {{else}}
+                        <span
+                            class="text-[14px] text-[#222222] font-normal">{{.entrydetail.AuthorDetail.NameString}}</span>
+                        {{end}}
+                    </div>
+                    <h5 class="text-primary text-base font-normal text-[#2facd6] ">
+                        {{.entrydetail.AuthorDetail.Username}}</h5>
+                </div>
+                <div class="px-2 py-1 text-base text-[#2FACD6] bg-[#F1FBFF] rounded-md">{{.entrydetail.CategoryGroup}}
+                </div>
+            </div>
+            <!-- <h1 class="sm:text-4xl text-3xl text-dark font-medium my-5">{{.entrydetail.Title}}</h1>
+            <div class="block my-5"><img alt="spurtCMS card image" fetchpriority="high" width="10000" height="10000"
+                    decoding="async" data-nimg="1" class="dark:invert" style="color:transparent"
+                    src="{{if .entrydetail.CoverImage}}{{.entrydetail.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}">
+            </div>
+            <p class="text-base font-normal text-[#525252]">{{.entrydetail.Description}}</p> -->
+
+            <div id="description">{{.content}}</div>
+        </div>
+    </main>
+
+</body>
+
+
+</html>

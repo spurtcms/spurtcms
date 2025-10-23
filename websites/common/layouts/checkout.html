@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+
+     <section
+            class="bg-[#FAFAFA] min-h-[calc(100vh-120px)] p-[26px_16px] flex flex-col max-md:min-h-[calc(100vh-68px)] max-xl:min-h-[calc(100vh-79px)]">
+            <div class="w-[90%] mx-auto max-[1400px]:w-full ">
+                <ul class="flex  items-center space-x-1 mb-[55px] max-sm:mb-[24px]">
+                    <li><a href="/ "><img alt="home" src="/websites/public/img/home.svg"></a></li>
+                    <li><img alt="arrow" src="/websites/public/img/crumb-arrow.svg"></li>
+                    <li><a class="text-[14px] font-normal leading-4 text-[#151618CC] hover:underline"
+                            href="/membership ">Membership plan</a></li>
+                    <li><img alt="arrow" src="/websites/public/img/crumb-arrow.svg"></li>
+                    <li>
+                        <p class="text-[14px] font-semibold leading-4 text-[#120B14]">Checkout</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-[90%] mx-auto max-[1400px]:w-full ">
+                <div class="max-w-[803px] mx-auto">
+                    <h1
+                        class="text-[32px] font-semibold leading-[40px] text-[#1D1D1F]  mb-[40px] max-sm:mb-[20px] max-sm:text-[28px]">
+                        Membership Checkout</h1>
+                    <div class="bg-white border border-[#E9E9E9] rounded-[12px] p-[40px] mb-[30px] max-sm:p-[16px]">
+                        <h3 class="text-[20px] font-semibold leading-[24px] mb-[40px] max-sm:mb-[20px]">Your membership
+                            information</h3>
+                        <p class="text-base font-normal leading-[19px] text-[#1D1D1F]">You have selected the&nbsp;<span
+                                class="font-bold">{{.membershipdetail.SubscriptionName}}</span>&nbsp;membership level.</p>
+                        <div
+                            class="flex items-center justify-between border border-[#D7D7D7] bg-[#F8F8F8] p-[20px] rounded-[12px] mt-[16px] gap-[16px] max-sm:grid max-sm:grid-cols-2">
+                            <div>
+                                <h3 class="text-[18px] font-bold text-[#151618CC] leading-[21px] mb-[10px]">{{.membershipdetail.SubscriptionName}}
+                                </h3>
+                                <p class="text-[14px] font-normal text-[#1516188F] leading-[16px] ">{{.membershipdetail.Description}}.&nbsp;
+                                </p>
+                            </div>
+                            <h2 class="text-[16px] font-normal text-[#1516188F]"><span
+                                    class="text-[36px] font-semibold leading-[43px] text-[#120B14] ">${{.membershipdetail.InitialPayment}}</span>/  
+                                     {{if gt .membershipdetail.BillingfrequentValue 1}}
+                                        {{.membershipdetail.BillingfrequentValue}}
+                                        {{if eq .membershipdetail.BillingfrequentType 7}}weeks{{end}}
+                                        {{if eq .membershipdetail.BillingfrequentType 30}}months{{end}}
+                                        {{if eq .membershipdetail.BillingfrequentType 360}}years{{end}}
+                                        {{else}}
+                                        {{if eq .membershipdetail.BillingfrequentType 7}}week{{end}}
+                                        {{if eq .membershipdetail.BillingfrequentType 30}}month{{end}}
+                                        {{if eq .membershipdetail.BillingfrequentType 360}}year{{end}}
+                                        {{end}}
+                            </h2>
+                            <div class="max-sm:col-span-2"><a
+                                    class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-fit block h-[42px] font-semibold text-[#FFFFFF] rounded-[4px] text-center hover:bg-[#28282c] max-sm:w-full"
+                                    href="/membership ">Choose plan</a></div>
+                        </div>
+                        <div class="w-full rounded-[12px] overflow-hidden my-[16px] "><img alt="banner"
+                                class="w-full h-full object-cover" src="/websites/public/img/detail-banner.svg"></div>
+                        <p class="text-base font-normal leading-[26px] text-[#1D1D1F]">.</p>
+                    </div>
+                    <div class="bg-white border border-[#E9E9E9] rounded-[12px] p-[40px] mb-[30px] max-sm:p-[16px]">
+                        <h3 class="text-[20px] font-semibold leading-[24px] mb-[40px] text-[#1D1D1F]">Account
+                            Information</h3>
+                        <div class="grid grid-cols-2 gap-x-[20px] gap-y-[30px] max-sm:grid-cols-1">
+                            <div class="col-span-2 max-sm:col-span-1"><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">User
+                                    name</label><input placeholder="Eg: Steve Job"
+                                    class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] border-[#00000029] "
+                                    maxlength="30" id="name" type="text" value=""></div>
+                            <div><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Email
+                                    Address</label><input placeholder="Eg: steve.job@example.com"
+                                    class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F]  border-[#00000029]"
+                                    id="email" type="text" value=""></div>
+                            <div><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Mobile
+                                    Number</label><input placeholder="00000-00000"
+                                    class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] border-[#00000029]"
+                                    id="number" maxlength="15" type="text" value="56"></div>
+                            <div><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Password</label>
+                                <div class="relative flex items-center"><input placeholder="Password"
+                                        class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_36px_6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] border-[#00000029]"
+                                        id="password" type="password" value="Picco$56"><button
+                                        class="absolute right-[10px]"><img alt="password"
+                                            src="/websites/public/img/hide-password.svg"></button></div>
+                            </div>
+                            <div><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Confirm
+                                    password</label>
+                                <div class="relative flex items-center"><input placeholder="Password"
+                                        class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_36px_6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] border-[#00000029]"
+                                        id="confirmPass" type="password" value=""><button
+                                        class="absolute right-[10px]"><img alt="password"
+                                            src="/websites/public/img/hide-password.svg"></button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-[#E9E9E9] rounded-[12px] p-[40px] mb-[30px] max-sm:p-[16px]">
+                        <h3 class="text-[20px] font-semibold leading-[24px] mb-[40px] text-[#1D1D1F]">Company
+                            Information</h3>
+                        <div class="grid grid-cols-2 gap-x-[20px] gap-y-[30px] max-sm:grid-cols-1">
+                            <div class="col-span-2 max-sm:col-span-1"><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Company
+                                    Name</label><input placeholder="Eg: Apple"
+                                    class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] "
+                                    maxlength="35" id="companyName" type="text" value=""></div>
+                            <div class="col-span-2 max-sm:col-span-1"><label
+                                    class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[10px]">Position</label><input
+                                    placeholder="Eg: Product Designer"
+                                    class="border border-[#00000029] rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] placeholder:text-[#1516188F] "
+                                    maxlength="35" id="position" type="text" value=""></div>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-[#E9E9E9] rounded-[12px] p-[40px] mb-[30px] max-sm:p-[16px]">
+                        <h3 class="text-[20px] font-semibold leading-[24px] mb-[40px] text-[#1D1D1F]">Payment
+                            Information</h3>
+                        <div class="mb-[30px] last-of-type:mb-0"><input id="radio1" class="peer hidden" type="radio"
+                                name="radio"><label for="radio1"
+                                class="cursor-pointer peer-checked:border-[#212121] peer-checked:[&amp;&gt;.radio-img&gt;img:first-of-type]:hidden [&amp;&gt;.radio-img&gt;img:last-of-type]:hidden peer-checked:[&amp;&gt;.radio-img&gt;img:last-of-type]:block border border-[#D6D6D6] border-solid rounded-[12px] p-[30px_20px] max-md:p-[16px] flex items-start space-x-[10px]">
+                                <div
+                                    class="radio-img min-w-[32px] min-h-[32px] max-md:min-w-[24px] max-md:min-h-[24px]">
+                                    <img alt="uncheck" src="/websites/public/img/unchecked-radio.svg"><img alt="uncheck"
+                                        src="/websites/public/img/checked-radio.svg"></div>
+                                <div class="grow">
+                                    <div class="flex items-center justify-between space-x-4 mb-[10px]">
+                                        <div class="flex items-center space-x-[10px]"><img alt="paypal"
+                                                src="/websites/public/img/paypal.svg">
+                                            <h3 class="text-[24px] font-semibold leading-[30px] text-[#1D1D1F]">PayPal
+                                            </h3>
+                                        </div>
+                                        <div class="flex items-center space-x-[4px] p-[2px_6px] bg-[#E0EEDE] rounded">
+                                            <img alt="check" src="/websites/public/img/check-green.svg">
+                                            <p class="text-[14px] font-normal leading-[24px] text-[#1B5214]">Active</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-[#434445] text-base font-normal leading-6">A trusted global payment
+                                        system for sending, receiving, and managing money.</p>
+                                </div>
+                            </label></div>
+                        <div class="mb-[30px] last-of-type:mb-0"><input id="radio2" class="peer hidden" type="radio"
+                                name="radio"><label for="radio2"
+                                class="cursor-pointer peer-checked:border-[#212121] peer-checked:[&amp;&gt;.radio-img&gt;img:first-of-type]:hidden [&amp;&gt;.radio-img&gt;img:last-of-type]:hidden peer-checked:[&amp;&gt;.radio-img&gt;img:last-of-type]:block border border-[#D6D6D6] border-solid rounded-[12px] p-[30px_20px] max-md:p-[16px] flex items-start space-x-[10px]">
+                                <div
+                                    class="radio-img min-w-[32px] min-h-[32px] max-md:min-w-[24px] max-md:min-h-[24px]">
+                                    <img alt="uncheck" src="/websites/public/img/unchecked-radio.svg"><img alt="uncheck"
+                                        src="/websites/public/img/checked-radio.svg"></div>
+                                <div class="grow">
+                                    <div class="flex items-center justify-between space-x-4 mb-[10px]">
+                                        <div class="flex items-center space-x-[10px]"><img alt="paypal"
+                                                src="/websites/public/img/stripe.svg">
+                                            <h3 class="text-[24px] font-semibold leading-[30px] text-[#1D1D1F]">Stripe
+                                            </h3>
+                                        </div>
+                                        <div class="flex items-center space-x-[4px] p-[2px_6px] bg-[#E0EEDE] rounded">
+                                            <img alt="check" src="/websites/public/img/check-green.svg">
+                                            <p class="text-[14px] font-normal leading-[24px] text-[#1B5214]">Active</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-[#434445] text-base font-normal leading-6">A powerful financial
+                                        platform enabling online and in-person transactions.</p>
+                                </div>
+                            </label></div>
+                    </div><button
+                        class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] rounded-[4px] text-center hover:bg-[#28282c]">Checkout</button>
+                </div>
+            </div>
+        </section>
+
+<script src="/websites/common/assets/js/common.js"></script>
+
+</body>
+</html>

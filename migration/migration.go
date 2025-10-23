@@ -70,6 +70,13 @@ func InsertDefaultValues() {
 
 		query = strings.ReplaceAll(query, "current_time", timeStamp)
 
+		baseurl := os.Getenv("BASE_URL")
+		baseurl = strings.TrimPrefix(baseurl, "https://")
+		baseurl = strings.TrimPrefix(baseurl, "http://")
+		baseurl = strings.TrimSuffix(baseurl, "/")
+
+		query = strings.ReplaceAll(query, "base_url", baseurl)
+
 		if strings.Contains(query, "tbl_forms") {
 
 			query = strings.ReplaceAll(query, "uu_id", Uuid)
@@ -122,7 +129,7 @@ func InsertDefaultValues() {
 
 			blocktag_count, blockcolln_count, gensetting_count int64
 
-			graphqlsetting_count, template_count, tempmodule_count, emailConf_count, emailTemp_count, form_count, Subscription_count int64
+			template_count, tempmodule_count, emailConf_count, emailTemp_count, form_count, Subscription_count int64
 		)
 
 		if err := db.Table("tbl_modules").Count(&module_count).Error; err != nil {
@@ -199,10 +206,7 @@ func InsertDefaultValues() {
 
 			log.Println(err)
 		}
-		if err := db.Table("tbl_graphql_settings").Count(&graphqlsetting_count).Error; err != nil {
 
-			log.Println(err)
-		}
 		if err := db.Table("tbl_template_modules").Count(&tempmodule_count).Error; err != nil {
 
 			log.Println(err)
@@ -447,18 +451,7 @@ func InsertDefaultValues() {
 			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_template_modules_id_seq RESTART WITH %v", templateModuleMaxId+1))
 
 		}
-		if graphqlsetting_count > 0 {
 
-			var GraphqlSettingMaxId int
-
-			if err := db.Raw("SELECT COALESCE((select max(id) from tbl_graphql_settings),0)").Scan(&GraphqlSettingMaxId); err != nil {
-				// Handle error
-				log.Println(err)
-			}
-
-			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_graphql_settings_id_seq RESTART WITH %v", GraphqlSettingMaxId+1))
-
-		}
 		if emailConf_count > 0 {
 
 			var emailConfMaxId int

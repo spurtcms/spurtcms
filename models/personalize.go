@@ -12,7 +12,7 @@ type TblUserPersonalize struct {
 	ExpandLogoPath      string
 	CreatedOn           time.Time
 	ModifiedOn          time.Time `gorm:"default:null"`
-	TenantId            int
+	TenantId            string
 }
 
 func GetPersonalize(personalize *TblUserPersonalize, id int, tenantid string) error {

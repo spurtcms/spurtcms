@@ -17,6 +17,18 @@ body {
     font-family: "Lexend", sans-serif !important;
 }
 
+.input-group label.error {
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #F26674;
+  padding: 0.3125rem 0.5rem;
+  border-radius: 0.1875rem 0.1875rem 0 0 !important;
+  border-bottom: 0;
+  position: relative;
+  left: -1px;
+}
+
 
 .font-roboto {
     font-family: "Roboto", sans-serif;
@@ -3332,47 +3344,25 @@ select:focus {
     line-height: normal;
   }
 
+  .opacity-\[50\%\] {
+    opacity: 50%;
+}
+.sortable-placeholder {
+    background: #f0f0f0;
+    border: 2px dashed #bbb;
+    margin: 8px 0;
+    height: 48px; /* match your item height */
+    border-radius: 8px;
+}
 
-.\[\&\.active\]\:before\:absolute.active::before {
-    content: var(--tw-content);
-    position: absolute;
-  }
-  
-  .\[\&\.active\]\:before\:bottom-0.active::before {
-    content: var(--tw-content);
-    bottom: 0px;
-  }
-  
-  .\[\&\.active\]\:before\:left-0.active::before {
-    content: var(--tw-content);
-    left: 0px;
-  }
-  
-  .\[\&\.active\]\:before\:block.active::before {
-    content: var(--tw-content);
-    display: block;
-  }
-  .\[\&\.active\]\:before\:h-\[2px\].active::before {
-    content: var(--tw-content);
-    height: 2px;
-  }
-  
-  .\[\&\.active\]\:before\:w-full.active::before {
-    content: var(--tw-content);
-    width: 100%;
-  }
-  
-  .\[\&\.active\]\:before\:rounded-\[18px_18px_0_0\].active::before {
-    content: var(--tw-content);
-    border-radius: 18px 18px 0 0;
-  }
-  
-  .\[\&\.active\]\:before\:bg-\[\#000000\].active::before {
-    content: var(--tw-content);
-    background-color: #000000;
-  }
-  
-  .\[\&\.active\]\:before\:bg-\[\#262626\].active::before {
-    content: var(--tw-content);
-    background-color: #262626;
-  }
+.logScr {
+    display: inline-flex;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #F26674;
+    padding: 0.3125rem 0.5rem;
+    border-radius: 0.1875rem 0.1875rem 0 0 !important;
+    border-bottom: 0;
+    position: relative;
+    left: -1px;
+}

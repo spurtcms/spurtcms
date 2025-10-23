@@ -82,8 +82,8 @@
                                 {{$Translate.Channell.Channelnamelable}}</p>
                         </div></label>
                         <input type="text"
-                            class=" {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs")))))}}opacity-[50%]{{end}} [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
-                            {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs")))))}}readonly{{end}}  placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
+                            class=" {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "Digital Products") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs"))))))}}opacity-[50%]{{end}} [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
+                            {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "Digital Products") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs"))))))}}readonly{{end}}  placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
                             value="{{.channel.ChannelName}}" />
                     </div>
                     <div class="flex flex-col space-y-[6px]">
@@ -100,7 +100,7 @@
                             value="{{if .channel}}{{.channel.ChannelUniqueId}}{{else}}{{.UniqueId}}{{end}}" />
                     </div>
                     <div class="flex flex-col space-y-[6px]">
-                        <label for="channeldesc" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Description}} <span class="text-red-600" >*</span> 
+                        <label for="channeldesc" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Description}}  
                             <div class="cursor-pointer group">
                             <img src="/public/img/inputdesc.svg" alt="">
                             <p
@@ -203,6 +203,14 @@
                            <span> Check Box</span>
                         </button>
                         {{end}}
+                          {{if eq .TypeName "Media Gallery"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="File Upload">
+                            <img src="/public/img/img.svg" alt="">
+                            <span>File Upload</span> 
+                        </button>
+                        {{end}}
                         {{if eq .TypeName "Number"}}
                         <button
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
@@ -211,6 +219,7 @@
                             <span>Number</span>
                         </button>
                         {{end}}
+                        
                         {{end}}
                         <!-- <h3 class="text-bold-black font-normal text-base may-4">
                             Relational Fields

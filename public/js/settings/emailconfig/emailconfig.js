@@ -149,10 +149,10 @@ $("#environmentmail").click(function(){
 
 function setroute(){
 
-    window.location.href="/settings/emails/"
+    window.location.href="/admin/settings/emails/"
 }
 
 function setroute1(){
 
-    window.location.href="/settings/emails/emailconfig/"
+    window.location.href="/admin/settings/emails/emailconfig/"
 }

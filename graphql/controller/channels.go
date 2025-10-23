@@ -3,9 +3,11 @@ package controller
 import (
 	"context"
 	"fmt"
+	"os"
 	"spurt-cms/graphql/info"
 	"spurt-cms/graphql/model"
 	"spurt-cms/graphql/scalars"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
@@ -249,14 +251,14 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 	)
 
 	var (
-		limit, offset                                                                   int = 0, -1
-		order                                                                           int
-		isActive                                                                        bool
-		keyword, title, sortBy                                                          string
-		channelId, categoryId                                                           int
-		categorySlug                                                                    string
-		status                                                                          string
-		memberProfFlag, categoriesFlag, fieldsFlg, authorFlag, selectedCategoriesFilter bool
+		limit, offset                                                                                 int = 0, -1
+		order                                                                                         int
+		isActive                                                                                      bool
+		keyword, title, sortBy, Location, Experience, Posteddate                                      string
+		channelId, categoryId, MemberID                                                               int
+		categorySlug, ChannelName                                                                     string
+		status                                                                                        string
+		memberProfFlag, categoriesFlag, fieldsFlg, authorFlag, selectedCategoriesFilter, savedlistFlg bool
 	)
 
 	tenantDetails, err := GetTenantDetails(c)
@@ -291,6 +293,18 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 
 			keyword = *commonFilter.Keyword.Value()
 		}
+		if commonFilter.Location.IsSet() && commonFilter.Location.Value() != nil {
+
+			Location = *commonFilter.Location.Value()
+		}
+		if commonFilter.Experience.IsSet() && commonFilter.Experience.Value() != nil {
+
+			Experience = *commonFilter.Experience.Value()
+		}
+		if commonFilter.Posteddate.IsSet() && commonFilter.Posteddate.Value() != nil {
+
+			Posteddate = *commonFilter.Posteddate.Value()
+		}
 	}
 
 	if EntryFilter != nil {
@@ -309,7 +323,10 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 
 			categorySlug = *EntryFilter.CategorySlug.Value()
 		}
+		if EntryFilter.ChannelName.IsSet() && EntryFilter.ChannelName.Value() != nil {
 
+			ChannelName = *EntryFilter.ChannelName.Value()
+		}
 		if EntryFilter.GetChildCategories.IsSet() && EntryFilter.GetChildCategories.Value() != nil && !*EntryFilter.GetChildCategories.Value() {
 
 			selectedCategoriesFilter = true
@@ -370,6 +387,14 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 
 			fieldsFlg = *additionalData.AdditionalFields.Value()
 		}
+		if additionalData.SavedList.IsSet() && additionalData.SavedList.Value() != nil {
+
+			savedlistFlg = *additionalData.SavedList.Value()
+		}
+		if additionalData.MemberID.IsSet() && additionalData.MemberID.Value() != nil {
+
+			MemberID = *additionalData.MemberID.Value()
+		}
 	}
 
 	// fmt.Printf("limit: %v,offset: %v,isActive: %v,order: %v,sort: %v,title: %v,keyword: %v,channelid: %v,categoryid: %v,categorySlug: %v,status: %v,memflag: %v,categoryFlag: %v,authorflag: %v,fieldsFlag: %v\n", limit, offset, isActive, order, sortBy, title, keyword, channelId, categoryId, categorySlug, status, memberProfFlag, categoriesFlag, authorFlag, fieldsFlg)
@@ -383,6 +408,7 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 		Title:                  title,
 		CategoryId:             categoryId,
 		CategorySlug:           categorySlug,
+		ChannelName:            ChannelName,
 		ActiveEntriesonly:      isActive,
 		TenantId:               tenantDetails.TenantId,
 		GetMemberProfile:       memberProfFlag,
@@ -395,6 +421,11 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 		SortBy:                 sortBy,
 		SectionFieldTypeId:     12,
 		MemberFieldTypeId:      14,
+		Location:               Location,
+		Experience:             Experience,
+		Posteddate:             Posteddate,
+		GetSavedEntryList:      savedlistFlg,
+		MemberId:               MemberID,
 	}
 
 	channelEntries, commonCount, _, err := ChannelConfigWP.FlexibleChannelEntriesList(inputs)
@@ -484,6 +515,18 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 
 		finalChannelEntries[i].TenantID = v.TenantId
 
+		finalChannelEntries[i].SavedFlag = &v.SavedFlag
+
+		viewurl := os.Getenv("VIEW_BASE_URL")
+
+		Channelinfo, _ := ChannelConfigWP.ChannelDetail(channels.Channels{Id: v.ChannelId, TenantId: v.TenantId})
+
+		previewurl := viewurl + "/" + Channelinfo.ChannelName + "/" + v.Slug + "-" + v.Uuid
+
+		finalChannelEntries[i].PreviewLink = &previewurl
+
+		finalChannelEntries[i].UUID = &v.Uuid
+
 		switch {
 
 		case utf8.RuneCountInString(v.Description) > MaxChunkLength:
@@ -509,6 +552,19 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 
 			authorModby := v.AuthorDetail.ModifiedBy
 
+			authorRole := v.AuthorDetail.RoleId
+
+			authorrolename := v.AuthorDetail.RoleName
+
+			var firstn = strings.ToUpper(v.AuthorDetail.FirstName[:1])
+
+			var lastn string
+			if v.AuthorDetail.LastName != "" {
+				lastn = strings.ToUpper(v.AuthorDetail.LastName[:1])
+			}
+
+			Namestring := firstn + lastn
+
 			authorDetails := &model.Author{
 				ID:               v.AuthorDetail.Id,
 				FirstName:        v.AuthorDetail.FirstName,
@@ -522,6 +578,9 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 				ModifiedOn:       &authorModon,
 				ModifiedBy:       &authorModby,
 				TenantID:         v.AuthorDetail.TenantId,
+				RoleID:           &authorRole,
+				RoleName:         &authorrolename,
+				NameString:       &Namestring,
 			}
 
 			finalChannelEntries[i].AuthorDetails = authorDetails
@@ -675,7 +734,7 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 					CreatedBy:  field.FieldValue.CreatedBy,
 					ModifiedOn: &fieldValueModon,
 					ModifiedBy: &fieldValueModBy,
-					TenantId:   field.FieldValue.TenantId,
+					TenantID:   field.FieldValue.TenantId,
 				}
 
 				conv_fieldOptions := make([]model.FieldOptions, len(field.FieldOptions))
@@ -747,7 +806,7 @@ func ChannelEntriesList(ctx context.Context, commonFilter *model.Filter, sort *m
 	return &model.ChannelEntryDetails{ChannelEntriesList: finalChannelEntries, Count: commonCount}, nil
 }
 
-func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalData *model.EntriesAdditionalData, channelId *int) (*model.ChannelEntries, error) {
+func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalData *model.EntriesAdditionalData, channelId *int, memberid *int) (*model.ChannelEntries, error) {
 
 	c, ok := ctx.Value(GinContext).(*gin.Context)
 
@@ -768,8 +827,8 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 	}
 
 	var (
-		entryId, chanId                                     int
-		entrySlug                                           string
+		entryId, chanId, memid                              int
+		entrySlug, ctalink                                  string
 		categoryFlag, fieldsFlg, memberProfFlag, authorFlag bool
 	)
 
@@ -787,6 +846,10 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 		chanId = *channelId
 	}
 
+	if memberid != nil && *memberid != 0 {
+
+		memid = *memberid
+	}
 	fmt.Println("chaannan", chanId)
 
 	if additionalData != nil {
@@ -828,12 +891,26 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 		GetAdditionalFields: fieldsFlg,
 		GetAuthorDetails:    authorFlag,
 		ChannelId:           chanId,
+		MemberId:            memid,
 	}
 
 	channelEntry, _, err := ChannelConfigWP.FetchChannelEntryDetail(inputs, nil)
 
-	fmt.Println("aithorDetails", channelEntry.AuthorDetail.CreatedOn)
+	fmt.Println(channelEntry.SavedFlag, "savedflagg")
 
+	if channelEntry.CtaId != 0 {
+
+		formdata, _ := FormConfigwp.GetCtaById(channelEntry.CtaId)
+
+		ctalink = `/forms/` + formdata.FormSlug + `-` + formdata.Uuid
+
+	}
+
+	viewurl := os.Getenv("VIEW_BASE_URL")
+
+	Channelinfo, _ := ChannelConfigWP.ChannelDetail(channels.Channels{Id: channelEntry.ChannelId, TenantId: channelEntry.TenantId})
+
+	previewurl := viewurl + "/" + Channelinfo.ChannelName + "/" + channelEntry.Slug + "-" + channelEntry.Uuid
 	switch {
 
 	case err != nil:
@@ -918,6 +995,15 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 
 	if channelEntry.AuthorDetail.Id != 0 {
 
+		var firstn = strings.ToUpper(channelEntry.AuthorDetail.FirstName[:1])
+
+		var lastn string
+		if channelEntry.AuthorDetail.LastName != "" {
+			lastn = strings.ToUpper(channelEntry.AuthorDetail.LastName[:1])
+		}
+
+		Namestring := firstn + lastn
+
 		authorDetails = model.Author{
 			ID:               channelEntry.AuthorDetail.Id,
 			FirstName:        channelEntry.AuthorDetail.FirstName,
@@ -931,6 +1017,8 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 			ModifiedOn:       &channelEntry.AuthorDetail.ModifiedOn,
 			ModifiedBy:       &channelEntry.AuthorDetail.ModifiedBy,
 			TenantID:         channelEntry.AuthorDetail.TenantId,
+			RoleName:         &channelEntry.AuthorDetail.RoleName,
+			NameString:       &Namestring,
 		}
 
 	}
@@ -980,7 +1068,7 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 				CreatedBy:  field.FieldValue.CreatedBy,
 				ModifiedOn: &fieldValueModon,
 				ModifiedBy: &fieldValueModBy,
-				TenantId:   field.FieldValue.TenantId,
+				TenantID:   field.FieldValue.TenantId,
 			}
 
 			conv_fieldOptions := make([]model.FieldOptions, len(field.FieldOptions))
@@ -1086,6 +1174,9 @@ func ChannelEntryDetail(ctx context.Context, id *int, slug *string, additionalDa
 		MemberProfile:    &memberProfile,
 		AdditionalFields: &additionalFields,
 		AuthorDetails:    &authorDetails,
+		CtaLink:          &ctalink,
+		SavedFlag:        &channelEntry.SavedFlag,
+		PreviewLink:      &previewurl,
 	}
 
 	switch {
@@ -1165,4 +1256,82 @@ func UpdateEntryViewCount(ctx context.Context, id *int, slug *string) (*model.Co
 	}
 
 	return &model.CountUpdate{Count: viewCount, Status: true}, nil
+}
+
+func TopAuthorsList(ctx context.Context, id *string) ([]*model.Author, error) {
+
+	c, ok := ctx.Value(GinContext).(*gin.Context)
+	if !ok {
+		ErrorLog.Printf("%v", info.ErrGinCtx)
+		return []*model.Author{}, info.ErrGinCtx
+	}
+
+	var tenantid string
+
+	if *id != "" {
+
+		tenantid = *id
+	}
+
+	Authors, err := ChannelConfigWP.EntryAuthors(tenantid)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.AbortWithStatus(400)
+			return []*model.Author{}, err
+		}
+		ErrorLog.Printf("%v", err)
+		c.AbortWithStatus(500)
+		return []*model.Author{}, err
+	}
+
+	var authdetails []*model.Author
+	for _, auth := range Authors {
+		authdet := model.Author{
+			ID:               auth.AuthorID,
+			FirstName:        auth.FirstName,
+			LastName:         auth.LastName,
+			Email:            auth.Email,
+			MobileNo:         auth.MobileNo,
+			ProfileImagePath: auth.ProfileImagePath,
+		}
+
+		authdetails = append(authdetails, &authdet)
+	}
+
+	return authdetails, nil
+}
+
+//Entry save Func//
+
+func EntrySaveUpdate(ctx context.Context, entrydetails *model.EntrySave) (string, error) {
+
+	_, ok := ctx.Value(GinContext).(*gin.Context)
+
+	if !ok {
+
+		ErrorLog.Printf("%v", info.ErrGinCtx)
+
+		return "Entry not Save", info.ErrGinCtx
+	}
+
+	// if entrydetails.EntryID ==0 || entrydetails.UserID ==0 || entrydetails.TenantID ==""{
+
+	//     return "Entry not Save",
+	// }
+	var entry channels.EntrySave
+
+	entry = channels.EntrySave{
+		EntryId:   entrydetails.EntryID,
+		UserId:    entrydetails.UserID,
+		TenantId:  entrydetails.TenantID,
+		IsDeleted: 0,
+	}
+
+	err := ChannelConfigWP.EntrySave(&entry, entrydetails.Save)
+	if err != nil {
+		ErrorLog.Printf("entry save create error: %s", err)
+
+		return "Entry not Save", err
+	}
+	return "Entry Saved Sucessfully", nil
 }

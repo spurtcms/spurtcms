@@ -21,7 +21,7 @@ $(document).on('click', '#uptprofile', function () {
         user_id = $("#id").val()
         console.log("id", user_id)
         $.ajax({
-            url: "/settings/checkemail",
+            url: "/admin/settings/checkemail",
             type: "POST",
             async: false,
             data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -39,7 +39,7 @@ $(document).on('click', '#uptprofile', function () {
         var result;
         user_id = $("#id").val()
         $.ajax({
-            url: "/settings/checkusername",
+            url: "/admin/settings/checkusername",
             type: "POST",
             async: false,
             data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -57,7 +57,7 @@ $(document).on('click', '#uptprofile', function () {
         var result;
         user_id = $("#id").val()
         $.ajax({
-            url: "/settings/checknumber",
+            url: "/admin/settings/checknumber",
             type: "POST",
             async: false,
             data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -227,7 +227,7 @@ $('input[name=user_mob]').keyup(function () {
 
 $(document).on('click', '#back', function () {
 
-    window.location.href = "/settings/myprofile"
+    window.location.href = "/admin/settings/myprofile"
 })
 
 

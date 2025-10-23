@@ -9,7 +9,7 @@ type Category{
 	modifiedOn:         Time 
 	modifiedBy:         Int       
 	parentId:           Int!
-	tenantId:           Int!
+	tenantId:           String!
 }
 
 type CategoryDetails{
@@ -17,8 +17,16 @@ type CategoryDetails{
 	count:        Int!
 }
 
+type GeneralInfo{
+	companyName:String!
+	logoPath:String!
+	expandLogoPath:String!
+	tenantId:String!
+}
+
 extend type Query{
 	CategoryList(categoryFilter: CategoryFilter,commonFilter: Filter): CategoryDetails! @auth
+	GeneralInformation(tenantId:String):GeneralInfo! @auth
 }
 
 input CategoryFilter{
@@ -31,3 +39,5 @@ input CategoryFilter{
 	categoryGroupSlug:    String
 	channelSlug:          String
 }
+
+

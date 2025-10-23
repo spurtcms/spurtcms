@@ -7,7 +7,10 @@ import (
 	"spurt-cms/controllers"
 	"spurt-cms/lang"
 	"spurt-cms/middleware"
+
 	"strings"
+
+	templateroutes "spurt-cms/websites/routes"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -28,6 +31,8 @@ func limitRequestBodySize(limit int64) gin.HandlerFunc {
 func SetupRoutes() *gin.Engine {
 
 	r := gin.Default()
+
+	templateroutes.TemplateRoutes(r)
 
 	var htmlfiles []string
 
@@ -53,6 +58,8 @@ func SetupRoutes() *gin.Engine {
 
 	r.POST("/uploadb64audio", controllers.EditroImageSave)
 
+	r.POST("/uploadb64document", controllers.EditroImageSave)
+
 	r.POST("/uploadform64image", controllers.EditroImageSave)
 
 	r.POST("/s3upload", controllers.UploadFilesToS3)
@@ -69,6 +76,8 @@ func SetupRoutes() *gin.Engine {
 
 	r.GET("/audio-resize", controllers.AudioResize)
 
+	r.GET("/document-access", controllers.DocumentResize)
+
 	r.GET("/sitemap.xml", controllers.Sitemap)
 
 	r.Use(middleware.CSRFAuth())
@@ -77,25 +86,29 @@ func SetupRoutes() *gin.Engine {
 
 	D := r.Group("")
 
-	D.Use(middleware.DashBoardAuth())
+	// D.Use(middleware.DashBoardAuth())
 
-	D.GET("/", controllers.WebsiteLogin)
+	D.GET("/", controllers.NewWebsitePage)
+
+	// D.GET("/s/*dynamicname",controllers.StaticPage)
+
+	D.GET("/admin", controllers.Login)
 
 	r.POST("/adminlogin", controllers.CheckLogin)
 
-	D.GET("/forgot", controllers.ForgetPassword)
+	D.GET("/admin/forgot", controllers.ForgetPassword)
 
-	D.POST("/reset-password", controllers.SendLinkForForgotPass)
+	D.POST("/admin/reset-password", controllers.SendLinkForForgotPass)
 
-	D.GET("/change-password", controllers.NewPassword)
+	D.GET("/admin/change-password", controllers.NewPassword)
 
-	D.POST("/set-newpassword", controllers.SetNewPassword)
+	D.POST("/admin/set-newpassword", controllers.SetNewPassword)
 
 	r.Use(middleware.JWTAuth())
 
 	r.GET("/lastactive", controllers.LastActive)
 
-	r.GET("/logout", controllers.Logout)
+	r.GET("/admin/logout", controllers.Logout)
 
 	r.Use(lang.TranslateHandler)
 
@@ -109,11 +122,10 @@ func SetupRoutes() *gin.Engine {
 	})
 
 	/*Cms*/
-	C := r.Group("")
+	C := r.Group("/admin")
 
 	/* Dashboard */
-	C.GET("/download-cms-open-source-code", controllers.Download)
-	
+
 	DH := C.Group("/dashboard")
 
 	DH.GET("/", controllers.DashboardView)
@@ -126,6 +138,8 @@ func SetupRoutes() *gin.Engine {
 	CE.GET("/create/:id", controllers.CreateEntry)
 
 	CE.GET("/entrylist", controllers.AllEntries)
+
+	CE.GET("/form-detail", controllers.Formdetail)
 
 	CE.GET("/deleteentries/", controllers.DeleteEntries)
 
@@ -185,6 +199,8 @@ func SetupRoutes() *gin.Engine {
 
 	CE.POST("/updatepermissionmembergroupid", controllers.UpdateAccPermissionMembergroupId)
 
+	CE.GET("/ctadetails", controllers.FormDetails)
+
 	// Form Builder
 
 	FB := C.Group("/cta")
@@ -223,6 +239,17 @@ func SetupRoutes() *gin.Engine {
 
 	FB.GET("/removecta/:id", controllers.RemoveCta)
 
+	// FB.GET("/ctapreview/:id", controllers.CtaPreview)
+
+	/* Get Support Module*/
+	// SP := C.Group("/get-spurtcmspro")
+
+	// SP.GET("", controllers.Getsupport)
+
+	// SP.POST("/payment", controllers.MakeStripePayment)
+
+	// SP.GET("/supportsubmited", controllers.Supportsubmited)
+
 	/*channels module*/
 	CH := C.Group("/channels")
 
@@ -254,10 +281,12 @@ func SetupRoutes() *gin.Engine {
 
 	CH.GET("/addtomycollection/:id", controllers.AddChannelTomyCollection)
 
+	CH.GET("/clone/:id", controllers.CloneChannels)
+
 	CH.POST("/checktitle", controllers.CheckChannelName)
 
 	/* Category Module*/
-	CS := r.Group("/categories")
+	CS := C.Group("/categories")
 
 	CS.GET("/", controllers.CategoryGroupList)
 
@@ -494,31 +523,53 @@ func SetupRoutes() *gin.Engine {
 
 	GS.POST("/update", controllers.UpdateGeneralSettings)
 
+	// /*Graphql settings*/
+
+	// GR := S.Group("/graphql")
+
+	// GR.GET("/", controllers.GraphqlTokenApi)
+
+	// GR.GET("/create", controllers.CreateTokenGrapqhl)
+
+	// GR.POST("/create", controllers.CreateToken)
+
+	// GR.GET("/edit/:id", controllers.UpdateGraphqlApi)
+
+	// GR.POST("/update", controllers.UpdateGraphqlToken)
+
+	// GR.GET("/delete/:id", controllers.DeleteToken)
+
+	// GR.POST("/multideletegraphtoken", controllers.MultiDeleteGraphqlToken)
+
+	/*Media Library*/
+	ME := C.Group("/media")
+
+	ME.GET("/", controllers.MediaList)
+
+	ME.POST("/createfolder", controllers.AddFolder)
+
+	ME.POST("/uploadimage", controllers.UploadImageMedia)
+
+	ME.POST("/deletefolfile", controllers.DeleteFolderFile)
+
+	ME.POST("/singlefolder", controllers.FolderDetails)
+
+	ME.POST("/upload", controllers.UploadImage)
+
+	ME.POST("/loadmore", controllers.LoadMore)
+
+	ME.GET("/settings", controllers.MediaSettings)
+
+	ME.POST("/settings/update", controllers.MediaStorageUpdate)
+
+	ME.POST("/renamemediapath", controllers.RenameMediaPath)
+
 	/*System Module*/
 	SS := S.Group("/personalize")
 
 	SS.GET("/", controllers.Personalization)
 
 	SS.POST("/update", controllers.PersonalizationUpdate)
-
-	/*Data Module*/
-	DT := S.Group("/data")
-
-	DT.GET("/", controllers.Data)
-
-	DT.GET("/entrieslist/:id", controllers.Entrieslist)
-
-	DT.GET("/export", controllers.Export)
-
-	DT.POST("/importdata", controllers.ImportData)
-
-	DT.GET("/err-xlsx-download", controllers.DownloaderrXlsx)
-
-	DT.GET("/secondimportpage", controllers.ImportPageTwo)
-
-	DT.GET("/thirdimportpage", controllers.ImportPageThree)
-
-	DT.GET("/exportpage", controllers.ExportPage)
 
 	G := C.Group("/graphql")
 
@@ -539,6 +590,8 @@ func SetupRoutes() *gin.Engine {
 	T := C.Group("/templates")
 
 	T.GET("/", controllers.ListTemplates)
+
+	// T.GET("/:id", controllers.Templates)
 
 	B := C.Group("/blocks")
 
@@ -565,6 +618,90 @@ func SetupRoutes() *gin.Engine {
 	B.GET("/removecollection", controllers.CollectionRemove)
 
 	B.POST("/addtomycollection", controllers.Addtomycollection)
+
+	We := C.Group("/website")
+
+	We.GET("/", controllers.WebsiteList)
+
+	We.POST("/createwebsite", controllers.CreateWebsite)
+
+	We.POST("/updatewebsite", controllers.UpdateWebsite)
+
+	We.GET("/deletewebsite/:id", controllers.DeleteWebsite)
+
+	We.POST("/checksitename", controllers.CheckSiteName)
+
+	We.GET("/template/:id", controllers.GoTemplateUpdate)
+
+	We.GET("/seo", controllers.Seo)
+
+	We.POST("/seopage", controllers.SeoPage)
+
+	We.GET("/setting", controllers.Settings)
+
+	We.POST("/settingpage", controllers.SettingPage)
+
+	We.POST("/duplicatedomainname", controllers.CheckDomainName)
+
+	Me := We.Group("/menu")
+
+	Me.GET("/", controllers.MenuList)
+
+	Me.POST("/createmenu", controllers.CreateMenu)
+
+	Me.POST("/updatemenu", controllers.UpdateMenu)
+
+	Me.GET("/deletemenu/:id", controllers.DeleteMenu)
+
+	Me.POST("/checkmenuname", controllers.CheckMenuName)
+
+	Me.POST("/menustatuschange", controllers.MenuStatusChange)
+
+	Me.GET("/publish/:id", controllers.MenuPublish)
+
+	Me.GET("/menuitems/:id", controllers.MenuIemsList)
+
+	Me.POST("/createmenuitems", controllers.CreateMenuItem)
+
+	Me.POST("/updatemenuitems", controllers.UpdateMenuItem)
+
+	Me.GET("/deletemenuitem/:id", controllers.DeleteMenuItem)
+
+	Wp := We.Group("/pages")
+
+	Wp.GET("/:id", controllers.TemplateEditPage)
+
+	Wp.GET("/createpage", controllers.AddPageInWebsite)
+
+	Wp.GET("/editpage/:id", controllers.AddPageInWebsite)
+
+	Wp.POST("/savepagedata", controllers.SavePage)
+
+	Wp.GET("/deletepage/:id", controllers.DeletePage)
+
+	Wp.POST("/pagestatuschange", controllers.PageStatusChange)
+
+	Gs := C.Group("getting-started")
+
+	Gs.GET("/", controllers.GettingStarted)
+
+	Gs.GET("/selectchannel", controllers.SelectChannel)
+
+	Gs.GET("/selectlanguage", controllers.SelectLanguage)
+
+	Gs.GET("/selectcountry", controllers.SelectCountry)
+
+	Gs.GET("/createdomain", controllers.CreateDomain)
+
+	Gs.POST("/usagemodeupdate", controllers.UsageModeUpdate)
+
+	Gs.POST("/updateselectchannel", controllers.UpdateChannelInfo)
+
+	Gs.POST("/selectedlanguage", controllers.SelectedLanguage)
+
+	Gs.POST("/selectedcountry", controllers.SelectedCountry)
+
+	Gs.POST("/subdomain", controllers.SubDomain)
 
 	return r
 

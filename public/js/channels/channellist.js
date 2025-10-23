@@ -57,7 +57,7 @@ $(document).on('keyup', '#search', function () {
 
     if ($('#search').val() === "") {
 
-      window.location.href = "/channels/"
+      window.location.href = "/admin/channels/"
 
     }
   }
@@ -76,10 +76,10 @@ $(document).on('click', '.channeldelete', function () {
   $('#delid').attr('data-id', $(this).attr('data-id'))
   $('#dltCancelBtn').text("cancel")
   if (pageno == null) {
-    $('#delid').attr('href', "/channels/deletechannel?id=" + $(this).attr('data-id'))
+    $('#delid').attr('href', "/admin/channels/deletechannel?id=" + $(this).attr('data-id'))
 
   } else {
-    $('#delid').attr('href', "/channels/deletechannel?id=" + $(this).attr('data-id') + "&page=" + pageno)
+    $('#delid').attr('href', "/admin/channels/deletechannel?id=" + $(this).attr('data-id') + "&page=" + pageno)
 
   }
 
@@ -94,7 +94,7 @@ function ChannelStatus(id) {
   }).change();
   var isactive = $('#cb' + id).val();
   $.ajax({
-    url: '/channels/status',
+    url: '/admin/channels/status',
     type: 'POST',
     async: false,
     data: {
@@ -266,7 +266,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
   $(".search").val('')
-  window.location.href = "/channels/"
+  window.location.href = "/admin/channels/"
 })
 
 $(document).ready(function () {

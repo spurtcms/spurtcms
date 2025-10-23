@@ -111,7 +111,7 @@ $(document).on('click', '.saverolperm', function () {
             pageno = "1";
         }
         $.ajax({
-            url: "/settings/roles/checkrole",
+            url: "/admin/settings/roles/checkrole",
             type: "POST",
             async: false,
             data: { "name": value, "id": id, csrf: $("input[name='csrf']").val() },
@@ -153,12 +153,12 @@ $(document).on('click', '.saverolperm', function () {
                             if (data.role == "added") {
                                 setCookie('get-toast', 'Role Created Successfully', 1)
                                 setCookie('Alert-msg', 'success', 1)
-                                window.location.href = "/settings/roles?page=" + pageno
+                                window.location.href = "/admin/settings/roles?page=" + pageno
                             }
                             if (data.role == "updated") {
                                 setCookie('get-toast', 'Role Updated Successfully', 1)
                                 setCookie('Alert-msg', 'success', 1)
-                                window.location.href = "/settings/roles?page=" + pageno
+                                window.location.href = "/admin/settings/roles?page=" + pageno
                             }
                         }
                     })
@@ -208,7 +208,7 @@ $(document).on('click', '.add-new', function () {
 
     $('.modal-header').children('h5').text(languagedata.Rolecontent.addnewrole + ' & ' + languagedata.Rolecontent.setpermisson)
 
-    $('#url').val('/settings/roles/createrole');
+    $('#url').val('/admin/settings/roles/createrole');
 
     $('.saverolperm').removeClass('roldisabled');
 
@@ -273,8 +273,6 @@ $(document).on('click', '.add-new', function () {
 
 })
 
-
-//public/js/settings/users
 /** Delete Role & Permission */
 
 $(document).on('click', '#deleterole-btn', function () {
@@ -282,7 +280,7 @@ $(document).on('click', '#deleterole-btn', function () {
     var id = $(this).attr('data-id')
 
     $.ajax({
-        url: '/settings/roles/chkroleshaveuser',
+        url: '/admin/settings/roles/chkroleshaveuser',
         type: 'POST',
         async: false,
         data: { "rolesid": id, csrf: $("input[name='csrf']").val() },
@@ -317,7 +315,7 @@ $(document).on('click', '#deleterole-btn', function () {
 
     pageno = urlpar.get('page');
 
-    $('#delid').attr('href', '/settings/roles/deleterole?id=' + id + "&page=" + pageno)
+    $('#delid').attr('href', '/admin/settings/roles/deleterole?id=' + id + "&page=" + pageno)
 
 })
 
@@ -334,7 +332,7 @@ $(document).on('keyup', '#searchroles', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/settings/roles/";
+            window.location.href = "/admin/settings/roles/";
         }
     }
 
@@ -352,7 +350,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/settings/roles/"
+    window.location.href = "/admin/settings/roles/"
 })
 
 $(document).ready(function () {
@@ -395,7 +393,7 @@ function RoleStatus(id) {
     }).change();
     var isactive = $('#cb' + id).val();
     $.ajax({
-        url: '/settings/roles/roleisactive',
+        url: '/admin/settings/roles/roleisactive',
         type: 'POST',
         async: false,
         data: {
@@ -475,7 +473,7 @@ $(document).on('click', '#manage', function () {
 
 function Editrole(id, languagedata) {
     $.ajax({
-        url: "/settings/roles/getroledetail",
+        url: "/admin/settings/roles/getroledetail",
         type: "POST",
         async: false,
         data: { "id": id, csrf: $("input[name='csrf']").val() },
@@ -510,7 +508,7 @@ function Editrole(id, languagedata) {
         }
     })
 
-    $('#url').val('/settings/roles/updaterole');
+    $('#url').val('/admin/settings/roles/updaterole');
 
     $('.saverolperm').text('Update');
 
@@ -777,7 +775,7 @@ $(document).on('click', '#Check', function () {
 $(document).on('click', '#seleccheckboxdelete', function () {
 
     $.ajax({
-        url: '/settings/roles/chkroleshaveuser',
+        url: '/admin/settings/roles/chkroleshaveuser',
         type: 'POST',
         async: false,
         data: {
@@ -878,7 +876,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/settings/roles/multiselectroledelete',
+        url: '/admin/settings/roles/multiselectroledelete',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -936,7 +934,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').addClass("hidden")
     $.ajax({
-        url: '/settings/roles/multiselectrolestatus',
+        url: '/admin/settings/roles/multiselectrolestatus',
         type: 'post',
         dataType: 'json',
         async: false,

@@ -16,8 +16,8 @@
 
 
         <div class="flex space-x-3">
-            <a href="/settings/emails/" class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline" id="emailback">{{$Translate.Cancel}}</a>
-            <a href="javascript:void(0);"  class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[4px] no-underline" id="addemailconfig">{{$Translate.Save}}</a>
+            <a href="/admin/settings/emails/" class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline" id="emailback">{{$Translate.Cancel}}</a>
+            <a href="javascript:void(0);"  class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline" id="addemailconfig">{{$Translate.Save}}</a>
         </div>
     </header>
 
@@ -34,8 +34,8 @@
 
             <div class="block overflow-auto">
                 <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
-                    <li><a href="/settings/emails/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">{{$Translate.Setting.Emailtemplates}} </a></li>
-                    <li><a href="/settings/emails/emailconfig/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">{{$Translate.Setting.Emailconfig}}</a></li>
+                    <li><a href="/admin/settings/emails/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">{{$Translate.Setting.Emailtemplates}} </a></li>
+                    <li><a href="/admin/settings/emails/emailconfig/" class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">{{$Translate.Setting.Emailconfig}}</a></li>
                 </ul>
             </div>
 
@@ -86,7 +86,7 @@
                         </div>
                     </div>
 
-                    <form method="post" id="emailconfigform" action="/settings/emails/update" name="configemailform">
+                    <form method="post" id="emailconfigform" action="/admin/settings/emails/update" name="configemailform">
                         <input type="hidden" name="csrf" value="{{.csrf}}">
                         <input type="hidden" value="{{.Maildetails.Id}}" name="id" id="emailid">
                         <input type="hidden" name="seltype" id="emailseltype" value="{{.Maildetails.SelectedType}}">

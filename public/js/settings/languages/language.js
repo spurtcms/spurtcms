@@ -122,7 +122,7 @@ $(document).ready(function () {
             var id = $("#langid").val()
 
             $.ajax({
-                url: "/settings/languages/checklanguagename",
+                url: "/admin/settings/languages/checklanguagename",
                 type: "POST",
                 async: false,
                 data: { "langname": value, "id": id, csrf: $("#csrfValue").val() },
@@ -216,11 +216,11 @@ $(document).on('keypress', '#langSearchBar', function (e) {
 
 
         if (searchText != "") {
-            $('#langSearchlink').attr('href', "/settings/languages/?keyword=" + searchText)
+            $('#langSearchlink').attr('href', "/admin/settings/languages/?keyword=" + searchText)
             $('#langSearchBar').attr('value', searchText)
             $('#langSearchlink').get(0).click()
         } else {
-            window.location.href = "/settings/languages/"
+            window.location.href = "/admin/settings/languages/"
         }
 
     }
@@ -233,7 +233,7 @@ $(document).on('keyup', '#langSearchBar', function (e) {
     if (e.which == 8 && searchVal != "") {
         var searchKey = $('#langSearchBar').val()
         if (searchKey == "") {
-            window.location.href = "/settings/languages/"
+            window.location.href = "/admin/settings/languages/"
         }
     }
 })
@@ -258,7 +258,7 @@ $(document).on('click', '.langEditBtn', function () {
 
 
     $.ajax({
-        url: '/settings/languages/editlanguage/' + langId,
+        url: '/admin/settings/languages/editlanguage/' + langId,
         type: 'GET',
         dataType: 'JSON',
         success: function (data) {
@@ -350,7 +350,7 @@ $(document).on('click', '.langEditBtn', function () {
 
 //     var isactive = $(this).val();
 //     $.ajax({
-//         url: '/settings/languages/languageisactive',
+//         url: '/admin/settings/languages/languageisactive',
 //         type: 'POST',
 //         async: false,
 //         data: {
@@ -402,7 +402,7 @@ $(document).on('click', '.langDeleteBtn', function () {
 
     $('.delname').text($(this).parents('tr').find('td:first>.flexx>h4').text())
 
-    $('#delid').attr('href', "/settings/languages/deletelanguage/" + langId)
+    $('#delid').attr('href', "/admin/settings/languages/deletelanguage/" + langId)
 
     // $('#centerModal').modal('show')
 })
@@ -653,7 +653,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/settings/languages/multiselectlanguagedelete',
+        url: '/admin/settings/languages/multiselectlanguagedelete',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -711,7 +711,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/settings/languages/multiselectlanguagestatus',
+        url: '/admin/settings/languages/multiselectlanguagestatus',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -777,7 +777,7 @@ function SetDefaultLang(langId, isDefault, roleId) {
     }
 
     $.ajax({
-        url: '/settings/languages/setdefaultlanguage',
+        url: '/admin/settings/languages/setdefaultlanguage',
         type: 'POST',
         dataType: 'json',
         cache: false,
@@ -789,7 +789,7 @@ function SetDefaultLang(langId, isDefault, roleId) {
         success: function (result) {
             if (result.value) {
                 setCookie("get-toast", "Language Updated Successfully")
-                window.location.href = "/settings/languages/"
+                window.location.href = "/admin/settings/languages/"
             }
 
         }
@@ -847,7 +847,7 @@ $(document).on("click", ".Closebtn", function () {
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
 
-    window.location.href = "/settings/languages/"
+    window.location.href = "/admin/settings/languages/"
 })
 
 $(document).ready(function () {
@@ -1145,7 +1145,7 @@ $(document).ready(function () {
 
 //     $('.selected-numbers').hide()
 //     $.ajax({
-//         url: '/settings/languages/multiselectlanguagedelete',
+//         url: '/admin/settings/languages/multiselectlanguagedelete',
 //         type: 'post',
 //         dataType: 'json',
 //         async: false,
@@ -1201,7 +1201,7 @@ $(document).ready(function () {
 
 //     $('.selected-numbers').hide()
 //     $.ajax({
-//         url: '/settings/languages/multiselectlanguagestatus',
+//         url: '/admin/settings/languages/multiselectlanguagestatus',
 //         type: 'post',
 //         dataType: 'json',
 //         async: false,

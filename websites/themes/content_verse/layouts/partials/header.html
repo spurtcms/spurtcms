@@ -1,0 +1,101 @@
+{{define "templateheader"}}
+{{$template:=.template_name}}
+{{$ChannelName:=.ChannelName}}
+
+
+
+
+<header>
+    <div
+        class=" flex justify-between items-center gap-[1rem] mx-auto px-[16px] max-w-[1295px] h-[120px] max-[1280px]:h-[60px]">
+        <div class="flex items-center space-x-6 w-full">
+            {{if .settingsdetail.SiteLogoPath}}
+            <a href="/ "><img class="w-[100px] h-[50px]"
+                    src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+            {{else}}
+            <a href="/ "><img
+                    src="/websites/themes/content_verse/assets/images/SpurtCMS.svg"></a>
+            {{end}}
+            <div class="relative w-full max-w-[623px] h-[47px]">
+                <input type="text"
+                    class="searchbtn border-[#0000002B] focus:border-[#0000002B] focus:shadow-[unset] px-8 border border-solid rounded-[50px] focus:ring-[transparent] w-full h-full font-normal text-[#0000008F] text-base focus:outline-[transparent]"
+                    placeholder="search" />
+                <div
+                    class="entrylistdiv hidden w-full z-[999] absolute min-h-[64px] border border-[#cdcdcd70]  mt-2 rounded  p-[16px]   justify-start shadow-xl max-h-[300px] overflow-auto bg-white ">
+                    <ul class="rounded m-auto">
+                        <li class="text-[12px] text-[#919090] mb-[10px]">BLOGS</li>
+                        {{if .searchlist}}
+                         {{range .searchlist}}
+                        <li class="text-[14px] mb-[10px] cursor-pointer"><a
+                                href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} ">{{.Title}}</a></li>
+                     {{end}}
+                     {{end}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="  flex items-center space-x-[36px] max-[700px]:space-x-4">
+            <div
+                class="top-0 justify-center left-[-100%] z-10 lg:z-0  lg:static fixed flex flex-col lg:items-center gap-[1.5vw] bg-white lg:bg-[transparent] px-5 lg:px-0 py-5 lg:py-0 w-[50%] lg:w-auto max-[600px]:w-full h-full lg:h-auto duration-500 navLinks ">
+                <ul class="flex lg:flex-row flex-col gap-[30px] lg:py-[20px] w-full lg:w-auto">
+                    <li class="flex justify-end lg:hidden w-full">
+                        <a onclick="onMenuToggle(this)" class="ml-auto w-4 text-[30px] cursor-pointer">
+                            <img src="/websites/public/img/modal-close.svg" alt="">
+                        </a>
+                    </li>
+                    {{if .menulist}}
+                    {{range .menulist}}
+                    <li>
+                        <a href="{{.UrlPath}} "
+                            class="font-medium text-base leading-[27px] whitespace-nowrap   {{if eq $ChannelName .Name}} text-[#F33151]{{else}}text-[#120B14]  {{end}} hover:text-[#F33151]">
+                            {{.Name}}</a>
+                    </li>
+                    {{end}}
+                    {{end}}
+
+                </ul>
+            </div>
+
+            {{if .memberdet}}
+
+            <div class="relative  inline-block text-center">
+                <div >
+                
+                    <button type="button"
+                        class="myprofilebtn w-12 h-12 bg-[#DD5B15] hover:bg-[#823e19] rounded-full text-2xl font-semibold text-white flex items-center justify-center ">
+                       {{if .memberdet.ProfileImagePath}}
+                       <img src="/image-resize?name={{.memberdet.ProfileImagePath}}" class="h-[44px] object-cover rounded-full" alt="">
+                       {{else}}
+                        {{.memberdet.NameString}}{{end}}</button>
+                        
+                </div>
+                <div class="hidden myprofiledrop absolute right-0 z-auto mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+                    role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                    <div class="px-3 py-2 bg-gray-50 border-gray-700 rounded-lg">
+                      <a href="/myprofile ">  <button type="button"
+                            class="flex items-center space-x-2 mb-4 w-full h-full text-left text-[14px] font-normal leading-[17px] text-[#120B14] hover:bg-[#F1F1F1] rounded-lg"
+                            role="menuitem" tabindex="-1" id="menu-item-profile"><img alt="profile"
+                                src="/websites/public/img/profile1.svg">My Profile</button></a>
+                             <a href="/logout ">   <button type="button"
+                            class="flex items-center ml-1 space-x-2 w-full h-full text-left text-[14px] font-normal leading-[17px] text-[#120B14] hover:bg-[#F1F1F1] rounded-lg"
+                            role="menuitem" tabindex="-1" id="menu-item-logout"><img alt="logout"
+                                src="/websites/public/img/logout.svg">Logout</button></a>
+                            </div>
+                </div>
+            </div>
+          
+            {{else}}
+            <a href="/signin "
+                class="flex justify-center items-center bg-[#F33151] hover:bg-[#f15e76] px-[32px] max-[700px]:px-4 rounded-[50px] h-[47px] font-[700] text-base text-white whitespace-nowrap max-sm:!ml-0">
+                join now
+            </a>
+            {{end}}
+            <a onclick="onMenuToggle(this)"
+                class="lg:hidden mr-[20px] w-[24px] max-[500px]:w-[16px] text-[30px] cursor-pointer">
+                <img src="/websites/public/img/menu-black.svg" alt="">
+            </a>
+        </div>
+    </div>
+</header>
+
+{{end}}

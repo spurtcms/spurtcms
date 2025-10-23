@@ -34,7 +34,7 @@ $(document).on('click', '.emailEditBtn', function () {
     pageno = urlpar.get('page');
     $("#pageno").val(pageno)
     $.ajax({
-        url: "/settings/emails/edit-template",
+        url: "/admin/settings/emails/edit-template",
         type: "GET",
         dataType: "json",
         data: { "id": tempid },
@@ -75,7 +75,7 @@ $(document).on('click', '.emailStatusBtn', function () {
 
 
     $.ajax({
-        url: '/settings/emails/templateisactive',
+        url: '/admin/settings/emails/templateisactive',
         type: 'POST',
         async: false,
         data: {
@@ -135,7 +135,7 @@ $(document).on('click', '#emailEditCloseBtn', function () {
 // $(document).on("click", "#filterformsubmit", function () {
 //     var key = $(this).siblings().children(".search").val();
 //     if (key == "") {
-//         window.location.href = "/settings/emails/"
+//         window.location.href = "/admin/settings/emails/"
 //     } else {
 //         $('.filterform').submit();
 //     }
@@ -148,7 +148,7 @@ $(document).on('click', '#emailEditCloseBtn', function () {
 
 //         if ($('.search').val() === "") {
 
-//             window.location.href = "/settings/emails"
+//             window.location.href = "/admin/settings/emails"
 
 //         }
 //     }
@@ -200,7 +200,7 @@ $(document).on('click', '#update-templatebtn', function () {
 
 
     if (formcheck == true) {
-        $('#mailtemplate_form').attr('action', '/settings/emails/update-temp')
+        $('#mailtemplate_form').attr('action', '/admin/settings/emails/update-temp')
         $('#mailtemplate_form')[0].submit();
 
     }
@@ -253,7 +253,7 @@ $(document).on('click', '.close', function () {
 //     pageno = urlpar.get('page');
 //     $("#pageno").val(pageno)
 //     $.ajax({
-//         url: "/settings/emails/edit-template",
+//         url: "/admin/settings/emails/edit-template",
 //         type: "GET",
 //         dataType: "json",
 //         data: { "id": tempid },
@@ -484,10 +484,10 @@ $('#update-templatebtn').click(function (event) {
 
 function setroute() {
 
-    window.location.href = "/settings/emails/"
+    window.location.href = "/admin/settings/emails/"
 }
 
 function setroute1() {
 
-    window.location.href = "/settings/emails/emailconfig/"
+    window.location.href = "/admin/settings/emails/emailconfig/"
 }

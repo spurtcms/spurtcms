@@ -23,7 +23,7 @@ type MemberProfile{
 	modifiedBy:        Int 
 	claimStatus:       Int 
 	IsActive:          Int  
-	tenantId:          Int! 
+	tenantId:          String! 
 	claimDate:         Time
 }
 
@@ -34,36 +34,122 @@ type MemberSettings {
 	modifiedBy:          Int       
 	modifiedOn:          Time 
 	notificationUsers:   String!  
-	tenantId:            Int!
+	tenantId:            String!
 }
+
+input MemberInfo{
+	email:   String!
+	tenantId:  String!
+	url: String!
+}
+
+input MemberResetpassInfo{
+	newPassword: String!
+	confrimPassword: String!
+	token: String!
+	
+}
+input MemberSignin{
+	email:        String!
+	password:     String!
+    userId:       Int! 
+	tenantId:     String! 
+}
+type MemberCheckLoginResponse {
+	email:Boolean!
+	password:Boolean!
+    message: String!
+	token:String!
+    success: Boolean!
+    memberDetails:  Members
+}
+
+type ForgotPasswordResponse{
+	message: String!
+	success:Boolean!
+}
+
+
 
 extend type Mutation{
-	memberRegister(input: MemberDetails!,arguments: MemberArguments):Boolean!
+	memberRegister(input: MemberDetails!,arguments: MemberArguments):Boolean! @auth
+	memberCheckLogin(input:MemberSignin!): MemberCheckLoginResponse! @auth
+	forgotPassword(input: MemberInfo!):ForgotPasswordResponse!@auth
+	resetPassword(input: MemberResetpassInfo!):Boolean! @auth
+  memberSocialLogin(input: SocialLoginInput!): SocialLoginResponse! @auth
+  updateMemberProfile(input:UpdateMember!): UpdatememberResponse! @auth
+
 }
 
+type UpdatememberResponse{
+	memberDetails:  Members!
+	message:               String!
+}
+input SocialLoginInput{
+
+    firstName:         String!
+    lastName:          String
+    email:             String!
+    password:          String
+    username:          String
+   
+  
+}
+
+type SocialLoginResponse{
+    message: String!
+	  token:String!
+    userid:Int!
+  
+}
 input MemberDetails{
+    id:   Int
     firstName:         String!
     lastName:          String
     mobile:            String
     email:             String!
-    password:          String
+    password:          String!
+    isActive:          Int
+    profileImage:      String
+    profileImagePath:  String
+    username:          String
+    groupId:           Int
+	  userId:            Int! 
+	  tenantId:          String! 
+    message:           String
+}
+input MemberArguments{
+	module:            Int
+	tenantId:          String
+}
+
+type Members{
+    Id:         Int
+    firstName:         String!
+    lastName:          String
+    mobile:            String
+    email:             String!
+    password:          String!
     isActive:          Int
     profileImage:      String
     profileImagePath:  String
     username:          String
     groupId:           Int 
+	createdBy:         Int
+	createdOn:         Time
+	modifiedOn:        Time 
+	modifiedBy:        Int 
+	tenantId:          String! 
+	isDeleted:           Int!
+  storageType: String
+  NameString: String
+  
 }
-
-input MemberArguments{
-	module:            Int
-	tenantId:          Int
-}
-
-type Members{
-	Id:         Int
+input UpdateMember{
+	Id:         Int!
     firstName:         String!
     lastName:          String
-    mobile:            String
+    mobile:            String!
     email:             String!
     password:          String
     isActive:          Int
@@ -75,16 +161,26 @@ type Members{
 	createdOn:         Time
 	modifiedOn:        Time 
 	modifiedBy:        Int 
-	tenantId:          Int! 
-	isDeleted:           Int!
+	tenantId:          String
+  removeImage:     Boolean
+
+  
 }
+
+
+
 
 
 type MembersDetails{
 	membersList:  [Members!]!
 	count:               Int!
 }
+
+
+
+
 extend type Query{
     MembersList(filter: Filter): MembersDetails! @auth
-
+	
+    MemberProfileDetails(id:Int!):Members! @auth
 }

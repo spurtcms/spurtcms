@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+    {{$template_name:=.template_name}}
+
+
+    <div id="__next" class="font-montserrat">
+        {{- block "templateheader" .}}{{end}}
+        {{$template:=.template_name}}
+        {{if .Entries}}
+        <div>
+            <div
+                class="min-h-[466px] grid place-items-center gap-8 p-4 bg-center bg-cover bg-[#004827] relative max-[1300px]:min-h-[300px]">
+                <img src="/support_sphere/assets/images/banner-left.svg" alt="" class="absolute left-0 h-full"><img
+                    src="/support_sphere/assets/images/banner-right.svg" alt="" class="absolute right-0 h-full">
+                <div class="relative">
+                    <h1 class="text-[42px] font-bold text-white leading-[51px] mb-8 text-center max-sm:text-start">Hey,
+                        what answer do you need?</h1>
+                    <div class="w-full max-w-[480px] mx-auto relative flex items-center"><img
+                            src="/support_sphere/assets/images/askQuestion.svg" alt="search"
+                            class="absolute right-[20px]"><input type="text" id="search" placeholder="Ask a question"
+                            class="searchbtn h-14 shadow-[0_4px_12px_0px_#00000026] bg-white rounded-[10px] border-0 w-full block text-base font-medium p-[18px_20px]"
+                            value=""></div>
+                    <div
+                        class="entrylistdiv hidden bg-white max-w-[676px] rounded-[8px] mt-1.5 absolute transform -translate-x-1/2 left-1/2 w-full shadow-[0_6px_10px_0px_#0000001A]">
+                        <h2
+                            class="text-[14px] font-semibold leading-[17.07px] text-left text-[#1B1B20] p-[30px_30px_15px_30px]">
+                            Search results</h2>
+                        <ul class="max-h-[300px] overflow-auto">
+                            {{$Entries:=.Entries}}
+                            {{if .menulist}}
+                            {{range .menulist}}
+                            <li>
+                                <div
+                                    class="hover:bg-[#F9F9F9] p-[15px_30px_30px_30px] grid grid-cols-[1fr_auto] gap-4 border-t border-[#1B1B201F] items-center">
+                                    <div>
+                                        <h3 class="text-base font-semibold leading-[19.5px] text-[#1B1B20] mb-4">
+                                            {{.Name}}</h3>
+                                        {{$TypeId:=.TypeId}}
+                                        {{range $entry := $Entries}}
+                                        {{if eq $TypeId $entry.ChannelId}}
+                                        <a class="searchtag" data-value="{{ $entry.Title }}"
+                                            href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} ">
+                                            <div class="grid grid-cols-[1fr_auto] gap-4 mb-4">
+                                                <p
+                                                    class="text-[14px] font-medium leading-[24px] text-left text-[#1B1B20] max-w-[500px] display[-webkit-box] -webkit-box-orient[vertical] overflow-hidden  line-clamp-1">
+                                                    {{ $entry.Title }}
+                                                </p>
+                                                <div class="w-[24px] h-[24px]">
+                                                    <img src="/support_sphere/assets/images/search-resultArrow.svg"
+                                                        alt="arrow" class="w-[24px]">
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {{end}}
+                                        {{end}}
+                                        <ul class="flex items-center">
+                                            <li
+                                                class="text-[12px] font-semibold leading-[14.63px] text-left text-[#1B1B20C2] mr-2 cursor-pointer">
+                                                Home</li>
+                                            <li
+                                                class="text-[12px] font-semibold leading-[14.63px] text-left text-[#1B1B20C2] mr-2">
+                                                <img src="/support_sphere/assets/images/search-resultArrow.svg"
+                                                    alt="arrow">
+                                            </li>
+                                            <li
+                                                class="text-[12px] font-semibold leading-[14.63px] text-left text-[#1B1B20C2] mr-2 cursor-pointer">
+                                                {{.Name}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-[1148px] mx-auto p-[161px_16px] max-[1300px]:p-[32px_16px]">
+                <h2 class="leading-[36px] text-[30px] font-bold text-[#1B1B20] mb-[47px] max-[1300px]:mb-[32px]">Browse
+                    by Channels</h2>
+                <div class="grid grid-cols-3 gap-[30px] max-[1300px]:gap-[16px] max-md:grid-cols-2 max-sm:grid-cols-1">
+                    {{$Entries:=.Entries}}
+                    {{if .menulist}}
+                    {{range .menulist}}
+                    <div
+                        class="bg-[#F5F5F5] p-[25px_30px] rounded-[12px] border border-transparent flex flex-col min-h-[460px] max-[1300px]:p-[16px] ">
+                        <h3 class="text-[22px] font-semibold text-[#1B1B20] mb-[38px] max-[992px]:text-[18px] ">
+                            {{.Name}}</h3>
+                        <p class="text-[14px] font-medium text-[#1B1B20C2] mb-[38px]">{{.Count}} Articles</p>
+                        <ul class="m-[0_-30px_30px] max-[1300px]:m-[0_-16px_16px] ">
+                            {{$TypeId:=.TypeId}}
+                            {{range $entry := $Entries}}
+                            {{if eq $TypeId $entry.ChannelId}}
+                            <a class="text-gray-500 text-base font-medium group hover:text-blue-600"
+                                href="javascript:void(0);">
+                                <li>
+                                    <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                                        class="flex items-center justify-between text-[16px] font-semibold leading-[24px] text-[#1B1B20] p-[16px_30px] border-b border-[#1B1B201A] group"><span
+                                            class="group-hover:text-[#2D47DA] max-[992px]:text-[14px] line-clamp-1">
+                                            {{ $entry.Title }}
+                                        </span><span class="min-w-[18px] grid"><img
+                                                src="/support_sphere/assets/images/helpCenter-arrow.svg" alt="arrow"
+                                                class="group-hover:hidden"><img
+                                                src="/support_sphere/assets/images/helpCenter-arrowActive.svg"
+                                                alt="arrow" class="hidden group-hover:inline-block"></span></a>
+                                </li>
+                            </a>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                        <a href="{{.UrlPath}} "
+                            class="border border-[#1B1B2026] bg-[#FFFFFF] p-[10px_20px] rounded-[8px] inline-flex items-center text-[14px] font-semibold leading-[17.07px] text-[#1B1B20] h-[37px] mt-auto w-fit group hover:bg-[#1B1B20] hover:text-[#FFFFFF]  ">
+                            Show all
+                            <span class="inline-flex ml-[4px]">
+                                <img src="/support_sphere/assets/images/showall-arrow.svg" alt="arrow"
+                                    class="group-hover:hidden">
+                                <img src="/support_sphere/assets/images/showall-arrowLight.svg" alt="arrow"
+                                    class="hidden group-hover:inline-block">
+                            </span>
+                        </a>
+                    </div>
+                    {{end}}
+                    {{end}}
+                </div>
+            </div>
+        </div>
+        {{end}}
+
+        {{if .entries}}
+        <section class="max-w-[1068px] mx-auto py-[70px] px-[16px] max-[1300px]:p-[16px]">
+            <!-- Breadcrumb -->
+            <ul class="flex items-center mb-[26px]">
+                <li class="text-[14px] font-semibold leading-[17.07px] mr-[8px] text-[#1B1B20]">
+                    <a href="/ "
+                        class="text-[#2D47DA] hover:underline">Home</a>
+                </li>
+                <li class="mr-[8px] text-[#1B1B20] mt-[2px]">
+                    <img src="/support_sphere/assets/images/search-resultArrow.svg" alt="arrow" class="h-[16px]" />
+                </li>
+                <li class="text-[14px] font-semibold leading-[17.07px] text-[#1B1B20]">
+                    {{.ChannelName}}
+                </li>
+            </ul>
+
+            <!-- Page Title -->
+            <h1 class="text-[30px] font-bold leading-[36.57px] text-[#1B1B20] mb-[20px]">
+                Help Center
+            </h1>
+
+            <!-- Help Center List -->
+            <ul>
+                {{if .entries}}
+                {{range .entries}}
+                <li>
+                    <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                        class="grid grid-cols-[1fr_auto] items-center py-[20px] border-b border-[#231F201F] group">
+                        <p class="text-base font-medium text-[#4F4F53] group-hover:text-[#2D47DA]">
+                            {{.Title}}
+                        </p>
+                        <img src="/support_sphere/assets/images/search-resultArrow.svg" class="w-[24px]" alt="arrow" />
+                    </a>
+                </li>
+                {{end}}
+                {{end}}
+            </ul>
+        </section>
+        {{end}}
+    </div>
+
+
+</body>
+
+<script src="/support_sphere/assets/js/content_list.js"></script>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+    <main>
+        <section>
+            <div
+                class="flex flex-col items-center mx-auto mb-[44px] max-[700px]:mb-[38px] px-[16px] py-[17px] max-w-[1295px]">
+                <p class="mb-[30px] font-normal text-[20px] text-center">
+                    <span>@{{.entrydetail.AuthorDetail.Username}}</span>
+                    {{.entrydetail.CreatedDate}} {{.entrydetail.ReadingTime}} minutes
+                    read
+                </p>
+                <h4
+                    class="mx-auto mb-[30px] max-w-[1188px] text-[#120B14] text-[70px] text-center max-[600px]:text-[42px] leading-[88px]">
+
+                   {{.entrydetail.Title}}</h4>
+         
+
+                <div class="border-[#1516183D] px-[16px] pt-[13px] border-t border-solid w-auto">
+                    <h6 class="font-[600] text-[#120B14] text-[20px] text-center break-all">
+                        Tags: #{{.entrydetail.CategoryGroup}}</h6>
+                </div>
+            </div>
+            <!-- <div class="bg-[#EFFC06] mb-[86px] max-[700px]:mb-[38px]">
+                <div class="mx-auto px-[16px] max-w-[1076px]">
+                    <img src="{{if .entrydetail.CoverImage}}{{.entrydetail.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}"
+                        alt="" class="w-full h-auto">
+                </div>
+            </div>
+            <div
+                class="flex flex-col items-start gap-[40px] mx-auto mb-[72px] max-[700px]:mb-[38px] px-[16px] max-w-[1076px]">
+                <p class="font-normal text-[#120B14] text-[18px]">{{.entrydetail.Description}}</p>
+
+            </div> -->
+
+            <div id="description">{{.content}}</div>
+
+            <div
+                class="flex max-[500px]:flex-col justify-between items-start gap-[16px] mx-auto mb-[47px] px-[16px] max-w-[1296px]">
+                <a href="#" class="flex flex-col items-start">      
+                        {{if gt (len .filteredEntries) 0}}
+                        {{with index .filteredEntries 0}}
+                </a>
+                <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                    class="flex flex-col items-end pb-[15px]">
+                    <p
+                        class="text-right border-[#EDEDED] mb-[17px] max-[500px]:mb-[12px] pb-[20px] max-[500px]:pb-[14px] border-b border-solid font-normal text-[25px] max-[500px]:text-[18px]">
+                        Next blog</p>
+
+                    <h5
+                        class="text-right py-[15px] line-clamp-3 max-w-[458px] font-normal text-[#120B14] text-[36px] max-[500px]:text-[24px] pb-0">
+                        {{.Title}}</h5>
+                </a>
+                {{end}}
+                {{end}}
+            </div>
+
+
+            <div class="relative bg-image">
+                <div class="top-0 left-0 absolute bg-[#120b1461] w-full h-full"></div>
+                <div
+                    class="relative z-20 flex max-[800px]:flex-col justify-between items-end gap-[18px] mx-auto px-[16px] max-[500px]:py-[32px] pt-[83px] pb-[122px] max-w-[1295px]">
+                    <div class="flex flex-col items-start">
+                        <h3 class="font-normal text-[24px] text-white">Membership</h3>
+                        <p class="font-normal text-[40px] text-white max-[500px]:text-[28px]">Unlock full access to
+                            <span class="font-medium">Myoan</span> and see the entire library of <span
+                                class="font-medium">paid-members</span> only posts
+                        </p>
+                    </div>
+                    <a href="#"
+                        class="flex items-center bg-[#F33151] hover:bg-[#f15e76] px-[46px] max-[500px]:px-[23px] rounded-[50px] max-w-[269px] h-[79px] font-medium text-[24px] text-white max-[500px]:text-[18px] whitespace-nowrap">Sign
+                        up for free</a>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    {{template "gofooter" .}}
+</body>
+
+
+</html>

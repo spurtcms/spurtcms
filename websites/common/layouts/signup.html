@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+   
+    {{$template_name:=.template_name}}
+
+    <section
+        class="bg-[#FAFAFA] min-h-[calc(100vh-120px)] p-[16px] flex flex-col max-md:min-h-[calc(100vh-68px)] max-xl:min-h-[calc(100vh-79px)] max-[1300px]:p-[16px]">
+        <div class="w-[90%] mx-auto max-[1400px]:w-full max-[1600px]:mb-auto mb-0">
+            <ul class="flex space-x-1 items-center mb-[24px] max-[1300px]:mb-[14px] ">
+                <li><a href="/ "><img alt="home"
+                            src="/websites/public/img/home.svg"></a></li>
+                <li><a href="#"><img alt="arrow" src="/websites/public/img/crumb-arrow.svg"></a></li>
+                <li>
+                    <p class="text-[14px] font-semibold leading-4 text-[#120B14] ">Sign up</p>
+                </li>
+            </ul>
+        </div>
+        <div class="w-[90%] mx-auto max-[1400px]:w-full ">
+            <form action="/signup " method="POST"
+                id="templatesignup">
+                <input type="hidden" id="adminuserid" value="{{.userid}}">
+                <div class="max-w-[394px] mx-auto">
+                    <h1
+                        class="text-[36px] font-semibold leading-none text-[#1D1D1F] text-center mb-[16px] max-sm:text-[24px] max-[1300px]:mb-[8px] max-[1300px]:text-[32px] max-[1300px]:leading-none ">
+                        Create an account</h1>
+                    <p
+                        class="text-base font-medium leading-[17px] text-[#83838D] text-center mb-[24px] max-[1300px]:mb-[16px] max-sm:text-[14px] ">
+                        Thank you for choosing us. Give your details</p>
+                    <div class="bg-[#FFFFFF] border border-[#E9E9E9] p-[30px] rounded-[12px] max-[1300px]:p-[16px]">
+                        <div class="mb-[24px] last-of-type:mb-0  relative">
+                            <label class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">
+                                User name
+                            </label>
+                            <input placeholder="Eg: Steve Jobs" id="username" name="username"
+                                class="border rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] text-black placeholder:text-[#1516188F] border-[#00000029] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                                maxlength="25" type="text">
+                        </div>
+                        <div class="mb-[24px] last-of-type:mb-0  relative">
+                            <label class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">
+                                Email
+                            </label>
+                            <input placeholder="Enter your Email" id="email" name="email"
+                                class="border rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] text-black placeholder:text-[#1516188F] border-[#00000029] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                                type="text">
+                        </div>
+                        <div class="mb-[24px] last-of-type:mb-0  relative">
+                            <label class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">
+                                Password
+                            </label>
+                            <div class="relative flex items-center password">
+                                <input placeholder="Enter your Password" id="password" name="password"
+                                    class="border rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] text-black font-normal leading-[16px] placeholder:text-[#1516188F] border-[#00000029] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                                    type="password">
+                                <a href="javascript:void(0);" id="eyeicon" class="absolute right-[10px] p-0">
+                                    <img alt="password" src="/websites/public/img/hide-password.svg">
+                                </a>
+                            </div>
+                        </div>
+                        <button id="gettingstarted"
+                            class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[34px] rounded-[4px] text-center hover:bg-[#28282c] ">Getting
+                            started
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-[4px] mt-[16px] justify-center max-[1300px]:mt-[16px]">
+                        <p class="text-[12px] font-medium leading-[14px] text-[#1516188F]">
+                            Already have an account?
+                        </p>
+                        <a class="text-[12px] font-semibold leading-[14px] hover:underline text-[#1D1D1F]"
+                            href="/signin ">
+                            Log In
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script src="/websites/common/assets/js/signup.js"></script>
+
+
+<script src="/websites/common/assets/js/common.js"></script>
+
+
+</body>
+
+</html>

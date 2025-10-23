@@ -27,40 +27,46 @@ type TblLanguage struct {
 }
 
 type TblUser struct {
-	Id                   int
-	Uuid                 string
-	FirstName            string
-	LastName             string
-	RoleId               int
-	Email                string
-	Username             string
-	Password             string
-	MobileNo             string
-	IsActive             int
-	ProfileImage         string
-	ProfileImagePath     string
-	DataAccess           int
-	CreatedOn            time.Time
-	CreatedBy            int
-	ModifiedOn           time.Time `gorm:"DEFAULT:NULL"`
-	ModifiedBy           int       `gorm:"DEFAULT:NULL"`
-	LastLogin            time.Time `gorm:"DEFAULT:NULL"`
-	IsDeleted            int
-	DeletedOn            time.Time `gorm:"DEFAULT:NULL"`
-	DeletedBy            int       `gorm:"DEFAULT:NULL"`
+	Id                   int       `gorm:"column:id"`
+	Uuid                 string    `gorm:"column:uuid"`
+	FirstName            string    `gorm:"column:first_name"`
+	LastName             string    `gorm:"column:last_name"`
+	RoleId               int       `gorm:"column:role_id"`
+	Email                string    `gorm:"column:email"`
+	Username             string    `gorm:"column:username"`
+	Password             string    `gorm:"column:password"`
+	MobileNo             string    `gorm:"column:mobile_no"`
+	IsActive             int       `gorm:"column:is_active"`
+	ProfileImage         string    `gorm:"column:profile_image"`
+	ProfileImagePath     string    `gorm:"column:profile_image_path"`
+	StorageType          string    `gorm:"column:storage_type"`
+	DataAccess           int       `gorm:"column:data_access"`
+	CreatedOn            time.Time `gorm:"column:created_on"`
+	CreatedBy            int       `gorm:"column:created_by"`
+	ModifiedOn           time.Time `gorm:"column:modified_on;DEFAULT:NULL"`
+	ModifiedBy           int       `gorm:"column:modified_by;DEFAULT:NULL"`
+	LastLogin            time.Time `gorm:"column:last_login;DEFAULT:NULL"`
+	IsDeleted            int       `gorm:"column:is_deleted"`
+	DeletedOn            time.Time `gorm:"column:deleted_on;DEFAULT:NULL"`
+	DeletedBy            int       `gorm:"column:deleted_by;DEFAULT:NULL"`
 	ModuleName           string    `gorm:"-"`
-	RouteName            string    `gorm:"<-:false"`
-	DisplayName          string    `gorm:"<-:false"`
+	RouteName            string    `gorm:"-:migration;<-:false"`
+	DisplayName          string    `gorm:"-:migration;<-:false"`
 	Description          string    `gorm:"-"`
-	ModuleId             int       `gorm:"<-:false"`
+	ModuleId             int       `gorm:"-:migration;<-:false"`
 	PermissionId         int       `gorm:"-"`
-	FullAccessPermission int       `gorm:"<-:false"`
-	RoleName             string    `gorm:"<-:false"`
-	DefaultLanguageId    int
-	NameString           string    `gorm:"<-:false"`
+	FullAccessPermission int       `gorm:"-:migration;<-:false"`
+	RoleName             string    `gorm:"-:migration;<-:false"`
+	DefaultLanguageId    int       `gorm:"column:default_language_id"`
+	NameString           string    `gorm:"-"`
+	TenantId             string
 	Otp                  int       `gorm:"column:otp"`
-	OtpExpiry            time.Time `gorm:"column:otp_expiry"`
-	TenantId             int
+	OtpExpiry            time.Time `gorm:"column:otp_expiry;DEFAULT:NULL"`
+	NameLength           int       `gorm:"-:migration;<-:false"`
+	LimitedLengthName    string    `gorm:"-:migration;<-:false"`
+	S3FolderName         string    `gorm:"column:s3_folder_name"`
+	Subdomain            string
+	GoTemplateDefault    int `gorm:"column:go_template_default"`
 	ArticleCount         int `gorm:"type:integer"`
 }
 
@@ -69,6 +75,26 @@ type QUERY struct {
 	DataAccess int
 }
 
+func UpdateSubDomain(id int, subdomain string) error {
+
+	result := DB.Table("tbl_users").Where("id = ?", id).Update("subdomain", subdomain)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func GetuserBySubdomain(subdomain string) (userdetils TblUser, err error) {
+
+	if err := DB.Table("tbl_users").Where("is_deleted = 0 and subdomain = ? ", subdomain).First(&userdetils).Error; err != nil {
+
+		return TblUser{}, err
+	}
+
+	return userdetils, nil
+}
 func (q QUERY) GetLanguageList(language *[]TblLanguage, limit, offset int, filter Filter, flag bool, tenantid string) ([]TblLanguage, int64) {
 
 	var Total_languages int64
@@ -112,7 +138,7 @@ func (q QUERY) GetLanguageList(language *[]TblLanguage, limit, offset int, filte
 
 }
 
-func GetLanguageDetails(langData *TblLanguage, langid int, userid, tenantid string) error {
+func GetLanguageDetails(langData *TblLanguage, langid, userid int, tenantid string) error {
 
 	var userDetails TblUser
 

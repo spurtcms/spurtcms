@@ -39,7 +39,7 @@ function CtaStatus(id) {
 
     console.log("isactive",isactive)
     $.ajax({
-      url: '/cta/isactive',
+      url: '/admin/cta/isactive',
       type: 'POST',
       async: false,
       data: {
@@ -85,7 +85,7 @@ $(document).on('keyup', '#formsearch', function (event) {
 
         if ($('.search').val() === "") {
 
-            window.location.href = "/cta/";
+            window.location.href = "/admin/cta/";
 
         }
     }
@@ -97,7 +97,7 @@ $(document).on('keyup', '#unpublishedformsearch', function (event) {
 
         if ($('.search').val() === "") {
 
-            window.location.href = "/cta/unpublished";
+            window.location.href = "/admin/cta/unpublished";
 
         }
     }
@@ -109,7 +109,7 @@ $(document).on('keyup', '#draftformsearch', function (event) {
 
         if ($('.search').val() === "") {
 
-            window.location.href = "/cta/draft";
+            window.location.href = "/admin/cta/draft";
 
         }
     }
@@ -134,11 +134,11 @@ $(document).on("click", "#unpublish", function () {
 
     if (pageno == null) {
 
-        $('#delid').attr('href', "/cta/formstatus?id=" + formid + "&status=" + status);
+        $('#delid').attr('href', "/admin/cta/formstatus?id=" + formid + "&status=" + status);
 
     } else {
 
-        $('#delid').attr('href', "/cta/formstatus?id=" + formid + "&status=" + status + "&page=" + pageno);
+        $('#delid').attr('href', "/admin/cta/formstatus?id=" + formid + "&status=" + status + "&page=" + pageno);
 
     }
 })
@@ -162,11 +162,11 @@ $(document).on("click", "#publish", function () {
 
     if (pageno == null) {
 
-        $('#delid').attr('href', "/cta/formstatus?id=" + formid + "&status=" + status);
+        $('#delid').attr('href', "/admin/cta/formstatus?id=" + formid + "&status=" + status);
 
     } else {
 
-        $('#delid').attr('href', "/cta/formstatus?id=" + formid + "&status=" + status + "&page=" + pageno);
+        $('#delid').attr('href', "/admin/cta/formstatus?id=" + formid + "&status=" + status + "&page=" + pageno);
 
     }
 })
@@ -189,11 +189,11 @@ $(document).on('click', "#delete-btn", function () {
 
     if (pageno == null) {
 
-        $('#delid').attr('href', "/cta/deleteform?id=" + formid + "&status=" + status);
+        $('#delid').attr('href', "/admin/cta/deleteform?id=" + formid + "&status=" + status);
 
     } else {
 
-        $('#delid').attr('href', "/cta/deleteform?id=" + formid + "&status=" + status + "&page=" + pageno);
+        $('#delid').attr('href', "/admin/cta/deleteform?id=" + formid + "&status=" + status + "&page=" + pageno);
 
     }
 
@@ -329,7 +329,7 @@ $(document).on('click', '.checkboxdelete', function () {
     $('.selected-numbers').hide()
 
     $.ajax({
-        url: '/cta/multiselectformdelete',
+        url: '/admin/cta/multiselectformdelete',
         type: 'POST',
         dataType: 'json',
         async: false,
@@ -424,7 +424,7 @@ $(document).on('click', '.checkboxstatuschange', function () {
     $('.selected-numbers').hide()
 
     $.ajax({
-        url: '/cta/multiselectstatuschange',
+        url: '/admin/cta/multiselectstatuschange',
         type: 'POST',
         dataType: 'json',
         async: false,
@@ -530,7 +530,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-      window.location.href = "/cta/"
+      window.location.href = "/admin/cta/"
     // var value = $(".formclosebutton").val()
     // console.log("value:", value);
     // if (value == 1) {
@@ -608,7 +608,7 @@ $(document).on('click','#addtocollect',function(){
  
 
     $.ajax({
-        url: "/cta/addtomycollection",
+        url: "/admin/cta/addtomycollection",
         type: "POST",
         async: false,
         data: {  csrf: $("input[name='csrf']").val() ,"title": title,"cimg":cimg,"desc":desc,"smallimg":smallimg,"fdata":fdata, "channelname":channelname },
@@ -629,7 +629,7 @@ $(document).on('click','#addtocollect',function(){
                 }, 5000);
 
                 setTimeout(() => {
-                     window.location.href="/cta"
+                     window.location.href="/admin/cta"
                 }, 2000);
                
             }else if (result.data=="Pleaseaddtherequiredchannelbeforeproceeding"){

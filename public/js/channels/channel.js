@@ -66,7 +66,7 @@ $(document).on('click', '#nextstep', function () {
       var result;
       id = $("#channelid").val()
       $.ajax({
-        url: "/channels/checktitle",
+        url: "/admin/channels/checktitle",
         type: "POST",
         async: false,
         data: { "channel_title": value, "channel_id": id, csrf: $("input[name='csrf']").val() },
@@ -87,10 +87,10 @@ $(document).on('click', '#nextstep', function () {
           duplicatetitle: true
 
         },
-        description: {
-          required: true,
-          // maxlength: 250,
-        }
+        // description: {
+        //   required: true,
+        //   // maxlength: 250,
+        // }
       },
       messages: {
         channelname: {
@@ -99,10 +99,10 @@ $(document).on('click', '#nextstep', function () {
           duplicatetitle: "* Channel name already exits"
 
         },
-        description: {
-          required: "*" + languagedata.Channell.chandescvalid,
-          // maxlength: "*" + languagedata.Permission.descriptionchat
-        },
+        // description: {
+        //   required: "*" + languagedata.Channell.chandescvalid,
+        //   // maxlength: "*" + languagedata.Permission.descriptionchat
+        // },
       }
     });
 
@@ -162,7 +162,7 @@ $(document).on('click', '#previous-btn', function () {
     $('#tab-s1').removeClass("text-bold-gray").addClass("text-[#10A37F]");
   }
   if (currentindex == 1) {
-    window.location.href = "/channels/"
+    window.location.href = "/admin/channels/"
   }
 })
 
@@ -358,6 +358,8 @@ $(document).on('click', '.edit-field', function () {
 // set property field based on field type
 function FieldBasedProperties(id) {
 
+  console.log("checkidfdf",id)
+
   if (id == "2") {
 
     $(".fl-name").text("Properties - Text")
@@ -432,7 +434,9 @@ function FieldBasedProperties(id) {
     $(".option-field").hide()
 
   } else if (id == "15") {
-    $(".fl-name").text("Properties - Media Gallery")
+
+    console.log("chedfdfdfdf")
+    $(".fl-name").text("Properties - File Upload")
     $(".dt-field").hide()
     $(".ti-field").hide()
     $(".option-field").hide()
@@ -625,7 +629,7 @@ $(document).on('click', '.channelsave', function () {
 
     $.ajax({
 
-      url: '/channels/create',
+      url: '/admin/channels/create',
       type: 'post',
       dataType: 'json',
       async: false,
@@ -640,7 +644,7 @@ $(document).on('click', '.channelsave', function () {
       },
       success: function (data) {
 
-        window.location.href = "/channels/"
+        window.location.href = "/admin/channels/"
 
       }
     })
@@ -664,7 +668,7 @@ $(document).on('click', '.channelsave', function () {
 
     $.ajax({
 
-      url: '/channels/updatechannel',
+      url: '/admin/channels/updatechannel',
       type: 'post',
       dataType: 'json',
       async: false,
@@ -684,9 +688,9 @@ $(document).on('click', '.channelsave', function () {
       success: function (data) {
 
         if (CurrentPage == 1) {
-          window.location.href = "/channels/"
+          window.location.href = "/admin/channels/"
         } else {
-          window.location.href = "/channels/?page=" + CurrentPage
+          window.location.href = "/admin/channels/?page=" + CurrentPage
         }
 
       }
@@ -814,7 +818,7 @@ $(document).ready(function () {
     var id = $('#channelid').val();
 
     $.ajax({
-      url: '/channels/getfields',
+      url: '/admin/channels/getfields',
       type: 'post',
       dataType: 'json',
       async: false,
@@ -962,9 +966,9 @@ $(document).ready(function () {
           space: true,
           duplicatetitle: true
         },
-        description: {
-          required: true,
-        }
+        // description: {
+        //   required: true,
+        // }
       },
       messages: {
         channelname: {
@@ -972,9 +976,9 @@ $(document).ready(function () {
           space: "* " + languagedata.spacergx,
           duplicatetitle: "* Channel name already exists"
         },
-        description: {
-          required: "*" + languagedata.Channell.chandescvalid,
-        },
+        // description: {
+        //   required: "*" + languagedata.Channell.chandescvalid,
+        // },
       }
     });
 
@@ -1016,9 +1020,9 @@ $(document).ready(function () {
           space: true,
           duplicatetitle: true
         },
-        description: {
-          required: true,
-        }
+        // description: {
+        //   required: true,
+        // }
       },
       messages: {
         channelname: {
@@ -1026,9 +1030,9 @@ $(document).ready(function () {
           space: "* " + languagedata.spacergx,
           duplicatetitle: "* Channel name already exists"
         },
-        description: {
-          required: "*" + languagedata.Channell.chandescvalid,
-        },
+        // description: {
+        //   required: "*" + languagedata.Channell.chandescvalid,
+        // },
       }
     });
 

@@ -21,7 +21,7 @@
                 <a href="javascript:void(0);" id="crop-cancel"
                     class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">Cancel</a>
                 <a href="javascript:void(0);" id="crop-button"
-                    class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[4px] no-underline">Crop</a>
+                    class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">Crop</a>
             </div>
         </header>
 
@@ -30,7 +30,7 @@
         <div class="p-[24px] pb-0 max-sm:p-[16px]">
             <div class=" flex items-center max-w-[80%] max-lg:max-w-full mx-auto relative">
                 <div class="block w-100">
-                    <div class="flex gap-[24px] items-center justify-center mb-[32px]">
+                    <!-- <div class="flex gap-[24px] items-center justify-center mb-[32px]">
                         <a href="javascript:void(0);" id="rotateLeft"
                             class=" group p-[8px_16px] rounded-[32px] border-[1px] border-solid border-transparent hover:border-[#EDEDED] flex gap-[8px] items-center w-fit">
                             <div class="grid place-items-center">
@@ -52,6 +52,27 @@
                                     class="group-hover:hidden block">
                             </div>
                         </a>
+                    </div> -->
+                    <div class="flex justify-center mb-[16px]">
+                    <div class="flex gap-[24px] items-center justify-center mb-[32px] hover:text-[#262626] [&.active]:bg-[#EDEDED]  !text-[#262626] p-[8px_16px] rounded-[32px] hover:bg-[#EDEDED] active w-fit" id="extrawidth" >
+                        <a href=" javascript:void(0);" class="active group" id="square">
+                            <img src="/public/img/cropSquare.svg" alt="square"
+                                class=" group-hover:hidden group-[&.active]:hidden block">
+                            <img src="/public/img/crop-square-active.svg" alt="square"
+                                class="  group-hover:block group-[&.active]:block hidden"></a>
+                        <a href=" javascript:void(0);" class="group" id="portrait">
+                            <img src="/public/img/cropPortrait.svg" alt="portrait"
+                                class=" group-hover:hidden group-[&.active]:hidden block">
+                            <img src="/public/img/cropPortrait-active.svg" alt="portrait"
+                                class="  group-hover:block group-[&.active]:block hidden">
+                        </a>
+                        <a href=" javascript:void(0);" class="group" id="Landscape">
+                            <img src="/public/img/cropLandscape.svg" alt="Landscape"
+                                class=" group-hover:hidden group-[&.active]:hidden block">
+                            <img src="/public/img/cropLandscape-active.svg" alt="Landscape"
+                                class="  group-hover:block group-[&.active]:block hidden">
+                        </a>
+                    </div>
                     </div>
 
                     <div class="[&>img]:w-full relative mb-[24px] h-[600px] bg-slate-500" id="imageSpace">
@@ -63,32 +84,13 @@
 
                 </div>
 
-                <div id="extrawidth"
-                    class="flex flex-col items-center gap-[12px] p-[24px_16px] rounded-[94px] bg-[#EDEDED] absolute left-full ms-[26px] min-w-[56px] m-[auto] w-fit max-lg:top-full max-lg:left-1/2 max-lg:transform max-lg:-translate-x-1/2 max-lg:flex-row max-lg:px-6 max-lg:py-4 max-lg:mt-6 max-lg:ml-0">
-                    <a href=" javascript:void(0);" class="active group" id="square">
-                        <img src="/public/img/cropSquare.svg" alt="square"
-                            class=" group-hover:hidden group-[&.active]:hidden block">
-                        <img src="/public/img/crop-square-active.svg" alt="square"
-                            class="  group-hover:block group-[&.active]:block hidden"></a>
-                    <a href=" javascript:void(0);" class="group" id="portrait">
-                        <img src="/public/img/cropPortrait.svg" alt="portrait"
-                            class=" group-hover:hidden group-[&.active]:hidden block">
-                        <img src="/public/img/cropPortrait-active.svg" alt="portrait"
-                            class="  group-hover:block group-[&.active]:block hidden">
-                    </a>
-                    <a href=" javascript:void(0);" class="group" id="Landscape">
-                        <img src="/public/img/cropLandscape.svg" alt="Landscape"
-                            class=" group-hover:hidden group-[&.active]:hidden block">
-                        <img src="/public/img/cropLandscape-active.svg" alt="Landscape"
-                            class="  group-hover:block group-[&.active]:block hidden">
-                    </a>
-                </div>
+
             </div>
             <div class="py-[24px] sticky bottom-0 bg-white !mx-[-24px] max-sm:!mx-[-16px] z-10 ">
 
                 <div class="tab-content" id="nav-tabContent">
                     <!-- Rotate Tab Pane -->
-                    <div class="tab-pane fade show active" id="rotate-tab-pane" role="tabpanel" tabindex="0">
+                    <!-- <div class="tab-pane fade show active" id="rotate-tab-pane" role="tabpanel" tabindex="0">
                         <div class="max-w-[384px] mx-auto relative ">
                             <div
                                 class="w-full flex items-center justify-center bg-repeat-x bg-center h-[22px] bg-[url('/public/img/rotate-scale.svg')] bg-[length:auto_6px]">
@@ -106,10 +108,10 @@
                                     id="rotateSlider" min="-180" max="180" value="0">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Scale Tab Pane -->
-                    <div class="tab-pane fade" id="scale-tab-pane" role="tabpanel" tabindex="0">
+                    <!-- <div class="tab-pane fade" id="scale-tab-pane" role="tabpanel" tabindex="0"> -->
                         <div class="max-w-[196px] mx-auto relative ">
                             <div
                                 class="w-full flex items-center justify-center bg-repeat-x bg-center h-[22px] bg-[url('/public/img/rotate-scale.svg')] bg-[length:auto_6px]">
@@ -125,16 +127,16 @@
                                 <input type="range" min="0" max="100" value="50" class="w-full" id="zoomSlider" />
                             </div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
 
                 <div class="flex items-center gap-[16px] justify-center mt-[32px] nav nav-tab">
-                    <a href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#rotate-tab-pane" role="tab"
+                    <!-- <a href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#rotate-tab-pane" role="tab"
                         class="nav-link text-base hover:text-[#262626] !text-[#262626] [&.active]:bg-[#EDEDED] active p-[8px_16px] rounded-[32px] hover:bg-[#EDEDED]">
                         Rotation
-                    </a>
+                    </a> -->
                     <a href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#scale-tab-pane" role="tab"
-                        class="nav-link text-base hover:text-[#262626] [&.active]:bg-[#EDEDED]  !text-[#262626] p-[8px_16px] rounded-[32px] hover:bg-[#EDEDED]">
+                        class="text-[#262626] ">
                         Scale
                     </a>
                 </div>

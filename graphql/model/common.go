@@ -49,7 +49,7 @@ type TblStorageTypes struct {
 	Azure        datatypes.JSONMap
 	Drive        datatypes.JSONMap
 	SelectedType string
-	TenantId     int
+	TenantId     string
 }
 
 func init() {
@@ -84,4 +84,24 @@ func GetStorageType(db *gorm.DB, storageType *TblStorageTypes) error {
 	}
 
 	return nil
+}
+
+func (model ModelConfig) GettenantByapikey(apikey string) (tenant TblGraphqlSettings, err error) {
+
+	if err := model.DB.Debug().Model(TblGraphqlSettings{}).Where("is_deleted = 0 and token = ?", apikey).First(&tenant).Error; err != nil {
+
+		return TblGraphqlSettings{}, err
+	}
+
+	return tenant, nil
+}
+
+func (model ModelConfig) GetUserbyTenantId(tenantid string) (user models.TblUser, err error) {
+
+	if err := model.DB.Debug().Table("tbl_users").Where("is_deleted = 0 and tenant_id = ?", tenantid).First(&user).Error; err != nil {
+
+		return models.TblUser{}, err
+	}
+
+	return user, nil
 }

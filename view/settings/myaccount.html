@@ -17,10 +17,10 @@
 
 
         <div class="flex space-x-[12px] header-rht">
-            <a href="/settings/myprofile"
+            <a href="/admin/settings/myprofile"
                 class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">{{$Translate.Cancel}}</a>
             <a href="#"
-                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[4px] no-underline"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline"
                 id="uptprofile">{{$Translate.Update}}</a>
         </div>
     </header>
@@ -38,7 +38,7 @@
             </h3>
             <p class="text-[#717171] text-xs font-normal leading-4 mb-[24px]">{{$Translate.Setting.Myprofilesubheading}}
             </p>
-            <form name="userform" id="userform" method="post" action="/settings/updateprofile">
+            <form name="userform" id="userform" method="post" action="/admin/settings/updateprofile">
                 <div class=" @[475px]:grid-cols-[120px_1fr] grid grid-cols-1 gap-[24px] max-w-[880px]  mainContainer">
                     <div>
                         <label
@@ -67,7 +67,7 @@
                                     <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
                                     <p
-                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        class=" hidden group-hover:block absolute left-0 max-w-[250px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                         {{$Translate.Setting.Firstnamelable}}</p>
                                 </div></label>
                             <input type="text" id="firstname" name="user_fname"
@@ -85,7 +85,7 @@
                                 <div class="cursor-pointer group">
                                 <img src="/public/img/inputdesc.svg" alt="">
                                 <p
-                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    class=" hidden group-hover:block absolute left-0 max-w-[280px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                     {{$Translate.Setting.Lastlamelable}}</p>
                             </div></label>
                             <input type="text" id="lastname" name="user_lname"
@@ -103,7 +103,7 @@
                                     <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
                                     <p
-                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        class=" hidden group-hover:block absolute left-0 w-[280px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                         {{$Translate.Setting.Usernamelable}}</p>
                                 </div></label>
                             <input type="text" id="username" name="user_name"
@@ -116,7 +116,7 @@
                                     <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
                                     <p
-                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        class=" hidden group-hover:block absolute left-0 w-[280px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                         {{$Translate.Setting.Rolelable}}</p>
                                 </div></label>
                             <input type="text" id="role"
@@ -128,7 +128,7 @@
                                     <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
                                     <p
-                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        class=" hidden group-hover:block absolute left-0 w-[280px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                         {{$Translate.Setting.Emaillable}}</p>
                                 </div></label>
                             <input type="text" id="email" name="user_email"
@@ -141,7 +141,7 @@
                                     <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
                                     <p
-                                        class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        class=" hidden group-hover:block absolute left-0 w-[280px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                         {{$Translate.Setting.Mobilelable}}</p>
                                 </div></label>
                             <input type="number" id="mobile" name="user_mob" maxlength="15"
@@ -184,9 +184,6 @@
 
 </section>
 
-{{template "mediamodal" .}}
-
-{{template "mediadecidemodal" .}}
 
 {{template "footer" .}}
 

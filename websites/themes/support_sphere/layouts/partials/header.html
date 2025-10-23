@@ -1,0 +1,28 @@
+{{define "templateheader"}}
+{{$template:=.template_name}}
+
+<header class="p-0 sticky top-0 z-[200] bg-white border border-[#231F201F]">
+    <div class="flex items-center gap-4 h-16 bg-white max-w-[1280px] mx-auto p-2.5 px-4"><a class="max-w-[35%]"
+            href="/">
+            {{if .settingsdetail.SiteLogoPath}}
+            <a href="/ "><img class="w-[100px] h-[50px]"
+                    src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+            {{else}}
+            <a href="/ "><img
+                    src="https://spurtcms.com//public/img/logo1.svg" alt="logo">
+            </a>
+            {{end}}
+        </a>
+        <h2
+            class="text-base font-semibold leading-[19.5px] border-l border-[#D8D8D8] pl-2.5 h-full items-center flex cursor-pointer">
+            Help Center</h2>
+        <a href="https://spurtcms.com/" target="_blank"
+            class="group hover:underline text-sm font-semibold leading-[17.07px] text-[#1B1B20] flex items-center ml-auto">
+            <p>Visit <span class="max-sm:hidden">spurtcms.com</span></p><img
+                src="/support_sphere/assets/images/showall-arrow.svg" alt="arrow"
+                class="group-hover:translate-x-1 ml-1 transition-all duration-200 ease-in-out">
+        </a>
+    </div>
+</header>
+
+{{end}}

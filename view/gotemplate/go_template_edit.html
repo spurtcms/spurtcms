@@ -1,0 +1,387 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$templatedetail :=.templatedetail}}
+{{$webdetail :=.websitedetail}}
+  <section
+            class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto max-md:pt-[90px] max-sm:pt-[64px] min-h-screen">
+
+            <div class=" max-sm:h-fit h-full ">
+
+                <header
+                    class="header-rht md:hidden top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+                    <div class="flex items-center gap-[6px] mr-auto">
+                        <a href="javascript:void(0);"
+                            class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                            <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                        </a>
+                    </div>
+
+                </header>
+
+                <!-- 
+                    <div class="flex items-center space-x-3">
+
+                        <a href="#modalId2" data-bs-toggle="modal"
+                            class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                            <span class="mr-[8px] max-sm:mr-0 text-lg leading-none ">
+                                +
+                            </span> <span class="max-sm:hidden">Create Menu</span></a>
+
+                    </div> -->
+
+
+
+                <div class=" @container setConatiner overflow-hidden ">
+                 
+                     
+                  {{template "gotemplatepageheader" .}}
+                       
+                        <div class="tab-content " id="pills-tabContent">
+                              <input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
+
+                            <div class="tab-pane fade show active" id="pills-themes" role="tabpanel"
+                                aria-labelledby="pills-themes-tab">
+                                <section class="-mx-[16px] ">
+
+                                    <div class="p-[10px_30px_10px_15px] flex items-center gap-[11px] max-sm:flex-wrap ">
+
+
+                                    </div>
+                                    <div class="overflow-unset overflow-x-auto scrollbar-thin">
+                                        <table class="w-full min-w-[900px]">
+                                            <thead>
+                                                <tr>
+
+                                                    <th
+                                                        class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[120px]">
+                                                        Page name
+                                                    </th>
+
+                                                    <th
+                                                        class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px]">
+                                                        Created
+                                                    </th>
+                                                    <th
+                                                        class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px]">
+                                                        Last modified
+                                                    </th>
+                                                    <th
+                                                        class="text-center px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[150px]">
+                                                        Status
+                                                    </th>
+                                                    <th
+                                                        class="text-center px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[150px]">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+
+                                                    {{if .templatepagelist}}
+                                                    {{range .templatepagelist}}
+
+                                                    <td
+                                                        class="px-[16px] hover:underline py-[12px] border-[#EDEDED] border-b text-[#252525] text-sm font-normal align-middle leading-none">
+                                                        <a href="/admin/website/pages/editpage/{{.Id}}?webid={{$webdetail.Id}}"> {{.Name}}</a>
+                                                    </td>
+                                                    <td
+                                                        class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                        {{.CreatedDate}}
+                                                    </td>
+                                                    <td
+                                                        class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                        {{.ModifiedDate}}
+                                                    </td>
+                                                    <td
+                                                        class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+
+                                                        <label  for="cb{{.Id}}"
+                                                            class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                                                            <div class="relative">
+                                                                <input type="checkbox" id="toggleTwo"
+                                                                    class="peer sr-only" />
+                                                                     <input type="checkbox"
+                        id="cb{{.Id}}"
+                        value="{{.Status}}"
+                        onclick="PageStatus('{{.Id}}')"
+                        {{if
+                        eq
+                        .Status
+                        1}}checked{{end}}
+                        data-id="{{.Id}}"
+                        class="peer sr-only tgl-light"
+                      />
+                                                                <div
+                                                                    class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                                                </div>
+                                                                <div
+                                                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </td>
+                                                    <td
+                                                        class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                        <div class="flex gap-[8px] items-center justify-center">
+
+
+                                                            <div class="btn-group language-group position-static">
+                                                                <a href="javascript:void(0);" type="button"
+                                                                    class=" border-0 grid place-items-center  items-center gap-[5px] w-[32px] h-[32px] rounded-full group hover:bg-[#F5F5F5] [&amp;.show]:bg-[#F5F5F5] "
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <img src="/public/img/action-vertical-active.svg"
+                                                                        alt="dropdown"
+                                                                        class="hidden group-hover:block rotate-90 transform">
+                                                                    <img src="/public/img/action-vertical.svg" alt="dropdown"
+                                                                        class="block group-hover:hidden rotate-90 transform">
+                                                                </a>
+
+
+
+                                                                <ul class="bg-[#FFF] shadow-[0px_4px_8px_0px_#00000026] p-[8px] border-0 rounded-[12px] min-w-[132px] dropdown-menu "
+                                                                    data-popper-placement="bottom-end">
+
+                                                                    <li class="mb-[2px] last-of-type:mb-[0]">
+                                                                        <a href="/admin/website/pages/editpage/{{.Id}}?webid={{$webdetail.Id}}" class="cursor-pointer items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item"
+                                                                           ><img
+                                                                                src="/public/img/edit.svg">Edit</a>
+                                                                    </li>
+
+                                                                    <li class="mb-[2px] last-of-type:mb-[0]">
+                                                                        <a href="javascript:void(0);"  id="deletebtn"
+                                                           data-id="{{.Id}}" class="cursor-pointer items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[#A01910] text-[14px] leading-[20px] dropdown-item"
+                                                                            data-bs-target="#deleteModal"
+                                                                            data-bs-toggle="modal">
+                                                                            <img src="/public/img/delete-drop.svg">Delete
+                                                                        </a>
+                                                                    </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                              {{end}}
+                                              {{ else if eq .Searchtrue true}}
+            <tr>
+              <td colspan="8">
+                <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                  <div class="text-center w-fit mx-auto">
+                    <img src="/public/img/noFilter.svg" alt="noFilter" />
+                  </div>
+                  <h2
+                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px]"
+                  >
+                    {{$Translate.Filtersearch}}
+                  </h2>
+                  <p
+                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px]"
+                  >
+                    {{$Translate.Filterkeyword}}
+                  </p>
+                </div>
+              </td>
+            </tr>
+                                                 {{else }}
+            <tr>
+              <td colspan="9">
+                <div
+                  class="flex flex-col items-center mx-auto pt-[60px] w-full max-w-[966px]"
+                >
+                  <div class="mb-[30px]">
+                    <img src="/public/img/no-data-categories.svg" alt="" />
+                  </div>
+                  <div class="flex flex-col items-center w-full">
+                    <div class="flex flex-col w-full">
+                      <h3
+                        class="mb-2 font-semibold text-[#262626] text-2xl text-center"
+                      >
+                        No Page found!
+                      </h3>
+                      <p
+                        class="font-light text-[#717171] text-center text-base"
+                      >
+                        Create a Page to organize and structure your content
+                        effectively.
+                      </p>
+                    </div>
+                    <a
+                      href="/admin/website/pages/createpage/?webid={{$webdetail.Id}}"
+                    
+                      class="inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline"
+                      >Create Page</a
+                    >
+                  </div>
+                </div>
+              </td>
+            </tr>
+                                              {{end}}
+
+                                            </tbody>
+
+
+
+                                        </table>
+                                    </div>
+                                </section>
+  <div
+        class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff] z-[997]"
+      >
+        <ul
+          class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex"
+        >
+          {{if gt .Count .Limit}}
+
+          <li>
+            <a
+              href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+              class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}"
+            >
+              <img src="/public/img/pg-prev.svg" alt="previous" />
+              <span class="max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+            </a>
+          </li>
+          {{if gt .CurrentPage 3}} {{$keyword := .filter.Keyword}}
+          <li>
+            <a
+              href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              1
+            </a>
+          </li>
+          {{end}} {{if eq .CurrentPage 5}}
+          <li>
+            <a
+              href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              2
+            </a>
+          </li>
+          {{end}} {{if gt .CurrentPage 5}}
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              ...</a
+            >
+          </li>
+          {{end}} {{if gt .CurrentPage 2}}
+          <li>
+            <a
+              href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              {{.Pagination.TwoBelow}}
+            </a>
+          </li>
+          {{end}} {{if gt .CurrentPage 1}}
+          <li>
+            <a
+              href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              {{.Pagination.PreviousPage}}
+            </a>
+          </li>
+          {{end}}
+
+          <li>
+            <a
+              href=""
+              class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}"
+            >
+              {{.CurrentPage}}
+            </a>
+          </li>
+
+          {{if lt .CurrentPage .Pagination.TotalPages}}
+          <li>
+            <a
+              href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              {{.Pagination.NextPage}}
+            </a>
+          </li>
+          {{end}} {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+          <li>
+            <a
+              href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              {{.Pagination.TwoAfter}}
+            </a>
+          </li>
+          {{end}} {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              ...</a
+            >
+          </li>
+          {{end}} {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+          <li>
+            <a
+              href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]"
+            >
+              {{.Pagination.TotalPages}}</a
+            >
+          </li>
+          {{end}}
+          <li>
+            <a
+              href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+              class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}"
+            >
+              <span class="max-sm:hidden"> {{$Translate.Next}} </span>
+              <img src="/public/img\pg-nxt.svg" alt="next" />
+            </a>
+          </li>
+          {{end}}
+        </ul>
+        <p
+          class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]"
+        >
+          {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}}
+          {{.Count}}
+        </p>
+      </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </section>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+        </section>
+
+ {{template "footer" .}}
+
+ <script src="/public/js/gotemplate/pagelist.js"></script>
+
+{{template "footerclose" .}}

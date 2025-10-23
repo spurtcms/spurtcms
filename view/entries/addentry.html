@@ -4,7 +4,7 @@
 {{$slchannelid := .Slchannelid}}
 {{$EntryId := .EntryId}}
 <!-- Additionalfield Configuration section -->
-
+<script src="https://cdn.tailwindcss.com"></script>
 <section class="  max-md:ms-0 hidden max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen"
     id="field-section">
     <header
@@ -180,11 +180,6 @@
         <input type="hidden" id="chnid" value="{{$EntryId}}">
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <input type="hidden" id="savetype">
-        <!-- <a href="javascript:void(0);" id="aiarticle"
-            class="flex place-items-center hover:bg-[#F5F5F5] max-sm:p-[8px] px-[12px] py-[7px] border border-[#E7E7E7] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-base text-center leading-tight tracking-tight whitespace-nowrap">
-            <img src="/public/img/AI-green.svg" alt="...">
-            <span class="max-sm:hidden  ml-[8px] text-[14px] inline-block">Generate with AI</span>
-        </a> -->
 
         <a href="javascript:void(0);" style="display: none;"
             class="bg-[#F5F5F5] flex max-sm:p-[8px] items-center rounded-full text-[#717171] text-xs font-normal leading-4 tracking-tight py-[4px] px-[12px] space-x-[4px] max-sm:h-[32px] hover:text-[#717171] border-[1px] border-solid border-[#F5F5F5] hover:border-[#717171] ">
@@ -246,7 +241,7 @@
             id="publishbtn">Publish</a>
     </header>
 
-    <div class="block mx-auto font-lexend-full" >
+    <div class="block mx-auto font-lexend-full">
 
         <spurt-editor id="spurt-editor" block="{{.blocks}}" defaultblock="{{.defaultblocks}}" mode="{{.Mode}}"
             storagepath="{{.Storagepath}}" uploadurl="{{.uploadurl}}" content="{{.Entries.Description}}"
@@ -260,28 +255,29 @@
 </div> -->
 
         <div
-            class="group-hover/item:bg-[#F5F9FF] top-[48px] right-0 z-[999] fixed bg-white shadow-[-2px_0px_6px_0px_#0000000D] min-w-[378px] max-sm:min-w-full max-w-[378px] h-[100vh] transform transition-all duration-300 ease-in-out editor-tabs translate-x-[120%]">
+            class="group-hover/item:bg-[#F5F9FF] top-[48px] right-0 z-[999] fixed bg-white shadow-[-2px_0px_6px_0px_#0000000D] min-w-[378px]  min-[1440px]:min-w-[478px] min-[1440px]:max-w-[478px] max-sm:min-w-full max-w-[378px] h-[100vh] transform transition-all duration-300 ease-in-out editor-tabs">
 
             <a href="javascript:void(0);"
-                class="tabclose absolute left-[-30px] top-[12px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] tab-togg w-[24px] h-[24px] grid place-items-center rounded-[2px] hover:bg-[#F3F3F3]"><img
-                    src="/public/img/Entries icon.svg" alt="close"></a>
+                class="tabclose absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+                    src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
+                 <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
 
 
 
             <div class="editor-tab-lnk bg-white">
                 <ul class="nav nav-tabs border-b border-[#EDEDED] px-[16px]">
+                        <li><a href="#seo" data-bs-toggle="tab"
+                            class="tab-togg4 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171] active">SEO</a>
                     <li><a href="#addCategories"
-                            class="tab-togg3R text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#262626] hover:text-[#262626]   active"
+                            class="tab-togg3R text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#262626] hover:text-[#262626]   "
                             data-bs-toggle="tab">Data</a></li>
                     <!-- <li><a href="#addData" data-bs-toggle="tab"
                             class=" tab-togg2R text-[14px] font-normal leading-[17.5px] pt-[21px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171] ">Meta Data</a></li> -->
-                    <li><a href="#seo" data-bs-toggle="tab"
-                            class="tab-togg4 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171]">Meta
-                            Data</a>
+                
                     </li>
-                    <li><a href="#cta" data-bs-toggle="tab"
-                            class="tab-togg55 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171]">Call
-                            To Action</a>
+                    <li><a href="#addData" data-bs-toggle="tab"
+                            class="tab-togg55 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171]">
+                           Additional</a>
                     </li>
                 </ul>
 
@@ -290,7 +286,7 @@
 
             <div class="tab-content bg-white">
                 <!-- tab1 -->
-                <div class=" scrollbar-thin p-[16px] tab-pane fade show active" id="addCategories">
+                <div class=" scrollbar-thin p-[16px] tab-pane fade show " id="addCategories">
 
                     <a href="javascript:void(0);" id="availblecate"
                         class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs tab-togg2 p-[12px_16px] border border-[#EDEDED] rounded-[4px] h-[42px] flex items-center justify-between hover:bg-[#F5F5F5]  mb-[16px]">
@@ -327,6 +323,45 @@
                         </div>
                     </a> -->
 
+                    {{$LangId:=.Entries.LanguageId}}
+                    <input type="hidden" id="languageid" value="{{if $LangId}}{{$LangId}}{{else}}1{{end}}">
+                    {{if .Language}}
+                    <div class="dropdown py-[16px]">
+                        <a class=" bg-[#FFFFFF] rounded-[4px] border border-[#EDEDED]  px-[16px] h-[32px] flex items-center [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs  "
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" href="javascript:void(0);">
+                            <div class=" flex-grow">
+                                <p id="selectedLanguage"
+                                    class="text-[14px] font-normal leading-[17.5px] tracking-[0.005em] text-[#262626] line-clamp-1">
+                                    {{$Lang:=.Language}}
+                                    {{if $LangId}}
+                                    {{range $Lang}}
+                                    {{ if eq .Id $LangId }}
+                                    {{ .LanguageName }}
+                                    {{ end }}
+                                    {{end}}
+                                    {{else}}
+                                    Select Language
+                                    {{end}}
+                                </p>
+
+                            </div>
+
+                            <span class="grid place-items-center  h-full  ">
+                                <img src="/public/img/dropDown-arrow.svg" alt="arrow">
+                            </span>
+                        </a>
+                        <div
+                            class="dropdown-menu  dropdown-menu-end w-full p-[4px_0px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014] min-w-full">
+                            {{range .Language}}
+                            <a href="javascript:void(0);" data-id="{{.Id}}"
+                                class="languageselect text-[14px] font-light leading-[15px] block hover:bg-[#F5F5F5] text-[#525252] p-[4px_6px]">{{.LanguageName}}</a>
+                            {{end}}
+                        </div>
+
+                    </div>
+                    {{end}}
+
+
                     <!-- <div class="mb-[24px]">
                         <h3 class="mb-[16px] font-normal text-[#262626] text-sm leading-[17.5px] mt-2">Require
                             Membership</h3>
@@ -345,7 +380,13 @@
                         </div>
                     </div> -->
 
-                    <div class="mb-[16px] mt-[20px]">
+                  
+
+                </div>
+                <!-- tab2 -->
+
+                <div class=" scrollbar-thin p-[16px] tab-pane fade" id="addData">
+                     <div class="mb-[16px] ">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Author</label>
                         <div class="dropdown p-0 border-0 bg-transparent">
                             <a class="bg-[#FFFFFF] h-[34px] flex items-center [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
@@ -405,93 +446,7 @@
                             class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
                     </div>
 
-                    <!-- <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Article
-                            Sorting</label>
-                        <input type="text" placeholder="Enter Number"
-                            class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div> -->
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Tags</label>
-                        <input type="text" placeholder="Enter Tag" name="tagname" id="tagname"
-                            class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Excerpt</label>
-                        <textarea placeholder="Enter Text" id="extxt" name="extxt"
-                            class="bg-[#F7F7F5] border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none block w-full  h-[120px] resize-none  placeholder:text-[#B2B2B2]"></textarea>
-                    </div>
-
-                </div>
-                <!-- tab2 -->
-
-                <div class=" scrollbar-thin p-[16px] tab-pane fade" id="addData">
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Author</label>
-                        <div class="dropdown p-0 border-0 bg-transparent">
-                            <a class="bg-[#FFFFFF] h-[34px] flex items-center [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
-                                href="javascript:void(0);">
-                                <div class=" flex-grow">
-                                    <input type="text" placeholder="Select Author Name" id="author" name="author"
-                                        class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:text-[#B2B2B2]">
-
-                                </div>
-
-
-                            </a>
-
-
-                            <ul
-                                class="userlistdiv dropdown-menu w-full rounded-b-[8px] border-none transform-none top-full p-0 shadow-[0_8px_24px_-4px_rgba(0,0,0,0.12)] bg-white min-h-[208px] place-items-center [&.nouserdata]:grid ">
-
-
-
-                                <li class="nodata-userlistdiv">
-                                    <div
-                                        class="noData-foundWrapper flex flex-col justify-content-center items-center h-full">
-
-                                        <div class="empty-folder">
-                                            <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
-                                            <img src="/public/img/shadow.svg" alt="">
-                                        </div>
-                                        <h1 style="text-align: center;font-size: 10px;" class="heading">
-                                            OOPS! No Data Found</h1>
-
-                                    </div>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Created
-                            On</label>
-                        <input type="datetime-local" placeholder="Select Date" value="{{.currentdate}}"
-                            data-date="MM/DD/YYYY" name="cdtime" id="cdtime"
-                            class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
-
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Published
-                            On</label>
-                        <input type="datetime-local" placeholder="Select Date" value="{{.currentdate}}" id="publishtime"
-                            name="publishtime"
-                            class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
-
-                    <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Reading
-                            Time</label>
-                        <input type="number" placeholder="Enter Time (In mins)" id="readingtime" name="readingtime"
-                            class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
-
-                    <!-- <div class="mb-[16px]">
-                        <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Article
-                            Sorting</label>
-                        <input type="text" placeholder="Enter Number"
-                            class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div> -->
+                   
                     <div class="mb-[16px]">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Tags</label>
                         <input type="text" placeholder="Enter Tag" name="tagname" id="tagname"
@@ -505,7 +460,7 @@
 
                 </div>
                 <!-- tab3 -->
-                <div class="  scrollbar-thin p-[16px] tab-pane fade" id="seo">
+                <div class="  scrollbar-thin p-[16px] tab-pane fade active show" id="seo">
                     <div class="mb-[16px]">
 
 
@@ -587,8 +542,9 @@
                  z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
                 <a href="javascript:void(0);"
-                    class="absolute left-[-30px] top-[12px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] tab-togg w-[24px] h-[24px] grid place-items-center rounded-[2px] hover:bg-[#F3F3F3]"><img
-                        src="/public/img/Entries icon.svg" alt="close"></a>
+                    class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+                        src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
+                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div class="bg-[#FCFCFC] p-[10px_16px] flex space-x-[2px] items-center justify-between">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">SELECT CATEGORIES</h2>
                     <a href="javascript:void(0);"
@@ -638,8 +594,9 @@
             <div class=" editor-tabs3  max-sm:min-w-full fixed top-[0px]  right-0 bg-white h-[100vh] transform   transition-all group-hover/item:bg-transparent duration-300 ease-in-out min-w-[346px] 
 z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                 <a href="javascript:void(0);"
-                    class="absolute left-[-30px] top-[12px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] tab-togg w-[24px] h-[24px] grid place-items-center rounded-[2px] hover:bg-[#F3F3F3]"><img
-                        src="/public/img/Entries icon.svg" alt="close"></a>
+                    class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+                        src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
+                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div
                     class="bg-white p-[10px_16px] flex  justify-between space-x-[6px] items-center shadow-[0px_1px_9px_0px_#0000001A] ">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">Additional Data</h2>
@@ -670,8 +627,9 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
             <div class=" editor-tabs4 max-sm:min-w-full fixed top-[0px]  right-0 bg-white h-[100vh] transform   transition-all group-hover/item:bg-transparent duration-300 ease-in-out min-w-[346px] 
             z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                 <a href="javascript:void(0);"
-                    class="absolute left-[-30px] top-[12px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] tab-togg w-[24px] h-[24px] grid place-items-center rounded-[2px] hover:bg-[#F3F3F3]"><img
-                        src="/public/img/Entries icon.svg" alt="close"></a>
+                    class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+                        src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
+                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div class="bg-[#FCFCFC] p-[10px_16px] flex space-x-[2px] items-center justify-between">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">SELECT MEMBERSHIP</h2>
                     <a href="javascript:void(0);"
@@ -754,39 +712,14 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                             </h5>
                             <p class="font-light text-[#717171] text-[10px] text-center">{{.FormDescription}}</p>
                         </div>
-                        <!-- <div class="flex flex-col items-center space-y-2 border-[#EDEDED] border-[1px] p-[12px] rounded-[4px] cursor-pointer">
-                        <img src="/public/img/CAT-2.svg" alt="meta title" />
-                        <h5 class="mt-[8px] mb-[4px] font-normal text-[#717171] text-center text-sm">Connect with Us</h5>
-                        <p class="font-light text-[#717171] text-[10px] text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                    </div>
-                    <div class="flex flex-col items-center space-y-2 border-[#EDEDED] border-[1px] p-[12px] rounded-[4px] cursor-pointer">
-                        <img src="/public/img/CAT-3.svg" alt="meta title" />
-                        <h5 class="mt-[8px] mb-[4px] font-normal text-[#717171] text-center text-sm">Start a Trial</h5>
-                        <p class="font-light text-[#717171] text-[10px] text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                    </div>
-                    <div class="flex flex-col items-center space-y-2 border-[#EDEDED] border-[1px] p-[12px] rounded-[4px] cursor-pointer">
-                        <img src="/public/img/CAT-4.svg" alt="meta title" />
-                        <h5 class="mt-[8px] mb-[4px] font-normal text-[#717171] text-center text-sm">Request a Demo</h5>
-                        <p class="font-light text-[#717171] text-[10px] text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                    </div> -->
-
+                  
 
                         {{end}}
 
 
                     </div>
 
-                    <!-- <div
-                class="noData-foundWrapper flex flex-col justify-content-center items-center h-full ctanodata hidden">
 
-                <div class="empty-folder">
-                    <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
-                    <img src="/public/img/shadow.svg" alt="">
-                </div>
-                <h1 style="text-align: center;font-size: 10px;" class="heading">
-                     No Data Found</h1>
-
-            </div> -->
                     {{else}}
 
 
@@ -818,8 +751,9 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         <!--tab button-->
         <a href="javascript:void(0);"
-            class="w-[24px] h-[24px] rounded-[2px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] grid place-items-center rotate-180 fixed top-[72px] right-[16px] tab-togg"><img
-                src="/public/img/Entries icon.svg" alt="close"></a>
+            class="w-[34px] h-[34px]  grid place-items-center rotate-0 fixed top-[72px] right-[16px] tab-togg group"><img
+                src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
+            <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
 
 
 
@@ -941,30 +875,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                                 </div>
 
 
-                                <!-- <div class="flex items-center gap-[12px] ">
-                                    <div class="border border-[#F7F7F5] pd-3 h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] flex items-center justify-between ">
-                                        Option 2
-
-                                        <a href="javascript:void(0);">
-                                            <img src="/public/img/drag.svg" alt="drag">
-                                        </a>
-                                    </div>
-                                    <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
-                                        <img src="/public/img/delete-options.svg" alt="delete">
-                                    </a>
-                                </div>
-                                <div class="flex items-center gap-[12px] ">
-                                    <div class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px] grow text-xs font-normal leading-4 text-[#262626] flex items-center justify-between ">
-                                        Option 3
-
-                                        <a href="javascript:void(0);">
-                                            <img src="/public/img/drag.svg" alt="drag">
-                                        </a>
-                                    </div>
-                                    <a href="javascript:void(0);" class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0]">
-                                        <img src="/public/img/delete-options.svg" alt="delete">
-                                    </a>
-                                </div> -->
+                         
                             </div>
                         </div>
 
@@ -1081,7 +992,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
 <div class="offcanvas offcanvas-end w-[580px]" data-bs-backdrop="static" tabindex="-1" id="Id3"
     aria-labelledby="staticBackdropLabel">
-    <form id="generateArticleForm" action="/aiassistance/generatearticle" method="POST">
+    <form id="generateArticleForm" action="/admin/aiassistance/generatearticle" method="POST">
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <input type="hidden" name="chnid" value="{{$EntryId}}">
         <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
@@ -1657,7 +1568,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                             <div class=" dropdown-menu  min-w-full w-full border-0 focus:bg-transparent pt-0 drop-shadow-4 max-h-52 overflow-auto"
                                 aria-labelledby="triggerId" data-dropdown="down">
 
-                                {{range .channel}}
+                                {{range .channellist}}
 
                                 <li>
                                     <a class="chk-group chk-group-label dropdown-item  lg items-center flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px] bg-white "
@@ -1780,8 +1691,8 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 </div>
 
 {{template "footer" .}}
-<!-- 
-<script src="/public/js/aiassistant/aiassistant.js"></script> -->
+
+<script src="/public/js/aiassistant/aiassistant.js"></script>
 
 <script src="/public/js/entries/addentry.js"></script>
 
@@ -1843,6 +1754,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 <script>
     $(document).ready(function () {
         $('.tab-togg').click(function () {
+           
             $("#chn-list").removeClass("show")
             $('.editor-tabs').toggleClass('translate-x-[120%]');
             $('#editingArea').toggleClass(' w-full');
@@ -1865,12 +1777,13 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
     /*create entires right side tab2 open*/
     $(document).ready(function () {
         $('.tab-togg2').click(function () {
-            $('.editor-tabs2').toggleClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            $('.editor-tabs2').toggleClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px] shadow-[-2px_0px_6px_0px_#0000000D] shadow-[-8px_0px_16px_0px_#0000000D]');
             $('.editor-tabs2').toggleClass('translate-x-[100%]');
             $('.editor-tabs').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-            $('.editor-tabs2').toggleClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
+            // $('.editor-tabs2').toggleClass('shadow-[-8px_0px_16px_0px_#0000000D]');
+            //  $('.editor-tabs2').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             // $('.tabclose').show()
-            $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
+            $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  min-[1440px]:translate-x-[-478px] max-lg:min-w-[378px]').addClass('translate-x-[100%] shadow-[-2px_0px_6px_0px_#0000000D] shadow-[-8px_0px_16px_0px_#0000000D]');
             $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
 
             if ($('.editor-tabs2').hasClass('translate-x-[100%]')) {
@@ -1882,13 +1795,14 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
         $('.tab-togg3').click(function () {
-            $('.editor-tabs3').toggleClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            $('.editor-tabs3').toggleClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
             $('.editor-tabs3').toggleClass('translate-x-[100%]');
             $('.editor-tabs').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3').toggleClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
-            // $('.tabclose').hide()
-            $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
-            $('.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
+            $('.editor-tabs2').removeClass('min-[1440px]:translate-x-[-478px]')
+             $('#availblecate').removeClass('bg-[#F5F5F5]')
+            $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]   shadow-[-8px_0px_16px_0px_#0000000D]').addClass('translate-x-[100%] ');
+            $('.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px] shadow-[-2px_0px_6px_0px_#0000000D]  shadow-[-8px_0px_16px_0px_#0000000D]').addClass('translate-x-[100%] ');
 
             if ($('.editor-tabs3').hasClass('translate-x-[100%]')) {
 
@@ -1899,7 +1813,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
         $('.tab-togg4').click(function () {
-            $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
             $('.editor-tabs3,.editor-tabs2').addClass('translate-x-[100%]');
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3,.editor-tabs2').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
@@ -1920,7 +1834,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
             $('.editor-tabs').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs4').toggleClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
             // $('.tabclose').hide()
-            $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
+            $('.editor-tabs3').removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
             $('.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
 
 
@@ -1933,10 +1847,13 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
         $('.tab-togg3R').click(function () {
-            $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            console.log("jjjjdfd")
+            $('.editor-tabs3').removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
             $('.editor-tabs3').addClass('translate-x-[100%]');
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
+            $('#availblecate').trigger('click'); 
+            $('#availblecate').addClass('bg-[#F5F5F5]')
 
         });
         $('.tab-togg2R').click(function () {
@@ -1956,8 +1873,16 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
 
+        // $('.editor-tabs3').click(function(){
+
+        //     console.log("checkdfdf")
+
+        //     $('.editor-tabs2').removeClass('min-[1440px]:translate-x-[-478px]')
+        // })
+
     });
 </script>
+
 <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
 {{template "footerclose" .}}

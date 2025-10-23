@@ -1,0 +1,44 @@
+{{define "templateheader"}}
+{{$ChannelName:=.ChannelName}}
+<header class="bg-black-700 shadow-lg">
+    {{$template:=.template_name}}
+    <nav class="mx-auto flex max-w-screen-2xl items-center justify-between p-4 lg:px-20 lg:py-6 h-[72px]"
+        aria-label="Global">
+        {{if .settingsdetail.SiteLogoPath}}
+        <a href="/ "><img class="w-[100px] h-[50px]"
+                src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+        {{else}}
+        <a href="/ "><img
+                src="/websites/public/img/Spurt-logo.svg"></a>
+        {{end}}
+        <div class="flex lg:hidden ml-auto"><button type="button"
+                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"><span
+                    class="sr-only">Open main menu</span><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
+                    class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                </svg></button></div>
+        <div class="justify-start items-center hidden lg:flex lg:flex-0 w-full">
+            <div class="flex lg:justify-center gap-6 w-11/12">
+                
+                <a class=" text-sm font-normal leading-4 {{if not $ChannelName}}  text-[#2facd6]{{else}}text-black {{end}}"
+                    href="/ ">Home</a>
+                {{if .menulist}}
+                {{range .menulist}}
+              
+                <a class="text-sm font-normal leading-4  {{if eq $ChannelName .Name}} text-[#2facd6]{{else}}text-black {{end}}"
+                    href="{{.UrlPath}} ">{{.Name}}</a>
+                {{end}}
+                {{end}}
+            </div>
+        </div>
+    </nav>
+    <div hidden=""
+        style="position:fixed;top:1px;left:1px;width:1px;height:0;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0;display:none">
+    </div>
+    </div>
+
+</header>
+
+{{end}}

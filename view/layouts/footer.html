@@ -24,7 +24,7 @@
             id="dltCancelBtn">{{$Translate.Webhooks.Cancel}}</a>
 
           <a href="javascript:void(0)"
-            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[3px] no-underline max-w-[130px] w-full deleteBtn"
+            class="h-8 flex items-center justify-center px-[12px] text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[3px] no-underline max-w-[130px] w-full deleteBtn"
             id="delid" data-id="">{{$Translate.Webhooks.Delete}}</a>
         </div>
       </div>
@@ -35,8 +35,7 @@
 
 <!-- multiselect -->
 
-<div
-  class="z-[99] w-full flex justify-center fixed bottom-[84px] left-auto right-0 max-w-[calc(100%-232px)] max-md:max-w-full multidelete
+<div class="z-[99] w-full flex justify-center fixed bottom-[84px] left-auto right-0 max-w-[calc(100%-232px)] max-md:max-w-full multidelete
    [&.responsive-width]:max-w-[calc(100%-470px)]  [&.responsive-width]:max-[768px]:max-w-[calc(100%-180px)]  [&.responsive-width]:max-sm:max-w-full
     [&.responsive-width]:max-xl:max-w-[calc(100%-412px)]  @container ">
   <div
@@ -46,7 +45,8 @@
     <div class="flex ml-auto">
       <a href="javascript:void(0)" id="seleccheckboxdelete" data-bs-toggle="modal" data-bs-target="#deleteModal"
         class="flex gap-[6px] items-center text-[14px] font-[500] leading-[17.5px] text-[#262626] border-r border-[#717171] mr-[8px] pr-[8px] hover:underline">
-        <img src="/public/img/delete-select.svg" alt="delete"> <span class="max-sm:hidden @[550px]:inline-block hidden">{{$Translate.Delete}}</span></a>
+        <img src="/public/img/delete-select.svg" alt="delete"> <span
+          class="max-sm:hidden @[550px]:inline-block hidden">{{$Translate.Delete}}</span></a>
       <a href="javascript:void(0)" id="unbulishslt" data-bs-toggle="modal" data-bs-target="#deleteModal"
         class="flex gap-[6px] items-center text-[14px] font-[500] leading-[17.5px] text-[#262626] hover:underline">
         <img src="/public/img/rename-select.svg" alt="rename" class="hidden renameimg">
@@ -210,6 +210,83 @@
   });
 
 </script>
+
+<div class="right modal fade" id="modalIdd2" tabindex="" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+  aria-labelledby="modalTitleId" aria-hidden="true">
+
+  <form action="/admin/website/menu/createmenu?webid={{.websitedetail.Id}}" name="createmenu" method="POST" id="menuform">
+
+  <div class="modal-dialog modal-dialog-scrollable max-w-[580px] z-[1056]" role="document">
+
+    <div class="rounded-none modal-content b-0">
+    
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <input type="hidden" name="menu_id" id="menu_id" value="">
+        <input type="hidden" name="menupageno" id="menupageno" value="">
+        <div class="flex justify-between items-center p-[59px_30px_22px] max-[1300px]:p-[16px_30px] ">
+          <h5 class="mb-0 font-medium text-bold-black text-base" id="modalTitleId">
+          {{$Translate.Menu.CreateNewMenu}}
+          </h5>
+          <div class="flex gap-3">
+            <a href="#" data-bs-dismiss="modal" class="flex justify-center items-center cancelbtn">
+              <img src="/public/img/modal-close.svg" alt=""></a>
+            <!-- <a href="#" data-bs-dismiss="modal"
+                            class="flex justify-center items-center bg-slate-250 rounded-[4px] h-8 font-normal text-bold-black text-sm no-underline pa-x-3">Cancel</a>
+                        <a href="#"
+                            class="flex justify-center items-center bg-[#10A37F] hover:bg-[#148569] rounded-[4px] h-8 font-normal text-white text-sm no-underline pa-x-3">Save
+                        </a> -->
+          </div>
+        </div>
+        <div class="h-full overflow-auto scrollbar-thin">
+          <div class="flex flex-col gap-[24px] p-[24px_30px] h-full">
+            <div class="flex flex-col items-start gap-[16px]">
+              <div class="gap-[16px] grid grid-cols-1 w-full">
+
+                <div class="flex flex-col gap-1.5">
+                  <p class="mb-0 font-normal text-bold-black text-sm">{{$Translate.Menu.MenuName}}</p>
+                  <input type="text" id="menu_name" name="menu_name"
+                    class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <p class="mb-0 font-normal text-[#152027] text-sm">{{$Translate.Menu.Description}} </p>
+                  <textarea type="text" id="menu_desc" name="menu_desc"
+                    class="focus:!border-[#373737] menu_desc [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-120 font-normal text-bold-black text-sm text-start resize-none"></textarea>
+                </div>
+                <div class="flexmt-[21px]">
+                  <label for="toggleSeven"
+                    class="flex  gap-[14px] items-center justify-start cursor-pointer select-none text-dark dark:text-white">
+                    <p class="text-[14px] font-medium text-[#282322] leading-[18px]">{{$Translate.Menu.Status}}
+                    </p>
+                    <div class="relative">
+                      <input type="checkbox" id="toggleSeven" class="peer sr-only menustatus" name="menustatus">
+                      <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                      </div>
+                      <div
+                        class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[calc(100% - 16px)] peer-checked:bg-primary">
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-[16px_30px] shadow-[0px_-4px_20px_0px_#0000000F] flex gap-[10px] justify-end">
+          <a href="#" data-bs-dismiss="modal"
+            class="h-[40px] cancelbtn flex justify-center items-center bg-slate-250 rounded-[4px]  font-normal text-bold-black text-sm no-underline p-[12px]">{{$Translate.Cancel}}</a>
+          <button type="submit" id="savebtn"
+            class="h-[40px] flex justify-center items-center bg-[#10A37F] hover:bg-[#148569] rounded-[4px] font-normal text-white text-sm no-underline p-[12px]">
+            {{$Translate.Save}}
+          </button>
+        </div>
+
+    </div>
+ 
+  </div>
+</form>
+</div>
 
 
 {{end}}

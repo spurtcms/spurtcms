@@ -94,7 +94,7 @@ $("body").on("click", "#edit", function () {
     $("#category-title").text(languagedata.Categoryy.updatecatgrp)
     var data = $(this).attr("data-id");
     edit = $(this).closest("tr");
-    $("#category_form").attr("name", "editcategory").attr("action", "/categories/updatecategory")
+    $("#category_form").attr("name", "editcategory").attr("action", "/admin/categories/updatecategory")
     var name = edit.find("td:eq(1)").text();
     var desc = edit.find("td:eq(2)").text();
     $("input[name=category_name]").val(name.trim());
@@ -113,7 +113,7 @@ $(document).on('click', '.cancel-btn', function () {
     $("#add-btn").show()
     $("#update-btn").hide()
     $("#cancel-btn").hide()
-    $("#category_form").attr("name", "createcategory").attr("action", "/categories/newcategory")
+    $("#category_form").attr("name", "createcategory").attr("action", "/admin/categories/newcategory")
     $("input[name=category_id]").val("")
     $("input[name=category_name]").val("")
     $("input[name=category_desc]").val("")
@@ -129,7 +129,7 @@ $(document).on('click', '.cancel-btn', function () {
 $(document).on("click", "#filterformsubmit", function () {
     var key = $(this).siblings().children(".search").val();
     if (key == "") {
-        window.location.href = "/categories/"
+        window.location.href = "/admin/categories/"
     } else {
         $('.filterform').submit();
     }
@@ -144,10 +144,10 @@ $(document).on('click', '#delete-btn', function () {
     pageno = urlpar.get('page')
 
     if (pageno == null) {
-        $('#delid').attr('href', "/categories/deletecategory/" + categoryId);
+        $('#delid').attr('href', "/admin/categories/deletecategory/" + categoryId);
 
     } else {
-        $('#delid').attr('href', "/categories/deletecategory/" + categoryId + "?page=" + pageno);
+        $('#delid').attr('href', "/admin/categories/deletecategory/" + categoryId + "?page=" + pageno);
 
     }
     $(".deltitle").text(languagedata.Categoryy.delgrptitle)
@@ -175,9 +175,9 @@ $("#popup").on("click", function () {
 $(document).on("click", "#categorylist", function () {
     var id = $(this).attr("data-id")
     var text = $(this).text()
-    var url = $("#searchforminclist").attr("action", "/categories/filtercategory/" + id)
+    var url = $("#searchforminclist").attr("action", "/admin/categories/filtercategory/" + id)
     $.ajax({
-        url: "/categories/addcategory/" + id,
+        url: "/admin/categories/addcategory/" + id,
         type: "POST",
         datatype: "json",
         data: { csrf: $("input[name='csrf']").val() },
@@ -243,7 +243,7 @@ $("#searchforminclist").keyup(function (event) {
 
     if ($("#searchforminclist").valid()) {
         $.ajax({
-            url: "/categories/filtercategory/" + id,
+            url: "/admin/categories/filtercategory/" + id,
             type: "get",
             datatype: "json",
             data: { "keyword": data, "id": id },
@@ -298,7 +298,7 @@ $('#save').click(function () {
         category_id = $("#category_id").val()
 
         $.ajax({
-            url: "/categories/checkcategoryname",
+            url: "/admin/categories/checkcategoryname",
             type: "POST",
             async: false,
             data: { "category_name": value, "category_id": category_id, csrf: $("input[name='csrf']").val() },
@@ -319,12 +319,12 @@ $('#save').click(function () {
                 space: true,
                 duplicatename: true,
             },
-            category_desc: {
-                required: true,
-                // categorys_desc: true,
-                maxlength: 250,
-                space: true,
-            }
+            // category_desc: {
+            //     required: true,
+            //     // categorys_desc: true,
+            //     maxlength: 250,
+            //     space: true,
+            // }
         },
         messages: {
             category_name: {
@@ -332,11 +332,11 @@ $('#save').click(function () {
                 space: "* " + languagedata.spacergx,
                 duplicatename: "*" + languagedata.Categoryy.namevailderr
             },
-            category_desc: {
-                required: "* " + languagedata.Categoryy.catgrpdescvalid,
-                maxlength: "* " + languagedata.Permission.descriptionchat,
-                space: "* " + languagedata.spacergx,
-            },
+            // category_desc: {
+            //     required: "* " + languagedata.Categoryy.catgrpdescvalid,
+            //     maxlength: "* " + languagedata.Permission.descriptionchat,
+            //     space: "* " + languagedata.spacergx,
+            // },
         }
     });
 
@@ -364,7 +364,7 @@ $('#update-btn').click(function () {
         category_id = $("#category_id").val()
 
         $.ajax({
-            url: "/categories/checkcategoryname",
+            url: "/admin/categories/checkcategoryname",
             type: "POST",
             async: false,
             data: { "category_name": value, "category_id": category_id, csrf: $("input[name='csrf']").val() },
@@ -384,13 +384,13 @@ $('#update-btn').click(function () {
                 space: true,
                 duplicatename: true,
             },
-            category_desc: {
-                required: true,
-                // categorys_desc: true
-                maxlength: 250,
-                space: true
+            // category_desc: {
+            //     required: true,
+            //     // categorys_desc: true
+            //     maxlength: 250,
+            //     space: true
 
-            }
+            // }
         },
         messages: {
             category_name: {
@@ -399,11 +399,11 @@ $('#update-btn').click(function () {
                 duplicatename: " *" + languagedata.Categoryy.namevailderr
 
             },
-            category_desc: {
-                required: "* " + languagedata.Categoryy.catgrpdescvalid,
-                maxlength: "* " + languagedata.Permission.descriptionchat
+            // category_desc: {
+            //     required: "* " + languagedata.Categoryy.catgrpdescvalid,
+            //     maxlength: "* " + languagedata.Permission.descriptionchat
 
-            },
+            // },
         }
     });
 
@@ -413,7 +413,7 @@ $('#update-btn').click(function () {
         value = $("#category_name").val()
 
         $.ajax({
-            url: "/categories/checkcategoryname",
+            url: "/admin/categories/checkcategoryname",
             type: "POST",
             async: false,
             data: { "category_name": value, "category_id": category_id, csrf: $("input[name='csrf']").val() },
@@ -471,7 +471,7 @@ $(document).on('keyup', '.search', function () {
 
         if ($('.search').val() === "") {
 
-            window.location.href = "/categories"
+            window.location.href = "/admin/categories"
 
         }
 
@@ -636,7 +636,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/categories/multiselectcategorygrbdelete',
+        url: '/admin/categories/multiselectcategorygrbdelete',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -690,7 +690,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/categories"
+    window.location.href = "/admin/categories"
 })
 
 $(document).ready(function () {

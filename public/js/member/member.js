@@ -86,10 +86,10 @@ $(document).on('click', '#del', function () {
 
     if (pageno == null) {
         console.log("varuthu");
-        $('#delid').attr('href', '/user/deletemember?id=' + MemberId);
+        $('#delid').attr('href', '/admin/user/deletemember?id=' + MemberId);
 
     } else {
-        $('#delid').attr('href', '/user/deletemember?id=' + MemberId + "&page=" + pageno);
+        $('#delid').attr('href', '/admin/user/deletemember?id=' + MemberId + "&page=" + pageno);
 
     }
 })
@@ -105,7 +105,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checkemailinmember",
+            url: "/admin/user/checkemailinmember",
             type: "POST",
             async: false,
             data: { "email": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -125,7 +125,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checknumberinmember",
+            url: "/admin/user/checknumberinmember",
             type: "POST",
             async: false,
             data: { "number": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -145,7 +145,7 @@ $(document).on('click', '#update', function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checknameinmember",
+            url: "/admin/user/checknameinmember",
             type: "POST",
             async: false,
             data: { "name": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -322,7 +322,7 @@ $(document).on('click', '#update', function () {
     var profileflg
 
     $.ajax({
-        url: "/user/checkprofilesluginmember",
+        url: "/admin/user/checkprofilesluginmember",
         type: "POST",
         async: false,
         data: { "name": $("input[name='profilepage']").val(), "id": $("#mem_id").val(), csrf: $("input[name='csrf']").val() },
@@ -426,7 +426,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checkemailinmember",
+            url: "/admin/user/checkemailinmember",
             type: "POST",
             async: false,
             data: { "email": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -447,7 +447,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checknumberinmember",
+            url: "/admin/user/checknumberinmember",
             type: "POST",
             async: false,
             data: { "number": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -467,7 +467,7 @@ $("#Save").click(function () {
         var mem_id = $("#mem_id").val()
 
         $.ajax({
-            url: "/user/checknameinmember",
+            url: "/admin/user/checknameinmember",
             type: "POST",
             async: false,
             data: { "name": value, "id": mem_id, csrf: $("input[name='csrf']").val() },
@@ -662,7 +662,7 @@ $(document).on('keyup', '#searchmember', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/user/";
+            window.location.href = "/admin/user/";
         }
     }
 
@@ -679,7 +679,7 @@ $(document).on("click", ".Closebtn", function () {
 
   $(document).on("click", ".searchClosebtn", function () {
     $(".Searchmem").val('')
-    window.location.href = "/user/"
+    window.location.href = "/admin/user/"
   })
 
   $(document).ready(function () {
@@ -734,7 +734,7 @@ $(document).on("click", ".Closebtn", function () {
 
 // cancel btn
 $("#cancel").click(function () {
-    window.location.href = "/user/";
+    window.location.href = "/admin/user/";
 })
 
 $(document).on('click', '#newdd-input', function () {
@@ -835,7 +835,7 @@ function refreshdiv() {
 $(document).on('click', '.closemember', function () {
 
 
-    window.location.href = "/user/"
+    window.location.href = "/admin/user/"
 })
 
 // pasword show and close
@@ -941,7 +941,7 @@ function MemberStatus(id) {
     console.log("check", isactive, id)
 
     $.ajax({
-        url: '/user/memberisactive',
+        url: '/admin/user/memberisactive',
         type: 'POST',
         async: false,
         data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -1268,7 +1268,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/user/deleteselectedmember',
+        url: '/admin/user/deleteselectedmember',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1332,7 +1332,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/user/multiselectmemberstatus',
+        url: '/admin/user/multiselectmemberstatus',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1394,7 +1394,7 @@ function GetMemberDetails(memberid) {
     console.log("work");
 
     $.ajax({
-        url: '/user/getmemberdetails',
+        url: '/admin/user/getmemberdetails',
         type: 'post',
         dataType: 'json',
         async: false,

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+
+       <section class="bg-white p-[84px_16px] border-t border-solid border-[#EEEEEE] max-md:p-[24px_16px]">
+             <form action="/updateprofile " method="post" id="myprofileform" name="myprofileform">
+             <input type="hidden" name="memberid" value="{{.memberdet.Id}}" id="memberid">
+             <input type="hidden" name="membergroupvalue" value="{{.memberdet.MemberGroupId}}">
+             <input type="hidden" name="crop_data" value="" id="crop_data">
+             <input type="hidden" name="remove_image" id="remove_image" value="">
+                <div
+                class="border border-solid border-[#EBEBEB] p-[50px] max-md:p-4 bg-[#FBFCFD] rounded-[12px] max-w-[700px] m-auto w-full">
+                <div
+                    class="max-sm:flex-col flex items-center space-x-5 max-sm:space-y-5 max-sm:space-x-0 max-sm:items-start pb-[40px] mb-[40px] max-md:pb-[24px] max-md:mb-[24px] border-b border-solid border-[#EAEAEA]">
+                    <div
+                        class="w-[90px] h-[90px] min-w-[90px] bg-[#DD5B15] hover:bg-[#823e19] rounded-full text-[42px] font-semibold leading-[48px] text-white grid place-items-center" id="imgdiv" namestring ="{{.memberdet.NameString}}">
+                       {{if .memberdet.ProfileImagePath}}
+                       <img src="/image-resize?name={{.memberdet.ProfileImagePath}}" class="h-[90px] object-cover rounded-full" id="profileimg"  alt="">
+                       {{else}}
+                        {{.memberdet.NameString}}{{end}}
+                        </div>
+                    <div>
+                        <div class="flex items-center space-x-1 mb-[14px]">
+                            <div class="bg-[#F1F1F1]  hover:bg-[#81818145] rounded-[8px] p-[12px_20px] relative w-fit ">
+                                <input id="myfile" accept="image/*"
+                                    class="left-0 top-0 opacity-0 w-full h-full absolute cursor-pointer text-[0px]"
+                                    type="file" name="">
+                                <p class=" flex text-[14px] text-center font-medium leading-[17px] flex items-center text-[#120B14]"><img
+                                        alt="upload" src="/websites/public/img/upload.svg">Upload Image</p>
+                            </div><button type="button" id="removebtn"
+                                class="inline-block bg-transparent rounded-[8px] p-[12px_20px] relative w-fit hover:underline text-[14px] font-medium leading-[17px] text-[#FF3B30] ">Remove</button>
+                        </div>
+                        <p class="text-[14px] font-normal leading-[17px] text-[#1516188F]">Only PNG or JPG images are
+                            allowed. Maximum file size: 5MB.</p>
+                    </div>
+                </div>
+                <div>
+
+                    <div
+                        class="grid grid-cols-[1fr_1.5fr] gap-4 max-sm:grid-cols-1 mb-5 items-center last-of-type:mb-0">
+                        <label for="Fname" class="text-[14px] font-medium leading-[17px] text-[#000000]" >First
+                            Name</label><input id="Fname" placeholder="Enter First Name" name="mem_name"
+                            class="h-[48px] text-[#120B14] focus:border-[#120B14] border border-solid border-[#E9E9E9] p-[15.5px_14px] rounded-[4px] text-[14px] font-normal leading-[17px] placeholder:text-[#1516188F] w-full border-[#00000029] "
+                            maxlength="25" type="text" value="{{.memberdet.FirstName}}" >
+                    </div>
+                    <div
+                        class="grid grid-cols-[1fr_1.5fr] gap-4 max-sm:grid-cols-1 mb-5 items-center last-of-type:mb-0">
+                        <label for="Lname" class="text-[14px] font-medium leading-[17px] text-[#000000]">Last
+                            Name</label><input id="lastName" placeholder="Enter Last Name" name="mem_lname" class="h-[48px] text-[#120B14] focus:border-[#120B14] border border-solid border-[#E9E9E9] p-[15.5px_14px] rounded-[4px] text-[14px] font-normal leading-[17px] placeholder:text-[#1516188F] w-full
+                   " type="text" value="{{.memberdet.LastName}}">
+                    </div>
+                    <div
+                        class="grid grid-cols-[1fr_1.5fr] gap-4 max-sm:grid-cols-1 mb-[20px] items-center last-of-type:mb-0">
+                        <label for="" class="text-[14px] font-medium leading-[17px] text-[#000000]">Email
+                            Address</label>
+                            <input placeholder="Enter your Email" id="emailId" name="mem_email" value="{{.memberdet.Email}}"
+                            class="h-[48px] text-[#120B14] focus:border-[#120B14] border border-solid border-[#E9E9E9] p-[15.5px_14px] rounded-[4px] text-[14px] font-normal leading-[17px] placeholder:text-[#1516188F] w-full "
+                            type="text">
+                    </div>
+                    <div
+                        class="grid grid-cols-[1fr_1.5fr] gap-4 max-sm:grid-cols-1 mb-[20px] items-center last-of-type:mb-0">
+                        <label for="number" class="text-[14px] font-medium leading-[17px] text-[#000000]">Mobile
+                            Number</label>
+
+                              <input placeholder="Enter your Mobile Number" id="mem_mobile" name="mem_mobile"  maxlength="15"
+                            class="h-[48px] text-[#120B14] focus:border-[#120B14] border border-solid border-[#E9E9E9] p-[15.5px_14px] rounded-[4px] text-[14px] font-normal leading-[17px] placeholder:text-[#1516188F] w-full "
+                            type="text" value="{{.memberdet.MobileNo}}">
+                        <!-- <div
+                            class="h-[48px] text-[#120B14]  border border-[#E9E9E9] p-[15.5px_14px] pl-0 rounded-[4px] flex items-center bg-white">
+                            <div class="relative inline-block text-[14px] font-normal text-[#201035]">
+                                <select
+                                    class="no-arrow  appearance-none !border-none outline-none  rounded-0 !bg-transparent shadow-none cursor-pointer px-[7px] py-[4px] text-[14px] border-r border-[#E8E8E8] !w-[43px]">
+                                    <option value="91">91</option>
+                                    <option value="91">91</option>
+                                    <option value="91">91</option>
+                                </select>
+                                <img src="/websites/public/img/drop-arrow.svg" alt="arrow icon"
+                                    class="pointer-events-none absolute right-[7px] top-1/2 transform -translate-y-1/2"
+                                    style="width: 14px; height: 14px;" />
+                            </div>
+
+
+                            <input id="number" placeholder="Enter Mobile Number" maxlength="15"
+                                class="text-[14px] h-[48px] font-normal leading-[17px] placeholder:text-[#1516188F] w-full border border-[#E9E9E9]   p-0 border-[#00000029]"
+                                type="text">
+                        </div> -->
+                    </div>
+                   
+                </div>
+                <div class="flex items-center space-x-[10px] mt-[50px] justify-end max-md:mt-[24px]">
+                    <a href="/ "><button type="button"
+                        class="bg-[#F1F1F1] hover:bg-[#81818145] rounded-[4px] p-[8px_20px] relative w-fit text-[14px] font-normal leading-[17px] text-[#120B14] ">Discard</button></a><button
+                        class="bg-[#120B14] hover:bg-[#28282c]  rounded-[4px] p-[8px_20px] relative w-fit text-[14px] font-normal leading-[17px] text-[#FFFFFF]" id="update" type="button">Save</button>
+                </div>
+            </div>
+             </form>
+        </section>
+</body>
+<script src="/websites/common/assets/js/myprofile.js"></script>
+<script src="/websites/common/assets/js/common.js"></script>
+
+</html>

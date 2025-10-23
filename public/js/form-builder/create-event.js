@@ -40,9 +40,9 @@ $(document).ready(async function () {
         let homeurl
         spurtdata = event.detail
         if (button == "save-form") {
-            homeurl = "/cta/draft"
+            homeurl = "/admin/cta/draft"
         } else {
-            homeurl = "/cta"
+            homeurl = "/admin/cta"
         }
         let first = spurtdata.data[0]
 
@@ -60,7 +60,7 @@ $(document).ready(async function () {
         }
         if (id == "") {
             $.ajax({
-                url: "/cta/createforms",
+                url: "/admin/cta/createforms",
                 type: "POST",
                 async: false,
                 data: { "button": button, "form": JSON.stringify(spurtdata), "image":newimage, "imagename":imagename, csrf: $("input[name='csrf']").val(), "title": value, "channelid": channelid, "channelname": channelname },
@@ -72,7 +72,7 @@ $(document).ready(async function () {
             })
         } else {
             $.ajax({
-                url: "/cta/updateforms",
+                url: "/admin/cta/updateforms",
                 type: "POST",
                 async: false,
                 data: { "button": button, "form": JSON.stringify(spurtdata),"image":newimage, "imagename":imagename,csrf: $("input[name='csrf']").val(), "title": value, "id": id, "channelid": channelid, "channelname": channelname },

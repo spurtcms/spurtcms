@@ -108,7 +108,7 @@ $("#saveuser").click(function () {
             var result;
             user_id = $("#userid").val()
             $.ajax({
-                url: "/settings/users/checkemail",
+                url: "/admin/settings/users/checkemail",
                 type: "POST",
                 async: false,
                 data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -127,7 +127,7 @@ $("#saveuser").click(function () {
             // var result;
             // user_id = $("#userid").val()
             // $.ajax({
-            //     url: "/settings/users/checkusername",
+            //     url: "/admin/settings/users/checkusername",
             //     type: "POST",
             //     async: false,
             //     data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -146,7 +146,7 @@ $("#saveuser").click(function () {
             var result;
             user_id = $("#userid").val()
             $.ajax({
-                url: "/settings/users/checknumber",
+                url: "/admin/settings/users/checknumber",
                 type: "POST",
                 async: false,
                 data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -241,7 +241,7 @@ $("#saveuser").click(function () {
             var uname = $('#user_name').val()
             var user_id = $("#userid").val()
             // $.ajax({
-            //     url: "/settings/users/checkuserdata",
+            //     url: "/admin/settings/users/checkuserdata",
             //     type: "POST",
             //     async: false,
             //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -316,7 +316,7 @@ $(document).on('click', '.btn-close', function () {
 //     $('#saveuser').show()
 //     $('#updateuser').hide();
 //     $("#userid").val("");
-//     $('#userform').attr('action', '/settings/users/createuser')
+//     $('#userform').attr('action', '/admin/settings/users/createuser')
 // })
 // $(document).on('click', '#clickadd', function () {
 //     $('#heading').text(languagedata.Userss.addnewuser)
@@ -342,11 +342,11 @@ $(document).on('click', '#edit-btn', function () {
     $("#userModal").show()
     $("#userModal").attr("action", "");
     $("#userModal").attr("name", "edit");
-    $('#userform').attr("action", "/settings/users/update-user")
+    $('#userform').attr("action", "/admin/settings/users/update-user")
     $('#userform').attr("name", "editform")
     $('#userid').val(data)
     $.ajax({
-        url: "/settings/users/edit-user",
+        url: "/admin/settings/users/edit-user",
         type: "GET",
         dataType: "json",
         data: { "id": data },
@@ -419,7 +419,7 @@ $("#usermodelclose").on("click", function () {
     $("#myfile-error").hide();
     $(".lengthErr").addClass("hidden");
     $('#userid').val("")
-    $('#userform').attr("action", "/settings/users/createuser")
+    $('#userform').attr("action", "/admin/settings/users/createuser")
 });
 
 
@@ -443,7 +443,7 @@ $(document).on('click', '#saveuser', function () {
             var result;
             user_id = $("#userid").val()
             $.ajax({
-                url: "/settings/users/checkemail",
+                url: "/admin/settings/users/checkemail",
                 type: "POST",
                 async: false,
                 data: { "email": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -462,7 +462,7 @@ $(document).on('click', '#saveuser', function () {
         //     var result;
         //     user_id = $("#userid").val()
         //     $.ajax({
-        //         url: "/settings/users/checkusername",
+        //         url: "/admin/settings/users/checkusername",
         //         type: "POST",
         //         async: false,
         //         data: { "username": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -481,7 +481,7 @@ $(document).on('click', '#saveuser', function () {
             var result;
             user_id = $("#userid").val()
             $.ajax({
-                url: "/settings/users/checknumber",
+                url: "/admin/settings/users/checknumber",
                 type: "POST",
                 async: false,
                 data: { "number": value, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -629,7 +629,7 @@ $(document).on('click', '#saveuser', function () {
             var user_id = $("#userid").val()
 
             // $.ajax({
-            //     url: "/settings/users/checkuserdata",
+            //     url: "/admin/settings/users/checkuserdata",
             //     type: "POST",
             //     async: false,
             //     data: { "email": email, "mobile": mob, "username": uname, "id": user_id, csrf: $("input[name='csrf']").val() },
@@ -710,10 +710,10 @@ $(document).on('click', '#del-btn', function () {
     pageno = urlpar.get('page');
 
     if (pageno == null) {
-        $("#delid").attr("href", "/settings/users/delete-user/" + userId)
+        $("#delid").attr("href", "/admin/settings/users/delete-user/" + userId)
 
     } else {
-        $("#delid").attr("href", "/settings/users/delete-user/" + userId + "?page=" + pageno)
+        $("#delid").attr("href", "/admin/settings/users/delete-user/" + userId + "?page=" + pageno)
 
     }
 
@@ -843,7 +843,7 @@ $(document).on('keyup', '#searchroles', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/settings/users/";
+            window.location.href = "/admin/settings/users/";
         }
     }
 
@@ -861,7 +861,7 @@ $(document).on("click", ".Closebtn", function () {
 
   $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/settings/users/"
+    window.location.href = "/admin/settings/users/"
   })
 
   $(document).ready(function () {
@@ -1299,7 +1299,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $(".selected-numbers").hide()
     $.ajax({
-        url: '/settings/users/deleteselectedusers',
+        url: '/admin/settings/users/deleteselectedusers',
         type: 'post',
         datatype: 'json',
         async: false,
@@ -1340,7 +1340,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
 
     $.ajax({
-        url: "/settings/users/selectedusersaccesschange",
+        url: "/admin/settings/users/selectedusersaccesschange",
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1397,7 +1397,7 @@ function UserStatus(id) {
     console.log("isactive", isActive);
 
     $.ajax({
-        url: '/settings/users/changeActiveStatus',
+        url: '/admin/settings/users/changeActiveStatus',
         type: 'POST',
         async: false,
         data: { "id": id, "isActive": isActive, csrf: $("#userform input[name = 'csrf']").val() },
@@ -1449,7 +1449,7 @@ $(document).on('click', '.selectedIsActive', function () {
     $('.selected-numbers').hide()
 
     $.ajax({
-        url: "/settings/users/selectedUserStatusChange",
+        url: "/admin/settings/users/selectedUserStatusChange",
         type: "POST",
         dataType: 'json',
         async: false,

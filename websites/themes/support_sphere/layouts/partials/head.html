@@ -1,0 +1,36 @@
+{{define "templatehead"}}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{if .seodetail.PageTitle}}{{.seodetail.PageTitle}}{{else}}{{.settingsdetail.SiteName}}{{end}}</title>
+<link rel="icon" type="image/x-icon"
+    href="{{if .settingsdetail.SiteFavIconPath}}/image-resize?name={{.settingsdetail.SiteFavIconPath}}{{else}}https://spurtcms.com/public/img/spurtCMSlogonew.jpg{{end}}">
+
+<meta name="description" content="{{.seodetail.PageDescription}}">
+<meta name="keywords" content="{{.seodetail.PageKeyword}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+
+<!-- Jquery  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    montserrat: ['Montserrat', 'sans-serif'],
+                },
+            },
+        },
+    };
+</script>
+
+{{end}}

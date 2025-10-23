@@ -1,0 +1,128 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+
+<section
+    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[90px] max-sm:pt-[64px] min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+
+        {{template "gotemplateheader" .}}
+
+                    {{$default:=.go_template_default}}
+
+
+        <div class="tab-content p-[32px_16px]" id="pills-tabContent">
+
+            <div class="tab-pane fade show active" id="pills-themes" role="tabpanel" aria-labelledby="pills-themes-tab">
+   {{ range .modulenames }}
+    <div class="mb-[24px]">
+
+     
+        <div class="mb-[24px]">
+            <h3 class="mb-[6px] text-base font-medium text-[#252525]">
+                {{ if eq . "Help Center" }}
+                    {{ $Translate.Templates.Helpcenter }}
+                {{ else if eq . "Blog" }}
+                    {{ $Translate.Templates.Blogs }}
+               {{ else if eq . "Courses" }}
+                  COURSE TEMPLATES
+             
+                {{ end }}
+            </h3>
+       
+ </div>
+     
+        <div class="gap-[16px] grid grid-cols-[repeat(auto-fill,_minmax(282px,_1fr))]">
+            {{$module := . }}
+
+           
+            {{ range $template := $.goTemplateList }}
+                {{ if eq $template.TemplateModuleName $module }}
+                   
+                        {{ if eq $default $template.Id }}
+                            <div class="bg-[var(--btn-bg)] rounded-[8px_8px_14px_14px]">
+                                <p class="text-xs font-normal leading-[16px] text-[#FFFFFF] p-[4px_10px]">
+                                    Default theme
+                                </p>
+                        {{ end }}
+
+                        <div class="flex flex-col border-[#ECECEC] border rounded-[8px] overflow-hidden bg-white mt-auto">
+
+                              <div class="relative border-[#ECECEC] border-b aspect-[15/11.1] group grow grid place-items-center">
+                        <img src="{{ $template.TemplateImage }}" alt="sample one"
+                            class="w-full h-full object-contain">
+
+                            <div
+                            class=" absolute flex justify-center items-center opacity-[0] group-hover:opacity-100 ">
+                          
+                          
+                            <a href="{{if eq $default $template.Id }}/{{else}} /?template_name={{ $template.TemplateName }}{{end}}"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            target="_blank"
+                                class="flex justify-center items-center space-x-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-6 rounded-[40px] w-auto h-[42px] font-normal text-[#FFFFFF] mt-[50px] text-sm">
+                                <img src="/public/img/eye-white.svg" alt="...">
+                                <span>Preview</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    
+
+                            <div class="p-[16px]">
+                                <h3 class="mb-[24px] font-black font-RecoletaBlack text-[#262626] text-2xl text-center leading-5">
+                                    {{ $template.TemplateName }}
+                                </h3>
+                                <div class="flex items-center gap-[24px]">
+                                  
+                                    <a href="/admin/website/template/{{ $template.Id }}" 
+                                        class=" {{ if eq $default $template.Id }}opacity-50  pointer-events-none{{end}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  flex justify-center items-center gap-[8px] border-[#252525] border-[1px] bg-[#F8F8F8] hover:bg-white p-[6px_8px] border-solid rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-sm leading-[17.5px] grow">
+                                       {{ if eq $default $template.Id }}Make as Default{{else}}  Make as Default{{end}}
+                                    </a>
+                                   <a href="/admin/website/pages/{{ $template.Id }}"
+                                        class="   flex items-center text-center justify-center gap-[16px] bg-[#252525] hover:bg-[#2f2f2f] p-[6px_8px] rounded-[4px] w-full h-[30px] font-normal text-[#FFFFFF] text-sm leading-[17.5px] grow {{ if eq $.default $template.Id }} opacity-50 {{ end }}">
+                                    Configure                                                                                                                                                                                           
+                                    </a>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        {{ if eq $default $template.Id }}</div>{{ end }}
+                    
+                {{ end }}
+            {{ end }}
+        </div>
+        
+    </div>
+{{ end }}
+
+            </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</section>
+
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+{{template "footer" .}}
+
+<script src="/public/js/gotemplate/seo.js"></script>
+{{template "footerclose" .}}

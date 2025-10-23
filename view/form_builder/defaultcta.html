@@ -38,7 +38,7 @@
                     <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden">
                     <img src="/public/img/search-icon-active.svg" alt="search" class="group-hover:block hidden searchopen">
                 </a>
-                <form action="/cta/defaultctalist/" method="get" class="filterform" autocomplete="off">
+                <form action="/admin/cta/defaultctalist/" method="get" class="filterform" autocomplete="off">
                     <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="formsearch"
                         value="{{.Filter.Keyword}}" class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block
                           {{if eq .SearchTrues `true`}} w-[calc(100%-36px)] p-[0_24px_0_0] {{else}} w-0 p-0 {{end}}">
@@ -72,7 +72,7 @@
                 {{range .channelist}}
                 <li class="mb-[8px]"><a
                         class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .SlugName}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
-                        href="/cta/defaultctalist?channel={{.SlugName}}">
+                        href="/admin/cta/defaultctalist?channel={{.SlugName}}">
                         <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
                         </h5>
                         <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if
@@ -118,9 +118,9 @@
                 <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
                   {{$Translate.FormBuilder.Sbanner}}
                    
-                    <a href="/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Entries}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    <a href="/admin/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Entries}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                     </a> {{$Translate.FormBuilder.Tbanner}}
-                    <a href="/channels" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Channels}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                    <a href="/admin/channels" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Channels}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                     </a> {{$Translate.FormBuilder.Fobanner}}
                    
                  </p>
@@ -141,12 +141,12 @@
         <ul class="border-[#EDEDED] mb-[24px] border-b nav" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px] "
-                    id="collection-tab"  href="/cta" type="button" 
+                    id="collection-tab"  href="/admin/cta" type="button" 
                     >{{$Translate.Blocks.MyCollections}}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="new block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px] active"
-                    id="work-tab"  href="/cta/defaultctalist" 
+                    id="work-tab"  href="/admin/cta/defaultctalist" 
                     >{{$Translate.Explore}}</a>
             </li>
 
@@ -385,7 +385,7 @@
                                     <p class="font-light text-[#717171] text-center mb-2 text-base">
                                         {{$Translate.FormBuilder.Noform}}</p>
                                 </div>
-                                <a href="/cta/create"
+                                <a href="/admin/cta/create"
                                     class="inline-flex items-center bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.FormBuilder.Createfirstform}}</a>
                             </div>
                         </div>

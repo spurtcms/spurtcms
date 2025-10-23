@@ -1,0 +1,457 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$isLocal :=.isLocal}}
+{{$baseurl :=.baseurl}}
+{{$baseurlpath :=.baseurlpath}}
+<section
+  class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[90px] max-sm:pt-[64px] min-h-screen">
+
+  <div class=" max-sm:h-fit h-full ">
+
+    {{template "gotemplateheader" .}}
+
+    <div class="overflow-auto mb-[30px]">
+      <table class="w-full min-w-[1000px]">
+        <thead>
+          <tr>
+            <th class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+              Website Title</th>
+            <th class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+              Channels</th>
+            <th class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+              Last updated</th>
+            <!-- <th
+                            class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+                             Status</th> -->
+            <th class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+            </th>
+            <th class="text-[13px] leading-[16px] font-normal text-[#575757] bg-[#F4F4F4] p-[16px] whitespace-nowrap">
+              Action
+            </th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          {{if .websitelist}}
+          {{range .websitelist}}
+          <tr>
+            <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
+              <div class="flex items-center gap-[10px]">
+                <div class="w-[77px] h-fit min-w-[77px]">
+                  <img src="{{.TemplateImage}}" alt="">
+                </div>
+                <div>
+                  <a href="/" target="_blank"
+
+      class="flex items-center border-[1px] border-solid border-[#00A481] rounded-[50px] bg-[#EFF6F5] text-[12px] leading-none font-medium text-[#00A481] p-[3.5px_5px] mb-[2px] gap-[2px] h-[21px]">
+                    <img src="/public/img/web.svg" alt="">
+                    {{if eq .Id 1}}www.{{$baseurl}}{{else}}www.{{.Name}}.{{$baseurl}}{{end}}
+                  </a>
+                  <h3 class="text-[11px] leading-[14px] font-medium text-[#202124] mb-[2px]">
+                    {{.TemplateName}}</h3>
+                  <p class="text-[11px] leading-[14px] font-light text-[#757575]">
+                    {{.CreatedDate}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
+              <p class="channames text-[13px] leading-[16px] font-light text-[#252525]"> {{.ChannelNames}}</p>
+            </td>
+            <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
+              <p class="text-[14px] leading-[18px] font-light text-[#757575] whitespace-nowrap">
+                {{.DateString}}</p>
+            </td>
+          
+            <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
+              <a href="/admin/website/pages/{{.Id}}"
+                class="hover:bg-[#F5F5F5] border-[1px] border-solid border-[#F5F5F5] rounded-[8px] flex items-center gap-[4px] text-[12px] font-normal leading-[16px] text-[#252525] p-[5px_10px] w-fit"><img
+                  src="/public/img/configure-tb.svg" alt=""> Configure</a>
+            </td>
+            <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
+
+              <div class="btn-group language-group position-static">
+                <a href="javascript:void(0);" type="button"
+                  class=" border-0 grid place-items-center  items-center gap-[5px] w-[32px] h-[32px] rounded-full group hover:bg-[#F5F5F5] [&amp;.show]:bg-[#F5F5F5] "
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="/public/img/action-vertical-active.svg" alt="dropdown"
+                    class="hidden group-hover:block rotate-90 transform">
+                  <img src="/public/img/action-vertical.svg" alt="dropdown"
+                    class="block group-hover:hidden rotate-90 transform">
+                </a>
+
+
+
+                <ul
+                  class="bg-[#FFFFFF] shadow-[0px_4px_10px_0px_#0000001F] p-[4px] border-[1px] border-solid border-[#E4E5E7] rounded-[8px] min-w-[205px] dropdown-menu "
+                  data-popper-placement="bottom-end">
+                  <li class="mb-[4px] last-of-type:mb-[0]">
+                    <a href="/"
+                      target="_blank"
+                      class="cursor-pointer items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"><img
+                        src="/public/img/preview-drop.svg">Preview</a>
+                  </li>
+               
+                  <!-- <li class="mb-[4px] last-of-type:mb-[0]">
+                                        <a class="cursor-pointer items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"
+                                            data-bs-toggle="modal" data-bs-target="#categoryGrp"><img
+                                                src="/public/img/unpublish.svg">Unpublish</a>
+                                    </li> -->
+
+                  <li class="mb-[4px] last-of-type:mb-[0]">
+                    <a class="changetemplate cursor-pointer items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"
+                      data-id="{{.Id}}" data-tempid="{{.TemplateId}}" data-tempname="{{.TemplateName}}"
+                      data-name="{{.Name}}" data-channame="{{.ChannelNames}}"><img
+                        src="/public/img/change-template.svg">Change template</a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          {{end}}
+          {{else }}
+          <tr>
+            <td colspan="9">
+              <div class="flex flex-col items-center mx-auto pt-[60px] w-full max-w-[966px]">
+                <div class="mb-[30px]">
+                  <img src="/public/img/no-data-categories.svg" alt="" />
+                </div>
+                <div class="flex flex-col items-center w-full">
+                  <div class="flex flex-col w-full">
+                    <h3 class="mb-2 font-semibold text-[#262626] text-2xl text-center">
+                      No Website found!
+                    </h3>
+                    <p class="font-light text-[#717171] text-center text-base">
+                      Create a Website to organize and structure your content
+                      effectively. Add website under it to ensure seamless
+                      navigation and linkage.
+                    </p>
+                  </div>
+                  <a href="javascript:void(0)" id="clickadd"
+                    class="newsite inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline">Create
+                    Website</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+
+          {{end}}
+
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff] z-[997]">
+      <ul class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex">
+        {{if gt .Count .Limit}}
+
+        <li>
+          <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+            class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+            <img src="/public/img/pg-prev.svg" alt="previous" />
+            <span class="max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+          </a>
+        </li>
+        {{if gt .CurrentPage 3}} {{$keyword := .filter.Keyword}}
+        <li>
+          <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            1
+          </a>
+        </li>
+        {{end}} {{if eq .CurrentPage 5}}
+        <li>
+          <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            2
+          </a>
+        </li>
+        {{end}} {{if gt .CurrentPage 5}}
+        <li>
+          <a href="javascript:void(0)"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            ...</a>
+        </li>
+        {{end}} {{if gt .CurrentPage 2}}
+        <li>
+          <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            {{.Pagination.TwoBelow}}
+          </a>
+        </li>
+        {{end}} {{if gt .CurrentPage 1}}
+        <li>
+          <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            {{.Pagination.PreviousPage}}
+          </a>
+        </li>
+        {{end}}
+
+        <li>
+          <a href=""
+            class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+            {{.CurrentPage}}
+          </a>
+        </li>
+
+        {{if lt .CurrentPage .Pagination.TotalPages}}
+        <li>
+          <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            {{.Pagination.NextPage}}
+          </a>
+        </li>
+        {{end}} {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li>
+          <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            {{.Pagination.TwoAfter}}
+          </a>
+        </li>
+        {{end}} {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+        <li>
+          <a href="javascript:void(0)"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            ...</a>
+        </li>
+        {{end}} {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li>
+          <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] @[500px]:w-[33px] @[500px]:h-[36px] w-[24px] h-[24px] gap-[4px]">
+            {{.Pagination.TotalPages}}</a>
+        </li>
+        {{end}}
+        <li>
+          <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+            class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+            <span class="max-sm:hidden"> {{$Translate.Next}} </span>
+            <img src="/public/img\pg-nxt.svg" alt="next" />
+          </a>
+        </li>
+        {{end}}
+      </ul>
+      <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+        {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}}
+        {{.Count}}
+      </p>
+    </div>
+
+    <!-- Create new site -->
+
+    <div class="modal right fade " tabindex="-1" id="Id2" aria-labelledby="staticBackdropLabel">
+      <div class="modal-dialog  !w-[902px] modal-dialog-scrollable mx-auto" role="document">
+        <div class="modal-content b-0 rounded-[4px]">
+      <input type="hidden" value=" {{.baseurl}}" class="baseurl">
+          <div
+            class="modal-header flex justify-between items-center max-[1300px]:p-[16px] p-[30px_30px_24px] border-b border-[#ECECEC]">
+
+            <h1 class="headtag text-[20px] font-medium leading-[25px] text-[#252525]">Create new site</h1>
+          </div>
+          <div class="p-[24px] max-[1300px]:p-[16px] flex flex-col gap-[16px] modal-body">
+            <div class="flex flex-col gap-[10px]">
+              <p class="text-[#152027] text-base font-medium mb-0">Site name</p>
+              <div class="relative commondiv">
+                <div
+                  class="absolute top-0 left-0 h-full flex items-center justify-center p-[14px_16px] border-[1px] border-solid border-[#F0F0F0] text-base font-light text-[#252525] bg-[#F4F4F4] rounded-e-none rounded-[8px] max-md:p-[8px]">
+                  www.</div>
+                <input type="text" placeholder="Site name"
+                  class="Sitename  focus:outline-none focus:ring-0 focus:border-[#EDEDED] rounded-[8px] p-[16px_160px_16px_90px] h-[48px] border-[1px] border-[#EDEDED] border-r-0 bg-white   text-bold-black text-base  font-light leading-[20px] placeholder:text-[#8A8A8A] w-full" />
+                <div
+                  class="focus-visible:bg-none  absolute top-0 right-0 h-full flex items-center justify-center p-[14px_24px] border-[1px] border-solid border-[#F0F0F0] text-sm font-normal text-[#10A37F] bg-[#F4F4F4] rounded-s-none rounded-[8px] max-md:p-[8px]"
+                  value="E.g. content marketing, ai content creation, social media engagement">/ {{.baseurl}}
+                </div>
+
+              </div>
+                <div class="relative defaultdiv hidden">
+                <div
+                  class="absolute top-0 left-0 h-full flex items-center justify-center p-[14px_16px] border-[1px] border-solid border-[#F0F0F0] text-base font-light text-[#252525] bg-[#F4F4F4] rounded-e-none rounded-[8px] max-md:p-[8px]">
+                  www.</div>
+                <input type="text" placeholder="Site name" value="{{.baseurl}}"
+                  class="Sitename pointer-events-none focus-visible:bg-none rounded-[8px] p-[16px_160px_16px_90px] h-[48px] border-[1px] border-[#EDEDED] border-r-0 bg-white   text-bold-black text-base  font-light leading-[20px] placeholder:text-[#8A8A8A] w-full" />
+             
+
+              </div>
+              <label id="sitename-error" class="error text-[#F26674] text-xs  hidden">*Please Enter Site
+                Name</label>
+            </div>
+
+            <div class="flex flex-col gap-[10px] mt-[43px]">
+              <p class="text-[#152027] text-base font-medium mb-0 leading-[20px]">Choose Business Type</p>
+              <div id="channel-error" class="hidden  text-[#F26674] text-xs ">*Please choose a type.</div>
+
+              <div class="grid grid-cols-3 gap-[10px] max-sm:grid-cols-1 max-lg:grid-cols-2">
+                <div class="chandiv">
+                  <input type="radio" id="blogs" name="option" class="peer hidden">
+                  <label for="blogs" data-slug="blog"
+                    class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
+                    <div>
+                      <img src="/public/img/blogs-green.svg" alt="">
+                      <h3 class="text-base leading-[19px] font-medium text-[#252525] mt-[12px]">Blog</h3>
+                      <p class="mt-[6px] text-[12px] leading-[18px] font-light text-[#616161] line-clamp-3">Showcases
+                        blog posts as Entries, grouped into categories like Lifestyle, Technology, or Travel. Each blog
+                        uChannel for blog templatesses a Blog Template for engaging and readable layouts.</p>
+                    </div>
+                    <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
+                    <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
+                  </label>
+                </div>
+                <div class="chandiv">
+                  <input type="radio" id="knowledgebase" name="option" class="peer hidden">
+                  <label for="knowledgebase" data-slug="knowledge-base"
+                    class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
+                    <div>
+                      <img src="/public/img/knowledge-base-green.svg" alt="">
+                      <h3 class="text-base leading-[19px] font-medium text-[#252525] mt-[12px]">Knowledge base
+                      </h3>
+                      <p class="mt-[6px] text-[12px] leading-[18px] font-light text-[#616161] line-clamp-3">Centralizes
+                        informative content and resources as Entries. Each entry will go into categories like Tutorials,
+                        Guides, or Best Practices for easy reference. Each entry is mapped to a Knowledge Template,
+                        ensuring clarity and a professional layout for readers.</p>
+                    </div>
+                    <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
+                    <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
+                  </label>
+                </div>
+                <div class="chandiv">
+                  <input type="radio" id="digital_products" name="option" class="peer hidden">
+                  <label for="digital_products" data-slug="digital_products"
+                    class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
+                    <div>
+                      <img src="/public/img/digital-product 1.svg" alt="">
+                      <h3 class="text-base leading-[19px] font-medium text-[#252525] mt-[12px]">Digital Products</h3>
+                      <p class="mt-[6px] text-[12px] leading-[18px] font-light text-[#616161] line-clamp-3">Explore
+                        expert articles and guides on digital products, including latest trends, tools, and reviews.
+                        This channel brings helpful insights to empower your digital journey.</p>
+                    </div>
+                    <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
+                    <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
+                  </label>
+                </div>
+
+                <div class="chandiv">
+                  <input type="radio" id="jobs" name="option" class="peer hidden">
+                  <label for="jobs" data-slug="jobs"
+                    class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
+                    <div>
+                      <img src="/public/img/jobs-green.svg" alt="">
+                      <h3 class="text-base leading-[19px] font-medium text-[#252525] mt-[12px]">Jobs</h3>
+                      <p class="mt-[6px] text-[12px] leading-[18px] font-light text-[#616161] line-clamp-3">The jobs template in the project enables posting, searching, and managing job openings tailored for various roles and industries. Users can easily browse vacancies, apply, and track the application process, making hiring and job hunting efficient and organized.</p>
+                    </div>
+                    <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
+                    <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
+                  </label>
+                </div>
+
+
+
+
+              </div>
+            </div>
+
+
+          </div>
+
+          <div
+            class="modal-footer shadow-[0px_-4px_20px_0px_#0000000F] border-t border-solid border-[#F0F0F0] p-[24px_30px] flex items-center justify-between gap-[16px] max-[1300px]:p-[16px]">
+            <a data-bs-dismiss="modal" id="cancelbtn"
+              class="cancelbtn cursor-pointer p-[14px_24px] border-[1px] border-solid border-[#EFEFEF] bg-[#F7F7F5] hover:bg-[#EFEFEF] rounded-[4px] h-[48px] text-[16px] font-normal leading-[20px] text-[#252525]">
+              Cancel
+            </a>
+            <!-- data-bs-target="#Id3" data-bs-toggle="offcanvas" -->
+            <a
+              class="choosetemplate flex items-center gap-[10px] p-[12px_14px] rounded bg-[#10A37F] hover:bg-[#148569] text-base font-normal leading-[20px] text-[#FFFFFF] cursor-pointer ">
+              Choose Template
+              <img src="/public/img/choose-template.svg" alt="">
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Choose template -->
+    <form action="/admin/website/createwebsite" name="createwebsite" method="POST" autocomplete="off"
+      id="createwebsite">
+      <input type="hidden" name="csrf" value="{{.csrf}}">
+      <input type="hidden" name="site_name" class="site_name" value="">
+      <input type="hidden" name="channel_name" class="channel_name" value="">
+      <input type="hidden" name="template_id" id="template_id" value="">
+      <input type="hidden" name="template_name" class="template_name" value="">
+      <input type="hidden" name="template_desc" class="template_desc" value="">
+      <input type="hidden" name="template_img" class="template_img" value="">
+      <input type="hidden" name="template_type" class="template_type" value="">
+      <input type="hidden" name="website_id" class="website_id" value="">
+      <div class="modal right fade " tabindex="-1" id="Id3" aria-labelledby="staticBackdropLabel">
+        <div class="modal-dialog  !w-[902px] modal-dialog-scrollable mx-auto" role="document">
+
+
+          <div class="modal-content b-0 rounded-[4px]">
+
+            <div
+              class="modal-header flex  items-center max-[1300px]:p-[16px] p-[30px_30px_24px] border-b border-[#ECECEC]">
+
+              <img src="/public/img/back.svg" class="cursor-pointer backbtn" alt="">
+
+              <h1 class="text-[20px] font-medium leading-[25px] text-[#252525]">Choose template</h1>
+
+            </div>
+            <div id="template-error" class="hidden mt-2 ml-2 text-[#F26674] text-xs ">*Please choose a template.</div>
+
+            <div class="p-[40px_30px] max-[1300px]:p-[16px] modal-body ">
+
+
+              <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[18px] ">
+                {{range .templatelist}}
+                <div data-name="{{.TemplateName}}" data-type="{{.Type}}"
+                  class="hidden selecttemplate [&.active]:border-[2px] hover:scale-[1.02] transition-all duration-300 [&.active]:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[12px] shadow-[0px_1px_3px_0px_#0000001F] overflow-hidden flex flex-col cursor-pointer">
+                  <div class="h-[150px] overflow-hidden max-sm:h-auto max-sm:aspect-video">
+                    <img src="{{.TemplateImage}}" alt="" class="img h-full w-full object-cover object-top ">
+                  </div>
+                  <div class="p-[16px]">
+                    <div class="flex items-center gap-[10px] justify-between mb-[10px]">
+                      <h3 class="text-base font-semibold leading-[20px] text-[#252525]">{{.TemplateName}}
+                      </h3>
+                      <img src="/public/img/publish-check.svg" class="activeimg hidden" alt="">
+                    </div>
+                    <p class="desc text-[12px] leading-[18px] text-[#575757] font-light line-clamp-3">{{.Description}}
+                    </p>
+                  </div>
+                </div>
+                {{end}}
+
+
+              </div>
+
+
+            </div>
+
+            <div
+              class="modal-footer shadow-[0px_-4px_20px_0px_#0000000F] border-t border-solid border-[#F0F0F0] p-[24px_30px] flex items-center justify-between gap-[16px] max-[1300px]:p-[16px]">
+              <a data-bs-dismiss="modal"
+                class="cancelbtn cursor-pointer p-[14px_24px] border-[1px] border-solid border-[#EFEFEF] bg-[#F7F7F5] hover:bg-[#EFEFEF] rounded-[4px] h-[48px] text-[16px] font-normal leading-[20px] text-[#252525]">
+                Cancel
+              </a>
+
+              <button id="webcreatebtn" type="button"
+                class="flex items-center gap-[10px] p-[12px_24px] rounded bg-[#10A37F] hover:bg-[#148569] text-base font-normal leading-[20px] text-[#FFFFFF] ">
+                Create
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/website/website.js"></script>
+
+    {{template "footerclose" .}}

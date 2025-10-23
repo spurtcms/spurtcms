@@ -31,6 +31,7 @@ var Channelcategories
 var newcatarray = []
 var formid
 var entryctaid
+var editresult
 
 
 var mapentryandmembershiplevel = []
@@ -74,7 +75,7 @@ $(document).ready(async function () {
 
     if (gurl.includes('generatearticle')) {
 
-        var newUrl = '/entries/create/' + channelid + '/';
+        var newUrl = '/admin/entries/create/' + channelid + '/';
 
         window.history.pushState({}, '', newUrl);
     }
@@ -118,9 +119,9 @@ $(document).ready(async function () {
             } else {
 
                 if (pageno == null) {
-                    homeurl = "/entries/entrylist"
+                    homeurl = "/admin/entries/entrylist"
                 } else {
-                    homeurl = "/entries/entrylist?page=" + pageno;
+                    homeurl = "/admin/entries/entrylist?page=" + pageno;
                 }
 
             }
@@ -163,11 +164,12 @@ $(document).ready(async function () {
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
+                languageid = $("#languageid").val()
                 $.ajax({
-                    url: "/entries/draftentry/" + eid,
+                    url: "/admin/entries/draftentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
                     success: function (result) {
                         window.location.href = homeurl;
                     }
@@ -193,15 +195,16 @@ $(document).ready(async function () {
             console.log("pageno", pageno);
 
             if (pageno == null) {
-                homeurl = "/entries/entrylist"
+                homeurl = "/admin/entries/entrylist"
             } else {
-                homeurl = "/entries/entrylist?page=" + pageno;
+                homeurl = "/admin/entries/entrylist?page=" + pageno;
             }
             Getselectedcatagories()
             if (categoryIds.length == 0) {
                 categoryIds.push($("#cat0").attr("data-id"));
             }
-            channelname = $("#slchannel").val()
+            channelname = $("#slchannel").val().trim().replace(/\s+/g, '-').toLowerCase();
+
             if ($.trim(spurtdata.title) === "") {
 
                 spurtdata.title = "Untitled Entries"
@@ -234,11 +237,12 @@ $(document).ready(async function () {
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
+                languageid = $("#languageid").val()
                 $.ajax({
-                    url: "/entries/draftentry/" + eid,
+                    url: "/admin/entries/draftentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
                     success: function (result) {
 
                         var anchor = document.createElement('a');
@@ -270,9 +274,9 @@ $(document).ready(async function () {
             }
 
             if (pageno == null) {
-                homeurl = "/entries/entrylist"
+                homeurl = "/admin/entries/entrylist"
             } else {
-                homeurl = "/entries/entrylist?page=" + pageno;
+                homeurl = "/admin/entries/entrylist?page=" + pageno;
             }
             channelname = $("#slchannel").val()
             Getselectedcatagories()
@@ -324,12 +328,14 @@ $(document).ready(async function () {
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
                 orderindex = $("#orderindex").val()
+                languageid = $("#languageid").val()
+
 
                 $.ajax({
-                    url: "/entries/publishentry/" + eid,
+                    url: "/admin/entries/publishentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
                     success: function (result) {
                         window.location.href = homeurl;
                     }
@@ -346,6 +352,9 @@ $(document).ready(async function () {
         })
     }
     var url = window.location.href;
+
+    console.log("url:", url);
+
 
 
     var pageurl = window.location.search
@@ -367,216 +376,189 @@ $(document).ready(async function () {
 
     if (channelname == "") {
         if (pageno == null) {
-            editurl = "/entries/editentrydetails/" + channelname + "/" + id
+            editurl = "/admin/entries/editentrydetails/" + channelname + "/" + id
         } else {
-            editurl = "/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
+            editurl = "/admin/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
         }
 
     } else {
 
         if (pageno == null) {
-            editurl = "/entries/editentrydetail/" + id
+            editurl = "/admin/entries/editentrydetail/" + id
         } else {
-            editurl = "/entries/editentrydetail/" + id + "?page=" + pageno
+            editurl = "/admin/entries/editentrydetail/" + id + "?page=" + pageno
         }
     }
 
-    if (/^\d+$/.test(id)) {
+    if (url.includes('edit') || url.includes("edits")) {
+        if (/^\d+$/.test(id)) {
 
-        $.ajax({
-            url: editurl,
-            type: "GET",
-            dataType: "json",
-            data: { "id": id, csrf: $("input[name='csrf']").val() },
-            success: function (result) {
+            $.ajax({
+                url: editurl,
+                type: "GET",
+                dataType: "json",
+                data: { "id": id, csrf: $("input[name='csrf']").val() },
+                success: function (result) {
+                    editresult =result
+                    var currentDate = new Date();
+                    var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
-                var currentDate = new Date();
-                var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
 
-
-                $('#metatitle').val(result.Entries.MetaTitle)
-                $('#metadesc').val(result.Entries.MetaDescription)
-                $('#metakey').val(result.Entries.Keyword)
-                $('#metaslug').val(result.Entries.Slug)
-                Channelid = result.Entries.ChannelId
-                $("#tagname").val(result.Entries.Tags)
-                $("#extxt").val(result.Entries.Excerpt)
-                $("#orderindex").val(result.Entries.OrderIndex)
-                formid = result.Entries.CtaId
-                if (result.Entries.Author != "") {
-                    $("#author").val(result.Entries.Author)
-                }
-                if (result.Createtime != "") {
-
-                    const date = new Date(result.Createtime);
-                    function formatDate(date) {
-                        const year = date.getFullYear();
-                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-                        const day = String(date.getDate()).padStart(2, '0');
-                        const hours = String(date.getHours()).padStart(2, '0');
-                        const minutes = String(date.getMinutes()).padStart(2, '0');
-
-                        return `${year}-${month}-${day} ${hours}:${minutes}`;
+                    $('#metatitle').val(result.Entries.MetaTitle)
+                    $('#metadesc').val(result.Entries.MetaDescription)
+                    $('#metakey').val(result.Entries.Keyword)
+                    $('#metaslug').val(result.Entries.Slug)
+                    Channelid = result.Entries.ChannelId
+                    $("#tagname").val(result.Entries.Tags)
+                    $("#extxt").val(result.Entries.Excerpt)
+                    $("#orderindex").val(result.Entries.OrderIndex)
+                    formid = result.Entries.CtaId
+                    if (result.Entries.Author != "") {
+                        $("#author").val(result.Entries.Author)
                     }
-                    const datetime = formatDate(date);
+                    if (result.Createtime != "") {
 
-                    $("#cdtime").val(datetime)
+                        const date = new Date(result.Createtime);
+                        function formatDate(date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
 
-                } else {
+                            return `${year}-${month}-${day} ${hours}:${minutes}`;
+                        }
+                        const datetime = formatDate(date);
 
-                    $("#cdtime").val(formattedDate)
+                        $("#cdtime").val(datetime)
 
-                }
+                    } else {
 
-                if (result.Publishedtime != "") {
+                        $("#cdtime").val(formattedDate)
 
-                    const date = new Date(result.Publishedtime);
-                    function formatDate(date) {
-                        const year = date.getFullYear();
-                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-                        const day = String(date.getDate()).padStart(2, '0');
-                        const hours = String(date.getHours()).padStart(2, '0');
-                        const minutes = String(date.getMinutes()).padStart(2, '0');
-
-                        return `${year}-${month}-${day} ${hours}:${minutes}`;
                     }
-                    const datetime = formatDate(date);
+
+                    if (result.Publishedtime != "") {
+
+                        const date = new Date(result.Publishedtime);
+                        function formatDate(date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                            return `${year}-${month}-${day} ${hours}:${minutes}`;
+                        }
+                        const datetime = formatDate(date);
 
 
 
-                    $("#publishtime").val(datetime)
+                        $("#publishtime").val(datetime)
 
 
-                } else {
+                    } else {
 
-                    $("#publishtime").val(formattedDate)
+                        $("#publishtime").val(formattedDate)
 
-                }
-                if (result.Entries.ReadingTime != 0) {
+                    }
+                    if (result.Entries.ReadingTime != 0) {
 
-                    $("#readingtime").val(result.Entries.ReadingTime)
+                        $("#readingtime").val(result.Entries.ReadingTime)
 
-                }
-                if (result.Entries.CategoriesId != "") {
-                    $(".sl-list").removeClass("hidden")
-                    newcatarray = result.Entries.CategoriesId.split(",")
+                    }
+                    if (result.Entries.CategoriesId != "") {
+                        $(".sl-list").removeClass("hidden")
+                        newcatarray = result.Entries.CategoriesId.split(",")
 
-                }
-                if (result.Entries.MemebrshipLevelIds != "") {
-                    mapentryandmembershiplevel = result.Entries.MemebrshipLevelIds.split(",")
+                    }
+                    if (result.Entries.MemebrshipLevelIds != "") {
+                        mapentryandmembershiplevel = result.Entries.MemebrshipLevelIds.split(",")
 
-                }
+                    }
 
 
-                for (let x of mapentryandmembershiplevel) {
+                    for (let x of mapentryandmembershiplevel) {
 
-                    $('.mapmembershiplevels').each(function () {
+                        $('.mapmembershiplevels').each(function () {
 
-                        const $this = $(this);
+                            const $this = $(this);
 
-                        if ($this.attr('data-id') === x) {
+                            if ($this.attr('data-id') === x) {
 
-                            $this.prop('checked', true);
+                                $this.prop('checked', true);
 
+                            }
+
+
+                        });
+                    }
+
+                    if (result.Entries.CtaId != 0) {
+
+                        entryctaid = result.Entries.CtaId
+                        console.log("ctacheck", result.Entries.CtaId)
+
+                    }
+
+                    for (const [index, y] of result.CategoryName.entries()) {
+
+                        if (newcatarray.length != 0) {
+                            $('.itemselecteddiv').removeClass('hidden')
+                            $('#catcount').text(newcatarray.length)
                         }
 
 
-                    });
-                }
-
-                if (result.Entries.CtaId != 0) {
-
-                    entryctaid=result.Entries.CtaId
-                    console.log("ctacheck",result.Entries.CtaId)
-                 
-                }
-
-                for (const [index, y] of result.CategoryName.entries()) {
-
-                    // var div = ""
-
-                    // var id = ""
-
-
-                    //     div += `<li class="p-[9px_24px] border-b border-[#EDEDED] sl-cat sl-cat` + index + `" data-id="` + index + `">
-                    //    <div class="chk-group chk-group-label"> <input type="checkbox" id="Check` + index + `" class="hidden peer " checked data-id="` + index + `">
-                    //                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
-                    //                 before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
-                    //                     ">`
-
-                    //     div += `<li class="p-[9px_24px] border-b border-[#EDEDED] sl-cat sl-cat` + index + `" data-id="` + index + `">
-                    //    <div class="chk-group chk-group-label"> <input type="checkbox" id="Check` + index + `" class="hidden peer " checked data-id="` + index + `">
-                    //                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
-                    //                 before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
-                    //                     ">`
-
-                    // for (let x of y.Categories) {
-
-                    //     div += `<span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
-                    // after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
-                    // last-of-type:after:hidden" data-id="` + x.Id + `"> ` + x.Category + `</span>`
-
-                    // id = x.Id
-                    // }
-                    //         div += `
-                    //    <input type="hidden" data-id="`+ id + `" class="cat-val">
-                    //     </li>`
-
-                    // id = x.Id
-                    // }
-                    //         div += `
-                    //    <input type="hidden" data-id="`+ id + `" class="cat-val">
-                    //     </li>`
-
-
-
-                    if (newcatarray.length != 0) {
-                        $('.itemselecteddiv').removeClass('hidden')
-                        $('#catcount').text(newcatarray.length)
                     }
+                    if (result.Entries.TblChannelEntryField != null) {
+                        result.Entries.TblChannelEntryField.forEach(function (field) {
+                            console.log(field.FieldName,"ggggg")
+                            $(`#${field.FieldId}`).val(field.FieldValue)
+                            $(`#${field.FieldId}`).attr('data-id', field.Id)
 
-
-                }
-                if (result.Entries.TblChannelEntryField != null) {
-                    result.Entries.TblChannelEntryField.forEach(function (field) {
-                        $(`#${field.FieldId}`).val(field.FieldValue)
-                        $(`#${field.FieldId}`).attr('data-id', field.Id)
-                    })
-                }
-                var radval = $('.radioval').val()
-                $('.radbtn').each(function () {
-                    if ($(this).next('label').text() == radval) {
-                        $(this).prop('checked', true)
+                            if (field.FieldName=="File Upload"){
+                                 console.log("qqqqq")
+                                $('.fileuploaddiv').addClass('hidden')
+                                $('.zip-preview').removeClass('hidden')
+                                
+                            }
+                        })
                     }
-                })
-
-                var selectval = $('.fieldid').val()
-                $('#selectval').text(selectval)
-                var cheval = $('.checkfieldid').val()
-
-                if (cheval != "" && cheval != undefined) {
-                    var values = cheval.split(','); // Split the string by comma
-                    for (var i = 0; i < values.length; i++) {
-                        checkboxarr.push(values[i]); // Push each value to the array
-                    }
-
-                    $('.checkboxdiv').each(function (index) {
-
-                        if (cheval.includes($(this).find('label').text())) {
-                            $(this).find('input').prop('checked', true);
+                    var radval = $('.radioval').val()
+                    $('.radbtn').each(function () {
+                        if ($(this).next('label').text() == radval) {
+                            $(this).prop('checked', true)
                         }
                     })
-                    $('.checkboxdiv').each(function (index) {
 
-                        if (cheval.includes($(this).find('input').attr('data-id'))) {
-                            $(this).find('input').prop('checked', true);
+                    var selectval = $('.fieldid').val()
+                    $('#selectval').text(selectval)
+                    var cheval = $('.checkfieldid').val()
+
+                    if (cheval != "" && cheval != undefined) {
+                        var values = cheval.split(','); // Split the string by comma
+                        for (var i = 0; i < values.length; i++) {
+                            checkboxarr.push(values[i]); // Push each value to the array
                         }
-                    })
-                }
-            }
-        })
 
+                        $('.checkboxdiv').each(function (index) {
+
+                            if (cheval.includes($(this).find('label').text())) {
+                                $(this).find('input').prop('checked', true);
+                            }
+                        })
+                        $('.checkboxdiv').each(function (index) {
+
+                            if (cheval.includes($(this).find('input').attr('data-id'))) {
+                                $(this).find('input').prop('checked', true);
+                            }
+                        })
+                    }
+                }
+            })
+
+        }
     }
     // Allow only five enter key 
     $('#metadesc').on('input', function () {
@@ -629,13 +611,41 @@ $(document).ready(async function () {
 
 })
 
+
+$(document).on('click','.tab-togg3',function(){
+ 
+ 
+   var url = window.location.href;
+     if (url.includes('edit') || url.includes("edits")) {
+    
+  if (editresult.Entries.TblChannelEntryField.length > 0) {
+ 
+ 
+                        editresult.Entries.TblChannelEntryField.forEach(function (field) {
+                           
+                            
+                            $(`#${field.FieldId}`).val(field.FieldValue)
+                            $(`#${field.FieldId}`).attr('data-id', field.Id)
+                            
+                            if (field.FieldName=="File Upload"){
+                                
+                                $('.fileuploaddiv').addClass('hidden')
+                                $('.zip-preview').removeClass('hidden')
+                                $('.uploaded-filepath').val(field.FieldValue)
+                                
+                            }
+                        })
+                    }
+                }
+})
+ 
 // New code 
 $(document).on("click", "#sl-chn", function () {
     $("#chn-list").toggleClass("show")
 })
 
 
-$(document).on('click','.tab-togg55',function(){
+$(document).on('click', '.tab-togg55', function () {
 
     $('.ctacard').each(function () {
         if ($(this).attr('data-id') == entryctaid) {
@@ -658,6 +668,8 @@ $(document).on('click', '.select-chn', function () {
     $(".sl-list").addClass("hidden")
     $(".selected-cat").empty()
     $("#chn-list").removeClass("show")
+    $("#defaultChannel").modal('hide')
+    $("#defaultChannel").removeClass("show")
 
     chanid = $(this).attr('data-id')
 
@@ -672,7 +684,7 @@ $(document).on('click', '.select-chn', function () {
 
     $('#catcount').text("")
     $.ajax({
-        url: "/entries/channelfields/" + chanid,
+        url: "/admin/entries/channelfields/" + chanid,
         type: "GET",
         dataType: "json",
         data: { "id": chanid },
@@ -701,7 +713,7 @@ $(document).on('click', '.select-chn', function () {
                    <div class="chk-group chk-group-label">
                   <input type="checkbox" id="Check` + index + `" class="hidden peer selectcheckbox" data-id="` + index + `">
                                                       <label for="Check` + index + `" class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
-                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
+                                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  
                                     ">`
 
                     for (let x of y.Categories) {
@@ -972,7 +984,7 @@ function Getseodetails() {
 
 function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional fields based on channel 
     for (let x of additionalfields) {
-
+        console.log(x.MasterFieldId, "checkdifdfdf")
         if (x.MasterFieldId == 2 || x.MasterFieldId == 7) {
 
             $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
@@ -1003,6 +1015,13 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                                 <input type="datetime-local" placeholder="Text Here" class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:font-normal placeholder:text-[#B2B2B2] date" id="${x.FieldId}">
                           <label class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                                 </div>`)
+        }
+        if (x.MasterFieldId == 17) {
+            $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
+                <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
+                <input type="number" placeholder="Enter Here" class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:font-normal placeholder:text-[#B2B2B2]" id="${x.FieldId}">
+                                                    <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
+                </div>`)
         }
         if (x.MasterFieldId == 10) {
 
@@ -1076,9 +1095,101 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                                 <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px] " data-id="${x.FieldId}">${x.FieldName}</label>${txt}  <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*` + languagedata?.Channell?.errmsg + `</label></div>
                                 `)
         }
+
+        if (x.MasterFieldId == 15) {
+
+
+            $(".add-fl").append(` <div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
+                               <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
+                               <input type="hidden" id="${x.FieldId}" class="uploaded-filepath" name="uploadedFilePath">
+
+                                <div class="fileuploaddiv btn-group w-full block">
+                                    <button class="p-[8px_12px] w-full flex justify-center items-center relative  rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid"
+                                        >
+                                        <img src="/public/img/upload-folder.svg" alt="">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#616161]">Upload File</p>
+                                        <input type="file" 
+                                        class="fileupload absolute w-full h-full opacity-0 text-[0]" accept=".zip">
+                                       
+                                    </button>
+                                     
+                                 <p class="file-error mt-2 text-[#F26674] text-xs hidden"></p>
+                                </div>
+                                 <div class="zip-preview hidden flex items-center space-x-[8px] mb-[8px] bg-[#FBFBFB] px-3 py-2 mt-2 rounded w-full border-[#E6E6E6] border border-solid">
+                                    <div class="w-[32px] h-[32px] rounded  grid place-items-center min-w-[32px]">
+                                        <img src="/public/img/Export file icon.svg" alt="">
+                                    </div>
+                                    <div>
+                                        <h4 class="text-[13px] font-normal leading-[20px] text-[#262626] !me-auto">.zip
+                                        </h4>
+                                       
+                                    </div>
+                                    <button class="flex items-center ms-auto cursor-pointer select-none text-dark">
+                                        <img src="/public/img/close-toast.svg" alt="">
+                                    </button>
+                                </div>
+                            </div>`)
+        }
     }
 }
 
+
+//file upload function of additional field//
+$(document).on('change', '.fileupload', function () {
+    var file = this.files[0];
+   console.log(file,"fileeee")
+ $('.uploaded-filepath').val("")
+    if (!file) return;
+
+    var ext = file.name.split('.').pop().toLowerCase();
+    if (ext !== 'zip') {
+        $('.file-error').removeClass("hidden").text('Only .zip files are allowed.');
+        this.value = '';
+        return false;
+    }
+
+    var maxSize = 100 * 1024 * 1024; // 100 MB
+    if (file.size > maxSize) {
+        $('.file-error').removeClass("hidden").text('Zip file must be 100 MB or less.');
+        this.value = '';
+        return false;
+    }
+  
+
+  
+    $('.file-error').addClass("hidden").text('')
+        $(this).parents('.btn-group').addClass('hidden')
+    $('.zip-preview').removeClass("hidden")
+
+              var formData = new FormData();
+            formData.append('documentdata', file);
+
+            $.ajax({
+                url: '/uploadb64document',
+                method: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+
+
+                    console.log(response,"responsedatadfdfd")
+
+                    const urlObj = new URL(response.documentpath);
+
+                    const finalpath = urlObj.pathname + urlObj.search;
+
+                    $('.uploaded-filepath').val(finalpath)
+                }
+            })
+
+});
+$(document).on('click', '.zip-preview button', function () {
+    var $preview = $(this).closest('.zip-preview');
+    $preview.addClass('hidden')
+    $('.fileupload').val('');
+     $preview.siblings('.btn-group').removeClass('hidden')
+});
 // field dropdown 
 $(document).on('click', '.drop-open', function () {
 
@@ -1252,7 +1363,7 @@ $(document).on("click", "#field-config", function () {
     orderindex = 1
     fiedlvalue = []
     $.ajax({
-        url: '/channels/getfields',
+        url: '/admin/channels/getfields',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1297,7 +1408,7 @@ $(document).on("keyup", "#author", function () {
 
     if (keyword != "") {
 
-        fetch(`/entries/userdetails/?keyword=${keyword}`, {
+        fetch(`/admin/entries/userdetails/?keyword=${keyword}`, {
             method: "GET"
         })
             .then(response => {
@@ -1439,7 +1550,7 @@ $(document).on("click", '#field-update', function () {
 
         $.ajax({
 
-            url: '/channels/Updatechannelfields',
+            url: '/admin/channels/Updatechannelfields',
             type: 'post',
             dataType: 'json',
             async: false,
@@ -1483,6 +1594,8 @@ $(document).on("click", '#field-update', function () {
 })
 
 function bindData(fields) {
+
+    
     fields.forEach(function (field) {
 
         $("#" + field.FieldId).val(field.FieldValue);
@@ -1588,7 +1701,7 @@ $(document).on('click', '#cancel-entry', function () {
     $('#content').text("Your changes will be lost. Do you wish to continue?");
     $(".deltitle").text("Discard Unsaved Entry?")
     $("#delid").text("Continue")
-    $('#delid').attr('href', '/entries/entrylist');
+    $('#delid').attr('href', '/admin/entries/entrylist');
     $("#dynamicImage").attr('src', "/public/img/Cancel.svg")
 
 })
@@ -1729,8 +1842,8 @@ $(document).ready(function () {
                 <p style="margin-left:36px;">- Click 'Save' to save it as draft.</p><br>
                 <p style="margin-left:36px;">- Click 'Cancel' to proceed without saving.</p>
             `);
-            
-              
+
+
             $('.deltitle').text("Exit Entry")
             $("#delid").text("Save")
             $("#delid").addClass("featurebtn")
@@ -1743,7 +1856,8 @@ $(document).ready(function () {
 
             var newUrl = currentUrl.substring(0, index);
 
-            $("#dltCancelBtn").attr('href', newUrl + tablurl)
+
+            $("#dltCancelBtn").attr('href', tablurl)
             $('#dltCancelBtn').attr('data-save', 'save');
         }
 
@@ -1752,6 +1866,24 @@ $(document).ready(function () {
 
 });
 
-$(document).on('click','.membershipclose',function(){
+$(document).on('click', '.membershipclose', function () {
     $('.tabclose').show()
 })
+
+$(document).on('click', '.languageselect', function () {
+    let id = $(this).data('id');
+
+    $("#languageid").val(id)
+
+    let languagename = $(this).text()
+
+    console.log("languagename::", languagename);
+
+    $("#selectedLanguage").text(languagename)
+
+    // Close the Bootstrap dropdown properly
+    const dropdownToggle = $(this).closest('.dropdown').find('[data-bs-toggle="dropdown"]')[0];
+    const dropdownInstance = bootstrap.Dropdown.getInstance(dropdownToggle)
+        || new bootstrap.Dropdown(dropdownToggle);
+    dropdownInstance.hide();
+});

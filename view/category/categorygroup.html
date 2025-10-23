@@ -30,7 +30,7 @@
                 <img src="/public/img/search-icon-active.svg" alt="search"
                     class="hidden group-hover:block hovericon searchopen">
             </a>
-            <form action="/categories/" method="get" class="filterform " autocomplete="off">
+            <form action="/admin/categories/" method="get" class="filterform " autocomplete="off">
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="" value="{{.Filter.Keyword}}"
                     class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0  absolute right-0 w-[calc(100%-36px)] h-full block  {{if eq .Searchtrue true}} p-[0_24px_0_0] {{else}} p-0 {{end}}">
                 {{if eq .Searchtrue true}}
@@ -149,12 +149,13 @@
                                         before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
                             </div>
                         </td>
+                        {{$Id := .Id}}
 
                         <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
                             <div class="flex gap-[8px] items-center justify-start">
-                                <p class="text-[#262626] font-normal text-xs mb-0  ">
-                                    {{.CategoryName}}
-                                </p>
+                                <a href="/admin/categories/addcategory/{{$Id}}" class="text-[#262626] font-normal text-xs mb-0 ">
+                                    <span>{{.CategoryName}}</span>
+                                </a>
                             </div>
                         </td>
                         <td
@@ -165,8 +166,6 @@
                             {{.DateString}}
                         </td>
 
-                        {{$Id := .Id}}
-
 
                         {{range $MENU.TblModule}}
                         {{if eq .ModuleName "Categories"}}
@@ -176,10 +175,9 @@
                         {{if eq .DisplayName "View"}}
 
                         <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
-                            <a href="/categories/addcategory/{{$Id}}"
-                                class="bordered-btn-normal">
-                                    <img src="/public/img/plus.svg" alt="..." />
-                                    <span>{{$Translate.Categoryy.Category}}</span>
+                            <a href="/admin/categories/addcategory/{{$Id}}" class="bordered-btn-normal">
+                                <img src="/public/img/plus.svg" alt="..." />
+                                <span>{{$Translate.Categoryy.Category}}</span>
                             </a>
 
                         </td>
@@ -402,7 +400,7 @@
     <!--Add Category-->
     <div class="modal right fade" id="categoryGrp" tabindex="-1" data-bs-backdrop="static"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <form action="/categories/newcategory" name="createcategory" method="POST" id="category_form">
+        <form action="/admin/categories/newcategory" name="createcategory" method="POST" id="category_form">
             <input type="hidden" name="csrf" value="{{.csrf}}">
             <input type="hidden" name="category_id" id="category_id" value="">
             <input type="hidden" name="catpageno" id="catpageno" value="">

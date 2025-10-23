@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+
+
+
+</head>
+
+<body>
+
+    {{$template_name:=.template_name}}
+
+    <section
+        class="bg-[#FAFAFA] min-h-[calc(100vh-120px)] p-[26px_16px] flex flex-col max-md:min-h-[calc(100vh-68px)] max-[1300px]:p-[16px] max-[1300px]:min-h-[calc(100vh-79px)]">
+        <div class="w-[90%] mx-auto max-[1400px]:w-full max-[1600px]:mb-auto mb-0">
+            <ul class="flex space-x-1 mb-[24px] items-center">
+                <li><a href="/ "><img alt="home"
+                            src="/websites/public/img/home.svg"></a></li>
+                <li><a href="#"><img alt="arrow" src="/websites/public/img/crumb-arrow.svg"></a>
+                </li>
+                <li>
+                    <p class="text-[14px] font-semibold leading-4 text-[#120B14] ">Login</p>
+                </li>
+            </ul>
+        </div>
+        <div class="w-[90%] mx-auto max-[1400px]:w-full  mb-auto">
+            <div class="max-w-[394px] mx-auto">
+                <h1
+                    class="text-[36px] font-semibold leading-[43px] text-[#1D1D1F] text-center mb-[16px] max-sm:text-[28px] max-[1300px]:mb-[10px]">
+                    Log in to your account</h1>
+                <p
+                    class="text-base font-medium leading-[17px] text-[#83838D] text-center mb-[24px] max-[1300px]:mb-[16px]">
+                    Welcome back! Please enter your details.</p>
+                <div class="bg-[#FFFFFF] border border-[#E9E9E9] p-[30px] rounded-[12px]">
+                    <form action="/singin " method="post"
+                        name="signinform" id="signinform">
+                        <div class="mb-[24px] last-of-type:mb-0 relative"><label
+                                class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">Email</label><input
+                                placeholder="Enter your Email" name="emailid"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  border rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] text-black placeholder:text-[#1516188F] border-[#00000029] "
+                                id="email" type="text">
+                            <p id="em-error" class="text-xs text-[#F26674] mt-2 error logScr" style="display: none;">
+                                *
+                                You are not registered with us!</p>
+                            <p id="em-error1" class="text-xs text-[#F26674] mt-2 error logScr" style="display: none;">
+                                * This account is inactive please contact the admin!</p>
+                        </div>
+                        <div class="mb-[10px] last-of-type:mb-0 relative"><label
+                                class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">Password</label>
+                            <div class="relative password flex items-center"><input placeholder="Enter your Password"
+                                    name="password"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  border rounded-[4px] h-[42px] p-[6px_10px] outline-none block w-full text-[14px] font-normal leading-[16px] text-black placeholder:text-[#1516188F] border-[#00000029] "
+                                    id="password" type="password"><button class="absolute right-[10px] p-0" id="eyeicon"
+                                    type="button"><img alt="password"
+                                        src="/websites/public/img/hide-password.svg"></button>
+
+                            </div>
+                            <p id="pas-error" class="text-xs text-[#F26674] mt-2 error logScr" style="display: none;">
+                                *
+                                Invalid Password</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a id="forgetpassword"
+                                class="text-[12px] font-semibold leading-[14px] hover:underline text-[#1D1D1F]"
+                                href="/forget-password ">
+                                Forgot Password
+                            </a>
+                        </div><button id="signintbn" type="button"
+                            class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[32px] rounded-[4px] text-center hover:bg-[#28282c] max-[1300px]:mt-[16px]">
+                            Sign
+                            In</button>
+                    </form>
+                </div>
+                <div class="flex items-center space-x-[4px] mt-[30px] justify-center max-[1300px]:mt-[16px]">
+                    <p class="text-[12px] font-medium leading-[14px] text-[#1516188F]">Don't have an account?</p><a
+                        class="text-[12px] font-semibold leading-[14px] hover:underline text-[#1D1D1F]"
+                        href="/signup ">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/websites/common/assets/js/signin.js"></script>
+
+    <script src="/websites/common/assets/js/common.js"></script>
+
+</body>
+
+
+</html>

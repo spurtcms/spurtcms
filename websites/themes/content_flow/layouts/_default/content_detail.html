@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body class="font-sans">
+    {{$template:=.template_name}}
+    <main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]">
+        <header class="flex items-center justify-between md:py-8 sm:py-4 lg:px-0 px-4 py-4">
+
+            {{if .settingsdetail.SiteLogoPath}}
+            <a href="/ "><img alt="spurtCMS Profile Image"
+                    fetchpriority="high" width="32" height="32" decoding="async" data-nimg="1" class="w-48 md:w-auto"
+                    style="color:transparent" src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+            {{else}}
+            <a href="/ "><img alt="spurtCMS Profile Image"
+                    fetchpriority="high" width="32" height="32" decoding="async" data-nimg="1" class="w-48 md:w-auto"
+                    style="color:transparent" src="/websites/public/img/Spurt-logo.svg"></a>
+            {{end}}
+            <!-- <a class="cursor-pointer"> <img src="/websites/public/img/dark.svg"></a> -->
+
+        </header>
+        <div class="md:lg-0 px-4">
+            <nav aria-label="breadcrumb">
+                <ol class="flex flex-wrap space-x-2 items-center mb-8 dark:text-white"><a
+                        href="/ ">
+                        <li>
+                            <p class="text-xl text-black  dark:text-white flex justify-start gap-2 items-center"> <img
+                                    src="/websites/public/img/home.svg" class="h-5">Home</p>
+                        </li>
+                    </a>
+                    <li> <img src="/websites/public/img/arrow-breadcrumbs.svg"> </li>
+                    <li class="text-black text-xl line-clamp-1 dark:text-white w-80" aria-current="page">
+                        {{.entrydetail.Title}}</li>
+                </ol>
+            </nav>
+
+            <div class="flex justify-start flex-wrap items-center gap-x-4">
+                <p class="text-base text-[#B6B6B7]">{{.entrydetail.CreatedDate}}</p>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300">
+                        {{if ne .entrydetail.AuthorDetail.ProfileImagePath ""}}
+                        <img alt="Picture of the author" loading="lazy" width="32" height="32" decoding="async"
+                            data-nimg="1" srcset="" src="{{.entrydetail.AuthorDetail.ProfileImagePath}}"
+                            class="h-[34px] rounded-3xl">
+                        {{else}}
+                        <span
+                            class="text-[14px] text-[#222222] font-normal">{{.entrydetail.AuthorDetail.NameString}}</span>
+                        {{end}}
+                    </div>
+                    <h5 class="text-primary text-base font-normal text-[#2facd6] ">
+                        {{.entrydetail.AuthorDetail.Username}}</h5>
+                </div>
+                <div class="px-2 py-1 text-base text-[#2FACD6] bg-[#F1FBFF] rounded-md">{{.entrydetail.CategoryGroup}}
+                </div>
+            </div>
+
+            <div id="description">{{.content}}</div>
+
+            {{if .filteredEntries}}
+
+            <div class="border-b border-gray-200 block mb-8 mt-10"></div>
+            <h1 class="text-[2rem] font-bold text-black mb-10"> More Stories </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8 mb-8">
+
+
+                {{range $i, $entry := .filteredEntries}}
+                {{if lt $i 2}}
+                <div class="flex flex-col"><a
+                        href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} ">
+                        <div class="mb-6 block h-[236px]"><img
+                                src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}"
+                                alt="spurtCMS card image" width="1000" height="1000" layout="responsive" class="h-full">
+                        </div>
+                        <h1
+                            class="text-[2rem] font-bold  text-black dark:text-white hover:underline line-clamp-1 overflow-hidden  leading-[2.625rem] ">
+                            {{ $entry.Title}}
+                        </h1>
+                    </a>
+                    <p class="text-base text-black dark:text-white my-3">{{$entry.CreatedDate}} </p>
+                    <div class="text-lg text-current  font-light line-clamp-3 mb-3 desc">
+                        <div
+                            class="dark:text-white text-black  text-lg font-light line-clamp-3 overflow-hidden mb-3 desc ">
+                            {{$entry.Description}}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-x-2 mt-auto">
+                        <div
+                            class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
+                            {{if ne $entry.ProfileImagePath ""}}
+                            <img src="{{ $entry.ProfileImagePath}}" alt="spurtCMS Profile Image" width="32" height="32">
+                            {{else}}
+                            <span class="text-[14px] text-[#222222] font-normal">{{$entry.NameString}}</span>
+                            {{end}}
+                        </div>
+                        <div class=""><a class="text-[#0d6efd] text-base"> {{$entry.Username}} </a></div>
+                    </div>
+                </div>
+                {{end}}
+                {{end}}
+
+
+            </div>
+            {{end}}
+
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+
+
+
+    <section>
+        <div class="mx-auto mb-[105px] max-[998px]:mb-[28px] px-[16px] max-w-[1295px]">
+            <h2 class="font-normal text-[66px] max-[500px]:text-[28px] max-[998px]:text-[48px]"><span
+                    class="font-[700]">Welcome to a Space Where Ideas Take Shape!</span> From decoding tech trends to capturing your latest travel tales, <span class="font-[700]">culture
+                    focused</span> this blog is where stories find their voice.</h2>
+        </div>
+        {{if gt (len .entries) 0}}
+        <div class="bg-[#EFFC06]">
+            <div class="mx-auto px-[16px] max-w-[1295px]">
+                <div class="flex max-[550px]:flex-col items-start gap-[45px] pb-[77px] max-[700px]:pb-[38px]">
+
+                    {{with index .entries 0}}
+                    <div class="flex flex-col pr-[15px] w-full max-w-[541px]">
+                        <div class="mb-[14px] w-full max-w-[526px]">
+                            <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class="w-[526px] h-[420px]"
+                                alt="">
+                        </div>
+                        <div class="flex flex-col items-start">
+                            <p class="mb-[14px] text-[#120B14] text-[18px] text-normal">{{.CreatedDate}} by
+                                @{{.Username}}
+                                in
+                                #{{.CategoryGroup}}</p>
+                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                                class="mb-[24px] font-medium text-[#120B14] text-[44px] max-[500px]:text-[28px] hover:underline leading-[54px] max-[500px]:leading-normal">
+                                {{.Title}}
+                            </a>
+                            <h6 class="font-normal text-[#120B14] text-[22px] line-clamp-3">{{.Description}}</h6>
+                        </div>
+                    </div>
+                    {{end}}
+
+                    <div
+                        class="gap-[60px] gap-y-[58px] max-[500px]:gap-y-[28px] grid grid-cols-2 max-[800px]:grid-cols-1 pt-[4.0625rem] max-[800px]:pt-0">
+                        {{if gt (len .entries) 1}}
+                        {{with index .entries 1}}
+                        <div class="flex flex-col items-start">
+                            <div class="mb-[12px] max-w-[326px] max-[550px]:max-w-full">
+                                <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
+                            </div>
+                            <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
+                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                               {{.Title}}
+                            </a>
+                        </div>
+                        {{end}}
+                        {{end}}
+                         {{if gt (len .entries) 2}}
+                        {{with index .entries 2}}
+                        <div class="flex flex-col items-start">
+                            <div class="mb-[12px] max-w-[326px] max-[550px]:max-w-full">
+                                <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
+                            </div>
+                            <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
+                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                                {{.Title}}
+                            </a>
+                        </div>
+                        {{end}}
+                        {{end}}
+                         {{if gt (len .entries) 3}}
+                        {{with index .entries 3}}
+                        <div class="flex flex-col items-start">
+                            <div class="mb-[12px] max-w-[326px] max-[550px]:max-w-full ">
+                                <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
+                            </div>
+                            <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
+                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                                 {{.Title}}
+                            </a>
+                        </div>
+                        {{end}}
+                        {{end}}
+                         {{if gt (len .entries) 4}}
+                        {{with index .entries 4}}
+                        <div class="flex flex-col items-start">
+                            <div class="mb-[12px] max-w-[326px] max-[550px]:max-w-full  ">
+                                <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
+                            </div>
+                            <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
+                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                                {{.Title}}
+                            </a>
+                        </div>
+                        {{end}}
+                        {{end}}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{else}}
+
+        {{end}}
+        <div class="relative bg-image">
+            <div class="top-0 left-0 absolute bg-[#120b1461] w-full h-full"></div>
+            <div
+                class="relative z-20 flex max-[800px]:flex-col justify-between items-end gap-[18px] mx-auto px-[16px] max-[500px]:py-[32px] pt-[69px] pb-[58px] max-w-[1295px]">
+                <div>
+                    <h4 class="mb-[47px] font-medium text-[46px] text-white max-[500px]:text-[28px]">Join <span
+                            class="font-[700]">Myoan</span> members. Register for free, and upgrade when you love
+                        it.</h4>
+
+                    <div class="w-full max-w-[545px] ">
+                        <ul
+                            class="gap-[40px] gap-y-[5px] grid grid-cols-2 max-[550px]:grid-cols-1 max-[550px]:pl-[2rem] list-disc list-inside">
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">Join
+                                    1000+ happy
+                                    members.</a>
+                            </li>
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">Weekly
+                                    email
+                                    newsletter</a>
+                            </li>
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">Access
+                                    to
+                                    comments</a>
+                            </li>
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">Free
+                                    forever</a>
+                            </li>
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">Access
+                                    to
+                                    comments</a>
+                            </li>
+                            <li class="text-[#120B14] hover:text-white group">
+                                <a href="#"
+                                    class="group-hover:text-white font-normal text-[#120B14] text-[18px] no-underline">No
+                                    spam ever, we
+                                    promise!</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pb-[8px]">
+                    <a href="/membership "
+                        class="flex items-center bg-[#F33151] hover:bg-[#f15e76] px-[46px] max-[500px]:px-[23px] rounded-[50px] max-w-[465px] h-[79px] font-medium text-[24px] text-white max-[500px]:text-[18px] whitespace-nowrap">
+                        Sign up for free
+                    </a>
+                </div>
+
+            </div>
+        </div>
+         {{if gt (len .entries) 5}}
+        <div class="mx-auto mb-[105px] px-[16px] pt-[85px] max-w-[1295px]">
+             
+            <div class="border-[#1516183D] pb-[37px] border-b border-solid">
+                <h3 class="font-[700] text-[#120B14] text-[46px]">What’s New?</h3>
+            </div>
+        
+            <div class="mb-[99px] max-[500px]:mb-[38px]">
+                {{if gt (len .entries) 5}}
+                {{range $i,$entry := .entries}}
+                 {{ if and (ge $i 5) (le $i 10) }}
+                <div
+                    class="flex max-[600px]:flex-col-reverse justify-between items-start gap-[16px] border-[#1516183D] py-[40px] last:pb-0 border-b last:border-b-0 border-solid max-w-[500px]:mb-[32px]">
+                    <div class="flex flex-col items-start max-w-[832px] max-[600px]:max-w-full max-[600px]:max-w-full">
+                        <p>{{ $entry.CreatedDate }} by @{{ $entry.Username }} in #{{ $entry.CategoryGroup }}</p>
+                        <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}-{{.Uuid}} "
+                            class="my-[10px] font-medium text-[#120B14] text-[60px] max-[998px]:text-[32px] hover:underline line-clamp-2">  {{ $entry.Title }}</a>
+                        <h6 class="font-normal text-[#120B14] text-[20px] line-clamp-3"> {{ $entry.Description }}</h6>
+                    </div>
+                    <div class=" max-w-[306px] w-[309px] h-[209px] max-h-[246px] max-[600px]:max-w-full max-[600px]:max-w-full">
+                        <img src="{{if $entry.CoverImage}}{{ $entry.CoverImage }}{{else}}/websites/public/img/no-image.png{{end}}" alt=""
+                            class=" w-[306px] h-[243px]">
+                    </div>
+                </div>
+             {{end}}
+             {{end}}
+             {{end}}
+            </div>
+           
+           {{if lt .CurrentPage .Pagination.TotalPages}}
+            <div class="flex justify-center items-center mb-[149px] max-[500px]:mb-[32px]">
+                <a href="?page={{.Pagination.NextPage}}{{if $template_name}}&template_name={{$template_name}}{{end}}"
+                    class="flex items-center bg-[#F33151] hover:bg-[#f15e76] px-[46px] max-[500px]:px-[23px] rounded-[50px] max-w-[465px] h-[79px] font-medium text-[24px] text-white max-[500px]:text-[18px] whitespace-nowrap">
+                 Load More</a>
+            </div>
+            {{end}}
+            <div class="gap-[27px] grid grid-cols-4 max-[500px]:grid-cols-1 max-[800px]:grid-cols-2 mb-[119px]">
+
+                 {{if gt (len .entries) 11}}
+                {{range $i,$entry := .entries}}
+                 {{ if and (ge $i 11) (le $i 15) }}
+                <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}-{{.Uuid}} " class="flex flex-col items-start group">
+                    <div class="mb-[30px] w-full h-[271px]">
+                        <img src="{{if $entry.CoverImage}}{{ $entry.CoverImage }}{{else}}/websites/public/img/no-image.png{{end}}" alt=""
+                            class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-normal text-[#151618] text-[24px] group-hover:underline no-underline">{{$entry.Title}}</p>
+                </a>
+                {{end}}
+                {{end}}
+                {{end}}
+        
+            </div>
+
+        </div>
+            {{end}}
+        <div class="relative bg-image">
+            <div class="top-0 left-0 absolute bg-[#120b1461] w-full h-full"></div>
+            <div
+                class="relative z-20 flex max-[800px]:flex-col justify-between items-end gap-[18px] mx-auto px-[16px] max-[500px]:py-[32px] pt-[83px] pb-[122px] max-w-[1295px]">
+                <div class="flex flex-col items-start">
+                    <h3 class="font-normal text-[24px] text-white">Membership</h3>
+                    <p class="font-normal text-[40px] text-white max-[500px]:text-[28px]">Unlock full access to <span
+                            class="font-medium">Myoan</span> and see the entire library of <span
+                            class="font-medium">paid-members</span> only posts</p>
+                </div>
+                <a href="/membership "
+                    class="flex items-center bg-[#F33151] hover:bg-[#f15e76] px-[46px] max-[500px]:px-[23px] rounded-[50px] max-w-[465px] h-[79px] font-medium text-[24px] text-white max-[500px]:text-[18px] whitespace-nowrap">Sign
+                    up for free</a>
+            </div>
+        </div>
+
+
+
+
+
+        {{template "gofooter" .}}
+</body>
+
+
+</html>

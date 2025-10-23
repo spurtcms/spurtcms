@@ -1,0 +1,43 @@
+{{define "templateheader"}}
+{{$template:=.template_name}}
+{{$ChannelName:=.ChannelName}}
+
+<header class="flex items-center justify-between md:py-8 sm:py-4 lg:px-0 px-4 py-4">
+
+    {{if .settingsdetail.SiteLogoPath}}
+    <a href="/ "><img alt="spurtCMS Profile Image"
+            fetchpriority="high" width="32" height="32" decoding="async" data-nimg="1" class="w-48 md:w-auto"
+            style="color:transparent" src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+    {{else}}
+    <a href="/ "><img alt="spurtCMS Profile Image"
+            fetchpriority="high" width="32" height="32" decoding="async" data-nimg="1" class="w-48 md:w-auto"
+            style="color:transparent" src="/websites/public/img/Spurt-logo.svg"></a>
+    {{end}}
+    <!-- <a class="cursor-pointer"> <img src="/websites/public/img/dark.svg"></a> -->
+
+</header>
+
+
+
+<div class="flex flex-nowrap flex-row gap-x-2 pb-4 mb-4 justify-start items-center relative">
+    <ul class="flex flex-nowrap flex-row gap-x-2 justify-start items-center overflow-auto scrollbar-none w-full">
+        <a href="/ ">
+            <li
+                class="whitespace-nowrap px-6 py-2 rounded-3xl border-[1px] font-base leading-4 hover:text-white hover:bg-gray-500 hover:border-gray-500 cursor-pointer {{if not $ChannelName}} border-cyan-500 text-[#0dcaf0] {{else}}border-gray-200 text-gray-600{{end}}">
+                Home
+            </li>
+        </a>
+        {{if .menulist}}
+        {{range .menulist}}
+        <a href="{{.UrlPath}} ">
+            <li
+                class="whitespace-nowrap px-6 py-2 rounded-3xl border-[1px] font-base leading-4 hover:text-white hover:bg-gray-500 hover:border-gray-500 cursor-pointer {{if eq $ChannelName .Name}}border-cyan-500 text-[#0dcaf0] {{else}}border-gray-200 text-gray-600{{end}}">
+                {{.Name}}
+            </li>
+        </a>
+        {{end}}
+        {{end}}
+    </ul>
+</div>
+
+{{end}}

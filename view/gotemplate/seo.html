@@ -1,0 +1,159 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+
+<section
+    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto {{if .gotemplatepageheader}}pt-0{{else}} pt-[90px]{{end}}  max-sm:pt-[64px] min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+
+     {{if .gotemplatepageheader}} {{template "gotemplatepageheader" .}} {{else}}
+    {{template "gotemplateheader" .}} {{end}}
+        <div class="p-[50px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
+
+            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="HomePage">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <div
+                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                    <h3 class="mt-[12px]">{{$Translate.Seo.HomePage}}</h3>
+
+                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageTitle}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.HomePageTitle}}" id="pagetitle"
+                                name="pagetitle" value="{{.seodetail.PageTitle}}" maxlength="55"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-pagetitle" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageDescription}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.HomePageDescription}}" id="pagedescription"
+                                name="pagedescription" value="{{.seodetail.PageDescription}}" maxlength="155"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-pagedescription" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageKeyword}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.HomePageKeyword}}" id="pagekeyword"
+                                name="pagekeyword" value="{{.seodetail.PageKeyword}}" maxlength="155"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-pagekeyword" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+
+                        <a href="javascript:void(0);" id="PageSave"
+                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                            {{$Translate.Seo.Save}}
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+
+            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="StoreData">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <div
+                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                    <h3 class="mt-[12px]">{{$Translate.Seo.Store}}</h3>
+
+                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreTitle}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.StorePageTitle}}" id="storetitle"
+                                name="storetitle" value="{{.seodetail.StoreTitle}}" maxlength="55"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-storetitle" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreDescription}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.StorePageDescription}}"
+                                id="storedescription" name="storedescription" value="{{.seodetail.StoreDescription}}"
+                                maxlength="155"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-storedescription" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <label for=""
+                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreKeyword}}</label>
+                            <input type="text" placeholder="{{$Translate.Seo.StorePageKeyword}}" id="storekeyword"
+                                name="storekeyword" value="{{.seodetail.StoreKeyword}}" maxlength="155"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
+                            <div id="error-storekeyword" class="text-[#F26674] text-xs mt-1"></div>
+                        </div>
+
+                        <a href="javascript:void(0);" id="StoreSave"
+                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                            {{$Translate.Seo.Save}}
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="SiteMap" enctype="multipart/form-data">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <div
+                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                    <h3 class="mt-[12px]">{{$Translate.Seo.SiteMap}}</h3>
+
+                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                        <div class="mb-[20px] last-of-type:mb-0">
+                            <div
+                                class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
+                                <label for="sitemap"
+                                    class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
+                                    {{$Translate.Seo.Choosefile}}
+                                </label>
+                                <p id="filenameDisplay" class="text-[13px] font-light leading-[18px] text-[#252525]">
+                                    {{if .seodetail.SiteMapName}}
+                                    {{.seodetail.SiteMapName}}
+                                    {{else}}
+                                    {{$Translate.Seo.Nofilechose}}
+                                    {{end}}
+                                </p>
+                                <a href="javascript:void(0);" id="deleteFile" class="ms-auto hidden">
+                                    <img src="/public/img/delete-red.svg" alt="Delete">
+                                </a>
+                            </div>
+                            <input id="sitemap" name="sitemap" type="file"
+                                class="fileInput hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                                accept="image/png, image/jpeg,image/jpg,image/svg">
+                            <input type="hidden" id="sitemapimage" value="{{.seodetail.SiteMapName}}"
+                                name="sitemapimage"
+                                class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                        </div>
+
+
+                        <div class="flex items-start gap-4 mt-[20px]">
+                            {{if .seodetail.SiteMapName}}
+                            <div class="grow">
+                                <img src="/image-resize?name={{.seodetail.SiteMapPath}}" class="max-w-[120px]" alt="">
+                            </div>
+                            {{end}}
+                            <a href="javascript:void(0);" id="SiteMapSave"
+                                class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                                {{$Translate.Seo.Update}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- </div> -->
+
+        {{template "footer" .}}
+
+        <script src="/public/js/gotemplate/seo.js"></script>
+
+
+        {{template "footerclose" .}}

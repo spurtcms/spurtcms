@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+
+
+    <section
+        class="bg-[#FAFAFA] min-h-[calc(100vh-120px)] p-[26px_16px] flex flex-col  max-md:min-h-[calc(100vh-68px)] max-xl:min-h-[calc(100vh-79px)]">
+        <div class="w-[90%] mx-auto max-[1400px]:w-full ">
+            <ul class="flex  items-center space-x-1 mb-[55px] max-[1300px]:mb-[24px]">
+                <li><a href="/ "><img alt="home"
+                            src="/websites/public/img/home.svg"></a></li>
+                <li><img alt="arrow" src="/websites/public/img/crumb-arrow.svg"></li>
+                <li><a class="text-[14px] font-normal leading-4 text-[#151618CC] hover:underline"
+                        href="/membership ">Membership
+                        plan</a></li>
+            </ul>
+        </div>
+        <div class="w-[90%] mx-auto max-[1400px]:w-full ">
+            <div class="max-w-[1014px] mx-auto">
+                <h1
+                    class="text-[36px] font-semibold leading-[40px] text-[#1D1D1F] mb-[14px] text-center max-sm:text-[26px] max-md:leading-[26px]">
+                    Choose your membership</h1>
+                <p
+                    class="text-[16px] font-medium leading-[17px] text-[#83838D] mb-[80px] text-center max-[1300px]:mb-[24px]">
+                    Choose plan and experience it now.</p>
+                <div class="grid grid-cols-3 gap-[24px] items-end max-md:grid-cols-1">
+
+                    {{if .membership}}
+                    {{range .membership}}
+                    <div
+                        class="border-[1.5px] border-solid border-[#F0F0F0] p-[30px_32px] rounded-[12px] bg-white hover:shadow-[0px_4px_10px_0px_#9B9B9B40]">
+                        <h3 class="text-[18px] font-bold leading-[21px] text-[#151618CC] mb-[10px]">{{.SubscriptionName}}</h3>
+                        <p class="text-[14px] font-normal leading-[16px] text-[#1516188F] mb-[32px]">
+                            {{.Description}}&nbsp;
+                        </p>
+                        <div class="flex">
+                            <div class="flex flex-row ">
+                                {{if .DiscountedAmount}}
+                                <span
+                                    class="text-[36px] font-semibold leading-[43px] text-[#83838D] line-through mr-3">${{.DiscountedAmount}}</span>{{end}}
+                                <div class="flex">
+                                    <p class="text-[36px] font-semibold leading-[43px] text-[#120B14] ">
+                                        ${{.InitialPayment}}</p>
+                                    <h2 class="text-[16px] font-normal text-[#1516188F] mt-3 ">/
+                                         {{if gt .BillingfrequentValue 1}}
+                                        {{.BillingfrequentValue}}
+                                        {{if eq .BillingfrequentType 7}}weeks{{end}}
+                                        {{if eq .BillingfrequentType 30}}months{{end}}
+                                        {{if eq .BillingfrequentType 360}}years{{end}}
+                                        {{else}}
+                                        {{if eq .BillingfrequentType 7}}week{{end}}
+                                        {{if eq .BillingfrequentType 30}}month{{end}}
+                                        {{if eq .BillingfrequentType 360}}year{{end}}
+                                        {{end}}</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[17px] rounded-[4px] text-center hover:bg-[#28282c]"
+                            href="/membership/{{.Id}} ">Choose
+                            plan</a>
+                    </div>
+
+                    {{end}}
+                    {{end}}
+                    <!-- <div
+                            class="border-[1.5px] border-solid border-[#F0F0F0] p-[30px_32px] rounded-[12px] bg-white hover:shadow-[0px_4px_10px_0px_#9B9B9B40]">
+                            <h3 class="text-[18px] font-bold leading-[21px] text-[#151618CC] mb-[10px]">Insider</h3>
+                            <p class="text-[14px] font-normal leading-[16px] text-[#1516188F] mb-[32px]">Gain deeper
+                                access and start engaging.</p>
+                            <div class="flex">
+                                <div class="flex flex-row "><span
+                                        class="text-[36px] font-semibold leading-[43px] text-[#83838D] line-through mr-3">$200</span>
+                                    <div class="flex">
+                                        <p class="text-[36px] font-semibold leading-[43px] text-[#120B14] ">$80</p>
+                                        <h2 class="text-[16px] font-normal text-[#1516188F] mt-3 ">/3 month</h2>
+                                    </div>
+                                </div>
+                            </div><a
+                                class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[17px] rounded-[4px] text-center hover:bg-[#28282c]"
+                                href="/membership/7">Choose plan</a>
+                        </div>
+                        <div
+                            class="border-[1.5px] border-solid border-[#F0F0F0] p-[30px_32px] rounded-[12px] bg-white hover:shadow-[0px_4px_10px_0px_#9B9B9B40]">
+                            <h3 class="text-[18px] font-bold leading-[21px] text-[#151618CC] mb-[10px]">Pro</h3>
+                            <p class="text-[14px] font-normal leading-[16px] text-[#1516188F] mb-[32px]">For serious
+                                users with extended features.&nbsp;
+                            </p>
+                            <div class="flex">
+                                <div class="flex flex-row "><span
+                                        class="text-[36px] font-semibold leading-[43px] text-[#83838D] line-through mr-3">$300</span>
+                                    <div class="flex">
+                                        <p class="text-[36px] font-semibold leading-[43px] text-[#120B14] ">$180</p>
+                                        <h2 class="text-[16px] font-normal text-[#1516188F] mt-3 ">/6 month</h2>
+                                    </div>
+                                </div>
+                            </div><a
+                                class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[17px] rounded-[4px] text-center hover:bg-[#28282c]"
+                                href="/membership/6">Choose plan</a>
+                        </div>
+                        <div
+                            class="border-[1.5px] border-solid border-[#F0F0F0] p-[30px_32px] rounded-[12px] bg-white hover:shadow-[0px_4px_10px_0px_#9B9B9B40]">
+                            <h3 class="text-[18px] font-bold leading-[21px] text-[#151618CC] mb-[10px]">Elite</h3>
+                            <p class="text-[14px] font-normal leading-[16px] text-[#1516188F] mb-[32px]">With premium
+                                features and exclusive benefits.
+                            </p>
+                            <div class="flex">
+                                <div class="flex flex-row "><span
+                                        class="text-[36px] font-semibold leading-[43px] text-[#83838D] line-through mr-3">$500</span>
+                                    <div class="flex">
+                                        <p class="text-[36px] font-semibold leading-[43px] text-[#120B14] ">$275</p>
+                                        <h2 class="text-[16px] font-normal text-[#1516188F] mt-3 ">/12 month</h2>
+                                    </div>
+                                </div>
+                            </div><a
+                                class="bg-[#1D1D1F] border border-[#D8D8D8] text-[14px] leading-[16px] p-[12px] w-full block h-[42px] font-semibold text-[#FFFFFF] mt-[17px] rounded-[4px] text-center hover:bg-[#28282c]"
+                                href="/membership/5">Choose plan</a>
+                        </div> -->
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script src="/websites/common/assets/js/common.js"></script>
+
+<script>
+    function onMenuToggle(e) {
+        const navlinks = document.querySelector(".navLinks");
+        e.name = e.name === "menu" ? "close" : "menu";
+        navlinks.classList.toggle("left-[0%]");
+    }
+    function ondroptoggle(e) {
+        const dropmenu = document.querySelector(".drop-menu");
+        dropmenu.classList.toggle("hidden");
+    }
+</script>
+
+</html>

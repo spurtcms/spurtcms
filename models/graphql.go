@@ -18,8 +18,8 @@ type TblGraphqlSettings struct {
 	DeletedBy   int       `gorm:"DEFAULT:NULL"`
 	DeletedOn   time.Time `gorm:"DEFAULT:NULL"`
 	IsDeleted   int       `gorm:"DEFAULT:0"`
-	Token       string
-	IsDefault   int    `gorm:"DEFAULT:0"`
+	Token       string    
+	IsDefault   int      `gorm:"DEFAULT:0"`
 	DateString  string `gorm:"-"`
 	ExpiryTime  time.Time
 	TenantId    string

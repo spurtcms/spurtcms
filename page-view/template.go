@@ -21,7 +21,7 @@ func RunTemplateView(wg *sync.WaitGroup) {
 
 	r.LoadHTMLGlob("view/**/*.html")
 
-	r.GET("/:dynamicString/:id", viewcontroller.PageView)
+	r.GET("/:dynamicString/*slugstring", viewcontroller.PageView)
 
 	r.GET("/forms/:id", viewcontroller.FormsView)
 
@@ -29,13 +29,11 @@ func RunTemplateView(wg *sync.WaitGroup) {
 
 	r.GET("/404-pageview", viewcontroller.FileNotFound)
 
-    r.NoRoute(func(ctx *gin.Context) {
+	r.NoRoute(func(ctx *gin.Context) {
 
 		ctx.Redirect(301, os.Getenv("VIEW_BASE_URL")+"/404-pageview")
 	})
 	err := r.Run(":" + os.Getenv("VIEW_PORT"))
-
-
 
 	if err != nil {
 

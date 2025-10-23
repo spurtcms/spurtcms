@@ -120,7 +120,7 @@ $(document).on('click', '#settingsUpdate[data-status=1]', function () {
     formData.append('timezon', timeZones)
 
     $.ajax({
-        url: "/settings/general-settings/update",
+        url: "/admin/settings/general-settings/update",
         type: "POST",
         data: formData,
         contentType: false, // Prevent jQuery from setting Content-Type
@@ -136,7 +136,7 @@ $(document).on('click', '#settingsUpdate[data-status=1]', function () {
                     });
                 }, 5000);
 
-                window.location.href = "/settings/general-settings/"
+                window.location.href = "/admin/settings/general-settings/"
 
             } else {
                 setCookie("Alert-msg", "success", 1)
@@ -184,12 +184,12 @@ $(document).ready(function (e) {
 // only enabling the cancel button if any thing changes in the general settings page
 
 $(document).on('change', '#companyName,#logoLabel', function () {
-    $('#genSettingsCancelBtn').attr('href', '/settings/general-settings/')
+    $('#genSettingsCancelBtn').attr('href', '/admin/settings/general-settings/')
     $('#genSettingsCancelBtn').removeClass('cursor-not-allowed')
 })
 
 $('.checkRole,.timeZone').click(function () {
-    $('#genSettingsCancelBtn').attr('href', '/settings/general-settings/')
+    $('#genSettingsCancelBtn').attr('href', '/admin/settings/general-settings/')
     $('#genSettingsCancelBtn').removeClass('cursor-not-allowed')
 })
 

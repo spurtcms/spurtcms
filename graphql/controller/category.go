@@ -4,6 +4,7 @@ import (
 	"context"
 	"spurt-cms/graphql/info"
 	"spurt-cms/graphql/model"
+	"spurt-cms/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -128,5 +129,43 @@ func CategoryList(ctx context.Context, categoryFilter *model.CategoryFilter, com
 	}
 
 	return &model.CategoryDetails{Categorylist: finalCategoriesList, Count: count}, nil
+
+}
+
+func GeneralInfo(ctx context.Context, id *string) (*model.GeneralInfo, error) {
+
+	c, ok := ctx.Value(GinContext).(*gin.Context)
+	if !ok {
+		ErrorLog.Printf("%v", info.ErrGinCtx)
+		return nil, info.ErrGinCtx
+	}
+
+	var tenantid string
+
+	if *id != "" {
+
+		tenantid = *id
+	}
+
+	// models.GetGeneralSettings(tenantid)
+
+	tblgeneralsetting, err :=models.GetGeneralSettings(tenantid)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.AbortWithStatus(400)
+			return nil, err
+		}
+		ErrorLog.Printf("%v", err)
+		c.AbortWithStatus(500)
+		return nil, err
+	}
+	generalInfo:=model.GeneralInfo{
+		CompanyName: tblgeneralsetting.CompanyName,
+		LogoPath: tblgeneralsetting.LogoPath,
+		ExpandLogoPath: tblgeneralsetting.ExpandLogoPath,
+		TenantID: tenantid,
+	}
+
+	return &generalInfo,nil
 
 }

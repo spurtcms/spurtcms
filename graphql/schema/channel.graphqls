@@ -16,7 +16,7 @@ type Channel{
     isDeleted:           Int!
 	modifiedOn:          Time          
 	modifiedBy:          Int  
-	tenantId:            Int!                                            
+	tenantId:            String!                                            
 }
 
 type ChannelDetails{
@@ -63,8 +63,12 @@ type ChannelEntries{
 	additionalFields:     AdditionalFields
 	authorDetails:        Author
 	memberProfile:        MemberProfile
-	tenantId:             Int!
+	tenantId:             String!
 	contentChunk:         Chunk
+	ctaLink:               String
+	savedFlag:             Boolean
+	PreviewLink:          String
+	Uuid:                 String
 }
 
 type Author{
@@ -79,7 +83,10 @@ type Author{
 	createdBy:            Int! 
 	modifiedOn:           Time
 	modifiedBy:           Int 
-	tenantId:             Int!
+	tenantId:             String!
+	roleId:               Int
+	roleName:              String
+	NameString:           String
 }
 
 type AdditionalFields{
@@ -96,7 +103,7 @@ type Section{
 	modifiedOn:        Time
 	modifiedBY:        Int
 	orderIndex:        Int!
-	tenantId:          Int!
+	tenantId:          String!
 }
 
 type Field{
@@ -119,7 +126,7 @@ type Field{
 	fieldTypeName:     String!
 	fieldValue:        FieldValue
 	fieldOptions:      [FieldOptions!]
-	tenantId:          Int!
+	tenantId:          String!
 }
 
 type FieldValue{
@@ -129,7 +136,7 @@ type FieldValue{
 	createdBy:         Int!
 	modifiedOn:        Time
 	modifiedBY:        Int
-	tenantId:          Int!
+	tenantId:          String!
 }
 
 type FieldOptions{
@@ -140,7 +147,7 @@ type FieldOptions{
 	createdBy:         Int!
 	modifiedOn:        Time
 	modifiedBY:        Int
-	tenantId:          Int!
+	tenantId:          String!
 }
 
 type CountUpdate{
@@ -153,15 +160,23 @@ type Chunk{
 	length:     Int!
 }
 
+input EntrySave{
+    entryId: Int!
+	userId:  Int!
+	tenantId: String!
+	save:     Boolean!
+}
 extend type Query{
     ChannelList(filter: Filter,sort: Sort): ChannelDetails! @auth
 	ChannelDetail(channelId: Int,channelSlug: String,isActive: Boolean): Channel @auth
 	ChannelEntriesList(commonFilter: Filter,sort: Sort,entryFilter: EntriesFilter,AdditionalData: EntriesAdditionalData): ChannelEntryDetails! @auth
-	ChannelEntryDetail(id: Int, slug: String,AdditionalData: EntriesAdditionalData,channelId:Int): ChannelEntries! @auth
+	ChannelEntryDetail(id: Int, slug: String,AdditionalData: EntriesAdditionalData,channelId:Int,memberId:Int): ChannelEntries! @auth
+    TopAuthorsList(id:String):[Author] @auth
 }
 
 extend type Mutation{
 	UpdateEntryViewCount(id: Int,slug: String): CountUpdate! @auth
+	EntrySaveUpdate(input: EntrySave!):String! @auth
 }
 
 input Filter{
@@ -169,6 +184,9 @@ input Filter{
 	offset:    Int
 	isActive:  Boolean
 	keyword:   String
+	location: String
+	Experience: String
+	posteddate: String
 }
 
 input EntriesFilter{
@@ -177,6 +195,7 @@ input EntriesFilter{
 	categorySlug:        String
 	getChildCategories:  Boolean
 	Status:              String
+	ChannelName:         String
 }
 
 input EntriesAdditionalData{
@@ -184,6 +203,8 @@ input EntriesAdditionalData{
 	memberProfile:     Boolean
 	additionalFields:  Boolean
 	categories:        Boolean
+	savedList:         Boolean
+	MemberId:          Int
 }
 
 input Sort{

@@ -1,19 +1,36 @@
+let countdownInterval;
+let timeLeft = 30;
+let countdown;
+
+
 
 $(document).ready(function() {
 
   currentloc= window.location.href 
 
-  if (currentloc.includes("/login/")) {
+  if (currentloc.includes("/admin/")) {
 
-    setTimeout(function() {
-        $('#resendbtn').removeClass("text-[#ACABA9] pointer-events-none ").addClass("text-[#05ACD7] hover:underline  hover:underline"); 
-    }, 30000);
-
+    startCountdown()
   }
-   
+ 
     
 });
 
+function startCountdown() {
+    $('#resendbtn').addClass("pointer-events-none");
+    $('#countdown').text(timeLeft); 
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        $('#countdown').text(timeLeft);
+
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            $('#countdown').text('');
+            $('#otpMessage').html('We sent a code to your inbox. You can resend now!'); 
+            $('#resendbtn').removeClass("text-[#ACABA9] pointer-events-none ").addClass("text-[#05ACD7] hover:underline  hover:underline"); 
+        }
+    }, 1000);
+}
 function handleKeyPress(event) {
     
     if (event.key === 'Enter') {
@@ -30,7 +47,8 @@ function handleKeyPress(event) {
     }
 }
 
-$(document).on('click', '.loginf', function () { 
+$(document).on('click', '.loginf', function (e) { 
+    e.preventDefault()
     jQuery.validator.addMethod(
         "email_validator",
         function (value, element) {
@@ -232,7 +250,7 @@ $(document).on('click', '#resendbtn', function () {
 
     email = $("#useremail").val()
     $.ajax({
-        url: "/login/resendotp",
+        url: "/admin/resendotp",
         type: "POST",
         async: false,
         data: { "emailid": email, csrf: $("input[name='csrf']").val() },
@@ -240,10 +258,18 @@ $(document).on('click', '#resendbtn', function () {
         caches: false,
         success: function (data) {
 
-
-    setTimeout(function() {
-        $('#resendbtn').removeClass("text-[#ACABA9] pointer-events-none").addClass("text-[#05ACD7] hover:underline  hover:underline"); 
-    }, 30000);
+            timeLeft = 30;
+            $('#countdown').text(timeLeft);
+            $('#resendbtn').addClass("pointer-events-none");
+            $('#otpMessage').html('We sent a code to your inbox. Resend in <span id="countdown">' + timeLeft + '</span>s'); 
+            startCountdown();
+        
+            setTimeout(function() {
+             
+                $('#resendbtn').removeClass("text-[#ACABA9] pointer-events-none").addClass("text-[#05ACD7] hover:underline  hover:underline"); 
+                $('#countdown').text('');
+            }, 30000);
+  
 
         }
     })
@@ -253,7 +279,7 @@ $(document).on('click', '#cancelbtn', function () {
 
     event.preventDefault();
 
-    window.location.href = "/weblogin"
+    window.location.href = "/admin"
 })
 
 

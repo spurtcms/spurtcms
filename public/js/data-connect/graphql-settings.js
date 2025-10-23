@@ -12,7 +12,7 @@ $(document).on('click', '.tkn-durn.dropdown-item', function () {
     $('#slctdurn').text(selectedVal)
     if ($("#createToken #genTokenBtn").attr('data-status') == "1" && editTknDrn != selectedVal) {
         $("#createToken #genTokenBtn").removeClass('bg-[#D1D1D1]')
-        $("#createToken #genTokenBtn").addClass('hover:bg-[#148569]').addClass('bg-[#10A37F]')
+        $("#createToken #genTokenBtn").addClass('hover:bg-[var(--btn-hover)]').addClass('bg-[var(--btn-bg)]')
         $("#createToken #genTokenBtn").prop('disabled', false).removeClass('cursor-not-allowed')
     } else {
         CheckIsEditDataUnchanged()
@@ -66,7 +66,7 @@ $(document).on('click', '#genTokenBtn[data-status=0]', function (e) {
         $('#genTokenBtn').css('display', 'none')
         $('#genTokenBtn').get(0).click()
         $.ajax({
-            url: "/graphql/create",
+            url: "/admin/graphql/create",
             type: "POST",
             data: formData,
             contentType: false, // Prevent jQuery from setting Content-Type
@@ -107,7 +107,7 @@ $(document).on('click', '#copy-btn', function () {
 })
 
 $(document).on('click', '#graphqlCopyCancel', function () {
-    window.location.href = "/graphql/"
+    window.location.href = "/admin/graphql/"
 })
 
 function TokenCopy(token) {
@@ -121,7 +121,7 @@ $(document).on('click', '#copyToken #copy-btn', function (e) {
     setTimeout(() => {
         if (dataUse == "save") {
             TokenCopy($('#tokenContent').attr('data-value').trim())
-            window.location.href = '/graphql/'
+            window.location.href = '/admin/graphql/'
             setCookie('get-toast', 'Graphql Settings Created Successfully')
         } else if (dataUse == "copy") {
             TokenCopy($('#tokenContent').attr('data-value').trim())
@@ -139,7 +139,7 @@ $(document).on('click', ".apitoken-data", function () {
 $(document).on('click', '#key-desc', function () {
     var id = $(this).attr('data-id')
     $.ajax({
-        url: "/graphql/edit/" + id,
+        url: "/admin/graphql/edit/" + id,
         type: "GET",
         success: function (result) {
             editTknName = result.data.TokenName
@@ -153,7 +153,7 @@ $(document).on('click', '#key-desc', function () {
             $("#createToken #genTokenBtn").text(languagedata.update)
             $("#createToken #tokenName").val(result.data.TokenName)
             $("#createToken #tokenName").attr('data-id', id)
-            $("#createToken #tokenDesc").val(result.data.Description)            
+            $("#createToken #tokenDesc").val(result.data.Description)
             $('#tokeninsideContent').text(result.data.Token)
             $('#tokeninsideContent').attr('data-value', result.data.Token)
             $("#slctdurn").text(result.data.Duration);
@@ -173,7 +173,7 @@ $(document).on('input', '#createToken #tokenName', function () {
         var currentValue = $(this).val()
         if (currentValue != editTknName) {
             $("#createToken #genTokenBtn").removeClass('bg-[#D1D1D1]')
-            $("#createToken #genTokenBtn").addClass('hover:bg-[#148569]').addClass('bg-[#10A37F]')
+            $("#createToken #genTokenBtn").addClass('hover:bg-[var(--btn-hover)]').addClass('bg-[var(--btn-bg)]')
             $("#createToken #genTokenBtn").prop('disabled', false).removeClass('cursor-not-allowed')
         } else {
             CheckIsEditDataUnchanged()
@@ -187,7 +187,7 @@ $(document).on('input', '#createToken #tokenDesc', function () {
         var currentValue = $(this).val()
         if (currentValue != editTknDesc) {
             $("#createToken #genTokenBtn").removeClass('bg-[#D1D1D1]')
-            $("#createToken #genTokenBtn").addClass('hover:bg-[#148569]').addClass('bg-[#10A37F]')
+            $("#createToken #genTokenBtn").addClass('hover:bg-[var(--btn-hover)]').addClass('bg-[var(--btn-bg)]')
             $("#createToken #genTokenBtn").prop('disabled', false).removeClass('cursor-not-allowed')
         } else {
             CheckIsEditDataUnchanged()
@@ -243,13 +243,13 @@ $(document).on('click', '#genTokenBtn[data-status=1]', function (e) {
     let validData = fieldVal.every(d => d != "" && d != "Select Duration" && d != "Seleccionar duración" && d != "Sélectionnez la durée")
     if (validData) {
         $.ajax({
-            url: "/graphql/update",
+            url: "/admin/graphql/update",
             type: "POST",
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
-                window.location.href = "/graphql/"
+                window.location.href = "/admin/graphql/"
             }
         })
     }
@@ -264,7 +264,7 @@ $(document).on('click', '.tokenDelBtn', function () {
     var id = $(this).attr('data-id');
     $('.deltitle').text(languagedata.Graphql.deletetoken + " ?")
     $("#content").text(languagedata.Graphql.deletesubheading)
-    $(".deleteBtn").attr('href', '/graphql/delete/' + id)
+    $(".deleteBtn").attr('href', '/admin/graphql/delete/' + id)
     $('.deleteBtn').attr('id', "delete" + id)
 
 })
@@ -282,11 +282,11 @@ $(document).on('keypress', '#graphqlSearchBar', function (e) {
 
 
         if (searchText != "") {
-            $('#graphqlSearchlink').attr('href', "/graphql/?keyword=" + searchText)
+            $('#graphqlSearchlink').attr('href', "/admin/graphql/?keyword=" + searchText)
             $('#graphqlSearchBar').attr('value', searchText)
             $('#graphqlSearchlink').get(0).click()
         } else {
-            window.location.href = "/graphql/"
+            window.location.href = "/admin/graphql/"
         }
 
     }
@@ -298,7 +298,7 @@ $(document).on('keyup', '#graphqlSearchBar', function (e) {
     if (e.which == 8 && searchVal != "") {
         var searchKey = $('#graphqlSearchBar').val()
         if (searchKey == "") {
-            window.location.href = "/graphql/"
+            window.location.href = "/admin/graphql/"
         }
     }
 })
@@ -395,7 +395,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/graphql/multideletetokens',
+        url: '/admin/graphql/multideletetokens',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -523,7 +523,7 @@ $(document).on("click", ".Closebtn", function () {
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
 
-    window.location.href = "/graphql/"
+    window.location.href = "/admin/graphql/"
 })
 
 $(document).ready(function () {

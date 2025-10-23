@@ -26,7 +26,10 @@ type Author struct {
 	CreatedBy        int        `json:"createdBy"`
 	ModifiedOn       *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy       *int       `json:"modifiedBy,omitempty"`
-	TenantID         string        `json:"tenantId"`
+	TenantID         string     `json:"tenantId"`
+	RoleID           *int       `json:"roleId,omitempty"`
+	RoleName         *string    `json:"roleName,omitempty"`
+	NameString       *string    `json:"NameString,omitempty"`
 }
 
 type Category struct {
@@ -40,7 +43,7 @@ type Category struct {
 	ModifiedOn   *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy   *int       `json:"modifiedBy,omitempty"`
 	ParentID     int        `json:"parentId"`
-	TenantID     string        `json:"tenantId"`
+	TenantID     string     `json:"tenantId"`
 }
 
 type CategoryDetails struct {
@@ -71,7 +74,7 @@ type Channel struct {
 	IsDeleted          int        `json:"isDeleted"`
 	ModifiedOn         *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy         *int       `json:"modifiedBy,omitempty"`
-	TenantID           string        `json:"tenantId"`
+	TenantID           string     `json:"tenantId"`
 }
 
 type ChannelDetails struct {
@@ -113,8 +116,12 @@ type ChannelEntries struct {
 	AdditionalFields *AdditionalFields    `json:"additionalFields,omitempty"`
 	AuthorDetails    *Author              `json:"authorDetails,omitempty"`
 	MemberProfile    *MemberProfile       `json:"memberProfile,omitempty"`
-	TenantID         string                  `json:"tenantId"`
+	TenantID         string               `json:"tenantId"`
 	ContentChunk     *Chunk               `json:"contentChunk,omitempty"`
+	CtaLink          *string              `json:"ctaLink,omitempty"`
+	SavedFlag        *bool                `json:"savedFlag,omitempty"`
+	PreviewLink      *string              `json:"PreviewLink,omitempty"`
+	UUID             *string              `json:"Uuid,omitempty"`
 }
 
 type ChannelEntryDetails struct {
@@ -132,11 +139,33 @@ type CountUpdate struct {
 	Status bool `json:"status"`
 }
 
+type Course struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	ImageName   string `json:"imageName"`
+	ImagePath   string `json:"imagePath"`
+	Category    int    `json:"category"`
+	TenantID    string `json:"tenantId"`
+}
+
+type CourseDetails struct {
+	Lesson  []Lesson   `json:"lesson"`
+	Section []Sections `json:"section"`
+}
+
+type CourseLists struct {
+	Courselist []Course `json:"courselist"`
+	Count      int      `json:"count"`
+}
+
 type EntriesAdditionalData struct {
 	AuthorDetails    graphql.Omittable[*bool] `json:"authorDetails,omitempty"`
 	MemberProfile    graphql.Omittable[*bool] `json:"memberProfile,omitempty"`
 	AdditionalFields graphql.Omittable[*bool] `json:"additionalFields,omitempty"`
 	Categories       graphql.Omittable[*bool] `json:"categories,omitempty"`
+	SavedList        graphql.Omittable[*bool] `json:"savedList,omitempty"`
+	MemberID         graphql.Omittable[*int]  `json:"MemberId,omitempty"`
 }
 
 type EntriesFilter struct {
@@ -145,6 +174,14 @@ type EntriesFilter struct {
 	CategorySlug       graphql.Omittable[*string] `json:"categorySlug,omitempty"`
 	GetChildCategories graphql.Omittable[*bool]   `json:"getChildCategories,omitempty"`
 	Status             graphql.Omittable[*string] `json:"Status,omitempty"`
+	ChannelName        graphql.Omittable[*string] `json:"ChannelName,omitempty"`
+}
+
+type EntrySave struct {
+	EntryID  int    `json:"entryId"`
+	UserID   int    `json:"userId"`
+	TenantID string `json:"tenantId"`
+	Save     bool   `json:"save"`
 }
 
 type Field struct {
@@ -167,7 +204,7 @@ type Field struct {
 	FieldTypeName    string         `json:"fieldTypeName"`
 	FieldValue       *FieldValue    `json:"fieldValue,omitempty"`
 	FieldOptions     []FieldOptions `json:"fieldOptions,omitempty"`
-	TenantID         string            `json:"tenantId"`
+	TenantID         string         `json:"tenantId"`
 }
 
 type FieldOptions struct {
@@ -178,7 +215,7 @@ type FieldOptions struct {
 	CreatedBy   int        `json:"createdBy"`
 	ModifiedOn  *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy  *int       `json:"modifiedBY,omitempty"`
-	TenantID    string        `json:"tenantId"`
+	TenantID    string     `json:"tenantId"`
 }
 
 type FieldValue struct {
@@ -188,32 +225,80 @@ type FieldValue struct {
 	CreatedBy  int        `json:"createdBy"`
 	ModifiedOn *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy *int       `json:"modifiedBY,omitempty"`
-	TenantId  string        `json:"tenantId"`
+	TenantID   string     `json:"tenantId"`
 }
 
 type Filter struct {
-	Limit    graphql.Omittable[*int]    `json:"limit,omitempty"`
-	Offset   graphql.Omittable[*int]    `json:"offset,omitempty"`
-	IsActive graphql.Omittable[*bool]   `json:"isActive,omitempty"`
-	Keyword  graphql.Omittable[*string] `json:"keyword,omitempty"`
+	Limit      graphql.Omittable[*int]    `json:"limit,omitempty"`
+	Offset     graphql.Omittable[*int]    `json:"offset,omitempty"`
+	IsActive   graphql.Omittable[*bool]   `json:"isActive,omitempty"`
+	Keyword    graphql.Omittable[*string] `json:"keyword,omitempty"`
+	Location   graphql.Omittable[*string] `json:"location,omitempty"`
+	Experience graphql.Omittable[*string] `json:"Experience,omitempty"`
+	Posteddate graphql.Omittable[*string] `json:"posteddate,omitempty"`
+}
+
+type ForgotPasswordResponse struct {
+	Message string `json:"message"`
+	Success bool   `json:"success"`
+}
+
+type GeneralInfo struct {
+	CompanyName    string `json:"companyName"`
+	LogoPath       string `json:"logoPath"`
+	ExpandLogoPath string `json:"expandLogoPath"`
+	TenantID       string `json:"tenantId"`
+}
+
+type Lesson struct {
+	ID         int    `json:"id"`
+	CourseID   int    `json:"courseId"`
+	SectionID  int    `json:"sectionId"`
+	Title      string `json:"title"`
+	Content    string `json:"content"`
+	EmbedLink  string `json:"embedLink"`
+	FileName   string `json:"fileName"`
+	FilePath   string `json:"filePath"`
+	LessonType string `json:"lessonType"`
+	OrderIndex int    `json:"orderIndex"`
+	TenantID   string `json:"tenantId"`
 }
 
 type MemberArguments struct {
-	Module   graphql.Omittable[*int] `json:"module,omitempty"`
-	TenantID graphql.Omittable[*int] `json:"tenantId,omitempty"`
+	Module   graphql.Omittable[*int]    `json:"module,omitempty"`
+	TenantID graphql.Omittable[*string] `json:"tenantId,omitempty"`
+}
+
+type MemberCheckLoginResponse struct {
+	Email         bool     `json:"email"`
+	Password      bool     `json:"password"`
+	Message       string   `json:"message"`
+	Token         string   `json:"token"`
+	Success       bool     `json:"success"`
+	MemberDetails *Members `json:"memberDetails,omitempty"`
 }
 
 type MemberDetails struct {
+	ID               graphql.Omittable[*int]    `json:"id,omitempty"`
 	FirstName        string                     `json:"firstName"`
 	LastName         graphql.Omittable[*string] `json:"lastName,omitempty"`
 	Mobile           graphql.Omittable[*string] `json:"mobile,omitempty"`
 	Email            string                     `json:"email"`
-	Password         graphql.Omittable[*string] `json:"password,omitempty"`
+	Password         string                     `json:"password"`
 	IsActive         graphql.Omittable[*int]    `json:"isActive,omitempty"`
 	ProfileImage     graphql.Omittable[*string] `json:"profileImage,omitempty"`
 	ProfileImagePath graphql.Omittable[*string] `json:"profileImagePath,omitempty"`
 	Username         graphql.Omittable[*string] `json:"username,omitempty"`
 	GroupID          graphql.Omittable[*int]    `json:"groupId,omitempty"`
+	UserID           int                        `json:"userId"`
+	TenantID         string                     `json:"tenantId"`
+	Message          graphql.Omittable[*string] `json:"message,omitempty"`
+}
+
+type MemberInfo struct {
+	Email    string `json:"email"`
+	TenantID string `json:"tenantId"`
+	URL      string `json:"url"`
 }
 
 type MemberProfile struct {
@@ -239,8 +324,14 @@ type MemberProfile struct {
 	ModifiedBy      *int       `json:"modifiedBy,omitempty"`
 	ClaimStatus     *int       `json:"claimStatus,omitempty"`
 	IsActive        *int       `json:"IsActive,omitempty"`
-	TenantID        string        `json:"tenantId"`
+	TenantID        string     `json:"tenantId"`
 	ClaimDate       *time.Time `json:"claimDate,omitempty"`
+}
+
+type MemberResetpassInfo struct {
+	NewPassword     string `json:"newPassword"`
+	ConfrimPassword string `json:"confrimPassword"`
+	Token           string `json:"token"`
 }
 
 type MemberSettings struct {
@@ -250,7 +341,14 @@ type MemberSettings struct {
 	ModifiedBy        *int       `json:"modifiedBy,omitempty"`
 	ModifiedOn        *time.Time `json:"modifiedOn,omitempty"`
 	NotificationUsers string     `json:"notificationUsers"`
-	TenantID          string        `json:"tenantId"`
+	TenantID          string     `json:"tenantId"`
+}
+
+type MemberSignin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	UserID   int    `json:"userId"`
+	TenantID string `json:"tenantId"`
 }
 
 type Members struct {
@@ -259,7 +357,7 @@ type Members struct {
 	LastName         *string    `json:"lastName,omitempty"`
 	Mobile           *string    `json:"mobile,omitempty"`
 	Email            string     `json:"email"`
-	Password         *string    `json:"password,omitempty"`
+	Password         string     `json:"password"`
 	IsActive         *int       `json:"isActive,omitempty"`
 	ProfileImage     *string    `json:"profileImage,omitempty"`
 	ProfileImagePath *string    `json:"profileImagePath,omitempty"`
@@ -269,8 +367,10 @@ type Members struct {
 	CreatedOn        *time.Time `json:"createdOn,omitempty"`
 	ModifiedOn       *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy       *int       `json:"modifiedBy,omitempty"`
-	TenantID         string        `json:"tenantId"`
+	TenantID         string     `json:"tenantId"`
 	IsDeleted        int        `json:"isDeleted"`
+	StorageType      *string    `json:"storageType,omitempty"`
+	NameString       *string    `json:"NameString,omitempty"`
 }
 
 type MembersDetails struct {
@@ -293,10 +393,58 @@ type Section struct {
 	ModifiedOn    *time.Time `json:"modifiedOn,omitempty"`
 	ModifiedBy    *int       `json:"modifiedBY,omitempty"`
 	OrderIndex    int        `json:"orderIndex"`
-	TenantID      string        `json:"tenantId"`
+	TenantID      string     `json:"tenantId"`
+}
+
+type Sections struct {
+	ID         int    `json:"id"`
+	CourseID   int    `json:"courseId"`
+	Title      string `json:"title"`
+	Content    string `json:"content"`
+	OrderIndex int    `json:"orderIndex"`
+	TenantID   string `json:"tenantId"`
+}
+
+type SocialLoginInput struct {
+	FirstName string                     `json:"firstName"`
+	LastName  graphql.Omittable[*string] `json:"lastName,omitempty"`
+	Email     string                     `json:"email"`
+	Password  graphql.Omittable[*string] `json:"password,omitempty"`
+	Username  graphql.Omittable[*string] `json:"username,omitempty"`
+}
+
+type SocialLoginResponse struct {
+	Message string `json:"message"`
+	Token   string `json:"token"`
+	Userid  int    `json:"userid"`
 }
 
 type Sort struct {
 	SortBy graphql.Omittable[*string] `json:"sortBy,omitempty"`
 	Order  graphql.Omittable[*int]    `json:"order,omitempty"`
+}
+
+type UpdateMember struct {
+	ID               int                           `json:"Id"`
+	FirstName        string                        `json:"firstName"`
+	LastName         graphql.Omittable[*string]    `json:"lastName,omitempty"`
+	Mobile           string                        `json:"mobile"`
+	Email            string                        `json:"email"`
+	Password         graphql.Omittable[*string]    `json:"password,omitempty"`
+	IsActive         graphql.Omittable[*int]       `json:"isActive,omitempty"`
+	ProfileImage     graphql.Omittable[*string]    `json:"profileImage,omitempty"`
+	ProfileImagePath graphql.Omittable[*string]    `json:"profileImagePath,omitempty"`
+	Username         graphql.Omittable[*string]    `json:"username,omitempty"`
+	GroupID          graphql.Omittable[*int]       `json:"groupId,omitempty"`
+	CreatedBy        graphql.Omittable[*int]       `json:"createdBy,omitempty"`
+	CreatedOn        graphql.Omittable[*time.Time] `json:"createdOn,omitempty"`
+	ModifiedOn       graphql.Omittable[*time.Time] `json:"modifiedOn,omitempty"`
+	ModifiedBy       graphql.Omittable[*int]       `json:"modifiedBy,omitempty"`
+	TenantID         graphql.Omittable[*string]    `json:"tenantId,omitempty"`
+	RemoveImage      graphql.Omittable[*bool]      `json:"removeImage,omitempty"`
+}
+
+type UpdatememberResponse struct {
+	MemberDetails *Members `json:"memberDetails"`
+	Message       string   `json:"message"`
 }

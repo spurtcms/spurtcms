@@ -29,10 +29,10 @@
         <div class="block overflow-hidden @container pb-[120px] ">
             <div class="block overflow-auto">
                 <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
-                    <li><a href="/settings/emails/"
+                    <li><a href="/admin/settings/emails/"
                             class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">{{$Translate.Setting.Emailtemplates}}</a>
                     </li>
-                    <li><a href="/settings/emails/emailconfig/"
+                    <li><a href="/admin/settings/emails/emailconfig/"
                             class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">{{$Translate.Setting.Emailconfig}}</a>
                     </li>
 
@@ -186,7 +186,7 @@
 
                 <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
                                     text-[14px] w-[33px] h-[36px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
-                                    bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+                                    bg-[#000000] hover:bg-[#2D2D2D] font-bold {{end}}">
                         {{.CurrentPage}} </a> </li>
                 {{if lt .CurrentPage .Pagination.TotalPages}}
                 <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
@@ -225,7 +225,6 @@
 
 </section>
 
-{{template "emailmodal" .}}
 {{template "footer" .}}
 <script>
     // Initialize tooltips

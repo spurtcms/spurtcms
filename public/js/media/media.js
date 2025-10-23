@@ -2287,7 +2287,6 @@ $(document).on('click', '.folder', function () {
 
                     if (fileType == 'file') {
 
-                        console.log(" inside file")
 
                         strr += `<div class="block ${mediaClass}">
                 <div class="block">
@@ -3112,7 +3111,6 @@ function BindLoadmore(res, action) {
                 subMediaHtml = '<p>' + totalSubMedia + '</p>'
             } else {
 
-                console.log(" media path check ")
 
                 mediaClass = 'filediv'
 

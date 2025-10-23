@@ -43,9 +43,9 @@ $(".searchentry").click(function () {
 
     if ($(this).is(':checked')) {
 
-        window.location.href = "/entries/entrylist/" + id
+        window.location.href = "/admin/entries/entrylist/" + id
     } else {
-        window.location.href = "/entries/entrylist/"
+        window.location.href = "/admin/entries/entrylist/"
     }
 
 })
@@ -57,15 +57,15 @@ $(document).on('click', '#removecategory', function () {
 
     if (currentLocation.includes("unpublishentrieslist")) {
 
-        window.location.href = "/entries/unpublishentries"
+        window.location.href = "/admin/entries/unpublishentries"
 
     } else if (currentLocation.includes("draftentrieslist")) {
 
-        window.location.href = "/entries/draftentries"
+        window.location.href = "/admin/entries/draftentries"
 
     } else if (currentLocation.includes("entrylist")) {
 
-        window.location.href = "/entries/entrylist"
+        window.location.href = "/admin/entries/entrylist"
     }
 
 
@@ -149,17 +149,17 @@ $(document).ready(async function () {
 
     if (channelname != "") {
         if (pageno == null) {
-            editurl = "/entries/editentrydetails/" + channelname + "/" + id
+            editurl = "/admin/entries/editentrydetails/" + channelname + "/" + id
         } else {
-            editurl = "/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
+            editurl = "/admin/entries/editentrydetails/" + channelname + "/" + id + "?page=" + pageno
         }
 
     } else {
 
         if (pageno == null) {
-            editurl = "/entries/editentrydetail/" + id
+            editurl = "/admin/entries/editentrydetail/" + id
         } else {
-            editurl = "/entries/editentrydetail/" + id + "?page=" + pageno
+            editurl = "/admin/entries/editentrydetail/" + id + "?page=" + pageno
         }
     }
 
@@ -698,7 +698,7 @@ $(document).ready(async function () {
                         $('.closemember').show()
                     }
 
-                    fetch(`/entries/memberdetails/?keyword=${keyword}`, {
+                    fetch(`/admin/entries/memberdetails/?keyword=${keyword}`, {
                         method: "GET"
                     })
                         .then(response => {
@@ -839,15 +839,15 @@ $(document).on('keyup', '#searchkey', function () {
 
             if (currentLocation.includes("unpublish")) {
 
-                window.location.href = "/entries/unpublishentries"
+                window.location.href = "/admin/entries/unpublishentries"
 
             } else if (currentLocation.includes("draft")) {
 
-                window.location.href = "/entries/draftentries"
+                window.location.href = "/admin/entries/draftentries"
 
             } else if (currentLocation.includes("entrylist")) {
 
-                window.location.href = "/entries/entrylist"
+                window.location.href = "/admin/entries/entrylist"
             }
 
 
@@ -932,16 +932,16 @@ $(document).on('click', '.deleteentry', function () {
     var pageno = $(this).attr("data-page")
 
     if (pageno == "") {
-        $('#delid').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname);
+        $('#delid').attr('href', "/admin/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname);
 
     } else {
-        $('#delid').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname + "&page=" + pageno);
+        $('#delid').attr('href', "/admin/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&pname=" + pname + "&page=" + pageno);
 
     }
 
-    // $('#delid').parent('#delete').attr('href', "/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&page="+pageno);
+    // $('#delid').parent('#delete').attr('href', "/admin/entries/deleteentries/?id=" + entryId + "&cname=" + channame + "&page="+pageno);
 
-    // $('#delid').parent('#delete').attr('href', "/entries/deleteentries/"+ entryId + "/" + channelname);
+    // $('#delid').parent('#delete').attr('href', "/admin/entries/deleteentries/"+ entryId + "/" + channelname);
 
 
 })
@@ -964,7 +964,7 @@ $(document).on("click", "#publish", function () {
 
     $.ajax({
 
-        url: "/entries/checkmandatoryfields/" + entryid,
+        url: "/admin/entries/checkmandatoryfields/" + entryid,
         datatype: "json",
         type: "GET",
         data: {
@@ -983,11 +983,11 @@ $(document).on("click", "#publish", function () {
                 $("#delid").text("Edit Entry")
                 $("#delcancel").text(languagedata.cancel)
                 if (channelname != "") {
-                    $('#delid').attr('href', "/entries/edit/" + channelname + "/" + entryid)
+                    $('#delid').attr('href', "/admin/entries/edit/" + channelname + "/" + entryid)
 
                 } else {
 
-                    $('#delid').attr('href', "/entries/edits/" + entryid)
+                    $('#delid').attr('href', "/admin/entries/edits/" + entryid)
                 }
 
             } else {
@@ -1065,7 +1065,7 @@ $(document).on("click", ".featurebtn", function () {
     featurestatus = $(this).attr("data-feature")
 
     $.ajax({
-        url: "/entries/feature",
+        url: "/admin/entries/feature",
         type: "post",
         data: {
             entryid: entryid,
@@ -1082,10 +1082,10 @@ $(document).on("click", ".featurebtn", function () {
 })
 
 $(document).on("click", ".entrystatuschange", function () {
-    // if (window.location.href.includes('/entries/entrylist')) {
+    // if (window.location.href.includes('/admin/entries/entrylist')) {
 
     $.ajax({
-        url: "/entries/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
+        url: "/admin/entries/changestatus/" + entryid + "?" + "entry=" + entryid + "cname=" + channelname + "&&status=" + chlstatus,
         type: "post",
         data: {
             entryid: entryid,
@@ -1193,9 +1193,9 @@ $('#draftbtn').click(function () {
     var drafturl
 
     if (pageno == null) {
-        drafturl = "/entries/draftentry/" + eid
+        drafturl = "/admin/entries/draftentry/" + eid
     } else {
-        drafturl = "/entries/draftentry/" + eid + "?page=" + pageno
+        drafturl = "/admin/entries/draftentry/" + eid + "?page=" + pageno
 
     }
     var data = ckeditor1.getData();
@@ -1338,10 +1338,10 @@ $('#draftbtn').click(function () {
 
                     if (result.Channelname == "") {
                         if (pageno == null) {
-                            window.location.href = "/entries/edits/" + result.id
+                            window.location.href = "/admin/entries/edits/" + result.id
 
                         } else {
-                            window.location.href = "/entries/edits/" + result.id + "?page=" + pageno
+                            window.location.href = "/admin/entries/edits/" + result.id + "?page=" + pageno
 
                         }
 
@@ -1350,10 +1350,10 @@ $('#draftbtn').click(function () {
 
 
                         if (pageno == null) {
-                            window.location.href = "/entries/edit/" + result.Channelname + "/" + result.id
+                            window.location.href = "/admin/entries/edit/" + result.Channelname + "/" + result.id
 
                         } else {
-                            window.location.href = "/entries/edit/" + result.Channelname + "/" + result.id + "?page=" + pageno
+                            window.location.href = "/admin/entries/edit/" + result.Channelname + "/" + result.id + "?page=" + pageno
 
                         }
                     }
@@ -1424,9 +1424,9 @@ $('#publishbtn').click(function () {
     var homeurl
 
     if (pageno == null) {
-        homeurl = "/entries/entrylist/"
+        homeurl = "/admin/entries/entrylist/"
     } else {
-        homeurl = "/entries/entrylist/?page=" + pageno;
+        homeurl = "/admin/entries/entrylist/?page=" + pageno;
     }
 
     if (url.includes('editentry') || url.includes('editsentry')) {
@@ -1535,7 +1535,7 @@ $('#publishbtn').click(function () {
         extxt = $("#extxt").val()
 
         $.ajax({
-            url: "/entries/publishentry/" + eid,
+            url: "/admin/entries/publishentry/" + eid,
             type: "POST",
             dataType: "json",
             data: { "id": entryId, "cname": channelname, "image": img, "title": title, "status": 1, "text": data, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": sortorder, "tagname": tagname, "extxt": extxt },
@@ -1836,7 +1836,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/entries/deleteselectedentry',
+        url: '/admin/entries/deleteselectedentry',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -1895,7 +1895,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
     $('.selected-numbers').hide()
     $.ajax({
-        url: '/entries/unpublishselectedentry',
+        url: '/admin/entries/unpublishselectedentry',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -2068,7 +2068,7 @@ $(document).on('click', '#editbtn', function () {
 //                             const formData = new FormData();
 //                             formData.append('file', file);
 //                             formData.append('csrf', $("input[name='csrf']").val())
-//                             fetch(url + '/entries/imageupload', {
+//                             fetch(url + '/admin/entries/imageupload', {
 //                                 method: 'POST',
 //                                 body: formData
 //                             })
@@ -2359,7 +2359,7 @@ $(document).on('click', '#channelfieldsave', function () {
         }
 
         $.ajax({
-            url: "/entries/checkentriesorder",
+            url: "/admin/entries/checkentriesorder",
             type: "POST",
             async: false,
             data: { "chid": $("#chanid").val(), csrf: $("input[name='csrf']").val(), "order": sortorder, "eid": eid },
@@ -2540,7 +2540,7 @@ $(document).on('click', '#configbtn', function () {
 
     // $('#ChannelEditmodal').modal('show');
     $.ajax({
-        url: '/channels/getfields',
+        url: '/admin/channels/getfields',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -3185,7 +3185,7 @@ $(document).on('click', '#uptchannelfield', function () {
 
     $.ajax({
 
-        url: '/channels/Updatechannelfields',
+        url: '/admin/channels/Updatechannelfields',
         type: 'post',
         dataType: 'json',
         async: false,
@@ -3533,7 +3533,7 @@ $(document).on("keyup", "#author", function () {
 
             $("#cn-user").show()
 
-            fetch(`/entries/userdetails/?keyword=${keyword}`, {
+            fetch(`/admin/entries/userdetails/?keyword=${keyword}`, {
                 method: "GET"
             })
                 .then(response => {
@@ -3711,7 +3711,7 @@ $(document).on('click', '#previewbtn', function () {
     entryid = $(this).attr('data-id')
 
     $.ajax({
-        url: "/entries/previewdetails/" + entryid,
+        url: "/admin/entries/previewdetails/" + entryid,
         type: "GET",
         dataType: "json",
         data: { "id": entryid, csrf: $("input[name='csrf']").val() },
@@ -3784,7 +3784,7 @@ function EntryStatus(id) {
     console.log("check", isactive, id)
 
     $.ajax({
-        url: '/entries/entryisactive',
+        url: '/admin/entries/entryisactive',
         type: 'POST',
         async: false,
         data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -3931,7 +3931,7 @@ $(function () {
             console.log(pageno, "pageno");
 
             $.ajax({
-                url: '/entries/reorder',
+                url: '/admin/entries/reorder',
                 method: 'POST',
                 dataType: 'application/json',
                 data: { "neworder": newOrder, csrf: $("input[name='csrf']").val(), pageno: pageno },
@@ -4086,7 +4086,7 @@ $(document).on('click', '#makeprivate', function () {
     pentryid = $(this).attr('data-id')
 
     $.ajax({
-        url: "/entries/previewdetails/" + pentryid,
+        url: "/admin/entries/previewdetails/" + pentryid,
         type: "GET",
         dataType: "json",
         data: { "id": pentryid, csrf: $("input[name='csrf']").val() },
@@ -4140,7 +4140,7 @@ $(document).on('click', '#permissionupdate', function () {
 
 
     $.ajax({
-        url: "/entries/updatepermissionmembergroupid",
+        url: "/admin/entries/updatepermissionmembergroupid",
         type: "POST",
         dataType: "json",
         data: { "entryid": pentryid, csrf: $("input[name='csrf']").val(), "memgrpids": access_granted_memgrps },
@@ -4188,11 +4188,11 @@ $(document).on("click", ".searchClosebtn", function () {
     var value = $(".entryclosebutton").val()
     console.log("value:", value);
     if (value == 1) {
-        window.location.href = "/entries/entrylist"
+        window.location.href = "/admin/entries/entrylist"
     } else if (value == 2) {
-        window.location.href = "/entries/unpublishentries"
+        window.location.href = "/admin/entries/unpublishentries"
     } else if (value == 3) {
-        window.location.href = "/entries/draftentries"
+        window.location.href = "/admin/entries/draftentries"
     }
 })
 
@@ -4292,6 +4292,19 @@ $(document).ready(function () {
         $(".statusdropdown").removeClass("show")
 
         $("#statushidden").val(value)
+    })
+
+    $(".languagedropdown .option").on('click', function () {
+
+        var value=$(this).data('value');
+
+        var LanguageName=$(this).data('name');
+        
+        $("#selectLanguage").text(LanguageName)
+
+        $(".languagedropdown").removeClass("show")
+
+        $("#LanguageId").val(value)
     })
 
 })

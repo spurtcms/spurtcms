@@ -1,0 +1,34 @@
+{{define "templateheader"}}
+{{$template:=.template_name}}
+{{$ChannelName:=.ChannelName}}
+
+<header class="xl:py-6 sm:py-4 xl:px-0 px-6 py-6 border-b border-color border-solid">
+    <div class="container mx-auto max-w-screen-xl">
+        {{if .settingsdetail.SiteLogoPath}}
+        <a href="/ "><img class="w-[100px] h-[50px]"
+                src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+        {{else}}
+        <a href="/ "><img
+                src="/websites/public/img/Spurt-logo.svg"></a>
+        {{end}}
+    </div>
+</header>
+
+<main class="container min-h-screen mx-auto max-w-screen-xl md:lg-0 px-4">
+
+    <div class="flex flex-nowrap flex-row gap-x-2 pb-4 my-10 justify-start overflow-auto">
+        <a href="/ "
+            class="whitespace-nowrap px-6 py-2 rounded-3xl border border-color font-base leading-4 hover:text-white hover:bg-gray-500 hover:border-gray-500 {{if not $ChannelName}} border-cyan-500 text-[#0dcaf0] {{else}}border-gray-200 text-gray-600{{end}}">
+            Home
+        </a>
+        {{if .menulist}}
+        {{range .menulist}}
+        <a href="{{.UrlPath}} "
+            class="whitespace-nowrap px-6 py-2 rounded-3xl border border-color font-base leading-4 hover:text-white hover:bg-gray-500 hover:border-gray-500 {{if eq $ChannelName .Name}}border-cyan-500 text-[#0dcaf0] {{else}}border-gray-200 text-gray-600{{end}}">
+            {{.Name}}
+        </a>
+        {{end}}
+        {{end}}
+    </div>
+
+    {{end}}

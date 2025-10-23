@@ -33,24 +33,24 @@
                 <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
                 <img src="/public/img/search-icon-active.svg" alt="search" class="hidden group-hover:block hovericon">
             </a>
-            <form action="/channels/defaultchannels" method="get" class="filterform " autocomplete="off">
+            <form action="/admin/channels/defaultchannels" method="get" class="filterform " autocomplete="off">
                 <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="search"
                     value="{{if .filter}}{{.filter}}{{end}}"
                     class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
                 {{if eq .Searchtrue true}}
                 <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
-                    <a href="/channels/defaultchannels">   <img src="/public/img/close.svg" alt="close"></a>
+                    <a href="/admin/channels/defaultchannels">   <img src="/public/img/close.svg" alt="close"></a>
                 </div>
                 {{else}}
                 <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
-                  <a href="/channels/defaultchannels">  <img src="/public/img/close.svg" alt="close"></a>
+                  <a href="/admin/channels/defaultchannels">  <img src="/public/img/close.svg" alt="close"></a>
                 </div>
                 {{end}}
 
             </form>
         </div>
 
-        <!-- <a href="/channels/create" id="create-channel-btn"
+        <!-- <a href="/admin/channels/create" id="create-channel-btn"
             class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D]">
             <span class="hidden max-sm:block text-lg leading-none ">+</span>
             <span class="max-sm:hidden">
@@ -85,14 +85,14 @@
                     {{$Translate.Channell.MyChannels}}</h3>
                     <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
                         {{$Translate.Channell.Mycollectiondescst}}
-                        <a href="/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                        <a href="/admin/entries/entrylist" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                         </a>
                         {{$Translate.Channell.Mycollectiondescmid}}
-                        <a href="/templates" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                        <a href="/admin/templates" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                                                 </a>
                         {{$Translate.Channell.Mycollectiondescmidnext}}
 
-                        <a href="/categories" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescategorie}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
+                        <a href="/admin/categories" class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center" href="">{{$Translate.Channell.Mycollectiondescategorie}} <span><img src="/public/img/link_icon.svg" alt=""></span> 
                         </a>
 
                         {{$Translate.Channell.Mycollectiondescend}}
@@ -116,19 +116,19 @@
         <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="collection-tab"  href="/channels/"  role="tab"
+                    id="collection-tab"  href="/admin/channels/"  role="tab"
                     aria-controls="collection" aria-selected="true">{{$Translate.Channell.Mychannel}}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="active hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="work-tab" href="/channels/defaultchannels"  role="tab" aria-controls="work"
+                    id="work-tab" href="/admin/channels/defaultchannels"  role="tab" aria-controls="work"
                     aria-selected="false" tabindex="-1">{{$Translate.Explore}}</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="work-tab" href="/templates" role="tab" aria-controls="work" aria-selected="false"
+                    id="work-tab" href="/admin/templates" role="tab" aria-controls="work" aria-selected="false"
                     tabindex="-1">Templates</a>
-            </li>
+            </li> -->
             <li class="ms-auto">
                 <p class="text-sm text-[#A1A1A1] font-normal max-[400px]:text-xs" id="records"> <span
                         class="text-[#262626]">{{.count}}
@@ -166,7 +166,7 @@
                         <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
                               {{$Translate.Pagesorry}}
                             {{$Translate.Gobackhome}}</p>
-                        <a href="/channels/create"
+                        <a href="/admin/channels/create"
                             class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
                             {{$Translate.Clickadd}} >></a>
                     </div> -->
@@ -180,7 +180,7 @@
                                 <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">{{$Translate.Channell.Nochannelsyet}}</h3>
                                 <p class="font-light text-[#717171] text-center mb-2 text-base">{{$Translate.Channell.Nochannels}}</p>
                             </div>
-                            <!-- <a href="/channels/create"
+                            <!-- <a href="/admin/channels/create"
                                 class="inline-flex items-center bg-[#000000] hover:bg-[#423\] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.Channell.Createfirstchannels}}</a> -->
                         </div>
                     </div>
@@ -272,6 +272,6 @@
 
 
     {{template "footer" .}}
-    <script src="/public/js/channels/channellist.js"></script>
+    <script src="/public/js/admin/channels/channellist.js"></script>
 
     {{template "footerclose" .}}

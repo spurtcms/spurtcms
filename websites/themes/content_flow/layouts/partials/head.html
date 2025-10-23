@@ -1,0 +1,43 @@
+{{define "templatehead"}}
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{{if .seodetail.PageTitle}}{{.seodetail.PageTitle}}{{else}}{{.settingsdetail.SiteName}}{{end}}</title>
+<link rel="icon" type="image/x-icon"
+    href="{{if .settingsdetail.SiteFavIconPath}}/image-resize?name={{.settingsdetail.SiteFavIconPath}}{{else}}https://spurtcms.com/public/img/spurtCMSlogonew.jpg{{end}}">
+
+<meta name="description" content="{{.seodetail.PageDescription}}">
+<meta name="keywords" content="{{.seodetail.PageKeyword}}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+
+
+<!-- Tailwind Config (after CDN) -->
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ["Montserrat", "Lexend"],
+
+                },
+            },
+        },
+        corePlugins: {
+            preflight: true,
+        },
+
+
+    };
+</script>
+
+
+{{end}}

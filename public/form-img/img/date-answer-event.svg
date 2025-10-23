@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5317" data-name="Rectangle 5317" width="16" height="16" transform="translate(420 312)" fill="#fff" stroke="#333" stroke-width="1.2"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_752" data-name="Mask Group 752" transform="translate(-420 -312)" clip-path="url(#clip-path)">
+    <g id="calendar-04-stroke-rounded_4_" data-name="calendar-04-stroke-rounded (4)" transform="translate(419.11 311.112)">
+      <path id="Path_39306" data-name="Path 39306" d="M13.345,1.488v1.48m-8.88-1.48v1.48" transform="translate(-0.015 0)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+      <path id="Path_39307" data-name="Path 39307" d="M1.86,9.073c0-3.224,0-4.837.927-5.838s2.418-1,5.4-1H9.593c2.983,0,4.474,0,5.4,1s.927,2.614.927,5.838v.38c0,3.224,0,4.837-.927,5.838s-2.418,1-5.4,1H8.187c-2.983,0-4.474,0-5.4-1S1.86,12.677,1.86,9.453Z" transform="translate(0 -0.004)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+      <path id="Path_39308" data-name="Path 39308" d="M2.233,5.953h13.32" transform="translate(-0.002 -0.025)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+    </g>
+  </g>
+</svg>

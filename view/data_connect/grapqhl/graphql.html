@@ -49,7 +49,7 @@
             {{end}}
         </div>
         <a href="#"
-            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] text-white text-sm font-normal no-underline min-w-[32px]"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] text-white text-sm font-normal no-underline min-w-[32px]"
             data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
             <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
             </span>
@@ -81,7 +81,7 @@
 
         </div>
         <a href="#"
-            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] text-white text-sm font-normal no-underline min-w-[32px]"
+            class="w-auto flex space-x-[6px] items-center justify-center px-[16px] max-md:px-[10px] h-8 rounded-[4px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]  text-white text-sm font-normal no-underline min-w-[32px]"
             data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
             <span class="max-sm:hidden"> {{$Translate.Graphql.CreateToken}}
             </span>
@@ -263,7 +263,7 @@
                     </p>
                 </div>
                 <a href="#"
-                    class="w-auto flex space-x-[6px] items-center justify-center px-[16px]  h-8 rounded-[4px] hover:bg-[#148569] bg-[#10A37F] text-white text-sm font-normal no-underline"
+                    class="w-auto flex space-x-[6px] items-center justify-center px-[16px]  h-8 rounded-[4px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] text-white text-sm font-normal no-underline"
                     data-bs-toggle="modal" data-bs-target="#createToken"><img src="/public/img/api-key.svg" />
                     {{$Translate.Graphql.CreateToken}}</a>
             </div>
@@ -357,7 +357,7 @@
     role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content border-0">
-            <div class="px-6 py-1.5 max-sm:p-[6px_16px] border-b border-[#EDEDED] flex justify-between items-center ">
+            <div class="px-6 py-1.5 max-sm:p-[6px_16px] border-b border-[#EDEDED] flex justify-between items-center !z-[5] sticky top-0">
                 <h5 class="mb-0 text-bold-black font-medium text-base" id="modalTitleId">
                     {{$Translate.Graphql.CreateToken}}
                 </h5>
@@ -371,7 +371,7 @@
                         class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white hover:bg-[#7f7e7e] bg-[#D1D1D1] rounded-[3px] no-underline">{{$Translate.Graphql.GenerateButton}}</a>-->
                 </div>
             </div>
-            <div class="overflow-auto h-full scrollbar-thin">
+            <div class="">
                 <div class="p-6 max-sm:px-[16px] h-full">
                     <div class="flex flex-col space-y-[16px]">
                         <div class="flex flex-col space-y-[6px] tokenInputGrp">
@@ -380,7 +380,7 @@
                                 <div class="cursor-pointer group">
                                 <img src="/public/img/inputdesc.svg" alt="">
                                 <p
-                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    class="!z-[10] hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                     {{$Translate.Graphql.Apitokennamelable}}</p>
                             </div></label>
                             <input type="text" name="tokenName" id="tokenName"
@@ -396,7 +396,7 @@
                                 <div class="cursor-pointer group">
                                 <img src="/public/img/inputdesc.svg" alt="">
                                 <p
-                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                     {{$Translate.Graphql.Descriptionlable}}</p>
                             </div></label>                           
                             <textarea type="text" name="tokenDesc" id="tokenDesc"
@@ -416,7 +416,7 @@
                                 <div class="cursor-pointer group">
                                 <img src="/public/img/inputdesc.svg" alt="">
                                 <p
-                                    class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
                                     {{$Translate.Graphql.Tokendurationlable}}</p>
                             </div></label>
                             <a class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED]   no-underline  w-full flex justify-between items-center apitoken-data selectVal cursor-pointer"
@@ -449,7 +449,8 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-800 text-xs font-normal mb-0 break-all" id="tokeninsideContent">
-                                       
+                                        Lorem ipsum dolor sit amet.Lorem
+                                        ipsum dolor sit amet.
                                     </p>
                                 </div>
                             </div>
@@ -459,8 +460,8 @@
                                         class="text-[#717171] text-xs font-normal">{{$Translate.Graphql.Copydetails}}</span>
                                 </p>
                                 <button
-                                    class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#FFFFFF] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center"
-                                    id="copy-insidebtn"><img src="/public/img/copy.svg">
+                                    class="flex space-x-[4px] h-8 rounded px-3  w-auto text-sm font-normal text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] justify-center items-center"
+                                    id="copy-insidebtn"><img src="/public/img/copy-white.svg">
                                     <span>{{$Translate.Copy}}</span></button>
                             </div>
                         </div>
@@ -527,14 +528,14 @@
                     {{$Translate.Graphql.Copyheading}}
                 </h5>
                 <div class="flex space-x-[12px]">
-                    <a href="/graphql/" data-bs-dismiss="modal"
+                    <a href="/admin/graphql/" data-bs-dismiss="modal"
                         class="h-[30px] flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline"
                         id="graphqlCopyCancel"><span>{{$Translate.Cancel}}</span></a>
                     <button id="copy-btn"
-                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center"><img
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]0] justify-center items-center"><img
                             src="/public/img/copy-white.svg" /> <span>{{$Translate.Copy}}</span></button>
                     <button id="copied-btn"
-                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#FFFFFF] hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
                 </div>
             </div>
             <div class="overflow-auto">

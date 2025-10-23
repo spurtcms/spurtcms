@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+    <div id="__next" class="font-montserrat">
+        {{- block "templateheader" .}}{{end}}
+        {{$template:=.template_name}}
+        <section class="max-w-[1060px] mx-auto p-[70px_16px] max-[1300px]:p-[32px_16px] max-sm:p-[16px]">
+            <!-- Breadcrumb -->
+            <ul
+                class="flex items-center flex-wrap gap-[8px] mb-[30px] text-[14px] font-semibold leading-[17.07px] text-[#1B1B20]">
+                <li>
+                    <a href="/ "
+                        class="text-[#1B1B20C2] hover:underline">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <img src="/support_sphere/assets/images/search-resultArrow.svg" alt="arrow" class="h-[16px]" />
+                </li>
+                <li>
+                    <a href="/channel/{{.ChannelName}} "
+                        class="text-[#1B1B20C2] hover:underline">
+                        {{.ChannelName}}
+                    </a>
+                </li>
+                <li>
+                    <img src="/support_sphere/assets/images/search-resultArrow.svg" alt="arrow" class="h-[16px]" />
+                </li>
+                <li>{{.entrydetail.Title}}</li>
+            </ul>
+
+            <div id="description">{{.content}}</div>
+
+            <div class="bg-[#F6F6F7] rounded-[8px] p-[16px] text-center">
+                <h4 class="text-[24px] font-bold leading-[30px] text-[#231F20] mb-[30px]">Was this article helpful?</h4>
+                <ul class="flex items-center justify-center gap-[16px]">
+                    <li>
+                        <a href="#"
+                            class="bg-white border border-[#1B1B2026] h-[37px] flex items-center justify-center rounded-[8px] w-[81px] text-[#1B1B20] text-[14px] font-semibold leading-[17.07px] group hover:bg-[#231F20] hover:text-white hover:border-[#231F20] cursor-pointer">
+                            <span class="mr-[4px]">Yes</span>
+                            <span class="thumb flex items-center gap-[4px]">
+                                <img class="rotate-180 group-hover:hidden"
+                                    src="/support_sphere/assets/images/thumb-no.svg" alt="no" />
+                                <img src="/support_sphere/assets/images/thumb-yes.svg" alt="yes"
+                                    class="hidden group-hover:inline-block" />
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="bg-white border border-[#1B1B2026] h-[37px] flex items-center justify-center rounded-[8px] w-[81px] text-[#1B1B20] text-[14px] font-semibold leading-[17.07px] group hover:bg-[#231F20] hover:text-white hover:border-[#231F20] cursor-pointer">
+                            <span class="mr-[4px]">No</span>
+                            <span class="thumb flex items-center gap-[4px]">
+                                <img src="/support_sphere/assets/images/thumb-no.svg" alt="no"
+                                    class="group-hover:hidden" />
+                                <img class="rotate-180 hidden group-hover:inline-block"
+                                    src="/support_sphere/assets/images/thumb-yes.svg" alt="yes" />
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </section>
+
+
+
+
+    </div>
+</body>
+
+</html>

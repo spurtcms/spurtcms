@@ -1,0 +1,355 @@
+{{define "gotemplatepageheader"}}
+
+{{$Translate := .translate}}
+
+<input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
+  <div class="header-rht flex border-b border-solid border-[#E8E8E8] max-md:flex-col">
+                        <div
+                            class="flex gap-[20px] items-center p-[30px_0_20px_24px] max-lg:flex-col max-lg:p-[16px] max-lg:items-start">
+
+                            <div class="min-w-[100px] max-w-[215px] w-full">
+                                <img src="{{.templatedetail.TemplateImage }}" alt="">
+                            </div>
+
+                            <div>
+                                <div class="pr-[1.25rem]">
+                                    <h2
+                                        class="mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">
+                                        {{.templatedetail.TemplateName}}</h2>
+                                    <p class="text-[13px] font-light leading-[20px] text-[#616161]"> {{.templatedetail.TemplateDescription}}</p>
+                                </div>
+                                <div
+                                    class="flex flex-wrap items-center gap-[10px] mt-[10px] w-full pt-[10px] border-t border-solid border-[#E8E8E8]">
+                                    <div class="flex items-center gap-[14px]">
+                                        <h3
+                                            class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">
+                                            Created date:
+                                        </h3>
+                                        <p
+                                            class="text-[13px] font-light leading-[16px]  text-[#0088FF] whitespace-nowrap">
+                                            {{.templatedetail.DateString}}</p>
+                                    </div>
+                                    <!-- <div class="flex items-center gap-[14px]">
+                                        <h3
+                                            class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">
+                                            Last Updated:
+                                        </h3>
+                                        <p
+                                            class="text-[13px] font-light leading-[16px]  text-[#0088FF] whitespace-nowrap">
+                                            12 Mar 25,
+                                            04:58 am</p>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div
+                            class="p-[30px_24px_20px_24px] max-lg:p-[16px] w-full max-md:max-w-full max-w-[314px] border-l border-solid border-[#E8E8E8]">
+                            <div class="flex items-center justify-between gap-[16px] mb-[18px] last-of-type:mb-0">
+                                <h4 class="text-[14px] leading-[18px] text-[#252525] font-light whitespace-nowrap">
+                                    Creator</h4>
+                                <p class="text-[14px] leading-[18px] text-[#0088FF] font-light whitespace-nowrap">{{.Menu.Name}}
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between gap-[16px] mb-[18px] last-of-type:mb-0">
+                                <h4 class="text-[14px] leading-[18px] text-[#252525] font-light whitespace-nowrap">
+                                    Owner:</h4>
+                                <p class="text-[14px] leading-[18px] text-[#0088FF] font-light whitespace-nowrap">Admin
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between gap-[16px] mb-[18px] last-of-type:mb-0">
+                                <h4 class="text-[14px] leading-[18px] text-[#252525] font-light whitespace-nowrap">
+                                    Publish:</h4>
+                                <p class="text-[14px] leading-[18px] text-[#0088FF] font-light whitespace-nowrap">Not
+                                    published</p>
+                            </div>
+                            <div class="flex items-center justify-between gap-[16px] mb-[18px] last-of-type:mb-0">
+                                <h4 class="text-[14px] leading-[18px] text-[#252525] font-light whitespace-nowrap">
+                                    Visibility :</h4>
+                                <p class="text-[14px] leading-[18px] text-[#0088FF] font-light whitespace-nowrap">Public
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="mb-[60px] p-[12px_16px]">
+                        <div
+                            class="border-b boder-solid border-[#E6E6E6] mb-0  flex flex-nowrap justify-between gap-[14px]">
+                            <ul class="nav nav-pills overflow-x-auto overflow-y-visible flex flex-nowrap  mb-0 gap-[14px]" id="pills-tab" role="tablist">
+                                <li class="" role="presentation">
+                                 <a href="/admin/website/pages/{{.websitedetail.Id}}">   <button
+                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Website Page`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px] "
+                                        id="pills-themes-tab" data-bs-toggle="pill" data-bs-target="#pills-themes"
+                                        type="button" role="tab" aria-controls="pills-themes"
+                                        aria-selected="true">Pages</button></a>
+                                </li>
+                                <li class="" role="presentation">
+                                  <a href="/admin/website/menu/?webid={{.websitedetail.Id}}">  <button
+                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Menus`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu"
+                                        type="button" role="tab" aria-controls="pills-menu"
+                                        aria-selected="false">Menu</button></a>
+                                </li>
+                                <li class="" role="presentation">
+                                  <a href="/admin/website/seo/?webid={{.websitedetail.Id}}"> <button
+                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `SEO`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-seo-tab" data-bs-toggle="pill" data-bs-target="#pills-seo"
+                                        type="button" role="tab" aria-controls="pills-seo"
+                                        aria-selected="false">SEO</button></a> 
+                                </li>
+                                <li class="" role="presentation">
+                                   <a href="/admin/website/setting/?webid={{.websitedetail.Id}}">  <button
+                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Setting`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-setting-tab" data-bs-toggle="pill" data-bs-target="#pills-setting"
+                                        type="button" role="tab" aria-controls="pills-setting"
+                                        aria-selected="false">Setting</button></a>
+                                </li>
+
+
+                            </ul>
+                          {{if eq .linktitle `Website Page`}}
+
+
+                            <div>
+                                <div class="flex items-center gap-[14px] ms-auto">
+                                   <div
+                class="{{if eq .Searchtrue true}} transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+                <a href="javascript:void(0);"
+                    class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px]  place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                    <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                    <img src="/public/img/search-icon-active.svg" alt="search"
+                        class="hidden group-hover:block hovericon searchopen">
+                </a>
+                <form action="/admin/website/pages/{{.websitedetail.Id}}" method="get" class="filterform " autocomplete="off">
+                    <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id=""
+                        value="{{.Filter.Keyword}}"
+                        class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0  absolute right-0 w-[calc(100%-36px)] h-full block  {{if eq .Searchtrue true}} p-[0_24px_0_0] {{else}} p-0 {{end}}">
+                    {{if eq .Searchtrue true}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+
+                </form>
+
+            </div>
+ <form action="/admin/website/pages/{{.websitedetail.Id}}" method="get" class="filterform " autocomplete="off">
+                <div class=" dropdown filter-dropDown static">
+
+                    <a href="javascript:void(0);"
+                        class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <img src="/public/img/filter.svg" alt="filter"
+                            class="block group-hover:hidden group-focus:hidden">
+                        <img src="/public/img/filter-active.svg" alt="filter-active"
+                            class="hidden group-hover:block group-focus:block">
+                    </a>
+                    <div
+                        class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                        <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[16px]">
+                            <h3
+                                class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center gap-[4px]">
+                                <img src="/public/img/filter-black.svg" alt="filter" class="block">
+                                {{$Translate.Memberships.MembershipGroups.Selectfilters}}
+                            </h3>
+
+                        </div>
+
+
+                        <div class="block mb-[12px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.Memberships.MembershipGroups.Status}}</p>
+                            <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                                <a class="flex items-center justify-between bg-[#ffffff] border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                                    href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                    <span class="slctstatus text-[11px] font-normal leading-[13.75px] text-[#D6D6D6]">
+                                        {{if .Filter.Status}}
+                                        {{.Filter.Status}}{{else}}
+                                        Select Status
+                                        {{end}}
+                                    </span>
+                                    <span>
+                                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                    </span>
+                                </a>
+                                <input type="hidden" name="status" id="statusid">
+                                <ul class="filterleveldropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                                    aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                            href="javascript:void(0)">Active</a></li>
+                                    <li><a class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                            href="javascript:void(0)">Inactive</a></li>
+
+                                </ul>
+
+
+                            </div>
+                        </div>
+
+                        <div class="block mb-[12px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.Memberships.MembershipGroups.Lastupdatedon}}
+                            </p>
+                            <div class="flter-option">
+
+                                <input type="date" name="lastupdated"
+                                    class=" bg-[#ffffff] border border-[#EDEDED] p-2 rounded-[4px] h-[32px] border-none text-[10px] font-normal leading-[12.5px] w-full outline-none min-w-[158px] placeholder:text-[#D6D6D6] block ">
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center gap-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                            <a href="/admin/website/pages/{{.websitedetail.Id}}"
+                                class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">Clear</a>
+                            <button type="submit"
+                                class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                                {{$Translate.Memberships.MembershipGroups.Applyfilter}}
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </form>
+
+                                    <a href="/admin/website/pages/createpage/?webid={{.websitedetail.Id}}" class="flex items-center justify-center gap-1 bg-[#F8F8F8] max-sm:p-[8px] px-[16px] py-[4px] border-[#F5F5F5] border-[1px] hover:border-[#717171] border-solid h-[36px] rounded-[0.25rem] font-normal text-[#202124] text-sm leading-4 tracking-tight"> <img src="/public/img/add.svg" alt=""> Create New Page </a>
+
+                                </div>
+                            </div>
+                            {{end}}
+
+                                 {{if eq .linktitle `Menus`}}
+        <div class="flex items-center gap-[14px] ms-auto">
+            <div
+                class="{{if eq .Searchtrue true}} transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+                <a href="javascript:void(0);"
+                    class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px]  place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                    <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                    <img src="/public/img/search-icon-active.svg" alt="search"
+                        class="hidden group-hover:block hovericon searchopen">
+                </a>
+                <form action="/admin/website/menu/?webid={{.websitedetail.Id}}" method="get" class="filterform " autocomplete="off">
+                    <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id=""
+                        value="{{.Filter.Keyword}}"
+                        class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0  absolute right-0 w-[calc(100%-36px)] h-full block  {{if eq .Searchtrue true}} p-[0_24px_0_0] {{else}} p-0 {{end}}">
+                 <input type="hidden" name="templateid" value="{{.templatedetail.Id}}" />
+                        {{if eq .Searchtrue true}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+
+                </form>
+
+            </div>
+
+            <form action="/admin/website/menu/?webid={{.websitedetail.Id}}" method="get" class="filterform " autocomplete="off">
+                <div class=" dropdown filter-dropDown static">
+
+                    <a href="javascript:void(0);"
+                        class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <img src="/public/img/filter.svg" alt="filter"
+                            class="block group-hover:hidden group-focus:hidden">
+                        <img src="/public/img/filter-active.svg" alt="filter-active"
+                            class="hidden group-hover:block group-focus:block">
+                    </a>
+                    <div
+                        class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                        <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[16px]">
+                            <h3
+                                class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center gap-[4px]">
+                                <img src="/public/img/filter-black.svg" alt="filter" class="block">
+                                {{$Translate.Memberships.MembershipGroups.Selectfilters}}
+                            </h3>
+
+                        </div>
+
+
+                        <div class="block mb-[12px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.Memberships.MembershipGroups.Status}}</p>
+                            <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                                <a class="flex items-center justify-between bg-[#ffffff] border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                                    href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                    <span class="slctstatus text-[11px] font-normal leading-[13.75px] text-[#D6D6D6]">
+                                        {{if .Filter.Status}}
+                                        {{.Filter.Status}}{{else}}
+                                        Select Status
+                                        {{end}}
+                                    </span>
+                                    <span>
+                                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                    </span>
+                                </a>
+                                  <input type="hidden" name="templateid" value="{{.websitedetail.Id}}" />
+                                <input type="hidden" name="status" id="statusid">
+                                <ul class="filterleveldropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                                    aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                            href="javascript:void(0)">Active</a></li>
+                                    <li><a class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                            href="javascript:void(0)">Inactive</a></li>
+
+                                </ul>
+
+
+                            </div>
+                        </div>
+
+                        <div class="block mb-[12px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.Memberships.MembershipGroups.Lastupdatedon}}
+                            </p>
+                            <div class="flter-option">
+
+                                <input type="date" name="lastupdated"
+                                    class=" bg-[#ffffff] border border-[#EDEDED] p-2 rounded-[4px] h-[32px] border-none text-[10px] font-normal leading-[12.5px] w-full outline-none min-w-[158px] placeholder:text-[#D6D6D6] block ">
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center gap-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                            <a href="/admin/website/menu?webid={{.websitedetail.Id}}"
+                                class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">Clear</a>
+                            <button type="submit"
+                                class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                                {{$Translate.Memberships.MembershipGroups.Applyfilter}}
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </form>
+
+            <a href="#modalIdd2" data-bs-toggle="modal"
+                class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                <span class="mr-[8px] max-sm:mr-0 text-lg leading-none ">
+                    +
+                </span> <span class="max-sm:hidden"> {{$Translate.Menu.CreateMenu}}</span></a>
+        </div>
+        {{end}}
+
+           
+                        </div>
+
+
+         {{end}}               

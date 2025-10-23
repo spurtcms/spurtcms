@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+    font-family: "Bricolage Grotesque", serif;
+}
+
+html {
+    font-size: 90%;
+}
+
+body {
+    margin: 0;
+}
+
+
+.scroll-invisible::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+
+.scroll-invisible::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.scroll-invisible::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.scroll-invisible::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+}
+
+.bg-image{
+    background-image: url('../images/Background.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}

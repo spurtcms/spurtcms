@@ -6,17 +6,26 @@ $(document).on('click', '#infoCloseBtn', function () {
 
 })
 
+// $('.hd-crd-btn').click(function () {
+  
+//     if ($('#hd-crd').is(':visible')) {
+//         $('#hd-crd').addClass('hidden').removeClass("show"); 
+//         document.cookie = `tempbanner=false; path=/;`;
+//     } else {
+//         $('#hd-crd').addClass("show").removeClass('hidden');
+//         document.cookie = `tempbanner=true; path=/;`; 
+//     }
+// });
 $('.hd-crd-btn').click(function () {
   
     if ($('#hd-crd').is(':visible')) {
         $('#hd-crd').addClass('hidden').removeClass("show"); 
-        document.cookie = `tempbanner=false; path=/;`;
+        document.cookie = `channelbanner=false; path=/;`;
     } else {
         $('#hd-crd').addClass("show").removeClass('hidden');
-        document.cookie = `tempbanner=true; path=/;`; 
+        document.cookie = `channelbanner=true; path=/;`; 
     }
 });
-
 
 $(document).on('click', '#infoShowBtn', function () {
     $('#hd-crd').removeClass('hidden')
@@ -41,11 +50,11 @@ $(document).on('keypress', '#templateSearchBar', function (e) {
 
 
         if (searchText != "") {
-            $('#templateSearchLink').attr('href', "/templates/?keyword=" + searchText)
+            $('#templateSearchLink').attr('href', "/admin/templates/?keyword=" + searchText)
             $('#templateSearchBar').attr('value', searchText)
             $('#templateSearchLink').get(0).click()
         } else {
-            window.location.href = "/templates/"
+            window.location.href = "/admin/templates/"
         }
 
     }
@@ -57,14 +66,14 @@ $(document).on('keyup', '#templateSearchBar', function (e) {
     if (e.which == 8 && searchVal != "") {
         var searchKey = $('#templateSearchBar').val()
         if (searchKey == "") {
-            window.location.href = "/templates/"
+            window.location.href = "/admin/templates/"
         }
     }
 })
 
 $(document).on('click', '#removeTemplateFilter', function () {
 
-    window.location.href = "/templates/"
+    window.location.href = "/admin/templates/"
 })
 
 $(document).on("click", ".Closebtn", function () {
@@ -77,7 +86,7 @@ $(document).on("click", ".Closebtn", function () {
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
 
-    window.location.href = "/templates/"
+    window.location.href = "/admin/templates/"
 })
 
 $(document).ready(function () {

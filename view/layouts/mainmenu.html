@@ -30,23 +30,23 @@
             <div class="bg-[#F5F5F5] border-b border-[#D9D9D9] py-[8px] px-[12px] relative">
                 <div class="dropdown ">
                     <a href="javascript:void(0)"
-                        class="bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]crt-bt rounded-[4px] grid grid-cols-[1fr_auto] place-items-center "
+                        class="bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] crt-bt rounded-[4px] grid grid-cols-[1fr_auto] place-items-center "
                         data-bs-toggle="dropdown">
                         <p
-                        class="text-base font-medium leading-none text-white p-1.5   border-r  w-full h-[32px] grid place-items-center">
-                        Create   </p>
+                            class="text-base font-medium leading-none text-white p-1.5   border-r  w-full h-[32px] grid place-items-center">
+                            Create </p>
                         <span class="w-8 h-8 grid place-items-center">
-                          <img src="/public/img\create-arrow.svg" alt="arrow">
+                            <img src="/public/img\create-arrow.svg" alt="arrow">
                         </span>
                     </a>
 
                     <ul
                         class="dropdown-menu border-none overflow-hidden w-full rounded-b-lg rounded-t-none transform-no top-100 p-0 shadow-md bg-white">
                         <li><a class=" hover:bg-[#F5F5F5] py-[12px] px-[16px]  block border-b border-[#EDEDED] text-xs font-normal leading-[16px] text-[#152027]  hover:text-[#152027]"
-                                href="/channels/create">{{$Translate.Channell.Channels}}    </a></li>
+                                href="/admin/channels/create">{{$Translate.Channell.Channels}} </a></li>
                         <li><a class=" hover:bg-[#F5F5F5] py-[12px] px-[16px]  block border-b border-[#EDEDED] text-xs font-normal leading-[16px] text-[#152027] hover:text-[#152027]"
-                                href="/entries/create/{{.Menu.ChannelID}}">    {{$Translate.Entries}} </a></li>
-                    
+                                href="/admin/entries/create/{{.Menu.ChannelID}}"> {{$Translate.Entries}} </a></li>
+
                     </ul>
                 </div>
 
@@ -56,7 +56,7 @@
             <!-- <div class="bg-[#F5F5F5] border-b border-[#D9D9D9] py-[8px] px-[12px] relative doc-lst">
                 <div class="dropdown ">
                     <a href="/entries/create/{{.Menu.ChannelID}}"
-                        class="bg-[var(--btn-bg)] crt-bt rounded-[4px] grid grid-cols-[1fr_auto] rounded-[6px] place-items-center hover:bg-[var(--btn-hover)]">
+                        class="bg-[#000000] crt-bt rounded-[4px] grid grid-cols-[1fr_auto] rounded-[6px] place-items-center hover:bg-[#2D2D2D]">
                         <p
                             class="text-base font-medium leading-none text-white p-1.5   border-r  w-full h-[32px] grid place-items-center">
                             {{$Translate.Channell.Createentry}}</p>
@@ -98,24 +98,24 @@
                 {{if ne .Route ""}}
                 {{if eq .ModuleName "Dashboard"}}
                 <ul>
-                <li class=" doc-lst  relative p-[10px]">
-                    <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                        href="{{.Route}}">
-                        <div class="relative grid place-items-center">
-                            {{if ne $Title .ModuleName}}
-                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                src="{{.IconPath}}" alt="channels">
-                            {{else}}
-                            <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                src="/public/img/dashboard_active.svg" alt="dashboard">
-                            {{end}}
-                        </div>
-                        <p
-                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                            {{$Translate.Dashboard}}</p>
-                    </a>
-                </li>
-            </ul>
+                    <li class=" doc-lst  relative p-[10px]">
+                        <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                            href="/admin{{.Route}}">
+                            <div class="relative grid place-items-center">
+                                {{if ne $Title .ModuleName}}
+                                <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                    src="{{.IconPath}}" alt="channels">
+                                {{else}}
+                                <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
+                                    src="/public/img/dashboard_active.svg" alt="dashboard">
+                                {{end}}
+                            </div>
+                            <p
+                                class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
+                                {{$Translate.Dashboard}}</p>
+                        </a>
+                    </li>
+                </ul>
                 {{end}}
                 {{end}}
                 {{end}}
@@ -142,18 +142,18 @@
                                 {{if ne .ModuleName "Settings"}}
                                 {{if gt (len .SubModule) 0}}
                                 {{if ne .Route ""}}
-                              
+
                                 {{if eq .ModuleName "Categories"}}
                                 <li class=" doc-lst  relative">
                                     <div>
                                         <a class=" group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer"
-                                            href="{{.Route}}">
+                                            href="/admin{{.Route}}">
                                             <div class="relative grid place-items-center">
                                                 {{if ne $Title .ModuleName}}
                                                 <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
                                                     src="{{.IconPath}}" alt="Documents">
                                                 {{else}}
-                                                <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
+                                                <img class="inline-block h-4 mr-3 flex-shrink-0"
                                                     src="/public/img/categories-active.svg" alt="Documents">
                                                 {{end}}
                                             </div>
@@ -167,7 +167,7 @@
                                 {{if eq .ModuleName "Channels"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
+                                        href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -179,7 +179,7 @@
                                         </div>
                                         <p
                                             class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}}overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Channell.Channels}} & {{$Translate.Entries}}           </p>
+                                            {{$Translate.Channell.Channels}} & {{$Translate.Entries}} </p>
                                     </a>
                                 </li>
 
@@ -211,19 +211,19 @@
                                     <div>
 
                                         <a class=" group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer"
-                                            href="/cta">
+                                            href="/admin/cta">
                                             <div class="relative grid place-items-center">
                                                 {{if ne $Title .ModuleName}}
                                                 <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
                                                     src="{{.IconPath}}" alt="Documents">
                                                 {{else}}
-                                                <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
+                                                <img class="inline-block h-4 mr-3 flex-shrink-0"
                                                     src="/public/img/Group 17557.svg" alt="Documents">
                                                 {{end}}
                                             </div>
                                             <p class="overflow-hidden line-clamp-1 pr-1 pointer-events-none font-normal text-sm leading-[18px]
                                         {{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}}">
-                                                Forms</p>
+                                                {{$Translate.FormBuilder.Cta}}</p>
                                         </a>
                                     </div>
                                 </li>
@@ -241,7 +241,7 @@
 
                                 <li class=" doc-lst  relative">
                                     <a class="group  {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
+                                        href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -258,7 +258,33 @@
                                 </li>
 
                                 {{end}}
-                          
+
+                                <!-- {{if eq .ModuleName "Menu"}}
+
+                                <li class=" doc-lst  relative">
+                                    <a class="group   w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}}  "
+                                        href="/admin{{.Route}}" >
+                                        <div class="relative grid place-items-center">
+                                         
+                                         
+                                                {{if ne $Title .ModuleName}}
+                                                <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                    src="/public/img/Default state.svg" alt="Documents">
+                                                {{else}}
+                                                <img class="inline-block mr-3 flex-shrink-0 h-4"
+                                                    src="/public/img/Actve state.svg" alt="Documents">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class=" {{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
+                                            Menu</p>
+                                    </a>
+                                </li>
+                                {{end}} -->
+
+
+
+
                                 {{end}}
                                 {{end}}
                                 {{end}}
@@ -283,7 +309,7 @@
                                 </a>
                             </li>
                             {{end}} -->
-               
+
                                 <!-- {{if eq .ModuleName "Blocks"}}
                                 <li class=" doc-lst  relative">
                                     <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
@@ -306,13 +332,11 @@
 
                                 {{end}} -->
 
-                            
+
                             </ul>
                         </div>
 
                     </div>
-
-
 
 
                     <div class="mb-[16px]">
@@ -325,19 +349,40 @@
 
                             <div
                                 class="text-[#717171] text-xs font-semibold uppercase mb-1 mt-0 ml-3 mr-0 flex justify-between items-center">
-                                <p class=" text-xs font-normal text-[#717171] ">{{$Translate.Dataconnect}}</p>
+                                <p class=" text-xs font-normal text-[#717171] "> {{$Translate.Menu.Website}}</p>
                                 <a href="javascript:void(0)"
                                     class=" hover:bg-[#0000000a] p-0 appearance-none tap-highlight-transparent cursor-pointer text-left relative flex-none border-none bg-none text-black/55 rounded-md w-10 h-8 inline-grid place-items-center  accord-bt active">
                                     <img src="/public/img/doc-arrow.svg" alt="arrow" class="arrow">
                                 </a>
                             </div>
                             <ul>
-                                <!-- {{range .Menu.TblModule}}
+                                {{range .Menu.TblModule}}
                                 {{if ne .ModuleName "Settings"}}
                                 {{if gt (len .SubModule) 0}}
                                 {{if ne .Route ""}}
+                                {{if eq .ModuleName "Website"}}
 
-                                {{if eq .ModuleName "Next.js Templates"}}
+                                <li class=" doc-lst  relative">
+                                    <a class="group   w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}}  "
+                                        href="/admin/website">
+                                        <div class="relative grid place-items-center">
+
+
+                                            {{if ne $Title .ModuleName}}
+                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Globe icon - Default.svg" alt="Documents">
+                                            {{else}}
+                                            <img class="inline-block mr-3 flex-shrink-0 h-4"
+                                                src="/public/img/Globe icon - Active.svg" alt="Documents">
+                                            {{end}}
+                                        </div>
+                                        <p
+                                            class=" {{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
+                                            {{$Translate.Menu.Website}}</p>
+                                    </a>
+                                </li>
+                                {{end}}
+                                <!-- {{if eq .ModuleName "Next.js Templates"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center
                                  px-[12px] py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
@@ -356,19 +401,20 @@
                                             {{$Translate.Templates.Title}}</p>
                                     </a>
                                 </li>
-                                {{end}}
-                                {{end}}
-                                {{end}}
-                                {{end}}
                                 {{end}} -->
+                                {{end}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
                                 {{range .Menu.TblModule}}
                                 {{if ne .ModuleName "Settings"}}
                                 {{if gt (len .SubModule) 0}}
                                 {{if ne .Route ""}}
+
                                 {{if eq .ModuleName "Graphql Api"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
+                                        href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -387,7 +433,7 @@
                                 {{if eq .ModuleName "Graphql Playground"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
+                                        href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -403,45 +449,7 @@
                                     </a>
                                 </li>
                                 {{end}}
-                                {{if eq .ModuleName "Webhooks"}}
-                                <li class=" doc-lst   relative">
-                                    <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
-                                        <div class="relative grid place-items-center">
-                                            {{if ne $Title .ModuleName}}
-                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/Webhooks.svg" alt="channels">
-                                            {{else}}
-                                            <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/Webhooks-active.svg" alt="channels">
-                                            {{end}}
-                                        </div>
-                                        <p
-                                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Webhooks.Webhook}}</p>
-                                    </a>
-                                </li>
-                                {{end}}
-                                {{if eq .ModuleName "Integration"}}
-                                <li class=" doc-lst   relative">
-                                    <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
-                                        <div class="relative grid place-items-center">
-                                            {{if ne $Title .ModuleName}}
-                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="{{.IconPath}}" alt="channels">
-                                            {{else}}
-                                            <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/integration-active.svg" alt="channels">
-                                            {{end}}
-                                        </div>
-                                        <p
-                                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Integrations.Integration}}</p>
-                                    </a>
-                                </li>
 
-                                {{end}}
                                 {{end}}
                                 {{end}}
                                 {{end}}
@@ -459,13 +467,13 @@
                 </div>
             </div>
             <div class="sticky bottom-0 ">
-                <div class="px-[16px] pb-[16px] doc-lst">
-                    <a href="https://spurtcms.com/download-cms-open-source-code" target="_blank"
+
+                <!-- <div class="px-[16px] pb-[16px] doc-lst">
+                    <a href="/admin/get-spurtcmspro"
                         class="flex justify-center items-center bg-[#000000] hover:bg-[#2D2D2D] shadow-[1px_0px_12px_3px_#75EB0080,-3px_-4px_20px_3px_#00BCDC99] rounded w-full h-9 font-normal text-base text-white">
                         {{$Translate.Getsupport}}
                     </a>
-                </div>
-             
+                </div> -->
                 <div class="border-t border-[#D9D9D9]  bg-[#fafafa] ">
 
                     <div class="dropup">
@@ -535,7 +543,7 @@
                                         <a class="group {{if eq $Title $myacc}} bg-[#F26726]/10
                                             {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center
                                             px-[16px] py-2 font-normal text-sm leading-normal cursor-pointer "
-                                            href=" /settings/myprofile">
+                                            href="/admin/settings/myprofile">
                                             <div class="relative grid place-items-center">
                                                 {{if eq $Title "My Account"}}
                                                 <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -578,7 +586,7 @@
                                     {{if .Routes}}
                                     <li class="doc-lst  relative">
                                         <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}}  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[16px]  py-2  font-normal text-sm leading-normal cursor-pointer "
-                                            href="/settings/languages/">
+                                            href="/admin/settings/languages/">
                                             <div class="relative grid place-items-center">
                                                 {{if ne $Title .ModuleName}}
                                                 <img class="inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -601,7 +609,7 @@
 
                                     <li class="doc-lst  relative">
                                         <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}}  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[16px]  py-2  font-normal text-sm leading-normal cursor-pointer "
-                                            href="/settings/">
+                                            href="/admin/settings/">
                                             <div class="relative grid place-items-center">
                                                 {{if ne $Title .ModuleName}}
                                                 <img class="inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -624,7 +632,7 @@
                                 <div class="border-t border-[#ECECEC] py-[4px]">
 
                                     <div class="doc-lst  relative">
-                                        <a id="logout" href="/logout"
+                                        <a id="logout" href="/admin/logout"
                                             class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[16px]  py-2 font-normal text-sm leading-normal cursor-pointer ">
                                             <div class="relative grid place-items-center">
                                                 <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"

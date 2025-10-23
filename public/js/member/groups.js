@@ -63,7 +63,7 @@ $('#save').click(function () {
           id = $("#membergroup_id").val()
           console.log("check", id)
           $.ajax({
-               url: "/usergroup/checknameinmembergrp",
+               url: "/admin/usergroup/checknameinmembergrp",
                type: "POST",
                async: false,
                data: { "membergroup_name": value, "membergroup_id": id, csrf: $("input[name='csrf']").val() },
@@ -145,7 +145,7 @@ $(".editmembergroup").click(function () {
      $("#title").text(languagedata.Members_Group.updmemgrp)
      var data = $(this).attr("data-id");
      edit = $(this).closest("tr");     
-     $("#membergroup_form").attr("action", "/usergroup/updategroup")
+     $("#membergroup_form").attr("action", "/admin/usergroup/updategroup")
      var name = edit.find("td:eq(1)").text().trim()
      var desc = edit.find("td:eq(2)").text().trim()
 
@@ -174,7 +174,7 @@ $('#groupcalcelbtn').on('click', function () {
 
 $(document).on("click", "#add-btn , #clickadd", function () {
      $("#title").text(languagedata.Members_Group.addmembergrp)
-     $("#membergroup_form").attr("action", "/usergroup/newgroup")
+     $("#membergroup_form").attr("action", "/admin/usergroup/newgroup")
      $(".input-group").removeClass("input-group-error")
 
      $("#membergroup_name-error").hide();
@@ -197,7 +197,7 @@ $(document).on('click', '#delete-btn', function () {
 
      var del = $(this).closest("tr");
      $.ajax({
-          url: '/usergroup/chkmemgrphavemember',
+          url: '/admin/usergroup/chkmemgrphavemember',
           type: 'POST',
           async: false,
           data: { "id": MemberGroupId,csrf: $("input[name='csrf']").val()},
@@ -226,10 +226,10 @@ $(document).on('click', '#delete-btn', function () {
 
      if (pageno == null) {
 
-          $('#delid').attr('href', '/usergroup/deletegroup?id=' + MemberGroupId);
+          $('#delid').attr('href', '/admin/usergroup/deletegroup?id=' + MemberGroupId);
 
      } else {
-          $('#delid').attr('href', '/usergroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
+          $('#delid').attr('href', '/admin/usergroup/deletegroup?id=' + MemberGroupId + "&page=" + pageno);
 
      }
 
@@ -255,7 +255,7 @@ function MemberStatus(id) {
      var isactive = $('#cb' + id).val();
 
      $.ajax({
-          url: '/usergroup/groupisactive',
+          url: '/admin/usergroup/groupisactive',
           type: 'POST',
           async: false,
           data: { "id": id, "isactive": isactive, csrf: $("input[name='csrf']").val() },
@@ -322,7 +322,7 @@ $('#update').click(function () {
           id = $("#membergroup_id").val()
           console.log("check", id)
           $.ajax({
-               url: "/usergroup/checknameinmembergrp",
+               url: "/admin/usergroup/checknameinmembergrp",
                type: "POST",
                async: false,
                data: { "membergroup_name": value, "membergroup_id": id, csrf: $("input[name='csrf']").val() },
@@ -411,7 +411,7 @@ $(document).on('keyup', '#searchmemgroup', function (event) {
 
         if ($(this).val() == "") {
 
-            window.location.href = "/usergroup/";
+            window.location.href = "/admin/usergroup/";
         }
     }
 
@@ -428,7 +428,7 @@ $(document).on("click", ".Closebtn", function () {
 
    $(document).on("click", ".searchClosebtn", function () {
      $(".search").val('')
-     window.location.href = "/usergroup/"
+     window.location.href = "/admin/usergroup/"
    })
 
    $(document).ready(function () {
@@ -480,7 +480,7 @@ $('form[class=filterform]>img').click(function () {
 
           var keyword = $(this).siblings('input[name=keyword]').val()
 
-          window.location.href = "/user/?keyword=" + keyword
+          window.location.href = "/admin/user/?keyword=" + keyword
      }
 })
 
@@ -734,7 +734,7 @@ $(document).on('click', '#Check', function () {
 $(document).on('click','#seleccheckboxdelete', function () {
 
      $.ajax({
-          url: '/usergroup/chkmemgrphavemember',
+          url: '/admin/usergroup/chkmemgrphavemember',
           type: 'POST',
           async: false,
           data: { "membergrpids": JSON.stringify(selectedcheckboxarr),
@@ -830,7 +830,7 @@ $(document).on('click', '.checkboxdelete', function () {
 
      $('.selected-numbers').hide()
      $.ajax({
-          url: '/usergroup/deleteselectedmembergroup',
+          url: '/admin/usergroup/deleteselectedmembergroup',
           type: 'post',
           dataType: 'json',
           async: false,
@@ -892,7 +892,7 @@ $(document).on('click', '.selectedunpublish', function () {
 
      $('.selected-numbers').hide()
      $.ajax({
-          url: '/usergroup/multiselectmembergroup',
+          url: '/admin/usergroup/multiselectmembergroup',
           type: 'post',
           dataType: 'json',
           async: false,

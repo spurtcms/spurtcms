@@ -62,17 +62,14 @@
                     {{.entrycount}} {{end}}</p>
 
                 {{else}}
-                <h4
-                    class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#717171] ">
+                <h4 class="line-clamp-1 lg:line-clamp-none text-sm font-normal leading-[17.5px] text-[#717171] ">
                     {{$Translate.Channell.Selectchannel}}</h4>
                 <img src="/public/img/avaliable-arrow.svg" alt="arrow" class="inline-block max-sm:hidden">
-                <img src="/public/img/avaliable-arrow-grn.svg" alt="arrow"
-                    class="hidden max-sm:inline-block">
+                <img src="/public/img/avaliable-arrow-grn.svg" alt="arrow" class="hidden max-sm:inline-block">
                 {{end}}
             </a>
             {{if .channelname}}
-            <img id="removecategory"
-                class="w-[10px] h-[10px] absolute right-[12px] top-[10px] cursor-pointer"
+            <img id="removecategory" class="w-[10px] h-[10px] absolute right-[12px] top-[10px] cursor-pointer"
                 src="/public/img/close-drop.svg" alt="">{{end}}
 
             <ul
@@ -84,7 +81,7 @@
 
                 <li class="mb-[8px]"><a
                         class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .Id}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
-                        href="/entries/entrylist/{{.Id}}">
+                        href="/admin/entries/entrylist/{{.Id}}">
                         <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">
                             {{.ChannelName}}</h5>
                         <p class="text-[10px] font-light leading-[12.5px] text-[#717171]">
@@ -97,7 +94,7 @@
                 {{end}}
 
                 <li class="sticky bottom-0 bg-white">
-                    <a href="/channels/create"
+                    <a href="/admin/channels/create"
                         class=" flex items-center justify-center border-[1px] border-dashed border-[#000000] rounded-[5px] p-[11px] h-[40px] text-sm font-normal text-[#000000] leading-[14px] text-center block mt-[8px] hover:border-solid ">
                         + Create Channel
                     </a>
@@ -110,7 +107,7 @@
 
 
 
-        <a href="/entries/create/{{.chnid}}"
+        <a href="/admin/entries/create/{{.chnid}}"
             class=" flex  space-x-1 items-center text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[10px] h-[32px] rounded-[4px] place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] ">
             <span class="hidden max-sm:block text-lg leading-none ">+</span>
             <span class="max-sm:hidden">
@@ -134,15 +131,13 @@
                 <li>
                     <div class="dropdown static">
 
-                        <a href="javascript:void(0);"
-                            class="bordered-btn"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <a href="javascript:void(0);" class="bordered-btn" data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside">
                             <div>
                                 <img src="/public/img/filter.svg" alt="filter">
 
                             </div>
-                            <span
-                                class="max-sm:hidden ">All</span>
+                            <span class="max-sm:hidden ">All</span>
                         </a>
                         <div
                             class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
@@ -155,7 +150,7 @@
 
                             </div>
                             <form action="" method="get" name="filterform">
-                                <div class="block mb-[12px]">
+                                <!-- <div class="block mb-[12px]">
                                     <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Channel
                                     </p>
                                     <div class="flter-option">
@@ -163,7 +158,7 @@
                                             value="{{.ChannelName}}"
                                             class="flex items-center justify-between bg-white  border border-[#EDEDED] p-2 rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px] placeholder:text-[#717171]">
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="block mb-[12px]">
                                     <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Entries
@@ -217,10 +212,52 @@
 
                                 </div>
 
+                                <div class="block mb-[12px]">
+                                    <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Language
+                                    </p>
+                                    <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                                        <a class="flex items-center justify-between bg-white  border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                                            href="javascript:void(0);" data-bs-toggle="dropdown"
+                                            data-bs-auto-close="outside">
+                                            <span class="text-[11px] font-normal leading-[13.75px] text-[#717171]"
+                                                id="selectLanguage">
+
+                                                {{$Lang:=.Language}}
+                                                {{if .LanguageId}}
+                                                {{range $Lang}}
+                                                {{ if eq .Id $.LanguageId }}
+                                                {{ .LanguageName }}
+                                                {{ end }}
+                                                {{end}}
+                                                {{else}}
+                                                Select Language
+                                                {{end}}
+                                            </span>
+                                            <span>
+                                                <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                            </span>
+                                        </a>
+                                        <input type="hidden" name="LanguageId" id="LanguageId">
+                                        <ul class="languagedropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                                            aria-labelledby="dropdownMenuButton1">
+                                            {{range .Language}}
+                                            <li data-value="{{.Id}}" data-name="{{.LanguageName}}" class="option">
+                                                <a class="dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                                    href="javascript:void(0)">{{.LanguageName}}
+                                                </a>
+                                            </li>
+                                            {{end}}
+                                        </ul>
+
+
+                                    </div>
+
+                                </div>
+
 
                                 <div
                                     class="flex align-items-center gap-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
-                                    <a href="/entries/entrylist"
+                                    <a href="/admin/entries/entrylist"
                                         class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">Clear</a>
                                     <button type="submit"
                                         class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
@@ -237,14 +274,12 @@
                 <li>
                     <div class="dropdown static">
 
-                        <a href="javascript:void(0);"
-                            class="bordered-btn"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <a href="javascript:void(0);" class="bordered-btn" data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside">
                             <div>
                                 <img src="/public/img/sort.svg" alt="filter">
                             </div>
-                            <p id="sortby"
-                                class="max-sm:hidden">
+                            <p id="sortby" class="max-sm:hidden">
                                 {{if eq .Sorting ""}}
                                 Last Updated
                                 {{else if eq .Sorting "lastUpdated"}}
@@ -373,8 +408,8 @@
 
                         <div>
 
-                            <a {{if .ChannelName}} href="/entries/edit/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}"
-                                {{else}}href="/entries/edits/{{.Id}}?page={{$Pageno}}" {{end}}>
+                            <a {{if .ChannelName}} href="/admin/entries/edit/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}" class="hover:underline"
+                                {{else}}href="/admin/entries/edits/{{.Id}}?page={{$Pageno}}" {{end}}>
                                 <h3 class="text-[#262626] text-sm font-medium leading-[17.5px] mb-[8px] w-[90%] ">
                                     {{.Title}}
                                 </h3>
@@ -382,7 +417,7 @@
                             <div class="flex gap-[12px] items-center">
 
 
-                                <a href="/entries/form-detail?entryid={{.Id}}"
+                                <a href="/admin/entries/form-detail?entryid={{.Id}}"
                                     class="flex gap-[4px] items-center  text-[#262626]  text-[12px] font-normal h-[24px] rounded-[4px]">
                                     {{$entryid := .Id}}
                                     {{if (eq (len $responseCount) 0)}}
@@ -485,7 +520,7 @@
 
                                     <li class="mb-[2px] last-of-type:mb-[0]">
                                         <a href="javascript:void(0);"
-                                            data-id="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}-{{.Uuid}}"
+                                            data-id="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}"
                                             class="copyButton dropdown-item h-[30px] w-full grid grid-cols-[16px_1fr] gap-[16px] rounded-[3px] text-[14px] font-light text-[##262626] items-center p-[6px_12px] leading-[20px] hover:bg-[#F5F5F5]"
                                             type="button">
                                             <span class="w-[16px] h-[16px] grid place-items-center"> <img
@@ -521,14 +556,14 @@
                                     {{end}}
 
                                     <li class="mb-[2px] last-of-type:mb-[0]">
-                                        <a href="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}-{{.Uuid}}" target="_blank"
+                                        <a href="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}" target="_blank"
                                             class="dropdown-item h-[30px] w-full grid grid-cols-[16px_1fr] gap-[16px] rounded-[3px] text-[14px] font-light text-[##262626] items-center p-[6px_12px] leading-[20px] hover:bg-[#F5F5F5]"
                                             type="button">
                                             <span><img src="/public/img/preview-drop.svg" alt=""></span>Preview</a>
                                     </li>
 
 
-                                    <li class="mb-[2px] last-of-type:mb-[0]"><a href="/entries/copyentry/{{.Id}}"
+                                    <li class="mb-[2px] last-of-type:mb-[0]"><a href="/admin/entries/copyentry/{{.Id}}"
                                             class="dropdown-item h-[30px] w-full grid grid-cols-[16px_1fr] gap-[16px] rounded-[3px] text-[14px] font-light text-[##262626] items-center p-[6px_12px] leading-[20px] hover:bg-[#F5F5F5]"
                                             type="button">
                                             <span><img src="/public/img/duplicate-drop.svg" alt=""></span>Duplicate
@@ -623,7 +658,7 @@
                                     <p class="font-light text-[#717171] text-center text-base mb-2">
                                         {{$Translate.Channell.Noentrys}}</p>
                                 </div>
-                                <a href="/entries/create/{{.chnid}}"
+                                <a href="/admin/entries/create/{{.chnid}}"
                                     class="inline-flex items-center underline  px-[16px] rounded h-[34px] font-normal text-sm ">{{$Translate.Channell.Createfirstentry}}</a>
                             </div>
                         </div>

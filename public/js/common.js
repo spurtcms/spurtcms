@@ -36,13 +36,13 @@ $(document).ready(function () {
     let cropper;
 
 
-    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1) {
+    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1 || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
 
         console.log("test");
 
 
         // Image Value Empty
-        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#flagFile,#blockimg,#categoryimage,#courseimg").click(function () {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#flagFile,#blockimg,#categoryimage,#courseimg,#listing",).click(function () {
             $(this).val("")
         })
 
@@ -51,7 +51,7 @@ $(document).ready(function () {
         var height
 
         // Change Image with cropper
-        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#logoLabel,#flagFile,#blockimg,#categoryimage,#courseimg").change(function () {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#logoLabel,#flagFile,#blockimg,#categoryimage,#courseimg,#listing").change(function () {
 
 
             var file;
@@ -97,6 +97,9 @@ $(document).ready(function () {
             }else if ($(this).attr("id") == 'courseimg') {
                 file = $("#courseimg")[0].files[0];
                 console.log(file, "courseimg");
+            }else if ($(this).attr("id") == 'listing') {
+                file = $("#listing")[0].files[0];
+                console.log(file, "listing");
             }
 
             filename = file.name;
@@ -114,7 +117,7 @@ $(document).ready(function () {
 
                 $('#imageSpace').removeClass('croppie-container').empty().show()
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1) {
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1 || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
                     console.log("F2");
 
                     if (window.location.href.indexOf("myprofile") != -1) {
@@ -187,7 +190,6 @@ $(document).ready(function () {
 
                     } else if (window.location.href.indexOf("courses") != -1) {
 
-                        console.log("hhhhsdf")
                         $("#prof-crop").attr('data-id', '10')
 
                         $('#cricleCropper-head').text('Crop Course Image')
@@ -195,11 +197,30 @@ $(document).ready(function () {
                         $('.mainsection').hide()
                         $('#create-course-modal').modal('hide')
 
+                    }else if (window.location.href.indexOf("listing") != -1) {
+
+                        $("#prof-crop").attr('data-id', '11')
+
+                        $('#cricleCropper-head').text('Crop Listing Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+
+                    }else if (window.location.href.indexOf("pages") != -1) {
+
+                      console.log("entries::");
+                        
+                        $("#prof-crop").attr('data-id', '8')
+
+                        $('#cricleCropper-head').text('Crop Block Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+                        $('#createModal').modal('hide')
+                        $('body').css("overflow", "visible")
                     }
 
                 }
 
-                if ($(this).attr("id") == 'cmpymyfile' || $(this).attr('id') == 'categoryimage' || $(this).attr('id') =='courseimg') {
+                if ($(this).attr("id") == 'cmpymyfile' || $(this).attr('id') == 'categoryimage' || $(this).attr('id') =='courseimg' || $(this).attr('id') =='listing') {
 
                     viewportType = 'square'
                     $('#extrawidth').show()
@@ -294,7 +315,7 @@ $(document).ready(function () {
             } else {
 
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("courses") !=-1) {
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("courses") !=-1  || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
 
                     $("#myfile-error").removeClass('hidden')
 
@@ -310,79 +331,6 @@ $(document).ready(function () {
                 }
             }
         });
-
-
-        // $("#cmpymyfile").change(function () {
-
-        //     $('#crop-container').removeClass('croppie-container').empty().show()
-
-        //     if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
-
-        //         if (window.location.href.indexOf("member") != -1) {
-
-        //             $('#changepicModal .admin-header >h3').text('Crop Company Image')
-
-        //         }
-
-        //         $("#cmpymyfile-error").hide()
-        //     }
-        //     var file = this.files[0];
-        //     var filename = $(this).val();
-        //     var ext = filename.split(".").pop().toLowerCase();
-        //     if (($.inArray(ext, ["jpg", "png", "jpeg"]) != -1)) {
-        //         var reader = new FileReader();
-        //         reader.onload = function (event) {
-        //             imgurl = event.target.result
-        //             img = new Image()
-        //             img.onload = function () {
-        //                 cropper = $('#crop-container').croppie({
-        //                     enableExif: true,
-        //                     enableResize: false,
-        //                     enableOrientation: true,
-        //                     viewport: {
-        //                         width: 300,
-        //                         height: 300,
-        //                         type: 'circle'
-        //                     },
-        //                     showZoomer: false,
-        //                 });
-        //                 $('canvas[class=cr-image]').css('opacity', '0')
-        //                 if ($('.cr-slider-wrap').length > 1) {
-        //                     $('.cr-slider-wrap')[1].remove()
-        //                 }
-        //                 $('.cr-slider-wrap').appendTo($('#zoom-div'));
-        //                 $('#rotateSlider').val("0")
-        //                 $('.cr-slider').css('display', 'block')
-        //             }
-
-        //             img.src = imgurl
-        //         }
-        //         reader.readAsDataURL(file);
-        //         $('#changepicModal').modal('show');
-        //     } else {
-
-        //         if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("member") != -1) {
-        //             $("#cmpymyfile-error").text(languagedata?.Toast?.errmsgupload).show()
-        //         }
-        //     }
-        // });
-
-        // $('#open-cricleCropper').on('shown.bs.modal', function (event) {
-        //     console.log("testsst");
-
-        //     console.log(imgurl);
-
-        //     $('#open-cricleCropper #cropImage').attr('src', imgurl)
-        //     cropper.croppie('bind', {
-        //         url: imgurl
-        //     }).then(function () {
-        //         cropper.croppie('setZoom', 0)
-        //         console.log("cropper initialized!");
-        //     })
-        //     canvas = document.querySelector('canvas[class=cr-image]');
-        //     ctx = canvas.getContext('2d');
-        // });
-
 
         $('#changepicModal').on('shown.bs.modal', function () {
 
@@ -638,6 +586,19 @@ $(document).ready(function () {
                     $('.mainsection').show()
                     $('#create-course-modal').modal('show')
                     $('#courseimgs-error').hide()
+
+                });
+            }
+            if (in_val == 11) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    console.log("in_val",in_val);
+                    $('#imageurl').val(dataUrl)
+                    $("#ImageName").text(filename)
+                    // $('.listingimage').attr('src', dataUrl)
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
+                    $("#imageRemoveDiv").show()
+                    $("#imageUploadDiv").hide()
 
                 });
             }

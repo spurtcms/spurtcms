@@ -38,7 +38,7 @@
                     <img src="/public/img/search-icon-active.svg" alt="search"
                         class="group-hover:block hidden searchopen">
                 </a>
-                <form action="/cta/" method="get" class="filterform" autocomplete="off">
+                <form action="/admin/cta/" method="get" class="filterform" autocomplete="off">
                     <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="formsearch"
                         value="{{.Filter.Keyword}}" class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block
 
@@ -74,7 +74,7 @@
                     {{range .channelist}}
                     <li class="mb-[8px]"><a
                             class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .SlugName}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
-                            href="/cta?channel={{.SlugName}}">
+                            href="/admin/cta?channel={{.SlugName}}">
                             <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
                             </h5>
                             <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if
@@ -91,7 +91,7 @@
             </div>
 
 
-            <a href="/cta/create"
+            <a href="/admin/cta/create"
                 class="flex justify-center items-center gap-[5px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] py-[7px] max-sm:p-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-center text-white leading-tight tracking-[0.7px] whitespace-nowrap">
                 <span> </span> <span class="max-sm:hidden">
                     Create Forms </span></a>
@@ -122,11 +122,11 @@
                 <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
                     {{$Translate.FormBuilder.Sbanner}}
 
-                    <a href="/entries/entrylist"
+                    <a href="/admin/entries/entrylist"
                         class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
                         href="">{{$Translate.Entries}} <span><img src="/public/img/link_icon.svg" alt=""></span>
                     </a> {{$Translate.FormBuilder.Tbanner}}
-                    <a href="/channels"
+                    <a href="/admin/channels"
                         class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
                         href="">{{$Translate.Channell.Channels}} <span><img src="/public/img/link_icon.svg"
                                 alt=""></span>
@@ -151,11 +151,11 @@
         <ul class="border-[#EDEDED] mb-[24px] border-b nav" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px] active "
-                    id="collection-tab" href="/cta">{{$Translate.Blocks.MyCollections}}</a>
+                    id="collection-tab" href="/admin/cta">{{$Translate.Blocks.MyCollections}}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px] "
-                    id="work-tab" href="/cta/defaultctalist">{{$Translate.Explore}}</a>
+                    id="work-tab" href="/admin/cta/defaultctalist">{{$Translate.Explore}}</a>
             </li>
 
             <li class="ms-auto">
@@ -207,7 +207,7 @@
                                 </div>
                             </div>
                             <div class="block px-[12px] py-[16px]">
-                                <a href="/cta/form-detail/{{.Id}}" class="block  group">
+                                <a href="/admin/cta/form-detail/{{.Id}}" class="block  group">
                                     <div class="flex  items-center ">
 
                                         <p class="mb-0 font-light text-[#10A37F] text-11">
@@ -229,7 +229,7 @@
                                         </p>
                                     </div>
                                 </a>
-                                <a href="/cta/form-detail/{{.Id}}">
+                                <a href="/admin/cta/form-detail/{{.Id}}">
                                     <h3 class="mb-2 font-normal text-bold-black text-base group-hover:underline">
                                         {{.FormTitle}}</h3>
                                 </a>
@@ -295,7 +295,7 @@
                                             <ul
                                                 class="dropdown-menu dropdown-menu-end min-w-[146px]  rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[4px] border-0">
 
-                                                <li class="mb-[4px] last-of-type:mb-[0] "><a href="/cta/edit/{{.Id}}"
+                                                <li class="mb-[4px] last-of-type:mb-[0] "><a href="/admin/cta/edit/{{.Id}}"
                                                         data-id="{{.Id}}"
                                                         class="dropdown-item  w-full grid grid-cols-[16px_1fr] gap-[8px]  text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[20px] hover:bg-[#F5F5F5] cursor-pointer">
 
@@ -350,7 +350,7 @@
                                     <p class="font-light text-[#717171] text-center mb-2 text-base">
                                         {{$Translate.FormBuilder.Noform}}</p>
                                 </div>
-                                <a href="/cta/create"
+                                <a href="/admin/cta/create"
                                     class="inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline">{{$Translate.FormBuilder.Createfirstform}}</a>
                             </div>
                         </div>

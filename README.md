@@ -32,7 +32,7 @@
 <br />
 
 > [!IMPORTANT]
-> 🎉 <strong>Spurtcms V1.2.1 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.[![GoDoc](https://godoc.org/github.com/spurtcms/block?status.svg)](https://pkg.go.dev/search?q=spurtcms)
+> 🎉 <strong>Spurtcms V1.3 is now available!</strong> Read more in the <a target="_blank" href="https://www.spurtcms.com/spurtcms-change-log" rel="dofollow"><strong>announcement post</strong></a>.[![GoDoc](https://godoc.org/github.com/spurtcms/block?status.svg)](https://pkg.go.dev/search?q=spurtcms)
 <br />
 <p>
 spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful tools for content creation, management, and defining CMS workspaces. Administrators have precise control over member access, ensuring streamlined member management. Dynamic channel management allows effective content structuring, enhancing the overall user experience. Administrators effortlessly create and manage channels and templates, providing a comprehensive, user-centric content management solution for personalized and organized web environments.
@@ -101,26 +101,26 @@ AWS_BUCKET_NAME=your-bucket-name
 
 ### Step 4: Running the Project
 
-Open the terminal within the project / cloned folder “spurtcms-admin”, and execute the following command:
+Open the terminal within the project or cloned folder “spurtcms-admin”, and execute the following command:
 
 ```
 go run main.go
+```
+Once the project runs successfully, a default website template will open automatically in your browser.
+To access the Admin Panel, navigate to the following route in your browser:
+```
+http://localhost:port/admin
+```
+Use the default login credentials to sign in:
 
 ```
-This command initiates the spurtCMS Admin application, allowing you to begin your journey with this powerful content management system.
-
- 
-
-By following the steps outlined in this article, you have successfully set up spurtCMS Admin on your system. Ensure that all prerequisites are met and the configuration steps are accurately executed to enjoy a seamless experience with spurtCMS Admin application. Now you can explore the features and functionalities of spurtCMS Admin for efficient content management.
-
-
-live demo of our intuitive Admin Panel .
-
-```
-Username : spurtcmsAdmin
+Username : Admin
 Password : Admin@123
 ```
 
+This allows you to manage website content, templates, and settings directly from the SpurtCMS Admin interface.
+
+By following the steps outlined in this article, you have successfully set up spurtCMS Admin on your system. Ensure that all prerequisites are met and the configuration steps are accurately executed to enjoy a seamless experience with spurtCMS Admin application. Now you can explore the features and functionalities of spurtCMS Admin for efficient content management.
 
 ## 🤔 Support , Document and Help
 
@@ -147,6 +147,3 @@ spurtcms is developed and maintain by [Piccosoft Software Labs India (P) Limited
 ## ❯ License
 
 spurtcms is released under the [BSD-3-Clause License.](https://github.com/spurtcms/spurtcms/blob/master/LICENSE).
-
-
-

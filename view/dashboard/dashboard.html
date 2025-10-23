@@ -55,8 +55,8 @@
                 <p class="text-bold-gray text-xs font-normal mb-0 text-bold-gray">{{$Translate.DashBoard.Userwelcome}}
                 </p>
             </div>
-            <a href="/settings/myprofile"
-                class="w-auto flex whitespace-nowrap gap-1.5 items-center justify-center pa-x-4 h-8  rounded-[3px]   bg-[#10A17F] hover:bg-[#148569]  text-white text-sm font-normal no-underline">
+            <a href="/admin/settings/myprofile"
+                class="w-auto flex whitespace-nowrap gap-1.5 items-center justify-center pa-x-4 h-8  rounded-[3px]   bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]  text-white text-sm font-normal no-underline">
                 {{$Translate.DashBoard.Editprofile}}</a>
         </div>
         <div class="pa-4">
@@ -64,13 +64,13 @@
                 <div class="flex flex-col space-y-[16px]">
                     <div class="grid grid-auto-fit gap-2  max-sm:grid-cols-1">
 
-                        <a href="/settings/users/" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188 space-y-[28px]">
+                        <a href="/admin/settings/users/" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188 space-y-[28px]">
                            
                             <div class="flex items-center space-x-[8px]">
                                 <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-orange-50">
                                     <img src="/public/img/users.svg" />
                                 </div>
-                                <h3 class="text-bold-black text-sm font-normal mb-0">Teams</h3>
+                                <h3 class="text-bold-black text-sm font-normal mb-0">{{$Translate.Users}}</h3>
                             </div>
                             {{if eq .usercount 0}}
                             <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
@@ -90,7 +90,7 @@
                             </p>
                             {{end}}
                         </a>
-                        <a href="/user/" class=" border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188   space-y-[28px]">
+                        <a href="/admin/user/" class=" border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188   space-y-[28px]">
                             <div class="flex items-center space-x-[8px]">
                                 <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-violet-50">
                                     <img src="/public/img/members.svg" />
@@ -115,7 +115,7 @@
                             </p>
                             {{end}}
                         </a>
-                        <a href="/entries/entrylist" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188    space-y-[28px]">
+                        <a href="/admin/entries/entrylist" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188    space-y-[28px]">
                             <div class="flex items-center space-x-[8px]">
                                 <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-blue-50">
                                     <img src="/public/img/content.svg" />
@@ -140,7 +140,31 @@
                             </p>
                             {{end}}
                         </a>
-                        
+                        <!-- <a href="/admin/blocks" class="border border-[#ECECEC]  rounded-[3px]  flex justify-between flex-col px-6 pa-y-3 min-h-188    space-y-[28px]">
+                            <div class="flex items-center space-x-[8px]">
+                                <div class="w-6 h-6 flex justify-center items-center rounded-2 bg-orange-50">
+                                    <img src="/public/img/users.svg" />
+                                </div>
+                                <h3 class="text-bold-black text-sm font-normal mb-0">{{$Translate.Blocks.Block}}</h3>
+                            </div>
+                            {{if eq .blockcount 0}}
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                0
+                            </h4>
+                            <p></p>
+                            {{else}}
+
+                            <h4 class="text-center text-2xl font-medium mb-0 text-bold-black">
+                                {{.blockcount}}
+                            </h4>
+                            <p
+                                class="flex space-x-[4px] justify-center flex-wrap font-normal text-bold-black items-baseline text-sm mb-0">
+                                <b class=" text-[#10A37F]  font-normal text-sm">+{{.newblockcount}}</b>
+                                <span>{{$Translate.DashBoard.Increased}}</span> <span class="text-10 font-light">(10
+                                    {{$Translate.DashBoard.Days}})</span>
+                            </p>
+                            {{end}}
+                        </a> -->
                     </div>
                     <div class="border border-[#ECECEC] container-type-inline-size h-full rounded">
                         <div class="pa-x-4 pa-y-3 border-b border-[#ECECEC] ">
@@ -158,7 +182,7 @@
                             {{if .Routes}}
                             {{if $Channelslist}}
                             {{range $Channelslist}}
-                            <a href="/entries/entrylist/{{.Id}}"
+                            <a href="/admin/entries/entrylist/{{.Id}}"
                                 class="grid-dash border border-[#ECECEC]  rounded-[3px]  pa-x-4 h-78 no-underline grid gird-temp  justify-between gap-6 items-center hover:bg-[#F5F5F5]">
                                 <h3 class="text-bold-black text-base font-normal mb-0 max-sm:text-xs line-clamp-1">{{.ChannelName}}</h3>
                                 <p class="text-bold-gray text-xs font-normal mb-0 whitespace-nowrap"><span
@@ -194,7 +218,20 @@
                                     {{$Translate.Entries}}
                                 </button>
                             </li>
-                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link border-0 max-sm:text-[11px] max-sm:!p-[8px]" id="profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#profile"  role="tab" aria-controls="profile"
+                                    aria-selected="false" >
+                                    {{$Translate.Blocks.Block}}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link border-0 max-sm:text-[11px] max-sm:!p-[8px]" id="messages-tab" data-bs-toggle="tab"
+                                    data-bs-target="#messages"  role="tab" aria-controls="messages"
+                                    aria-selected="false">
+                                    {{$Translate.Forms}}
+                                </button>
+                            </li>
                         </ul>
     
                         <!-- Tab panes -->
@@ -220,9 +257,9 @@
                                         {{range $Entries}}
                                         <tr>
     
-                                            <td
-                                                class=" max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
-                                                {{.Title}}
+                                         <td
+                                                class="cursor-pointer max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                             <a href="/admin/entries/edit/{{.ChannelName}}/{{.Id}}" class="cursor-pointer">      {{.Title}}</a>
                                             </td>
                                             <td
                                                 class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
@@ -264,6 +301,42 @@
                                                 {{$Translate.Channell.Date}}
                                             </th>
                                         </tr>
+                                        {{if .Blocklist}}
+                                        {{range .Blocklist}}
+                                        <tr>
+    
+                                            <td
+                                                class=" max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.Title}}
+                                            </td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.Username}}
+                                            </td>
+                                            <td
+                                                class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                                {{.CreatedDate}}
+                                            </td>
+                                        </tr>
+                                        {{end}}
+                                        {{else}}
+                                        <tr>
+                                            <td colspan="5" class="p-[8px_16px]">
+                                                <div class="flex flex-col gap-[5px] justify-center items-center my-16">
+                                                    <img src="/public/img/items-no.svg" />
+                                                    <p class="text-[#222222] font-normal text-xs mb-0">{{$Translate.DashBoard.Nocontentfound}}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{end}}
+                                        <!-- <tr>
+                                            <td colspan="5" class="p-[8px_16px]">
+                                                <div class="flex flex-col gap-[5px] justify-center items-center my-16">
+                                                    <img src="/public/img/items-no.svg" />
+                                                    <p class="text-[#222222] font-normal text-xs mb-0">No content found</p>
+                                                </div>
+                                            </td>
+                                        </tr> -->
                                     </table>
                                 </div>
                             </div>
@@ -289,8 +362,8 @@
                                         <tr>
     
                                             <td
-                                                class=" max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
-                                                {{.FormTitle}}
+                                                class="cursor-pointer max-sm:w-[30%] w-[55%] text-black-200 p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
+                                               <a href="/admin/cta/edit/{{.Id}}">{{.FormTitle}}</a> 
                                             </td>
                                             <td
                                                 class="text-bold-gray p-[8px_16px] text-xs font-normal border-b border-[#ECECEC]">
@@ -347,17 +420,17 @@
                             {{end}}
                             <div class="flex flex-col space-y-[4px]">
                                 {{if eq .Contenttype "channel"}}
-                                <p class="text-bold-black font-light text-xs mb-0">{{.User}} <span
+                               <a href="/admin/channels/edit/{{.Id}}" class="cursor-pointer"> <p class="text-bold-black font-light text-xs mb-0">{{.User}} <span
                                         class="text-bold-black font-medium">{{$Translate.DashBoard.Contenttype}}</span>
-                                    <span class="font-medium  text-[#10A37F] ">{{.Title}}</span>
-                                </p>
+                                    <span class="font-medium  text-[#10A37F] " >{{.Title}}</span>
+                                </p></a>
                                 {{else}}
-                                <p class="text-bold-black font-light text-xs mb-0">{{.User}}<span
+                               <a href="/admin/entries/edit/{{.Channelname}}/{{.Id}}"> <p class="text-bold-black font-light text-xs mb-0">{{.User}}<span
                                         class="text-bold-black font-medium">
                                         Added a {{.Channelname}} : </span> <span
                                         class="font-medium  text-[#10A37F] ">{{.Title}}</span></p>{{end}}
                                 <p class="text-gray-20 mb-0 text-xs font-light">{{.Active}} {{$Translate.DashBoard.Ago}}
-                                </p>
+                                </p></a>
                             </div>
                         </div>
 

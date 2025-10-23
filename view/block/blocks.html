@@ -1,0 +1,850 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+{{$User_Name := ""}}
+
+
+<section
+    class="sectionclass max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen pb-[90px]">
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Blocks.Customblocks}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.Blocks.Blockheading}}
+                </p>
+            </div>
+        </div>
+
+
+
+        <a href="javascript:void(0);"
+            class="hd-crd-btn [&.hide>img:first-of-type]:block   [&.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] h-[32px] grid place-content-center hover:bg-[#FAFAFA]">
+            <img src="/public/img/bt-show.svg" alt="show" class="hidden">
+            <img src="/public/img/bt-hide.svg" alt="hide">
+        </a>
+
+
+
+        <div
+            class="{{if eq .SearchTrues `true`}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+                class="{{if eq .SearchTrues `true`}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="hidden group-hover:block hovericon searchopen">
+            </a>
+            <form action="/blocks" method="get" class="filterform " autocomplete="off">
+                <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="blocksearch"
+                    value="{{.Filter.Keyword}}"
+                    class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                {{if eq .SearchTrues `true`}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{end}}
+
+            </form>
+        </div>
+        <div class="dropdown filter-dropDown static">
+
+            <a href="javascript:void(0);"
+                class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <img src="/public/img/filter.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                <img src="/public/img/filter-active.svg" alt="filter-active"
+                    class="hidden group-hover:block group-focus:block">
+            </a>
+            <ul
+                class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col space-y-[8px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[300px] !mt-[6px]">
+                {{$ChannelId := .chnid}}
+                {{range .channelist}}
+                <li class="mb-[8px]"><a
+                        class="block border-[1px] border-solid  rounded-[5px] p-[3px_8px] hover:bg-[#FAFAFA]{{if eq $ChannelId .Id}} bg-[#FAFAFA] border-[#000000]{{else}} border-[#EDEDED] {{end}}"
+                        href="/admin/blocks?id={{.Id}}">
+                        <h5 class="text-[#262626] text-xs font-normal leading-[15px] mb-[6px] ">{{.ChannelName}}
+                        </h5>
+                        <p class="text-[10px] font-light leading-[12.5px] text-[#717171]"> {{$Translate.Total}} {{if
+                            gt
+                            .EntriesCount 1}}{{$Translate.Entries}} :{{.EntriesCount}}{{else}}
+                            {{$Translate.Channell.Entry}}
+                            :{{.EntriesCount}}{{end}}</p>
+                    </a></li>
+
+                {{end}}
+
+            </ul>
+
+        </div>
+        <a href="#createModal" data-bs-toggle="offcanvas" id="CreateBlock"
+            class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] flex items-center space-x-[5px] justify-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#000000] hover:bg-[#2D2D2D]">
+            <span class="max-sm:text-lg max-sm:leading-none "> + </span> <span class="max-sm:hidden">
+                {{$Translate.Blocks.NewBlock}} </span></a>
+
+
+    </header>
+
+
+    <div class="px-[16px] py-[11px]">
+
+        <div id="hd-crd"
+            class="{{if eq .blockBannerValue `false` }} hidden{{end}} [&.hide]:hidden transition-all  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#FAFAFA] rounded-[12px] relative mb-[24px] ">
+
+            <a href="javascript:void(0);"
+                class=" hd-crd-btn absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
+                <img src="/public/img/block-close.svg" alt="close"></a>
+
+            <div class="relative grid place-items-center">
+                <img src="/public/img/Blocks.jpg" alt="video" class="w-full ">
+                <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                    <img src="/public/img/play-video.svg" alt="play">
+                </a>
+            </div>
+
+
+            <div>
+                <h3 class="mb-[12px] text-base text-[#252525] font-medium leading-[20px]">
+                    {{$Translate.Blocks.MyCollection}}</h3>
+                <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
+                    {{$Translate.Blocks.Mycollectiondescst}}
+                    <a href="/admin/entries/entrylist"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Blocks.Mycollectiondescentry}} <span><img src="/public/img/link_icon.svg"
+                                alt=""></span>
+                    </a>
+                    {{$Translate.Blocks.Mycollectiondescmid}}
+                    <a href="/admin/channels"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Blocks.Mycollectiondescchannel}} <span><img src="/public/img/link_icon.svg"
+                                alt=""></span>
+                    </a>
+
+                    {{$Translate.Blocks.Mycollectiondescend}}
+                </p>
+                <div
+                    class="flex items-center min-[426px]:space-x-[24px] max-[425px]:items-start max-[425px]:space-y-[24px] max-[425px]:flex-col">
+                    <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img/how-to.svg" alt="How to use">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">{{$Translate.Blocks.HowToUse}}
+                        </p>
+                    </a>
+                    <a href="https://github.com/spurtcms/blocks" target="_blank"
+                        class="flex items-center space-x-[8px]  hover:underline">
+                        <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
+                            {{$Translate.Blocks.ExploreDocumentation}}</p>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <ul class="nav border-b border-[#EDEDED] mb-[24px]  " id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="active hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                    href="/admin/blocks">{{$Translate.Blocks.MyCollections}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                    href="/admin/blocks/defaultlist"> Explore </a>
+            </li>
+
+            <li class="ms-auto">
+                <p class="text-sm text-[#A1A1A1] font-normal max-[400px]:text-xs"> <span class="text-[#262626]"
+                        id="defaultcount">{{.Count}} </span> {{if gt .Count 9}} {{$Translate.Blocks.Block}} {{else}}
+                    {{$Translate.Blocks.Blocks}} {{end}} {{$Translate.Available}}</p>
+            </li>
+        </ul>
+
+        {{$Key := .Filter.Keyword}}
+        {{$UserId := .UserId}}
+        {{$Collectionidlist := .Collectionid}}
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="collection">
+                {{if .Blocklist}}
+                <div class="grid gap-[16px] grid-cols-[repeat(auto-fill,_minmax(282px,_1fr))]">
+
+                    {{range .Blocklist}}
+                    <div class=" rounded-[12px]  shadow-[-1px_1px_5px_0px_#0000001A]">
+
+                        <div class="p-[12px] bg-[#F9F9F9] group grid place-items-center relative overflow-hidden imgblock">
+                            <div class="h-[170px] bg-white">
+                                <img id="blockcoverimage" src="{{.CoverImage}}" alt="sample image "
+                                    style="height: 100%;background: #fff;width: auto;margin: auto;object-fit: contain;"
+                                    class="">
+
+                            </div>
+                            <div
+                                class=" absolute flex justify-center items-center opacity-[0] group-hover:opacity-100 ">    
+                                <a href="javascript:void(0);" data-bs-target="#previewModal" data-bs-toggle="offcanvas"
+                                    id="blockpreview" data-blockimg="{{.CoverImage}}" data-title="{{.Title}}"
+                                    data-userimg="{{.ProfileImagePath}}" data-namestring="{{.NameString}}"
+                                    data-username="{{.Username}}" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-custom-class="custom-tooltip" data-bs-title="Preview"
+                                    class="flex justify-center items-center space-x-2 bg-[#000000b3] hover:bg-[#000000] px-6 rounded-[40px] w-auto h-[42px] font-normal text-[#FFFFFF] text-sm">
+                                    <img src="/public/img/eye-white.svg" alt="...">
+                                    <span>Preview</span>
+                                </a>
+                            </div>
+                            {{if eq .Prime 1}}
+                            <a href="javascript:void(0);"
+                                class="hover:scale-[1.05] transition-all w-[32px] h-[32px] bg-white rounded-[4px] grid place-items-center shadow-[0px_1px_8px_0px_#00000033] absolute top-[8px] right-[8px]  ">
+                                <img src="/public/img/premium.svg" alt="premium">
+                            </a>
+                            {{end}}
+
+                        </div>
+
+                        <div class="p-[16px_12px] flex flex-col space-y-[12px]  border-t border-[#ECECEC] titleblock">
+                            <div class="flex items-center justify-between space-x-[8px]">
+                                <h2 id="blocktitle"
+                                    class="text-[14px]  font-normal text-[#262626] leading-[17.5px] line-clamp-1">
+                                    {{.Title}}
+                                </h2>
+                                <div class="flex space-x-[8px] items-center">
+                                    <!-- <a href="javascript:void(0);" data-bs-target="#previewModal"
+                                        data-bs-toggle="offcanvas" id="blockpreview" data-blockimg="{{.CoverImage}}"
+                                        data-title="{{.Title}}" data-userimg="{{.ProfileImagePath}}"
+                                        data-namestring="{{.NameString}}" data-username="{{.Username}}"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-custom-class="custom-tooltip" data-bs-title="Preview"
+                                        class=" toggle-trigger w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-[4px] relative group ">
+                                        <img src="/public/img/preview.svg" alt="preview">
+
+                                    </a> -->
+
+                                    {{if eq .Id 1}}
+                                    <a href="javascript:void(0);" data-blockid="{{.Id}}" data-bs-toggle="tooltip"
+                                        id="collectionblock" data-bs-placement="bottom"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$Translate.Blocks.AddCollectiontooltip}}"
+                                        class="pointer-events-none w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-[4px] relative group ">
+                                        <img src="/public/img/block-add.svg" alt="add">
+                                    </a>
+                                    {{else if and (eq .Prime 0) (eq .Actions "false") }}
+                                    <a href="javascript:void(0);" data-blockid="{{.Id}}" data-bs-toggle="tooltip"
+                                        id="collectionblock" data-bs-placement="bottom"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$Translate.Blocks.AddCollectiontooltip}}"
+                                        class=" w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-[4px] relative group ">
+                                        <img src="/public/img/block-add.svg" alt="add">
+                                    </a>
+
+
+                                    {{end}}
+
+
+
+                                </div>
+
+                            </div>
+                            <ul class="flex items-center space-x-[8px] flex-wrap">
+
+                                {{if .ChannelNames}}
+                                {{range .ChannelNames}}
+                                <li
+                                    class="rounded-[39px] bg-[#EBEBEB] p-[4px_8px] text-[12px] font-normal leading-[14px] text-[#262626] grid place-items-center">
+                                    {{.}}
+                                </li>
+                                {{end}}
+                                {{end}}
+                            </ul>
+                            <div>
+                                <div class="flex items-center space-x-[8px] justify-between">
+
+                                    <div class="flex items-center space-x-[8px]">
+
+                                        {{if .BlockDescription}}
+                                        {{if .ProfileImagePath}}
+                                        <div class=" min-w-6 w-6 h-6 rounded-full overflow-hidden">
+                                            <img id="userimage" src="{{.ProfileImagePath}}" alt="profile">
+                                        </div>
+                                        {{else}}
+                                        <div
+                                            class="grid place-items-center bg-[#F5F5F5] min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden text-sm ">
+                                            <span id="namestring" class="text-[#252525]"> S</span>
+                                        </div>
+                                        {{end}}
+                                        <p id="blockusername"
+                                            class="text-sm font-normal leading-5 text-[#252525] overflow-hidden truncate whitespace-nowrap">
+                                            {{.BlockDescription}}</p>
+                                        {{else}}
+                                        {{if .ProfileImagePath}}
+                                        <div class=" min-w-6 w-6 h-6 rounded-full overflow-hidden">
+                                            <img id="userimage" src="{{.ProfileImagePath}}" alt="profile">
+                                        </div>
+                                        {{else}}
+                                        <div
+                                            class="grid place-items-center bg-[#F5F5F5] min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden text-sm ">
+                                            <span id="namestring" class="text-[#252525]"> {{.NameString}} </span>
+                                        </div>
+                                        {{end}}
+                                        <p id="blockusername"
+                                            class="text-sm font-normal leading-5 text-[#252525] overflow-hidden truncate whitespace-nowrap">
+                                            {{.Username}}</p>
+                                        {{end}}
+
+                                    </div>
+
+                                    {{$User_Name = .NameString}}
+
+
+
+                                    <div class="flex items-center space-x-[8px]">
+                                        <label for="block{{.Id}}"
+                                            class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white {{if and (eq .Id 1) (eq .IsActive 1) }} pointer-events-none {{end}}">
+                                            <div class="relative">
+                                                <input type="checkbox" value="{{.IsActive}}"
+                                                    onclick="BlockStatus('{{.Id}}')" id="block{{.Id}}" {{if eq .IsActive
+                                                    1}} checked {{end}} class="peer sr-only">
+                                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                                </div>
+                                                <div
+                                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <div class="btn-group language-group position-static">
+                                            <a href="javascript:void(0);"
+                                                class=" border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] [&amp;.show]:bg-[#F5F5F5] cursor-pointer "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                                    class="hidden group-hover:block">
+                                                <img src="/public/img/action-btn.svg" alt="dropdown"
+                                                    class="block group-hover:hidden">
+                                            </a>
+
+
+                                            <ul
+                                                class="dropdown-menu dropdown-menu-end min-w-[146px]  rounded-[8px] bg-[#FFF] shadow-[2px_3px_8px_1px_#00000026] py-[4px] border-0">
+
+                                                <li class="mb-[4px] last-of-type:mb-[0] "><a href="javascript:void(0);"
+                                                        id="editblock" data-id="{{.Id}}"
+                                                        class="dropdown-item  w-full grid grid-cols-[16px_1fr] gap-[8px]  text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[20px] hover:bg-[#F5F5F5] cursor-pointer">
+
+                                                        <span><img src="/public/img/Config.svg"
+                                                                alt=""></span>Configuration </a>
+                                                </li>
+
+                                                <li class="mb-[4px] last-of-type:mb-[0] "><a href="#deleteModal"
+                                                        data-blockid="{{.Id}}" id="removeblock" data-bs-toggle="modal"
+                                                        class="dropdown-item  w-full grid grid-cols-[16px_1fr] gap-[8px]  text-[12px] font-normal text-[#262626] items-center p-[8px_16px] leading-[20px] hover:bg-[#F5F5F5] cursor-pointer">
+                                                        <span><img src="/public/img/newdelete.svg"
+                                                                alt=""></span>{{$Translate.Delete}}
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{end}}
+                    {{ else if or (eq .SearchTrues "ftrue") (eq .SearchTrues "true") }}
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noFilter.svg" alt="noFilter">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Filtersearch}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Filterkeyword}} </p>
+
+                    </div>
+
+                    {{else}}
+                    <!-- <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                        <div class="text-center w-fit mx-auto">
+                            <img src="/public/img/noData.svg" alt="nodate">
+                        </div>
+                        <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                            {{$Translate.Oopsnodata}}</h2>
+                        <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                            {{$Translate.Pagesorry}}
+                            {{$Translate.Gobackhome}}</p>
+                        <a href="#createModal" id="newblock" data-bs-toggle="offcanvas"
+                            class="text-[#10A37F] text-center text-[14px] hover:underline leading-[17.5px] font-normal inline-block">
+                            {{$Translate.Clickadd}} >></a>
+
+                    </div> -->
+
+                    <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] max-[1300px]:pt-0">
+                        <div class="mb-[30px]">
+                            <img src="/public/img/Blocksnodata.svg" alt="" class=" ">
+
+                        </div>
+                        <div class="flex flex-col items-center space-y-8 w-full">
+                            <div class="flex flex-col space-y-[16px] w-full">
+                                <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">
+                                    {{$Translate.Blocks.Noblockyet}}</h3>
+                                <p class="font-light text-[#717171] text-center mb-2 text-base">
+                                    {{$Translate.Blocks.Noblock}}</p>
+                            </div>
+                            <a href="#createModal" id="CreateBlock" data-bs-toggle="offcanvas"
+                                class="inline-flex items-center bg-[#000000] hover:bg-[#2D2D2D] px-[16px] rounded h-[34px] font-normal text-sm text-white">{{$Translate.Blocks.Createfirstblock}}</a>
+                        </div>
+                    </div>
+
+                </div>
+                {{end}}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {{if .Blocklist}}
+    <div
+        class="@container space-x-[16px] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff]">
+        <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#000000] hover:bg-[#2D2D2D] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+     @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]  space-x-[8px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px]   space-x-[8px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] 
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[8px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[8px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+
+    {{end}}
+
+
+
+
+    <!-- Preview -->
+    <div class="offcanvas offcanvas-end w-100 max-w-[820px] border-0  " tabindex="-1" id="previewModal"
+        aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header  border-0 flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
+         py-[24px_16px]">
+            <div class="modalHeader-left">
+                <h1 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
+                    {{$Translate.Preview}}</h1>
+            </div>
+            <div class="flex gap-3 items-center" id="previewclose">
+                <a class="cursor-pointer" data-bs-dismiss="offcanvas" aria-label="Close">
+                    <img src="/public/img/blockModal-close.svg" alt="close">
+                </a>
+            </div>
+
+        </div>
+        <div class=" border-b border-[#ECECEC] mx-[24px] max-[1300px]:mx-[12px]">
+
+        </div>
+        <div class="offcanvas-body p-[24px]  max-[1300px]:p-[8px_12px] scrollbar-thin ">
+
+            <div class="mb-[24px]">
+                <h3 id="previewtitle" class="text-[#262626] text-base font-normal  leading-[20px] mb-[12px]">
+                </h3>
+                <div class="flex items-center gap-[8px] ">
+                    <div class=" min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden previewimgblock">
+                        <img id="previewuserimg" src="" alt="profile">
+                    </div>
+                    <div
+                        class="previewusername  grid place-items-center bg-[#F5F5F5] min-w-[32px] w-[32px] h-[32px] rounded-full overflow-hidden text-[16px] font-medium">
+                        <span id="previewnamestring"></span>
+                    </div>
+                    <p id="previewname"
+                        class="text-sm font-normal leading-5 text-[#252525] overflow-hidden truncate whitespace-nowrap">
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="mb-[24px]">
+                <img id="previewblogimg" src="" alt="preview image" class="w-full">
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+
+    <!--create modal-->
+
+    <div class="offcanvas offcanvas-end w-100 max-w-[580px] border-0  " tabindex="-1" id="createModal"
+        aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[16px] max-[1300px]:pl-[16px] px-[24px]
+         py-[8px] border-b border-[#ECECEC] max-sm:p-[6px_16px] ">
+            <div class="modalHeader-left">
+                <h1 id="titleblock" class="text-base font-medium leading-5 text-[#262626]">
+                    {{$Translate.Create}}{{$Translate.Blocks.Block}}</h1>
+            </div>
+            <div class="flex gap-3 items-center">
+                <a id="blockclose"
+                    class="h-8 rounded-[3px] p-[8px_12px] text-sm font-sm leading-none text-left w-fit bg-[#FAFAFA] text-[#222222] hover:bg-[#e0e0e0] cursor-pointer"
+                    data-bs-dismiss="offcanvas" aria-label="Close">{{$Translate.Cancel}}</a>
+                <!-- <a href="javascript:void(0);" id="createblock"
+                    class="h-8 rounded-[3px] p-[8px_12px] text-sm font-sm leading-none text-left w-fit bg-[#000000] text-white hover:bg-[#2D2D2D]">{{$Translate.Create}}</a>
+                <a href="javascript:void(0);" style="display: none;" id="updateblock"
+                    class="h-8 rounded-[3px] p-[8px_12px] text-sm font-sm leading-none text-left w-fit bg-[#000000] text-white hover:bg-[#2D2D2D]">{{$Translate.Update}}</a> -->
+
+            </div>
+
+        </div>
+        <div class="offcanvas-body p-[24px]  scrollbar-thin  max-sm:p-[16px] ">
+            <form action="/blocks/create" method="post" name="formblock" id="blockform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="blockid" id="blockid" value="">
+                <input type="hidden" name="isactive" id="isactive" value="">
+                <!-- <div class="flex items-center gap-[5px] justify-end cursor-pointer">
+                    <label for="premium1"
+                        class="text-[14px] font-normal leading-[17.5px] text-[#152027] cursor-pointer ">
+                        {{$Translate.Blocks.Setaspremium}}
+                    </label>
+                    <label for="premium"
+                        class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+
+                        <div class="relative">
+                            <input type="checkbox" id="premium" value="" name="premiumvalue" onclick="BlockPremium()"
+                                class="peer sr-only">
+                            <div class="tgl-light block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                            <div
+                                class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                            </div>
+                        </div>
+                    </label>
+                </div> -->
+
+                <div class="mb-[24px] max-[1300px]:mb-[12px]">
+
+                    <label for="title"
+                        class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px]">{{$Translate.ContentAccessControl.Title}}
+                        <span class="text-red-600">*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class="z-999 hidden group-hover:block absolute left-0 max-w[250px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Blocks.Titlelable}}</p>
+                        </div>
+                    </label>
+                    <input type="text" name="title" id="title" placeholder="{{$Translate.Blocks.Titleplaceholder}}"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border border-[#EDEDED] outline-none h-[36px] block w-full">
+               
+                    </div>
+
+                <div class="mb-[24px]  max-[1300px]:mb-[12px]">
+                    <label for="html"
+                        class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px]">{{$Translate.Blocks.Blockhtml}}
+                        <span class="text-red-600">*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w[250px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Blocks.Blockhtmllable}}</p>
+                        </div>
+                    </label>
+                    <textarea name="html" id="html" placeholder="{{$Translate.Blocks.HtmlPlaceholder}}"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border border-[#EDEDED] outline-none max-[1300px]:h-[100px] h-[120px] block w-full resize-none scrollbar-none mb-[12px]"></textarea>
+
+                    <p class="text-[12px] font-[400] leading-[16px] text-[#717171] mb-[24px] max-[1300px]:mb-[12px]">
+                        <span class="text-[#262626]">{{$Translate.Blocks.Note}}:</span> Add a tailwind html .
+                    </p>
+                </div>
+
+                <div class="dropdown open input-group mb-2" id="memgrp">
+                    <label for=""
+                        class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px]">Select
+                        Channel
+                        <span class="text-red-600">*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p class=" hidden group-hover:block absolute left-0  mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]"
+                                style="width: 400px;">
+                                {{$Translate.Blocks.Selectchannellable}}</p>
+                        </div>
+                    </label>
+
+                    <a id="triggerId"
+                        class="rounded-[4px] p-[12px] h-9 border border-light-300 no-underline w-full flex justify-between items-center field text-[14px] cursor-pointer "
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
+                        <span id="showgroup" class="text-bold-gray text-sm font-normal"> Choose Channel</span>
+                        <img src="/public/img/drop-down-img.svg" />
+
+                    </a>
+                    <input type="hidden" name="membergroupid" id="membergroupid" value="">
+                    <input type="hidden" name="channelids" id="channelids" value="">
+                    <input type="hidden" name="chennelname"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                        id="chennelname" value="">
+                    <div class=" dropdown-menu  min-w-full w-full border-0 focus:bg-transparent pt-0 drop-shadow-4 max-h-52 overflow-auto"
+                        aria-labelledby="triggerId" data-dropdown="down">
+                        <!-- <div class="sticky top-0 bg-white z-10">
+                            <div class="px-[12px] py-[8px] relative ">
+                                <input type="text"
+                                    placeholder="Search Channels"
+                                    id="searchmembergrp" name="keyword"
+                                    class="search border border-[#ECECEC] pl-10 text-[#222222] text-xs font-light w-full h-8 rounded-[3px]" />
+                                <img src="/public/img/search-icon.svg" class="absolute top-4 left-6" />
+                            </div>
+                        </div> -->
+                        {{range .channel}}
+
+                        <li>
+                            <a class="chk-group chk-group-label dropdown-item  lg items-center flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px] bg-white "
+                                data-id="{{.Id}}" title="{{.ChannelName}}" data-slug="{{.SlugName}}">
+                                <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}" data-cname="{{.ChannelName}}"
+                                    title="{{.ChannelName}}" data-slug="{{.SlugName}}"
+                                    class="hidden peer select-channel">
+                                <label for="Check{{.Id}}"
+                                    class="checkbox-field h-[14px] relative cursor-pointer flex gap-[6px] w-full  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">{{.ChannelName}}</label>
+                            </a>
+                        </li>
+                        <!-- <button
+                            class="select-channel channel-list-row chk-group chk-group-label dropdown-item text-[14px] font-normal leading-[1] text-[#262626] bg-transparent" type="button"
+                         data-id="{{.ChannelName}}">{{.ChannelName}}</button> -->
+                        {{end}}
+
+                        <!-- member add dropdown search -->
+
+                        <div class="noData-foundWrapper hidden flex flex-col justify-content-center items-center h-full"
+                            id="nodatafounddesign">
+
+                            <div class="empty-folder">
+                                <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
+                                <img src="/public/img/shadow.svg" alt="">
+                            </div>
+                            <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                {{$Translate.Oopsnodata}}</h1>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- <div class="mb-[24px]  max-[1300px]:mb-[12px]">
+                    <label class="text-[14px] font-normal leading-[17.5px] text-[#152027] mb-[6px]">
+                        {{$Translate.Blocks.Tags}} <span class="text-red-600">*</span></label>
+                    <input type="hidden" name="tag" id="tagvalues"
+                        class="[&amp;+label]:text-[#F26674] text-[14px] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                        value="">
+                    <input type="hidden" name="deletetag" id="deletetag" value="">
+                    <input type="hidden" name="edittag" id="edittag" value="">
+                    <input type="text" name="blocktag" autocomplete="off" id="tag"
+                        placeholder="{{$Translate.Blocks.TagPlaceholder}}"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border border-[#EDEDED] outline-none h-[36px] block w-full">
+
+                    <label id="tagvalues-error" class="error" for="tagvalues" style="display:none">* Please press enter
+                        key to add tags</label>
+                    <div
+                        class="bg-[#F7F7F5] p-[12px] rounded-[4px] border border-[#EDEDED] text-sm font-normal leading-[17.5px] tracking-tight max-[1300px]:h-[100px] min-h-[120px] resize-none scrollbar-none w-full mt-2 tagdiv hidden">
+                        <ul class="flex flex-wrap items-center gap-3 taglist">
+
+                        </ul>
+
+                    </div>
+                </div> -->
+
+                <!--                 <div class="mb-[0]">
+                    <label class="text-[14px] font-normal leading-[17.5px] text-[#152027] mb-[6px]">
+                        {{$Translate.Uploadcoverimage}}</label>
+                    <div
+                        class="border-[1px] border-dashed border-[#B8B8B8] rounded-[4px] p-[16px] grid place-items-center gap-[8px] mb-[16px]">
+
+
+                        <label for="blockimg" id="browse"
+                            class="flex cursor-pointer h-[32px] hover:bg-[#148569] bg-[#10A37F] rounded-[3px] text-[#FFFFFF] text-[14px] font-normal leading-[16.41px] p-[8px_16px]">{{$Translate.Browse}}</label>
+                        <p class="text-[14px] font-[400] leading-[17.5px] text-[#717171]  mt-[4px]">
+                            {{$Translate.Uploadcoverimage}} </p>
+                        <p class="text-[#B6B6B7] text-[12px] font-normal  leading-[16.41px] " id="blockchosimg">
+                            {{$Translate.ChooseFormats}} </p>
+                        <input type="file" name="" id="blockimg"
+                            class="hidden [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"></input>
+                        <img alt="" data-id="8" id="prof-crop" name="prof_pic">
+                    </div>
+                    <input type="hidden" value="" name="coverimg" style="display: none;"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                        id="coverimg">
+                    <p
+                        class="text-[12px] font-[400] leading-[16px] text-[#717171] mb-[24px] max-[1300px]:mb-[12px] imagediv">
+                        <span class="text-[#262626]">{{$Translate.Blocks.Note}}:</span> {{$Translate.Blocks.Notedesc}}
+                    </p>
+
+                </div> -->
+
+                <div class="flex flex-col gap-1.5  mb-[16px] last-of-type:mb-0">
+
+                    <label for=""
+                        class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] ">{{$Translate.Uploadcoverimage}}
+                        <span class="text-red-600">*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w[250px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Blocks.Uploadcoverimagelable}}</p>
+                        </div>
+                    </label>
+                    <div
+                        class="rounded-[4px] relative p-[12px] h-[160px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full flex items-center flex-col gap-[12px] justify-center">
+
+                        <label for="categoryimage"
+                            class="flex cursor-pointer h-[32px] hover:bg-[#2D2D2D] bg-[#000000] rounded-[3px] text-[#FFFFFF] text-[14px] font-normal leading-[16.41px] p-[8px_16px]"
+                            id="browse">{{$Translate.Browse}}</label>
+                        <p class="text-[#717171] text-[14px] font-normal  leading-[16.41px] " id="uploadLine">
+                            {{$Translate.Uploadneworchoose}}</p>
+                        <p class="text-[#717171] text-[12px] font-normal  leading-[16.41px] " id="uploadFormat">
+                            {{$Translate.ChooseFormats}}
+                        </p>
+                        <input type="file" name="categoryimage" id="categoryimage"
+                            accept="image/png, image/jpeg,image/jpg,image/svg"
+                            class="hidden [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                        <label id="categoryimage-error" class="error" for="categoryimage" style="display: none;">Please
+                            enter a value with a valid mimetype.</label>
+                        <label id="myfile-error" class="error hidden " for="myfile"
+                            style="font-size: 0.75rem; font-weight: 400; color: rgb(242, 102, 116); position: absolute; top: 100%;left: 0;">*
+                            Please
+                            choose images with jpg /jpeg /png formats only</label>
+                        <img alt="" data-id="9" id="prof-crop" name="prof_pic" class="hidden">
+                        <div id="catdel-img" class=" hover:opacity-100 opacity-[0] ">
+                            <button class="absolute right-[0.75rem] top-[0.75rem] bg-transparent border-0 z-[3]"
+                                type="button"><img src="/public/img/deletehovericon.svg" alt=""></button>
+                            <div class="bg-[#1E292C76] m-auto h-full w-full absolute left-0 top-0 z-[1]"></div>
+                        </div>
+
+                        <img src="" name="blockcoverimg" id="blockcoverimg" class="w-full h-full object-contain">
+                    </div>
+                    <input type="hidden" value="" name="coverimg"
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                        id="coverimg">
+                </div>
+
+        </div>
+        </form>
+
+    </div>
+    <div id="backgroundfade"></div>
+
+    <!-- <div class="grid grid-cols-1 gap-[8px] ">
+        <label class="bg-[#F4F4F4] flex items-center justify-center cursor-pointer aspect-[1/1] row-span-2">
+        <div class="delImg absolute top-0 right-0 hidden cursor-pointer w-full flex justify-end p-6 items-start h-full bg-[#00000042]">
+                                                            <img id="del" class="delIcons ml-auto" src="${require(`@/assets/Delete.svg`)}">
+                                                        </div>
+            <img src="https://spurtcms.com/public/img/upload-folder.svg" class="max-w-full max-h-full object-contain" alt="Upload-image">Upload Image
+        </label>
+        <label class="bg-[#F4F4F4] flex items-center justify-center cursor-pointer aspect-[1/1]">
+        <div class="delImg absolute top-0 right-0 hidden cursor-pointer w-full flex justify-end p-6 items-start h-full bg-[#00000042]">
+                                                            <img id="del" class="delIcons ml-auto" src="${require(`@/assets/Delete.svg`)}">
+                                                        </div>
+            <img src="https://spurtcms.com/public/img/upload-folder.svg" class="max-w-full max-h-full object-contain" alt="Upload-image">Upload Image
+        </label>
+        <label class="bg-[#F4F4F4] flex items-center justify-center cursor-pointer aspect-[1/1]">
+        <div class="delImg absolute top-0 right-0 hidden cursor-pointer w-full flex justify-end p-6 items-start h-full bg-[#00000042]">
+                                                            <img id="del" class="delIcons ml-auto" src="${require(`@/assets/Delete.svg`)}">
+                                                        </div>
+            <img src="https://spurtcms.com/public/img/upload-folder.svg" class="max-w-full max-h-full object-contain" alt="Upload-image">Upload Image
+        </label>
+        <label class="bg-[#F4F4F4] flex items-center justify-center cursor-pointer aspect-[1/1]">
+        <div class="delImg absolute top-0 right-0 hidden cursor-pointer w-full flex justify-end p-6 items-start h-full bg-[#00000042]">
+                                                            <img id="del" class="delIcons ml-auto" src="${require(`@/assets/Delete.svg`)}">
+                                                        </div>
+            <img src="https://spurtcms.com/public/img/upload-folder.svg" class="max-w-full max-h-full object-contain" alt="Upload-image">Upload Image
+        </label>
+        <label class="bg-[#F4F4F4] flex items-center justify-center cursor-pointer aspect-[1/1]">
+        <div class="delImg absolute top-0 right-0 hidden cursor-pointer w-full flex justify-end p-6 items-start h-full bg-[#00000042]">
+                                                            <img id="del" class="delIcons ml-auto" src="${require(`@/assets/Delete.svg`)}">
+                                                        </div>
+            <img src="https://spurtcms.com/public/img/upload-folder.svg" class="max-w-full max-h-full object-contain" alt="Upload-image">Upload Image
+        </label>
+    </div> -->
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/block/block.js"></script>
+
+    <script src="/public/js/media/media.js"></script>
+
+    {{template "footerclose" .}}

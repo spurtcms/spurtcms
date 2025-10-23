@@ -155,6 +155,9 @@ type Translation struct {
 	Getsupport             string `json:"getsupport"`
 	Explore                string `json:"explore"`
 	Aiwritingheading       string `json:"aiwritingheading"`
+	Selling                string `json:"selling"`
+	Courses                string `json:"courses"`
+	Listing                string `json:"listing"`
 
 	Permission struct {
 		Searchroles       string `json:"searchroles"`
@@ -262,6 +265,7 @@ type Translation struct {
 		Rolelable      string `json:"rolelable"`
 		Emaillable     string `json:"emaillable"`
 		Mobilelable    string `json:"mobilelable"`
+		Aimodule       string `json:"aimodule"`
 	} `json:"Setting"`
 
 	Emailtemplate struct {
@@ -1401,6 +1405,581 @@ type Translation struct {
 			ValidateWebhookName string `json:"validateWebhookName"`
 		} `json:"validationErrors"`
 	} `json:"webhooks"`
+
+	Memberships struct {
+		Membershiphead         string `json:"membershiphead"`
+		Membershipheaddesc     string `json:"membershipheaddesc"`
+		Membershipmember       string `json:"membershipmember"`
+		Membershipgroup        string `json:"membershipgroup"`
+		Membershiplevel        string `json:"membershiplevel"`
+		Membershipsubscription string `json:"membershipsubscription"`
+		Membershiporders       string `json:"membershiporders"`
+
+		Recordsavailable string `json:"recordsavailable"`
+		Recordavailable  string `json:"recordavailable"`
+
+		Member struct {
+			Recordsavailable string `json:"recordsavailable"`
+			Recordavailable  string `json:"recordavailable"`
+			CreateMember     string `json:"createmember"`
+			UpdateMember     string `json:"updatemember"`
+
+			Selectfilters string `json:"selectfilters"`
+
+			Createdon   string `json:"createdon"`
+			Clear       string `json:"clear"`
+			Applyfilter string `json:"applyfilter"`
+
+			Searchplacehoder string `json:"searchplacehoder"`
+
+			Id           string `json:"id"`
+			Name         string `json:"name"`
+			Email        string `json:"email"`
+			Level        string `json:"level"`
+			Subscription string `json:"subscription"`
+			Startdate    string `json:"startdate"`
+			Enddate      string `json:"enddate"`
+			Status       string `json:"status"`
+			Action       string `json:"action"`
+
+			Edit   string `json:"edit"`
+			Delete string `json:"delete"`
+
+			Memberemptytitle string `json:"memberemptytitle"`
+			Memberemptydesc  string `json:"memberemptydesc"`
+
+			// create
+
+			Cancel                string `json:"cancel"`
+			Save                  string `json:"save"`
+			Active                string `json:"active"`
+			Firstname             string `json:"firstname"`
+			Firstnameinfo         string `json:"firstnameinfo"`
+			Firstnameplacceholder string `json:"firstnameplacceholder"`
+			Lastname              string `json:"lastname"`
+			Lastnameinfo          string `json:"lastnameinfo"`
+
+			Lastnameplacceholder string `json:"lastnameplacceholder"`
+			Emailinfo            string `json:"emailinfo"`
+			Emailplacceholder    string `json:"emailplacceholder"`
+			Mobile               string `json:"mobile"`
+			Mobileinfo           string `json:"mobileinfo"`
+
+			Mobileplacehoder string `json:"mobileplacehoder"`
+			Username         string `json:"username"`
+			Usernameinfo     string `json:"usernameinfo"`
+
+			Usernameplacehoder string `json:"usernameplacehoder"`
+			Password           string `json:"password"`
+			Passwordinfo       string `json:"passwordinfo"`
+
+			Passwordplacehoder string `json:"passwordplacehoder"`
+		} `json:"member"`
+
+		MembershipGroups struct {
+			Recordsavailable      string `json:"recordsavailable"`
+			Recordavailable       string `json:"recordavailable"`
+			CreateMembersiphgroup string `json:"createMembersiphgroup"`
+			UpdateMembersiphgroup string `json:"updateMembersiphgroup"`
+			Selectfilters         string `json:"selectfilters"`
+			Lastupdatedon         string `json:"lastupdatedon"`
+			Clear                 string `json:"clear"`
+			Applyfilter           string `json:"applyfilter"`
+			Status                string `json:"status"`
+			Active                string `json:"active"`
+			Inactive              string `json:"inactive"`
+			Searchplacehoder      string `json:"searchplacehoder"`
+
+			Group       string `json:"group"`
+			Description string `json:"description"`
+			Action      string `json:"action"`
+
+			Membershipgroupemptytitle string `json:"membershipgroupemptytitle"`
+			Membershipgroupemptydesc  string `json:"membershipgroupemptydesc"`
+
+			Cancel                  string `json:"cancel"`
+			Save                    string `json:"save"`
+			Groupname               string `json:"groupname"`
+			Groupnameinfo           string `json:"groupnameinfo"`
+			Groupnameplacehoder     string `json:"groupnameplacehoder"`
+			Groupnamedesc           string `json:"groupnamedesc"`
+			Groupnamedescinfo       string `json:"groupnamedescinfo"`
+			Groupnamedescplacehoder string `json:"groupnamedescplacehoder"`
+		} `json:"membershipgroups"`
+
+		MemberShipLevels struct {
+			Create               string `json:"create"`
+			Membershipavailable  string `json:"membershipavailable"`
+			Membershipavailables string `json:"membershipavailables"`
+			Id                   string `json:"id"`
+			Level                string `json:"level"`
+			Fee                  string `json:"fee"`
+			Status               string `json:"status"`
+			Action               string `json:"action"`
+			Edit                 string `json:"edit"`
+			Delete               string `json:"delete"`
+			Cancel               string `json:"cancel"`
+			Save                 string `json:"save"`
+
+			Basicinfo     string `json:"basicinfo"`
+			Basicinfodesc string `json:"basicinfodesc"`
+
+			Name                       string `json:"name"`
+			Nameinfo                   string `json:"nameinfo"`
+			Selectmembership           string `json:"selectmembership"`
+			Selectmembershipinfo       string `json:"selectmembershipinfo"`
+			Selectmembershipplaceholde string `json:"selectmembershipplaceholde"`
+
+			Selectmembershiplevelgroup            string `json:"selectmembershiplevelgroup"`
+			Selectmembershiplevelgroupinfo        string `json:"selectmembershiplevelgroupinfo"`
+			Selectmembershiplevelgroupplaceholder string `json:"Selectmembershiplevelgroupplaceholder"`
+
+			Message            string `json:"message"`
+			Messageinfo        string `json:"messageinfo"`
+			Billingdetails     string `json:"billingdetails"`
+			Billingdetailsdesc string `json:"billingdetailsdesc"`
+
+			Initialpayment     string `json:"initialpayment"`
+			Initialpaymentinfo string `json:"initialpaymentinfo"`
+			Initialpaymentdesc string `json:"initialpaymentdesc"`
+
+			Recurringsubscription     string `json:"recurringsubscription"`
+			Recurringsubscriptioninfo string `json:"recurringsubscriptioninfo"`
+			Recurringsubscriptiondesc string `json:"recurringsubscriptiondesc"`
+
+			Billingamount     string `json:"billingamount"`
+			Billingamountinfo string `json:"billingamountinfo"`
+			Billingamountdesc string `json:"billingamountdesc"`
+
+			Per   string `json:"per"`
+			Day   string `json:"day"`
+			Week  string `json:"week"`
+			Year  string `json:"year"`
+			Month string `json:"month"`
+
+			Billingcyclelimit     string `json:"billingcyclelimit"`
+			Billingcyclelimitinfo string `json:"billingcyclelimitinfo"`
+			Billingcyclelimitdesc string `json:"billingcyclelimitdesc"`
+
+			Customtrial     string `json:"Customtrial"`
+			Customtrialinfo string `json:"Customtrialinfo"`
+			Customtrialdesc string `json:"Customtrialdesc"`
+
+			Trailbillingamount     string `json:"Trailbillingamount"`
+			Trailbillingamountinfo string `json:"Trailbillingamountinfo"`
+			Trailbillingamountdesc string `json:"Trailbillingamountdesc"`
+			Forthefirst            string `json:"forthefirst"`
+			Subscriptionpayment    string `json:"Subscriptionpayment"`
+
+			Membershiplevelemptytitle string `json:"membershiplevelemptytitle"`
+			Membershiplevelemptydesc  string `json:"membershiplevelemptydesc"`
+			Membershipdesc            string `json:"membershipdesc"`
+		} `json:"membershiplevels"`
+
+		Subscriptions struct {
+			Create                 string `json:"create"`
+			Subscriptionavailable  string `json:"subscriptionavailable"`
+			Subscriptionavailables string `json:"subscriptionavailables"`
+
+			Subcriptionid             string `json:"subcriptionid"`
+			User                      string `json:"user"`
+			Level                     string `json:"level"`
+			Fee                       string `json:"fee"`
+			Gateway                   string `json:"gateway"`
+			Paymenton                 string `json:"paymenton"`
+			Status                    string `json:"status"`
+			Action                    string `json:"action"`
+			Edit                      string `json:"edit"`
+			Delete                    string `json:"delete"`
+			Cancel                    string `json:"cancel"`
+			Save                      string `json:"save"`
+			Subscriptionemptytitle    string `json:"subscriptionemptytitle"`
+			Subscriptionemptydesc     string `json:"subscriptionemptydesc"`
+			Selectgateway             string `json:"selectgateway"`
+			MemberShiplevel           string `json:"memberShiplevel"`
+			Selectlevel               string `json:"Selectlevel"`
+			Subscriptiontransactionid string `json:"subscriptiontransactionid"`
+			Entertransactionid        string `json:"entertransactionid"`
+
+			Linksubscription     string `json:"linksubscription"`
+			Linksubscriptiondesc string `json:"linksubscriptiondesc"`
+
+			Transactionid     string `json:"transactionid"`
+			Transactionidinfo string `json:"transactionidinfo"`
+
+			Subscriptiontransactionidinfo string `json:"subscriptiontransactionidinfo"`
+			Subscriptiontransactioniddesc string `json:"subscriptiontransactioniddesc"`
+
+			Gatewayinfo string `json:"gatewayinfo"`
+
+			Gatewayenvironment     string `json:"Gatewayenvironment"`
+			Gatewayenvironmentinfo string `json:"Gatewayenvironmentinfo"`
+
+			Memberid     string `json:"memberid"`
+			Memberidinfo string `json:"memberidinfo"`
+
+			Membershiplevelid     string `json:"membershiplevelid"`
+			Membershiplevelidinfo string `json:"membershiplevelidinfo"`
+			Selectmember          string `json:"selectmember"`
+		} `json:"subscriptions"`
+		Orders struct {
+			Create                    string `json:"create"`
+			Orderavailable            string `json:"orderavailable"`
+			Orderavailables           string `json:"orderavailables"`
+			Orderid                   string `json:"orderid"`
+			User                      string `json:"user"`
+			Level                     string `json:"level"`
+			Total                     string `json:"total"`
+			Gateway                   string `json:"gateway"`
+			Paymenton                 string `json:"paymenton"`
+			Subscriptiontransactionid string `json:"subscriptiontransactionid"`
+			Status                    string `json:"status"`
+			Action                    string `json:"action"`
+			Edit                      string `json:"edit"`
+			Delete                    string `json:"delete"`
+			Cancel                    string `json:"cancel"`
+			Save                      string `json:"save"`
+			Orderemptytitle           string `json:"orderemptytitle"`
+			Orderemptydesc            string `json:"orderemptydesc"`
+			Enterorderid              string `json:"enterorderid"`
+			Entertransactionid        string `json:"entertransactionid"`
+			MemberShiplevel           string `json:"memberShiplevel"`
+			Selectlevel               string `json:"selectlevel"`
+
+			Memberinformation     string `json:"memberinformation"`
+			Memberinformationdesc string `json:"memberinformationdesc"`
+			Userid                string `json:"userid"`
+			Useridinfo            string `json:"useridinfo"`
+			Membershiplevelid     string `json:"membershiplevelid"`
+			Membershiplevelidinfo string `json:"membershiplevelidinfo"`
+			Selectmember          string `json:"selectmember"`
+			Selectmembershiplevel string `json:"selectmembershiplevel"`
+			Searchmembershiplevel string `json:"searchmembershiplevel"`
+
+			Billingaddress     string `json:"billingaddress"`
+			Billingaddressdesc string `json:"billingaddressdesc"`
+
+			Billingname           string `json:"billingname"`
+			Billingnameinfo       string `json:"billingnameinfo"`
+			Billingstreet         string `json:"billingstreet"`
+			Billingstreetinfo     string `json:"billingstreetinfo"`
+			Billingstreet2        string `json:"billingstreet2"`
+			Billingstreetinfo2    string `json:"billingstreetinfo2"`
+			Billingcity           string `json:"billingcity"`
+			Billingcityinfo       string `json:"billingcityinfo"`
+			Billingstate          string `json:"billingstate"`
+			Billingstateinfo      string `json:"billingstateinfo"`
+			Billingpostelcode     string `json:"billingpostelcode"`
+			Billingpostelcodeinfo string `json:"billingpostelcodeinfo"`
+			Billingcounty         string `json:"billingcounty"`
+			Billingcountyinfo     string `json:"billingcountyinfo"`
+			Billingphone          string `json:"billingphone"`
+			Billingphoneinfo      string `json:"Billingphoneinfo"`
+
+			Paymentinformation     string `json:"paymentinformation"`
+			Paymentinformationdesc string `json:"paymentinformationdesc"`
+
+			Subtotal                      string `json:"subtotal"`
+			Subtotalinfo                  string `json:"subtotalinfo"`
+			Tax                           string `json:"tax"`
+			Taxinfo                       string `json:"taxinfo"`
+			Totalinfo                     string `json:"totalinfo"`
+			Entertotalamount              string `json:"entertotalamount"`
+			Paymenttype                   string `json:"paymenttype"`
+			Paymenttypeinfo               string `json:"paymenttypeinfo"`
+			Enterpaymenttype              string `json:"enterpaymenttype"`
+			Paymenttypedesc               string `json:"paymenttypedesc"`
+			Statusinfo                    string `json:"statusinfo"`
+			Success                       string `json:"success"`
+			Failed                        string `json:"failed"`
+			Paymentgatewayinformation     string `json:"paymentgatewayinformation"`
+			Paymentgatewayinformationdesc string `json:"paymentgatewayinformationdesc"`
+			Gatewayinfo                   string `json:"gatewayinfo"`
+			Gatewayenvironment            string `json:"Gatewayenvironment"`
+			Gatewayenvironmentinfo        string `json:"Gatewayenvironmentinfo"`
+			Paymenttransactionid          string `json:"paymenttransactionid"`
+			Paymenttransactionidinfo      string `json:"paymenttransactionidinfo"`
+			Paymenttransactioniddesc      string `json:"paymenttransactioniddesc"`
+			Subscriptiontransactionidinfo string `json:"subscriptiontransactionidinfo"`
+			Subscriptiontransactioniddesc string `json:"subscriptiontransactioniddesc"`
+
+			Selectgateway            string `json:"selectgateway"`
+			Selectgatewayenvironment string `json:"selectgatewayenvironment"`
+		} `json:"orders"`
+	} `json:"memberships"`
+
+	Integrations struct {
+		Integration string `json:"integration"`
+		Headtitle   string `json:"headtitle"`
+		Title       string `json:"title"`
+		Keypoint1   string `json:"keypoint1"`
+		Keypoint2   string `json:"keypoint2"`
+		Keypoint3   string `json:"keypoint3"`
+		Keypoint4   string `json:"keypoint4"`
+		Keypoint5   string `json:"keypoint5"`
+		Keypoint6   string `json:"keypoint6"`
+		Keypoint7   string `json:"keypoint7"`
+		Cloudtite   string `json:"cloudtite"`
+		Deschead    string `json:"deschead"`
+		List1       string `json:"list1"`
+		Sublist1    string `json:"sublist1"`
+		List2       string `json:"list2"`
+		Sublist2    string `json:"sublist2"`
+		List3       string `json:"list3"`
+		Sublist3    string `json:"sublist3"`
+		List4       string `json:"list4"`
+		Sublist4    string `json:"sublist4"`
+		List5       string `json:"list5"`
+		Sublist5    string `json:"sublist5"`
+		Sublist6    string `json:"sublist6"`
+		Sublist7    string `json:"sublist7"`
+		Sublist8    string `json:"sublist8"`
+		Sublist9    string `json:"sublist9"`
+		Sublist10   string `json:"sublist10"`
+		List6       string `json:"list6"`
+		Sublist11   string `json:"sublist11"`
+		List7       string `json:"list7"`
+		Sublist12   string `json:"sublist12"`
+		List8       string `json:"list8"`
+		Sublist13   string `json:"sublist13"`
+		List9       string `json:"list9"`
+		Sublist14   string `json:"sublist14"`
+		List10      string `json:"list10"`
+		Sublist15   string `json:"sublist15"`
+		Sublist16   string `json:"sublist16"`
+		Sublist17   string `json:"sublist17"`
+		Sublist18   string `json:"sublist18"`
+	} `json:"integrations"`
+
+	AImodulesettings struct {
+		Cancel                 string `json:"cancel"`
+		Save                   string `json:"save"`
+		Create                 string `json:"create"`
+		Aimodule               string `json:"aimodule"`
+		Description            string `json:"description"`
+		Lastupdatedon          string `json:"lastupdatedon"`
+		Status                 string `json:"status"`
+		Model                  string `json:"model"`
+		Action                 string `json:"action"`
+		Edit                   string `json:"edit"`
+		Delete                 string `json:"delete"`
+		Aiemptytitle           string `json:"aiemptytitle"`
+		Aiemptydesc            string `json:"aiemptydesc"`
+		Selectmodule           string `json:"selectmodule"`
+		Selectmoduledesc       string `json:"selectmoduledesc"`
+		Openai                 string `json:"openai"`
+		Openaidesc             string `json:"openaidesc"`
+		Google                 string `json:"google"`
+		Googledesc             string `json:"googledesc"`
+		Deepseek               string `json:"deepseek"`
+		Deepseekdesc           string `json:"deepseekdesc"`
+		Apikey                 string `json:"apikey"`
+		Apikeyplaceholder      string `json:"apikeyplaceholder"`
+		Descriptionplaceholder string `json:"descriptionplaceholder"`
+		Aimodel                string `json:"aimodel"`
+		Selectaimodel          string `json:"selectaimodel"`
+	} `json:"AImodulesettings"`
+
+	Securitys struct {
+		Security            string `json:"security"`
+		Changepassword      string `json:"changepassword"`
+		Changepassworddesc  string `json:"changepassworddesc"`
+		Newpassword         string `json:"newpassword"`
+		Newpasswordinfo     string `json:"Newpasswordinfo"`
+		Confirmpassword     string `json:"confirmpassword"`
+		Confirmpasswordinfo string `json:"Confirmpasswordinfo"`
+		Cancel              string `json:"cancel"`
+		Save                string `json:"save"`
+	} `json:"Securitys"`
+
+	Course struct {
+		Course                string `json:"course"`
+		Manageandorganize     string `json:"manageandorganize"`
+		Createcourse          string `json:"createcourse"`
+		RecordsAvailable      string `json:"recordsavailable"`
+		All                   string `json:"all"`
+		SelectFilters         string `json:"selectfilters"`
+		CourseTitle           string `json:"coursetitle"`
+		EnterCourseTitle      string `json:"entercoursetitle"`
+		Status                string `json:"status"`
+		SelectStatus          string `json:"selectstatus"`
+		Pricing               string `json:"pricing"`
+		SelectPricing         string `json:"selectpricing"`
+		Clear                 string `json:"clear"`
+		ApplyFilter           string `json:"applyfilter"`
+		SortBy                string `json:"sortby"`
+		LastUpdated           string `json:"lastupdated"`
+		CreatedDate           string `json:"createddate"`
+		Ascending             string `json:"ascending"`
+		Descending            string `json:"descending"`
+		CreatedBy             string `json:"createdBy"`
+		Action                string `json:"action"`
+		LastUpdatedOn         string `json:"lastupdatedon"`
+		CreatedOn             string `json:"createdon"`
+		Publish               string `json:"publish"`
+		UnPublish             string `json:"unpublish"`
+		Delete                string `json:"delete"`
+		Cancel                string `json:"cancel"`
+		Save                  string `json:"save"`
+		Title                 string `json:"title"`
+		EnterYourTitle        string `json:"enteryourtitle"`
+		Titleinfo             string `json:"titleinfo"`
+		Description           string `json:"description"`
+		EnterYourDescription  string `json:"enteryourdescription"`
+		Descriptioninfo       string `json:"descriptioninfo"`
+		Category              string `json:"category"`
+		Categoryinfo          string `json:"categoryinfo"`
+		SelectCategory        string `json:"selectcategory"`
+		SearchCategory        string `json:"searchcategory"`
+		UploadCoverImage      string `json:"uploadcoverimage"`
+		UploadCoverImageinfo  string `json:"uploadcoverimageinfo"`
+		Browse                string `json:"browse"`
+		Uploadnewfiles        string `json:"uploadnewfiles"`
+		Chooseonly            string `json:"chooseonly"`
+		NoCoursesyet          string `json:"nocoursesyet"`
+		Startcreating         string `json:"startcreating"`
+		DeleteCourse          string `json:"deletecourse"`
+		Areyousure            string `json:"areyousure"`
+		Lesson                string `json:"lesson"`
+		Section               string `json:"section"`
+		Settings              string `json:"settings"`
+		NoLessonYet           string `json:"nolessonsyet"`
+		Startbuilding         string `json:"startbuilding"`
+		CreateYourFirstLesson string `json:"createyourfirstlesson"`
+		Newlesson             string `json:"newlesson"`
+		NewSection            string `json:"newSection"`
+		Addtext               string `json:"addtext"`
+		Addembed              string `json:"addembed"`
+		Addquiz               string `json:"addquiz"`
+		AddFiles              string `json:"addFiles"`
+		Createlesson          string `json:"createlesson"`
+		Updatelesson          string `json:"updatelesson"`
+		Createsection         string `json:"createsection"`
+		Updatesection         string `json:"updatesection"`
+	} `json:"Course"`
+
+	Coursessettings struct {
+		Settings        string `json:"settings"`
+		Details         string `json:"details"`
+		Title           string `json:"title"`
+		Titledesc       string `json:"titledesc"`
+		Description     string `json:"description"`
+		Desccont        string `json:"desccont"`
+		Image           string `json:"image"`
+		Imagedesc       string `json:"imagedesc"`
+		Chooseimg       string `json:"chooseimg"`
+		Category        string `json:"category"`
+		Catdesc         string `json:"catdesc"`
+		Searchcat       string `json:"searchcat"`
+		Options         string `json:"options"`
+		Certificate     string `json:"certificate"`
+		Cerdesc         string `json:"cerdesc"`
+		Cerstatus       string `json:"cerstatus"`
+		Comments        string `json:"comments"`
+		Commentsdesc    string `json:"commentsdesc"`
+		Active          string `json:"active"`
+		Inactive        string `json:"inactive"`
+		Pricing         string `json:"pricing"`
+		Offer           string `json:"offer"`
+		Offerdesc       string `json:"offerdesc"`
+		Offerchange     string `json:"offerchange"`
+		Free            string `json:"free"`
+		Freedesc        string `json:"freedesc"`
+		Waitlist        string `json:"waitlist"`
+		Waitlistdesc    string `json:"waitlistdesc"`
+		Paid            string `json:"paid"`
+		Paiddesc        string `json:"paiddesc"`
+		Availability    string `json:"availability"`
+		Status          string `json:"status"`
+		Statusdesc      string `json:"statusdesc"`
+		Visibility      string `json:"visibility"`
+		Visibilitydesc  string `json:"visibilitydesc"`
+		Published       string `json:"published"`
+		Unpublish       string `json:"unpublish"`
+		Draft           string `json:"draft"`
+		Selectvisible   string `json:"selectvisible"`
+		Public          string `json:"public"`
+		Private         string `json:"private"`
+		Startdate       string `json:"startdate"`
+		Datedesc        string `json:"datedesc"`
+		Singuplimit     string `json:"singuplimit"`
+		Singuplimitdesc string `json:"singuplimitdesc"`
+		Enterlimits     string `json:"enterlimits"`
+		Duration        string `json:"duration"`
+		Durationdesc    string `json:"durationdesc"`
+		Selectduration  string `json:"selectduration"`
+		Month           string `json:"month"`
+		Year            string `json:"year"`
+		Visiblityerr    string `json:"visiblityerr"`
+		Dateerr         string `json:"dateerr"`
+		Limiterr        string `json:"limiterr"`
+		Durationerr     string `json:"durationerr"`
+	} `json:"Coursessettings"`
+	Menu struct {
+		Website            string `json:"website"`
+		Templates          string `json:"templates"`
+		SEO                string `json:"seo"`
+		Setting            string `json:"setting"`
+		WebDesc            string `json:"webdesc"`
+		BannerTitle        string `json:"bannertitle"`
+		BannerDesc         string `json:"bannerdesc"`
+		Menu               string `json:"menu"`
+		MenuName           string `json:"menuname"`
+		TotalItems         string `json:"totalitems"`
+		Status             string `json:"status"`
+		LastModified       string `json:"lastmodified"`
+		Action             string `json:"action"`
+		CreateMenu         string `json:"createmenu"`
+		CreateNewMenu      string `json:"createnewmenu"`
+		Description        string `json:"description"`
+		ManageMenu         string `json:"managemenu"`
+		ManageMenuDesc     string `json:"managemenudesc"`
+		ChooseMenuItem     string `json:"choosemenuitem"`
+		AddMenuItems       string `json:"addmenuitems"`
+		AddToMenu          string `json:"addtomenu"`
+		MostRecent         string `json:"mostrecent"`
+		ViewAll            string `json:"viewall"`
+		SelectAll          string `json:"selectall"`
+		AddMenuItem        string `json:"addmenuitem"`
+		LabelName          string `json:"labelname"`
+		LabelNamePlcholder string `json:"labelnameplcholder"`
+		NavigationPath     string `json:"navigationpath"`
+		NavPlcholder       string `json:"navplcholder"`
+		AddItem            string `json:"additem"`
+		LabelNameErr       string `json:"labelnameerr"`
+		LinkPathErr        string `json:"linkpatherr"`
+	} `json:"Menu"`
+	Seo struct {
+		HomePage             string `json:"homepage"`
+		PageTitle            string `json:"pagetitle"`
+		HomePageTitle        string `json:"homepagetitle"`
+		PageDescription      string `json:"pagedescription"`
+		HomePageDescription  string `json:"homepagedescription"`
+		PageKeyword          string `json:"pagekeyword"`
+		HomePageKeyword      string `json:"homepagekeyword"`
+		Save                 string `json:"save"`
+		Store                string `json:"store"`
+		StoreTitle           string `json:"storetitle"`
+		StorePageTitle       string `json:"storepagetitle"`
+		StoreDescription     string `json:"storedescription"`
+		StorePageDescription string `json:"storepagedescription"`
+		StoreKeyword         string `json:"storekeyword"`
+		StorePageKeyword     string `json:"storepagekeyword"`
+		SiteMap              string `json:"sitemap"`
+		Choosefile           string `json:"choosefile"`
+		Nofilechose          string `json:"nofilechosen"`
+		Update               string `json:"update"`
+	} `json:"Seo"`
+
+	WebsiteSettings struct {
+		SiteName    string `json:"sitename"`
+		Spurtcms    string `json:"spurtcms"`
+		SiteLogo    string `json:"sitelogo"`
+		SiteFavIcon string `json:"sitefavicon"`
+		WebsiteUrl  string `json:"websiteurl"`
+		Subdomain   string `json:"subdomain"`
+		Spurtcmscom string `json:"spurtcmscom"`
+	} `json:"WebsiteSettings"`
 }
 
 func LoadTranslation(filepath string) (Translation, error) {
