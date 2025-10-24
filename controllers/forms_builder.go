@@ -85,7 +85,7 @@ func FormbuilderList(c *gin.Context) {
 
 	var FormsBuidlersList []forms.TblForms
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error: %s", perr)
 	}
@@ -171,7 +171,7 @@ func FormbuilderList(c *gin.Context) {
 
 		// ModuleName, TabName, _ := ModuleRouteName(c)
 
-		ModuleName := "Forms Builder"
+		ModuleName := "Forms"
 
 		translate, _ := TranslateHandler(c)
 
@@ -337,7 +337,7 @@ func DefaultCtaList(c *gin.Context) {
 		Previous, Next, PageCount, Page := Pagination(pageno, int(responseData.BlockCount), limt)
 		menu := NewMenuController(c)
 		// ModuleName, TabName, _ := ModuleRouteName(c)
-		ModuleName := "Forms Builder"
+		ModuleName := "Forms"
 
 		translate, _ := TranslateHandler(c)
 		var active string
@@ -354,7 +354,7 @@ func DefaultCtaList(c *gin.Context) {
 			TwoAfter:     pageno + 2,
 			TwoBelow:     pageno - 2,
 			ThreeAfter:   pageno + 3,
-		},  "ctabanner": ctabannerval,  "chnid": filter.ChannelName, "keywordtrue": keywordtrue, "Count": responseData.BlockCount, "Searchtrue": filterflag, "linktitle": "Forms", "Limit": limt, "UserId": c.GetInt("userid"), "Formlist": responseData.FinalctaList, "Previous": Previous, "Page": Page, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "StorageType": storagetype.SelectedType, "Filter": filter, "title": ModuleName, "csrf": csrf.GetToken(c), "Active": active, "translate": translate, "channelist": finalChannelList})
+		}, "ctabanner": ctabannerval, "chnid": filter.ChannelName, "keywordtrue": keywordtrue, "Count": responseData.BlockCount, "Searchtrue": filterflag, "linktitle": "Forms", "Limit": limt, "UserId": c.GetInt("userid"), "Formlist": responseData.FinalctaList, "Previous": Previous, "Page": Page, "Next": Next, "PageCount": PageCount, "CurrentPage": pageno, "Paginationendcount": paginationendcount, "Paginationstartcount": paginationstartcount, "StorageType": storagetype.SelectedType, "Filter": filter, "title": ModuleName, "csrf": csrf.GetToken(c), "Active": active, "translate": translate, "channelist": finalChannelList})
 
 	}
 
@@ -365,7 +365,7 @@ func AddForms(c *gin.Context) {
 
 	_, TabName, _ := ModuleRouteName(c)
 
-	ModuleName := "Forms Builder"
+	ModuleName := "Forms"
 
 	translate, _ := TranslateHandler(c)
 
@@ -430,7 +430,7 @@ func CreateForms(c *gin.Context) {
 	}
 
 	fmt.Println("checkformcreate")
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -464,7 +464,7 @@ func Status(c *gin.Context) {
 	pageno := c.Query("page")
 	modifiedby := c.GetInt("userid")
 
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 	}
@@ -548,7 +548,7 @@ func DeleteForm(c *gin.Context) {
 	pageno := c.Query("page")
 	deletedby := c.GetInt("userid")
 
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 	}
@@ -616,7 +616,7 @@ func FormEdit(c *gin.Context) {
 
 	id := c.Param("id")
 	Id, _ := strconv.Atoi(id)
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 	}
@@ -638,7 +638,7 @@ func FormEdit(c *gin.Context) {
 
 	_, TabName, _ := ModuleRouteName(c)
 
-	ModuleName := "Forms Builder"
+	ModuleName := "Forms"
 
 	translate, _ := TranslateHandler(c)
 	channelist, _, err := ChannelConfig.ListChannel(channels.Channels{Limit: 200, Offset: 0, IsActive: true, TenantId: TenantId})
@@ -656,7 +656,7 @@ func FormDuplicate(c *gin.Context) {
 
 	id := c.Param("id")
 	Id, _ := strconv.Atoi(id)
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 	}
@@ -731,7 +731,7 @@ func FormUpdate(c *gin.Context) {
 		FormPreviewImagename: imagename,
 	}
 
-	permission, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permission, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error:%s", perr)
 		c.Redirect(301, "/403-page")
@@ -765,7 +765,7 @@ func MultiDelete(c *gin.Context) {
 
 	var homeurl string
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error: %s", perr)
 	}
@@ -926,7 +926,7 @@ func MultiSelectStatusChange(c *gin.Context) {
 
 	}
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("formbuilders authorization error: %s", perr)
 	}
@@ -993,12 +993,11 @@ func Formdetail(c *gin.Context) {
 
 	FormId, _ := strconv.Atoi(id)
 
-
 	var Formsresponselist []forms.TblFormResponses
 
 	responselist, TotalResponseCount, formname, _ := FormConfig.FormDetailLists(limt, offset, forms.Filter(filter), FormId, userid, EntryId, TenantId)
 
-	fmt.Println("Formdetail::",responselist)
+	fmt.Println("Formdetail::", responselist)
 
 	var FormData []string
 
@@ -1053,7 +1052,7 @@ func FormIsactive(c *gin.Context) {
 	val, _ := strconv.Atoi(c.Request.PostFormValue("isactive"))
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("cta status authorization error: %s", perr)
 	}
@@ -1082,14 +1081,14 @@ func AddCollection(c *gin.Context) {
 	fdata := c.PostForm("fdata")
 	channelname := c.PostForm("channelname")
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 
 	if perr != nil {
-		ErrorLog.Printf("Forms Builder authorization error :%s", perr)
+		ErrorLog.Printf("Forms authorization error :%s", perr)
 	}
 
 	if !permisison {
-		ErrorLog.Printf("Forms Builder authorization error: %s", perr)
+		ErrorLog.Printf("Forms authorization error: %s", perr)
 		c.Redirect(301, "/403-page")
 		return
 	}
@@ -1144,14 +1143,14 @@ func RemoveCta(c *gin.Context) {
 
 	fmt.Println("form not working", id)
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 
 	if perr != nil {
-		ErrorLog.Printf("Forms Builder authorization error :%s", perr)
+		ErrorLog.Printf("Forms authorization error :%s", perr)
 	}
 
 	if !permisison {
-		ErrorLog.Printf("Forms Builder authorization error: %s", perr)
+		ErrorLog.Printf("Forms authorization error: %s", perr)
 		c.Redirect(301, "/403-page")
 		return
 	}
@@ -1182,14 +1181,14 @@ func CtaPreview(c *gin.Context) {
 
 	fmt.Println("form not working", id)
 
-	permisison, perr := NewAuth.IsGranted("Forms Builder", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Forms", auth.CRUD, TenantId)
 
 	if perr != nil {
-		ErrorLog.Printf("Forms Builder authorization error :%s", perr)
+		ErrorLog.Printf("Forms authorization error :%s", perr)
 	}
 
 	if !permisison {
-		ErrorLog.Printf("Forms Builder authorization error: %s", perr)
+		ErrorLog.Printf("Forms authorization error: %s", perr)
 		c.Redirect(301, "/403-page")
 		return
 	}

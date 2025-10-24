@@ -51,7 +51,7 @@ func MemberGroupList(c *gin.Context) {
 		offset = (pageno - 1) * limt
 	}
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Read, TenantId)
+	permisison, perr := NewAuth.IsGranted("View", auth.Read, TenantId)
 
 	if perr != nil {
 		ErrorLog.Printf("Member group list authorization error: %s", perr)
@@ -122,7 +122,7 @@ func CreateNewMemberGroup(c *gin.Context) {
 		CreatedBy:   userid,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Create, TenantId)
+	permisison, perr := NewAuth.IsGranted("Create", auth.Create, TenantId)
 
 	if perr != nil {
 		ErrorLog.Printf("Member Group List authorization error: %s", perr)
@@ -186,7 +186,7 @@ func UpdateMemberGroup(c *gin.Context) {
 		ModifiedBy:  userid,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Update, TenantId)
+	permisison, perr := NewAuth.IsGranted("Update", auth.Update, TenantId)
 
 	if perr != nil {
 		ErrorLog.Printf("Member Group List authorization error: %s", perr)
@@ -239,7 +239,7 @@ func DeleteMemberGroup(c *gin.Context) {
 	}
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Members Group", auth.Delete, TenantId)
+	permisison, perr := NewAuth.IsGranted("Delete", auth.Delete, TenantId)
 
 	if perr != nil {
 		ErrorLog.Printf("Member Group List authorization error: %s", perr)

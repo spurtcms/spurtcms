@@ -52,7 +52,7 @@ func MemberList(c *gin.Context) {
 
 	var memberlists []mem.Tblmember
 
-	permisison, perr := NewAuth.IsGranted("Member", auth.Read, TenantId)
+	permisison, perr := NewAuth.IsGranted("View", auth.Read, TenantId)
 
 	if perr != nil {
 		ErrorLog.Printf("MemberList authorization error: %s", perr)
@@ -215,7 +215,7 @@ func CreateMember(c *gin.Context) {
 		TenantId:         TenantId,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Member", auth.Create, TenantId)
+	permisison, perr := NewAuth.IsGranted("Create", auth.Create, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("Member create authorization error: %s", perr)
 	}
@@ -535,7 +535,7 @@ func UpdateMember(c *gin.Context) {
 		StorageType:     storagetype.SelectedType,
 	}
 
-	permisison, perr := NewAuth.IsGranted("Member", auth.Update, TenantId)
+	permisison, perr := NewAuth.IsGranted("Update", auth.Update, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("Update Member authorization error: %s", perr)
 	}
@@ -627,7 +627,7 @@ func DeleteMember(c *gin.Context) {
 
 	userid := c.GetInt("userid")
 
-	permission, perr := NewAuth.IsGranted("Member", auth.Delete, TenantId)
+	permission, perr := NewAuth.IsGranted("Delete", auth.Delete, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("rolescreate authorization error: %s", perr)
 		c.Redirect(301, "/403-page")

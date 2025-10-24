@@ -58,7 +58,7 @@ func WebsiteList(c *gin.Context) {
 	if pageno != 0 {
 		offset = (pageno - 1) * limt
 	}
-	permisison, perr := NewAuth.IsGranted("Menu", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Website", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("menu authorization error: %s", perr)
 	}
@@ -309,7 +309,7 @@ func DeleteWebsite(c *gin.Context) {
 
 	userid := c.GetInt("userid")
 
-	permisison, perr := NewAuth.IsGranted("Menu", auth.CRUD, TenantId)
+	permisison, perr := NewAuth.IsGranted("Website", auth.CRUD, TenantId)
 	if perr != nil {
 		ErrorLog.Printf("Delete authorization error: %s", perr)
 	}
