@@ -129,7 +129,7 @@ func InsertDefaultValues() {
 
 			blocktag_count, blockcolln_count, gensetting_count int64
 
-			template_count, tempmodule_count, emailConf_count, emailTemp_count, form_count, Subscription_count int64
+			template_count, tempmodule_count, emailConf_count, emailTemp_count, form_count, website_count, gotemp_count, Subscription_count int64
 		)
 
 		if err := db.Table("tbl_modules").Count(&module_count).Error; err != nil {
@@ -230,7 +230,14 @@ func InsertDefaultValues() {
 
 			log.Println(err)
 		}
+		if err := db.Table("tbl_websites").Count(&website_count).Error; err != nil {
 
+			log.Println(err)
+		}
+		if err := db.Table("tbl_go_templates").Count(&gotemp_count).Error; err != nil {
+
+			log.Println(err)
+		}
 		if module_count > 0 {
 
 			var moduleId int
@@ -486,6 +493,31 @@ func InsertDefaultValues() {
 			}
 
 			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_mstr_membershiplevels_id_seq RESTART WITH %v", subscriptionMaxId+1))
+		}
+		if website_count > 0 {
+
+			var WebsiteMaxid int
+
+			if err := db.Raw("SELECT max(id) FROM tbl_websites").Row().Scan(&WebsiteMaxid); err != nil {
+				// Handle error
+				log.Println(err)
+			}
+
+			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_websites_id_seq RESTART WITH %d", WebsiteMaxid+1))
+
+		}
+
+		if gotemp_count > 0 {
+
+			var gotempMaxid int
+
+			if err := db.Raw("SELECT max(id) FROM tbl_go_templates").Row().Scan(&gotempMaxid); err != nil {
+				// Handle error
+				log.Println(err)
+			}
+
+			db.Exec(fmt.Sprintf("ALTER SEQUENCE tbl_go_templates_id_seq RESTART WITH %d", gotempMaxid+1))
+
 		}
 
 	}

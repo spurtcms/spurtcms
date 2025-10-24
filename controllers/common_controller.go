@@ -530,7 +530,7 @@ func Registereduserloginalert(wg *sync.WaitGroup, data map[string]interface{}, e
 }
 func Loginedsuccessfully(wg *sync.WaitGroup, data map[string]interface{}, email string, tenant_id string, action string) {
 	var templates models.TblEmailTemplate
-	models.GetTemplates(&templates, "Logined successfully", tenant_id)
+	models.GetTemplates(&templates, "Logged successfully", tenant_id)
 	if templates.IsActive == 1 {
 		sub := templates.TemplateSubject
 		msg := templates.TemplateMessage
@@ -613,47 +613,46 @@ func MemberCreateEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]i
 
 }
 
-func SupportEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string) {
+// func SupportEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string) {
 
-	var templates models.TblEmailTemplate
-	models.GetTemplates(&templates, "SupportEmail", "")
+// 	var templates models.TblEmailTemplate
+// 	models.GetTemplates(&templates, "SupportEmail", "")
 
-	if templates.IsActive == 1 {
+// 	if templates.IsActive == 1 {
 
-		sub := templates.TemplateSubject
-		msg := templates.TemplateMessage
+// 		sub := templates.TemplateSubject
+// 		msg := templates.TemplateMessage
 
-		replacer := strings.NewReplacer(
-			"{Service}", data["service"].(string),
-			"{FirstName}", data["fname"].(string),
-			"{Useremail}", data["email"].(string),
-			"{Number}", data["number"].(string),
-			"{Timestamp}", data["timezone"].(string),
-			"{Country}", data["Country"].(string),
-			"{Describe}", data["describe"].(string),
-			"{AdminLogo}", data["admin_logo"].(string),
-			"{FbLogo}", data["fb_logo"].(string),
-			"{LinkedinLogo}", data["linkedin_logo"].(string),
-			"{TwitterLogo}", data["twitter_logo"].(string),
-			"{YoutubeLogo}", data["youtube_logo"].(string),
-			"{InstaLogo}", data["insta_log"].(string),
-			"{FacebookLink}", data["facebook"].(string),
-			"{InstagramLink}", data["instagram"].(string),
-			"{YoutubeLink}", data["youtube"].(string),
-			"{LinkedinLink}", data["linkedin"].(string),
-			"{TwitterLink}", data["twitter"].(string),
-		)
+// 		replacer := strings.NewReplacer(
+// 			"{Service}", data["service"].(string),
+// 			"{FirstName}", data["fname"].(string),
+// 			"{Useremail}", data["email"].(string),
+// 			"{Number}", data["number"].(string),
+// 			"{Timestamp}", data["timezone"].(string),
+// 			"{Country}", data["Country"].(string),
+// 			"{Describe}", data["describe"].(string),
+// 			"{AdminLogo}", data["admin_logo"].(string),
+// 			"{FbLogo}", data["fb_logo"].(string),
+// 			"{LinkedinLogo}", data["linkedin_logo"].(string),
+// 			"{TwitterLogo}", data["twitter_logo"].(string),
+// 			"{YoutubeLogo}", data["youtube_logo"].(string),
+// 			"{InstaLogo}", data["insta_log"].(string),
+// 			"{FacebookLink}", data["facebook"].(string),
+// 			"{InstagramLink}", data["instagram"].(string),
+// 			"{YoutubeLink}", data["youtube"].(string),
+// 			"{LinkedinLink}", data["linkedin"].(string),
+// 			"{TwitterLink}", data["twitter"].(string),
+// 		)
 
-		msg = replacer.Replace(msg)
+// 		msg = replacer.Replace(msg)
 
-		Superadminemail := Superaddminmail()
-		GenerateEmail(Superadminemail, sub, data, msg, wg)
+// 		Superadminemail := Superaddminmail()
+// 		GenerateEmail(Superadminemail, sub, data, msg, wg)
 
-		// // test
-		// GenerateEmail("nithyar396@gmail.com", sub, data, msg, wg)
-	}
+	
+// 	}
 
-}
+// }
 
 func SupportuserEmail(Chan chan<- string, wg *sync.WaitGroup, data map[string]interface{}, email string, tenantid string) {
 
