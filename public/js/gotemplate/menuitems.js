@@ -141,7 +141,7 @@ $(document).on('click', '.addchannelmenu', function (e) {
 
         if (!exists) {
             $.ajax({
-                url: "/admin/website/menu/createmenuitems",
+                 url: "/admin/website/menu/createmenuitems?webid=" + $('.webid').attr('data-id'),
                 type: "POST",
                 async: false,
                 data: {
@@ -152,6 +152,7 @@ $(document).on('click', '.addchannelmenu', function (e) {
                     "cid": id,
                     "type": type,
                     "webid": $('.templateid').attr('data-id'),
+                     "menu_typeid": id,
                 },
                 dataType: "json",
                 cache: false,

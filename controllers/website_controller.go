@@ -17,9 +17,6 @@ import (
 	"github.com/spurtcms/courses"
 	"github.com/spurtcms/menu"
 	"golang.org/x/net/html"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"golang.org/x/oauth2/linkedin"
 	"gorm.io/gorm"
 )
 
@@ -49,94 +46,11 @@ type WebAuth struct {
 	DataAccess    int
 }
 
-// Goolgle credentials
-var (
-	googleOauthConfig = &oauth2.Config{
-		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		RedirectURL:  os.Getenv("GOOGLE_REDIRECT_URL"),
-		Scopes: []string{
-			"https://www.googleapis.com/auth/userinfo.email",
-			"https://www.googleapis.com/auth/userinfo.profile",
-		},
-		Endpoint: google.Endpoint,
-	}
-
-	oauthStateString = os.Getenv("OAUTH_STATE")
-)
-
-// Linkedin credentials
-
-var (
-	linkedinConf = &oauth2.Config{
-		ClientID:     os.Getenv("LINKEDIN_CLIENT_ID"),
-		ClientSecret: os.Getenv("LINKEDIN_CLIENT_SECRET"),
-		RedirectURL:  os.Getenv("LINKEDIN_REDIRECT_URL"),
-		Scopes:       []string{"r_liteprofile", "r_emailaddress"},
-		Endpoint:     linkedin.Endpoint,
-	}
-)
-
-//Star Repo
-
-var (
-	githubConfig = &oauth2.Config{
-		ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
-		ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
-		RedirectURL:  os.Getenv("GITHUB_REDIRECT_URL"),
-		Scopes:       []string{"user:email", "repo"},
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://github.com/login/oauth/authorize",
-			TokenURL: "https://github.com/login/oauth/access_token",
-		},
-	}
-)
-
 func NewWebsitePage(c *gin.Context) {
 
 	TENANTID := os.Getenv("TENANTID")
 
-	host := c.Request.Host
-	subdomain := strings.Split(host, ".")[0]
-	port := os.Getenv("PORT")
-
-	if subdomain == "spurtcms" || host == "www.spurtcms.com" || subdomain == "lvh" || subdomain == "localhost:"+port || subdomain == "dev" || host == "103.189.89.34" {
-
-		session, _ := Store.Get(c.Request, os.Getenv("SESSION_KEY"))
-		tkn := session.Values["token"]
-
-		if tkn != "" && tkn != nil && TENANTID != "1" {
-
-			tkn := session.Values["token"].(string)
-			claims := jwt.MapClaims{}
-			token, err := jwt.ParseWithClaims(tkn, claims, func(token *jwt.Token) (interface{}, error) {
-				return []byte(os.Getenv("JWT_SECRET")), nil
-			})
-			if err != nil || !token.Valid {
-				c.Redirect(http.StatusFound, "/")
-				return
-			}
-
-			c.Writer.Header().Set("Pragma", "no-cache")
-
-			c.Redirect(301, "/admin/dashboard")
-
-			return
-
-		} else if TENANTID == "1" {
-
-			WebsiteLoad(c, TENANTID, "")
-
-			return
-
-		} else {
-			c.HTML(200, "index.html", gin.H{"linktitle": "Open Source Golang Based CMS Solution | spurtCMS", "description": "A CMS Solution that can be tailor-made for your content management needs. Customize it for any unique Delivery purpose.", "keywords": "Open source cms solutions, Golang open source cms, Golang CMS Solution, Golang Content Management System, Custom fields, Golang open source content management system, GOlang open source cms systems, content management software open source with Golang.", "OGImage": "/public/img/index.png"})
-		}
-	} else if subdomain != "" && subdomain != "lvh" && subdomain != "localhost:8000" && subdomain != "spurtcms" {
-
-		WebsiteLoad(c, "", subdomain)
-
-	}
+	WebsiteLoad(c, TENANTID, "")
 
 }
 
@@ -160,8 +74,6 @@ func WebsiteLoad(c *gin.Context, Tenantid, subdomain string) {
 		return
 	}
 
-	fmt.Println(website, "websitdetailsdfd")
-
 	User, _, _ := NewTeamWP.GetUserById(website.CreatedBy, []int{})
 
 	templatedet, _ := MenuConfig.GetTemplateById(website.TemplateId, website.TenantId)
@@ -175,6 +87,7 @@ func WebsiteLoad(c *gin.Context, Tenantid, subdomain string) {
 	for _, val := range menulist {
 
 		if val.Status == 1 {
+
 			parentid = val.Id
 		}
 

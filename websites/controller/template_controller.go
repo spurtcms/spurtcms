@@ -666,35 +666,13 @@ func GetTemplateName(c *gin.Context, TemplateName string) string {
 	return templateName
 }
 func GetTenantByHost(c *gin.Context) (team.TblUser, menu.TblWebsite, error) {
-	host := c.Request.Host
-
-	if host == "spurtcms.com" || host == "www.spurtcms.com" {
-		c.HTML(200, "index.html", gin.H{
-			"linktitle":   "Open Source Golang Based CMS Solution | spurtCMS",
-			"description": "A CMS Solution that can be tailor-made for your content management needs. Customize it for any unique Delivery purpose.",
-			"keywords":    "Open source cms solutions, Golang open source cms, Golang CMS Solution, Golang Content Management System, Custom fields, Golang open source content management system, GOlang open source cms systems, content management software open source with Golang.",
-			"OGImage":     "/public/img/index.png",
-		})
-		return team.TblUser{}, menu.TblWebsite{}, nil
-	}
-
-	subdomain := strings.Split(host, ".")[0]
-
-	if subdomain == "" || (subdomain == "lvh" && os.Getenv("TENANTID") != "1") || (subdomain == "spurtcms" && os.Getenv("TENANTID") != "1") || (subdomain == "localhost:8080" && os.Getenv("TENANTID") != "1") {
-		c.HTML(404, "nodata.html", nil)
-		return team.TblUser{}, menu.TblWebsite{}, fmt.Errorf("invalid subdomain")
-	}
 
 	var website menu.TblWebsite
 
 	if os.Getenv("TENANTID") == "1" {
 
 		website, _ = controllers.MenuConfig.GetWebsiteById(1, "1")
-	} else {
-
-		website, _ = controllers.MenuConfig.GetWebsiteByName(subdomain)
 	}
-
 	if website.Id == 0 {
 		c.HTML(404, "nodata.html", nil)
 		c.Abort()
