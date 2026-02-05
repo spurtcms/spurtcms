@@ -1,6 +1,6 @@
 template_name: "Writer`s hub theme"
-template_image: "/public/img/writers_hub.png"
+template_image: "/image-resize?name=media/blog1.png"
 description: "A WriterHub theme template provides a unified visual and structural design for writing-focused websites or platforms, ensuring all content maintains a cohesive and professional appearance."
 type: "Blog"
 channel: "Blog,Knowledge Base"
-
+html_templates: "default.html"

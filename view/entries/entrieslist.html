@@ -172,7 +172,7 @@
                                 </div>
 
 
-                                <div class="block mb-[12px]">
+                                <!-- <div class="block mb-[12px]">
                                     <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Status</p>
                                     <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
                                         <a class="flex items-center justify-between bg-white  border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
@@ -210,10 +210,10 @@
 
                                     </div>
 
-                                </div>
+                                </div> -->
 
                                 <div class="block mb-[12px]">
-                                    <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Language
+                                    <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Category
                                     </p>
                                     <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
                                         <a class="flex items-center justify-between bg-white  border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
@@ -222,31 +222,37 @@
                                             <span class="text-[11px] font-normal leading-[13.75px] text-[#717171]"
                                                 id="selectLanguage">
 
-                                                {{$Lang:=.Language}}
-                                                {{if .LanguageId}}
-                                                {{range $Lang}}
-                                                {{ if eq .Id $.LanguageId }}
-                                                {{ .LanguageName }}
+                                                {{$Category:=.CategoryFilter}}
+                                                {{if .CategoryId}}
+                                                {{range $Category}}
+                                                {{ if eq .Id $.CategoryId }}
+                                                {{ .CategoryName }}
                                                 {{ end }}
                                                 {{end}}
                                                 {{else}}
-                                                Select Language
+                                                Select Category
                                                 {{end}}
+
                                             </span>
                                             <span>
                                                 <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
                                             </span>
                                         </a>
-                                        <input type="hidden" name="LanguageId" id="LanguageId">
+                                        <input type="hidden" value="{{.CategoryId}}" name="LanguageId" id="LanguageId">
                                         <ul class="languagedropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
                                             aria-labelledby="dropdownMenuButton1">
-                                            {{range .Language}}
-                                            <li data-value="{{.Id}}" data-name="{{.LanguageName}}" class="option">
+
+                                            {{range .CategoryFilter }}
+                                            <li class="option" data-value="{{.Id}}" data-name="{{.CategoryName}}">
                                                 <a class="dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
-                                                    href="javascript:void(0)">{{.LanguageName}}
+                                                    href="javascript:void(0)">
+                                                    <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
+                                            after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                                            last-of-type:after:hidden" data-id="{{.Id}}">{{.CategoryName}} </span>
                                                 </a>
                                             </li>
                                             {{end}}
+
                                         </ul>
 
 
@@ -348,7 +354,7 @@
 
         <div class="px-[16px] overflow-auto scrollbar-thin ">
             <div class=" py-[12px] border-b border-[#EDEDED] min-w-[850px]">
-                <div class="grid grid-cols-[40px_1fr_0.5fr_0.25fr_45px] gap-[12px] items-center">
+                <div class="grid grid-cols-[40px_1fr_1fr_0.25fr_45px] gap-[12px] items-center">
 
 
                     <div class="flex self-start gap-[12px]">
@@ -367,7 +373,7 @@
 
                     <div>
                         <h3 class="text-[#222222] text-sm font-normal leading-[17.5px]">
-                            Created By</h3>
+                            Categories</h3>
                     </div>
                     <div>
                         <h3 class="text-[#222222] text-sm font-normal leading-[17.5px]">
@@ -390,7 +396,7 @@
 
                 <div class=" py-[12px] border-b border-[#EDEDED] entry{{.Id}} min-w-[850px] draggable"
                     data-channel="{{.ChannelName}}" data-page="{{$Pageno}}" data-id="{{.Id}}">
-                    <div class="grid grid-cols-[40px_1fr_0.5fr_0.25fr_45px] gap-[12px] items-center">
+                    <div class="grid grid-cols-[40px_1fr_1fr_0.25fr_45px] gap-[12px] items-center">
                         <div class="flex self-start gap-[12px]">
                             <input type="hidden" class="pagno" data-page="{{$Pageno}}">
                             <div class="chk-group chk-group-label">
@@ -408,8 +414,9 @@
 
                         <div>
 
-                            <a {{if .ChannelName}} href="/admin/entries/edit/{{.ChannelName}}/{{.Id}}?page={{$Pageno}}" class="hover:underline"
-                                {{else}}href="/admin/entries/edits/{{.Id}}?page={{$Pageno}}" {{end}}>
+                            <a {{if .ChannelName}} href="/admin/entries/edit/{{.ChannelSlug}}/{{.Id}}?page={{$Pageno}}"
+                                class="hover:underline" {{else}}href="/admin/entries/edits/{{.Id}}?page={{$Pageno}}"
+                                {{end}}>
                                 <h3 class="text-[#262626] text-sm font-medium leading-[17.5px] mb-[8px] w-[90%] ">
                                     {{.Title}}
                                 </h3>
@@ -417,7 +424,7 @@
                             <div class="flex gap-[12px] items-center">
 
 
-                                <a href="/admin/entries/form-detail?entryid={{.Id}}"
+                                <!-- <a href="/admin/entries/form-detail?entryid={{.Id}}"
                                     class="flex gap-[4px] items-center  text-[#262626]  text-[12px] font-normal h-[24px] rounded-[4px]">
                                     {{$entryid := .Id}}
                                     {{if (eq (len $responseCount) 0)}}
@@ -439,10 +446,10 @@
                                     {{end}}
                                     {{end}}
 
-                                </a>
+                                </a> -->
                                 <p class="text-[#717171] text-xs font-normal leading-4">
-                                    Last Updated on :
-                                    <span class="text-[#262626]">{{.ModifiedDate}}
+                                    Created on :
+                                    <span class="text-[#262626]">{{.CreatedDate}}
                                     </span>
                                 </p>
 
@@ -465,23 +472,21 @@
                             </div>
                         </div>
                         <div class="flex space-x-[8px] items-center">
-                            <div
-                                class="w-[40px] h-[40px] min-w-[40px] overflow-hidden rounded-full grid place-items-center bg-[#F5F5F5]">
-                                {{if ne .ProfileImagePath ""}}
-                                <img src="{{.ProfileImagePath}}" alt="profile image">
-                                {{else}}
-                                <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
-                                {{end}}
-                            </div>
-                            <div>
-                                <h4 class="text-[#262626] text-xs font-normal leading-4"> {{.Username}}</h4>
-                                <p class="text-[#717171] text-xs font-normal leading-4">
-                                    {{$Translate.Memberss.Createdon}}:
-                                    <span class="text-[#262626] whitespace-nowrap">
-                                        {{.CreatedDate}}</span>
-                                </p>
-                            </div>
 
+                            <div>
+
+
+
+
+                                {{ range $i, $cat := .Categoriesnew }}
+                                {{ if $i }}, {{ end }}
+                                <span class="text-[#262626] text-xs font-normal leading-4">
+                                    {{ $cat.CategoryName }}
+                                </span>
+                                {{ end }}
+
+
+                            </div>
                         </div>
 
                         <div>
@@ -520,7 +525,7 @@
 
                                     <li class="mb-[2px] last-of-type:mb-[0]">
                                         <a href="javascript:void(0);"
-                                            data-id="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}"
+                                            data-id="{{$Viewbaseurl}}/{{.ChannelSlug}}/{{.Slug}}"
                                             class="copyButton dropdown-item h-[30px] w-full grid grid-cols-[16px_1fr] gap-[16px] rounded-[3px] text-[14px] font-light text-[##262626] items-center p-[6px_12px] leading-[20px] hover:bg-[#F5F5F5]"
                                             type="button">
                                             <span class="w-[16px] h-[16px] grid place-items-center"> <img
@@ -556,7 +561,7 @@
                                     {{end}}
 
                                     <li class="mb-[2px] last-of-type:mb-[0]">
-                                        <a href="{{$Viewbaseurl}}/{{.ChannelName}}/{{.Slug}}" target="_blank"
+                                        <a href="{{$Viewbaseurl}}/{{.ChannelSlug}}/{{.Slug}}" target="_blank"
                                             class="dropdown-item h-[30px] w-full grid grid-cols-[16px_1fr] gap-[16px] rounded-[3px] text-[14px] font-light text-[##262626] items-center p-[6px_12px] leading-[20px] hover:bg-[#F5F5F5]"
                                             type="button">
                                             <span><img src="/public/img/preview-drop.svg" alt=""></span>Preview</a>

@@ -1,5 +1,7 @@
 var languagedata
 var selectedcheckboxarr = []
+let selectedChannels = [];
+let pendingTemplates = {}; 
 /** */
 $(document).ready(async function () {
 
@@ -240,7 +242,7 @@ $(document).ready(function () {
             $("#websiteInput-error").hide().text("");
 
         }
-    })
+    })    
 })
 
 $('.hd-crd-btn').click(function () {
@@ -251,5 +253,312 @@ $('.hd-crd-btn').click(function () {
     } else {
         $('#hd-crd').addClass("show").removeClass('hidden');
         document.cookie = `webbanner=true; path=/;`;
+    }
+});
+
+
+// 
+
+$(document).ready(function () {
+
+     // stores template temporarily when channel not selected
+
+    // CLICK ON CHANNEL
+    $(document).on("click", ".dropdown-channel .dropdown-menu a", function () {        
+
+        let chosenName = $(this).text().trim();
+        let chosenId = $(this).data("id");
+        let index = $(this).closest(".dropdown-channel").data("index");
+
+        // Prevent duplicate channel selection
+        if (selectedChannels.some(ch => ch.id === chosenId)) {
+            $("#Channeltemplate-error").text("This channel is already selected. Please choose another one.").removeClass("hidden");
+            return;
+        }
+        $("#Channeltemplate-error").addClass("hidden");
+
+        // Remove old entry for same index
+        selectedChannels = selectedChannels.filter(ch => ch.index !== index);
+
+        // Add Channel
+        let newObj = {
+            index: index,
+            id: chosenId,
+            name: chosenName,
+            templatetype: ""
+        };
+
+        // If template was selected earlier, apply it
+        if (pendingTemplates[index]) {
+            newObj.templatetype = pendingTemplates[index];
+            delete pendingTemplates[index]; // clear once applied
+        }
+
+        selectedChannels.push(newObj);
+
+        $(this).closest(".dropdown").find("a:first").text(chosenName);
+
+    });
+
+    // CLICK ON TEMPLATE
+    $(document).on("click", ".dropdown-template .dropdown-menu a", function () {
+
+        let chosenTemplate = $(this).text().trim();
+        let index = $(this).closest(".dropdown-template").data("index");
+
+        // Find existing channel for this index
+        let obj = selectedChannels.find(ch => ch.index === index);
+
+        if (obj) {
+            // Channel selected → update template
+            obj.templatetype = chosenTemplate;
+        } else {
+            // Channel NOT selected → store temporarily
+            pendingTemplates[index] = chosenTemplate;
+        }
+
+        $(this).closest(".dropdown").find("a:first").text(chosenTemplate);
+
+     
+    });
+
+
+    // pair of template type and channel validation
+
+
+    // UPDATE BUTTON CLICK
+$(document).on("click", "#channeltemplateupdate", function (e) {
+    
+    e.preventDefault();  // stop form submit first
+
+    // If any template exists without channel
+    if (Object.keys(pendingTemplates).length > 0) {
+        $("#Channeltemplate-error")
+            .text("Please select a channel for all chosen templates.")
+            .removeClass("hidden");
+        return; // stop submit
+    }
+
+    // If no channels selected at all (optional, but useful)
+    if (selectedChannels.length === 0) {
+        $("#Channeltemplate-error")
+            .text("Please select at least one channel.")
+            .removeClass("hidden");
+        return;
+    }
+
+    $("#channel_template_data").val(JSON.stringify(selectedChannels));
+    $("#Channeltemplate-error").addClass("hidden");
+    
+
+    // Everything valid → submit form
+    $("#channeltemplatform")[0].submit();
+});
+
+
+});
+
+$(document).ready(function () {
+
+    $("#socialmediaupdate").on("click", function (e) {
+
+        e.preventDefault(); 
+
+        let FaceBookLink = $("#facebooklink").val();
+        let LinkedinLink = $("#linkedinlink").val();
+        let YoutubeLink = $("#youtubelink").val();
+        let XSocialLink = $("#xlink").val();
+        let InstaLink = $("#instagramlink").val();
+
+        let obj ={
+            "Type" :"facebook",
+            "SocialUrl":FaceBookLink,
+            "IsActive": 0
+        }
+
+        let newObject = {
+            FaceBooklink: FaceBookLink,
+            Linkedinlink: LinkedinLink,
+            Youtubelink: YoutubeLink,
+            XSociallink: XSocialLink,
+            Instalink: InstaLink
+        };
+
+       
+        const socialConfig = [
+            { type: "FaceBooklink", checkbox: "ck4", input: "#facebooklink" },
+            { type: "Linkedinlink", checkbox: "ck5", input: "#linkedinlink" },
+            { type: "Youtubelink", checkbox: "ck2", input: "#youtubelink" },
+            { type: "XSociallink", checkbox: "ck1", input: "#xlink" },
+            { type: "Instalink", checkbox: "ck3", input: "#instagramlink" }
+        ];
+
+        let socialMediaData = [];
+
+        socialConfig.forEach(item => {
+            const isChecked = document.getElementById(item.checkbox).checked;
+            const link = $(item.input).val();
+
+            socialMediaData.push({
+                Type: item.type,
+                SocialUrl: link,
+                IsActive: isChecked ? 1 : 0
+            });
+        });
+
+        console.log("checked or not ", socialMediaData)
+
+        // let selectLinks = [socialMediaData]
+
+  
+        $("#social_media_data").val(JSON.stringify(socialMediaData));
+
+        $("#SocialmediaForm")[0].submit(); 
+    });
+
+});
+
+// update social link
+
+
+let link_json = $("#social_link_json").val()
+
+let savedlinks = JSON.parse(link_json);
+
+savedlinks.forEach((item, index) => {
+
+
+    if (item.Type == "Instalink") {
+
+        if (item.SocialUrl !="") {
+
+            $("#instagramlink").val(item.SocialUrl)
+
+        }
+        if (item.IsActive == 1) {
+            $("#ck3").prop("checked", true); // ✅ check the box
+        } else {
+            $("#ck3").prop("checked", false);
+        }
+
+    }
+    if (item.Type == "XSociallink") {
+
+        if (item.SocialUrl != "") {
+
+            $("#xlink").val(item.SocialUrl)
+
+        }
+        if (item.IsActive == 1) {
+            $("#ck1").prop("checked", true); // ✅ check the box
+        } else {
+            $("#ck1").prop("checked", false);
+        }
+
+    }
+
+    if (item.Type == "Youtubelink") {
+
+        if (item.SocialUrl != "") {
+
+            $("#youtubelink").val(item.SocialUrl)
+
+        }
+        if (item.IsActive == 1) {
+            $("#ck2").prop("checked", true); // ✅ check the box
+        } else {
+            $("#ck2").prop("checked", false);
+        }
+
+    }
+    if (item.Type == "FaceBooklink") {
+
+        if (item.SocialUrl != "") {
+
+            $("#facebooklink").val(item.SocialUrl)
+
+        }
+        if (item.IsActive == 1) {
+            $("#ck4").prop("checked", true); // ✅ check the box
+        } else {
+            $("#ck4").prop("checked", false);
+        }
+
+    }
+  
+    
+
+    if (item.Type == "Linkedinlink") {
+
+        if (item.SocialUrl != "") {
+
+            $("#linkedinlink").val(item.SocialUrl)
+
+        }
+        if (item.IsActive == 1) {
+            $("#ck5").prop("checked", true); // ✅ check the box
+        } else {
+            $("#ck5").prop("checked", false);
+        }
+
+    }
+
+
+  
+});
+
+
+
+
+let raw = $("#template_json").val();
+    
+        let savedChannelTemplate = [];
+        try {
+            savedChannelTemplate = JSON.parse(raw)
+        } catch (e) {
+            console.error("Invalid JSON:", raw);
+        }
+    
+    
+        $(document).ready(function () {
+    
+            if (Array.isArray(savedChannelTemplate)) {
+    
+                savedChannelTemplate.forEach(item => {
+    
+                    // Fill dropdown visually
+                    let channelDropdown = $(`.dropdown-channel[data-index='${item.index}'] a:first`);
+                    channelDropdown.text(item.name);
+                    channelDropdown.data("selected", item.name);
+    
+                    let templateDropdown = $(`.dropdown-template[data-index='${item.index}'] a:first`);
+                    templateDropdown.text(item.templatetype || "Choose Template");
+                    templateDropdown.data("selected", item.templatetype);
+    
+                    // Add to selectedChannels
+                    selectedChannels.push({
+                        index: item.index,
+                        id: item.id,
+                        name: item.name,
+                        templatetype: item.templatetype
+                    });
+                });
+    
+            }
+        });
+
+
+// set header thame what selected
+
+let headerthame = $("#headerthame").val()
+
+console.log("dfjhdsj", headerthame)
+
+$(document).ready(function () {
+    let headerthame = $("#headerthame").val();
+    console.log("headerthame:", headerthame);
+
+    if (headerthame) {
+        $('input[type="radio"][name="radio"][value="' + headerthame + '"]').prop('checked', true);
     }
 });

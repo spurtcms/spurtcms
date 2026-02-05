@@ -1,0 +1,655 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+
+<section
+    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto {{if .gotemplatepageheader}}pt-0{{else}} pt-[90px]{{end}}  max-sm:pt-[64px] min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+     {{template "gotemplatepageheader" .}} </div>
+      
+            <section class="p-[36px_0px]">
+               <form action="{{.action}}" method="post" id="widgetform">
+                 <input type="hidden" name="csrf" value="{{.csrf}}">
+                 <input type="hidden" name="widget_id" value="{{.widgetdetail.Id}}">
+                 <input type="hidden" class="productids" name="productids" value="{{.productids}}">
+                 <input type="hidden" class="widget_type" name="widget_type" value="{{.widgetdetail.WidgetType}}">
+                <div class="mb-[46px] last-of-type:mb-0 max-sm:mb-[40px]">
+                    <div class="flex justify-between">
+                    <div>
+                    <h2 class="text-[18px] leading-[23px] font-normal text-[#252525] mb-[10px]">
+                        General
+                        Information</h2>
+                    <p class="text-[13px] leading-[20px] font-light text-[#616161] mb-[40px] max-md:mb-[20px]">
+                       Provide the basic details of your widget. These fields help define how the widget appears and behaves on the website. </p>
+                  </div> 
+                     <div class="flex">                            
+                            <a href="/admin/website/widgets/?webid={{.websitedetail.Id}}" class="place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] max-sm:p-[8px] px-[16px] py-[7px] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Cancel</a>                            
+                            <a href="javascript:void(0)" id="widgetsave" class="ms-2 place-items-center grid bg-[#10A37F] hover:bg-[#148569] max-sm:p-[8px] px-[16px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">{{if ne .widgetdetail.Id 0}} Update{{else}}Save{{end}} </a>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 max-sm:grid-cols-1 max-sm:gap-y-[16px]  gap-x-[20px] gap-y-[30px]">
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">
+                                Title</label>
+                            <input type="text" name="title" placeholder="Enter Widget Title" value="{{.widgetdetail.Title}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Long
+                                 Title</label>
+                            <input type="text" name="long_title" placeholder="Enter Widget Long Title" value="{{.widgetdetail.LongTitle}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+                       <div class="">
+                                            <label class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">
+                                                Position
+                                            </label>
+                                            
+                                            <div class="bg-transparent p-0 border-0 dropdown trail-dtl">
+                                                <a class="flex justify-between items-center h-[48px] bg-white p-[8px] border border-[#EDEDED] border-none rounded-[4px] outline-none w-full min-w-[158px]  font-normal text-[11px] leading-[13.75px]" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                    <span class="position_span font-normal text-[#717171] text-[13px] leading-[13.75px]">
+                                                        
+                                                     {{if .widgetdetail.Position}} {{.widgetdetail.Position}}{{else}} Position{{end}}
+                                                        
+                                                    </span>
+                                                    <span>
+                                                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                                    </span>
+                                                </a>
+                                                <ul class="top-[100%] bg-[#ffffff] shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] p-0 border-none rounded-b-[8px] w-full transform-none dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                                                    <li><a class=" h-[48px] postiondropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">W1</a></li>
+                                                    <li><a class=" h-[48px] postiondropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">W2</a></li>
+                                                        <li><a class=" h-[48px] postiondropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">W3</a></li>
+                                                             <li><a class=" h-[48px] postiondropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">W4</a></li>
+                                                            
+                                                </ul>
+                                               
+                                            </div>
+                                             <input type="hidden" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full" name="position" id="position" value="{{.widgetdetail.Position}}">
+                                        </div>
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Limit</label>
+                            <input type="number" placeholder="Enter Widget Limit"  name="widget_limit" value="{{.widgetdetail.WidgetLimit}}"maxlength="3"
+           inputmode="numeric"
+           pattern="[0-9]{1,3}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,3);"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Widget
+                                slug</label>
+                            <input type="text" name="widget_slug" placeholder="Enter Widget Slug" value="{{.widgetdetail.Slug}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                        <!-- <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Sort
+                                Order</label>
+
+
+                            <input type="text" name="sort_order"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div> -->
+                          <div class="">
+                                            <label class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">
+                                                Sort Order
+                                            </label>
+                                             <input type="hidden" name="sort_order" id="sort_order" value="{{.widgetdetail.SortOrder}}">
+                                            <div class="bg-transparent p-0 border-0 dropdown trail-dtl">
+                                                <a class="flex justify-between items-center h-[48px] bg-white p-[8px] border border-[#EDEDED] border-none rounded-[4px] outline-none w-full min-w-[158px]  font-normal text-[11px] leading-[13.75px]" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                    <span class="sortorder_span font-normal text-[#717171] text-[13px] leading-[13.75px]">
+                                                        
+                                                {{if .widgetdetail.SortOrder}}{{.widgetdetail.SortOrder}} {{else}} Sort Order{{end}}
+                                                        
+                                                    </span>
+                                                    <span>
+                                                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                                    </span>
+                                                </a>
+                                                <ul class="top-[100%] bg-[#ffffff] shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] p-0 border-none rounded-b-[8px] w-full transform-none dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                                                    <li><a class=" h-[48px] sortdropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">1</a></li>
+                                                    <li><a class=" h-[48px] sortdropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">2</a></li>
+                                                      <li><a class=" h-[48px] sortdropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">3</a></li>
+                                                            
+                                                </ul>
+                                               
+                                            </div>
+                                        </div>
+
+                        <!-- <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Status</label>
+                            <input type="text"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div> -->
+                            <div class="">
+                                            <label class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">
+                                                Status
+                                            </label>
+                                            <input type="hidden" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full" name="status" id="status" value="{{.widgetdetail.Status}}">
+                                            <div class="bg-transparent p-0 border-0 dropdown trail-dtl">
+                                                <a class="flex justify-between items-center h-[48px] bg-white p-[8px] border border-[#EDEDED] border-none rounded-[4px] outline-none w-full min-w-[158px]  font-normal text-[11px] leading-[13.75px]" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                    <span class="status_type_span font-normal text-[#717171] text-[13px] leading-[13.75px]">
+                                                        
+                                                  {{if eq .widgetdetail.Status 1}}Active  {{else}}status{{end}}      
+                                                        
+                                                    </span>
+                                                    <span>
+                                                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                                    </span>
+                                                </a>
+                                                <ul class="top-[100%] bg-[#ffffff] shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] p-0 border-none rounded-b-[8px] w-full transform-none dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                                                    <li><a class=" h-[48px]  statusdropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">Active</a></li>
+                                                    <li><a class=" h-[48px] statusdropdown hover:bg-[#F5F5F5] p-[8px] px-[16px] border-[#EDEDED] border-b border-solid font-normal text-[#152027] text-[12px] leading-[16px] dropdown-item" href="javascript:void(0)">InActive</a></li>
+                                                            
+                                                </ul>
+                                                
+                                            </div>
+                                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mb-[46px] last-of-type:mb-0 max-sm:mb-[40px]">
+                    <h2 class="text-[18px] leading-[23px] font-normal text-[#252525] mb-[10px]">
+                        Mapping Product/Categories</h2>
+                    <p class="text-[13px] leading-[20px] font-light text-[#616161] mb-[40px] max-md:mb-[20px]">
+                       Choose the content types where this widget will be shown—entries, listings, categories.
+  </p>
+                         <div class="flex flex-wrap gap-x-4">
+                                    <!-- <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioCustomUrl" value="customUrl"
+                                            class="hidden peer langInput" />
+                                        <label for="radioCustomUrl"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Custom URL
+                                        </label>
+                                    </div> -->
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioEntries" value="entries"
+                                            class="hidden peer langInput" />
+                                        <label for="radioEntries"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Entries
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioPages" value="pages"
+                                            class="hidden peer langInput" />
+                                        <label for="radioPages"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Pages
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioListings" value="listings"
+                                            class="hidden peer langInput" />
+                                        <label for="radioListings"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Listings
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioCategories" value="categories"
+                                            class="hidden peer langInput" />
+                                        <label for="radioCategories"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Categories
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioChannels" value="Channels"
+                                            class="hidden peer langInput" />
+                                        <label for="radioChannels"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Channels
+                                        </label>
+                                    </div>
+                                    <!-- <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radionone" value="none"
+                                            class="hidden peer langInput" />
+                                        <label for="radionone"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            None
+                                        </label>
+                                    </div> -->
+                                </div>
+
+                                <p class="product-error text-xs text-[#F26674] hidden ">*Please Choose Content type</p>
+                                <div class="flex-col gap-1.5 w-[500px] customUrlInput hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Custom URL</p>
+                                    <input type="text" placeholder="{{$Translate.Menu.NavPlcholder}}" name="customurl"
+                                        class="customurl focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+
+                                </div>
+                                <div class="flex-col gap-1.5 w-[500px] entriesDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Entries</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171]">Select Entry</p>
+
+                                        </a>
+                                        <input type="hidden" name="subcategoryid" value="" id="cid"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchcatlists"
+                                                        placeholder="Search Entries"
+                                                        class="searchcatlists search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+                                            {{range .Entrylist}}
+
+                                               <li class="entry-dropdownlist p-[9px_24px] border-b border-[#EDEDED]" data-id="{{.Id}}">
+                                                <div class="chk-group chk-group-label">
+                                                    <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
+                                                        title="{{.Slug}}" class="hidden peer selected-listings">
+                                                    <label for="Check{{.Id}}"
+                                                        class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[12px] font-normal leading-none text-[#555555] tracking-[0.005em]
+                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+                                                        {{.Title}}
+                                                    </label>
+                                                </div>
+                                            </li>
+                                          
+                                            {{end}}
+                                            <li class="noData-foundentry" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="flex-col gap-1.5 w-[500px] pagesDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Pages</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] selectpage">Select Page</p>
+
+                                        </a>
+                                        <input type="hidden" name="subcategoryid" value="" id="cid"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchcatlists"
+                                                        placeholder="Search Pages"
+                                                        class="searchpagelist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+                                    
+                                               
+
+                                                {{range .pagelist}}
+
+                                                <li class="page-dropdownlist p-[9px_24px] border-b border-[#EDEDED]" data-id="{{.Id}}">
+                                                    <div class="chk-group chk-group-label">
+                                                        <input type="checkbox" id="PageCheck{{.Id}}" data-id="{{.Id}}" title="{{.Slug}}"
+                                                            class="hidden peer selected-pages" />
+                                                        <label for="PageCheck{{.Id}}" class="relative cursor-pointer flex space-x-[6px] items-center text-[12px] text-[#555555]
+                                                                   before:min-w-[14px] before:w-[14px] before:h-[14px]
+                                                                   before:bg-[url('/public/img/unchecked-box.svg')]
+                                                                   before:bg-no-repeat before:bg-contain before:mr-[6px]
+                                                                   peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+                                                            {{.Name}} ({{.PageType}})
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                {{end}}
+
+                                            
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="flex-col gap-1.5 w-[500px] listingsDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Listings
+                                    </p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171]">Select Listing</p>
+
+                                        </a>
+                                        <input type="hidden" name="listingsids" value="" id="listingsids"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="listingsDropdownMenu dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 150px; overflow: auto;">
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchlistinglist"
+                                                        placeholder="Search Listings"
+                                                        class="searchlistinglist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+                                            {{range .listinglist}}
+                                            <li class="p-[9px_24px] border-b border-[#EDEDED]" data-id="{{.Id}}">
+                                                <div class="chk-group chk-group-label">
+                                                    <input type="checkbox" id="Checklist{{.Id}}" data-id="{{.Id}}"
+                                                        title="{{.Title}}" class="hidden peer selected-listings">
+                                                    <label for="Checklist{{.Id}}"
+                                                        class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[12px] font-normal leading-none text-[#555555] tracking-[0.005em]
+                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+                                                        {{.Title}}
+                                                    </label>
+                                                </div>
+                                            </li>
+                                            {{end}}
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <!-- category dropdown -->
+                                <div class="flex-col gap-1.5 w-[500px] categoryDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Categories</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171]">Select Category</p>
+
+                                        </a>
+                                        <input type="hidden" name="categoryids" value="" id="categoryids"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="categoryDropdownMenu dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchcategorylists"
+                                                        placeholder="Search Categories"
+                                                        class="searchcategorylists search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+
+                                            {{range $index, $value := .Categorylist}}
+                                            <li class="catrgory-list p-[9px_24px] border-b border-[#EDEDED]"
+                                                data-id="{{$index}}">
+                                                <div class="chk-group chk-group-label">
+                                                    <input type="checkbox" id="Checkcat{{$index}}"
+                                                        class="hidden peer selectcheckbox" data-id="{{$index}}">
+                                                    <label for="Checkcat{{$index}}"
+                                                        class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
+                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+
+                                                        {{range $i, $cat := $value.Categories}}
+                                                        <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                            {{$cat.Category}}
+                                                        </span>
+                                                        {{end}}
+                                                    </label>
+
+                                                </div>
+                                            </li>
+                                            {{end}}
+
+
+
+                                            <li class="noData-foundcategory " style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                               <!-- channel dropdown -->
+
+                                    <div class="flex-col gap-1.5 w-[500px] channelDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Channels</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] selectchannel">Select Channel</p>
+
+                                        </a>
+                                        <input type="hidden" name="subcategoryid" value="" id="cid"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchlistinglist"
+                                                        placeholder="Search Channels"
+                                                        class="searchchannellist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+                                                {{range .channelist}}
+                                                
+                                                <li class="page-dropdownlist p-[9px_24px] border-b border-[#EDEDED]" data-id="{{.Id}}">
+                                                    <div class="chk-group chk-group-label">
+                                                        <input type="checkbox" id="PageCheck{{.Id}}" data-id="{{.Id}}" 
+                                                            class="hidden peer selected-chennals" />
+                                                        <label for="PageCheck{{.Id}}"
+                                                            class="relative cursor-pointer flex space-x-[6px] items-center text-[12px] text-[#555555]
+                                                                                                                   before:min-w-[14px] before:w-[14px] before:h-[14px]
+                                                                                                                   before:bg-[url('/public/img/unchecked-box.svg')]
+                                                                                                                   before:bg-no-repeat before:bg-contain before:mr-[6px]
+                                                                                                                   peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+                                                            {{.ChannelName}}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                {{end}}
+
+                                            
+                                           
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                    <!-- <div class="flex items-center justify-between gap-[16px] max-w-[318px] mb-[30px] max-sm:mb-[20px]">
+                        <input type="radio" name="radio1" id="radio-product" class="hidden peer/product" checked>
+                        <input type="radio" name="radio1" id="radio-category" class="hidden peer/category">
+                        <input type="radio" name="radio1" id="radio-brand" class="hidden peer/brand">
+
+                        <label for="radio-product"
+                            class="relative cursor-pointer flex gap-[8px] items-center text-sm font-normal text-[#152027] tracking-[0.005em] peer-checked/product:text-[#262626]
+    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/product:before:bg-[url('/public/img/radio-checked.svg')]">
+                            Product
+                        </label>
+
+                        <label for="radio-category"
+                            class="relative cursor-pointer flex gap-[8px] items-center text-sm font-normal text-[#636b70] tracking-[0.005em] peer-checked/category:text-[#262626]
+    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/category:before:bg-[url('/public/img/radio-checked.svg')]">
+                            Category
+                        </label>
+
+                        <label for="radio-brand"
+                            class="relative cursor-pointer flex gap-[8px] items-center text-sm font-normal text-[#152027] tracking-[0.005em] peer-checked/brand:text-[#262626]
+    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/brand:before:bg-[url('/public/img/radio-checked.svg')]">
+                            Brand
+                        </label>
+                    </div> -->
+
+
+                    <!-- <h3 class="text-base leading-[20px] font-light text-[#252525] mb-[16px]">Product
+                        Type</h3>
+                  
+                    <div class="flex items-center justify-between gap-[16px] max-w-[183px]">
+                        <input type="radio" name="radio-group2" id="radio-fixed" class="hidden peer/fixed" checked>
+                        <input type="radio" name="radio-group2" id="radio-auction" class="hidden peer/auction">
+
+                        <label for="radio-fixed"
+                            class="relative cursor-pointer flex gap-[8px] items-center text-sm font-normal text-[#152027] tracking-[0.005em] peer-checked/fixed:text-[#262626]
+    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/fixed:before:bg-[url('/public/img/radio-checked.svg')]">
+                            Fixed
+                        </label>
+
+                        <label for="radio-auction"
+                            class="relative cursor-pointer flex gap-[8px] items-center text-sm font-normal text-[#636b70] tracking-[0.005em] peer-checked/auction:text-[#262626]
+    before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/auction:before:bg-[url('/public/img/radio-checked.svg')]">
+                            Auction
+                        </label>
+                    </div> -->
+
+                </div>
+
+               
+                <div class="mb-[46px] last-of-type:mb-0 max-sm:mb-[40px]">
+                    <h2 class="text-[18px] leading-[23px] font-normal text-[#252525] mb-[10px]">
+                        SEO Setting</h2>
+                    <p class="text-[13px] leading-[20px] font-light text-[#616161] mb-[40px] max-md:mb-[20px]">
+                        Configure SEO options for this widget to improve its search visibility and help users discover it easily. </p>
+
+                    <div class="grid grid-cols-3 max-sm:grid-cols-1 max-sm:gap-y-[16px] gap-x-[20px] gap-y-[30px]">
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Meta
+                                Title</label>
+                            <input type="text" name="meta_title" placeholder="Enter Meta Title" value="{{.widgetdetail.MetaTitle}}"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Meta
+                                Description</label>
+                            <input type="text" name="meta_description" placeholder="Enter Meta Description" value="{{.widgetdetail.MetaDescription}}"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                        <div>
+                            <label for=""
+                                class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Meta
+                                Keyword</label>
+                            <input type="text" name="meta_keyword" placeholder="Enter Meta Keyword" value="{{.widgetdetail.MetaKeywords}}"
+                                class="border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                        </div>
+
+                    </div>
+                </div>
+
+               </form>
+            </section>
+        
+
+
+
+        {{template "footer" .}}
+
+        <script src="/public/js/gotemplate/widget/create_widget.js"></script>
+
+
+        {{template "footerclose" .}}

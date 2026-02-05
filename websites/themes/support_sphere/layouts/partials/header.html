@@ -6,10 +6,10 @@
             href="/">
             {{if .settingsdetail.SiteLogoPath}}
             <a href="/ "><img class="w-[100px] h-[50px]"
-                    src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+                    src="/{{.settingsdetail.SiteLogoPath}}"></a>
             {{else}}
             <a href="/ "><img
-                    src="https://spurtcms.com//public/img/logo1.svg" alt="logo">
+                    src="/public/img/logo1.svg" alt="logo">
             </a>
             {{end}}
         </a>

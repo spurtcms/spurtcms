@@ -1,0 +1,683 @@
+{{template "header" .}}
+{{template "head" .}}
+
+{{$MembershipMemberList := .MembershipMemberList}}
+{{$Translate := .translate}}
+
+
+
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2
+                class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap max-[425px]:w-[120px] max-[425px]:overflow-hidden max-[425px]:text-ellipsis">
+                {{if .orderlist.Id}}
+                Update Order
+                {{else}}
+                Create Order
+                {{end}}
+
+            </h2>
+        </div>
+
+
+
+        <div class="flex !gap-3">
+            <a href="/admin/order"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px]  no-underline"> {{$Translate.Memberships.Orders.Cancel}}</a>
+            <a id="save"
+                class="cursor-pointer h-8 flex items-center justify-center p-[0_12px] text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">
+
+                {{if .orderlist.Id}}
+                {{$Translate.Update}}
+                {{else}}
+                {{$Translate.Save}}
+                {{end}}
+            </a>
+        </div>
+
+    </header>
+
+    <div class="p-[24px_16px]">
+        <form action="{{if .orderlist.Id}}/admin/order/updateorder{{else}}/admin/order/addorder{{end}}" method="post"
+            name="create-order" id="create-order" autocomplete="off">
+            {{if .orderlist.Id}}
+            <input type="hidden" name="orderid" id="orderid" value="{{.orderlist.Id}}">
+            {{end}}
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]"> {{$Translate.Memberships.Orders.Memberinformation}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.Orders.Memberinformationdesc}}
+                </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Userid}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Useridinfo}}</p>
+                        </div></label>
+
+                    <div>
+
+                        <div
+                            class="dropdown items-center  space-x-[8px] block w-full border rounded-[4px] border-[#EDEDED] h-[36px] max-w-[480px]">
+                            <a href="javascript:void(0);" id="triggerId"
+                                class=" rounded-[4px] p-[10px_12px] h-[36px] flex items-center space-x-[16px] justify-between bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer text-[12px] font-light leading-[15px] text-[#525252]"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="searchmemberlists">{{$id:=.orderlist.UserId}}
+                                    {{if $id}}
+                                    {{range $index,$value:=.SubscriptionList}}
+                                    {{if eq $id $value.MemberId}}
+                                    {{$value.FirstName}}
+                                    {{end}}
+                                    {{end}}
+                                    {{else}}
+                                    {{$Translate.Memberships.Orders.Selectmember}}
+                                    {{end}}
+                                </span>
+                            </a>
+                            <input type="hidden" name="userid" id="userid" value="{{.orderlist.UserId}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs max-w-[380px]">
+                            <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+
+                                <li class="p-[4px_12px_8px_12px]">
+                                    <input type="text" name="keyword" id="memberlistsid" placeholder="Search Members"
+                                        class="search h-[36px] max-w-[480px]  text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                </li>
+                                {{range .SubscriptionList}}
+                                {{if eq .IsActive 1}}
+                                <li class="order-dropdownlist">
+                                    <a href="javascript:void(0);" data-value="{{.FirstName}}" id="memberlist"
+                                        data-id="{{.MemberId}}" data-subscription="{{.SubscriptionTransactionId}}"
+                                        class=" relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                        <span
+                                            class="inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                            {{.FirstName}}
+                                        </span>
+                                    </a>
+                                </li>
+                                {{end}}
+                                {{end}}
+                                <li class="noData-foundWrapper" style="display: none;">
+                                    <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                        <div class="text-center mx-auto w-[48px]">
+                                            <img src="/public/img/noFilter.svg" alt="noFilter">
+                                        </div>
+                                        <h2
+                                            class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                            No data found with current filters</h2>
+                                        <p
+                                            class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                            Try changing any other keywords </p>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Membershiplevelid}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Membershiplevelidinfo}}</p>
+                        </div>
+                    </label>
+
+
+                    <div
+                        class="dropdown items-center  space-x-[8px] block w-full border rounded-[4px] border-[#EDEDED] h-[36px] max-w-[480px]">
+                        <a href="javascript:void(0);" id="triggerId"
+                            class=" rounded-[4px] p-[10px_12px] h-[36px] flex items-center space-x-[16px] justify-between bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer text-[12px] font-light leading-[15px] text-[#525252]"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{$id:=.orderlist.MembershiplevelId}}
+                            <span id="membershiplevelidvalue">
+                                {{if $id}}
+                                {{range $index,$value:= .Membershiplevellist}}
+                                {{if eq $value.Id $id}}
+                                {{$value.SubscriptionName}}
+                                {{end}}
+                                {{end}}
+                                {{else}}
+                                {{$Translate.Memberships.Orders.Selectmembershiplevel}} 
+                                {{end}}
+                            </span>
+                        </a>
+                        <input type="hidden" name="membershiplevelid" id="membershiplevelid"
+                            value="{{.orderlist.MembershiplevelId}}"
+                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs max-w-[380px]">
+                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                    shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+
+                            <li class="p-[4px_12px_8px_12px]">
+                                <input type="text" name="keyword" placeholder="{{$Translate.Memberships.Orders.Searchmembershiplevel}} "
+                                    class="searchlevel h-[36px] max-w-[480px]  text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                            </li>
+                            {{range .Membershiplevellist}}
+                            {{if eq .IsActive 1}}
+                            <li class="membershiplevelid">
+                                <a href="javascript:void(0);" data-value="{{.SubscriptionName}}" data-id="{{.Id}}"
+                                    class="option relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                    <span
+                                        class="option inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                        {{.SubscriptionName}}
+                                    </span>
+                                </a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                            <li class="levelnoData-foundWrapper" style="display: none;">
+                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                    <div class="text-center mx-auto w-[48px]">
+                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                    </div>
+                                    <h2
+                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                        No data found with current filters</h2>
+                                    <p
+                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                        Try changing any other keywords </p>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">{{$Translate.Memberships.Orders.Billingaddress}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.Orders.Billingaddressdesc}}
+                </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingname}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingnameinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingname" value="{{.orderlist.BillingName}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingstreet}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingstreetinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingstreet" value="{{.orderlist.BillingStreet}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingstreet2}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingstreetinfo2}}
+                            </p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingstreet2" value="{{.orderlist.BillingStreet2}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingcity}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingcityinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingcity" value="{{.orderlist.BillingCity}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingstate}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingstateinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingstate" value="{{.orderlist.BillingState}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingpostelcode}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingpostelcodeinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingpostalcode" value="{{.orderlist.BillingPostalcode}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Billingcounty}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingcountyinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingcountry" value="{{.orderlist.BillingCountry}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Memberships.Orders.Billingphone}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Billingphoneinfo}}</p>
+                        </div>
+                    </label>
+
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="billingphone" maxlength="15" value="{{.orderlist.BillingPhone}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[14px] font-normal">
+                        </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">{{$Translate.Memberships.Orders.Paymentinformation}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.Orders.Paymentinformationdesc}}
+                </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Subtotal}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Subtotalinfo}} </p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="subtotal"
+                                value="{{if .orderlist.SubTotal}}{{.orderlist.SubTotal}}{{else}}0{{end}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[160px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Tax}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Taxinfo}}</p>
+                        </div>
+                    </label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="tax"
+                                value="{{if .orderlist.Tax}}{{.orderlist.Tax}}{{else}}0{{end}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[160px] text-[14px] font-normal">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Total}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Totalinfo}}</p>
+                        </div>
+                    </label>
+
+                    <div>
+                        <div class="items-center space-x-[8px]">
+                            <input type="text" name="total" placeholder="Enter Total Amount"
+                                value="{{.orderlist.Total}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[160px] text-[12px] font-light [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Paymenttype}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Paymenttypeinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="paymenttype" placeholder="Enter Payment Type"
+                                value="{{.orderlist.PaymentType}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[12px] font-light">
+                        </div>
+                        <p class="text-[12px] font-light  text-[#525252]  mt-[4px] absolute top-full">
+                            {{$Translate.Memberships.Orders.Paymenttypedesc}}</p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Status}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Statusinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="items-center space-x-[8px] w-full ">
+
+                                <div class="dropdown w-full">
+
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between max-w-[104px]"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                        <span id="statusvalue">
+                                            {{.orderlist.Status}}
+                                        </span>
+                                        <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                    </a>
+                                    <input type="hidden" name="status" id="status" value="{{.orderlist.Status}}"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs max-w-[380px]">
+                                    <div
+                                        class="status dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014] max-w-[104px] !min-w-[104px]">
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="Success">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252]">Success</button>
+                                        </p>
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="Failed">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252]">Failed</button>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">{{$Translate.Memberships.Orders.Paymentgatewayinformation}}
+                    </h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.Orders.Paymentgatewayinformationdesc}}
+                </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Gateway}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Gatewayinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="flex items-center space-x-[8px] w-full  max-w-[380px]">
+
+                                <div class="dropdown w-full">
+
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                        <span id="gatewayvalue">
+                                            {{if .orderlist.Gateway}}
+                                            {{.orderlist.Gateway}}
+                                            {{else}}
+                                            {{$Translate.Memberships.Orders.Selectgateway}}
+                                            {{end}}
+                                        </span>
+                                        <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                    </a>
+                                    <input type="hidden" name="gateway" id="gateway" value="{{.orderlist.Gateway}}"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                                    <div
+                                        class="gateway dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="PayPal Express">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252">
+                                                PayPal Express
+                                            </button>
+                                        </p>
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]"
+                                            data-value="PayPal Standard">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252">
+                                                PayPal Standard
+                                            </button>
+                                        </p>
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="Credit Card">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252">
+                                                Credit Card
+                                            </button>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Gatewayenvironment}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Gatewayenvironmentinfo}}</p>
+                        </div></label>
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="flex items-center space-x-[8px] w-full  max-w-[380px]">
+
+                                <div class="dropdown w-full">
+
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                        <span id="gatewayenvironmentvalue">
+                                            {{if .orderlist.GatewayEnvironment}}
+                                            {{.orderlist.GatewayEnvironment}}
+                                            {{else}}
+                                            {{$Translate.Memberships.Orders.Selectgatewayenvironment}} 
+                                            {{end}}
+                                        </span>
+                                        <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                    </a>
+                                    <input type="hidden" name="gatewayenvironment" id="gatewayenvironment"
+                                        value="{{.orderlist.GatewayEnvironment}}">
+                                    <div
+                                        class="gatewayenvironment dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="Offline">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252]">Offline</button>
+                                        </p>
+                                        <p class="option cursor-pointer hover:bg-[#f2f2f2]" data-value="Online">
+                                            <button type="button"
+                                                class=" text-[12px] font-light leading-[15px] text-[#525252]">Online</button>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Paymenttransactionid}} <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Paymenttransactionidinfo}} </p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="paymenttransactionid" placeholder="{{$Translate.Memberships.Orders.Entertransactionid}}"
+                                value="{{if .orderlist.PaymenttransactionId}}{{.orderlist.PaymenttransactionId}}{{end}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[12px] font-light">
+                        </div>
+                        <p class="text-[12px] font-light leading-[15px] text-[#525252]  mt-[4px] absolute top-full">
+                            {{$Translate.Memberships.Orders.Paymenttransactioniddesc}}</p>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Orders.Subscriptiontransactionid}}<div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[208px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Orders.Subscriptiontransactionidinfo}}</p>
+                        </div></label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" name="subscriptiontransactionid" id="subscriptiontransactionid"
+                                placeholder="{{$Translate.Memberships.Orders.Selectmember}}" readonly
+                                value="{{if .orderlist.SubscriptiontransactionId}}{{.orderlist.SubscriptiontransactionId}}{{end}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[540px] text-[12px] font-light">
+                        </div>
+                        <p class="text-[12px] font-light leading-[15px] text-[#525252]  mt-[4px] absolute top-full">
+                            {{$Translate.Memberships.Orders.Subscriptiontransactioniddesc}} </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+
+
+
+
+</section>
+
+
+
+{{template "footer" .}}
+
+<script src="/public/js/membership/order.js"></script>
+
+{{template "footerclose" .}}

@@ -34,7 +34,7 @@
                                 @{{.Username}}
                                 in
                                 #{{.CategoryGroup}}</p>
-                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                            <a href="{{.Slug}}"
                                 class="mb-[24px] font-medium text-[#120B14] text-[44px] max-[500px]:text-[28px] hover:underline leading-[54px] max-[500px]:leading-normal">
                                 {{.Title}}
                             </a>
@@ -52,7 +52,7 @@
                                 <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
                             </div>
                             <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
-                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                            <a href="{{.Slug}}" class="font-medium text-[#120B14] text-[26px] hover:underline">
                                {{.Title}}
                             </a>
                         </div>
@@ -65,7 +65,7 @@
                                 <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
                             </div>
                             <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
-                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                            <a href="{{.Slug}}" class="font-medium text-[#120B14] text-[26px] hover:underline">
                                 {{.Title}}
                             </a>
                         </div>
@@ -78,7 +78,7 @@
                                 <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
                             </div>
                             <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
-                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                            <a href="{{.Slug}}" class="font-medium text-[#120B14] text-[26px] hover:underline">
                                  {{.Title}}
                             </a>
                         </div>
@@ -91,7 +91,7 @@
                                 <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}" class=" w-[309px] h-[209px]" alt="">
                             </div>
                             <p class="font-normal text-[#120B14] text-[18px]">{{.CreatedDate}} in #{{.CategoryGroup}}</p>
-                            <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} " class="font-medium text-[#120B14] text-[26px] hover:underline">
+                            <a href="{{.Slug}}" class="font-medium text-[#120B14] text-[26px] hover:underline">
                                 {{.Title}}
                             </a>
                         </div>
@@ -180,7 +180,7 @@
                     class="flex max-[600px]:flex-col-reverse justify-between items-start gap-[16px] border-[#1516183D] py-[40px] last:pb-0 border-b last:border-b-0 border-solid max-w-[500px]:mb-[32px]">
                     <div class="flex flex-col items-start max-w-[832px] max-[600px]:max-w-full max-[600px]:max-w-full">
                         <p>{{ $entry.CreatedDate }} by @{{ $entry.Username }} in #{{ $entry.CategoryGroup }}</p>
-                        <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}-{{.Uuid}} "
+                        <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}"
                             class="my-[10px] font-medium text-[#120B14] text-[60px] max-[998px]:text-[32px] hover:underline line-clamp-2">  {{ $entry.Title }}</a>
                         <h6 class="font-normal text-[#120B14] text-[20px] line-clamp-3"> {{ $entry.Description }}</h6>
                     </div>
@@ -206,7 +206,7 @@
                  {{if gt (len .entries) 11}}
                 {{range $i,$entry := .entries}}
                  {{ if and (ge $i 11) (le $i 15) }}
-                <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}-{{.Uuid}} " class="flex flex-col items-start group">
+                <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}" class="flex flex-col items-start group">
                     <div class="mb-[30px] w-full h-[271px]">
                         <img src="{{if $entry.CoverImage}}{{ $entry.CoverImage }}{{else}}/websites/public/img/no-image.png{{end}}" alt=""
                             class="w-full h-full object-cover">

@@ -45,10 +45,15 @@ $(document).on('click','#savebtn,#savemenubtn',function(){
                 duplicatename:true,
                
             },
-            menu_desc: {
+            menu_title: {
                 required: true,
-                maxlength: 250,
                 space: true,
+                duplicatename:true,
+            },
+            menu_desc: {
+                // required: true,
+                maxlength: 250,
+                // space: true,
             }
         },
         messages: {
@@ -57,10 +62,14 @@ $(document).on('click','#savebtn,#savemenubtn',function(){
                 space: "* " + languagedata.spacergx,
                 duplicatename: "*"+languagedata.Menu.nameduplicateerr 
             },
-            menu_desc: {
-                required: "*"+languagedata.Menu.descriptionerror ,
-                maxlength: "* " + languagedata.Permission.descriptionchat,
+            menu_title: {
+                required: "* Please Enter Menu Title",
                 space: "* " + languagedata.spacergx,
+            },
+            menu_desc: {
+                // required: "*"+languagedata.Menu.descriptionerror ,
+                maxlength: "* " + languagedata.Permission.descriptionchat,
+                // space: "* " + languagedata.spacergx,
             },
         }
     });
@@ -95,13 +104,23 @@ $(document).on('click','#editbtn',function(){
     var data = $(this).attr("data-id");
     edit = $(this).closest("tr");
     $("#menuform").attr("name", "editmenu").attr("action", "/admin/website/menu/updatemenu/?webid="+$('.templateid').val())
-    var name = edit.find("td:eq(0) a").text();
+    var name = edit.find("td:eq(0) a").attr('data-name');
+    var title = edit.find("td:eq(0) a").text();
     var desc = edit.find("td:eq(1)").attr('data-desc');
     var checkbox = edit.find("td:eq(2) input[type='checkbox']").is(':checked');
     // var statusValue = checkbox.val();
     console.log("name,",checkbox)
     $("input[name=menu_name]").val(name.trim());
+    $("input[name=menu_title]").val(title.trim());
+
     $("textarea[name=menu_desc]").val(desc.trim());
+
+    if ((name.trim()=="Aside")||(name.trim()=="Headers") ||(name.trim()=="Footers")||(name.trim()=="SERVICES")||(name.trim()=="SOLUTIONS")||(name.trim()=="EXPERTISE")){
+
+        $('#menu_name').addClass('pointer-events-none opacity-50')
+    }else{
+         $('#menu_name').removeClass('pointer-events-none opacity-50')
+    }
     if (checkbox == 1) {
         $('.menustatus').prop('checked', true).val('1');
     } else {
@@ -150,7 +169,8 @@ console.log(templateid)
 $(document).on('click', '.cancelbtn', function () {
     $("#add-btn").show()
     $("#savebtn").text(languagedata.Save)
-    $("#menuform").attr("action", "/admin/website/menu/createmenu")
+    
+    $("#menuform").attr("action", "/admin/website/menu/createmenu/?webid="+$('.templateid').val())
     $("input[name=menu_id]").val("")
     $("input[name=menu_name]").val("")
     // $("input[name=menu_desc]").val("")
@@ -161,6 +181,7 @@ $(document).on('click', '.cancelbtn', function () {
     $('.menustatus').prop('checked', false).val('0');
     $('#modalTitleId').text(languagedata.createnewmenu)
     $('#menu_desc').val("")
+    $('#menu_name').removeClass('pointer-events-none')
 
 })
 
@@ -174,7 +195,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/admin/website/menu?webid="+$('.templateid').val()
+    window.location.href = "/admin/website/menu?webid="+$('.webid').attr('data-id')
 })
 
 $(document).ready(function () {
@@ -272,3 +293,15 @@ $('.hd-crd-btn').click(function () {
         document.cookie = `webbanner=true; path=/;`; 
     }
 });
+
+
+$('.createmenuclass').click(function(){
+
+    console.log("hhhh")
+
+    $('#modalTitleId').text('Create New Menu')
+
+    $('#savebtn').text('Save')
+
+    $('#menu_name').removeClass(' pointer-events-none opacity-50')
+})

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{template "templatehead" .}}
+</head>
+
+<body>
+
+  {{- block "templateheader" .}}{{end}}
+  {{$template_name:=.template_name}}
+  {{if .Entries}}
+  {{range .Entries}}
+  <div class="grid grid-cols-1 sm:grid-cols-3 sm:gap-16 gap-y-4">
+    <div class="col-span-2 row-start-2 sm:row-start-1">
+      <div class="flex justify-start flex-wrap items-center gap-x-4">
+        <p class="text-[0.8125rem] text-[#B6B6B7]">{{.CreatedDate}}</p>
+        <!-- <p class="text-[0.8125rem] text-[#B6B6B7]">1 min read</p>
+            <p class="text-[0.8125rem] text-[#B6B6B7]">views 1245</p> -->
+        <!-- <a href="javascrip:void(0)" class="text-[0.8125rem] text-[#278BED]">{{.Username}}</a> -->
+        <div class="flex items-center gap-2">
+          <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300">
+            {{if ne .AuthorDetail.ProfileImagePath ""}}
+            <img alt="Picture of the author" loading="lazy" width="32" height="32" decoding="async" data-nimg="1"
+              srcset="" src="{{.AuthorDetail.ProfileImagePath}}" class="h-[34px] rounded-3xl">
+            {{else}}
+            <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
+            {{end}}
+          </div>
+          <h5 class="text-primary text-base font-normal text-[#2facd6] ">{{.AuthorDetail.Username}}</h5>
+        </div>
+        <div class="px-2 py-1 text-[0.8125rem] text-[#2FACD6] bg-[#F1FBFF] rounded-md">{{.CategoryGroup}}</div>
+      </div><a
+        href="{{.Slug}}"
+        class="block mt-2 mb-4 hover:underline">
+        <h1 class="text-[2rem] text-dark font-medium leading-8">{{.Title}}</h1>
+      </a>
+      <p class="text-base font-light text-[#525252] line-clamp-4">{{.Description}}</p>
+    </div>
+    <div class="row-start-1 sm:row-start-1"><a
+        href="{{.Slug}}"><img
+          alt="spurtCMS card image" fetchpriority="high" decoding="async" data-nimg="1"
+          class="dark:invert w-[400px] h-[220px]" style="color:transparent"
+          src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}"></a></div>
+  </div>
+  <div class="border-b border-color block my-8"></div>
+  {{end}}
+  {{end}}
+
+</body>
+
+
+</html>

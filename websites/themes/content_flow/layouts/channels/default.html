@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{template "templatehead" .}}
+</head>
+
+<body>
+
+  <main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]">
+
+    {{- block "templateheader" .}}{{end}}
+    {{$template_name:=.template_name}}
+
+    <div>
+      <div class="md:lg-0">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8 mb-10">
+          {{if .Entries}}
+        
+          {{range .Entries}}
+
+          <div class="flex flex-col"><a
+              href="{{.Slug}}">
+              <div class="mb-6 block h-[236px]">
+                <img src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}"
+                  alt="spurtCMS card image" width="1000" height="1000" layout="responsive" class="h-full">
+              </div>
+              <h1
+                class="text-[2rem] font-bold  text-black dark:text-white hover:underline line-clamp-1 overflow-hidden  leading-[2.625rem] ">
+                {{.Title}}</h1>
+            </a>
+            <p class="text-base text-black dark:text-white my-3">{{.CreatedDate}} </p>
+            <div class="text-lg text-current  font-light line-clamp-3 mb-3 desc">
+              <div class="dark:text-white text-black  text-lg font-light line-clamp-3 overflow-hidden mb-3 desc ">
+                {{.Description}}
+              </div>
+            </div>
+            <div class="flex items-center gap-x-2 mt-auto">
+              <div
+                class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
+                {{if ne .AuthorDetail.ProfileImagePath ""}}
+                <img src="{{.AuthorDetail.ProfileImagePath}}" alt="spurtCMS Profile Image" width="32" height="32">
+                {{else}}
+                <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
+                {{end}}
+              </div>
+              <div class=""><a class="text-[#0d6efd] text-base">{{.AuthorDetail.Username}} </a></div>
+            </div>
+          </div>
+          {{end}}
+          {{end}}
+
+        </div>
+      </div>
+
+  
+
+    </div>
+
+
+
+  </main>
+
+
+</body>
+
+
+</html>

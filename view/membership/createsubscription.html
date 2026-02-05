@@ -1,0 +1,337 @@
+{{template "header" .}}
+{{template "head" .}}
+
+{{$Translate := .translate}}
+
+
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2
+                class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap max-[425px]:w-[120px] max-[425px]:overflow-hidden max-[425px]:text-ellipsis">
+                {{$Translate.Memberships.Subscriptions.Create}}</h2>
+        </div>
+
+
+        <div class="flex !gap-3">
+            <a href="/admin/subscription"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px]  no-underline"> {{$Translate.Memberships.Subscriptions.Cancel}}</a>
+            <a id="Createsubscription" href="create-second-field.html"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px]  no-underline">{{.action}}</a>
+        </div>
+    </header>
+    <div class="p-[24px_16px]">
+
+        <form id="Createsubscriptionform" action="{{.endpoint}}" method="post">
+
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+
+            <input type="text" value="{{.EditSubscription.Id}}" id="subscriptionid" name="subscriptionid"
+                class="hidden">
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">{{$Translate.Memberships.Subscriptions.Linksubscription}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">Seamlessly connect user
+                    {{$Translate.Memberships.Subscriptions.Linksubscriptiondesc}}</p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.Subscriptions.Transactionid}}
+                        <span class="text-red-600" >*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Subscriptions.Transactionidinfo}}</p>
+                        </div>
+                    </label>
+
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <div>
+                                <input type="text" name="subscriptiontransactionid" id="subscriptiontransactionid"
+                                    value="{{.EditSubscription.SubscriptionTransactionId}}" maxlength="10"
+                                    class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[680px] text-[14px] font-normal">
+                                <span id="error-message" class="text-[12px] font-normal" style="color: #F26674; display: none;">You cannot enter more than
+                                    10 digits.</span>
+                            </div>
+
+                        </div>
+                        <p class="text-[12px] font-light leading-[15px] text-[#525252]  mt-[4px] absolute top-full">
+                            {{$Translate.Memberships.Subscriptions.Transactionidinfo}} </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Subscriptions.Gateway}}
+                        <span class="text-red-600" >*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Subscriptions.Gatewayinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="flex items-center space-x-[8px] w-full max-w-[380px]">
+
+                                <div class="w-full">
+                                    <div class="dropdown w-full">
+
+                                        <a href="javascript:void(0);"
+                                            class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                            data-bs-toggle="dropdown">
+                                            <span id="gatewayvalue">{{.EditSubscription.Gateway}}</span>
+                                            <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                        </a>
+                                        <div
+                                            class="gateway dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                            <p class="cursor-pointer hover:bg-[#f2f2f2]">
+                                                <button type="button"
+                                                    class="option text-[12px] font-light leading-[15px] text-[#525252]"
+                                                    data-value="PayPal Express">PayPal Express</button>
+                                            </p>
+                                            <p class="cursor-pointer hover:bg-[#f2f2f2]">
+                                                <button type="button"
+                                                    class="option text-[12px] font-light leading-[15px] text-[#525252]"
+                                                    data-value="PayPal Standard">PayPal Standard</button>
+                                            </p>
+                                            <p class="cursor-pointer hover:bg-[#f2f2f2]">
+                                                <button type="button"
+                                                    class="option text-[12px] font-light leading-[15px] text-[#525252]"
+                                                    data-value="Credit Card">Credit Card</button>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <input type="hidden" name="gateway" id="gateway"
+                                        value="{{.EditSubscription.Gateway}}"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Subscriptions.Gatewayenvironment}}
+                        <span class="text-red-600" >*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Subscriptions.Gatewayenvironmentinfo}}</p>
+                        </div></label>
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="flex items-center space-x-[8px] w-full ">
+                                <div class="w-full">
+                                    <div class="dropdown w-full max-w-[104px]">
+
+                                        <a href="javascript:void(0);"
+                                            class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                            data-bs-toggle="dropdown">
+                                            <span id="gatewayenvironmentvalue" class=" leading-none">
+                                                {{.EditSubscription.GatewayEnvironment}}</span>
+                                            <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                        </a>
+                                        <div
+                                            class="gatewayenvironment dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014] min-w-full">
+
+                                            <p class="cursor-pointer hover:bg-[#f2f2f2]">
+                                                <button type="button"
+                                                    class="option text-[12px] font-light leading-[15px] text-[#525252]"
+                                                    data-value="Offline">Offline</button>
+                                            </p>
+                                            <p class="cursor-pointer hover:bg-[#f2f2f2]">
+                                                <button type="button"
+                                                    class="option text-[12px] font-light leading-[15px] text-[#525252]"
+                                                    data-value="Online">Online</button>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                    <input type="hidden" name="gatewayenvironment" id="gatewayenvironment"
+                                        class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                                        value="{{.EditSubscription.GatewayEnvironment}}">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Memberships.Subscriptions.Memberid}}
+                        
+                        <span class="text-red-600" >*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Subscriptions.Memberidinfo}}
+                            </p>
+                        </div></label>
+
+                    <div>
+
+                        <div
+                            class="dropdown items-center  space-x-[8px] block w-full border rounded-[4px] border-[#EDEDED] h-[36px] max-w-[480px]">
+                            <a href="javascript:void(0);" id="triggerId"
+                                class=" rounded-[4px] p-[10px_12px] h-[36px] flex items-center space-x-[16px] justify-between bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer text-[12px] font-light leading-[15px] text-[#525252]"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="searchmemberlists">{{.EditSubscription.FirstName}} </span>
+
+                            </a>
+                            <input type="hidden" name="userid" id="userid" value="{{.EditSubscription.UserId}}"
+                                class="block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[480px] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+
+                            <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                    shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                <li class="p-[4px_12px_8px_12px]">
+                                    <input type="text" name="keyword" id="memberlistsid" placeholder="{{$Translate.Memberships.Subscriptions.Selectmember}}"
+                                        class="search block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[480px]  text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                </li>
+                                {{range .MembershipMemberList}}
+                                {{if eq .IsActive 1}}
+                                <li class="order-dropdownlist">
+                                    <a href="javascript:void(0);" data-value="{{.FirstName}}" id="memberlist"
+                                        data-id="{{.Id}}"
+                                        class=" relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                        <span
+                                            class="inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                            {{.FirstName}} ({{.Id}})
+                                        </span>
+                                    </a>
+                                </li>
+                                {{end}}
+                                {{end}}
+                                <li class="noData-foundWrapper" style="display: none;">
+                                    <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                        <div class="text-center mx-auto w-[48px]">
+                                            <img src="/public/img/noFilter.svg" alt="noFilter">
+                                        </div>
+                                        <h2
+                                            class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                            No data found with current filters</h2>
+                                        <p
+                                            class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                            Try changing any other keywords </p>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.Subscriptions.Membershiplevelid}}
+                        <span class="text-red-600" >*</span>
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.Subscriptions.Membershiplevelidinfo}}</p>
+                        </div></label>
+
+
+                    <div>
+                        <div class="flex items-center gap-[16px]">
+
+                            <div class="items-center space-x-[8px] w-full max-w-[480px]">
+                                <div class="dropdown w-full">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                        data-bs-toggle="dropdown">
+                                        <span id="membershiplevelidvalue">
+                                            {{.EditSubscription.SubscriptionName}}
+                                        </span>
+                                        <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                    </a>
+                                    <div
+                                        class=" dropdown-menu dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                                        {{range .Membershiplevellist}}
+                                        {{if eq .IsActive 1}}
+                                        <li class="order-dropdownlist">
+                                            <a href="javascript:void(0);" data-value="{{.SubscriptionName}}"
+                                                data-id="{{.Id}}"
+                                                class="membershiplevelid relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+                                                <span
+                                                    class="inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                                    {{.SubscriptionName}}
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <!-- <p>
+                                    <button type="button hover:bg-[#f2f2f2]"
+                                        class="text-[12px] font-light leading-[15px] text-[#525252] option"
+                                        data-value="{{.SubscriptionName}}" data-id="{{.Id}}">  {{.SubscriptionName}}
+                                    </button>
+                                </p> -->
+                                {{end}}
+                                        {{end}}
+
+                                    </div>
+                                </div>
+                                <input type="hidden" id="membershiplevelid" name="membershiplevelid"
+                                    value="{{.EditSubscription.MembershiplevelId}}"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </form>
+
+    </div>
+
+
+
+</section>
+
+
+
+{{template "footer" .}}
+
+<script src="/public/js/membership/membershipsubcription.js"></script>
+{{template "footerclose" .}}

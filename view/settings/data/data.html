@@ -1,0 +1,172 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Data</h2>
+
+        </div>
+
+
+        <div class="flex gap-3">
+            <a href="/admin/settings/data/secondimportpage"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">Next</a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+        <!--accordion-->
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+
+
+        <div class="block overflow-hidden @container pb-[120px] ">
+
+
+            <div class="block overflow-auto">
+                <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                    <li><a href="/admin/settings/data/"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">
+                            Data Import</a>
+                    </li>
+                    <li><a href="/admin/settings/data/exportpage"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">
+                            Data Export
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-[24px_16px] max-w-[1920px] mx-auto  max-lg:p-[16px]">
+                <div class="flex flex-col gap-8">
+                    <div class="flex justify-between gap-8 items-start sm:items-center">
+                        <div class="flex flex-col gap-1.5 max-w-[600px]">
+                            <h3 class="text-[#262626] text-sm font-normal mb-0">Import</h3>
+                            <p class="text-[#717171] font-light mb-0 text-[11px]">Effortlessly import your
+                                website content into spurtCMS.Upload Excel sheets in any format, accommodating
+                                all your existing content details that may differ from spurtCMS standards.</p>
+                        </div>
+                        <div
+                            class="h-34 whitespace-nowrap px-[12px] text-[#69AB69] border rounded-32 bg-[#EBFAEB] border-[#A5D794] flex items-center justify-center text-sm font-normal">
+                            Step 1 of 3
+                        </div>
+                    </div>
+                    <div class="max-w-[462px]">
+                        <div class="flex flex-col gap-[12px]">
+                            <div class="flex flex-col gap-1.5 max-w-[600px]">
+                                <h3 class="text-[#262626] text-sm font-normal mb-0">Choose Channel</h3>
+                                <p class="text-[#717171] font-light mb-0 text-[11px]">
+                                </p>
+                            </div>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);"
+                                    class="border border-light-300 pd-3 h-[42px] rounded-[4px]  flex items-center bg-[url(/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <p id="select_channel" data-id="">Choose Channel </p>
+                                </a>
+                                <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                    {{if .Channellist}}
+                                    {{range .Channellist}}
+                                    <li><a href="javascript:void(0);" data-id="{{.Id}}" data-name="{{.ChannelName}}"
+                                            class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] data-drop-list">{{.ChannelName}}
+                                        </a> </li>
+
+                                    {{end}}
+                                    {{end}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 grid-cols-1 gap-[16px]">
+                        <div class="flex flex-col gap-[12px]">
+                            <div class="flex flex-col gap-1.5 max-w-[600px]">
+                                <h3 class="text-[#262626] text-sm font-normal mb-0">Upload File</h3>
+                                <p class="text-[#717171] font-light mb-0 text-[11px]">Effortlessly import your website
+                                    content into spurtCMS.Upload Excel sheets in any format,accommodating all your
+                                    existing content details that may differ from spurtCMS standards.</p>
+                            </div>
+                            <div id="upload-file"
+                                class="upload-file mt-auto h-[196px]  border-[#D8D8D8] border-dashed border-[1px] rounded-[4px] p-[32px] flex gap-[12px] items-center text-center justify-center flex-col">
+                                <div>
+                                    <img src="/public/img/xls.svg" />
+                                </div>
+                                <div class="relative border-[#EDEDED] border-[1px] rounded-[3px] cursor-pointer upload-file-btn"
+                                    id="xlsx-file">
+                                    <button
+                                        class="bordered-btn h-[32px] rounded-[3px] px-[12px] font-normal text-sm ">Upload
+                                        File</button>
+                                    <input type="file" id="fileInput"
+                                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs absolute top-0 left-0 w-full h-full text-[0px] cursor-pointer opacity-0" />
+                                </div>
+                                <span id="uploaddrag" class="text-xs font-normal text-[#717171]">Or drag and drop it
+                                    here</span>
+                                <p id="uploadtext" class="text-[#262626] text-xs font-normal mb-0">Supported formats
+                                    .XLSX, max file size 5MB</p>
+                            </div>
+                            <label id="File-error" class="" style="display: none;">* Please select only xlsx
+                                file</label>
+                        </div>
+                        <div class="flex flex-col gap-[12px]">
+                            <div class="flex flex-col gap-1.5 max-w-[600px]">
+                                <h3 class="text-[#262626] text-sm font-normal mb-0">Upload Image</h3>
+                                <p class="text-[#717171] font-light mb-0 text-[11px]">Import images in bulk while
+                                    making sure that the file name with extension of the image is same as
+                                    the name with extension entered in the excel sheet.
+                                </p>
+                            </div>
+                            <div id="upload-zipfile"
+                                class="upload-file mt-auto h-[196px] border-[#D8D8D8] border-dashed border-[1px] rounded-[4px] p-[32px] flex gap-[12px] items-center text-center justify-center flex-col">
+                                <div>
+                                    <img src="/public/img/zip.svg" />
+                                </div>
+                                <div id="zip-file"
+                                    class="relative border-[#EDEDED] border-[1px]   rounded-[3px] cursor-pointer upload-file-btn">
+                                    <button
+                                        class="bordered-btn h-[32px] rounded-[3px] px-[12px] font-normal text-sm cursor-pointer">Upload
+                                        File</button>
+                                    <input type="file" id="img-Input"
+                                        class="absolute text-[0px]  top-0 left-0 w-full h-full cursor-pointer opacity-0 [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs" />
+                                </div>
+                                <span class="text-xs font-normal text-[#717171]">Or drag and drop it here</span>
+                                <p class="text-[#262626] text-xs font-normal mb-0">Supported formats .ZIP</p>
+                            </div>
+                            <label id="Filezip-error" class="error" style="display: none;">* Please select your image
+                                file</label>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+{{template "footer" .}}
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+<script src="/public/js/settings/data/data.js"></script>
+<script src="/public/js/settings/data/export.js"></script>
+
+{{template "footerclose" .}}

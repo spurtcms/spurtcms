@@ -8,176 +8,642 @@
     class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto {{if .gotemplatepageheader}}pt-0{{else}} pt-[90px]{{end}}  max-sm:pt-[64px] min-h-screen">
 
     <div class=" max-sm:h-fit h-full ">
- {{if .gotemplatepageheader}} {{template "gotemplatepageheader" .}} {{else}}
+        {{if .gotemplatepageheader}} {{template "gotemplatepageheader" .}}</div> {{else}}
     {{template "gotemplateheader" .}} {{end}}
 
-        <div class="p-[50px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
-            <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteNameForm">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteName}}</h3>
+    <div class="p-[50px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
 
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
 
-                        <div class="mb-[20px] last-of-type:mb-0">
+        <!--  -->
 
-                            <input type="text" placeholder="{{$Translate.WebsiteSettings.Spurtcms}}"
-                                value="{{.settingsdetail.SiteName}}" id="siteName" name="siteName" maxlength="20"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="channeltemplatform">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+
+            <input type="hidden" id="channel_template_data" name="channel_template_data">
+
+
+
+            <div class="" id="pills-setting" role="tabpanel" aria-labelledby="pills-setting-tab">
+                <div class="pt-[50px] max-lg:p-[16px] max-md:p-0">
+                    <div
+                        class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                        <h3 class="mt-[12px]">Channel template</h3>
+
+                        <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                            <div class="grid  grid-cols-2 max-[950px]:grid-cols-1 gap-x-[20px] gap-y-[40px]">
+
+                                <!-- {{range $i, $ch := .channelslist}}
+
+                                <div class="dropdown dropdown-channel" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+
+                                    <ul
+                                        class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.channelslist}}
+                                        <li>
+                                            <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.ChannelName}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-template" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+
+                                    <ul
+                                        class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.HtmlTemplate}}
+                                        <li>
+                                            <a href="javascript:void(0);" data-channel="false"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                {{end}} -->
+
+                                {{range $i, $ch := .channelslist}}
+
+                                <!-- Channel Dropdown -->
+                                <div class="dropdown dropdown-channel" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.channelslist}}
+                                        <li>
+                                            <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.ChannelName}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+                            
+                                <!-- Template Dropdown -->
+                                <div class="dropdown dropdown-template" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.HtmlTemplate}}
+                                        <li>
+                                            <a href="javascript:void(0);" data-channel="false"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+                            
+                            {{end}}
+                            
+
+                                <!-- <div class="dropdown dropdown-channel" data-index="2">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .channelslist}}
+                                        <li> <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.ChannelName}}</a>
+                                        </li>
+                                        {{end}}
+
+
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-template" data-index="2">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .HtmlTemplate}}
+                                        <li> <a href="javascript:void(0);" data-channel="false"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.}}</a>
+                                        </li>
+                                        {{end}}
+
+
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-channel" data-index="3">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .channelslist}}
+                                        <li> <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.ChannelName}}</a>
+                                        </li>
+                                        {{end}}
+
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-template" data-index="3">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .HtmlTemplate}}
+                                        <li> <a href="javascript:void(0);" data-channel="false"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.}}</a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-channel" data-index="4">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .channelslist}}
+                                        <li> <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.ChannelName}}</a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-template" data-index="4">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .HtmlTemplate}}
+                                        <li> <a href="javascript:void(0);" data-channel="false"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.}}</a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-channel" data-index="5">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .channelslist}}
+                                        <li> <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.ChannelName}}</a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown dropdown-template" data-index="5">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white  pd-3 h-[48px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                            shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        {{range .HtmlTemplate}}
+                                        <li> <a href="javascript:void(0);" data-channel="false"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">{{.}}</a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div> -->
+
+
+
+                            </div>
+
+                            <p id="Channeltemplate-error" class="text-[#F26674] font-normal text-xs mt-2 hidden"></p>
+
+
+                            <a href="javascript:void(0);" id="channeltemplateupdate"
+                                class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                                Update
+                            </a>
                         </div>
-                        <label id="siteName-error" style="display: none;" for="siteName"
-                            class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
-                            Website URL</label>
+                    </div>
 
 
-                        <a href="javascript:void(0);" id="siteNameSave"
-                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+
+
+                </div>
+            </div>
+
+        </form>
+        <!--  -->
+
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteNameForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteName}}</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                    <div class="mb-[20px] last-of-type:mb-0">
+
+                        <input type="text" placeholder="{{$Translate.WebsiteSettings.Spurtcms}}"
+                            value="{{.settingsdetail.SiteName}}" id="siteName" name="siteName" maxlength="20"
+                            class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    </div>
+                    <label id="siteName-error" style="display: none;" for="siteName"
+                        class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
+                        Website URL</label>
+
+
+                    <a href="javascript:void(0);" id="siteNameSave"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                        {{$Translate.Seo.Update}}
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteLogoForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteLogo}}</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                    <div class="mb-[20px] last-of-type:mb-0">
+                        <div
+                            class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
+                            <label for="sitelogo"
+                                class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
+                                {{$Translate.Seo.Choosefile}}
+                            </label>
+                            <p id="filenameDisplay" class="text-[13px] font-light leading-[18px] text-[#252525]">
+                                {{if .settingsdetail.SiteLogo}}
+                                {{.settingsdetail.SiteLogo}}
+                                {{else}}
+                                {{$Translate.Seo.Nofilechose}}
+                                {{end}}
+                            </p>
+                            <a href="javascript:void(0);" id="deleteFile" class="ms-auto hidden">
+                                <img src="/public/img/delete-red.svg" alt="Delete">
+                            </a>
+                        </div>
+                        <input id="sitelogo" name="sitelogo" type="file"
+                            class="fileInput hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                            accept="image/png, image/jpeg,image/jpg,image/svg">
+                        <input type="hidden" value="{{.settingsdetail.SiteLogo}}" id="sitelogoimage"
+                            name="sitelogoimage"
+                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    </div>
+
+                    <div class="flex items-start gap-4 mt-[20px]">
+                        {{if .settingsdetail.SiteLogoPath}}
+                        <div class="grow">
+                            <img id="sitelogopathsrc" src="/{{.settingsdetail.SiteLogoPath}}"
+                                class="max-w-[120px]" alt="">
+                        </div>
+                        {{end}}
+                        <a href="javascript:void(0);" id="siteLogoSave"
+                            class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
                             {{$Translate.Seo.Update}}
                         </a>
                     </div>
                 </div>
-            </form>
+            </div>
+        </form>
 
-            <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteLogoForm">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteLogo}}</h3>
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteFavIconForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteFavIcon}}</h3>
 
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <div
-                                class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
-                                <label for="sitelogo"
-                                    class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
-                                    {{$Translate.Seo.Choosefile}}
-                                </label>
-                                <p id="filenameDisplay" class="text-[13px] font-light leading-[18px] text-[#252525]">
-                                    {{if .settingsdetail.SiteLogo}}
-                                    {{.settingsdetail.SiteLogo}}
-                                    {{else}}
-                                    {{$Translate.Seo.Nofilechose}}
-                                    {{end}}
-                                </p>
-                                <a href="javascript:void(0);" id="deleteFile" class="ms-auto hidden">
-                                    <img src="/public/img/delete-red.svg" alt="Delete">
-                                </a>
-                            </div>
-                            <input id="sitelogo" name="sitelogo" type="file"
-                                class="fileInput hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
-                                accept="image/png, image/jpeg,image/jpg,image/svg">
-                            <input type="hidden" value="{{.settingsdetail.SiteLogo}}" id="sitelogoimage"
-                                name="sitelogoimage"
-                                class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
-                        </div>
-
-                        <div class="flex items-start gap-4 mt-[20px]">
-                            {{if .settingsdetail.SiteLogoPath}}
-                            <div class="grow">
-                                <img id="sitelogopathsrc" src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"
-                                    class="max-w-[120px]" alt="">
-                            </div>
-                            {{end}}
-                            <a href="javascript:void(0);" id="siteLogoSave"
-                                class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
-                                {{$Translate.Seo.Update}}
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                    <div class="mb-[20px] last-of-type:mb-0">
+                        <div
+                            class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
+                            <label for="sitefavicon"
+                                class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
+                                {{$Translate.Seo.Choosefile}}
+                            </label>
+                            <p id="filenameDisplayFavIcon" class="text-[13px] font-light leading-[18px] text-[#252525]">
+                                {{if .settingsdetail.SiteFavIcon}}
+                                {{.settingsdetail.SiteFavIcon}}
+                                {{else}}
+                                {{$Translate.Seo.Nofilechose}}
+                                {{end}}
+                            </p>
+                            <a href="javascript:void(0);" id="deleteFileFavIcon" class="ms-auto hidden">
+                                <img src="/public/img/delete-red.svg" alt="Delete">
                             </a>
                         </div>
+                        <input id="sitefavicon" name="sitefavicon" type="file"
+                            class="fileInputFavIcon hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                            accept="image/png, image/jpeg,image/jpg,image/svg">
+                        <input type="hidden" value="{{.settingsdetail.SiteFavIcon}}" id="sitefaviconimage"
+                            name="sitefaviconimage"
+                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
                     </div>
-                </div>
-            </form>
 
-            <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="siteFavIconForm">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.SiteFavIcon}}</h3>
-
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <div
-                                class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
-                                <label for="sitefavicon"
-                                    class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
-                                    {{$Translate.Seo.Choosefile}}
-                                </label>
-                                <p id="filenameDisplayFavIcon"
-                                    class="text-[13px] font-light leading-[18px] text-[#252525]">
-                                    {{if .settingsdetail.SiteFavIcon}}
-                                    {{.settingsdetail.SiteFavIcon}}
-                                    {{else}}
-                                    {{$Translate.Seo.Nofilechose}}
-                                    {{end}}
-                                </p>
-                                <a href="javascript:void(0);" id="deleteFileFavIcon" class="ms-auto hidden">
-                                    <img src="/public/img/delete-red.svg" alt="Delete">
-                                </a>
-                            </div>
-                            <input id="sitefavicon" name="sitefavicon" type="file"
-                                class="fileInputFavIcon hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
-                                accept="image/png, image/jpeg,image/jpg,image/svg">
-                            <input type="hidden" value="{{.settingsdetail.SiteFavIcon}}" id="sitefaviconimage"
-                                name="sitefaviconimage"
-                                class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    <div class="flex items-start gap-4 mt-[20px]">
+                        {{if .settingsdetail.SiteFavIcon}}
+                        <div class="grow">
+                            <img id="siteaviconsrc" src="/image-resize?name={{.settingsdetail.SiteFavIconPath}}"
+                                class="max-w-[75px]" alt="">
                         </div>
-
-                        <div class="flex items-start gap-4 mt-[20px]">
-                            {{if .settingsdetail.SiteFavIcon}}
-                            <div class="grow">
-                                <img id="siteaviconsrc" src="/image-resize?name={{.settingsdetail.SiteFavIconPath}}"
-                                    class="max-w-[75px]" alt="">
-                            </div>
-                            {{end}}
-                            <a href="javascript:void(0);" id="siteFavIconSave"
-                                class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
-                                {{$Translate.Seo.Update}}
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </form>
-<!-- 
-            <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="websiteUrlForm">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.WebsiteUrl}}</h3>
-
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-
-                        <div class="mb-[20px] last-of-type:mb-0">
-
-                            <div class="relative">
-                                <input type="text" id="websiteInput" name="websiteInput"
-                                    value="{{.websitedetail.Name}}"
-                                    placeholder="{{$Translate.WebsiteSettings.Subdomain}}"
-                                    class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
-                                    maxlength="20">
-                                <div
-                                    class="absolute right-0 top-0 h-full w-fit p-3 flex items-center bg-[#F8F9FA] text-[13px] font-normal text-[#408686] border border-solid border-[#E6E6E6] ">
-                                    {{$Translate.WebsiteSettings.Spurtcmscom}}</div>
-                            </div>
-                            <label id="websiteInput-error" style="display: none;" for="websiteInput"
-                                class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
-                                Website URL</label>
-                        </div>
-
-
-                        <a href="javascript:void(0);" id="websiteUrlSave"
-                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
-                            Update
+                        {{end}}
+                        <a href="javascript:void(0);" id="siteFavIconSave"
+                            class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                            {{$Translate.Seo.Update}}
                         </a>
                     </div>
-                </div>
-            </form> -->
 
+                </div>
+            </div>
+        </form>
+
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}" method="post" id="websiteUrlForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.WebsiteUrl}}</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                    <div class="mb-[20px] last-of-type:mb-0">
+
+                        <div class="relative">
+                            <input type="text" id="websiteInput" name="websiteInput" value="{{.websitedetail.Name}}"
+                                placeholder="{{$Translate.WebsiteSettings.Subdomain}}"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                                maxlength="20">
+                            <div
+                                class="absolute right-0 top-0 h-full w-fit p-3 flex items-center bg-[#F8F9FA] text-[13px] font-normal text-[#408686] border border-solid border-[#E6E6E6] ">
+                                {{.baseurl}}</div>
+                        </div>
+                        <label id="websiteInput-error" style="display: none;" for="websiteInput"
+                            class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
+                            Website URL</label>
+                    </div>
+
+
+
+
+                    <a href="javascript:void(0);" id="websiteUrlSave"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                        Update
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}"  method="post" id="SocialmediaForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+
+
+
+       <div class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+            <h3 class="mt-[12px]">Social Media Link</h3>
+ 
+        
+            <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+            <input type="hidden" id="social_media_data" name="social_media_data">
+        
+                <div class=" mx-auto space-y-[24px]">
+        
+                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
+                        <label for='ck5' class="cursor-pointer">
+                            <input type="checkbox" id="ck5" class="peer hidden" />
+                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                        </label>
+                        <img src="/public/img/linkedin-circle.svg" class="min-w-[48px]" />
+                        <!-- Input -->
+                        <input type="text" placeholder="http://linkedin/example" id="linkedinlink"
+                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
+        
+        
+                    </div>
+        
+        
+        
+                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
+                        <label for='ck1' class="cursor-pointer">
+                            <input type="checkbox" id="ck1" class="peer hidden" />
+                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                        </label>
+                        <img src="/public/img/x-circle.svg" class="min-w-[48px]" />
+                        <!-- Input -->
+                        <input type="text" placeholder="http://x/example" id="xlink"
+                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
+        
+                    </div>
+        
+                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
+                        <label for="ck2" class="cursor-pointer">
+                            <input type="checkbox" id="ck2" class="peer hidden" />
+                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                        </label>
+                        <img src="/public/img/youtube-circle.svg" class="min-w-[48px]" />
+                        <!-- Input -->
+                        <input type="text" placeholder="http://youtube/example" id="youtubelink"
+                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
+        
+                    </div>
+        
+                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
+                        
+                        <label for="ck3" class="cursor-pointer">
+                            <input type="checkbox" id="ck3" class="peer hidden" />
+                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                        </label>
+                     
+ 
+                        <img src="/public/img/instagram-circle.svg" class="min-w-[48px]" />
+                        <!-- Input -->
+                        <input type="text" placeholder="http://instagram/example" id="instagramlink"
+                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
+        
+                    </div>
+        
+                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
+                        <label for="ck4" class="cursor-pointer">
+                            <input type="checkbox" id="ck4" class="peer hidden" />
+                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                        </label>
+                        <img src="/public/img/facebook-circle.svg" class="min-w-[48px]"  />
+                        <!-- Input -->
+                        <input type="text" placeholder="http://facebook/example" id="facebooklink"
+                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
+        
+                    </div>
+        
+                    <!-- Buttons -->
+                    <div class="flex justify-end gap-4 pt-4">
+        
+                        <a href="javascript:void(0);" id="socialmediaupdate"
+                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-[91px] whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
+                            Update
+                        </a>
+                        
+                    </div>
+        
+                </div>
+        
+        
+        
+            </div>
+        </div>
+        </form>
+
+        <div class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+            <h3 class="mt-[12px]">Header Theme</h3>
+        
+            <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+
+                <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}"  method="post" >
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+        
+                <div class=" mx-auto flex flex-wrap gap-[20px] md:gap-[30px]">
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio" class="hidden peer/member" checked="" value="new-year">
+        
+                        <label for="radio"
+                            class=" relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/member:text-[#252525] tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/member:before:bg-[url('../img/radio-checked-green.svg')]  ">New
+                            Year</ldivl>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio1" class="hidden peer/public" value="christmas">
+        
+                        <label for="radio1"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  ">Christmas</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio2" class="hidden peer/public" value="pongal">
+        
+                        <label for="radio2"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  ">Pongal</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio3" class="hidden peer/public" value="diwali">
+        
+                        <label for="radio3"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  ">Diwali</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio4" class="hidden peer/public" value="default">
+        
+                        <label for="radio4"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  "> Default</label>
+                    </div>
+        
+        
+                    <!-- <div>
+                        <input type="radio" name="radio" id="radio5" class="hidden peer/public">
+        
+                        <label for="radio5"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  ">Republic
+                            day</label>
+                    </div> -->
+        
+                </div>
+                <div class="flex justify-end gap-4 mt-[30px] ms-auto">
+                
+                    <button type="submit"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-[91px] whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
+                        Update
+                    </button>
+                </div>
+                
+                </form>
+        
+                <!-- Buttons -->
+               
+        
+            </div>
+        
+        
+        
         </div>
 
-        {{template "footer" .}}
-
-        <script src="/public/js/gotemplate/template_settings.js"></script>
 
 
-        {{template "footerclose" .}}
+    </div>
+
+
+    <input type="hidden" id="template_json" value="{{ .TemplateTypeJSON }}">
+
+    <input type="hidden" id="social_link_json" value="{{ .sociallink }}">
+
+    <input type="hidden" id="headerthame" value="{{ .headerthame}}">
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/gotemplate/template_settings.js"></script>
+
+
+    {{template "footerclose" .}}

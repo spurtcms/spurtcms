@@ -87,10 +87,12 @@
                             <table style="width: 100%; max-width:696px; margin-inline: auto;" width="100%"
                                 cellpadding="0" cellspacing="0" role="presentation">
                                 <tbody>
+                                    {{if eq .LogoCondition ""}}
                                     <tr>
                                         <td style="text-align: center;"><img style="height: 36px; width:240px;"
                                                 src="{{.AdminLogo}}" alt="logo"></td>
                                     </tr>
+                                    {{end}}
                                     <tr>
                                         <td style="padding: 59px 0 60px 0; border-bottom: 1px solid #EEEEEE;">
                                             <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
@@ -100,6 +102,7 @@
                                             </table>
                                         </td>
                                     </tr>
+                                     {{if eq .LogoCondition ""}}
                                     <tr>
                                         <td style="padding: 80px 0 0 0 ;" align="center">
                                             <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
@@ -154,6 +157,7 @@
                                             </table>
                                         </td>
                                     </tr>
+                                    {{end}}
                                 </tbody>
                             </table>
                         </td>

@@ -12,6 +12,7 @@
 
        <section class="bg-white p-[84px_16px] border-t border-solid border-[#EEEEEE] max-md:p-[24px_16px]">
              <form action="/updateprofile " method="post" id="myprofileform" name="myprofileform">
+                 <input type="hidden" name="csrf" value="{{.csrf}}">
              <input type="hidden" name="memberid" value="{{.memberdet.Id}}" id="memberid">
              <input type="hidden" name="membergroupvalue" value="{{.memberdet.MemberGroupId}}">
              <input type="hidden" name="crop_data" value="" id="crop_data">

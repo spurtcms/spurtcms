@@ -20,7 +20,7 @@ $(document).ready(function () {
     var $errorpagetitle = $('#error-pagetitle');
 
     $pagetitle.on('input', function () {
-        var maxLength = 55;
+        var maxLength = 95;
         if ($(this).val().length >= maxLength) {
             // Show error message
             $errorpagetitle.text("* "+languagedata.Seo.titlemustnotexceed55characters);
@@ -34,7 +34,7 @@ $(document).ready(function () {
     var $errorpagedescription = $('#error-pagedescription');
 
     $pagedescription.on('input', function () {
-        var maxLength = 155;
+        var maxLength = 250;
         if ($(this).val().length >= maxLength) {
             // Show error message
             $errorpagedescription.text("* "+languagedata.Seo.descriptionmustnotexceed155characters);
@@ -48,7 +48,7 @@ $(document).ready(function () {
     var $errorpagekeyword = $('#error-pagekeyword');
 
     $pagekeyword.on('input', function () {
-        var maxLength = 155;
+        var maxLength = 250;
         if ($(this).val().length >= maxLength) {
             // Show error message
             $errorpagekeyword.text("* "+languagedata.Seo.keywordmustnotexceed155characters);

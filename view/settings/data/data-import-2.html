@@ -1,0 +1,338 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[8px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Data</h2>
+
+        </div>
+
+
+        <div class="flex gap-3">
+            <a href="/admin/settings/data/"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">Previous</a>
+            <a href="/admin/settings/data/thirdimportpage"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline">Next</a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+        <!--accordion-->
+        <div class="accordion sm:grid bg-white max-sm:sticky max-sm:z-10  max-sm:top-[48px]  " id="CategoriesGroup">
+
+            <div class=" sm:hidden accordion-item !rounded-none  border-none overflow-hidden ">
+                <a class="accordion-button !bg-[#fafafa] !shadow-none   hover:!bg-[#fafafa] flex justify-between items-center leading-none  p-[16px_auto_4px_16px] after:!h-[16px] after:!w-[16px]  after:!bg-contain   after:!inline-block  after:!bg-[url('/public/img/accord-arrow.svg')] [&.collapsed]:!after:rotate-180  [&.collapsed]:!bg-white border-b border-solid  [&.collapsed]:border-[#EDEDED] border-transparent"
+                    type="button" data-bs-toggle="collapse" href="#collapseCategoriesGroup" aria-expanded="true"
+                    aria-controls="collapseCategoriesGroup">
+                    <div class="flex items-center  gap-[8px] text-[#262626] text-sm font-normal leading-none">
+                        <img src="/public/img/setting.svg" alt="category group">
+                        Settings
+                    </div>
+                </a>
+            </div>
+
+            <div id="collapseCategoriesGroup"
+                class="accordion-collapse collapse show  max-sm:w-full max-sm:absolute bg-white z-10 sm:h-full"
+                aria-labelledby="headingCategoriesGroup" data-bs-parent="#CategoriesGroup">
+                <div class="accordion-body p-[0] sm:h-full">
+                    <div
+                        class="  sm:h-full max-sm:p-[0px_0px_0px_8px] p-[24px_0px_24px_8px] border-r border-solid border-[#EDEDED]  ">
+
+                        <div class=" ">
+                            <h3
+                                class="text-[#717171] text-xs font-normal leading-[15px] p-[0_0_8px_8px]  max-sm:mb-0 max-sm:p-[9px]">
+                                Basic Info
+                            </h3>
+                            <ul class="max-sm:flex   gap-[8px] flex-wrap">
+                                <li><a href="/admin/settings/myprofile"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative  before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/my-account.svg" alt="my Account">
+                                        <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">
+                                            My
+                                            Account</span></a></li>
+                                <li><a href="/admin/settings/changepassword"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/my-security.svg" alt="my Security">
+                                        <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Security
+                                        </span>
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="mb-[16px] max-sm:mb-[5px]  mr-[8px] pb-[8px] border-b border-solid border-[#D9D9D9] ">
+
+                        </div>
+
+                        <div class="">
+                            <h3
+                                class="text-[#717171] text-xs font-normal leading-[15px] p-[0_0_8px_8px]  max-sm:mb-0 max-sm:p-[9px]">
+                                Permissions
+                            </h3>
+                            <ul class=" max-sm:flex   gap-[8px] flex-wrap">
+                                <li><a href="/admin/settings/roles/"
+                                        class=" max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/roles.svg" alt="roles and permission">
+                                        <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Roles
+                                            &
+                                            Permissions</span></a></li>
+                                <li><a href="/admin/settings/users/"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/teams.svg" alt="teams">
+                                        <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Teams
+                                        </span>
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="mb-[16px] max-sm:mb-[5px]  mr-[8px] pb-[8px] border-b border-solid border-[#D9D9D9] ">
+
+                        </div>
+
+                        <div class="">
+                            <h3
+                                class="text-[#717171] text-xs font-normal leading-[15px] p-[0_0_8px_8px]  max-sm:mb-0 max-sm:p-[9px]">
+                                Systems</h3>
+                            <ul class=" max-sm:flex   gap-[8px] flex-wrap">
+                                <li><a href="/admin/settings/general-settings/"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative  before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/general.svg" alt="general">
+                                        <span class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">General
+                                            Settings
+                                        </span>
+                                    </a></li>
+                                <!-- <li><a href="/graphql/"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/graphQl-setting.svg" alt="graph ql"> <span
+                                            class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Graphql
+                                            Api</span></a>
+                                </li> -->
+                                <li><a href="/admin/settings/languages/"
+                                        class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] "><img
+                                            src="/public/img/language-setting.svg" alt="language"> <span
+                                            class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Language</span></a>
+                                </li>
+                                <li><a href="/admin/settings/emails/"
+                                        class=" max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9]"><img
+                                            src="/public/img/email-setting.svg" alt="email"> <span
+                                            class="text-[#262626] text-[13px] font-normal leading-[16.25px]  ">Email</span></a>
+                                </li>
+                                <li><a href="/admin/settings/data/"
+                                        class=" active max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#10A37F] before:block rounded-[4px_0_0_4px] flex items-center gap-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9]"><img
+                                            src="/public/img/data-setting.svg" alt="data"> <span
+                                            class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">Data</span></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class=" max-sm:block hidden  ml-[-8px] pb-[16px] border-b border-solid border-[#D9D9D9] ">
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--accordion-->
+
+
+
+        <div class="block overflow-hidden @container pb-[120px] relative">
+
+
+            <div class="block overflow-auto">
+                <ul class="flex items-center border-b border-[#EDEDED] px-[16px]">
+                    <li><a href="/admin/settings/data/"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#262626] hover:text-[#262626] after:inline-block after:w-full after:h-[2px] after:bg-[#262626] after:rounded-t-[18px] after:absolute after:bottom-0 after:left-0 ">
+                            Data Import</a>
+                    </li>
+                    <li><a href="/admin/settings/data/exportpage"
+                            class="text-[14px] font-normal leading-[17.5px] tracking-[0.01em] py-[11px] px-[12px] grid place-items-center relative text-[#717171] hover:text-[#262626]">
+                            Data Export
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class=" max-w-[1920px] mx-auto  ">
+                <div class="flex justify-between gap-8 items-start sm:items-center p-[24px_16px] max-lg:p-[16px]">
+                    <div class="flex flex-col gap-1.5 max-w-[600px]">
+                        <h3 class="text-[#262626] text-sm font-normal mb-0">Fields Mapping</h3>
+                        <p class="text-[#717171] font-light mb-0 text-[11px]">Effortlessly import your
+                            website content into spurtCMS.Upload Excel sheets in any format, accommodating
+                            all your existing content details that may differ from spurtCMS standards.</p>
+                    </div>
+                    <div
+                        class="h-34 whitespace-nowrap px-[12px] text-[#69AB69] border rounded-32 bg-[#EBFAEB] border-[#A5D794] flex items-center justify-center text-sm font-normal">
+                        Step 2 of 3
+                    </div>
+                </div>
+                <div class="w-full overflow-auto overflow-unset">
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-[16px] py-[12px] border-b border-[#EDEDED] text-sm font-normal text-[#262626]">
+                                    XLSX FIELDS</th>
+                                <th class="px-[16px] py-[12px] border-b border-[#EDEDED]"></th>
+                                <th
+                                    class="px-[16px] py-[12px] border-b border-[#EDEDED] text-sm font-normal text-[#262626] text-left">
+                                    SPURTCMS FIELDS</th>
+                                <th class="px-[16px] py-[12px] border-b border-[#EDEDED]"></th>
+                                <th
+                                    class="px-[16px] py-[12px] border-b border-[#EDEDED] text-sm font-normal text-[#262626] text-left">
+                                    EXAMPLES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img
+                                            src="/public/img/right-line-arrow.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class=" pd-3 par-3 h-[32px] border border-[#EDEDED] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] text-xs font-normal mb-0 line-clamp-1">
+                                                Select Fields to mapping</p>
+                                        </a>
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                    shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    1</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    2</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    3</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img src="/public/img/equals.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                            </tr>
+                            <tr>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img
+                                            src="/public/img/right-line-arrow.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class=" pd-3 par-3 h-[32px] border border-[#EDEDED] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] text-xs font-normal mb-0 line-clamp-1">
+                                                Select Fields to mapping</p>
+                                        </a>
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                    shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    1</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    2</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    3</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img src="/public/img/equals.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                            </tr>
+                            <tr>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img
+                                            src="/public/img/right-line-arrow.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);"
+                                            class=" pd-3 par-3 h-[32px] border border-[#EDEDED] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] text-xs font-normal mb-0 line-clamp-1">
+                                                Select Fields to mapping</p>
+                                        </a>
+                                        <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                    shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                            <li> <a href="javascript:void(0);"
+                                                    class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    1</a>
+                                            </li>
+
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    2</a>
+                                            </li>
+                                            <li> <a href="javascript:void(0);"
+                                                    class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Channel
+                                                    3</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED]">
+                                    <div class="whitespace-nowrap w-[16px]"><img src="/public/img/equals.svg" /></div>
+                                </td>
+                                <td class="p-[16px] border-b border-[#EDEDED] text-xs font-normal text-[#262626]">
+                                    Lorem ipsum dolor sit amet, consetetur</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+            <div class="absolute left-0 w-full flex justify-center bottom-[24px]">
+                <a href="#"
+                    class="flex gap-[4px] items-center justify-center px-[16px] h-[50px] rounded-[47px] bg-[#20252F] text-[#FFFFFF] text-xl font-normal hover:bg-[#353a42]"><img
+                        src="/public/img/bind.svg" /> Auto Mapping</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+{{template "footer" .}}
+{{template "footerclose" .}}

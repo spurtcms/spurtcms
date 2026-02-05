@@ -1,0 +1,538 @@
+{{template "header" .}}
+{{template "head" .}}
+
+{{$Translate := .translate}}
+
+
+
+<section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="img\menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2
+                class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap max-[425px]:w-[120px] max-[425px]:overflow-hidden max-[425px]:text-ellipsis">
+                {{$Translate.Memberships.MemberShipLevels.Create}}
+            </h2>
+        </div>
+
+        <div class="flex !gap-3">
+            <a href="/admin/membershiplevel"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px]  no-underline">
+                {{$Translate.Memberships.MemberShipLevels.Cancel}}</a>
+            <a id="membershipsave"
+                class="cursor-pointer h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px]  no-underline">{{if
+                eq .action "Save"}}{{$Translate.Memberships.MemberShipLevels.Save}}{{else}}Update{{end}}</a>
+        </div>
+    </header>
+    <div class="p-[24px_16px]">
+
+
+
+        <form id="membershipcreateform" action="{{.endpoint}}" method="POST">
+
+            <input class="hidden" type="text" value="{{.csrf}}" name="csrf">
+            <input type="text" name="subscriptionid" id="subscriptionid" value="{{.SelectedMembership.Id}}"
+                class="hidden">
+
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">
+                    {{$Translate.Memberships.MemberShipLevels.Basicinfo}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.MemberShipLevels.Basicinfodesc}} </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] max-md:grid-cols-1 ">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.MemberShipLevels.Name}}
+                        <span class="text-red-600">*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Nameinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+
+                        <input type="text" id="subscriptionname" name="subscriptionname"
+                            value="{{.SelectedMembership.SubscriptionName}}"
+                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[680px] text-bold-black text-sm font-normal">
+                    </div>
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-start mb-[24px] max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.MemberShipLevels.Membershipdesc}}
+                        <span class="text-red-600">*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Messageinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+                        <textarea type="text" id="subscriptiondescription" name="subscriptiondescription"
+                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[100px] p-[4px_8px] max-w-[680px] resize-none">{{.SelectedMembership.Description}}</textarea>
+
+                    </div>
+
+                </div>
+
+                <!-- <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.MemberShipLevels.Selectmembership}}
+
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Selectmembershipinfo}}</p>
+                        </div>
+                    </label>
+                    <div class="flex items-center gap-[16px]">
+
+                        <div class="flex items-center space-x-[8px] w-full max-w-[680px]">
+
+                            <div class="dropdown w-full">
+
+                                <a href="javascript:void(0);"
+                                    class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                    data-bs-toggle="dropdown">
+                                    <span> {{$Translate.Memberships.MemberShipLevels.Selectmembershipplaceholde}}</span>
+                                    <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                </a>
+                                <div
+                                    class="dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                    {{range .Defaulmembershiplevel}}
+
+                                    <a data-id="{{.Id}}" id="loadtemplate"
+                                        class="cursor-pointer text-[12px] font-light leading-[15px] text-[#525252] block p-[6px] hover:bg-[#f2f2f2]">{{.SubscriptionName}}</a>
+                                    {{end}}
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.MemberShipLevels.Selectmembershiplevelgroup}}
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Selectmembershiplevelgroupinfo}}</p>
+                        </div>
+                    </label>
+                    <div class="flex items-center gap-[16px]">
+
+                        <div class="flex items-center space-x-[8px] w-full max-w-[680px]">
+
+                            <div class="dropdown w-full">
+
+                                <a href="javascript:void(0);"
+                                    class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                    data-bs-toggle="dropdown">
+                                    <span id="membershipgrouptext">{{if .SelectedMembership.GroupName}}{{.SelectedMembership.GroupName}}{{else}}{{$Translate.Memberships.MemberShipLevels.Selectmembershiplevelgroupplaceholder}}{{end}}</span>
+                                    <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                </a>
+                                <div
+                                    class="dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                                    {{range .SubscriptionGroupList}}
+                                    <a data-id="{{.Id}}"
+                                        class="cursor-pointer block p-[6px] hover:bg-[#f2f2f2] text-[12px] font-light leading-[15px] text-[#525252]"
+                                        onclick="SelectMembershipGroup('{{.Id}}', '{{.GroupName}}')">{{.GroupName}}</a>
+                                    {{end}}
+
+                                    <input type="text" name="subscriptiongroupid" id="subscriptiongroupid" value="{{.SelectedMembership.GroupId}}"
+                                        class="hidden">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-start mb-[24px] max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
+                        {{$Translate.Memberships.MemberShipLevels.Message}}
+                        <span class="text-red-600">*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Messageinfo}}</p>
+                        </div>
+                    </label>
+                    <div>
+                        <textarea type="text" id="subscriptiondesc" name="subscriptiondesc"
+                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[120px] p-[4px_8px] max-w-[680px] resize-none">{{.SelectedMembership.MembershiplevelDetails}}</textarea>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="border-b border-[#EDEDED] mb-[24px] last-of-type:mb-0 last-of-type:border-b-0">
+                <h2 class="text-[18px] font-normal leading-[22px] text-[#152027] mb-[4px]">
+                    {{$Translate.Memberships.MemberShipLevels.Billingdetails}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] mb-[24px]">
+                    {{$Translate.Memberships.MemberShipLevels.Billingdetailsdesc}} </p>
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Initialpayment}}
+                        <span class="text-red-600">*</span>
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[280px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Initialpaymentinfo}}</p>
+                        </div>
+                    </label>
+
+                    <div>
+                        <div class="flex items-center space-x-[8px]">
+                            <p class="text-[12px] font-light leading-[15px] text-[#525252]">$</p>
+                            <div class="w-full">
+                                <input type="text" id="initialpayment" name="initialpayment"
+                                    value="{{.SelectedMembership.InitialPayment}}" maxlength="6"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[680px]">
+                                <label for="initialpayment" class="hidden" id="error-initailpayment">Please Enter
+                                    Initial Payment.</label>
+                            </div>
+                        </div>
+                        <p
+                            class="text-[12px] font-light leading-[15px] text-[#525252] ml-[16px] mt-[4px] absolute top-full">
+                            {{$Translate.Memberships.MemberShipLevels.Initialpaymentdesc}}</p>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[16px] max-md:grid-cols-1">
+
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Discount
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[280px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Initialpaymentinfo}}</p>
+                        </div>
+                    </label>
+                    <div class="flex items-center space-x-[8px]">
+                        <div class="chk-group chk-group-label flex justify-center">
+                            <input type="checkbox" id="Discount" name="Discount" value="{{.SelectedMembership.IsDiscount}}" class="hidden peer" {{if eq
+                                .SelectedMembership.IsDiscount 1}}checked{{end}}>
+                            <label for="Discount"
+                                class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                    before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('../img/checked-box.svg')]  "></label>
+                        </div>
+                        <label for="Discount"
+                            class="text-[12px] font-light text-[#525252] leading-[15px] cursor-pointer">Set
+                            discount</label>
+                    </div>
+                </div>
+
+                <div class="{{if ne .SelectedMembership.IsDiscount 1}}hidden{{else}}show{{end}}" id="Discountdiv">
+
+                    <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+
+                        <label for=""
+                            class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Discount
+                            %
+
+                            <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 max-w-[280px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Memberships.MemberShipLevels.Initialpaymentinfo}}</p>
+                            </div>
+                        </label>
+                        <div class=" flex items-center space-x-[8px]">
+                            <div class="w-fit">
+                                <input type="text" id="discountpercentage" name="discountpercentage" maxlength="2" value="{{.SelectedMembership.DiscountPercentage}}"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[280px] me-[15px]">
+                            </div>
+
+                            <a class="Defaulltdescount cursor-pointer border border-solid border-[#F4F4F4] p-[9px_10px] text-[14px] font-normal leading-[18px] text-[#757575] flex items-center justify-center hover:bg-[#F3F3F3] hover:border-[#F3F3F3] rounded-[50px] h-[36px]"
+                                data-value="10">10%</a>
+                            <a class="Defaulltdescount cursor-pointer border border-solid border-[#F4F4F4] p-[9px_10px] text-[14px] font-normal leading-[18px] text-[#757575] flex items-center justify-center hover:bg-[#F3F3F3] hover:border-[#F3F3F3] rounded-[50px] h-[36px]"
+                                data-value="30">30%</a>
+                            <a class="Defaulltdescount cursor-pointer border border-solid border-[#F4F4F4] p-[9px_10px] text-[14px] font-normal leading-[18px] text-[#757575] flex items-center justify-center hover:bg-[#F3F3F3] hover:border-[#F3F3F3] rounded-[50px] h-[36px]"
+                                data-value="50">50%</a>
+                        </div>
+
+                    </div>
+
+                    <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] relative max-md:grid-cols-1">
+                       
+                        <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Discounted
+                        Price
+
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[280px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Initialpaymentinfo}}</p>
+                        </div>
+                    </label>
+                        <div class="flex items-center space-x-[8px]">
+                            <input type="text" id="discountedprice" name="discountedprice" value="{{.SelectedMembership.DiscountedAmount}}" readonly
+                                class="text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[280px] cursor-not-allowed">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[24px] max-md:grid-cols-1">
+                    <label for=""
+                        class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Recurringsubscription}}
+                        <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Memberships.MemberShipLevels.Recurringsubscriptioninfo}}</p>
+                        </div>
+                    </label>
+                    <div class="flex items-center space-x-[8px]">
+                        <div class="chk-group chk-group-label flex justify-center">
+                            <input type="checkbox" id="isrecurring" name="isrecurring"
+                                value="{{.SelectedMembership.RecurrentSubscription}}" class="hidden peer" {{if eq
+                                .SelectedMembership.RecurrentSubscription 1}}checked{{end}}>
+
+                            <label for="isrecurring" id="isrecurringlable"
+                                class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                        </div>
+                        <label for="Check"
+                            class="text-[12px] font-light text-[#525252] leading-[15px] cursor-pointer">{{$Translate.Memberships.MemberShipLevels.Recurringsubscriptiondesc}}</label>
+                    </div>
+                </div>
+
+                <div id="recurringsubscriptiondev"
+                    class="{{if ne .SelectedMembership.RecurrentSubscription 1}}hidden{{else}}show{{end}}">
+                    <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                        <label for=""
+                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Billingamount}}
+                            <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Memberships.MemberShipLevels.Billingamountinfo}}</p>
+                            </div>
+                        </label>
+                        <div>
+                            <div class="flex items-center gap-[16px]">
+                                <div class="flex items-center space-x-[8px]">
+                                    <p class="text-[12px] font-light leading-[15px] text-[#525252]">$</p>
+                                    <div class="w-full">
+                                        <input type="text" id="billingamount" name="billingamount"
+                                            value="{{.SelectedMembership.BillingAmount}}" maxlength="6"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[680px]">
+
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-[8px] max-w-[150px]">
+                                    <p class="text-[12px] font-light leading-[15px] text-[#525252]">
+                                        {{$Translate.Memberships.MemberShipLevels.Per}}</p>
+                                    <div class="w-full">
+                                        <input type="text" id="billingfrequentvalue" name="billingfrequentvalue"
+                                            maxlength="3" value="{{.SelectedMembership.BillingfrequentValue}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[58px]">
+
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center space-x-[8px] w-full max-w-[104px]">
+
+                                    <div class="dropdown">
+
+                                        <a href="javascript:void(0);"
+                                            class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px]"
+                                            data-bs-toggle="dropdown">
+                                            <span
+                                                id="PlanTimeShow">{{$Translate.Memberships.MemberShipLevels.Month}}</span>
+                                            <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+
+
+                                        </a>
+                                        <div class="w-full">
+                                            <input type="text" name="billingfrequenttype" id="billingfrequenttype"
+                                                value="{{.SelectedMembership.BillingfrequentType}}"
+                                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal hidden">
+
+                                        </div>
+                                        <div
+                                            class="min-w-full dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                            <a class="PlanvalidTime text-[12px] p-[6px] font-light leading-[15px] text-[#525252] block cursor-pointer hover:bg-[#f2f2f2]"
+                                                data-id="Day(s)">{{$Translate.Memberships.MemberShipLevels.Day}}</a>
+                                            <a class="PlanvalidTime text-[12px] p-[6px] font-light leading-[15px] text-[#525252] block cursor-pointer hover:bg-[#f2f2f2]"
+                                                data-id="Week(s)">{{$Translate.Memberships.MemberShipLevels.Week}}</a>
+                                            <a class="PlanvalidTime text-[12px] p-[6px] font-light leading-[15px] text-[#525252] block cursor-pointer hover:bg-[#f2f2f2]"
+                                                data-id="Month(s)">{{$Translate.Memberships.MemberShipLevels.Month}}</a>
+                                            <a class="PlanvalidTime text-[12px] p-[6px] font-light leading-[15px] text-[#525252] block cursor-pointer hover:bg-[#f2f2f2]"
+                                                data-id="Year(s)">{{$Translate.Memberships.MemberShipLevels.Year}}</a>
+
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <p
+                                class="text-[12px] font-light leading-[15px] text-[#525252] ml-[16px] mt-[4px] absolute top-full">
+                                The amount to be build one cycle after the initail payment
+                                <!-- {{$Translate.Memberships.MemberShipLevels.Billingamountdesc}} -->
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                        <label for=""
+                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Billingcyclelimit}}
+                            <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Memberships.MemberShipLevels.Billingcyclelimitinfo}}</p>
+                            </div>
+                        </label>
+                        <div>
+                            <input type="text" name="billingcyclelimit" id="billingcyclelimit" maxlength="3"
+                                value="{{.SelectedMembership.BillingCyclelimit}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full max-w-[58px] border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] ">
+                            <p class="text-[12px] font-light leading-[15px] text-[#525252] mt-[4px] absolute top-full">
+                                The total number of recurrent billing cycle for this level, Including the trial period if applicable but not including the initail payment.
+                                <!-- {{$Translate.Memberships.MemberShipLevels.Billingcyclelimitdesc}} -->
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="grid !gap-4 grid-cols-[1fr_2fr] items-start mb-[24px] max-md:grid-cols-1">
+                        <label for=""
+                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Customtrial}}
+                            <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Memberships.MemberShipLevels.Customtrialinfo}}</p>
+                            </div>
+                        </label>
+                        <div class="flex items-center space-x-[8px]">
+                            <div class="chk-group chk-group-label flex justify-center">
+                                <input type="checkbox" id="customtrial" name="customtrial"
+                                    value="{{.SelectedMembership.CustomTrial}}" class=" hidden peer" {{if eq
+                                    .SelectedMembership.CustomTrial 1}}checked{{end}}>
+                                <label for="customtrial"
+                                    class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                          before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                            </div>
+                            <label for="customtrial"
+                                class="text-[12px] font-light text-[#525252] leading-[15px] cursor-pointer">{{$Translate.Memberships.MemberShipLevels.Customtrialdesc}}</label>
+                        </div>
+
+                    </div>
+
+                    <div id="customtraildiv"
+                        class="{{if ne .SelectedMembership.CustomTrial 1}}hidden{{else}}{{end}} grid !gap-4 grid-cols-[1fr_2fr] items-center mb-[40px] relative max-md:grid-cols-1">
+                        <label for=""
+                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Memberships.MemberShipLevels.Trailbillingamount}}
+                            <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 max-w-[300px] w-fit mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Memberships.MemberShipLevels.Trailbillingamountinfo}}</p>
+                            </div>
+                        </label>
+                        <div>
+                            <div class="flex items-center gap-[16px]">
+                                <div class="flex items-center space-x-[8px]">
+                                    <p class="text-[12px] font-light leading-[15px] text-[#525252]">$</p>
+
+                                    <div class="w-full">
+                                        <input type="text" id="trirbillingamount" name="trirbillingamount" maxlength="6"
+                                            value="{{.SelectedMembership.TrialBillingAmount}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[680px]">
+
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center space-x-[8px]">
+                                    <p class="text-[12px] font-light leading-[15px] text-[#525252]">
+                                        {{$Translate.Memberships.MemberShipLevels.Forthefirst}}</p>
+                                    <div class="">
+                                        <input type="text" id="trialbillinglimit" name="trialbillinglimit" maxlength="3"
+                                            value="{{.SelectedMembership.TrialBillingLimit}}"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs text-bold-black text-sm font-normal block w-full border rounded-[4px] border-[#EDEDED] h-[36px] p-[4px_8px] max-w-[58px]">
+
+                                    </div>
+                                    <p class="text-[12px] font-light leading-[15px] text-[#525252]">
+                                        {{$Translate.Memberships.MemberShipLevels.Subscriptionpayment}}
+                                    </p>
+
+                                </div>
+
+                            </div>
+                            <!-- <p
+                                class="text-[12px] font-light leading-[15px] text-[#525252] ml-[16px] mt-[4px] absolute top-full">
+                                {{$Translate.Memberships.MemberShipLevels.Trailbillingamountdesc}}</p> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+</section>
+
+
+
+{{template "footer" .}}
+<script src="/public/js/membership/membershiplevel.js"></script>
+{{template "footerclose" .}}

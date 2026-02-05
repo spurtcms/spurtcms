@@ -6086,7 +6086,7 @@ header {
   display: flex;
   justify-content: space-between;
   place-items: unset;
-  padding: 12.5rem 6.25rem !important;
+  padding: 6.5rem 6.25rem !important;
   gap: 6.3125rem;
 }
 
@@ -8580,4 +8580,12 @@ width: fit-content;
   color: #555555;
   line-height: normal;
 }
-
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+ 
+input[type=number] {
+    -moz-appearance: textfield;
+}

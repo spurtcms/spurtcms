@@ -53,42 +53,7 @@
 
             </div>
 
-            <!-- <div class="bg-[#F5F5F5] border-b border-[#D9D9D9] py-[8px] px-[12px] relative doc-lst">
-                <div class="dropdown ">
-                    <a href="/entries/create/{{.Menu.ChannelID}}"
-                        class="bg-[#000000] crt-bt rounded-[4px] grid grid-cols-[1fr_auto] rounded-[6px] place-items-center hover:bg-[#2D2D2D]">
-                        <p
-                            class="text-base font-medium leading-none text-white p-1.5   border-r  w-full h-[32px] grid place-items-center">
-                            {{$Translate.Channell.Createentry}}</p>
 
-                    </a>
-
-                    <ul
-                        class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col space-y-[8px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[210px] !mt-[6px]">
-
-                        <div id="ai-content-home"
-                            class='grid grid-cols-[16px_1fr] items-center space-x-[6px] mb-[8px] last-of-type:mb-0 '>
-                            <input type="radio" name="home-radio" id="ai-content-home-input" data-id="/aiassistance"
-                                class='accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default'  />
-                            <label class='text-[#262626] text-xs font-normal leading-4 cursor-pointer'> AI Writing</label>
-                        </div>
-                        <div class="border-b  border-[#EDEDED] -mx-[16px] my-1 "></div>
-                        <div id="manual-content-home"
-                            class='grid grid-cols-[16px_1fr] items-center space-x-[6px] mb-[8px] last-of-type:mb-0 '>
-                            <input type="radio" name="home-radio" id="manual-content-home-input"
-                                data-id="/entries/create/{{.Menu.ChannelID}}"
-                                class='accent-[#262626] w-[12px] h-[12px] cursor-pointer appearance-default'  />
-                            <label class='text-[#262626] text-xs font-normal leading-4 cursor-pointer'>Own Writing</label>
-                        </div>
-
-
-                    </ul>
-
-
-                </div>
-
-
-            </div> -->
 
             <div class="h-full">
 
@@ -184,50 +149,10 @@
                                 </li>
 
                                 {{end}}
-                                <!-- {{if eq .ModuleName "Entries"}}
-                                <li class=" doc-lst   relative">
-                                    <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
-                                        <div class="relative grid place-items-center">
-                                            {{if ne $Title .ModuleName}}
-                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="{{.IconPath}}" alt="channels">
-                                            {{else}}
-                                            <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/left-entries-active.svg" alt="channels">
-                                            {{end}}
-                                        </div>
-                                        <p
-                                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}}overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Entries}}</p>
-                                    </a>
-                                </li>
-
-                                {{end}} -->
 
 
-                                {{if eq .ModuleName "Forms"}}
-                                <li class=" doc-lst  relative">
-                                    <div>
 
-                                        <a class=" group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer"
-                                            href="/admin/cta">
-                                            <div class="relative grid place-items-center">
-                                                {{if ne $Title .ModuleName}}
-                                                <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                    src="{{.IconPath}}" alt="Documents">
-                                                {{else}}
-                                                <img class="inline-block h-4 mr-3 flex-shrink-0"
-                                                    src="/public/img/Group 17557.svg" alt="Documents">
-                                                {{end}}
-                                            </div>
-                                            <p class="overflow-hidden line-clamp-1 pr-1 pointer-events-none font-normal text-sm leading-[18px]
-                                        {{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}}">
-                                                {{$Translate.FormBuilder.Cta}}</p>
-                                        </a>
-                                    </div>
-                                </li>
-                                {{end}}
+                            
                                 {{end}}
                                 {{end}}
                                 {{end}}
@@ -259,78 +184,44 @@
 
                                 {{end}}
 
-                                <!-- {{if eq .ModuleName "Menu"}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
+
+                                {{range .Menu.TblModule}}
+                                {{if ne .ModuleName "Settings"}}
+                                {{if gt (len .SubModule) 0}}
+                                {{if ne .Route ""}}
+
+
+                                {{if eq .ModuleName "Membership"}}
 
                                 <li class=" doc-lst  relative">
-                                    <a class="group   w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}}  "
-                                        href="/admin{{.Route}}" >
-                                        <div class="relative grid place-items-center">
-                                         
-                                         
-                                                {{if ne $Title .ModuleName}}
-                                                <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                    src="/public/img/Default state.svg" alt="Documents">
-                                                {{else}}
-                                                <img class="inline-block mr-3 flex-shrink-0 h-4"
-                                                    src="/public/img/Actve state.svg" alt="Documents">
-                                                {{end}}
-                                        </div>
-                                        <p
-                                            class=" {{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            Menu</p>
-                                    </a>
-                                </li>
-                                {{end}} -->
-
-
-
-
-                                {{end}}
-                                {{end}}
-                                {{end}}
-                                {{end}}
-                                <!-- {{if eq .ModuleName "Media"}}
-
-                            <li class=" doc-lst  relative">
-                                <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                    href="{{.Route}}">
-                                    <div class="relative grid place-items-center">
-                                        {{if ne $Title .ModuleName}}
-                                        <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                            src="{{.IconPath}}" alt="channels">
-                                        {{else}}
-                                        <img class="inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                            src="/public/img/media-active.svg" alt="channels">
-                                        {{end}}
-                                    </div>
-                                    <p
-                                        class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                        {{.ModuleName}}</p>
-                                </a>
-                            </li>
-                            {{end}} -->
-
-                                <!-- {{if eq .ModuleName "Blocks"}}
-                                <li class=" doc-lst  relative">
-                                    <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
-
+                                    <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/admin/membership/">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
-                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="{{.IconPath}}" alt="channels">
+                                            <img class="min-w-[1rem] inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Membership.svg" alt="channels">
                                             {{else}}
-                                            <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/Blocks-active.svg" alt="channels">
+                                            <img class="min-w-[1rem] inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Membershipselect.svg" alt="dashboard">
                                             {{end}}
                                         </div>
                                         <p
                                             class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Blocks.Block}}</p>
+                                            {{$Translate.Memberships.Membershiphead}}</p>
                                     </a>
                                 </li>
+                                {{end}}
 
-                                {{end}} -->
+
+                                {{end}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
+
 
 
                             </ul>
@@ -382,11 +273,20 @@
                                     </a>
                                 </li>
                                 {{end}}
-                                <!-- {{if eq .ModuleName "Next.js Templates"}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
+
+                                <!-- {{range .Menu.TblModule}}
+                                {{if ne .ModuleName "Settings"}}
+                                {{if gt (len .SubModule) 0}}
+                                {{if ne .Route ""}}
+                                {{if eq .ModuleName "Next.js Templates"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center
                                  px-[12px] py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="{{.Route}}">
+                                        href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
@@ -398,57 +298,59 @@
                                         </div>
                                         <p
                                             class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Templates.Title}}</p>
+                                            Templates
+                                        </p>
                                     </a>
                                 </li>
+                                {{end}}
+                                {{end}}
+                                {{end}}
+                                {{end}}
                                 {{end}} -->
-                                {{end}}
-                                {{end}}
-                                {{end}}
-                                {{end}}
                                 {{range .Menu.TblModule}}
                                 {{if ne .ModuleName "Settings"}}
                                 {{if gt (len .SubModule) 0}}
                                 {{if ne .Route ""}}
-
-                                {{if eq .ModuleName "Graphql Api"}}
-                                <li class=" doc-lst   relative">
-                                    <a class="group   {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
-                                        href="/admin{{.Route}}">
-                                        <div class="relative grid place-items-center">
-                                            {{if ne $Title .ModuleName}}
-                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/graph-ql-key.svg" alt="channels">
-                                            {{else}}
-                                            <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/graph-ql-key-active.svg" alt="channels">
-                                            {{end}}
-                                        </div>
-                                        <p
-                                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Graphql.Apikey}}</p>
-                                    </a>
-                                </li>
-                                {{end}}
-                                {{if eq .ModuleName "Graphql Playground"}}
+                                {{if eq .ModuleName "Webhooks"}}
                                 <li class=" doc-lst   relative">
                                     <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
                                         href="/admin{{.Route}}">
                                         <div class="relative grid place-items-center">
                                             {{if ne $Title .ModuleName}}
                                             <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/graphql-playground.svg" alt="channels">
+                                                src="/public/img/Webhooks.svg" alt="channels">
                                             {{else}}
                                             <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
-                                                src="/public/img/graphql-playground-active.svg" alt="channels">
+                                                src="/public/img/Webhooks-active.svg" alt="channels">
                                             {{end}}
                                         </div>
                                         <p
                                             class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
-                                            {{$Translate.Graphql.Graphqlplayground}}</p>
+                                            {{$Translate.Webhooks.Webhook}}</p>
                                     </a>
                                 </li>
                                 {{end}}
+                                {{if eq .ModuleName "Integration"}}
+                                <li class=" doc-lst   relative">
+                                    <a class="group {{if eq $Title .ModuleName}} bg-[#F26726]/10 {{else}}hover:bg-[#0000000a]{{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/admin{{.Route}}">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne $Title .ModuleName}}
+                                            <img class="inline-block opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="{{.IconPath}}" alt="channels">
+                                            {{else}}
+                                            <img class=" inline-block h-4 mr-3 flex-shrink-0 h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/integration-active.svg" alt="channels">
+                                            {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if eq $Title .ModuleName}} text-[#f26726] {{else}}text-[#262626] {{end}} overflow-hidden line-clamp-1 pr-1 font-normal text-sm leading-[18px]">
+                                            {{$Translate.Integrations.Integration}}</p>
+                                    </a>
+                                </li>
+
+                                {{end}}
+
 
                                 {{end}}
                                 {{end}}

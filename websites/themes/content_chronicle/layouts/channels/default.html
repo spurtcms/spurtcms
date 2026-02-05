@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{template "templatehead" .}}
+</head>
+
+<body>
+
+  {{- block "templateheader" .}}{{end}}
+  {{$template_name:=.template_name}}
+
+
+  {{if .Entries}}
+  <div class=" min-h-screen p-4 md:p-8 lg:p-20   max-w-screen-2xl m-auto">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 mb-12">
+      {{if .Entries}}
+      {{range .Entries}}
+      <div class="flex flex-col">
+        <a
+          href="{{.Slug}}"><img
+            alt="Cover image of the author" class="w-[280px] h-[152px] h-channel"
+            src="{{if .CoverImage}}{{.CoverImage}}{{else}}/websites/public/img/no-image.png{{end}}"></a>
+        <p class="text-primary text-sm font-normal mb-2 my-3 text-[#2facd6] ">{{.CategoryGroup}}</p>
+        <div class="flex flex-col grow"><a
+            href="{{.Slug}}">
+            <h3 class="text-black text-2xl line-clamp-1 font-bold mb-2 overflow-hidden">{{.Title}}</h3>
+          </a>
+          <div class="text-black  text-lg font-light line-clamp-3 desc mb-3 desc overflow-hidden">
+            {{.Description}}</div>
+          <div class="flex items-center gap-3 mt-auto">
+            <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
+              <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
+                {{if ne .ProfileImagePath ""}}
+                <img alt="Picture of the author" loading="lazy" width="32" height="32" decoding="async" data-nimg="1"
+                  srcset="" src="{{.ProfileImagePath}}" class="h-[34px] rounded-3xl">
+                {{else}}
+                <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
+                {{end}}
+              </div>
+             
+            </div>
+             <h5 class="text-primary text-base font-normal text-[#2facd6] ">{{.AuthorDetail.Username}}</h5>
+            <p class="text-black font-normal text-base">{{.CreatedDate}}</p>
+          </div>
+        </div>
+      </div>
+      {{end}}
+      {{else}}
+
+
+      {{end}}
+    </div>
+
+  </div>
+  {{end}}
+
+</body>
+
+
+</html>

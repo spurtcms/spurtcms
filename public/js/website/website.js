@@ -166,16 +166,19 @@ $(document).on('click', '#edit', function () {
     var channame = edit.find("td:eq(1)").text().trim();
     var templatename = $(this).attr('data-tempname');
  $('.backbtn').removeClass('hidden')
-    if (($(this).attr('data-id')==1) &&($(this).attr('data-tenantid')==1)){
+    // if (($(this).attr('data-id')==1) &&($(this).attr('data-tenantid')==1)){
 
-        $('.defaultdiv').removeClass('hidden')
-        $('.commondiv').addClass('hidden')
-    }else{
-     $('.defaultdiv').addClass('hidden')
-        $('.commondiv').removeClass('hidden')
+    //     $('.defaultdiv').removeClass('hidden')
+    //     $('.commondiv').addClass('hidden')
+    // }else{
+    //  $('.defaultdiv').addClass('hidden')
+    //     $('.commondiv').removeClass('hidden')
           
 
-    }
+    // }
+    $('.defaultdiv').addClass('hidden')
+        $('.commondiv').removeClass('hidden')
+       
 
   $('.Sitename').val(sitename);
     $('.site_name').val(sitename)
@@ -282,7 +285,6 @@ $(document).on('click', '.changetemplate', function () {
     $('#webcreatebtn').text("Update")
     $('#createwebsite').attr('action', '/admin/website/updatewebsite')
     $('.website_id').val(webid)
-    $('.template_name').val(templatename)
 
     console.log("lll", templateid)
     $('.selecttemplate').each(function () {

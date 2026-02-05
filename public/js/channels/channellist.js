@@ -24,15 +24,15 @@ var languagedata
 
 
 
-  $('.hd-crd-btn').click(function () {
-  
-    if ($('#hd-crd').is(':visible')) {
-        $('#hd-crd').addClass('hidden').removeClass("show"); 
-        document.cookie = `channelbanner=false; path=/;`;
-    } else {
-        $('#hd-crd').addClass("show").removeClass('hidden');
-        document.cookie = `channelbanner=true; path=/;`; 
-    }
+$('.hd-crd-btn').click(function () {
+
+  if ($('#hd-crd').is(':visible')) {
+    $('#hd-crd').addClass('hidden').removeClass("show");
+    document.cookie = `channelbanner=false; path=/;`;
+  } else {
+    $('#hd-crd').addClass("show").removeClass('hidden');
+    document.cookie = `channelbanner=true; path=/;`;
+  }
 });
 
 
@@ -250,7 +250,7 @@ $(document).on('click', "#collection-tab", function () {
 })
 
 $(document).on('click', '.delete-toast-btn', function () {
-  $('.deltitle').text(languagedata.Channell.delchltitle)
+  $('.deltitle').text("Channel Deletion Restricted")
   $('.deldesc').text(languagedata.Channell.thischannelcontainsentries)
   $('#delid').hide()
   $('.delname').text($(this).parents('.f-chn').find('.chname').text())
@@ -272,16 +272,16 @@ $(document).on("click", ".searchClosebtn", function () {
 $(document).ready(function () {
 
   $('.search').on('input', function () {
-      if ($(this).val().length >= 1) {
-          var value=$(".search").val();
-          $(".Closebtn").removeClass("hidden")
-          $(".srchBtn-togg").addClass("pointer-events-none")
-          $(".SearchClosebtn").addClass("hidden")
-      } else {
-          $(".SearchClosebtn").removeClass("hidden")
-          $(".Closebtn").addClass("hidden")
-          $(".srchBtn-togg").removeClass("pointer-events-none")
-      }
+    if ($(this).val().length >= 1) {
+      var value = $(".search").val();
+      $(".Closebtn").removeClass("hidden")
+      $(".srchBtn-togg").addClass("pointer-events-none")
+      $(".SearchClosebtn").addClass("hidden")
+    } else {
+      $(".SearchClosebtn").removeClass("hidden")
+      $(".Closebtn").addClass("hidden")
+      $(".srchBtn-togg").removeClass("pointer-events-none")
+    }
   });
 })
 
@@ -290,15 +290,43 @@ $(document).on("click", ".SearchClosebtn", function () {
   $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
   $(".transitionSearch").addClass("w-[32px]")
 
-  
+
 })
 
 $(document).on("click", ".searchopen", function () {
 
   $(".SearchClosebtn").removeClass("hidden")
-  
+
 })
 
+
+$(document).ready(function () {
+
+  // Open Modal
+  $('.open-modal').on('click', function () {
+    const videoUrl = $(this).data('video');
+    const imageUrl = $(this).data('image');
+    let content = '';
+
+    if (videoUrl) {
+      content = `<iframe src="${videoUrl}" class="w-full h-full rounded-[12px]" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      content = `<img src="${imageUrl}" class="w-full h-full object-cover rounded-[12px]" alt="">`;
+    }
+
+    $('#modalContent').html(content);
+    $('#videoModal').fadeIn(200).css('display', 'flex');
+  });
+
+  // Close Modal when clicking ✕ or background
+  $('#closeModal, #videoModal').on('click', function (e) {
+    if (e.target.id === 'videoModal' || e.target.id === 'closeModal') {
+      $('#videoModal').fadeOut(200, function () {
+        $('#modalContent').html('');
+      });
+    }
+  });
+});
 
 
 

@@ -7,7 +7,7 @@
 
 <body>
 
-   
+  
     {{$template_name:=.template_name}}
 
     <section
@@ -26,6 +26,7 @@
             <form action="/signup " method="POST"
                 id="templatesignup">
                 <input type="hidden" id="adminuserid" value="{{.userid}}">
+                 <input type="hidden" name="csrf" value="{{.csrf}}">
                 <div class="max-w-[394px] mx-auto">
                     <h1
                         class="text-[36px] font-semibold leading-none text-[#1D1D1F] text-center mb-[16px] max-sm:text-[24px] max-[1300px]:mb-[8px] max-[1300px]:text-[32px] max-[1300px]:leading-none ">

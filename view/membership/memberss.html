@@ -1,0 +1,666 @@
+{{template "header" .}}
+{{template "head" .}}
+
+{{$Translate := .translate}}
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Memberships.Membershiphead}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+
+                    {{$Translate.Memberships.Membershipheaddesc}}</p>
+
+            </div>
+        </div>
+
+        <a id="AddnewMember" data-bs-toggle="modal" data-bs-target="#modalId2"
+            class="cursor-pointer text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+            <span class="hidden max-sm:block text-lg leading-none ">+</span> <span
+                class="max-sm:hidden"> {{$Translate.Memberships.Member.CreateMember}}</span></a>
+
+
+        <!-- <a href="" id="addmember" data-bs-toggle="modal" data-bs-target="#modalId2"
+    class="text-[14px] max-sm:w-[32px] max-sm:min-w-[32px] max-sm:p-[7px] font-normal leading-tight text-center py-[7px] px-[16px] h-[32px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+    <span class="hidden max-sm:block text-lg leading-none ">+</span> <span class="max-sm:hidden">Create Membership Level</span></a> -->
+
+
+    </header>
+
+    <section class="pb-[60px]">
+        <div class="flex  items-center !px-4 border-b border-[#EDEDED] overflow-auto whitespace-nowrap scrollbar-thin">
+            <a href="/admin/membership/"
+                class="py-[11px] px-[12px] relative  border-b-2 border-b-black text-sm font-normal text-bold-[#262626] no-underline flex items-center">{{$Translate.Memberships.Membershipmember}}</a>
+            <a href="/admin/membershipgroup"
+                class="py-[11px] px-[12px] relative  border-b-2  border-transparent text-sm font-normal text-[#717171] no-underline flex items-center">{{$Translate.Memberships.Membershipgroup}}
+               </a>
+            <a href="/admin/membershiplevel"
+                class="py-[11px] px-[12px] relative  border-b-2  border-transparent text-sm font-normal text-[#717171] no-underline flex items-center">{{$Translate.Memberships.Membershiplevel}}
+                </a>
+            <a href="/admin/subscription"
+                class="py-[11px] px-[12px] relative  border-b-2  border-transparent text-sm font-normal text-[#717171] no-underline flex items-center">{{$Translate.Memberships.Membershipsubscription}}</a>
+            <a href="/admin/order"
+                class="py-[11px] px-[12px] relative  border-b-2  border-transparent text-sm font-normal text-[#717171] no-underline flex items-center">{{$Translate.Memberships.Membershiporders}}</a>
+
+            <div class="ml-auto flex items-center space-x-[6px] ">
+
+                <div
+                    class=" {{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}  ">
+                    <a href="javascript:void(0);"
+                        class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                        <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                        <img src="/public/img/search-icon-active.svg" alt="search"
+                            class="searchopen hidden  group-hover:block ">
+                    </a>
+                    <form action="/admin/membership/" method="get" class="filterform " autocomplete="off">
+
+                        <input type="text" placeholder="{{$Translate.Memberships.Member.Searchplacehoder}}"
+                            value="{{.Filters}}" name="keyword" id="searchmembershiplevel"
+                            class="Searchmembership shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                        {{if eq .Searchtrue true}}
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        {{else}}
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                            <img src="/public/img/close.svg" alt="close">
+                        </div>
+                        {{end}}
+                    </form>
+                </div>
+
+
+                <form action="/admin/membership/" method="get" class="filterform " autocomplete="off">
+                    <div class="dropdown filter-dropDown static">
+
+                        <a href="javascript:void(0);"
+                            class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                            <img src="/public/img/filter.svg" alt="filter"
+                                class="block group-hover:hidden group-focus:hidden">
+                            <img src="/public/img/filter-active.svg" alt="filter-active"
+                                class="hidden group-hover:block group-focus:block">
+                        </a>
+                        <div
+                            class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                            <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[16px]">
+                                <h3
+                                    class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center gap-[4px]">
+                                    <img src="/public/img/filter-black.svg" alt="filter" class="block">
+                                    {{$Translate.Memberships.Member.Selectfilters}}
+                                </h3>
+
+                            </div>
+
+
+                            <!-- <div class="block mb-[12px]">
+                        <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">Member
+                            Group
+                        </p>
+                        <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                            <a class="flex items-center justify-between bg-[#ffffff] border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                                href="javascript:void(0);" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside">
+                                <span class="text-[11px] font-normal leading-[13.75px] text-[#D6D6D6]">
+                                    Select Group
+                                </span>
+                                <span>
+                                    <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                                aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                        href="javascript:void(0)">Group 1</a></li>
+                                <li><a class="dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                        href="javascript:void(0)">Group 2</a></li>
+                                <li><a class="dropdown-item text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                        href="javascript:void(0)">Group 3</a></li>
+                            </ul>
+
+
+                        </div>
+                    </div> -->
+
+                            <div class="block mb-[12px]">
+                                <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">{{$Translate.Memberships.Member.Level}}</p>
+                                <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                                    <a class="flex items-center justify-between bg-[#ffffff] border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                                        href="javascript:void(0);" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="outside">
+                                        <span class=" text-[11px] font-normal leading-[13.75px] text-[#D6D6D6]"
+                                            id="filterlevelspan">
+                                            {{if .Filter.Level}}
+                                            {{.Filter.Level}}
+                                            {{else}}
+                                            Select Level
+                                            {{end}}
+                                        </span>
+                                        <span>
+                                            <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                                        </span>
+                                    </a>
+                                    <input type="hidden" name="filter-level" id="filter-level">
+                                    <ul class="filterleveldropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                                        aria-labelledby="dropdownMenuButton1">
+                                        {{range .Membershiplevellist}}
+                                        {{if eq .IsActive 1}}
+                                        <li class="filterlevel" data-value="{{.SubscriptionName}}">
+                                            <a class="dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                                                href="javascript:void(0)">{{.SubscriptionName}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
+                                    </ul>
+
+
+                                </div>
+                            </div>
+
+                            <div class="block mb-[12px]">
+                                <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                    {{$Translate.Memberships.Member.Createdon}}
+                                </p>
+                                <div class="flter-option">
+
+                                    <input type="date" name="startdate" value=" {{.Filter.FromDate}}"
+                                        class=" bg-[#ffffff] border border-[#EDEDED] p-2 rounded-[4px] h-[32px] border-none text-[10px] font-normal leading-[12.5px] w-full outline-none min-w-[158px] placeholder:text-[#D6D6D6] block ">
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div
+                                class="flex align-items-center gap-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                                <a href="/admin/membership/"
+                                    class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">{{$Translate.Memberships.Member.Clear}}</a>
+                                <button type="submit"
+                                    class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                                    {{$Translate.Memberships.Member.Applyfilter}}
+                                </button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="px-[16px] py-[8px] border-b border-[#EDEDED] flex justify-between items-center">
+            <p class="text-[#717171] text-xs font-normal mb-0"><span class="text-bold-black">{{.Count}} </span>
+                {{if gt .Count 1}}
+                {{$Translate.Memberships.Member.Recordsavailable}}
+                {{else}}
+                {{$Translate.Memberships.Member.Recordavailable}}
+                {{end}}
+            </p>
+            <!-- <a href="" class="text-[12px] font-normal text-[#717171] leading-[15px] hover:underline">Clear
+            Filter</a> -->
+        </div>
+        <div class="overflow-x-auto overflow-unset scrollbar-thin">
+            <table class="w-full">
+                <tr>
+                    <th class="px-[16px] py-[12px] pr-0 w-[30px] border-b border-[#EDEDED]">
+                        <div class="chk-group chk-group-label flex justify-center">
+                            <input type="checkbox" id="Check" class="hidden peer">
+                            <label for="Check"
+                                class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                        </div>
+                    </th>
+                    <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        <p class="text-[#222222] text-sm font-normal mb-0"> {{$Translate.Memberships.Member.Id}}</p>
+                    </th>
+                    <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        <p class="text-[#222222] text-sm font-normal mb-0"> {{$Translate.Memberships.Member.Name}}</p>
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.Memberships.Member.Email}}
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.Memberships.Member.Level}}
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.Memberships.Member.Subscription}}
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.Memberships.Member.Startdate}}
+                    </th>
+                    <th class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                        {{$Translate.Memberships.Member.Enddate}}
+                    </th>
+                    <th
+                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                        {{$Translate.Memberships.Member.Status}}
+                    </th>
+                    <th
+                        class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                        {{$Translate.Memberships.Member.Action}}
+                    </th>
+                </tr>
+                {{if .MemberList}}
+                {{range .MemberList}}
+                <tr>
+
+                    <td class="px-[16px] py-[12px] pr-0 border-b border-[#EDEDED] align-middle">
+                        <div class="chk-group chk-group-label flex justify-center">
+                            <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
+                                class="selectcheckbox hidden peer">
+                            <label for="Check{{.Id}}"
+                                class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                        </div>
+                    </td>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
+                        <div class="flex gap-[8px] items-center justify-start">
+                            <p class="text-[#262626] font-normal text-xs mb-0">{{.Uuid}}</p>
+                        </div>
+                    </td>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle">
+                        <div class="flex gap-[8px] items-center justify-start">
+                            <p class="text-[#262626] font-normal text-xs mb-0">{{.FirstName}} {{.LastName}}</p>
+                        </div>
+                    </td>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                        {{.Email}}
+                    </td>
+                    <td class="px-[16px]  py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                        {{if .SubscriptionName}}{{.SubscriptionName}}{{else}}--{{end}}
+                    </td>
+                    <td class="px-[16px]  py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                        {{if .InitialPayment}}{{.InitialPayment}}{{else}}--{{end}}
+                    </td>
+                    <td class="px-[16px]  py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                        {{if .DateString}}{{.DateString}}{{else}}--{{end}}
+                    </td>
+                    <td class="px-[16px]  py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                        {{if .DateStringend}}{{.DateStringend}}{{else}}--{{end}}
+                    </td>
+                    <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                        <label for="toggleTwo{{.Id}}"
+                            class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                            <div class="relative">
+                                <input type="checkbox" value="{{.IsActive}}" id="toggleTwo{{.Id}}" data-id="{{.Id}}"
+                                    class=" peer sr-only" onclick="MembershipStatus('{{.Id}}')" {{if eq .IsActive
+                                    1}}checked{{end}} />
+                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                <div
+                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td
+                        class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                        <div class="btn-group position-static">
+                            <div class="btn-group language-group position-static">
+                                <a href="javascript:void(0);" type="button"
+                                    class="group items-center place-items-center gap-[5px] grid [&.show]:border [&.show]:border-[#ECECEC] [&.show]:border-solid rounded-[4px] w-[24px] h-[24px]"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="/public/img/action-btn-active.svg" alt="dropdown" />
+                                </a>
+
+                                <ul
+                                    class="bg-[#FFF] shadow-[0px_4px_8px_0px_#00000026] p-[8px] border-0 rounded-[12px] min-w-[132px] dropdown-menu dropdown-menu-end">
+
+                                    <li class="mb-[2px] last-of-type:mb-[0]">
+                                        <a data-id="{{.Id}}" id="EditmembershipMember"
+                                            class="cursor-pointer items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item"><img
+                                                src="/public/img/edit.svg" /> {{$Translate.Edit}}</a>
+                                    </li>
+                                    <li class="mb-[2px] last-of-type:mb-[0]">
+                                        <a data-id="{{.Id}}" id="DeleteMembershipMember" class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[#A01910]
+                                            text-[14px] leading-[20px] dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal" href="#"> <img
+                                                src="/public/img/delete-drop.svg">{{$Translate.Delete}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {{end}}
+                {{else}}
+                <tr>
+                    <td colspan="10">
+                        <div class="flex items-center flex-col justify-center max-w-[966px] m-[60px_auto] p-[0_16px]">
+                            <div class="mb-[24px] max-sm:mb-[16px]">
+                                <img src="/public/img/Member.svg" alt="nodata">
+                            </div>
+                            <h2
+                                class="text-[24px] font-semibold leading-[30px] text-[#262626] mb-[16px] text-center max-sm:mb-[8px]  max-sm:leading-normal max-sm:text-[20px]">
+                                {{$Translate.Memberships.Member.Memberemptytitle}}</h2>
+                            <p
+                                class="text-[16px] font-light leading-6 text-[#717171]  text-center   max-sm:leading-normal">
+                                {{$Translate.Memberships.Member.Memberemptydesc}}</p>
+                            <a data-bs-toggle="modal" data-bs-target="#modalId2" id="AddnewMembers"
+                                class="cursor-pointer h-8 px-[16px] rounded-[4px] flex items-center justify-center text-sm font-normal underline whitespace-nowrap">
+                                {{$Translate.Memberships.Member.CreateMember}} </a>
+                        </div>
+
+                    </td>
+                </tr>
+                {{end}}
+            </table>
+        </div>
+
+
+        <!--pagination-->
+        <div
+            class="@container space-x-[16px] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+            <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+                {{if gt .Count .Limit}}
+
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                        class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                        <img src="/public/img/pg-prev.svg" alt="previous">
+                        <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                    </a>
+                </li>
+                {{if gt .CurrentPage 3}}
+                {{$keyword := .filter.Keyword}}
+                <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        1 </a> </li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                        2 </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TwoBelow}} </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.PreviousPage}} </a> </li>
+                {{end}}
+
+                <li> <a href=""
+                        class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+                        {{.CurrentPage}} </a> </li>
+
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+@[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.NextPage}} </a> </li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TwoAfter}} </a> </li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        ...</a> </li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+             @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                        {{.Pagination.TotalPages}}</a> </li> {{end}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                        class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                        <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                            alt="next">
+                    </a>
+                </li>
+                {{end}}
+            </ul>
+            <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+                {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+            </p>
+        </div>
+
+
+
+        <!--Add member-->
+
+        <div class="modal fade right" id="modalId2" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content b-0 rounded-none">
+                    <div class="px-6 py-1.5 border-b border-[#EDEDED] flex justify-between items-center">
+                        <h5 class="mb-0 text-bold-black font-medium text-base" id="modalTitleId">
+                            {{$Translate.Memberships.Member.CreateMember}}
+                        </h5>
+                        <div class="flex gap-3">
+                            <a href="#" data-bs-dismiss="modal"
+                                class="h-8 flex items-center justify-center pa-x-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline cancelbtn">{{$Translate.Memberships.Member.Cancel}}</a>
+                            <a id="membershipcreatemember" href="#"
+                                class="h-8 flex items-center justify-center pa-x-3 text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded no-underline">{{$Translate.Memberships.Member.Save}}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="overflow-auto scrollbar-thin">
+                        <form action="{{.endpoint}}" id="membershipform" name="createmember"
+                            enctype="multipart/form-data" method="post">
+
+                            <input type="hidden" name="csrf" value="{{.csrf}}">
+                            <input type="text" name="Update_memberid" id="Update_memberid" class="hidden">
+
+
+                            <div class="p-6 flex flex-col gap-[16px]">
+
+                                <div class="flex justify-between items-center">
+                                    <!-- <h3 class="text-[#262626] text-base font-normal mb-0">Basic Info</h3> -->
+                                    <div class="flex gap-[16px] items-center justify-end w-full">
+                                        <div class="flex flex-col gap-[6px]">
+                                            <h3 class="text-[#152027] text-sm font-normal mb-0">{{$Translate.Memberships.Member.Active}}</h3>
+                                        </div>
+                                        <label for="mem_activestatus"
+                                            class=" flex items-center  justify-center cursor-pointer select-none text-dark dark:text-white">
+                                            <div class="relative">
+                                                <input type="checkbox" name="mem_activestatus" id="mem_activestatus"
+                                                    class="peer sr-only" />
+                                                <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                                                </div>
+                                                <div
+                                                    class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <div class="flex items-start flex-col  gap-[16px]">
+                                    <!-- <div class="min-w-[120px] h-[120px] rounded-full bg-[#F9F9FA] relative group">
+                         <div
+                             class="absolute top-0 left-0 w-full h-full opacity-[0] group-hover:opacity-100 flex justify-center items-center">
+                             <img src="/public/img/cam-logo.svg" />
+                         </div>
+                         <input type="file"
+                             class="opacity-0 w-full h-full absolute top-0 left-0 cursor-pointer" />
+
+                     </div> -->
+                                    <div class="grid-cols-1 w-full grid gap-[16px]">
+                                        <div class="flex flex-col gap-1.5">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Firstname}}
+                                                <span class="text-red-600">*</span>
+
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Firstnameinfo}}
+                                                    </p>
+                                                </div>
+
+                                            </label>
+                                            <input type="text" id="mem_name" name="mem_name"
+                                                placeholder="{{$Translate.Memberships.Member.Firstnameplacceholder}}"
+                                                class=" [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full" />
+                                        </div>
+                                        <div class="flex flex-col gap-1.5">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Lastname}}
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Lastnameinfo}}</p>
+                                                </div>
+                                            </label>
+                                            <input type="text" id="mem_lname" name="mem_lname"
+                                                placeholder="{{$Translate.Memberships.Member.Lastnameplacceholder}}"
+                                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full" />
+                                        </div>
+                                        <div class="flex flex-col gap-1.5">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Email}}
+                                                <span class="text-red-600">*</span>
+
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Emailinfo}}
+                                                    </p>
+                                                </div>
+                                            </label>
+                                            <input type="text" id="mem_email" name="mem_email"
+                                                placeholder="{{$Translate.Memberships.Member.Emailplacceholder}}"
+                                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full" />
+                                        </div>
+                                        <div class="flex flex-col gap-1.5">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Mobile}}
+                                                <span class="text-red-600">*</span>
+
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Mobileinfo}}</p>
+                                                </div>
+                                            </label>
+                                            <input type="text" id="mem_mobile" name="mem_mobile" maxlength="15"
+                                                placeholder="{{$Translate.Memberships.Member.Mobileplacehoder}}"
+                                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full mobileInput" />
+                                            <p class="text-xs text-[#F26674] mt-1 hidden lengthErr">You have reached a
+                                                maximum limit
+                                                of 15
+                                                digits
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col gap-1.5">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Username}}
+                                                <span class="text-red-600">*</span>
+
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Usernameinfo}}</p>
+                                                </div>
+                                            </label>
+                                            <input type="text" id="mem_usrname" name="mem_usrname"
+                                                placeholder="{{$Translate.Memberships.Member.Usernameplacehoder}}"
+                                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full" />
+                                        </div>
+                                        <div class="flex flex-col gap-1.5 ">
+                                            <label
+                                                class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">{{$Translate.Memberships.Member.Password}}
+                                                <span class="text-red-600">*</span>
+
+                                                <div class="cursor-pointer group flex items-center ">
+                                                    <img src="/public/img/inputdesc.svg" alt="">
+                                                    <p
+                                                        class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                        {{$Translate.Memberships.Member.Passwordinfo}}</p>
+                                                </div>
+                                            </label>
+                                            <div class="relative">
+                                                <input type="password" id="mem_pass" name="mem_pass" autocomplete="off"
+                                                    placeholder="{{$Translate.Memberships.Member.Passwordplacehoder}}"
+                                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full" />
+                                                <button class="eye absolute right-[8px] top-[10px] bg-transparent"
+                                                    id="eye" type="button">
+                                                    <img id="img" src="/public/img/eye-closed.svg" alt="ddsfsf" />
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        <!-- <div class="flex flex-col gap-1.5">
+                             <label
+                             class="mt-[16px] text-[#262626] text-sm font-normal mb-0 flex items-center gap-[6px] relative w-fit">Member Group
+                             <div class="cursor-pointer group flex items-center ">
+                                 <img src="/public/img/inputdesc.svg" alt="">
+                                 <p
+                                     class="ml-[6px] hidden group-hover:block absolute left-full w-[208px] mb-[6px] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                     Choose the LLM model for your agent</p>
+                             </div>
+                         </label>
+                             <div class="dropdown w-full">
+
+                                 <a href="javascript:void(0);"
+                                     class="border border-[#EDEDED] rounded-[4px] p-[10px_12px] text-[12px] font-light leading-[15px] text-[#525252] flex items-center space-x-[16px] justify-between"
+                                     data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                     <span></span>
+                                     <img src="/public/img/dropdown-arrow-grey.svg" alt="arrow">
+                                 </a>
+                                 <div
+                                     class="dropdown-menu  dropdown-menu-end w-full p-[8px] rounded-[4px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+
+                                     <a href=""
+                                         class="text-[12px] font-light leading-[15px] text-[#525252]">option</a>
+                                 </div>
+
+                             </div>
+                         </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </section>
+
+
+
+</section>
+
+
+{{template "footer" .}}
+<script src="/public/js/membership/membershipmember.js"></script>
+{{template "footerclose" .}}

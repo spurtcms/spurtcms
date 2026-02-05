@@ -111,7 +111,7 @@
                         {{end}}
                         {{end}}
                         {{end}}
-
+                        
                         {{range .Menu.TblModule}}
                         {{range .SubModule}}
                         {{if eq .ModuleName "Languages"}}
@@ -138,6 +138,38 @@
                         {{end}}
                         {{end}}
                         {{end}}
+
+                        <!-- {{range .Menu.TblModule}}
+                        {{range .SubModule}}
+                        {{if eq .ModuleName "Data"}}
+                        {{if .Routes}}
+                        <li><a href="/admin/settings/data/"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#000000] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                id="dataPageLink"><img src="/public/img/data-setting.svg" alt="data"> <span
+                                    class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Data}}</span></a>
+                        </li>
+                        {{end}}
+                        {{end}}
+
+                        {{end}}
+                        {{end}}
+
+                        {{range .Menu.TblModule}}
+                        {{range .SubModule}}
+                        {{if eq .ModuleName "AI Settings"}}
+                        {{if .Routes}}
+
+                        <li><a href="/admin/settings/aisettings/"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#000000] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu"
+                                id="aiPageLink"><img src="/public/img/open-ai-back.svg" alt="data"> <span
+                                    class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Setting.Aimodule}}</span>
+                            </a>
+                        </li>
+
+                        {{end}}
+                        {{end}}
+                        {{end}}
+                        {{end}} -->
 
                     </ul>
                 </div>

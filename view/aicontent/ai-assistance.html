@@ -1,0 +1,704 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$Blogfields := ""}}
+
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
+    <header
+        class="max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Contentwriting}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.Aiwritingheading}}
+                </p>
+            </div>
+        </div>
+        <div class="flex space-x-[12px] items-center">
+            <form action="/aiassistance/" method="get" class="filterform" autocomplete="off">
+                <div
+                    class="transitionSearch header-rht w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .filter}}w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm space-x-[12px] overflow-hidden{{end}}">
+                    <a href="javascript:void(0);"
+                        class="{{if .filter}}pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                        <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                        <img src="/public/img/search-icon-active.svg" alt="search"
+                            class="hidden group-hover:block searchopen">
+                    </a>
+                    <input type="text" placeholder="{{$Translate.Csearch}}" id="searchkey" name="keyword"
+                        value="{{if .filter}}{{.filter}}{{end}}"
+                        class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0  absolute right-0 w-[calc(100%-36px)] h-full block">
+                    {{if .filter}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+                </div>
+            </form>
+        </div>
+    </header>
+    {{$ChanSlug:=.ChanSlug}}
+    <div class="p-[16px]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[16px]">
+            <input type="hidden" id="articlecount" value="{{.articlecount}}">
+            {{if .myapps}}
+            {{range .myapps}}
+            {{$Blogfields = .CustomFields}}
+            <a href="#" id="aiarticle"
+                class="border border-[#ECECEC] p-[12px] flex flex-col space-y-[12px] rounded-md hover-card relative">
+                <div class="absolute top-3 right-3 hidden">
+                    <img src="/public/img/startgray.svg" alt="...">
+                </div>
+                <div class="w-[30px] h-[30px] rounded-full bg-[#EDFFFA] flex justify-center items-center">
+                    <img src="/public/img/text-img.svg" />
+                </div>
+                <div class="flex flex-col space-y-[8px] mb-[28px]">
+                    <h3 class="text-[#262626] text-sm mb-0 font-normal">{{.Title}}</h3>
+                    <p class="text-[#717171] font-normal text-xs mb-0 ">{{.Description}}
+                    </p>
+                </div>
+                <div class="flex space-x-[6px] items-center mt-auto hidden">
+                    <img src="/public/img/aicopy.svg" />
+                    <p class="text-[#AAAAAA] text-xs mb-0 font-normal">Bulk generation enabled</p>
+                </div>
+            </a>
+            {{end}}
+            {{ else if eq .Searchtrue true}}
+            <div class="max-w-[328px] mx-auto text-center m-[120px_16px] col-[1/-1]">
+                <div class="text-center w-fit mx-auto">
+                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                </div>
+                <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                    {{$Translate.Filtersearch}}</h2>
+                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                    {{$Translate.Filterkeyword}} </p>
+
+            </div>
+            {{end}}
+            <!-- <a href="#" data-bs-toggle="offcanvas" data-bs-target="#Id4" aria-controls="Id4"
+            class="border border-[#ECECEC] p-[12px] flex flex-col gap-[12px] rounded-md hover-card relative">
+            <div class="absolute top-3 right-3">
+                <img src="/public/img/startgray.svg" alt="...">
+            </div>
+            <div class="w-[30px] h-[30px] rounded-full bg-[#EDFFFA] flex justify-center items-center">
+                <img src="/public/img/text-img.svg" />
+            </div>
+            <div class="flex flex-col gap-[8px] mb-[28px]">
+                <h3 class="text-[#262626] text-sm mb-0 font-normal">Ecommerce article</h3>
+                <p class="text-[#717171] font-normal text-xs mb-0 ">Generate a ecommerce article from product name based on word count and tone</p>
+            </div>
+        </a>  -->
+        </div>
+    </div>
+</section>
+
+
+<!-- Ai Content modal -->
+
+<div class="offcanvas offcanvas-end w-[580px] border-0" data-bs-backdrop="static" tabindex="-1" id="Id2"
+    aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[16px] max-[1300px]:pl-[16px] px-[24px]
+        py-[6px] border-b border-[#ECECEC] max-sm:p-[6px_16px]">
+        <div class="modalHeader-left">
+            <h1 class="text-base font-medium leading-5 text-[#262626]">Create custom content</h1>
+        </div>
+        <div class="flex space-x-[12px] items-center">
+            <a data-bs-dismiss="offcanvas" aria-label="Close" id="close-textbtn"
+                class="nextclosebtn h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline cursor-pointer">cancel</a>
+            <a id="nextbtn"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[#000000] hover:bg-[#2D2D2D] rounded-[3px] no-underline cursor-pointer">Next</a>
+            <a id="closeimgbtn" class="nextclosebtn hidden py-2" data-bs-toggle="offcanvas" aria-label="Close"> <img
+                    class="opacity-55 hover:opacity-100 h-4 flex items-center justify-center text-sm font-normal"
+                    src="/public/img/close-drop.svg" alt=""></a>
+        </div>
+
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+    </div>
+    <div class="p-[24px] flex flex-col space-y-[16px] max-sm:p-[16px]">
+        <div class="flex flex-col space-y-[4px]">
+            <p class="flex text-[#262626] text-sm font-normal space-x-[4px]">
+                <img src="/public/img/thunder.svg" alt="thunder">
+                <span>Create using</span>
+            </p>
+            <div class="dropdown open">
+                <a href="#"
+                    class="  rounded-[4px]    p-[12px] h-9 bg-white border border-[#EDEDED] no-underline  w-full flex justify-between items-center "
+                    id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span id="contentdropdown" class="text-bold text-sm font-normal">Topic</span>
+                    <img src="/public/img/drop-down-img.svg" />
+                </a>
+                <div class="dropdown-menu min-w-full w-full border-0 focus:bg-transparent drop-shadow-4 max-h-52 overflow-auto"
+                    aria-labelledby="triggerId">
+                    <a class="selecttypecontent dropdown-item h-8 lg items-center flex cursor-pointer ">
+                        <p class="text-bold-black text-xs font-normal mb-0">Keyword</p>
+                    </a>
+                    <a class="selecttypecontent dropdown-item h-8 lg items-center flex cursor-pointer">
+                        <p class="text-bold-black text-xs font-normal mb-0">Topic</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="topicinput" class="hidden flex flex-col space-y-[4px]">
+            <p class="text-[#152027] text-sm font-normal mb-0">Topic</p>
+            <input type="text" id="inputtopic"
+                class="inputtopic rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+        </div>
+
+        <div id="keywordinput" class="hidden flex flex-col space-y-[4px]">
+            <p id="generatetitle" class="text-[#152027] text-sm font-normal mb-0">Keyword</p>
+            <div class="relative">
+                <input type="text" id="inputkeyword"
+                    class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED] border-r-0 pe-[152px] bg-white   text-bold-black text-sm font-normal w-full" />
+                <button id="generatetopics"
+                    class="absolute top-0 right-0 h-full flex items-center justify-center px-3 text-sm font-normal text-white  bg-[#000000] hover:bg-[#2D2D2D] rounded-s-none rounded"
+                    value="E.g. content marketing, ai content creation, social media engagement">Generate
+                    topics</button>
+                <p id="generatetopics-error" class="text-xs text-[#F26674] mt-2 hidden absolute">Keyword can not be
+                    empty</p>
+            </div>
+        </div>
+
+        <div id="topic-listdev">
+            <h3 class=" text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[12px]">Choose a Topic</h3>
+            <ul id="dynamoictopic" class="flex flex-col space-y-[12px]">
+
+            </ul>
+        </div>
+
+    </div>
+</div>
+<div class="offcanvas offcanvas-end w-[580px]" data-bs-backdrop="static" tabindex="-1" id="Id4"
+    aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
+    py-[8px] border-b border-[#ECECEC]">
+        <div class="modalHeader-left">
+            <h1 class="text-base font-medium leading-5 text-[#262626]">Create custom content</h1>
+        </div>
+        <div class="flex space-y-[12px] items-center">
+            <a data-bs-dismiss="offcanvas" aria-label="Close" id="close-textbtn"
+                class="nextclosebtn h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline cursor-pointer">cancel</a>
+            <a id="ecnextbtn"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[#000000] hover:bg-[#2D2D2D] rounded-[3px] no-underline cursor-pointer">Next</a>
+        </div>
+
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+    </div>
+    <div class="p-[24px] flex flex-col space-y-[16px]">
+
+        <div id="topicinput" class="flex flex-col space-y-[4px]">
+            <p class="text-[#152027] text-sm font-normal mb-0">Product Name</p>
+            <input type="text" id="inputproduct"
+                class="inputproduct rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- Ai Generate Content modal -->
+
+<div class="offcanvas offcanvas-end w-[580px]" data-bs-backdrop="static" tabindex="-1" id="Id3"
+    aria-labelledby="staticBackdropLabel">
+    <form id="generateArticleForm" action="/admin/aiassistance/generatearticle" method="POST">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
+        py-[8px] border-b border-[#ECECEC]">
+            <div class="modalHeader-left">
+                <h1 class="text-base font-medium leading-5 text-[#262626]">Blog Brief & Outline</h1>
+            </div>
+            <div class="flex space-x-[12px] items-center">
+                <a href="#" data-bs-dismiss="offcanvas" aria-label="Close" id="generatearticle-closebtn"
+                    class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline cursor-pointer">cancel</a>
+                <a href="#" id="generatearticle"
+                    class="h-8 flex items-center space-x-[5px] justify-center px-3 text-sm font-normal text-white  bg-[#000000] hover:bg-[#2D2D2D] rounded-[3px] no-underline cursor-pointer">
+                    <div class="spinner-border text-light w-[15px] h-[15px] text-[10px] hidden" role="status"
+                        id="articleloader">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span> Generate
+                        article</span>
+                </a>
+
+            </div>
+        </div>
+        <div class="p-[24px] overflow-auto h-full">
+            <div class="flex flex-col space-y-[16px] mb-[24px]">
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Title</p>
+                    <input type="text" id="titletopic" name="titletopic"
+                        class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Keywords</p>
+                    <input type="hidden" name="keywords" id="keywords">
+                    <div class="border border-[#EDEDED] p-[12px] flex flex-wrap space-x-[8px] dynamickey">
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Article length (words)</p>
+                    <input type="number" id="articlelength" name="articlelength"
+                        class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+                    <div id="articlelength-error" class="text-red-500 text-xs mt-1"></div>
+
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="flex text-[#262626] text-sm font-normal space-x-[4px]">
+                        Tone / Brand voice
+                    </p>
+                    <div class="dropdown open">
+                        <a href="#"
+                            class="  rounded-[4px]    p-[12px] h-9 bg-white border border-[#EDEDED] no-underline  w-full flex justify-between items-center"
+                            id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="selectedtone" class="text-bold text-sm font-normal">Friendly</span>
+                            <input type="hidden" id="tonetype" name="tonetype" value="Friendly">
+                            <img src="/public/img/drop-down-img.svg" />
+                        </a>
+                        <div class="dropdown-menu min-w-full w-full  border-0 focus:bg-transparent drop-shadow-4 max-h-52 overflow-auto"
+                            aria-labelledby="triggerId">
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Cautionary</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Compassionnate</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Convincing</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Critical</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Dramatic</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Earnest</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Friendly</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Funny</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Grumpy</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humble</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humorous</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Informative</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="flex flex-col gap-[16px]">
+                <div class="flex gap-[8px] items-center">
+                    <h6 class="text-[#262626] text-sm font-normal mb-0">Saving to project:</h6>
+                    <div class="flex items-center gap-[4px] text-[#717171] text-sm font-normal">
+                        Default project
+                        <img src="/public/img/defaultpen.svg" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-[12px]">
+                    <div class="flex justify-between items-center gap-[10px]">
+                        <h6 class="text-sm font-normal text-[#262626] mb-0">Blog Outline</h6>
+                        <a href="#" class="flex items-center gap-[4px] text-xs font-normal text-[#10A37F] no-underline">
+                            <img src="/public/img/retry.svg" />
+                            Regenerate blog outline
+                        </a>
+                    </div>
+                    <div class="flex flex-col gap-[22px]">
+                        <div class="flex items-center ps-[50px] pe-[48px] relative gap-[8px] group">
+                            <img src="/public/img/h2.svg" />
+                            <input type="text"
+                                class="h-[36px] px-[12px] text-[#717171] text-sm font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                value="Introduction" />
+                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                <img src="/public/img/remove-filed.svg" alt="">
+                            </a>
+                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                <a href="#" class="invisible group-hover:visible">
+                                    <img src="/public/img/add-gray.svg" alt="">
+                                </a>
+                                <a href="#" class="invisible group-hover:visible">
+                                    <img src="/public/img/drag-gray.svg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="accordion ai-content-field border-0" id="accordionExample">
+                            <div class="accordion-item border-0">
+                                <h2 class="accordion-header" id="headingOne">
+
+                                    <button class="accordion-button border-0 relative shadow-none p-0 bg-transparent"
+                                           >
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="h-full flex items-center absolute right-6"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                aria-expanded="true" aria-controls="collapseOne">
+                                                <img src="/public/img/accord-arrow-2.svg" alt="" class="">
+                                            </a>
+                                            <a href="#" class="invisible group-hover:visible absolute right-0">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body pb-0 flex flex-col gap-[20px] pr-0">
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h3.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h3.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="accordion ai-content-field border-0" id="accordionExample2">
+                            <div class="accordion-item border-0">
+                                <h2 class="accordion-header" id="headingOne2">
+
+                                    <button class="accordion-button border-0 relative shadow-none p-0 bg-transparent"
+                                           >
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="h-full flex items-center absolute right-6"
+                                                data-bs-toggle="collapse" data-bs-target="#collapsetwo"
+                                                aria-expanded="true" aria-controls="collapsetwo">
+                                                <img src="/public/img/accord-arrow-2.svg" alt="" class="">
+                                            </a>
+                                            <a href="#" class="invisible group-hover:visible absolute right-0">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+
+                                    </button>
+                                </h2>
+                                <div id="collapsetwo" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingOne2" data-bs-parent="#accordionExample2">
+                                    <div class="accordion-body pb-0 flex flex-col gap-[20px] pr-0">
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                        <div
+                                            class="flex items-center w-full ps-[50px] pe-[48px] relative gap-[8px] group">
+                                            <img src="/public/img/h2.svg" />
+                                            <input type="text"
+                                                class="h-[36px] px-[12px] text-[#717171] text-sm  font-normal w-full group-hover:border border-0 border-[#EDEDED] rounded"
+                                                value="Introduction" />
+
+                                            <div class="flex gap-[4px] items-center absolute top-0 -left-1 h-full">
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/add-gray.svg" alt="">
+                                                </a>
+                                                <a href="#" class="invisible group-hover:visible">
+                                                    <img src="/public/img/drag-gray.svg" alt="">
+                                                </a>
+                                            </div>
+                                            <a href="#" class="invisible group-hover:visible absolute right-6">
+                                                <img src="/public/img/remove-filed.svg" alt="">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </form>
+</div>
+
+<div class="offcanvas offcanvas-end w-[580px]" data-bs-backdrop="static" tabindex="-1" id="Id5"
+    aria-labelledby="staticBackdropLabel">
+    <form id="generateArticleForm" action="/aiassistance/generate-ecom-article" method="POST">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <div class="offcanvas-header flex justify-between items-center max-[1300px]:pr-[12px] max-[1300px]:pl-[12px] px-[24px]
+        py-[8px] border-b border-[#ECECEC]">
+            <div class="modalHeader-left">
+                <h1 class="text-base font-medium leading-5 text-[#262626]">Blog Brief & Outline</h1>
+            </div>
+            <div class="flex space-x-[4px] items-center">
+                <a data-bs-dismiss="offcanvas" aria-label="Close" id="generatearticle-closebtn"
+                    class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[3px] no-underline cursor-pointer">cancel</a>
+                <a id="generatearticle"
+                    class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white bg-[#000000] hover:bg-[#2D2D2D] rounded-[3px] no-underline cursor-pointer">Generate
+                    article</a>
+
+            </div>
+        </div>
+        <div class="p-[24px] overflow-auto h-full  ">
+            <div class="flex flex-col space-y-[16px] mb-[24px]">
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Product Name</p>
+                    <input type="text" id="titleproduct" name="titleproduct"
+                        class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Key Feature</p>
+                    <input type="hidden" name="keyfeature" id="keyfeature">
+                    <div class="border border-[#EDEDED] p-[12px] flex flex-wrap space-x-[8px] dynamickeyfeature">
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="text-[#152027] text-sm font-normal mb-0">Description length (words)</p>
+                    <input type="number" id="descriptionlength" name="descriptionlength"
+                        class="rounded-[4px] p-[12px] h-9 border border-[#EDEDED] bg-white   text-bold-black text-sm font-normal w-full" />
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="flex text-[#262626] text-sm font-normal space-x-[4px]">
+                        Tone / Brand voice
+                    </p>
+                    <div class="dropdown open">
+                        <a href="#"
+                            class="  rounded-[4px]    p-[12px] h-9 bg-white border border-[#EDEDED] no-underline  w-full flex justify-between items-center"
+                            id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="ecselectedtone" class="text-bold text-sm font-normal">Friendly</span>
+                            <input type="hidden" id="ectonetype" name="ectonetype" value="Friendly">
+                            <img src="/public/img/drop-down-img.svg" />
+                        </a>
+                        <div class="dropdown-menu min-w-full w-full  border-0 focus:bg-transparent drop-shadow-4 max-h-52 overflow-auto"
+                            aria-labelledby="triggerId">
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Cautionary</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Compassionnate</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Convincing</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Critical</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Dramatic</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Earnest</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Friendly</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Funny</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Grumpy</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humble</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humorous</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Informative</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-[4px]">
+                    <p class="flex text-[#262626] text-sm font-normal space-x-[4px]">
+                        Target Audience
+                    </p>
+                    <div class="dropdown open">
+                        <a href="#"
+                            class="  rounded-[4px]    p-[12px] h-9 bg-white border border-[#EDEDED] no-underline  w-full flex justify-between items-center"
+                            id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="ecselectedtone" class="text-bold text-sm font-normal">Friendly</span>
+                            <input type="hidden" id="ectonetype" name="ectonetype" value="Friendly">
+                            <img src="/public/img/drop-down-img.svg" />
+                        </a>
+                        <div class="dropdown-menu min-w-full w-full  border-0 focus:bg-transparent drop-shadow-4 max-h-52 overflow-auto"
+                            aria-labelledby="triggerId">
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Cautionary</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Compassionnate</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Convincing</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Critical</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Dramatic</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Earnest</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Friendly</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Funny</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Grumpy</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humble</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Humorous</p>
+                            </a>
+                            <a class="tonetype  dropdown-item h-8 lg cursor-pointer items-center flex ">
+                                <p class="text-bold-black cursor-pointer text-xs font-normal mb-0">Informative</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{{template "footer" .}}
+<script src="/public/js/aiassistant/aiassistant.js"></script>
+
+{{template "footerclose" .}}

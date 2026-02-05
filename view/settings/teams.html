@@ -530,9 +530,9 @@
                                                 class="{{if or (and (ne $.loggedinuser 1) (eq .Name `Admin`)) (and (ne $.loggedinuser 1) (eq .Name `admin`))}}pointer-events-none opacity-50{{end}}
                                                 chk-group chk-group-label dropdown-items dropdown-item text-[14px] font-normal leading-[1] text-[#262626] dropdown-filter-roless cursor-pointer"
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button> -->
-                                            
+
                                                 <button
-                                                class="{{if  (eq .Name `Admin`)}}pointer-events-none opacity-50{{end}}
+                                                class="{{if  and (ne $.loggedinuser 1) (eq .CreatedBy 1)}}pointer-events-none opacity-50{{end}}
                                                 chk-group chk-group-label dropdown-items dropdown-item text-[14px] font-normal leading-[1] text-[#262626] dropdown-filter-roless cursor-pointer"
                                                 type="button" data-id="{{.Id}}">{{.Name}}</button>
 

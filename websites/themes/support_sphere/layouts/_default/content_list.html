@@ -33,8 +33,17 @@
                             Search results</h2>
                         <ul class="max-h-[300px] overflow-auto">
                             {{$Entries:=.Entries}}
-                            {{if .menulist}}
-                            {{range .menulist}}
+                            {{ $HeaderId := "" }}
+
+                {{ range .menulist }}
+                {{ if eq .Name "Headers" }}
+                {{ $HeaderId = .Id }}
+                {{ end }}
+                {{ end }}
+
+                {{ if $HeaderId }}
+                {{ range .menulist }}
+                {{ if eq .ParentId $HeaderId }}
                             <li>
                                 <div
                                     class="hover:bg-[#F9F9F9] p-[15px_30px_30px_30px] grid grid-cols-[1fr_auto] gap-4 border-t border-[#1B1B201F] items-center">
@@ -45,7 +54,7 @@
                                         {{range $entry := $Entries}}
                                         {{if eq $TypeId $entry.ChannelId}}
                                         <a class="searchtag" data-value="{{ $entry.Title }}"
-                                            href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} ">
+                                            href="{{.Slug}}">
                                             <div class="grid grid-cols-[1fr_auto] gap-4 mb-4">
                                                 <p
                                                     class="text-[14px] font-medium leading-[24px] text-left text-[#1B1B20] max-w-[500px] display[-webkit-box] -webkit-box-orient[vertical] overflow-hidden  line-clamp-1">
@@ -77,6 +86,7 @@
                             </li>
                             {{end}}
                             {{end}}
+                            {{end}}
                         </ul>
                     </div>
                 </div>
@@ -86,8 +96,17 @@
                     by Channels</h2>
                 <div class="grid grid-cols-3 gap-[30px] max-[1300px]:gap-[16px] max-md:grid-cols-2 max-sm:grid-cols-1">
                     {{$Entries:=.Entries}}
-                    {{if .menulist}}
-                    {{range .menulist}}
+              {{ $HeaderId := "" }}
+
+                {{ range .menulist }}
+                {{ if eq .Name "Headers" }}
+                {{ $HeaderId = .Id }}
+                {{ end }}
+                {{ end }}
+
+                {{ if $HeaderId }}
+                {{ range .menulist }}
+                {{ if eq .ParentId $HeaderId }}
                     <div
                         class="bg-[#F5F5F5] p-[25px_30px] rounded-[12px] border border-transparent flex flex-col min-h-[460px] max-[1300px]:p-[16px] ">
                         <h3 class="text-[22px] font-semibold text-[#1B1B20] mb-[38px] max-[992px]:text-[18px] ">
@@ -100,7 +119,7 @@
                             <a class="text-gray-500 text-base font-medium group hover:text-blue-600"
                                 href="javascript:void(0);">
                                 <li>
-                                    <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
+                                    <a href="{{.Slug}}"
                                         class="flex items-center justify-between text-[16px] font-semibold leading-[24px] text-[#1B1B20] p-[16px_30px] border-b border-[#1B1B201A] group"><span
                                             class="group-hover:text-[#2D47DA] max-[992px]:text-[14px] line-clamp-1">
                                             {{ $entry.Title }}
@@ -113,6 +132,7 @@
                             </a>
                             {{end}}
                             {{end}}
+                           
                         </ul>
                         <a href="{{.UrlPath}} "
                             class="border border-[#1B1B2026] bg-[#FFFFFF] p-[10px_20px] rounded-[8px] inline-flex items-center text-[14px] font-semibold leading-[17.07px] text-[#1B1B20] h-[37px] mt-auto w-fit group hover:bg-[#1B1B20] hover:text-[#FFFFFF]  ">
@@ -127,50 +147,13 @@
                     </div>
                     {{end}}
                     {{end}}
+                     {{end}}
                 </div>
             </div>
         </div>
         {{end}}
 
-        {{if .entries}}
-        <section class="max-w-[1068px] mx-auto py-[70px] px-[16px] max-[1300px]:p-[16px]">
-            <!-- Breadcrumb -->
-            <ul class="flex items-center mb-[26px]">
-                <li class="text-[14px] font-semibold leading-[17.07px] mr-[8px] text-[#1B1B20]">
-                    <a href="/ "
-                        class="text-[#2D47DA] hover:underline">Home</a>
-                </li>
-                <li class="mr-[8px] text-[#1B1B20] mt-[2px]">
-                    <img src="/support_sphere/assets/images/search-resultArrow.svg" alt="arrow" class="h-[16px]" />
-                </li>
-                <li class="text-[14px] font-semibold leading-[17.07px] text-[#1B1B20]">
-                    {{.ChannelName}}
-                </li>
-            </ul>
-
-            <!-- Page Title -->
-            <h1 class="text-[30px] font-bold leading-[36.57px] text-[#1B1B20] mb-[20px]">
-                Help Center
-            </h1>
-
-            <!-- Help Center List -->
-            <ul>
-                {{if .entries}}
-                {{range .entries}}
-                <li>
-                    <a href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} "
-                        class="grid grid-cols-[1fr_auto] items-center py-[20px] border-b border-[#231F201F] group">
-                        <p class="text-base font-medium text-[#4F4F53] group-hover:text-[#2D47DA]">
-                            {{.Title}}
-                        </p>
-                        <img src="/support_sphere/assets/images/search-resultArrow.svg" class="w-[24px]" alt="arrow" />
-                    </a>
-                </li>
-                {{end}}
-                {{end}}
-            </ul>
-        </section>
-        {{end}}
+       
     </div>
 
 

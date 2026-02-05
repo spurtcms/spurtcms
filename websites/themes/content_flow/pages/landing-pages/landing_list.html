@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+
+    {{- block "templateheader" .}}{{end}}
+
+<section>
+
+   <div class="lg:p-[56px] p-[20px_16px] relative before:w-full before:h-[500px] before:blur-2xl befor:bg-center before:bg-cover before:block before:absolute before:left-0 before:top-0 overflow-hidden">
+   {{if .pagelist}}
+  {{range .pagelist}}
+  <a href="{{.Slug}}">{{.Name}}</a>
+  {{end}}
+  {{end}}
+    </div>
+
+</section>
+</main>
+
+
+</body>
+
+
+</html>

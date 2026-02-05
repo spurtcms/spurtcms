@@ -6,7 +6,7 @@
         aria-label="Global">
         {{if .settingsdetail.SiteLogoPath}}
         <a href="/ "><img class="w-[100px] h-[50px]"
-                src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+                src="/{{.settingsdetail.SiteLogoPath}}"></a>
         {{else}}
         <a href="/ "><img
                 src="/websites/public/img/Spurt-logo.svg"></a>
@@ -24,13 +24,23 @@
                 
                 <a class=" text-sm font-normal leading-4 {{if not $ChannelName}}  text-[#2facd6]{{else}}text-black {{end}}"
                     href="/ ">Home</a>
-                {{if .menulist}}
-                {{range .menulist}}
-              
-                <a class="text-sm font-normal leading-4  {{if eq $ChannelName .Name}} text-[#2facd6]{{else}}text-black {{end}}"
+                        {{ $HeaderId := "" }}
+
+                {{ range .menulist }}
+                {{ if eq .Name "Headers" }}
+                {{ $HeaderId = .Id }}
+                {{ end }}
+                {{ end }}
+
+                {{ if $HeaderId }}
+                {{ range .menulist }}
+                {{ if eq .ParentId $HeaderId }}
+                  <a class="text-sm font-normal leading-4  {{if eq $ChannelName .Name}} text-[#2facd6]{{else}}text-black {{end}}"
                     href="{{.UrlPath}} ">{{.Name}}</a>
-                {{end}}
-                {{end}}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+
             </div>
         </div>
     </nav>

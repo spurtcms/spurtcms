@@ -108,6 +108,15 @@
                     </button>
                     {{end}}
 
+                    {{if eq .TypeName "Editor"}}
+                    <button
+                        class="field-types dropdown-item flex items-center h-9 space-x-[14px] text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                        href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                        <img src="/public/img/text-area.svg" alt="">
+                        <span>Text Area</span>
+                    </button>
+                    {{end}}
+
                     {{end}}
                     <!-- <h3 class="text-bold-black font-normal text-base may-4">
                         Relational Fields
@@ -180,6 +189,12 @@
         <input type="hidden" id="chnid" value="{{$EntryId}}">
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <input type="hidden" id="savetype">
+           <input type="hidden" id="jsDateLayout" value="{{.jsDateLayout}}">
+        <a href="javascript:void(0);" id="aiarticle"
+            class="flex place-items-center hover:bg-[#F5F5F5] max-sm:p-[8px] px-[12px] py-[7px] border border-[#E7E7E7] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-base text-center leading-tight tracking-tight whitespace-nowrap">
+            <img src="/public/img/AI-green.svg" alt="...">
+            <span class="max-sm:hidden  ml-[8px] text-[14px] inline-block">Generate with AI</span>
+        </a>
 
         <a href="javascript:void(0);" style="display: none;"
             class="bg-[#F5F5F5] flex max-sm:p-[8px] items-center rounded-full text-[#717171] text-xs font-normal leading-4 tracking-tight py-[4px] px-[12px] space-x-[4px] max-sm:h-[32px] hover:text-[#717171] border-[1px] border-solid border-[#F5F5F5] hover:border-[#717171] ">
@@ -257,27 +272,31 @@
         <div
             class="group-hover/item:bg-[#F5F9FF] top-[48px] right-0 z-[999] fixed bg-white shadow-[-2px_0px_6px_0px_#0000000D] min-w-[378px]  min-[1440px]:min-w-[478px] min-[1440px]:max-w-[478px] max-sm:min-w-full max-w-[378px] h-[100vh] transform transition-all duration-300 ease-in-out editor-tabs">
 
-            <a href="javascript:void(0);"
-                class="tabclose absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+            <a href="javascript:void(0);" data-tag=""
+                class="tabclose absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group z-[-1]"><img
                     src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
-                 <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
+                <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
 
 
 
             <div class="editor-tab-lnk bg-white">
                 <ul class="nav nav-tabs border-b border-[#EDEDED] px-[16px]">
-                        <li><a href="#seo" data-bs-toggle="tab"
+                    <li><a href="#seo" data-bs-toggle="tab"
                             class="tab-togg4 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171] active">SEO</a>
                     <li><a href="#addCategories"
                             class="tab-togg3R text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#262626] hover:text-[#262626]   "
                             data-bs-toggle="tab">Data</a></li>
                     <!-- <li><a href="#addData" data-bs-toggle="tab"
                             class=" tab-togg2R text-[14px] font-normal leading-[17.5px] pt-[21px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171] ">Meta Data</a></li> -->
-                
+
                     </li>
                     <li><a href="#addData" data-bs-toggle="tab"
                             class="tab-togg55 text-[12px] font-normal leading-[17.5px] pt-[12px] pb-[12px] px-[12px] relative grid place-items-center text-[#717171] hover:text-[#717171]">
-                           Additional</a>
+                            Additional</a>
+                    </li>
+                    <li><a href="#content-protection" data-bs-toggle="tab"
+                            class="tab-togg7 relative place-items-center grid px-[12px] pt-[12px] pb-[12px] font-normal text-[#717171] text-[14px] hover:text-[#262626] leading-[17.5px] whitespace-nowrap">Content
+                            Protection</a>
                     </li>
                 </ul>
 
@@ -361,6 +380,58 @@
                     </div>
                     {{end}}
 
+                    <!-- TechStack Logos -->
+<!-- 
+                    <div class="py-[16px] mb-[24px] max-[1300px]:mb-[16px] last-of-type:mb-0">
+                     
+                        <div class="dropdown" data-bs-auto-close="false">
+                            <a href="javascript:void(0);"
+                                class="rounded-[4px] p-3 h-[36px] bg-white border border-[#EDEDED] text-bold-black text-sm font-normal w-full flex items-center bg-[url('../img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                <div class=" flex-grow">
+                                    <p
+                                        class="text-[14px] font-normal leading-[17.5px] tracking-[0.005em] text-[#262626] line-clamp-1">
+                                        Techstack Logos
+                                    </p>
+                                </div>
+                                <span class="grid place-items-center  h-full  ">
+                                    <img src="/public/img/dropDown-arrow.svg" alt="arrow">
+                                </span>
+                            </a>
+
+
+                            <ul
+                                class="logodropdownmenu dropdown-menu w-full border-0 rounded-[8px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                <li class="px-[12px] py-[8px]">
+                                    <input type="text" placeholder="Search for Techstack Logos"
+                                        class="text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]">
+                                </li>
+
+
+                                <input type="hidden" value="{{.Entries.TechStackLogos}}" id="checkedlogos">
+                                {{range $i, $item := .logoArray}}
+                                <li class="px-[12px] py-[8px]">
+                                    <div class="chk-group chk-group-label">
+                                        <input type="checkbox" value="{{$item}}" id="Check{{$item}}"
+                                            class="techstack hidden peer">
+                                        <label for="Check{{$item}}"
+                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                    before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                            <p class="text-[#252525] text-[13px] font-light mb-0">{{$item}}
+                                            </p>
+                                        </label>
+                                    </div>
+                                </li>
+                                {{end}}
+                            </ul>
+                        </div>
+                        <label class="text-[#f26674] font-normal text-xs error manerr" id="techstackerr"
+                            style="display: none;">*Please
+                            Select Techstack Logos</label>
+                    </div> -->
+
+
 
                     <!-- <div class="mb-[24px]">
                         <h3 class="mb-[16px] font-normal text-[#262626] text-sm leading-[17.5px] mt-2">Require
@@ -380,13 +451,13 @@
                         </div>
                     </div> -->
 
-                  
+
 
                 </div>
                 <!-- tab2 -->
 
                 <div class=" scrollbar-thin p-[16px] tab-pane fade" id="addData">
-                     <div class="mb-[16px] ">
+                    <div class="mb-[16px] ">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Author</label>
                         <div class="dropdown p-0 border-0 bg-transparent">
                             <a class="bg-[#FFFFFF] h-[34px] flex items-center [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
@@ -426,18 +497,20 @@
                     <div class="mb-[16px]">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Created
                             On</label>
-                        <input type="text" placeholder="Select Date" value="{{.currentdate}}" data-date="d M Y h:i K"
+                  
+                      <input type="text" placeholder="{{.currentdate}}" value=""
                             name="cdtime" id="cdtime"
                             class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
+ 
+                        </div>
 
                     <div class="mb-[16px]">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Published
                             On</label>
-                        <input type="text" placeholder="Select Date" value="{{.currentdate}}" id="publishtime"
+                     <input type="text" placeholder="{{.currentdate}}" value="" id="publishtime"
                             name="publishtime"
                             class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                    </div>
+                        </div>
 
                     <div class="mb-[16px]">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Reading
@@ -446,7 +519,7 @@
                             class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
                     </div>
 
-                   
+
                     <div class="mb-[16px]">
                         <label class="text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]">Tags</label>
                         <input type="text" placeholder="Enter Tag" name="tagname" id="tagname"
@@ -531,20 +604,114 @@
                         </label>
                         <input type="text" placeholder="Enter Slug" id="metaslug"
                             class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                        <label id="mslug-input-error" class="error hidden text-xs text-[#F26674]" for="fl-input">*Only
+                            letters, numbers, - and _ are allowed</label>
+
                     </div>
 
 
+                </div>
+
+                <!--tabcontent4-->
+                <div class="p-[30px_16px] h-[calc(100vh_-_143px)] overflow-auto fade scrollbar-thin tab-pane"
+                    id="content-protection">
+                    <input type="hidden" name="accesstype" id="accesstype-value" value="">
+
+                    <div class="mb-[30px] last-of-type:mb-0 flex items-center gap-[16px]">
+                        <label
+                            class="mb-[6px] font-normal text-[#252525] text-[12px] leading-[15px] w-full max-w-[171px]">Who
+                            can access the content</label>
+                        <div class="dropdown w-full">
+
+                            <a href="javascript:void(0);"
+                                class="border border-solid border-[#F0F0F0] rounded-[4px] p-[10px_10px_10px_16px] text-[12px] font-light leading-[15px] text-[#252525] flex items-center space-x-[4px] justify-between h-[32px] w-full"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                <span class="accesstypespan line-clamp-1 leading-normal">Select Access Type</span>
+                                <img src="/public/img/listing-arow.svg" alt="arrow">
+                            </a>
+                            <div
+                                class="dropdown-menu  dropdown-menu-end w-full p-[0px_0px] rounded-[8px] 
+                                            shadow-[0px_4px_10px_0px_#0000001F] min-w-full border-[1px] border-solid border-[#E4E5E7] p-[4px]">
+
+                                <a href="javascript:void(0);" data-text="Logged in user" data-value="logged_in_user"
+                                    class="access_type text-[13px] font-normal leading-[16px] block hover:bg-[#F4F4F4] text-[#252525] p-[7px_10px] rounded mb-[4px] ">Logged
+                                    in user</a>
+                                <a href="javascript:void(0);" data-text="Every one" data-value="every_one"
+                                    class="access_type text-[13px] font-normal leading-[16px] block hover:bg-[#F4F4F4] text-[#252525] p-[7px_10px] rounded ">Every
+                                    one</a>
+                                <a href="javascript:void(0);" data-text="No direct access" data-value="no_direct_access"
+                                    class="access_type text-[13px] font-normal leading-[16px] block hover:bg-[#F4F4F4] text-[#252525] p-[7px_10px] rounded ">No
+                                    direct access</a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mb-[30px] last-of-type:mb-0 flex items-center gap-[16px]">
+                        <label
+                            class="mb-[6px] font-normal text-[#252525] text-[12px] leading-[15px] w-full max-w-[171px]">Select
+                            Membership Plan that can access content</label>
+                        <div class="dropdown w-full">
+
+                            <a href="javascript:void(0);"
+                                class="border border-solid border-[#F0F0F0] rounded-[4px] p-[10px_10px_10px_16px] text-[12px] font-light leading-[15px] text-[#252525] flex items-center space-x-[4px] justify-between h-[32px] w-full"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                <span class="membershipspan line-clamp-1 leading-normal">Select plan</span>
+                                <img src="/public/img/listing-arow.svg" alt="arrow">
+                            </a>
+                            <div
+                                class="dropdown-menu  dropdown-menu-end w-full p-[0px_0px] rounded-[8px] 
+                                            shadow-[0px_4px_10px_0px_#0000001F] min-w-full border-[1px] border-solid border-[#E4E5E7] p-[4px]">
+                                <input type="hidden" name="membership_levelid" id="membership_levelid" value="">
+                                {{if .Membershiplevellist}}
+                                {{range .Membershiplevellist}}
+                                <a href="javascript:void(0);" data-id="{{.Id}}"
+                                    class="membership_level text-[13px] font-normal leading-[16px] block hover:bg-[#F4F4F4] text-[#252525] p-[7px_10px] rounded mb-[4px] ">{{.SubscriptionName}}</a>
+
+                                {{end}}
+                                {{end}}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="Role-list-div" class="mb-[30px] last-of-type:mb-0 flex items-start gap-[16px]">
+                        <label
+                            class="mb-[6px] font-normal text-[#252525] text-[12px] leading-[15px] w-full max-w-[171px]">Select
+                            User Role that can Access the Content</label>
+                        <div class="flex flex-col items-center gap-[12px] flex-wrap">
+
+
+                            {{if .roleslist}}
+                            {{range .roleslist}}
+                            <div class="flex items-center space-x-[8px] py-0 cursor-pointer w-full">
+                                <input type="radio" name="role" id="userrole{{.Id}}"
+                                    class="user_role w-[16px] min-w-[16px] h-[16px] accent-[#10A37F] cursor-pointer"
+                                    data-id="{{.Id}}">
+                                <label for="userrole{{.Id}}"
+                                    class="whitespace-nowrap block font-light text-[#252525] leading-[18px] text-[14px] hover:text-[#262626] cursor-pointer">
+                                    {{.Name}}
+                                </label>
+                            </div>
+                            {{end}}
+                            {{end}}
+                            <input type="hidden" name="user_role" id="user_roleid" value="">
+                            <p id="user_role_error" style="color:red; font-size:13px; margin-top:4px;"></p>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
             <!-- category tab -->
             <div class=" editor-tabs2 max-sm:min-w-full fixed top-[0px]  right-0 bg-white h-[100vh] transform   transition-all group-hover/item:bg-transparent duration-300 ease-in-out min-w-[346px] 
-                 z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
+                z-[-1]  border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
-                <a href="javascript:void(0);"
-                    class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
+                <a href="javascript:void(0);" data-tag=".editor-tabs2"
+                    class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group  "><img
                         src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
-                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
+                    <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div class="bg-[#FCFCFC] p-[10px_16px] flex space-x-[2px] items-center justify-between">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">SELECT CATEGORIES</h2>
                     <a href="javascript:void(0);"
@@ -593,10 +760,10 @@
             <!-- additional field tab -->
             <div class=" editor-tabs3  max-sm:min-w-full fixed top-[0px]  right-0 bg-white h-[100vh] transform   transition-all group-hover/item:bg-transparent duration-300 ease-in-out min-w-[346px] 
 z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
-                <a href="javascript:void(0);"
+                <a href="javascript:void(0);" data-tag=".editor-tabs3"
                     class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
                         src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
-                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
+                    <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div
                     class="bg-white p-[10px_16px] flex  justify-between space-x-[6px] items-center shadow-[0px_1px_9px_0px_#0000001A] ">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">Additional Data</h2>
@@ -629,7 +796,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                 <a href="javascript:void(0);"
                     class="absolute left-[-42px] top-[9px] rotate-180 tab-togg w-[34px] h-[34px] grid place-items-center group "><img
                         src="/public/img/Group 17666.svg" alt="close" class="block group-hover:hidden">
-                     <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
+                    <img src="/public/img/Group 176661.svg" alt="" class="hidden group-hover:block "></a>
                 <div class="bg-[#FCFCFC] p-[10px_16px] flex space-x-[2px] items-center justify-between">
                     <h2 class="text-[#262626] text-sm font-normal leading-[17.5px]">SELECT MEMBERSHIP</h2>
                     <a href="javascript:void(0);"
@@ -712,7 +879,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                             </h5>
                             <p class="font-light text-[#717171] text-[10px] text-center">{{.FormDescription}}</p>
                         </div>
-                  
+
 
                         {{end}}
 
@@ -875,7 +1042,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                                 </div>
 
 
-                         
+
                             </div>
                         </div>
 
@@ -1573,6 +1740,185 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
                                 <li>
                                     <a class="chk-group chk-group-label dropdown-item  lg items-center flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px] bg-white "
                                         data-id="{{.Id}}" title="{{.ChannelName}}" data-slug="{{.SlugName}}">
+                                        <input type="checkbox" id="block_Check{{.Id}}" data-id="{{.Id}}"
+                                            data-cname="{{.ChannelName}}" title="{{.ChannelName}}"
+                                            data-slug="{{.SlugName}}" class="hidden peer select-channel">
+                                        <label for="block_Check{{.Id}}"
+                                            class="checkbox-field h-[14px] relative cursor-pointer flex gap-[6px] w-full  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                    before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">{{.ChannelName}}</label>
+                                    </a>
+                                </li>
+
+                                {{end}}
+
+
+                                <div class="noData-foundWrapper hidden flex flex-col justify-content-center items-center h-full"
+                                    id="nodatafounddesign">
+
+                                    <div class="empty-folder">
+                                        <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        {{$Translate.Oopsnodata}}</h1>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="flex flex-col items-start mb-[16px] last:mb-0 w-full">
+
+                            <label for=""
+                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] w-full">{{$Translate.Uploadcoverimage}}
+                                <span class="text-red-600">*</span>
+                                <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 max-w-[275px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Blocks.Uploadcoverimagelable}}</p>
+                                </div>
+                            </label>
+                            <div
+                                class="rounded-[4px] relative p-[12px] h-[160px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full flex items-center flex-col gap-[12px] justify-center">
+
+                                <label for="categoryimage"
+                                    class="flex cursor-pointer h-[32px]  bg-[#EBEBEB] rounded-[3px] text-[#717171] text-[14px] font-normal leading-[16.41px] p-[8px_16px]"
+                                    id="browse">{{$Translate.Browse}}</label>
+                                <p class="text-[#717171] text-[14px] font-normal  leading-[16.41px] " id="uploadLine">
+                                    {{$Translate.Uploadneworchoose}}</p>
+                                <p class="text-[#717171] text-[12px] font-normal  leading-[16.41px] " id="uploadFormat">
+                                    {{$Translate.ChooseFormats}}
+                                </p>
+                                <input type="file" name="categoryimage" id="categoryimage"
+                                    accept="image/png, image/jpeg,image/jpg,image/svg"
+                                    class="hidden [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs">
+                                <label id="categoryimage-error" class="error" for="categoryimage"
+                                    style="display: none;">Please
+                                    enter a value with a valid mimetype.</label>
+                                <label id="myfile-error" class="error hidden " for="myfile"
+                                    style="font-size: 0.75rem; font-weight: 400; color: rgb(242, 102, 116); position: absolute; top: 100%;left: 0;">*
+                                    Please
+                                    choose images with jpg /jpeg /png formats only</label>
+                                <img alt="" data-id="9" id="prof-crop" name="prof_pic" class="hidden">
+                                <div id="catdel-img" class=" hover:opacity-100 opacity-[0] ">
+                                    <button class="absolute right-[0.75rem] top-[0.75rem] bg-transparent border-0 z-[3]"
+                                        type="button"><img src="/public/img/deletehovericon.svg" alt=""></button>
+                                    <div class="bg-[#1E292C76] m-auto h-full w-full absolute left-0 top-0 z-[1]"></div>
+                                </div>
+
+                                <img src="" name="blockcoverimg" id="blockcoverimg"
+                                    class="w-full h-full object-contain">
+                            </div>
+                            <input type="hidden" value="" name="coverimg"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                                id="coverimg">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="p-[16px] fade modal" id="createModalNew" tabindex="-1" aria-hidden="true">
+    <form name="formblock" id="blockform">
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <input type="hidden" name="blockid" id="blockid" value="">
+        <input type="hidden" name="isactive" id="isactive" value="">
+        <div
+            class="mx-auto max-1289:my-[0] rounded-[4px] w-full max-w-[1224px] max-1289:h-full modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
+
+            <div class="modal-content">
+                <div class="p-[18px_24px] max-sm:p-[12px_16px] modal-header">
+                    <h1 class="font-normal text-[#262626] text-base leading-[20px]">Create Block</h1>
+                    <div class="flex items-center gap-3 ms-auto">
+                        <a href="#basicBlockNew" data-bs-toggle="modal" type="button" id="Closeblockmodal"
+                            class="bg-[#FAFAFA] hover:bg-[#e0e0e0] p-[8px_12px] rounded-[3px] w-fit h-8 font-sm text-[#222222] text-sm text-left leading-none"
+                            data-bs-dismiss="modal" aria-label="Close">Cancel</a>
+                        <a id="createblock"
+                            class="cursor-pointer bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] p-[8px_12px] rounded-[3px] w-fit h-8 font-sm text-white text-sm text-left leading-none">Save</a>
+                        <a href="javascript:void(0);" style="display: none;" id="updateblock" data-bs-dismiss="modal"
+                            aria-label="Close"
+                            class="h-8 rounded-[3px] p-[8px_12px] text-sm font-sm leading-none text-left w-fit bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] text-white">{{$Translate.Update}}</a>
+
+                    </div>
+                </div>
+                <div class="max-1289:p-[16px] px-[16px] py-[48px] h-calc-modal modal-body">
+                    <div class="flex flex-col items-start mx-auto w-full max-w-[600px]">
+                        <div class="flex flex-col items-start mb-[16px] last:mb-0 w-full">
+                            <label for="title"
+                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px] w-full">{{$Translate.ContentAccessControl.Title}}
+                                <span class="text-red-600">*</span>
+                                <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class="z-999 hidden group-hover:block absolute left-0 max-w-[275px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Blocks.Titlelable}}</p>
+                                </div>
+                            </label>
+                            <input type="text" name="title" id="title"
+                                placeholder="{{$Translate.Blocks.Titleplaceholder}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border border-[#EDEDED] outline-none h-[36px] block w-full">
+
+                        </div>
+                        <div class="flex flex-col items-start mb-[16px] last:mb-0 w-full">
+                            <label for="html"
+                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px] w-full">{{$Translate.Blocks.Blockhtml}}
+                                <span class="text-red-600">*</span>
+                                <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 max-w-[275px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Blocks.Blockhtmllable}}</p>
+                                </div>
+                            </label>
+                            <textarea name="html" id="html" placeholder="{{$Translate.Blocks.HtmlPlaceholder}}"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border border-[#EDEDED] outline-none max-[1300px]:h-[100px] h-[120px] block w-full resize-none scrollbar-none mb-[12px]"></textarea>
+
+                        </div>
+
+
+
+
+                        <div class="dropdown open input-group mb-2" id="memgrp">
+                            <label for=""
+                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px] w-full">{{$Translate.Channell.Selectchannel}}
+                                <span class="text-red-600">*</span>
+                                <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 max-w-[275px] w-fit mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Blocks.Selectchannellable}}</p>
+                                </div>
+                            </label>
+
+                            <a id="triggerId"
+                                class="rounded-[4px] p-[12px] h-9 border border-light-300 no-underline w-full flex justify-between items-center field text-[14px] cursor-pointer"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                data-bs-auto-close="outside">
+                                <span id="showgroup" class="text-bold-gray text-sm font-normal"> Choose Channel</span>
+                                <img src="/public/img/drop-down-img.svg" />
+
+                            </a>
+                            <input type="hidden" name="membergroupid" id="membergroupid" value="">
+                            <input type="hidden" name="channelids" id="channelids" value="">
+                            <input type="hidden" name="chennelname"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs"
+                                id="chennelname" value="">
+                            <div class=" dropdown-menu  min-w-full w-full border-0 focus:bg-transparent pt-0 drop-shadow-4 max-h-52 overflow-auto"
+                                aria-labelledby="triggerId" data-dropdown="down">
+
+                                {{range .channellist}}
+
+                                <li>
+                                    <a class="chk-group chk-group-label dropdown-item  lg items-center flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px] bg-white "
+                                        data-id="{{.Id}}" title="{{.ChannelName}}" data-slug="{{.SlugName}}">
                                         <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
                                             data-cname="{{.ChannelName}}" title="{{.ChannelName}}"
                                             data-slug="{{.SlugName}}" class="hidden peer select-channel">
@@ -1690,6 +2036,59 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
     </div>
 </div>
 
+{{range $_, $value := .Entries.TblChannelEntryField}}
+{{if eq $value.FieldTypeId 18}}
+
+<input type="hidden" id="{{$value.FieldId}}" value="{{$value.FieldValue}}" class="editorinput{{$value.FieldId}}">
+
+{{end}}
+{{end}}
+
+
+
+<div id="customModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5); z-index:1051;">
+
+    <div id="modalContent" style="position:absolute; top:50%; left:50%;
+                transform:translate(-50%, -50%);
+                width:960px; height:540px;
+                background:white; border-radius:10px;
+                display:flex; flex-direction:column;">
+
+        <!-- Header -->
+        <div style="padding:15px; display:flex; justify-content:space-between; align-items:center; background:#f1f1f1;">
+            <h3 style="margin:0;" id="customModalTitle">Change Log</h3>
+            <input type="hidden" id="customModalFields">
+            <div>
+                <button id="cancelBtn" class="closeModal"
+                    style="padding:8px 16px; margin-right:10px; border:1px solid #ccc; background:#eee; border-radius:5px; cursor:pointer;">
+                    Cancel
+                </button>
+
+                <button id="saveBtnLog"
+                    style="padding:8px 16px; border:0; color:white; border-radius:5px; cursor:pointer;"
+                    class="bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:20px; flex:1; overflow:auto;">
+
+            <div id="editor-container">
+                <spurt-editor-new id="spurtEditorNew"  block="{{.blocks}}" defaultblock="{{.defaultblocks}}" mode="{{.Mode}}" storagepath="{{.Storagepath}}"
+                    uploadurl="{{.uploadurl}}" content="" generated="{{.htmldata}}" save="" get-hlml=""
+                    page=""></spurt-editor-new>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
 {{template "footer" .}}
 
 <script src="/public/js/aiassistant/aiassistant.js"></script>
@@ -1698,6 +2097,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
 <script src="/public/js/channels/channel.js"></script>
 <script src="/public/js/app.js"></script>
+<script src="/public/js/addfield.js"></script>
 <script src="/public/js/block/block.js"> </script>
 <script src="/public/js/media/media.js"></script>
 
@@ -1753,17 +2153,31 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
 <script>
     $(document).ready(function () {
+
+
+
         $('.tab-togg').click(function () {
-           
+            var targetTab = $(this).data('tag');
+            var $target = $(targetTab);
+            var $others = $('.editor-tabs2, .editor-tabs3').not($target);
+
+
+            if ($target.hasClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px]')) {
+                $target.removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                    .addClass('translate-x-[378px] min-[1440px]:translate-x-[478px]');
+            } else {
+
+                $target.addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                    .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px]');
+                $others.removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                    .addClass('translate-x-[378px] min-[1440px]:translate-x-[478px]');
+            }
             $("#chn-list").removeClass("show")
             $('.editor-tabs').toggleClass('translate-x-[120%]');
             $('#editingArea').toggleClass(' w-full');
-            $('.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
-            $('.editor-tabs2').addClass('translate-x-[100%]');
+
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-            $('.editor-tabs2').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
-            $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
-            $('.editor-tabs3').addClass('translate-x-[100%]');
+
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
             $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
@@ -1777,13 +2191,22 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
     /*create entires right side tab2 open*/
     $(document).ready(function () {
         $('.tab-togg2').click(function () {
-            $('.editor-tabs2').toggleClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px] shadow-[-2px_0px_6px_0px_#0000000D] shadow-[-8px_0px_16px_0px_#0000000D]');
-            $('.editor-tabs2').toggleClass('translate-x-[100%]');
+            $('.tab-togg').addClass('addcategorybtn')
+            if ($('.editor-tabs2').hasClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px]')) {
+                $('.editor-tabs2')
+                    .removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] ')
+                    .addClass('translate-x-[378px] min-[1440px]:translate-x-[478px]');
+            } else {
+                $('.editor-tabs2')
+                    .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px]  shadow-[-8px_0px_16px_0px_#0000000D]')
+                    .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
+            }
+
+
             $('.editor-tabs').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-            // $('.editor-tabs2').toggleClass('shadow-[-8px_0px_16px_0px_#0000000D]');
-            //  $('.editor-tabs2').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-            // $('.tabclose').show()
+
             $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  min-[1440px]:translate-x-[-478px] max-lg:min-w-[378px]').addClass('translate-x-[100%] shadow-[-2px_0px_6px_0px_#0000000D] shadow-[-8px_0px_16px_0px_#0000000D]');
+
             $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]').addClass('translate-x-[100%]');
 
             if ($('.editor-tabs2').hasClass('translate-x-[100%]')) {
@@ -1795,12 +2218,22 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
         $('.tab-togg3').click(function () {
-            $('.editor-tabs3').toggleClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
-            $('.editor-tabs3').toggleClass('translate-x-[100%]');
+
+            if ($('.editor-tabs3').hasClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px]')) {
+                $('.editor-tabs3')
+                    .removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] ')
+                    .addClass('translate-x-[378px] min-[1440px]:translate-x-[478px]  ');
+            } else {
+                $('.editor-tabs3')
+                    .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                    .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
+            }
+            // $('.editor-tabs3').toggleClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            // $('.editor-tabs3').toggleClass('translate-x-[100%]');
             $('.editor-tabs').toggleClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3').toggleClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
             $('.editor-tabs2').removeClass('min-[1440px]:translate-x-[-478px]')
-             $('#availblecate').removeClass('bg-[#F5F5F5]')
+            $('#availblecate').removeClass('bg-[#F5F5F5]')
             $('.editor-tabs4').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]   shadow-[-8px_0px_16px_0px_#0000000D]').addClass('translate-x-[100%] ');
             $('.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px] shadow-[-2px_0px_6px_0px_#0000000D]  shadow-[-8px_0px_16px_0px_#0000000D]').addClass('translate-x-[100%] ');
 
@@ -1852,7 +2285,7 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
             $('.editor-tabs3').addClass('translate-x-[100%]');
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
-            $('#availblecate').trigger('click'); 
+            $('#availblecate').trigger('click');
             $('#availblecate').addClass('bg-[#F5F5F5]')
 
         });
@@ -1864,8 +2297,23 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 
         });
         $('.tab-togg55').click(function () {
-            $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
             $('.editor-tabs3,.editor-tabs2').addClass('translate-x-[100%]');
+
+            // $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            // $('.editor-tabs3,.editor-tabs2').addClass('translate-x-[100%]');
+            $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
+            $('.editor-tabs3,.editor-tabs2').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
+            $('.tab-togg3R').addClass('text-[#717171]')
+
+
+        });
+        $('.tab-togg7').click(function () {
+            $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            $('.editor-tabs3,.editor-tabs2').addClass('translate-x-[100%]');
+
+            // $('.editor-tabs3,.editor-tabs2').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+            // $('.editor-tabs3,.editor-tabs2').addClass('translate-x-[100%]');
             $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
             $('.editor-tabs3,.editor-tabs2').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
             $('.tab-togg3R').addClass('text-[#717171]')
@@ -1886,3 +2334,4 @@ z-[-1] border-e border-[#EDEDED] max-w-[378px] translate-x-[100%]">
 <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
 {{template "footerclose" .}}
+

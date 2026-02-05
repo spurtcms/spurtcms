@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @font-face {
     font-family: font-RecoletaBlack;
@@ -17,22 +17,56 @@ body {
     font-family: "Lexend", sans-serif !important;
 }
 
-.input-group label.error {
-  display: inline-flex;
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #F26674;
-  padding: 0.3125rem 0.5rem;
-  border-radius: 0.1875rem 0.1875rem 0 0 !important;
-  border-bottom: 0;
-  position: relative;
-  left: -1px;
-}
-
 
 .font-roboto {
     font-family: "Roboto", sans-serif;
 }
+
+.font-inter{
+    font-family: "Inter", sans-serif;
+}
+
+.font-fira{
+    font-family: "Fira Code", monospace;
+}
+
+.dark-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  padding: 0 14px;
+  background-color: #202732 !important;
+  cursor: pointer;
+  border: 1px solid #C1C9D7;
+  width: 100%;
+}
+
+.bordered-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #202732;
+  padding: 0 14px;
+  background-color: #ffffff;
+  cursor: pointer;
+  border: 1px solid #EEF0F4;
+  width: 100%;
+}
+
+/* Hover effect for .bordered-btn */
+.bordered-btn:hover {
+  background-color: #f9fafb; /* Tailwind's gray-50 */
+}
+
+
+/* @theme {
+  --font-inter: "Inter", sans-serif;
+  --font-fira: "Fira Code", monospace;
+} */
 
 a {
     transition: all 0.1s ease-in-out;
@@ -3348,15 +3382,16 @@ select:focus {
     opacity: 50%;
 }
 .sortable-placeholder {
-    background: #f0f0f0;
-    border: 2px dashed #bbb;
+    background: transparent;
+    /* border: 2px dashed #bbb; */
     margin: 8px 0;
     height: 48px; /* match your item height */
     border-radius: 8px;
 }
 
-.logScr {
-    display: inline-flex;
+.input-group label.error {
+    display: inline-flex
+;
     font-size: 0.75rem;
     font-weight: 400;
     color: #F26674;
@@ -3366,3 +3401,34 @@ select:focus {
     position: relative;
     left: -1px;
 }
+
+.small-loader {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin-right: 8px; /* spacing between loader and text */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-text {
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+  vertical-align: middle;
+}
+

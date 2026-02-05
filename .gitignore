@@ -1,0 +1,7 @@
+# Secret file
+
+storage/*
+logs
+.idea
+tailwindcss-linux-x64
+tailwindcss-v4

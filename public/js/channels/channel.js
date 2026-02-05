@@ -55,6 +55,39 @@ $(document).ready(async function () {
   $('[data-bs-toggle="tooltip"]').tooltip();
 })
 
+
+
+    // Generic route slug name check
+
+    jQuery.validator.addMethod("duplicaterouteslug", function (value) {
+
+      var isDuplicate = true;
+      $.ajax({
+          url: "/admin/checkduplicateroute",
+          type: "POST",
+          async: false,
+          data: {
+              "product_id": $('#channelid').val(),
+              "slug_name": $('#ChannelSlugName').val(),
+              "module_name": "Channel",
+              csrf: $("input[name='csrf']").val()
+          },
+          datatype: "json",
+          cache: false,
+          success: function (data) {
+              var result = data.trim();
+   
+              console.log(result, "resulttt")
+              if (result == 'true') {
+                  isDuplicate = false;
+              }
+          }
+        });
+ 
+        return isDuplicate
+    })
+ 
+
 // Create channel Next btn
 $(document).on('click', '#nextstep', function () {
   var currentindex = $("#chn-step").val()
@@ -79,6 +112,11 @@ $(document).on('click', '#nextstep', function () {
       })
       return result.trim() != "true"
     })
+
+
+
+
+
     $("form[name='channelform']").validate({   // channel name and deiscription validation
       rules: {
         channelname: {
@@ -87,22 +125,26 @@ $(document).on('click', '#nextstep', function () {
           duplicatetitle: true
 
         },
-        // description: {
-        //   required: true,
-        //   // maxlength: 250,
-        // }
+        ChannelSlugName: {
+          required: true,
+          space: true,
+          duplicaterouteslug:true
+          // maxlength: 250,
+        }
       },
       messages: {
         channelname: {
-          required: "*" + languagedata.Channell.channamevalid,
+          required: "* " + languagedata.Channell.channamevalid,
           space: "* " + languagedata.spacergx,
           duplicatetitle: "* Channel name already exits"
 
         },
-        // description: {
-        //   required: "*" + languagedata.Channell.chandescvalid,
-        //   // maxlength: "*" + languagedata.Permission.descriptionchat
-        // },
+        ChannelSlugName: {
+          required: "* Please enter the channel slug",  
+          space: "* " + languagedata.spacergx,
+          duplicaterouteslug: "* This slug name already exits"
+          // maxlength: "*" + languagedata.Permission.descriptionchat
+        },
       }
     });
 
@@ -236,9 +278,9 @@ $(document).on('click', '.duplicate-field', function () {
 // field string
 function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, timeformat, mandatoryfd, optval, id) {
   var div
-  if ( fieldname=="Duration In(mins)" || fieldname=="Short Description") {
+  if (fieldname == "Duration In(mins)" || fieldname == "Short Description") {
 
-     div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
+    div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
     <div class="flex items-center space-x-[8px]">
         <img src="`+ imgicon + `" class="field-icon" alt="text">
         <p class="text-bold-black text-sm font-normal mb-0 field-name" opt-val="`+ optval + `" dt-format="` + dformat + `" fl-mandatory="` + mandatoryfd + `" tm-format="` + timeformat + `" master-fieldid="` + masterfieldid + `" field-id="` + fieldid + `">` + fieldname + `</p>
@@ -259,10 +301,10 @@ function AddFieldString(masterfieldid, fieldid, fieldname, imgicon, dformat, tim
     </div>
 </div>`
 
-  }else{
+  } else {
 
 
-   div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
+    div = `<div class="border border-[#ECECEC] group-hover bg-white rounded-[4px] p-[16px] relative flex items-center sl-fields h-[56px] new-field` + orderindex + `" data-id="` + masterfieldid + `" data-orderindex="` + orderindex + `">
                             <div class="flex items-center space-x-[8px]">
                                 <img src="`+ imgicon + `" class="field-icon" alt="text">
                                 <p class="text-bold-black text-sm font-normal mb-0 field-name" opt-val="`+ optval + `" dt-format="` + dformat + `" fl-mandatory="` + mandatoryfd + `" tm-format="` + timeformat + `" master-fieldid="` + masterfieldid + `" field-id="` + fieldid + `">` + fieldname + `</p>
@@ -358,7 +400,7 @@ $(document).on('click', '.edit-field', function () {
 // set property field based on field type
 function FieldBasedProperties(id) {
 
-  console.log("checkidfdf",id)
+  console.log("checkidfdf", id)
 
   if (id == "2") {
 
@@ -454,6 +496,13 @@ function FieldBasedProperties(id) {
     $(".dt-field").hide()
     $(".ti-field").hide()
     $(".option-field").hide()
+  } else if (id == "18") {
+
+    $(".fl-name").text("Properties - Editor")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
   }
 }
 
@@ -604,11 +653,16 @@ $(document).on('click', '.channelsave', function () {
   console.log("myfields", fiedlvalue);
 
   var name = $('#channelname').val();
+  var ChannelSlugName = $('#ChannelSlugName').val();
   var channeluniqueid = $('#channeluniqueid').val();
   var desc = $('#channeldesc').val();
+  var metatitle = $('#metatitle').val();
+  var metadesc = $('#metadesc').val();
+  var metakey = $('#metakey').val();
   var url = window.location.search
   const urlpar = new URLSearchParams(url)
   pageno = urlpar.get('page')
+
 
 
 
@@ -635,8 +689,12 @@ $(document).on('click', '.channelsave', function () {
       async: false,
       data: {
         "channelname": name,
+        "ChannelSlugName":ChannelSlugName,
         "channeldesc": desc,
         "channeluniqueid": channeluniqueid,
+        "metatitle": metatitle,
+        "metadesc": metadesc,
+        "metakey": metakey,
         "sections": JSON.stringify({ sections }),
         "fiedlvalue": JSON.stringify({ fiedlvalue }),
         "categoryvalue": SelectedCategoryValue,
@@ -675,8 +733,12 @@ $(document).on('click', '.channelsave', function () {
       data: {
         "id": $("#channelid").val(),
         "channelname": name,
+        "ChannelSlugName":ChannelSlugName,
         "channeldesc": desc,
         "channeluniqueid": channeluniqueid,
+        "metatitle": metatitle,
+        "metadesc": metadesc,
+        "metakey": metakey,
         "sections": JSON.stringify({ sections }),
         "deletesections": JSON.stringify({ deletesecion }),
         "deletefields": JSON.stringify({ deletefields }),

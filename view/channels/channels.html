@@ -80,9 +80,22 @@
 
             <div class="relative grid place-items-center">
                 <img src="/public/img/Channel.jpg" alt="video" class="w-full  ">
-                <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                <a href="javascript:void(0);" class="open-modal absolute hover:scale-[1.1] transition-all duration-200"
+                    data-video="https://www.youtube.com/embed/z3jHhxVBlyg?si=lzNJj9kQnm6hkiMB">
                     <img src="/public/img/play-video.svg" alt="play">
                 </a>
+            </div>
+
+            <!-- Modal (hidden by default) -->
+            <div id="videoModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+                <div class="relative bg-white rounded-[12px] shadow-lg overflow-hidden"
+                    style="width:800px; height:540px; aspect-ratio:16/9;">
+                    <button id="closeModal"
+                        class="absolute top-3 right-3 bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-black">
+                        ✕
+                    </button>
+                    <div id="modalContent" class="w-full h-full"></div>
+                </div>
             </div>
 
 
@@ -137,8 +150,8 @@
             </li>
             <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
-                    id="work-tab" href="/admin/channels/defaultchannels" role="tab" aria-controls="work" aria-selected="false"
-                    tabindex="-1">{{$Translate.Explore}}</a>
+                    id="work-tab" href="/admin/channels/defaultchannels" role="tab" aria-controls="work"
+                    aria-selected="false" tabindex="-1">{{$Translate.Explore}}</a>
             </li>
             <!-- <li class="nav-item" role="presentation">
                 <a class=" hover:text-[#252525]  [&amp;.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] [&amp;.active]:before:block [&amp;.active]:before:absolute [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0  relative [&amp;.active]:before:bg-[#262626] [&amp;.active]:before:rounded-[18px_18px_0_0] block"
@@ -168,10 +181,11 @@
                             <div class="flex items-center space-x-[8px] mb-[8px]">
                                 <div
                                     class="w-[32px] h-[32px] rounded bg-[#f8f8f8] grid place-items-center min-w-[32px]">
-                                    <img src="{{if .ImagePath}}{{.ImagePath}}{{else}}/public/img/Frame.svg{{end}}" alt="">
+                                    <img src="{{if .ImagePath}}{{.ImagePath}}{{else}}/public/img/Frame.svg{{end}}"
+                                        alt="">
                                 </div>
                                 <p class="text-[16px] font-normal leading-[20px] text-[#262626] !me-auto line-clamp-1">
-                                   <a href="/admin/channels/edit/{{.Id}}" class="hover:underline">  {{.ChannelName}}</a>
+                                    <a href="/admin/channels/edit/{{.Id}}" class="hover:underline"> {{.ChannelName}}</a>
                                 </p>
                                 <label for="cb{{.Id}}"
                                     class="flex items-center cursor-pointer select-none text-dark dark:text-white">
@@ -202,8 +216,8 @@
                                                 {{$Translate.Configuration}} </a>
                                         </li>
 
-                                        <li class="mb-[4px] last-of-type:mb-[0] "><a href="/admin/channels/clone/{{.Id}}"
-                                                data-id="{{.Id}}"
+                                        <li class="mb-[4px] last-of-type:mb-[0] "><a
+                                                href="/admin/channels/clone/{{.Id}}" data-id="{{.Id}}"
                                                 class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item">
 
                                                 <span><img src="/public/img/duplicate-drop.svg" alt=""></span> Clone
@@ -256,7 +270,7 @@
                                 class="text-[14px] font-normal text-[#717171] hover:text-[#252525]  [&.active]:text-[#252525] text-center leading-[18px] underline">{{.EntriesCount}}
                                 {{if gt .EntriesCount
                                 1}}{{$Translate.Channell.Blogavailable}}{{else}}{{$Translate.Channell.Entriesavailable}}{{end}}
-                                </a>
+                            </a>
 
                             <a href="/admin/entries/create/{{.Id}}"
                                 class="  w-[24px] h-[24px] grid place-items-center hover:bg-[#F5F5F5] rounded-full overflow-hidden relative group  ">

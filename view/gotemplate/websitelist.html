@@ -41,17 +41,17 @@
             <td class="p-[16px] border-b border-solid border-[#F0F0F0]">
               <div class="flex items-center gap-[10px]">
                 <div class="w-[77px] h-fit min-w-[77px]">
-                  <img src="{{.TemplateImage}}" alt="">
+                  <a href="/admin/website/pages/{{.Id}}"><img src="{{.TemplateImage}}" alt=""></a>
                 </div>
                 <div>
-                  <a href="/" target="_blank"
+                  <a href="{{if and (eq .TenantId `1`) (eq .Id 1)}}{{$baseurlpath}}{{else}}{{.Subdomain}}{{end}}" target="_blank"
 
       class="flex items-center border-[1px] border-solid border-[#00A481] rounded-[50px] bg-[#EFF6F5] text-[12px] leading-none font-medium text-[#00A481] p-[3.5px_5px] mb-[2px] gap-[2px] h-[21px]">
                     <img src="/public/img/web.svg" alt="">
                     {{if eq .Id 1}}www.{{$baseurl}}{{else}}www.{{.Name}}.{{$baseurl}}{{end}}
                   </a>
-                  <h3 class="text-[11px] leading-[14px] font-medium text-[#202124] mb-[2px]">
-                    {{.TemplateName}}</h3>
+                 <a href="/admin/website/pages/{{.Id}}"> <h3 class="text-[11px] leading-[14px] font-medium text-[#202124] mb-[2px]">
+                    {{.TemplateName}}</h3></a>
                   <p class="text-[11px] leading-[14px] font-light text-[#757575]">
                     {{.CreatedDate}}</p>
                 </div>
@@ -87,8 +87,13 @@
                 <ul
                   class="bg-[#FFFFFF] shadow-[0px_4px_10px_0px_#0000001F] p-[4px] border-[1px] border-solid border-[#E4E5E7] rounded-[8px] min-w-[205px] dropdown-menu "
                   data-popper-placement="bottom-end">
+                  <li class="mb-[2px] last-of-type:mb-[0]">
+                    <a class=" cursor-pointer items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"
+                      data-id="{{.Id}}" data-tempname="{{.TemplateName}}" data-name="{{.Name}}" data-tenantid="{{.TenantId}}" id="edit"><img
+                        src="/public/img/edit.svg" />{{$Translate.Edit}}</a>
+                  </li>
                   <li class="mb-[4px] last-of-type:mb-[0]">
-                    <a href="/"
+                    <a href="{{if and (eq .TenantId `1`) (eq .Id 1)}}{{$baseurlpath}}{{else}}{{.Subdomain}}{{end}}"
                       target="_blank"
                       class="cursor-pointer items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"><img
                         src="/public/img/preview-drop.svg">Preview</a>
@@ -106,6 +111,13 @@
                       data-name="{{.Name}}" data-channame="{{.ChannelNames}}"><img
                         src="/public/img/change-template.svg">Change template</a>
                   </li>
+                               <li class="mb-[4px] last-of-type:mb-[0]"><a data-bs-target="#deleteModal"
+                                            data-bs-toggle="modal" data-page="" data-id="{{.Id}}"
+                                            data-name=""
+                                            class="{{if  and (eq .TenantId `1`) (eq .Id 1)}} pointer-events-none opacity-[50%]{{else}} cursor-pointer {{end}} deletebtn  items-center gap-[8px] grid grid-cols-[16px_1fr] hover:bg-[#F4F4F4] p-[7px_10px] rounded-[4px] w-full h-[30px] font-normal text-[#252525] text-[13px] leading-[16px] dropdown-item"
+                                            type="button">
+                                            <span><img src="/public/img/delete-drop.svg" alt=""></span> Delete </a>
+                                    </li>
                 </ul>
               </div>
             </td>
@@ -317,7 +329,7 @@
                     <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
                   </label>
                 </div>
-                <div class="chandiv">
+                <!-- <div class="chandiv">
                   <input type="radio" id="digital_products" name="option" class="peer hidden">
                   <label for="digital_products" data-slug="digital_products"
                     class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
@@ -331,9 +343,9 @@
                     <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
                     <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
                   </label>
-                </div>
-
-                <div class="chandiv">
+                </div> -->
+<!-- 
+    <div class="chandiv">
                   <input type="radio" id="jobs" name="option" class="peer hidden">
                   <label for="jobs" data-slug="jobs"
                     class="channelchkbox peer-checked:[&>img:last-of-type]:hidden peer-checked:[&>img:first-of-type]:block peer-checked:border-[#10A37F] border-[1px] border-solid border-[#F0F0F0] rounded-[8px] max-sm:p-[16px] cursor-pointer p-[16px] flex items-start justify-between gap-[16px]">
@@ -345,7 +357,7 @@
                     <img src="/public/img/checked-radio.svg" alt="checked" class="min-w-[24px] hidden">
                     <img src="/public/img/unchecked-radio.svg" alt="unchecked" class="min-w-[24px]">
                   </label>
-                </div>
+                </div> -->
 
 
 

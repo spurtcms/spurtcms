@@ -104,7 +104,7 @@ AWS_BUCKET_NAME=your-bucket-name
 Open the terminal within the project or cloned folder “spurtcms-admin”, and execute the following command:
 
 ```
-go run main.go
+./spurt-cms
 ```
 Once the project runs successfully, a default website template will open automatically in your browser.
 To access the Admin Panel, navigate to the following route in your browser:

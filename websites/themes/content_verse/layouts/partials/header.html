@@ -11,7 +11,7 @@
         <div class="flex items-center space-x-6 w-full">
             {{if .settingsdetail.SiteLogoPath}}
             <a href="/ "><img class="w-[100px] h-[50px]"
-                    src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
+                    src="/{{.settingsdetail.SiteLogoPath}}"></a>
             {{else}}
             <a href="/ "><img
                     src="/websites/themes/content_verse/assets/images/SpurtCMS.svg"></a>
@@ -27,7 +27,7 @@
                         {{if .searchlist}}
                          {{range .searchlist}}
                         <li class="text-[14px] mb-[10px] cursor-pointer"><a
-                                href="/channel/{{.ChannelName}}/{{.Slug}}-{{.Uuid}} ">{{.Title}}</a></li>
+                                href="{{.Slug}}">{{.Title}}</a></li>
                      {{end}}
                      {{end}}
                     </ul>
@@ -43,15 +43,26 @@
                             <img src="/websites/public/img/modal-close.svg" alt="">
                         </a>
                     </li>
-                    {{if .menulist}}
-                    {{range .menulist}}
-                    <li>
+                      {{ $HeaderId := "" }}
+
+                {{ range .menulist }}
+                {{ if eq .Name "Headers" }}
+                {{ $HeaderId = .Id }}
+                {{ end }}
+                {{ end }}
+
+                {{ if $HeaderId }}
+                {{ range .menulist }}
+                {{ if eq .ParentId $HeaderId }}
+               <li>
                         <a href="{{.UrlPath}} "
                             class="font-medium text-base leading-[27px] whitespace-nowrap   {{if eq $ChannelName .Name}} text-[#F33151]{{else}}text-[#120B14]  {{end}} hover:text-[#F33151]">
                             {{.Name}}</a>
                     </li>
-                    {{end}}
-                    {{end}}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                   
 
                 </ul>
             </div>

@@ -1,0 +1,106 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+
+<section class="max-md:ms-0 ml-auto pt-[71px] w-full max-w-[calc(100%-232px)] max-md:max-w-full min-h-screen">
+    <header
+        class="header-rht top-0 right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+        <div class="flex items-center gap-[6px] mr-auto">
+            <a href="javascript:void(0);"
+                class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="mb-[4px] font-medium text-[#252525] text-[16px] leading-[20px] whitespace-nowrap">
+                    Effortless Payment Integrations in SpurtCMS</h2>
+                <p class="max-sm:!hidden font-light text-[#525252] text-[12px] line-clamp-2 leading-[15px]">
+                    Seamlessly connect and manage payment gateways for secure and hassle-free transactions.</p>
+            </div>
+        </div>
+
+
+        <!-- <div
+            class=" {{if eq .Searchtrue true}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}  ">
+            <a href="javascript:void(0);"
+                class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                <img src="/public/img/search-icon-active.svg" alt="search"
+                    class="searchopen hidden  group-hover:block ">
+            </a>
+            <form action="/integration/" method="get" class="filterform " autocomplete="off">
+
+                <input type="text" placeholder="Search (Ctrl + “k” to focus)" value="{{.Filters}}" name="keyword"
+                    id="searchmembershiplevel"
+                    class="Searchmembership shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block">
+                {{if eq .Searchtrue true}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{end}}
+            </form>
+        </div> -->
+
+
+    </header>
+
+
+
+    <ul class="nav border-b border-[#EDEDED] mb-[24px] mt-[10px]  " id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class=" hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                href="/admin/integration">Integration</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="active hover:text-[#252525]  [&.active]:text-[#252525] p-[0px_12px_10px] text-[#717171] font-normal max-[400px]:text-xs text-sm leading-[17.5px] [&.active]:before:w-full [&.active]:before:h-[2px] [&.active]:before:block [&.active]:before:absolute [&.active]:before:bottom-0 [&.active]:before:left-0  relative [&.active]:before:bg-[#262626] [&.active]:before:rounded-[18px_18px_0_0] block cursor-pointer"
+                href="/admin/integration/master"> Explore </a>
+        </li>
+    </ul>
+
+    <div class="p-[16px]">
+        <p class="mb-[16px] font-normal text-[#717171] text-xs"><span class="font-semibold text-[#262626]">{{.Count}}</span>
+            Records Available</p>
+        <div
+            class="gap-[24px] grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[repeat(auto-fill,minmax(376px,1fr))] lg:grid-cols-3">
+        
+
+            {{range .Integration}}
+
+            <div class="border border-[#ECECEC] rounded"><div class="group p-[12px] flex flex-col items-center justify-center">
+                <div class="flex items-center flex-col space-y-[16px] mb-[8px]">
+                    <div class="w-[40px] h-[40px] rounded  grid place-items-center min-w-[32px]">
+                        <img class="w-full" src="{{.Credentials.CoverImage}}">
+                    </div>
+                    <p class="text-[16px] font-normal leading-[20px] text-[#262626] ">{{.Credentials.GatewayName}}
+                    </p>
+                </div> 
+                <p class="text-[11px] font-light text-[#717171] leading-[14px] mb-3 line-clamp-3">{{.Credentials.GatewayDesc}}</p>
+     <a href="/admin/integration/addcollection?Id={{.Id}}" data-id="{{.Id}}"
+                     class="hover:shadow-[0px_2px_4px_0px_#00000014] p-[6px_24px] bg-white text-[12px] font-normal leading-[16px] text-[#000000] border border-solid border-[#ECECEC] rounded-[6px]">+ Add to collection</a>
+              
+            </div></div>
+
+           
+            {{end}}
+
+        </div>
+    </div>
+
+
+
+
+
+</section>
+
+
+{{template "footer" .}}
+<script src="/public/js/integration/integration.js"></script>
+{{template "footerclose" .}}

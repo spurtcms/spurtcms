@@ -5,43 +5,48 @@
 {{$Pagedetail :=.PageDetail}}
 {{$webdetail :=.websitedetail}}
 
-<link rel="stylesheet" href="/public/css/page.css">
-  <section
-            class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[90px] max-sm:pt-[64px] min-h-screen  ">
 
-            <div class=" max-sm:h-fit h-full  flex flex-col ">
+<section
+    class="header-rht  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[90px] max-sm:pt-[64px] min-h-screen  ">
 
-                <header
-                    class="top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
-                    <div class="flex items-center gap-[6px] mr-auto w-full">
-                        <a href="javascript:void(0);"
-                            class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
-                            <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
-                        </a>
-                        <input type="hidden" class="pageid" id="pageId" value="{{.PageDetail.Id}}">
-                        <input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
-                        <div class="max-w-[640px]">
-                            <h2 class="mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">
-                                {{.templatedetail.TemplateName}}</h2>
-                            <ul class="flex items-center gap-[4px]">
-                                <li>
-                                 <a href="/admin/website/pages/{{$webdetail.Id}}"> <p class="text-[12px] font-normal text-[#757575] leading-[15px]">Pages</p></a>
-                                </li>
-                                <li>
-                                    <img src="/public/img/bread-crumb-arrow.svg" alt="arrow">
-                                </li>
-                                <li>
-                                    <a href=""
-                                        class="text-[12px] font-normal text-[#202124] leading-[15px]">{{if .editpage}}{{.PageDetail.Name}}{{else}}Create Page{{end}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="ms-auto flex">                            
-                            <a href="/admin/website/pages/{{$webdetail.Id}}" class="place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] max-sm:p-[8px] px-[16px] py-[7px] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Cancel</a>                            
-                            <a href="javascript:void(0)" id="pagesave" class="ms-2 place-items-center grid bg-[#10A37F] hover:bg-[#148569] max-sm:p-[8px] px-[16px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap"> Save </a>
-                        </div>
-                    </div>
-                    <!-- 
+    <div class=" max-sm:h-fit h-full  flex flex-col ">
+
+        <header
+            class="top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+            <div class="flex items-center gap-[6px] mr-auto w-full">
+                <a href="javascript:void(0);"
+                    class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                    <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                </a>
+                <input type="hidden" class="pageid" id="pageId" value="{{.PageDetail.Id}}">
+                <input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
+                <div class="max-w-[640px]">
+                    <h2 class="mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">
+                        {{.templatedetail.TemplateName}}</h2>
+                    <ul class="flex items-center gap-[4px]">
+                        <li>
+                            <a href="/admin/website/pages/{{$webdetail.Id}}">
+                                <p class="text-[12px] font-normal text-[#757575] leading-[15px]">Pages</p>
+                            </a>
+                        </li>
+                        <li>
+                            <img src="/public/img/bread-crumb-arrow.svg" alt="arrow">
+                        </li>
+                        <li>
+                            <a href="" class="text-[12px] font-normal text-[#202124] leading-[15px]">{{if
+                                .editpage}}{{.PageDetail.Name}}{{else}}Create Page{{end}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ms-auto flex">
+                    <a href="/admin/website/pages/{{$webdetail.Id}}"
+                        class="place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] max-sm:p-[8px] px-[16px] py-[7px] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Cancel</a>
+                    <a href="javascript:void(0)" id="pagesave"
+                        class="ms-2 place-items-center grid bg-[#10A37F] hover:bg-[#148569] max-sm:p-[8px] px-[16px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                        Save </a>
+                </div>
+            </div>
+            <!-- 
                     <div class="flex items-center space-x-3">
 
                         <a href="#modalId2" data-bs-toggle="modal"
@@ -52,9 +57,9 @@
 
                     </div> -->
 
-                </header>
+        </header>
 
-                     <div class=" @container setConatiner overflow-x-clip flex flex-col h-full ">
+        <div class=" @container setConatiner overflow-x-clip flex flex-col h-full ">
 
             <div class="p-[23px_10px] border-b border-solid border-[#E8E8E8] flex justify-between items-center">
                 <div class="dropdown w-full max-w-[480px] mx-auto ">
@@ -68,7 +73,7 @@
                         <img src="/public/img/drop-arrow-down.svg" alt="" class="w-[9px]">
                     </a>
                     <div
-                        class=" dropdown-menu pagelist dropdown-menu-end w-full rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]">
+                        class="max-h-[250px] overflow-auto dropdown-menu pagelist dropdown-menu-end w-full rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]">
                         <div class="pages-container">
                             <div class="sticky top-0 bg-white z-10">
                                 <div class="px-[12px] py-[8px] relative ">
@@ -91,7 +96,7 @@
                                     <p class="nameerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
                                         Enter Page Name</p>
                                 </div>
-                                <a href="javascript:void(0)" data-currentpageid="{{.Name}}"
+                                <a  data-pagename="{{.Name}}" data-id="{{.Id}}" data-type="{{.PageType}}" data-path="{{.CustomPagePath}}" data-slug="{{.Slug}}" href="#choosepage" data-bs-toggle="modal"
                                     class="editpagename shrink-0 px-3 py-[20px] hover:bg-[#e1e1e1]">
                                     <img src="/public/img/edit-event.svg" alt="" class="w-[1rem]">
                                 </a>
@@ -103,8 +108,20 @@
 
                             {{end}}
                             {{end}}
+
+                                <div class="noData-foundWrapper pagelistnodata hidden flex flex-col justify-content-center items-center h-full mb-[10px]"
+                                    id="nodatafounddesign">
+
+                                    <div class="empty-folder">
+                                        <img style="max-width: 50px;" src="/public/img/noData.svg" alt="">
+                                        <img src="/public/img/shadow.svg" alt="">
+                                    </div>
+                                    <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                        {{$Translate.Oopsnodata}}</h1>
+
+                                </div>
                         </div>
-                        <div class="relative">
+                        <div class=" sticky bottom-0 bg-[#F8F8F8]">
                             <div
                                 class="hidden  createpagediv p-[14px_20px] pb-[20px] bg-[#F8F8F8] relative bottom-full w-full left-0 flex items-center gap-2">
                                 <input type="text" placeholder="Page name"
@@ -116,7 +133,7 @@
                                     Page Name</p>
                             </div>
 
-                            <a href="javascript:void(0)"
+                            <a href="#choosepage" data-bs-toggle="modal"
                                 class="createpage flex items-center space-x-[4px] p-[14px] justify-center border-t border-[#E4E4E4] border-solid hover:bg-[#F5F5F5]">
                                 <img src="/public/img/add-page.svg" alt="add">
                                 <p class="text-[14px] font-normal leading-[18px] text-[#282322]">Add New Page
@@ -174,7 +191,7 @@
                                             within 60 characters for optimal SEO.Meta</p>
                                     </div>
                                 </label>
-                                <input type="text" placeholder="Enter Title" id="metatitle"
+                                <input type="text" placeholder="Enter Title" id="metatitle" value="{{.PageDetail.MetaTitle}}"
                                     class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
                             </div>
                             <div class="mb-[16px]">
@@ -194,8 +211,8 @@
                                             characters to improve search visibility.</p>
                                     </div>
                                 </label>
-                                <textarea placeholder="Enter Text" id="metadesc"
-                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]  bg-[#F7F7F5] border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[120px] resize-none block w-full  placeholder:text-[#B2B2B2]"></textarea>
+                                <textarea placeholder="Enter Text" id="metadesc" value="{{.PageDetail.MetaDescription}}"
+                                    class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]  bg-[#F7F7F5] border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[120px] resize-none block w-full  placeholder:text-[#B2B2B2]">{{.PageDetail.MetaDescription}}</textarea>
                             </div>
                             <div class="mb-[16px]">
                                 <label for=""
@@ -211,12 +228,12 @@
                                             content of your entry and improve ranking.</p>
                                     </div>
                                 </label>
-                                <input type="text" placeholder="Keywords" id="metakey"
+                                <input type="text" placeholder="Keywords" id="metakey" value="{{.PageDetail.MetaKeywords}}"
                                     class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:text-[#B2B2B2]  ">
                             </div>
                             <div class="mb-[16px]">
 
-                                <label for=""
+                                <!-- <label for=""
                                     class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Slug
 
 
@@ -228,10 +245,11 @@
                                             numbers, and
                                             hyphens to ensure proper URL structure.</p>
                                     </div>
-                                </label>
-                                <input type="text" placeholder="Enter Slug" id="metaslug"
+                                </label> -->
+                                <input type="hidden" placeholder="Enter Slug" id="metaslug" value="{{.PageDetail.Slug}}"
                                     class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
-                            </div>
+                           
+                                </div>
 
 
                         </div>
@@ -244,11 +262,11 @@
 
             </div>
 
-         
-                      <spurt-editor id="spurt-editor" block="{{.blocks}}" defaultblock="{{.defaultblocks}}" mode="{{.Mode}}" widgetlist="{{.widgetlist}}" widgetblock="{}"
-            storagepath="{{.Storagepath}}" uploadurl="{{.uploadurl}}" content="{{.PageDetail.PageDescription}}"
-           >
-        </spurt-editor>
+
+            <spurt-editor id="spurt-editor" block="{{.blocks}}" defaultblock="{{.defaultblocks}}" mode="{{.Mode}}"
+                widgetlist="{{.widgetlist}}" widgetblock="{}" storagepath="{{.Storagepath}}" uploadurl="{{.uploadurl}}"
+                content="{{.PageDetail.PageDescription}}">
+            </spurt-editor>
 
 
         </div>
@@ -261,14 +279,14 @@
 
 
 
-            </div>
+    </div>
 
 
-        </section>
+</section>
 
 
 
-    <!-- create-block-modal -->
+<!-- create-block-modal -->
 <div class="p-[16px] fade modal" id="createModal" tabindex="-1" aria-hidden="true">
     <form name="formblock" id="blockform">
         <input type="hidden" name="csrf" value="{{.csrf}}">
@@ -447,9 +465,406 @@
         </div>
     </form>
 </div>
- {{template "footer" .}}
+
+
+<div class="modal  fade" id="choosepage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered max-w-[710px] " role="document">
+
+
+        <div class="modal-content border-0">
+            <input type="hidden" class="pagetype" value="editor-page">
+            <input type="hidden" name="page_id" id="page_id" value="">
+            <div class="modal-header p-[30px_30px_15px_30px] max-lg:p-[16px] border-b-0">
+                <h3 class="pagetitle text-[20px] leading-[25px] font-medium text-[#252525]">Add New Page</h3>
+            </div>
+            <div class="modal-body p-[15px_30px_10px_30px] max-lg:p-[16px]">
+                <ul class="nav nav-tabs mb-[20px] border-b-0 gap-[30px]" id="myTab" role="tablist">
+                    <li class="dynamicradio nav-item" role="presentation">
+                        <button class="nav-lik active" id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                            aria-selected="true">
+                            <input type="radio" name="radio" id="radio" class="hidden peer/member" checked>
+
+                            <label for="radio"
+                                class=" relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-light text-[#252525] peer-checked/member:text-[#252525] tracking-[0.005em]
+                                before:bg-transparent before:w-[20px] before:h-[20px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/member:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Editor
+                                Page</label>
+                        </button>
+                    </li>
+                    <li class="staticradio nav-item" role="presentation">
+                        <button class="nav-lik" id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                            aria-selected="true">
+                            <input type="radio" name="radio" id="radio1" class="hidden peer/public">
+
+                            <label for="radio1"
+                                class="relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-light text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                before:bg-transparent before:w-[20px] before:h-[20px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Static
+                                page</label>
+                        </button>
+                    </li>
+
+                      <li class="landingradio nav-item" role="presentation">
+                        <button class="nav-lik " id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                            aria-selected="true">
+                            <input type="radio" name="radio" id="radiolanding" class="hidden peer/public">
+
+                            <label for="radiolanding"
+                                class="relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-light text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                before:bg-transparent before:w-[20px] before:h-[20px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Landing
+                                page</label>
+                        </button>
+                    </li>
+                  <li class="blockradio nav-item" role="presentation">
+                        <button class="nav-lik " id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                            aria-selected="true">
+                            <input type="radio" name="radio" id="radioblock" class="hidden peer/public">
+
+                            <label for="radioblock"
+                                class="relative cursor-pointer flex gap-[8px] items-center mb-0 text-sm font-light text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                before:bg-transparent before:w-[20px] before:h-[20px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Block
+                                page</label>
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                        tabindex="0">
+                        <div class="flex flex-col gap-[10px] mb-[14px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page
+                                Name</label>
+
+                            <input type="text" name="dynamicpage_name"
+                                class="dynamicpage_name rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Eg: home page, featured page">
+                            <p class="dynamicnameerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Name</p>
+
+                        </div>
+                          <div class="flex flex-col gap-[10px] mb-[14px] slugdiv">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page
+                                Slug</label>
+
+                            <input type="text" name="dynamicpage_slug"
+                                class="dynamicpage_slug rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Enter Page Slug">
+                            <p class="dynamicslugerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Slug</p>
+
+                        </div>
+                         <input type="hidden" class="selectpage" value="">
+                          <div class="flex flex-col gap-[10px] staticpagedropdown hidden">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Choose Page</label>
+
+                            <div class="dropdown w-full">
+                               
+
+                                <a type="button"
+                                    class="border border-[#E6E6E6] rounded-[8px] p-[6px_10px] h-[48px] text-[14px] font-light leading-[15px] flex items-center space-x-[10px] justify-between"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <input type="text"
+                                        class="customselectpage pagepath !border-none text-sm leading-[18px] font-light text-[#8A8A8A] block w-full"
+                                        placeholder="Select Page" />
+                                    <img src="/public/img/drop-arrow-down.svg" alt="" class="w-[9px]">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end w-full  h-[180px] overflow-auto rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]"
+                                    style="">
+                                    {{range .custompagelist}}
+
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href="javascript:void(0)" data-name="{{.}}" id="categoryclick"
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">{{.}}</a>
+                                    </div>
+
+                                    {{end}}
+                                    <!-- <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href=""
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">Ecommerce</a>
+                                    </div>
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href=""
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">Knowledge
+                                            base</a>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                             <p class="customchooseerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Select Custom Page </p>
+                            <p class="text-[11px] leading-[14px] font-light text-[#757575]">Add the custom-page of a webpage
+                                created outside SpurtCMS. It will appear on your site but cannot be edited here.</p>
+
+                        </div>
+                           <div class="flex flex-col gap-[10px] landingpagedropdown hidden">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Choose Page</label>
+
+                            <div class="dropdown w-full">
+
+                                <a type="button"
+                                    class="border border-[#E6E6E6] rounded-[8px] p-[6px_10px] h-[48px] text-[14px] font-light leading-[15px] flex items-center space-x-[10px] justify-between"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <input type="text"
+                                        class="landingselectpage pagepath !border-none text-sm leading-[18px] font-light text-[#8A8A8A] block w-full"
+                                        placeholder="Select Page" />
+                                    <img src="/public/img/drop-arrow-down.svg" alt="" class="w-[9px]">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end w-full  h-[180px] overflow-auto rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]"
+                                    style="">
+                                    {{range .landingpagelist}}
+
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href="javascript:void(0)" data-name="{{.}}" id="categoryclick"
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">{{.}}</a>
+                                    </div>
+
+                                    {{end}}
+                             
+                                </div>
+
+                            </div>
+                             <p class="customchooseerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Select Custom Page </p>
+                            <p class="text-[11px] leading-[14px] font-light text-[#757575]">Add the custom-page of a webpage
+                                created outside SpurtCMS. It will appear on your site but cannot be edited here.</p>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                        tabindex="0">
+                        <div class="flex flex-col gap-[10px] mb-[14px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page Name</label>
+
+                            <input type="text" name="customepage_name"
+                                class="customepage_name rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Enter Page Name">
+                            <p class="customnameerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Name</p>
+                        </div>
+                         <div class="flex flex-col gap-[10px] mb-[14px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page Slug</label>
+
+                            <input type="text" name="customepage_slug"
+                                class="customepage_slug rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Enter Page Slug">
+                            <p class="customslugerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Slug</p>
+                        </div>
+                        <div class="flex flex-col gap-[10px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Choose Page</label>
+
+                            <div class="dropdown w-full">
+
+                                <a type="button"
+                                    class="border border-[#E6E6E6] rounded-[8px] p-[6px_10px] h-[48px] text-[14px] font-light leading-[15px] flex items-center space-x-[10px] justify-between"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <input type="text"
+                                        class="selectpagee !border-none text-sm leading-[18px] font-light text-[#8A8A8A] block w-full"
+                                        placeholder="Select Page" />
+                                    <img src="/public/img/drop-arrow-down.svg" alt="" class="w-[9px]">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end w-full rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]"
+                                    style="">
+                                    {{range .custompagelist}}
+
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href="javascript:void(0)" data-name="{{.}}" id="categoryclick"
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">{{.}}</a>
+                                    </div>
+
+                                    {{end}}
+                                    <!-- <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href=""
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">Ecommerce</a>
+                                    </div>
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href=""
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">Knowledge
+                                            base</a>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                             <p class="customchooseerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Select Custom Page </p>
+                            <p class="text-[11px] leading-[14px] font-light text-[#757575]">Add the custom-page of a webpage
+                                created outside SpurtCMS. It will appear on your site but cannot be edited here.</p>
+
+                        </div>
+                    </div>
+                      <div class="tab-pane fade" id="landingpage-tab" role="tabpanel" aria-labelledby="landing-page"
+                        tabindex="0">
+                        <div class="flex flex-col gap-[10px] mb-[14px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page Name</label>
+
+                            <input type="text" name="landingpage_name"
+                                class="landingpage_name rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Enter Page Name">
+                            <p class="landingnameerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Name</p>
+                        </div>
+                         <div class="flex flex-col gap-[10px] mb-[14px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Page Slug</label>
+
+                            <input type="text" name="landingpage_slug"
+                                class="landingpage_slug rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
+                                placeholder="Enter Page Slug">
+                            <p class="landingslugerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Enter Page Slug</p>
+                        </div>
+                        <div class="flex flex-col gap-[10px]">
+                            <label class="text-[#252525] text-sm leading-[18px] font-medium">Choose Page</label>
+
+                            <div class="dropdown w-full">
+
+                                <a type="button"
+                                    class="border border-[#E6E6E6] rounded-[8px] p-[6px_10px] h-[48px] text-[14px] font-light leading-[15px] flex items-center space-x-[10px] justify-between"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <input type="text"
+                                        class="selectpagee !border-none text-sm leading-[18px] font-light text-[#8A8A8A] block w-full"
+                                        placeholder="Select Page" />
+                                    <img src="/public/img/drop-arrow-down.svg" alt="" class="w-[9px]">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end w-full rounded-[8px] border border-solid border-[#E6E6E6] shadow-[0px_1px_10px_0px_#00000014] !mt-[8px] p-[0]"
+                                    style="">
+                                    {{range .landingpagelist}}
+
+                                    <div class="flex items-center hover:bg-[#F5F5F5]">
+                                        <a href="javascript:void(0)" data-name="{{.}}" id="categoryclick"
+                                            class="text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">{{.}}</a>
+                                    </div>
+
+                                    {{end}}
+                             
+                                </div>
+
+                            </div>
+                             <p class="customchooseerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
+                                Select Custom Page </p>
+                            <p class="text-[11px] leading-[14px] font-light text-[#757575]">Add the custom-page of a webpage
+                                created outside SpurtCMS. It will appear on your site but cannot be edited here.</p>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+            <div class="modal-footer p-[10px_30px_30px_30px] max-lg:p-[10px_16px_16px_16px] border-t-0">
+                <div class="ms-auto flex">
+                    <a href="javascript:void(0)" data-bs-dismiss="modal"
+                        class="pagecancelbtn place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] px-[16px] py-[7px] rounded-md w-fit h-[34px] font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Cancel</a>
+                    <a href="javascript:void(0)" id="pagemodalsave-btn"
+                        class="ms-2 place-items-center grid bg-[#10A37F] hover:bg-[#148569] px-[16px] py-[7px] rounded-[4px] w-fit h-[34px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                        Add page </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- <div class="modal  fade" id="choosepage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable max-w-608 pt-[200px] max-md:pt-[100px]" role="document">
+        <div class="modal-content border-0">
+            <div class="px-6 max-sm:px-[16px] py-1.5 border-b border-[#EDEDED] flex justify-between items-center">
+                <h5 class="mb-0 text-bold-black font-medium text-base">
+                    Select Page
+                </h5>
+          
+                <div class="flex space-x-[12px]">
+                    <a href="javascript:void(0);" data-bs-dismiss="modal"
+                        class="h-[30px] flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0] rounded-[3px] no-underline"
+                        id="graphqlCopyCancel"><span>{{$Translate.Cancel}}</span></a>
+                    <button id="pagemodalsave-btn"
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]0] justify-center items-center"> <span>Save</span></button>
+                    <button id="copied-btn"
+                        class="flex space-x-[4px] h-[30px] rounded-[3px] px-3  w-auto text-sm font-normal text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] justify-center items-center hidden">{{$Translate.Graphql.Copied}}</button>
+                </div>
+            </div>
+            <div class="overflow-auto">
+                <div class="p-6 max-sm:px-[16px]">
+                    <div class="flex flex-col space-y-[12px] items-start" id="key-blck">
+                        <div class="flex items-start space-x-[8px]   pd-3 rounded-[4px]">
+                         
+                           <input type="radio" class="editor-page">Page
+                           <input type="radio" class="custom-page">Custom Pages
+                        </div>
+                       
+                    </div>
+                     <div class="w-[400px] flex-col gap-1.5 pagesDropdown hidden">
+
+                      Page Name <input type="text" class="custom_pagename">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Custom Pages</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public//public/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] selectpage">Select Custom Page</p>
+
+                                        </a>
+                                        <input type="hidden" name="subcategoryid" value="" id="cid"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchcatlists"
+                                                        placeholder="Search Pages"
+                                                        class="searchpagelist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public//public/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+                                            {{range .custompagelist}}
+                                            <li class="catrgory-dropdownlistt">
+                                                <a href="javascript:void(0);" id="categoryclick" data-id=""
+                                                    data-name="{{.}}"
+                                                    class="pageslug drp category-path-list relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+
+                                                    <span
+                                                        class="para categorylistname inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                                        {{.}}
+                                                    </span>
+
+                                                </a>
+                                            </li>
+                                            {{end}}
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public//public/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div> -->
+{{template "footer" .}}
 <script src="/public/js/gotemplate/pages.js"></script>
- <script src="/public/js/page.js"></script>
- <script src="/public/js/block/block.js"> </script>
- <script src="/public/js/media/media.js"></script> 
+<script src="/public/js/page.js"></script>
+<script src="/public/js/block/block.js"> </script>
+<script src="/public/js/media/media.js"></script>
 {{template "footerclose" .}}

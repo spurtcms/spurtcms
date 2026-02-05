@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body>
+    {{$template_name:=.template_name}}
+
+
+    <div id="__next" class="font-montserrat">
+        {{- block "templateheader" .}}{{end}}
+        {{$template:=.template_name}}
+    
+
+        {{if .Entries}}
+        <section class="max-w-[1068px] mx-auto py-[70px] px-[16px] max-[1300px]:p-[16px]">
+            <!-- Breadcrumb -->
+            <ul class="flex items-center mb-[26px]">
+                <li class="text-[14px] font-semibold leading-[17.07px] mr-[8px] text-[#1B1B20]">
+                    <a href="/ "
+                        class="text-[#2D47DA] hover:underline">Home</a>
+                </li>
+                <li class="mr-[8px] text-[#1B1B20] mt-[2px]">
+                    <img src="/support_sphere/assets/images/search-resultArrow.svg" alt="arrow" class="h-[16px]" />
+                </li>
+                <li class="text-[14px] font-semibold leading-[17.07px] text-[#1B1B20]">
+                    {{.ChannelName}}
+                </li>
+            </ul>
+
+            <!-- Page Title -->
+            <h1 class="text-[30px] font-bold leading-[36.57px] text-[#1B1B20] mb-[20px]">
+                Help Center
+            </h1>
+
+            <!-- Help Center List -->
+            <ul>
+                {{if .Entries}}
+                {{range .Entries}}
+                <li>
+                    <a href="{{.Slug}}"
+                        class="grid grid-cols-[1fr_auto] items-center py-[20px] border-b border-[#231F201F] group">
+                        <p class="text-base font-medium text-[#4F4F53] group-hover:text-[#2D47DA]">
+                            {{.Title}}
+                        </p>
+                        <img src="/support_sphere/assets/images/search-resultArrow.svg" class="w-[24px]" alt="arrow" />
+                    </a>
+                </li>
+                {{end}}
+                {{end}}
+            </ul>
+        </section>
+        {{end}}
+    </div>
+
+
+</body>
+
+<script src="/support_sphere/assets/js/content_list.js"></script>
+
+</html>

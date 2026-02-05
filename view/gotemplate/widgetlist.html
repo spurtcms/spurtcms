@@ -1,0 +1,346 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$templatedetail :=.templatedetail}}
+{{$webdetail :=.websitedetail}}
+<section
+  class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto max-md:pt-[90px] max-sm:pt-[64px] min-h-screen">
+
+  <div class=" max-sm:h-fit h-full ">
+
+    <header
+      class="header-rht md:hidden top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+      <div class="flex items-center gap-[6px] mr-auto">
+        <a href="javascript:void(0);"
+          class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+          <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
+      </div>
+
+    </header>
+
+
+
+
+
+    <div class=" @container setConatiner overflow-hidden ">
+
+
+      {{template "gotemplatepageheader" .}}
+
+      <div>
+        <div class="flex items-center gap-[14px] ms-auto">
+          <div
+            class="{{if eq .Searchtrue true}} transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+            <a href="javascript:void(0);"
+              class="{{if eq .Searchtrue true}} pointer-events-none {{end}} srchBtn-togg group grid h-full w-[32px]  place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+              <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+              <img src="/public/img/search-icon-active.svg" alt="search"
+                class="hidden group-hover:block hovericon searchopen">
+            </a>
+            <form action="/admin/website/widgets/" method="get" class="filterform " autocomplete="off">
+              <input type="hidden" name="webid" id="webid" value="{{.websitedetail.Id}}">
+              <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="" value="{{.Filter.Keyword}}"
+                class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0  absolute right-0 w-[calc(100%-36px)] h-full block  {{if eq .Searchtrue true}} p-[0_24px_0_0] {{else}} p-0 {{end}}">
+              {{if eq .Searchtrue true}}
+              <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                <img src="/public/img/close.svg" alt="close">
+              </div>
+              {{else}}
+              <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                <img src="/public/img/close.svg" alt="close">
+              </div>
+              <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                <img src="/public/img/close.svg" alt="close">
+              </div>
+              {{end}}
+
+            </form>
+
+          </div>
+          <form action="/admin/website/widgets/" method="get" class="filterform " autocomplete="off">
+            <input type="hidden" name="webid" id="webid" value="{{.websitedetail.Id}}">
+            <div class=" dropdown filter-dropDown static">
+
+              <a href="javascript:void(0);"
+                class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <img src="/public/img/filter.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                <img src="/public/img/filter-active.svg" alt="filter-active"
+                  class="hidden group-hover:block group-focus:block">
+              </a>
+              <div
+                class="dropdown-menu  dropdown-menu-end w-[280px] p-[12px] rounded-[12px] border-none shadow-[0px_1px_10px_0px_#00000014]">
+                <div class="flex items-center justify-between pb-[8px] border-b border-[#EDEDED] mb-[16px]">
+                  <h3 class="text-[14px] font-normal leading-[17.5px] text-[#262626] flex items-center gap-[4px]">
+                    <img src="/public/img/filter-black.svg" alt="filter" class="block">
+                    {{$Translate.Memberships.MembershipGroups.Selectfilters}}
+                  </h3>
+
+                </div>
+
+
+                <div class="block mb-[12px]">
+                  <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                    {{$Translate.Memberships.MembershipGroups.Status}}</p>
+                  <div class=" dropdown trail-dtl p-0 border-0 bg-transparent">
+                    <a class="flex items-center justify-between bg-[#ffffff] border border-[#EDEDED] p-[8px] rounded-[4px] h-[32px] border-none text-[11px] font-normal leading-[13.75px] w-full outline-none min-w-[158px]"
+                      href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                      <span class="slctstatus text-[11px] font-normal leading-[13.75px] text-[#D6D6D6]">
+                        {{if .Filter.Status}}
+                        {{.Filter.Status}}{{else}}
+                        Select Status
+                        {{end}}
+                      </span>
+                      <span>
+                        <img src="/public/img/filter-drop-arrow.svg" alt="arrow">
+                      </span>
+                    </a>
+                    <input type="hidden" name="status" id="statusid">
+                    <ul
+                      class="filterleveldropdown dropdown-menu w-full rounded-b-[8px] border-none transform-none top-[100%] p-0 shadow-[0px_8px_24px_-4px_rgba(0,0,0,0.12)] bg-[#ffffff]"
+                      aria-labelledby="dropdownMenuButton1">
+                      <li><a
+                          class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                          href="javascript:void(0)">Active</a></li>
+                      <li><a
+                          class="statuscls dropdown-item border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] p-[8px] px-[16px] hover:bg-[#F5F5F5]"
+                          href="javascript:void(0)">Inactive</a></li>
+
+                    </ul>
+
+
+                  </div>
+                </div>
+
+                <div class="block mb-[12px]">
+                  <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                    {{$Translate.Memberships.MembershipGroups.Lastupdatedon}}
+                  </p>
+                  <div class="flter-option">
+
+                    <input type="date" name="lastupdated"
+                      class=" bg-[#ffffff] border border-[#EDEDED] p-2 rounded-[4px] h-[32px] border-none text-[10px] font-normal leading-[12.5px] w-full outline-none min-w-[158px] placeholder:text-[#D6D6D6] block ">
+                  </div>
+                </div>
+
+                <div
+                  class="flex align-items-center gap-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                  <a href="/admin/website/widgets/?webid={{.websitedetail.Id}}"
+                    class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">Clear</a>
+                  <button type="submit"
+                    class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                    {{$Translate.Memberships.MembershipGroups.Applyfilter}}
+                  </button>
+                </div>
+
+
+              </div>
+
+            </div>
+          </form>
+
+          <a href="/admin/website/widgets/createwidget/?webid={{.websitedetail.Id}}"
+            class="flex items-center justify-center gap-1 bg-[#F8F8F8] max-sm:p-[8px] px-[16px] py-[4px] border-[#F5F5F5] border-[1px] hover:border-[#717171] border-solid h-[36px] rounded-[0.25rem] font-normal text-[#202124] text-sm leading-4 tracking-tight">
+            <img src="/public/img/add.svg" alt=""> Create Widget </a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content " id="pills-tabContent">
+      <input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
+
+      <div class="tab-pane fade show active" id="pills-themes" role="tabpanel" aria-labelledby="pills-themes-tab">
+        <section class="-mx-[16px] ">
+
+          <div class="p-[10px_30px_10px_15px] flex items-center gap-[11px] max-sm:flex-wrap ">
+
+
+          </div>
+          <div class="overflow-unset overflow-x-auto scrollbar-thin">
+            <table class="w-full min-w-[900px]">
+              <thead>
+                <tr>
+
+                  <th
+                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[120px]">
+                    Widget name
+                  </th>
+
+                  <th
+                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px]">
+                    Position
+                  </th>
+                  <th
+                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px]">
+                    Last modified
+                  </th>
+                  <th
+                    class="text-center px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[150px]">
+                    Status
+                  </th>
+                  <th
+                    class="text-center px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#F4F4F4] font-normal text-[#757575] leading-none text-[13px] min-w-[150px]">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+
+                  {{if .Widgetlist}}
+                  {{range .Widgetlist}}
+
+                  <td
+                    class="px-[16px] hover:underline py-[12px] border-[#EDEDED] border-b text-[#252525] text-sm font-normal align-middle leading-none">
+                    <a href="/admin/website/widgets/editwidget/{{.Id}}?webid={{$webdetail.Id}}"> {{.Title}}</a>
+                  </td>
+                  <td
+                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                    {{.Position}}
+                  </td>
+                  <td
+                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                    {{.ModifiedDate}}
+                  </td>
+                  <td
+                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+
+                    <label for="cb{{.Id}}"
+                      class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                      <div class="relative">
+                        <input type="checkbox" id="toggleTwo" class="peer sr-only" />
+                        <input type="checkbox" id="cb{{.Id}}" value="{{.Status}}" onclick="WidgetStatus('{{.Id}}')" {{if
+                          eq .Status 1}}checked{{end}} data-id="{{.Id}}" class="peer sr-only tgl-light" />
+                        <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
+                        </div>
+                        <div
+                          class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                        </div>
+                      </div>
+                    </label>
+                  </td>
+                  <td
+                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                    <div class="flex gap-[8px] items-center justify-center">
+
+
+                      <div class="btn-group language-group position-static">
+                        <a href="javascript:void(0);" type="button"
+                          class=" border-0 grid place-items-center  items-center gap-[5px] w-[32px] h-[32px] rounded-full group hover:bg-[#F5F5F5] [&amp;.show]:bg-[#F5F5F5] "
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="/public/img/action-vertical-active.svg" alt="dropdown"
+                            class="hidden group-hover:block rotate-90 transform">
+                          <img src="/public/img/action-vertical.svg" alt="dropdown"
+                            class="block group-hover:hidden rotate-90 transform">
+                        </a>
+
+
+
+                        <ul
+                          class="bg-[#FFF] shadow-[0px_4px_8px_0px_#00000026] p-[8px] border-0 rounded-[12px] min-w-[132px] dropdown-menu "
+                          data-popper-placement="bottom-end">
+
+                          <li class="mb-[2px] last-of-type:mb-[0]">
+                            <a href="/admin/website/widgets/editwidget/{{.Id}}?webid={{$webdetail.Id}}"
+                              class="cursor-pointer items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item"><img
+                                src="/public/img/edit.svg">Edit</a>
+                          </li>
+
+                          <li class="mb-[2px] last-of-type:mb-[0]">
+                            <a href="javascript:void(0);" id="deletebtn" data-id="{{.Id}}"
+                              class="cursor-pointer items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[#A01910] text-[14px] leading-[20px] dropdown-item"
+                              data-bs-target="#deleteModal" data-bs-toggle="modal">
+                              <img src="/public/img/delete-drop.svg">Delete
+                            </a>
+                          </li>
+
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+
+                </tr>
+                {{end}}
+                {{ else if eq .Searchtrue true}}
+                <tr>
+                  <td colspan="8">
+                    <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                      <div class="text-center w-fit mx-auto">
+                        <img src="/public/img/noFilter.svg" alt="noFilter" />
+                      </div>
+                      <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px]">
+                        {{$Translate.Filtersearch}}
+                      </h2>
+                      <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px]">
+                        {{$Translate.Filterkeyword}}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+                {{else }}
+                <tr>
+                  <td colspan="9">
+                    <div class="flex flex-col items-center mx-auto pt-[60px] w-full max-w-[966px]">
+                      <div class="mb-[30px]">
+                        <img src="/public/img/no-data-categories.svg" alt="" />
+                      </div>
+                      <div class="flex flex-col items-center w-full">
+                        <div class="flex flex-col w-full">
+                          <h3 class="mb-2 font-semibold text-[#262626] text-2xl text-center">
+                            No Widget found!
+                          </h3>
+                          <p class="font-light text-[#717171] text-center text-base">
+                            Create a Widget to organize and structure your content
+                            effectively.
+                          </p>
+                        </div>
+                        <a href="/admin/website/widgets/createwidget/?webid={{$webdetail.Id}}"
+                          class="inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline">Create
+                          Widget</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                {{end}}
+              </tbody>
+
+
+
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+
+
+    </div>
+
+</section>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</section>
+
+{{template "footer" .}}
+
+<script src="/public/js/gotemplate/widget/widgetlist.js"></script>
+
+{{template "footerclose" .}}

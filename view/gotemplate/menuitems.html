@@ -28,8 +28,8 @@
                 <a href="{{if .gotemplatepageheader}}/admin/website/menu/?webid={{.websitedetail.Id}}{{else}}/admin/website/menu/{{end}}"
                     class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline"
                     id="previous-btn">{{$Translate.Cancel}}</a>
-                <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline"
-                    id="nextstep" href="/admin/website/menu/publish/{{$menuid}}?webid={{.websitedetail.Id}}">Publish</a>
+                <!-- <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline"
+                    id="nextstep" href="/admin/website/menu/publish/{{$menuid}}?webid={{.websitedetail.Id}}">Publish</a> -->
 
             </div>
             <!-- <div class="flex items-center space-x-3">
@@ -48,6 +48,8 @@
 
             <input type="hidden" class="templateid" value="{{.websitedetail.Id}}" data-id="{{.websitedetail.Id}}">
             <input type="hidden" class="webid" value="{{.websitedetail.Id}}" data-id="{{.websitedetail.Id}}">
+            <input type="hidden" class="selectedcategoryids" value="{{.selectedcategoryids}}">
+            <input type="hidden" class="selectedlistingids" value="{{.selectedlistingids}}">
             <section class="h-full flex flex-col w-full">
 
                 <div class="grid grid-cols-[360px_1fr] h-full max-lg:grid-cols-1">
@@ -103,8 +105,8 @@
                                                     <div class="chk-group chk-group-label ">
                                                         <input type="checkbox" id="cbox{{$channel.Id}}"
                                                             class="hidden peer channelnameinput"
-                                                            data-id="{{$channel.Id}}" data-type="channel" {{if
-                                                            $checked}}checked{{end}}>
+                                                            data-id="{{$channel.Id}}" data-slug="{{.SlugName}}"
+                                                            data-type="channel" {{if $checked}}checked{{end}}>
                                                         <label for="cbox{{$channel.Id}}"
                                                             class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
                                                            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
@@ -127,11 +129,11 @@
 
                                                     {{end}}
                                                     <div class="chk-group chk-group-label ">
-                                                        <input type="checkbox" id="cbox{{$channel.Id}}"
+                                                        <input type="checkbox" id="rcbox{{$channel.Id}}"
                                                             class="hidden peer channelnameinput"
-                                                            data-id="{{$channel.Id}}" data-type="channel" {{if
-                                                            $checked}}checked{{end}}>
-                                                        <label for="cbox{{$channel.Id}}"
+                                                            data-id="{{$channel.Id}}" data-slug="{{.SlugName}}"
+                                                            data-type="channel" {{if $checked}}checked{{end}}>
+                                                        <label for="rcbox{{$channel.Id}}"
                                                             class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
                                                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
                                                             <p class="text-[#252525] text-[13px] font-light mb-0">
@@ -175,7 +177,133 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                <!-- <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+
+                                    <button
+                                        class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                        aria-expanded="false" aria-controls="collapseTwo">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#202124]">
+                                            {{$Translate.Course.Course}}
+                                        </p>
+                                        <img src="/public/img/accord-arrow.svg" alt="">
+                                    </button>
+
+                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body p-[24px_14px_20px]">
+                                            <div class="relative flex items-center w-full max-sm:max-w-full">
+                                                <input type="text" placeholder="{{$Translate.Search}}"
+                                                    class="searchbtn p-[10px_30px_10px_10px] border border-solid border-[#E6E6E6] rounded text-[14px] font-light placeholder:text-[#616161] w-full  h-[38px]">
+                                                <img src="/public/img/search-dark.svg" alt=""
+                                                    class="absolute right-[12px] w-[12px]">
+                                            </div>
+
+                                            <div class="flex items-center gap-[6px] m-[18px_0_12px] nav">
+
+                                                <a href="#recentcourse" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] recentcourse hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.MostRecent}}</a>
+                                                <a href="#allcourse" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.ViewAll}}</a>
+                                                <a href="javascript:void(0);"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] courseallselect p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.SelectAll}}</a>
+                                            </div>
+
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show active" id="allcourse">
+                                                    {{if .courselist}}
+
+                                                    {{range $course := .courselist}}
+                                                    {{$checked := false}}
+                                                    {{range $item := $menuitemslist}}
+
+                                                    {{if and (eq $item.Type "course") (eq $item.TypeId $course.Id)}}
+                                                    {{$checked = true}}
+                                                    {{end}}
+                                                    {{end}}
+
+
+                                                    <div class="chk-group chk-group-label ">
+                                                        <input type="checkbox" id="crbox{{$course.Id}}" disabled
+                                                            class="hidden peer channelnameinput"
+                                                            data-id="{{$course.Id}}" data-type="course" {{if
+                                                            $checked}}checked{{end}}>
+                                                        <label for="crbox{{$course.Id}}" disabled
+                                                            class="pointer-events-none h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                               before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$course.Title}}</p>
+                                                        </label>
+                                                    </div>
+
+                                                    {{end}}
+                                                    {{end}}
+                                                </div>
+                                                <div class="tab-pane fade " id="recentcourse">
+
+                                                    {{if .recentCourses}}
+                                                    {{range $course := .recentCourses}}
+                                                    {{$checked := false}}
+                                                    {{range $item := $menuitemslist}}
+
+                                                    {{if and (eq $item.Type "course") (eq $item.TypeId $course.Id)}}
+                                                    {{$checked = true}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    <div class="chk-group chk-group-label ">
+                                                        <input type="checkbox" id="crbox{{$course.Id}}"
+                                                            class="hidden peer channelnameinput"
+                                                            data-id="{{$course.Id}}" data-type="course" {{if
+                                                            $checked}}checked{{end}}>
+                                                        <label for="crbox{{$course.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                                   before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$course.Title}}</p>
+                                                        </label>
+                                                    </div>
+                                                    {{end}}
+                                                    {{else}}
+
+                                                    <div class="noData-foundWrapper  flex flex-col justify-content-center items-center h-[150px]"
+                                                        id="nodatafounddesignn">
+
+                                                        <div class="empty-folder">
+                                                            <img style="max-width: 50px;" src="/public/img/noData.svg"
+                                                                alt="">
+                                                            <img src="/public/img/shadow.svg" alt="">
+                                                        </div>
+                                                        <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                            {{$Translate.Oopsnodata}}</h1>
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+                                            </div>
+                                            <div class="noData-foundWrapper hidden flex flex-col justify-content-center items-center h-full"
+                                                id="nodatafounddesign">
+                                                <div class="text-center mx-auto w-[48px]">
+                                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                </div>
+                                                <h2
+                                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                    {{$Translate.Filtersearch}}</h2>
+                                                <p
+                                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                    {{$Translate.Filterkeyword}} </p>
+
+                                            </div>
+                                            <a href="#"
+                                                class="addcoursemenu ms-auto mt-[24px] flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569]  px-[14px] py-[7px] rounded-[4px] w-fit  h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                {{$Translate.Menu.AddToMenu}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
                                     <button
                                         class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
                                         type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
@@ -290,6 +418,467 @@
                                             </a>
                                         </div>
                                     </div>
+                                </div> -->
+                                <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                    <button
+                                        class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                                        aria-expanded="false" aria-controls="collapseFour">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#202124]">
+                                            Categories
+                                        </p>
+                                        <img src="/public/img/accord-arrow.svg" alt="">
+                                    </button>
+                                    <div id="collapseFour" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body p-[24px_14px_20px] categorybody">
+                                            <div class="relative flex items-center w-full max-sm:max-w-full">
+                                                <input type="text" placeholder="{{$Translate.Search}}"
+                                                    class="searchcategorylists p-[10px_30px_10px_10px] border border-solid border-[#E6E6E6] rounded text-[14px] font-light placeholder:text-[#616161] w-full  h-[38px]">
+                                                <img src="/public/img/search-dark.svg" alt=""
+                                                    class="absolute right-[12px] w-[12px]">
+                                            </div>
+
+                                            <div class="flex items-center gap-[6px] m-[18px_0_12px] nav">
+                                                <a href="#recentcategory" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] recentcategory hover:border-[#DEEEEA] recentform hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.MostRecent}}</a>
+                                                <a href="#allcategory" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.ViewAll}}</a>
+                                                <a href="javascript:void(0);"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] courseallselect p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.SelectAll}}</a>
+                                            </div>
+
+
+                                            <div class="tab-content -mx-[14px] max-h-[250px] overflow-auto">
+                                                <div class="tab-pane fade show active" id="allcategory">
+                                                    {{range $index, $value := .Categorylist}}
+                                                    <li class="catrgory-list p-[8px_16px] border-b border-[#EDEDED] list-none"
+                                                        data-id="{{$index}}">
+                                                        <div class="chk-group chk-group-label">
+
+                                                            <input type="checkbox" id="Checkcat{{$index}}"
+                                                                class="hidden peer channelnameinput selectcheckbox"
+                                                                data-id="{{$index}}">
+                                                            <label for="Checkcat{{$index}}"
+                                                                class="   relative cursor-pointer flex gap-[10px] mb-0 items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                             before:min-w-[14px]  before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+
+                                                                {{range $i, $cat := $value.Categories}}
+                                                                <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-normal text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                                    {{$cat.Category}}
+                                                                </span>
+                                                                {{end}}
+                                                            </label>
+
+                                                        </div>
+                                                    </li>
+                                                    {{end}}
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-content -mx-[14px] max-h-[250px] overflow-auto">
+                                                <div class="tab-pane fade show " id="recentcategory">
+                                                    {{if .recentCategories}}
+                                                    {{range $index, $value := .recentCategories}}
+                                                    <li class="catrgory-list p-[8px_16px] border-b border-[#EDEDED] list-none"
+                                                        data-id="{{$index}}">
+                                                        <div class="chk-group chk-group-label">
+
+                                                            <input type="checkbox" id="rCheckcat{{$index}}"
+                                                                class="hidden peer channelnameinput selectcheckbox"
+                                                                data-id="{{$index}}">
+                                                            <label for="rCheckcat{{$index}}"
+                                                                class="   relative cursor-pointer flex gap-[10px] mb-0 items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                             before:min-w-[14px]  before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+
+                                                                {{range $i, $cat := $value.Categories}}
+                                                                <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-normal text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                                    {{$cat.Category}}
+                                                                </span>
+                                                                {{end}}
+                                                            </label>
+
+                                                        </div>
+                                                    </li>
+                                                    {{end}}
+                                                    {{else}}
+                                                    <div class="noData-foundWrapper  flex flex-col justify-content-center items-center h-[150px]"
+                                                        id="nodatafounddesignn">
+
+                                                        <div class="empty-folder">
+                                                            <img style="max-width: 50px;" src="/public/img/noData.svg"
+                                                                alt="">
+                                                            <img src="/public/img/shadow.svg" alt="">
+                                                        </div>
+                                                        <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                            {{$Translate.Oopsnodata}}</h1>
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+
+                                            </div>
+                                            <div class="noData-foundcategory hidden flex flex-col justify-content-center items-center h-full"
+                                                id="nodatafounddesign">
+                                                <div class="text-center mx-auto w-[48px]">
+                                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                </div>
+                                                <h2
+                                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                    {{$Translate.Filtersearch}}</h2>
+                                                <p
+                                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                    {{$Translate.Filterkeyword}} </p>
+
+                                            </div>
+                                            <a href="#"
+                                                class="addcategorymenu ms-auto mt-[24px] flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569]  px-[14px] py-[7px] rounded-[4px] w-fit  h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                {{$Translate.Menu.AddToMenu}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                    <button
+                                        class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                        aria-expanded="false" aria-controls="collapseFive">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#202124]">
+                                            Listings
+                                        </p>
+                                        <img src="/public/img/accord-arrow.svg" alt="">
+                                    </button>
+                                    <div id="collapseFive" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body p-[24px_14px_20px] listingbody ">
+                                            <div class="relative flex items-center w-full max-sm:max-w-full">
+                                                <input type="text" placeholder="{{$Translate.Search}}"
+                                                    class="searchlslists p-[10px_30px_10px_10px] border border-solid border-[#E6E6E6] rounded text-[14px] font-light placeholder:text-[#616161] w-full  h-[38px]">
+                                                <img src="/public/img/search-dark.svg" alt=""
+                                                    class="absolute right-[12px] w-[12px]">
+                                            </div>
+
+                                            <div class="flex items-center gap-[6px] m-[18px_0_12px] nav">
+                                                <a href="#recentlistingCategory" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] recentlistingCategory hover:border-[#DEEEEA] recentform hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.MostRecent}}</a>
+                                                <a href="#alllistingCategory" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.ViewAll}}</a>
+                                                <a href="javascript:void(0);"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] courseallselect p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.SelectAll}}</a>
+                                            </div>
+
+
+                                            <div class="tab-content -mx-[14px] max-h-[250px] overflow-auto">
+                                                <div class="tab-pane fade show active" id="alllistingCategory">
+                                                    {{range $index, $value := .Categorylist}}
+                                                    <li class="catrgory-listt listingcat p-[8px_16px] border-b border-[#EDEDED] list-none"
+                                                        data-id="{{$index}}">
+                                                        <div class="chk-group chk-group-label">
+
+                                                            <input type="checkbox" id="checklistingcat{{$index}}"
+                                                                class="hidden peer channelnameinput selectcheckbox"
+                                                                data-id="{{$index}}">
+                                                            <label for="checklistingcat{{$index}}"
+                                                                class="relative cursor-pointer flex gap-[10px] mb-0 items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                             before:min-w-[14px]  before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+
+                                                                {{range $i, $cat := $value.Categories}}
+                                                                <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-normal text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                                    {{$cat.Category}}
+                                                                </span>
+                                                                {{end}}
+                                                            </label>
+
+                                                        </div>
+                                                    </li>
+                                                    {{end}}
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-content -mx-[14px] max-h-[250px] overflow-auto">
+                                                <div class="tab-pane fade show " id="recentlistingCategory">
+                                                    {{if .recentCategories}}
+                                                    {{range $index, $value := .recentCategories}}
+                                                    <li class="catrgory-list p-[8px_16px] border-b border-[#EDEDED] list-none"
+                                                        data-id="{{$index}}">
+                                                        <div class="chk-group chk-group-label">
+
+                                                            <input type="checkbox" id="rlCheckcat{{$index}}"
+                                                                class="hidden peer channelnameinput selectcheckbox"
+                                                                data-id="{{$index}}">
+                                                            <label for="rlCheckcat{{$index}}"
+                                                                class="   relative cursor-pointer flex gap-[10px] mb-0 items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                             before:min-w-[14px]  before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+
+                                                                {{range $i, $cat := $value.Categories}}
+                                                                <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-normal text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                                    {{$cat.Category}}
+                                                                </span>
+                                                                {{end}}
+                                                            </label>
+
+                                                        </div>
+                                                    </li>
+                                                    {{end}}
+                                                    {{else}}
+                                                    <div class="noData-foundWrapper  flex flex-col justify-content-center items-center h-[150px]"
+                                                        id="nodatafounddesignn">
+
+                                                        <div class="empty-folder">
+                                                            <img style="max-width: 50px;" src="/public/img/noData.svg"
+                                                                alt="">
+                                                            <img src="/public/img/shadow.svg" alt="">
+                                                        </div>
+                                                        <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                            {{$Translate.Oopsnodata}}</h1>
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+
+                                            </div>
+                                            <div class="noData-foundcategorylist hidden flex flex-col justify-content-center items-center h-full"
+                                                id="nodatafounddesign">
+                                                <div class="text-center mx-auto w-[48px]">
+                                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                </div>
+                                                <h2
+                                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                    {{$Translate.Filtersearch}}</h2>
+                                                <p
+                                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                    {{$Translate.Filterkeyword}} </p>
+
+                                            </div>
+                                            <a href="#"
+                                                class="addlistingcatmenu ms-auto mt-[24px] flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569]  px-[14px] py-[7px] rounded-[4px] w-fit  h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                {{$Translate.Menu.AddToMenu}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                    <button
+                                        class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapsesix"
+                                        aria-expanded="false" aria-controls="collapsesix">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#202124]">
+                                            Pages
+                                        </p>
+                                        <img src="/public/img/accord-arrow.svg" alt="">
+                                    </button>
+                                    <div id="collapsesix" class="accordion-collapse collapse "
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body p-[24px_14px_20px]">
+                                            <div class="relative flex items-center w-full max-sm:max-w-full">
+                                                <input type="text" placeholder="{{$Translate.Search}}"
+                                                    class="searchbtn p-[10px_30px_10px_10px] border border-solid border-[#E6E6E6] rounded text-[14px] font-light placeholder:text-[#616161] w-full  h-[38px]">
+                                                <img src="/public/img/search-dark.svg" alt=""
+                                                    class="absolute right-[12px] w-[12px]">
+                                            </div>
+
+                                            <div class="flex items-center gap-[6px] m-[18px_0_12px] nav">
+                                                <a href="#recentpages" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] recentpages hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.MostRecent}}</a>
+                                                <a href="#allpages" data-bs-toggle="tab"
+                                                    class="hover:bg-[#DEEEEA] hover:border-[#DEEEEA] hover:text-[#10A37F] p-[5px_10px] border border-solid border-[#D9D9D9] text-[13px] font-light leading-4 text-[#575757] rounded-[50px] hover:font-normal">
+                                                    {{$Translate.Menu.ViewAll}}</a>
+
+                                            </div>
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show active" id="allpages">
+                                                    {{$Pagelist := .pagelist}}
+                                                    {{if .pagelist}}
+                                                    {{range $page := $Pagelist}}
+                                                    {{if eq .ParentId 0}}
+                                                    {{/* PARENT LEVEL */}}
+                                                    {{$checked := false}}
+                                                    {{range $item := $menuitemslist}}
+                                                    {{if and (eq $item.Type "pages") (eq $item.TypeId $page.Id)}}
+                                                    {{$checked = true}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    <div class="chk-group chk-group-label">
+                                                        <input type="checkbox" id="pcbox{{$page.Id}}"
+                                                            class="hidden peer channelnameinput" data-id="{{$page.Id}}"
+                                                            data-slug="{{.Slug}}" data-type="pages" {{if
+                                                            $checked}}checked{{end}}>
+                                                        <label for="pcbox{{$page.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$page.Name}}</p>
+                                                        </label>
+                                                    </div>
+
+                                                    {{/* FIRST LEVEL CHILDREN */}}
+                                                    {{range $child1 := $Pagelist}}
+                                                    {{if eq $child1.ParentId $page.Id}}
+                                                    {{$checked1 := false}}
+                                                    {{range $item := $menuitemslist}}
+                                                    {{if and (eq $item.Type "pages") (eq $item.TypeId $child1.Id)}}
+                                                    {{$checked1 = true}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    <div class="ms-[20px] chk-group chk-group-label">
+                                                        <input type="checkbox" id="pcbox_child1_{{$child1.Id}}"
+                                                            class="hidden peer channelnameinput"
+                                                            data-id="{{$child1.Id}}" data-slug="{{$child1.Slug}}"
+                                                            data-type="pages" {{if $checked1}}checked{{end}}>
+                                                        <label for="pcbox_child1_{{$child1.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                   before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$child1.Name}}</p>
+                                                        </label>
+                                                    </div>
+
+                                                    {{/* SECOND LEVEL SUBCHILDREN */}}
+                                                    {{range $child2 := $Pagelist}}
+                                                    {{if eq $child2.ParentId $child1.Id}}
+
+                                                    {{$checked2 := false}}
+                                                    {{range $item := $menuitemslist}}
+                                                    {{if and (eq $item.Type "pages") (eq $item.TypeId $child2.Id)}}
+                                                    {{$checked2 = true}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    <div class="ms-[30px] chk-group chk-group-label">
+                                                        <input type="checkbox" id="pcbox_child2_{{$child2.Id}}"
+                                                            class="hidden peer channelnameinput"
+                                                            data-id="{{$child2.Id}}" data-slug="{{$child2.Slug}}"
+                                                            data-type="pages" {{if $checked2}}checked{{end}}>
+                                                        <label for="pcbox_child2_{{$child2.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$child2.Name}}</p>
+                                                        </label>
+                                                    </div>
+                                                    {{end}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    {{end}}
+                                                </div>
+
+
+                                            </div>
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show " id="recentpages">
+                                                    {{if .recentPages}}
+                                                    {{range $page := .recentPages}}
+                                                    {{$checked := false}}
+                                                    {{range $item := $menuitemslist}}
+
+                                                    {{if and (eq $item.Type "pages") (eq $item.TypeId $page.Id)}}
+                                                    {{$checked = true}}
+                                                    {{end}}
+                                                    {{end}}
+                                                    <div class="chk-group chk-group-label ">
+                                                        <input type="checkbox" id="rpcbox{{$page.Id}}"
+                                                            class="hidden peer channelnameinput" data-id="{{$page.Id}}"
+                                                            data-slug="{{.Slug}}" data-type="pages" {{if
+                                                            $checked}}checked{{end}}>
+                                                        <label for="rpcbox{{$page.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$page.Name}}</p>
+                                                        </label>
+                                                    </div>
+                                                    {{end}}
+                                                    {{else}}
+                                                    <div class="noData-foundWrapper  flex flex-col justify-content-center items-center h-[150px]"
+                                                        id="nodatafounddesignn">
+
+                                                        <div class="empty-folder">
+                                                            <img style="max-width: 50px;" src="/public/img/noData.svg"
+                                                                alt="">
+                                                            <img src="/public/img/shadow.svg" alt="">
+                                                        </div>
+                                                        <h1 style="text-align: center;font-size: 10px;" class="heading">
+                                                            {{$Translate.Oopsnodata}}</h1>
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+
+                                            </div>
+                                            <div class="noData-foundWrapper hidden flex flex-col justify-content-center items-center h-full"
+                                                id="nodatafounddesign">
+                                                <div class="text-center mx-auto w-[48px]">
+                                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                </div>
+                                                <h2
+                                                    class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                    {{$Translate.Filtersearch}}</h2>
+                                                <p
+                                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                    {{$Translate.Filterkeyword}} </p>
+
+                                            </div>
+                                            <a href="#"
+                                                class="addchannelmenu ms-auto mt-[24px] flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569]  px-[14px] py-[7px] rounded-[4px] w-fit  h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                {{$Translate.Menu.AddToMenu}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                    <button
+                                        class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven"
+                                        aria-expanded="false" aria-controls="collapseSeven">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#202124]">
+                                            Custom Url
+                                        </p>
+                                        <img src="/public/img/accord-arrow.svg" alt="">
+                                    </button>
+                                    <div id="collapseSeven" class="accordion-collapse collapse "
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body p-[24px_14px_20px]">
+                                            <div class="flex-col gap-1.5 customUrlInput ">
+                                                <p class="mb-1 font-normal text-[#152027] text-sm">
+                                                    Menu Item Name</p>
+                                                <input type="text" placeholder="Enter Menu Name"
+                                                    class="custommenuname focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                                <label id="custommenuname-error"
+                                                    class="custommenuname-error error hidden">*Please
+                                                    Enter Menu Item Name</label>
+                                            </div>
+                                            <div class="flex-col mt-2 gap-1.5 customUrlInput ">
+                                                <p class="mb-1 font-normal text-[#152027] text-sm">
+                                                    Custom URL</p>
+                                                <input type="text" placeholder="{{$Translate.Menu.NavPlcholder}}"
+                                                    class="customumenurl focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                                <label id="customumenurl-error"
+                                                    class="customumenurl-error error hidden">*Please
+                                                    Enter Url Path</label>
+                                            </div>
+
+
+                                            <a href="#"
+                                                class="addcustommenu ms-auto mt-[24px] flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569]  px-[14px] py-[7px] rounded-[4px] w-fit  h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                {{$Translate.Menu.AddToMenu}}
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -308,18 +897,18 @@
                                     contenteditable="true"> {{.menudetails.Name}}</p>
                                 <a href="javascript:void(0);" class="flex items-center gap-[2px] hover:underline"
                                     data-bs-target="#modalId3" data-bs-toggle="modal" id="editbtnn"
-                                    data-id="{{.menudetails.Id}}" data-desc="{{.menudetails.Description}}"
+                                    data-id="{{.menudetails.Id}}" data-title="{{.menudetails.MenuTitle}}" data-desc="{{.menudetails.Description}}"
                                     data-name="{{.menudetails.Name}}" data-status="{{.menudetails.Status}}">
                                     <img src="/public/img/edit-green.svg" alt="">
                                     <p class="text-sm font-light leading-[18px] text-[#10A37F]">{{$Translate.Edit}}</p>
                                 </a>
                             </div>
-                            <div> <a href="#modalIdd2" data-bs-toggle="modal"
-                                    class="cursor-pointer flex  justify-center place-items-center bg-[#ffffff] hover:bg-[#ffffff] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] border border-solid border-[#E8E8E8] h-[32px] font-normal text-[14px] text-[#202124] text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                            <!-- <div> <a href="#modalIdd2" data-bs-toggle="modal"
+                                    class="addmenuitembtn cursor-pointer flex  justify-center place-items-center bg-[#ffffff] hover:bg-[#ffffff] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] border border-solid border-[#E8E8E8] h-[32px] font-normal text-[14px] text-[#202124] text-center leading-tight tracking-[0.7px] whitespace-nowrap">
                                     <span class="mr-[8px] max-sm:mr-0 text-lg leading-none ">
                                         +
                                     </span> <span class="max-sm:hidden"> {{$Translate.Menu.AddMenuItems}}</span></a>
-                            </div>
+                            </div> -->
 
 
                             <!-- </div> -->
@@ -353,137 +942,319 @@
 
                                 {{range .menuitemslist}}
                                 {{if eq .ParentId $menuid}}
+                                <div class="border-[#EDEDED] border-[1px] rounded-[8px] mb-[12px] pt-[12px] px-[8px] menuitemsdiv"
+                                    id="menuitemsdiv">
+                                    <div class="flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group dragitem"
+                                        data-id="{{.Id}}" data-parent="{{.ParentId}}">
 
-                                <div class="flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group dragitem"
-                                    data-id="{{.Id}}">
-                                    <div>
-                                        <button class="pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
-                                            id="menuitemdeletebtn" data-id="{{.Id}}" data-name="{{.Name}}"
-                                            data-bs-target="#deleteModal" data-bs-toggle="modal"> <img
-                                                src="/public/form-img/img/delete.svg" alt=""></button>
-                                    </div>
-                                    <div
-                                        class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
-                                        <img src="/public/img/drag.svg" alt="">
-                                    </div>
-                                    <div class="accordion-item grow max-w-[586px] div{{.Id}}">
-                                        <button
-                                            class="bg-[#F0F0F0] p-[12px_20px] rounded-[8px] w-full border-[#EBEBEB] brder border-solid justify-between flex items-center mb-[8px] h-[48px] collapsed"
-                                            type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Id}}"
-                                            aria-expanded="false" aria-controls="collapse{{.Id}}">
-                                            <p
-                                                class="text-base font-normal leading-[20px] text-[#252525] text-start itemname">
-                                                {{.Name}}
-                                            </p>
-
-                                            <div class="flex items-center gap-[10px]">
-                                                <p class="text-[13px] font-light text-[#757575] leading-[16px]">
+                                        <div
+                                            class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
+                                            <img src="/public/img/drag.svg" alt="">
+                                        </div>
+                                        <div class="accordion-item grow max-w-[573px] div{{.Id}}">
+                                            <button
+                                                class="bg-[#F0F0F0] p-[12px_20px] rounded-[8px] w-full border-[#EBEBEB] brder border-solid justify-between flex items-center mb-[8px] h-[48px] collapsed"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{.Id}}" aria-expanded="false"
+                                                aria-controls="collapse{{.Id}}">
+                                                <p
+                                                    class="text-sm font-normal leading-[20px] text-[#252525] text-start itemname line-clamp-1" data-desc="{{.Description}}">
                                                     {{.Name}}
                                                 </p>
-                                                <img src="/public/img/accord-arrow.svg" alt="">
-                                            </div>
-                                        </button>
-                                        <div id="collapse{{.Id}}"
-                                            class="accordion-collapse [&amp;.collapse]:!visible collapse"
-                                            data-bs-parent="#accordionExample1" style="">
-                                            <div
-                                                class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px]">
-                                                <input type="text" placeholder="Navigation Lable" value="{{.Name}}"
-                                                    maxlength="20"
-                                                    class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
-                                                <label id="lablename-error" class="lablename-error error hidden">*Please Enter 20
-                                                    Characters Only</label>
-                                                <input type="text" placeholder="Path link" value="{{.UrlPath}}" disabled
-                                                    class="p-[15px_14px] opacity-[0.5] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
-                                                <div class="flex items-center justify-end gap-[10px]">
-                                                    <a href="#" id="" data-id="{{.Id}}" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapse{{.Id}}" aria-expanded="false"
-                                                        aria-controls="collapse{{.Id}}"
-                                                        class="flex justify-center place-items-center bg-[#ffffff] hover:bg-[#F5F5F5] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-light text-[14px] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#E6E6E6] text-[#989898]">
-                                                        {{$Translate.Cancel}}
-                                                    </a>
-                                                    <a href="#" id="updatebtn" data-id="{{.Id}}" data-type="{{.Type}}"
-                                                        data-typeid="{{.TypeId}}" data-parent="{{.ParentId}}"
-                                                        class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
-                                                        {{$Translate.Save}}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        {{ $currentId := .Id }}
-                                        {{ range $menuitemslist }}
-                                        {{ if eq .ParentId $currentId }}
-                                        <div class="child-container">
-                                            <div class="childdiv flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group ms-[20px]"
-                                                data-id="{{.Id}}">
-                                                <div>
-                                                    <button
-                                                        class="pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
-                                                        id="menuitemdeletebtn" data-id="{{.Id}}" data-name="{{.Name}}"
-                                                        data-bs-target="#deleteModal" data-bs-toggle="modal"> <img
-                                                            src="/public/form-img/img/delete.svg" alt=""></button>
+                                                <div class="flex items-center gap-[10px]">
+                                                    <p
+                                                        class="text-[13px] font-light text-[#757575] leading-[16px] line-clamp-1">
+                                                        {{.Name}}
+                                                    </p>
+                                                    <img src="/public/img/accord-arrow.svg" alt="">
                                                 </div>
+                                            </button>
+                                            <div id="collapse{{.Id}}"
+                                                class="accordion-collapse [&amp;.collapse]:!visible collapse"
+                                                data-bs-parent="#accordionExample1" style="">
                                                 <div
-                                                    class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
-                                                    <img src="/public/img/drag.svg" alt="">
-                                                </div>
-                                                <div class="accordion-item grow max-w-[586px] ">
-                                                    <button
-                                                        class="bg-[#F0F0F0] p-[12px_20px] rounded-[8px] w-full border-[#EBEBEB] brder border-solid justify-between flex items-center mb-[8px] h-[48px] collapsed"
-                                                        type="button" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapse{{.Id}}" aria-expanded="false"
-                                                        aria-controls="collapse{{.Id}}">
+                                                    class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px] ">
+                                                    <input type="text" placeholder="Navigation Lable" value="{{.Name}}"
+                                                        maxlength="300"
+                                                        class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+                                                    <label id="lablename-error"
+                                                        class="lablename-error error hidden">*Please
+                                                        Enter 300
+                                                        Characters Only</label>
+
+                                                    <!-- Toolbar - UNIQUE ID per menu item -->
+                                                    <div id="toolbar-container-{{.Id}}" class="">
+                                                        <span class="ql-formats">
+                                                            <button class="ql-bold" title="Bold"></button>
+                                                            <button class="ql-italic" title="Italic"></button>
+                                                        </span>
+                                                        <span class="ql-formats">
+                                                            <button class="ql-list" value="ordered"></button>
+                                                            <button class="ql-list" value="bullet"></button>
+                                                            <button class="ql-list" value="check"></button>
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- Editor - UNIQUE ID per menu item -->
+                                                    <div id="editor-{{.Id}}"  
+                                                        class="quill-editor-container border border-[#EDEDED] rounded-[4px] min-h-[120px] bg-white">{{.HtmlDescription}}
+                                                    </div>
+
+
+
+
+                                                    <!-- <textarea  id="editor" class=" p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]" name="" placeholder="Enter Your Description"></textarea> -->
+                                                    <div
+                                                        class="{{if .ImagePath}}{{else}}hidden{{end}} imageRemoveDiv flex mb-[24px] max-[1300px]:mb-[16px] mt-[24px] last-of-type:mb-0">
                                                         <p
-                                                            class="text-base font-normal leading-[20px] text-[#252525] text-start">
-                                                            {{.Name}}</p>
-                                                        <div class="flex items-center gap-[10px]">
+                                                            class="ImageName text-[14px] font-normal leading-[18px] text-[#10A37F] mb-[8px]">
+                                                            {{.ImageName}}
+                                                        </p>
+                                                        <input type="hidden" class="svgDelete" value="">
+                                                        <span
+                                                            class="{{if .ImagePath}}{{else}}hidden{{end}} deleteimg pl-[10px] cursor-pointer "><img
+                                                                src="/public/img/delete-drop.svg" alt=""></span>
+
+                                                    </div>
+
+
+                                                    <div
+                                                        class="  {{if .ImagePath}}hidden {{end}} imgupldiv mt-[24px] flex flex-col gap-1.5">
+
+                                                        <input type="hidden" class="svgval" value="">
+                                                        <button
+                                                            class="p-[9px_10px] w-full flex justify-center items-center relative w-fit rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
+                                                            <img src="/public/img/upload-folder.svg" alt="">
                                                             <p
-                                                                class="text-[13px] font-light text-[#757575] leading-[16px]">
-                                                                {{.Name}}</p>
-                                                            <img src="/public/img/accord-arrow.svg" alt="">
-                                                        </div>
-                                                    </button>
-                                                    <div id="collapse{{.Id}}"
-                                                        class="accordion-collapse [&amp;.collapse]:!visible collapse"
-                                                        data-bs-parent="#accordionExample1" style="">
-                                                        <div
-                                                            class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px]">
-                                                            <input type="text" placeholder="Navigation Lable"
-                                                                value="{{.Name}}" maxlength="20"
-                                                                class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
-                                                            <label id="lablename-error" class="lablename-error error hidden">*Please
-                                                                Enter
-                                                                20 Characters Only</label>
-                                                            <input type="text" placeholder="Path link"
-                                                                value="{{.UrlPath}}" disabled
-                                                                class="p-[15px_14px] opacity-[0.5] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
-                                                            <div class="flex items-center justify-end gap-[10px]">
-                                                                <a href="#" id="" data-id="{{.Id}}"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapse{{.Id}}"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="collapse{{.Id}}"
-                                                                    class="flex justify-center place-items-center bg-[#ffffff] hover:bg-[#F5F5F5] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-light text-[14px] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#E6E6E6] text-[#989898]">
-                                                                    Cancel
-                                                                </a>
-                                                                <a href="#" id="updatebtn" data-id="{{.Id}}"
-                                                                    data-type="{{.Type}}" data-typeid="{{.TypeId}}"
-                                                                    data-parent="{{.ParentId}}"
-                                                                    class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
-                                                                    Save
-                                                                </a>
-                                                            </div>
-                                                        </div>
+                                                                class="text-[14px] font-normal leading-[18px] text-[#616161]">
+                                                                Upload Icon
+                                                            </p>
+                                                            <input type="file" accept=".svg"
+                                                                class="imguploadd absolute w-full h-full opacity-0 text-[0] cursor-pointer top-0 left-0">
+                                                        </button>
+                                                        <p
+                                                            class="svgins text-[12px] text-[#8A8A8A] mb-[20px] text-right">
+                                                            Only *SVG files are allowed
+                                                        </p>
+                                                    </div>
+
+                                                    <input type="text" placeholder="Path link" value="{{.UrlPath}}" {{if
+                                                        ne .Type `custom_url`}} disabled {{end}}
+                                                        class="p-[15px_14px] {{if ne .Type `custom_url`}} opacity-[0.5] {{end}} border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+
+                                                    <div class="chk-group chk-group-label ">
+                                                        <input type="checkbox" {{if eq .SeparateWindow 1}}checked{{end}}
+                                                            class="separatewindow hidden peer "
+                                                            id="separatewindow{{.Id}}"
+                                                            value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                                            onclick="this.value = this.checked ? 1 : 0;">
+                                                        <label for="separatewindow{{.Id}}"
+                                                            class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                            <p class="text-[#252525] text-[13px] font-light mb-0">
+                                                                {{$Translate.Menu.SeparateWindow}}</p>
+                                                        </label>
+                                                    </div>
+                                                    <div class="flex items-center justify-end gap-[10px]">
+                                                        <a href="#" id="" data-id="{{.Id}}" data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{.Id}}" aria-expanded="false"
+                                                            aria-controls="collapse{{.Id}}"
+                                                            class="flex justify-center place-items-center bg-[#ffffff] hover:bg-[#F5F5F5] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-light text-[14px] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#E6E6E6] text-[#989898]">
+                                                            {{$Translate.Cancel}}
+                                                        </a>
+                                                        <a href="#" id="updatebtn" data-id="{{.Id}}"
+                                                            data-type="{{.Type}}" data-name="{{.Name}}"
+                                                            data-typeid="{{.TypeId}}" data-parent="{{.ParentId}}"
+                                                            class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                            {{$Translate.Save}}
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {{ $currentId := .Id }}
+                                            {{ range $menuitemslist }}
+                                            {{ if eq .ParentId $currentId }}
+                                            <div class="child-container" data-parent-id="{{.ParentId}}">
+                                                <div class="childdiv flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group ms-[20px]"
+                                                    data-id="{{.Id}}" data-parent="{{.ParentId}}">
+
+                                                    <div
+                                                        class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
+                                                        <img src="/public/img/drag.svg" alt="">
+                                                    </div>
+                                                    <div class="accordion-item grow max-w-[573px] ">
+                                                        <button
+                                                            class="bg-[#F0F0F0] p-[12px_20px] rounded-[8px] w-full border-[#EBEBEB] brder border-solid justify-between flex items-center mb-[8px] h-[48px] collapsed"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{.Id}}" aria-expanded="false"
+                                                            aria-controls="collapse{{.Id}}">
+                                                            <p
+                                                                class="text-sm font-normal leading-[20px] text-[#252525] text-start line-clamp-1">
+                                                                {{.Name}}</p>
+                                                            <div class="flex items-center gap-[10px]">
+                                                                <p
+                                                                    class="text-[13px] font-light text-[#757575] leading-[16px] line-clamp-1">
+                                                                    {{.Name}}</p>
+                                                                <img src="/public/img/accord-arrow.svg" alt="">
+                                                            </div>
+                                                        </button>
+
+                                                        <div id="collapse{{.Id}}"
+                                                            class="accordion-collapse [&amp;.collapse]:!visible collapse"
+                                                            data-bs-parent="#accordionExample1" style="">
+                                                            <div
+                                                                class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px]">
+                                                                <input type="text" placeholder="Navigation Lable"
+                                                                    value="{{.Name}}" maxlength="300" data-desc="{{.Description}}"
+                                                                    class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+                                                                <label id="lablename-error"
+                                                                    class="lablename-error error hidden">*Please
+                                                                    Enter
+                                                                    300 Characters Only</label>
+
+                                                                <!-- Toolbar - UNIQUE ID per menu item -->
+                                                                <div id="toolbar-container-{{.Id}}" class="">
+                                                                    <span class="ql-formats">
+                                                                        <button class="ql-bold" title="Bold"></button>
+                                                                        <button class="ql-italic"
+                                                                            title="Italic"></button>
+                                                                    </span>
+                                                                    <span class="ql-formats">
+                                                                        <button class="ql-list"
+                                                                            value="ordered"></button>
+                                                                        <button class="ql-list" value="bullet"></button>
+                                                                        <button class="ql-list" value="check"></button>
+                                                                    </span>
+                                                                </div>
+
+                                                                <!-- Editor - UNIQUE ID per menu item -->
+                                                                <div id="editor-{{.Id}}" data-description="{{.Description}}"
+                                                                    class="quill-editor-container border border-[#EDEDED] rounded-[4px] min-h-[120px] bg-white">{{.HtmlDescription}}
+                                                                </div>
+
+                                                                <div
+                                                                    class="{{if .ImagePath}}{{else}}hidden{{end}} imageRemoveDiv flex mb-[24px] mt-[24px] max-[1300px]:mb-[16px] last-of-type:mb-0">
+                                                                    <p
+                                                                        class="ImageName text-[14px] font-normal leading-[18px] text-[#10A37F] mb-[8px]">
+                                                                        {{.ImageName}}
+                                                                    </p>
+                                                                    <input type="hidden" class="svgDelete" value="">
+                                                                    <span
+                                                                        class="{{if .ImagePath}}{{else}}hidden{{end}} deleteimg pl-[10px] cursor-pointer "><img
+                                                                            src="/public/img/delete-drop.svg"
+                                                                            alt=""></span>
+
+                                                                </div>
+
+
+                                                                <div
+                                                                    class="  {{if .ImagePath}}hidden {{end}} imgupldiv mt-[24px] flex flex-col gap-1.5">
+
+                                                                    <input type="hidden" class="svgval" value="">
+                                                                    <button
+                                                                        class="p-[9px_10px] w-full flex justify-center items-center relative w-fit rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
+                                                                        <img src="/public/img/upload-folder.svg" alt="">
+                                                                        <p
+                                                                            class="text-[14px] font-normal leading-[18px] text-[#616161]">
+                                                                            Upload Icon
+                                                                        </p>
+                                                                        <input type="file" accept=".svg"
+                                                                            class="imguploadd absolute w-full h-full opacity-0 text-[0] cursor-pointer top-0 left-0">
+                                                                    </button>
+                                                                    <p
+                                                                        class="svgins text-[12px] text-[#8A8A8A] mb-[20px] text-right">
+                                                                        Only *SVG files are allowed
+                                                                    </p>
+                                                                </div>
+                                                                <input type="text" placeholder="Path link"
+                                                                    value="{{.UrlPath}}" {{if ne .Type `custom_url`}}
+                                                                    disabled {{end}}
+                                                                    class="p-[15px_14px] {{if ne .Type `custom_url`}} opacity-[0.5]{{end}} border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+                                                                <div class="chk-group chk-group-label ">
+                                                                    <input type="checkbox" {{if eq .SeparateWindow
+                                                                        1}}checked{{end}}
+                                                                        class="separatewindow hidden peer "
+                                                                        id="separatewindow{{.Id}}"
+                                                                        value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                                                        onclick="this.value = this.checked ? 1 : 0;">
+                                                                    <label for="separatewindow{{.Id}}"
+                                                                        class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                                        <p
+                                                                            class="text-[#252525] text-[13px] font-light mb-0">
+                                                                            {{$Translate.Menu.SeparateWindow}}</p>
+                                                                    </label>
+                                                                </div>
+
+                                                                <!-- <div class="flex flex-col gap-1.5">
+                                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                                        <input id="separatewindow" type="checkbox" class="pr-3"
+                                                            name="separatewindow"
+                                                            value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                                            onclick="this.value = this.checked ? 1 : 0;" />
+                                                        {{$Translate.Menu.SeparateWindow}}
+                                                    </p>
+
+
+                                                </div> -->
+                                                                <div class="flex items-center justify-end gap-[10px]">
+                                                                    <a href="#" id="" data-id="{{.Id}}"
+                                                                        data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapse{{.Id}}"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapse{{.Id}}"
+                                                                        class="flex justify-center place-items-center bg-[#ffffff] hover:bg-[#F5F5F5] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-light text-[14px] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#E6E6E6] text-[#989898]">
+                                                                        Cancel
+                                                                    </a>
+                                                                    <a href="#" id="updatebtn" data-id="{{.Id}}"
+                                                                        data-type="{{.Type}}" data-typeid="{{.TypeId}}"
+                                                                        data-name="{{.Name}}"
+                                                                        data-parent="{{.ParentId}}"
+                                                                        class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                                        Save
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div>
+                                                    <button
+                                                        class="menuitemeditbtn pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                                        data-id="{{.Id}}" data-name="{{.Name}}"
+                                                        data-bs-target="#modalIdd2" data-bs-toggle="modal"> <img
+                                                            src="/public/img/edit.svg" alt=""></button>
+                                                </div> -->
+                                                    <div class="w-[40px]">
+                                                        <button
+                                                            class="pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                                            id="menuitemdeletebtn" data-id="{{.Id}}"
+                                                            data-name="{{.Name}}" data-bs-target="#deleteModal"
+                                                            data-bs-toggle="modal"> <img
+                                                                src="/public/form-img/img/delete.svg" alt=""></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{ end }}
+                                            {{ end }}
                                         </div>
-                                        {{ end }}
-                                        {{ end }}
+                                        <!-- <div>
+                                        <button
+                                            class="menuitemeditbtn pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                            data-id="{{.Id}}" data-name="{{.Name}}" data-bs-target="#modalIdd2"
+                                            data-bs-toggle="modal"> <img src="/public/img/edit.svg" alt=""></button>
+                                    </div> -->
+
+                                        <div>
+                                            <button
+                                                class="pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                                id="menuitemdeletebtn" data-id="{{.Id}}" data-name="{{.Name}}"
+                                                data-bs-target="#deleteModal" data-bs-toggle="modal"> <img
+                                                    src="/public/form-img/img/delete.svg" alt=""></button>
+                                        </div>
                                     </div>
                                 </div>
-
                                 {{end}}
                                 {{end}}
                                 {{else}}
@@ -532,6 +1303,12 @@
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <input type="hidden" name="formmode" id="formmode" value="1">
         <input type="hidden" name="menu_id" id="menu_id" value="{{.menuid}}">
+        <input type="hidden" name="type" id="menutype" class="menutype" value="">
+        <input type="hidden" class="webid" name="webid" value="{{.websitedetail.Id}}" data-id="{{.websitedetail.Id}}">
+        <input type="hidden" name="parentmenu_id" class="parentmenu_id" value="{{.menuid}}">
+        <input type="hidden" name="redirectid" class="redirectid" value="{{.menuid}}">
+        <input type="hidden" name="menuitem_id" class="menuitem_id" value="">
+        <input type="hidden" name="menu_typeid" class="menu_typeid" value="">
         <div class="modal-dialog modal-dialog-scrollable max-w-[580px]" role="document">
             <div class="rounded-none modal-content b-0">
 
@@ -558,16 +1335,43 @@
                                     </p>
                                     <input type="text" placeholder="{{$Translate.Menu.LabelNamePlcholder}}"
                                         name="menu_name"
-                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                        class="menuitemname focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
                                 </div>
-                                <div class="flex flex-col gap-1.5">
-                                    <p class="mb-0 font-normal text-[#152027] text-sm">
-                                        {{$Translate.Menu.NavigationPath}}</p>
-                                    <input type="text" placeholder="{{$Translate.Menu.NavPlcholder}}" name="urlpath"
-                                        class="navpath pointer-events-none focus:!border-[#373737] [&amp;+label]:text-[#F26674]  [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                <div class=" flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-bold-black text-sm">
+                                        Menu Item Icon
+                                    </p>
 
+                                    <input type="hidden" id="svgHidden" name="svgHidden">
+                                    <button
+                                        class="uploadbtn p-[9px_10px] w-full flex justify-center items-center relative w-fit rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
+                                        <img src="/public/img/upload-folder.svg" alt="">
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#616161]">Upload Icon
+                                        </p>
+                                        <input type="file" accept=".svg"
+                                            class="imgupload absolute w-full h-full opacity-0 text-[0] cursor-pointer top-0 left-0">
+                                    </button>
+                                    <p class="svgins text-[12px] text-[#8A8A8A] mb-[20px] text-right">
+                                        Only *SVG files are allowed
+                                    </p>
                                 </div>
-                                <div class="flex gap-4">
+
+                                <div class="hidden mb-[24px] max-[1300px]:mb-[16px] last-of-type:mb-0 ImageNamediv">
+                                    <p id="ImageName"
+                                        class="text-[14px] font-normal leading-[18px] text-[#10A37F] mb-[8px]">
+                                        IMG-1760790085590102913.jpeg
+                                    </p>
+                                    <div id="imageRemoveDiv"
+                                        class="p-[9px_10px] flex items-center relative w-fit rounded cursor-pointer gap-2 bg-[#F9F9F9]  border-[#E6E6E6] border border-solid">
+                                        <a href="javascript:void(0);" class="w-[8px]">
+                                            <img src="/public/img/close-toast.svg" alt="">
+                                        </a>
+                                        <p class="text-[14px] font-normal leading-[18px] text-[#616161]">Remove</p>
+
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-x-4">
                                     <div class="mb-[16px] last-of-type:mb-0">
                                         <input type="radio" name="lang" id="radioCustomUrl" value="customUrl"
                                             class="hidden peer langInput" />
@@ -577,7 +1381,7 @@
                                             Custom URL
                                         </label>
                                     </div>
-                                    <div class="mb-[16px] last-of-type:mb-0">
+                                    <!-- <div class="mb-[16px] last-of-type:mb-0">
                                         <input type="radio" name="lang" id="radioEntries" value="entries"
                                             class="hidden peer langInput" />
                                         <label for="radioEntries"
@@ -585,7 +1389,7 @@
                                             data-role-id="2">
                                             Entries
                                         </label>
-                                    </div>
+                                    </div> -->
                                     <div class="mb-[16px] last-of-type:mb-0">
                                         <input type="radio" name="lang" id="radioPages" value="pages"
                                             class="hidden peer langInput" />
@@ -593,6 +1397,42 @@
                                             class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
                                             data-role-id="2">
                                             Pages
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioListings" value="listings"
+                                            class="hidden peer langInput" />
+                                        <label for="radioListings"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Listings
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioCategories" value="categories"
+                                            class="hidden peer langInput" />
+                                        <label for="radioCategories"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Categories
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radioChannels" value="Channels"
+                                            class="hidden peer langInput" />
+                                        <label for="radioChannels"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            Channels
+                                        </label>
+                                    </div>
+                                    <div class="mb-[16px] last-of-type:mb-0">
+                                        <input type="radio" name="lang" id="radionone" value="none"
+                                            class="hidden peer langInput" />
+                                        <label for="radionone"
+                                            class="relative cursor-pointer flex before:mr-[6px] items-center text-sm font-normal text-[#152027] peer-checked:text-[#262626] tracking-[0.005em] before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/radio-checked.svg')] checkRole"
+                                            data-role-id="2">
+                                            None
                                         </label>
                                     </div>
                                 </div>
@@ -671,7 +1511,7 @@
                                         <a href="javascript:void(0);" id="triggerId"
                                             class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                            <p class="text-[#717171]">Select Page</p>
+                                            <p class="text-[#717171] selectpage">Select Page</p>
 
                                         </a>
                                         <input type="hidden" name="subcategoryid" value="" id="cid"
@@ -721,6 +1561,231 @@
                                     </div>
 
                                 </div>
+                                <div class="flex-col gap-1.5 listingsDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Listings
+                                    </p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171]">Select Listing</p>
+
+                                        </a>
+                                        <input type="hidden" name="listingsids" value="" id="listingsids"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="listingsDropdownMenu dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 150px; overflow: auto;">
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchlistinglist"
+                                                        placeholder="Search Listings"
+                                                        class="searchlistinglist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+                                            {{range .listinglist}}
+                                            <li class="p-[9px_24px] border-b border-[#EDEDED]" data-id="{{.Id}}">
+                                                <div class="chk-group chk-group-label">
+                                                    <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
+                                                        title="{{.Title}}" class="hidden peer selected-listings">
+                                                    <label for="Check{{.Id}}"
+                                                        class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[12px] font-normal leading-none text-[#555555] tracking-[0.005em]
+                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+                                                        {{.Title}}
+                                                    </label>
+                                                </div>
+                                            </li>
+                                            {{end}}
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <!-- category dropdown -->
+                                <div class="flex-col gap-1.5 categoryDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Categories</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171]">Select Category</p>
+
+                                        </a>
+                                        <input type="hidden" name="categoryids" value="" id="categoryids"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="categoryDropdownMenu dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchcategorylists"
+                                                        placeholder="Search Categories"
+                                                        class="searchcategorylists search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+
+                                            {{range $index, $value := .Categorylist}}
+                                            <li class="catrgory-list p-[9px_24px] border-b border-[#EDEDED]"
+                                                data-id="{{$index}}">
+                                                <div class="chk-group chk-group-label">
+                                                    <input type="checkbox" id="Checkcat{{$index}}"
+                                                        class="hidden peer selectcheckbox" data-id="{{$index}}">
+                                                    <label for="Checkcat{{$index}}"
+                                                        class="relative cursor-pointer flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em]
+                before:bg-transparent before:min-w-[14px] before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:mr-[6px] before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]">
+
+                                                        {{range $i, $cat := $value.Categories}}
+                                                        <span class="inline-flex items-center space-x-[6px] text-[12px] font-normal leading-none text-[#555555]
+                        after:inline-block after:ml-[6px] after:bg-[url('/public/img/path-arrow.svg')] after:w-[8px] after:h-[8px] after:bg-no-repeat after:bg-[length:6px_8px] after:bg-center 
+                        last-of-type:after:hidden" data-id="{{$cat.Id}}">
+                                                            {{$cat.Category}}
+                                                        </span>
+                                                        {{end}}
+                                                    </label>
+
+                                                </div>
+                                            </li>
+                                            {{end}}
+
+
+
+                                            <li class="noData-foundcategory " style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <!-- channel dropdown -->
+
+                                <div class="flex-col gap-1.5 channelDropdown hidden">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        Channels</p>
+
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" id="triggerId"
+                                            class="gap-[6px] rounded-[4px] p-[12px] h-[36px] bg-[#FCFBFC] border-[#EDEDED] border-[1px] text-bold-black text-sm font-normal w-full  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center] cursor-pointer"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <p class="text-[#717171] selectchannel">Select Channel</p>
+
+                                        </a>
+                                        <input type="hidden" name="subcategoryid" value="" id="cid"
+                                            class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
+
+                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                            style="height: 230px; overflow: auto;">
+
+                                            <div class="sticky top-0 bg-white z-10">
+                                                <div class="px-[12px] py-[8px] relative ">
+                                                    <input type="text" name="keyword" id="searchlistinglist"
+                                                        placeholder="Search Channels"
+                                                        class="searchchannellist search text-xs font-light text-[#AAAAAA] leading-[15px] border-[1px] border-solid border-[#ECECEC] block w-full bg-no-repeat bg-[left_12px_center] p-[8px_12px_8px_40px] rounded-[3px] bg-[url('/public/img/category-search.svg')]  ">
+                                                </div>
+                                            </div>
+
+                                            {{range .channelist}}
+                                            <li class="catrgory-dropdownlistt">
+                                                <a href="javascript:void(0);" id="categoryclick" data-id="{{.Id}}"
+                                                    data-slug="{{.SlugName}}"
+                                                    class="channelname drp category-path-list relative flex space-x-[6px] items-center mb-0 text-[14px] font-normal leading-none text-[#262626] tracking-[0.005em] p-[8px_12px] hover:bg-[#F5F5F5] cursor-pointer">
+
+                                                    <span
+                                                        class="para categorylistname inline-flex items-center gap-[6px] text-[12px] font-normal leading-none text-[#555555]">
+                                                        {{.ChannelName}}
+                                                    </span>
+
+                                                </a>
+                                            </li>
+                                            {{end}}
+                                            <li class="noData-foundWrapperr" style="display: none;">
+                                                <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
+                                                    <div class="text-center mx-auto w-[48px]">
+                                                        <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                    </div>
+                                                    <h2
+                                                        class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
+                                                        No data found with current filters</h2>
+                                                    <p
+                                                        class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                        Try changing any other keywords </p>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        {{$Translate.Menu.NavigationPath}}</p>
+                                    <input type="text" placeholder="{{$Translate.Menu.NavPlcholder}}" name="urlpath"
+                                        class="navpath pointer-events-none focus:!border-[#373737] [&amp;+label]:text-[#F26674]  [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) !bg-[#F9F9F9] p-3 border border-[#E6E6E6] rounded-[4px] w-full h-[48px] font-normal text-[#717171] text-sm" />
+
+                                </div>
+
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                        <input id="separatewindow" type="checkbox" class="pr-3" name="separatewindow"
+                                            value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                            onclick="this.value = this.checked ? 1 : 0;" />
+                                        {{$Translate.Menu.SeparateWindow}}
+                                    </p>
+
+
+                                </div>
+
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-bold-black text-sm">Meta Title
+                                    </p>
+                                    <input type="text" placeholder="Enter Title" name="meta_title"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-bold-black text-sm">Meta Description
+                                    </p>
+                                    <input type="text" placeholder="Enter Description" name="meta_description"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-bold-black text-sm">Meta Keywords
+                                    </p>
+                                    <input type="text" placeholder="Enter Keywords" name="meta_keywords"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -729,7 +1794,7 @@
                 <div class="p-[16px_30px] shadow-[0px_-4px_20px_0px_#0000000F] flex gap-[10px] justify-end">
                     <a href="#" data-bs-dismiss="modal"
                         class="cancelmenuitem flex justify-center items-center bg-slate-250 rounded-[4px]  font-normal text-bold-black text-sm no-underline p-[12px] h-[40px]">{{$Translate.Cancel}}</a>
-                    <button id="menuitemssavebtn" type="submit"
+                    <button id="menuitemssavebtn"
                         class="flex justify-center items-center bg-[#10A37F] hover:bg-[#148569] rounded-[4px] font-normal text-white text-sm no-underline p-[12px] h-[40px]">
                         {{$Translate.Menu.AddItem}}
                     </button>
@@ -778,6 +1843,13 @@
                                     <input type="text" id="menu_name" name="menu_name"
                                         class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
                                 </div>
+
+                                <div class="flex flex-col gap-1.5">
+                                    <p class="mb-0 font-normal text-bold-black text-sm">Menu Title</p>
+                                    <input type="text" id="menu_title" name="menu_title"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                </div>
+
                                 <div class="flex flex-col gap-1.5">
                                     <p class="mb-0 font-normal text-[#152027] text-sm">{{$Translate.Menu.Description}}
                                     </p>
@@ -795,7 +1867,7 @@
                                             <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">
                                             </div>
                                             <div
-                                                class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[calc(100% - 16px)] peer-checked:bg-primary">
+                                                class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
                                             </div>
                                         </div>
                                     </label>
@@ -823,6 +1895,58 @@
     </form>
 </div>
 {{template "footer" .}}
+<script>
+$(document).ready(function () {
+    $(document).on('shown.bs.collapse', '.accordion-collapse', function () {
+        var $collapse = $(this);
+        var menuId = $collapse.find('#updatebtn').data('id');
+        if (!menuId) return;
+
+        var $editor = $('#editor-' + menuId);
+        var $toolbar = $('#toolbar-container-' + menuId);
+
+        // Prevent double init
+        if ($editor.data('quill-initialized')) return;
+        if (!$editor.length || !$toolbar.length) return;
+
+        // Capture existing HTML
+        var existingHTML = $editor.html().trim();
+        
+        // Clear container
+        $editor.empty();
+
+        // Use setTimeout(0) to defer init until after Bootstrap animation & reflow completes [web:3][web:16]
+        setTimeout(function() {
+            // Init Quill
+            var quill = new Quill($editor[0], {
+                theme: 'snow',
+                modules: {
+                    toolbar: $toolbar[0]
+                },
+                placeholder: 'Enter Your Description...',
+                readOnly: false  // Explicitly ensure editable [web:4]
+            });
+
+            // Restore content AFTER init completes
+            if (existingHTML) {
+                quill.clipboard.dangerouslyPasteHTML(existingHTML);
+            }
+
+            // Focus after content load to activate selection/mouse handlers [web:7][web:10]
+            setTimeout(function() {
+                quill.focus({ preventScroll: true });
+            }, 10);
+
+            $editor.data('quill', quill);
+            $editor.data('quill-initialized', true);
+        }, 0);
+    });
+});
+
+</script>
+
+
+
 
 <script src="/public/js/gotemplate/menuitems.js"></script>
 <script src="/public/js/gotemplate/menulist.js"></script>

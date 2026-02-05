@@ -100,7 +100,7 @@ $("#save").click(function () {
       url: "/admin/categories/checksubcategoryname",
       type: "POST",
       async: false,
-      data: { "cname": value,"parentid": parent_id, "categoryid": category_id, csrf: $("input[name='csrf']").val() },
+      data: { "cname": value, "parentid": parent_id, "categoryid": category_id, csrf: $("input[name='csrf']").val() },
       datatype: "json",
       caches: false,
       success: function (data) {
@@ -222,7 +222,10 @@ $("body").on("click", "#edit", function () {
         $("#ctimagehide").attr("src", "/image-resize?name=" + result.ImagePath)
         $("#id").val(result.Id)
         $("#category_id").val(result.Id)
-
+        $("#metatitle").val(result.SeoTitle)
+        $("#metadesc").val(result.SeoDescription)
+        $("#metakey").val(result.SeoKeyword)
+         $("#metaslug").val(result.CategorySlug)
 
         var keyword = $("#searchcatlists").val()
 
@@ -349,6 +352,10 @@ $("#caddbtn , #clickadd").on("click", function () {
   $("#update").hide()
   $("#ctimagehide").hide()
   $("#catdel-img").hide()
+  $("#metatitle").val("");
+  $("#metadesc").val("");
+  $("#metakey").val("");
+    $("#metaslug").val("");
 
   $("#form").attr("name", "")
 
@@ -405,6 +412,10 @@ $(document).on("click", "#cancel", function () {
   $('#uploadFormat').show()
   $("#error-messagename").html("")
   $("#error-messagedesc").html("")
+  $("#metatitle").val("");
+  $("#metadesc").val("");
+  $("#metakey").val("");
+    $("#metaslug").val("");
 
 })
 
@@ -486,6 +497,10 @@ $('#update').click(function () {
     var parentid = $("#categoryid").val();
     var image = $("#categoryimages").val();
     var pageno = $("#catpageno").val();
+    var metatitle = $("#metatitle").val();
+    var metadesc = $("#metadesc").val();
+    var metakey = $("#metakey").val();
+    var metaslug =$("#metaslug").val();
 
 
     if ($("#form").valid()) {
@@ -493,7 +508,7 @@ $('#update').click(function () {
         url: "/admin/categories/editsubcategory",
         type: "POST",
         datatype: "json",
-        data: { "id": id, "cname": cname, "cdesc": cdesc, "pcategoryid": pcategoryid, "image": image, csrf: $("input[name='csrf']").val() },
+        data: { "id": id, "cname": cname, "cdesc": cdesc, "pcategoryid": pcategoryid, "image": image, csrf: $("input[name='csrf']").val(), "metatitle": metatitle, "metadesc": metadesc, "metakey": metakey,"metaslug":metaslug },
         success: function (result) {
 
 

@@ -1,0 +1,608 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[72px] min-h-screen">
+    <input type="hidden" value="{{.CurrentPage}}" id="wh-current-page">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] p-[16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+  
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    {{$Translate.Webhooks.Webhook}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                   {{$Translate.Webhooks.Webhookheading}}
+                </p>
+            </div>
+        </div>
+    
+
+        {{if or (gt .count 0) (ne .keyword "")}}
+        <form id="wh-srch-form" action="/admin/webhooks">
+            <div
+                class="transitionSearch w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{if .keyword}} langSearchDiv{{end}}">
+                <a href="javascript:void(0);"
+                    class="srchBtn-togg group grid h-full w-[32px] place-items-center absolute left-0 top-0  hover:bg-[#FAFAFA]">
+                    <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden ">
+                    <img src="/public/img/search-icon-active.svg" alt="search"
+                        class="hidden group-hover:block searchopen ">
+                </a>
+                <input type="text" placeholder="Search (Ctrl + “k” to focus)" name="keyword" id="wh-srch-input"
+                    value="{{.keyword}}"
+                    class="search text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0  w-[calc(100%-36px)] h-full block ">
+                </input>
+                {{if .keyword}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{else}}
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                    <img src="/public/img/close.svg" alt="close">
+                </div>
+                {{end}}
+            </div>
+        </form>
+        {{end}}
+    </header>
+    {{if and (eq .count 0) (eq .keyword "")}}
+    <section>
+        <div class="p-[16px] flex space-y-[16px] flex-col items-start">
+            <div class="flex flex-col space-y-[8px]">
+                <h3 class="text-[#222222] font-normal text-2xl leading-[30px] mb-0">{{$Translate.Webhooks.Webhook}}</h3>
+                <p class="text-[#555555] text-xs font-normal mb-0">{{$Translate.Webhooks.HeadingDesc}}</p>
+            </div>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modalId"
+                class="flex space-x-[6px] items-center justify-center h-8 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] rounded-[4px] text-white text-sm font-normal">
+                <img src="/public/img/api-key.svg" />
+                <span>{{$Translate.Webhooks.NewWebhook}}</span>
+            </a>
+        </div>
+    </section>
+    {{end}}
+
+    {{if or (gt .count 0) (ne .keyword "")}}
+    <section>
+        <div class="p-[16px]">
+            <div class="flex sm:space-x-[16px] max-sm:space-y-[16px] sm:flex-row flex-col justify-between items-start sm:items-center mb-[24px]">
+                <div class="flex flex-col space-y-[8px]">
+                    <h3 class="text-[#222222] font-normal text-2xl leading-[30px] mb-0">Webhooks</h3>
+                    <p class="text-[#555555] text-xs font-normal mb-0">{{$Translate.Webhooks.HeadingDesc}}</p>
+                </div>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalId"
+                    class="flex space-x-[6px] items-center justify-center h-8 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] rounded-[4px] text-white text-sm font-normal">
+                    <img src="/public/img/api-key.svg" />
+                    <span>{{$Translate.Webhooks.NewWebhook}}</span>
+                </a>
+            </div>
+            <div class="flex flex-col space-y-[16px]">
+                {{if gt .count 0}}
+                {{range .Webhooks}}
+                <div class="border border-[#DFDFDF] rounded-[4px] flex items-center justify-between px-[16px] sm:px-[32px] py-[16px] space-x-[32px]"
+                    id="wh-container{{.Id}}">
+                    <div class="flex items-center space-x-[24px]">
+                        <div
+                            class="p-[8px] border border-[#DFDFDF] rounded-[4px] min-w-12 h-12 flex justify-center items-center">
+                            <img src="/public/img/slack-1.svg" />
+                        </div>
+                        <div class="flex flex-col space-y-[16px]" id="wh-flxcol1">
+                            <div class="flex flex-col space-y-[12px]" id="wh-flxcol2">
+                                <h5 class="text-lg font-normal text-[#222222] mb-0">{{.WebhookName}}</h5>
+                                <div class="flex items-start sm:items-center max-sm:space-y-[8px] sm:space-x-[8px] sm:flex-row flex-col">
+                                    <!-- <p class="text-[#6C757D] text-sm mb-0 font-normal">No runs</p> -->
+                                    <!-- <div class="w-px h-[12px] bg-[#727272] sm:block hidden"></div> -->
+                                    <span
+                                        class="text-[#6C757D] text-sm mb-0 font-normal break-all">{{.RequestUrl}}</span>
+                                </div>
+                            </div>
+                            <p class="text-[#222222] text-sm font-normal mb-0">{{$Translate.Webhooks.EventEnable}}:
+                                <span class="text-[#F43E8A] font-light">{{.EventType}}</span>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="btn-group">
+                        <button id="triggerId" class="bg-transparent  pa-1 rounded bg-hover h-6 w-6"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="/public/img/dots.svg" />
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-180"
+                            aria-labelledby="triggerId">
+                            <a id="wh-edit"
+                                class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#262626] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5]"
+                                href="javascript:void(0)" data-id="{{.Id}}"> <img
+                                    src="/public/img/edit.svg">{{$Translate.Webhooks.Edit}}</a>
+                            <a id="wh-delete"
+                                class="dropdown-item h-[40px] w-full grid grid-cols-[16px_1fr] gap-[12px] rounded-[3px] text-[12px] font-normal text-[#A01910] items-center p-[12px_16px] leading-none hover:bg-[#F5F5F5]"
+                                data-id="{{.Id}}" href="javascript:void(0)"> <img
+                                    src="/public/img/delete-drop.svg">{{$Translate.Webhooks.Delete}}</a>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+                {{else}}
+                <tr>
+                    <td colspan="8">
+
+                        <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                            <div class="text-center w-fit mx-auto">
+                                <img src="/public/img/noFilter.svg" alt="noFilter">
+                            </div>
+                            <h2 class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                {{$Translate.Webhooks.FilterNoData}}</h2>
+                            <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                {{$Translate.Webhooks.ChangeKeywords}} </p>
+
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+            </div>
+        </div>
+
+        <div
+            class=" max-sm:flex-col max-sm:space-y-[1rem] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+            <ul class="!ml-auto    max-sm:mx-auto  justify-center items-center space-x-[8px] flex flex-wrap">
+                {{if gt .totalcount .Limit}}
+
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}} graphqlPagination">
+                        <img src="/public/img/pg-prev.svg" alt="previous">
+                        <span class=" max-sm:hidden"> {{$Translate.Graphql.PaginationBackButton}}</span>
+                    </a>
+                </li>
+                {{if gt .CurrentPage 3}}
+                {{$keyword := .filter}}
+                <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        1 </a> </li>
+                {{end}}
+                {{if eq .CurrentPage 5}}
+                <li> <a href="?page=2{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        2 </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 5}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        ...</a> </li>
+                {{end}}
+                {{if gt .CurrentPage 2}}
+                <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        {{.Pagination.TwoBelow}} </a> </li>
+                {{end}}
+                {{if gt .CurrentPage 1}}
+                <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        {{.Pagination.PreviousPage}} </a> </li>
+                {{end}}
+
+                <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+                        text-[14px] w-[33px] h-[36px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+                        bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}} graphqlPagination">
+                        {{.CurrentPage}} </a> </li>
+                {{if lt .CurrentPage .Pagination.TotalPages}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        {{.Pagination.NextPage}} </a> </li>
+                {{end}}
+                {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        {{.Pagination.TwoAfter}} </a> </li>
+                {{end}}
+                {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+                <li> <a href="javascript:void(0)"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        ...</a> </li>
+                {{end}}
+                {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+                <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] graphqlPagination">
+                        {{.Pagination.TotalPages}}</a> </li> {{end}}
+                <li> <a href="?page={{.Pagination.NextPage}}{{if .filter}}&keyword={{.filter}}{{end}}"
+                        class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}} graphqlPagination">
+                        <span class=" max-sm:hidden"> {{$Translate.Graphql.PaginationNextButton}} </span> <img
+                            src="/public/img\pg-nxt.svg" alt="next">
+                    </a>
+                </li>
+                {{end}}
+            </ul>
+            <p class="!ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+                {{.Paginationstartcount}} – {{.Paginationendcount}} of {{.totalcount}}
+            </p>
+        </div>
+
+    </section>
+    {{end}}
+</section>
+
+<div class="modal right fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="modalTitleId" style="display: none;" aria-hidden="true">
+    <!-- <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  p-[4rem_1rem] max-xl:p-[2rem_1rem] h-full m-auto max-w-608" -->
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content b-0 rounded-[3px]">
+            <div
+                class="px-[24px]  py-[6px] max-sm:p-[6px_16px] border-b border-[#EDEDED] flex justify-between items-center !z-[5] sticky top-0" >
+                <h5 class="mb-0 text-bold-black font-medium text-base" id="modalTitleId">
+                    {{$Translate.Webhooks.CreateWebhook}}
+                </h5>
+                <div class="flex space-x-[12px]">
+                    <a href="#" data-bs-dismiss="modal"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline">{{$Translate.Webhooks.Cancel}}</a>
+                    <a href="javascript:void(0)" id="webhook-trgrBtn" data-status="0"
+                        class="h-8 flex items-center justify-center px-3  text-sm font-normal text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline ">{{$Translate.Webhooks.Create}}</a>
+                </div>
+            </div>
+            <div class="">
+                <form id="webhook-form" autocomplete="off">
+                    <input type="hidden" name="wh_id">
+                    <div class="p-[24px] flex flex-col space-y-[16px] max-sm:p-[16px] ">
+                        <div class="flex flex-col space-y-[6px]">
+                          
+                                    <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Webhooks.WebhookName}}  <span class="text-red-600" >*</span> 
+                                        <div class="cursor-pointer group">
+                                        <img src="/public/img/inputdesc.svg" alt="">
+                                        <p
+                                            class="!z-[10] hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            {{$Translate.Webhooks.Webhooknamelable}}</p>
+                                    </div></label>   
+                            <input type="text" placeholder="Enter Webhook Name" name="wh_name"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] p-[12px] h-[36px] placeholder:text-[#B2B2B2] text-[#152027] text-sm font-normal w-full">
+                        </div>
+                        <div class="relative">
+                            <div class="flex flex-col space-y-[6px]">
+                              
+                                        <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Webhooks.Event}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                {{$Translate.Webhooks.Eventlable}}</p>
+                                        </div></label>
+                                <div class="dropdown">
+                                    <input type="hidden" name="wh_event">
+                                    <a href="javascript:void(0);" id="slct-event-btn"
+                                        class="border border-[#EDEDED]  pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <p id="slct-event-item" class="font-normal w-full text-sm text-[#B2B2B2]">
+                                            {{$Translate.Webhooks.Placeholders.SlctEventType}}</p>
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                        shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        <li class="event-list-item"> <a href="javascript:void(0);"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">{{$Translate.Webhooks.Dropdowns.EntryCreate}}</a>
+                                        </li>
+                                        <li class="event-list-item"> <a href="javascript:void(0);"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">{{$Translate.Webhooks.Dropdowns.EntryPublish}}</a>
+                                        </li>
+                                        <li class="event-list-item"> <a href="javascript:void(0);"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">{{$Translate.Webhooks.Dropdowns.EntryUnpublish}}</a>
+                                        </li>
+                                        <li class="event-list-item"> <a href="javascript:void(0);"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">{{$Translate.Webhooks.Dropdowns.EntryDelete}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <label id="wh_event-error"
+                                    class="error text-[#F26674] font-normal text-xs rounded-[4px]"
+                                    style="display: none;" for="wh_event">*
+                                    {{$Translate.Webhooks.ValidationErrors.ReqEventType}}</label>
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-[6px]">
+                          
+                                    <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">  {{$Translate.Webhooks.EndpointUrl}} <span class="text-red-600" >*</span> 
+                                        <div class="cursor-pointer group">
+                                        <img src="/public/img/inputdesc.svg" alt="">
+                                        <p
+                                            class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                            {{$Translate.Webhooks.Endpointurllable}}</p>
+                                    </div></label>
+                            <input type="text" placeholder="Enter the Endpoint Url" name="wh_url"
+                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px] rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] p-[12px] h-[36px] placeholder:text-[#B2B2B2] text-[#152027] text-sm font-normal w-full">
+                        </div>
+                        <div class="relative">
+                            <div class="flex flex-col space-y-[6px]">
+                                
+                                        <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Webhooks.Method}} <span class="text-red-600" >*</span> 
+                                            <div class="cursor-pointer group">
+                                            <img src="/public/img/inputdesc.svg" alt="">
+                                            <p
+                                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                                {{$Translate.Webhooks.Methodlable}}</p>
+                                        </div></label>
+                                <div class="dropdown">
+                                    <input type="hidden" name="wh_method">
+                                    <a href="javascript:void(0);" id="slct-method-btn"
+                                        class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                         data-bs-toggle="dropdown" aria-expanded="false">
+                                        <p id="slct-method-item" class="font-normal w-full text-sm text-[#B2B2B2]">
+                                            {{$Translate.Webhooks.Placeholders.SlctMethod}}</p>
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                        shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        <li class="method-list-item"> <a href="javascript:void(0);" data-value="get"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">GET</a>
+                                        </li>
+                                        <li class="method-list-item"> <a href="javascript:void(0);" data-value="post"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">POST</a>
+                                        </li>
+                                        <li class="method-list-item"> <a href="javascript:void(0);" data-value="put"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">PUT</a>
+                                        </li>
+                                        <li class="method-list-item"> <a href="javascript:void(0);" data-value="delete"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">DELETE</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <label id="wh_method-error"
+                                    class="error text-[#F26674] font-normal text-xs rounded-[4px]" for="wh_method"
+                                    style="display: none;">*
+                                    {{$Translate.Webhooks.ValidationErrors.ReqMethod}}</label>
+                            </div>
+                        </div>
+                        <div class="relative" id="payload-container">
+                            <div class="flex flex-col space-y-[6px]">
+                               
+                                <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Webhooks.PayloadType}} 
+                                    <div class="cursor-pointer group">
+                                    <img src="/public/img/inputdesc.svg" alt="">
+                                    <p
+                                        class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                        {{$Translate.Webhooks.Payloadtypelable}}</p>
+                                </div></label>
+                                <div class="dropdown">
+                                    <input type="hidden" name="wh_payload">
+                                    <a href="javascript:void(0);" id="slct-payload-btn"
+                                        class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <p id="slct-payload-item" class="font-normal w-full text-sm text-[#B2B2B2]">
+                                            {{$Translate.Webhooks.Placeholders.SlctPayloadType}}</p>
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                        shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        <li class="payload-list-item"> <a href="javascript:void(0);" data-value="json"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                JSON</a>
+                                        </li>
+
+                                        <li class="payload-list-item"> <a href="javascript:void(0);" data-value="xml"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                XML</a>
+                                        </li>
+
+                                        <li class="payload-list-item"> <a href="javascript:void(0);"
+                                                data-value="form data"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                FORM DATA</a>
+                                        </li>
+
+                                        <!-- <li class="payload-list-item"> <a href="javascript:void(0);"
+                                                data-value="form data"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                Multipart Form Data</a>
+                                        </li> -->
+                                        <!-- <li class="payload-list-item"> <a href="javascript:void(0);"
+                                                data-value="plain text"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                Plain Text</a>
+                                        </li> -->
+                                        <!-- <li class="payload-list-item"> <a href="javascript:void(0);"
+                                                data-value="binary data"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                Binary Data</a>
+                                        </li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="header-section" class="flex flex-col space-y-[6px]">
+
+                            <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Webhooks.Headers}}
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Webhooks.Headerslable}}</p>
+                            </div></label>
+                            <!-- <div class="flex flex-col items-start rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] h-20">
+                                <div class="flex items-start w-full active">
+                                    <div class="min-w-10 h-full">
+                                        <p
+                                            class="h-[20px] text-center bg-[#DCDCDC] bg-grey-400 text-xs text-[#152027] font-normal flex items-center justify-center ">
+                                            1
+                                        </p>
+                                    </div>
+                                    <div class="w-full h-full flex">
+                                        <input
+                                            class="text-[#152027] text-xs font-normal w-full h-[20px] px-[12px] bg-[#F7F7F5] focus:bg-[#EDEDED] bg-grey-200 py-[3px] pb-[6px]"
+                                            value="{}">
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div id="headers-container"
+                                class="grid grid-cols-[1fr_1fr_auto] gap-[16px] head-containers">
+                                <input type="text" placeholder="Header" name="wh_header_key"
+                                    class="rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] p-[12px] h-[36px]  text-[#152027] text-sm font-normal w-full placeholder:text-[#B2B2B2] ">
+                                <input type="text" placeholder="Value" name="wh_header_value"
+                                    class="rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] p-[12px] h-[36px] text-[#152027] text-sm font-normal w-full placeholder:text-[#B2B2B2] ">
+                                <a id="add-header" href="javascript:void(0)"
+                                    class="bg-[#F7F7F5]  border border-[#EDEDED] text-xl w-[36px] h-[36px] grid place-items-center"
+                                    data-status="0">+</a>
+                            </div>
+                        </div>
+                        <div id="field-section" class="flex flex-col space-y-[6px]">
+                            <label for="" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">  {{$Translate.Webhooks.PayloadFields}}
+                                <div class="cursor-pointer group">
+                                <img src="/public/img/inputdesc.svg" alt="">
+                                <p
+                                    class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                    {{$Translate.Webhooks.Payloadfieldslable}}</p>
+                            </div></label>
+                            <div id="field-container" class="grid grid-cols-[1fr_1fr_auto] gap-[16px] field-containers"
+                                data-status="0">
+                                <div>
+                                    <input type="text" placeholder="Field Name" name="wh_field_name"
+                                        class="rounded-[4px] border border-[#EDEDED] bg-[#F7F7F5] p-[12px] h-[36px]  text-[#152027] text-sm font-normal w-full placeholder:text-[#B2B2B2] ">
+                                    <label id="wh_field_name-error"
+                                        class="error text-[#F26674] font-normal text-xs rounded-[4px]"
+                                        for="wh_field_name" style="display: none;">*
+                                        {{$Translate.Webhooks.ValidationErrors.ReqFieldName}}</label>
+                                </div>
+                                <div class="dropdown">
+                                    <input type="hidden" name="wh_field_value">
+                                    <a href="javascript:void(0);" id="slct-fieldval-btn"
+                                        class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <p id="slct-fieldval-item"
+                                            class="font-normal whitespace-nowrap w-[calc(100%-30px)] text-sm text-[#B2B2B2] overflow-hidden">
+                                            {{$Translate.Webhooks.Placeholders.SlctFieldValue}}</p>
+                                    </a>
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                        shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                        <li class="fv-list-item"> <a href="javascript:void(0);" data-value="entry title"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                {{$Translate.Webhooks.Dropdowns.EntryTitle}}</a>
+                                        </li>
+                                        <li class="fv-list-item"> <a href="javascript:void(0);"
+                                                data-value="channel name"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                {{$Translate.Webhooks.Dropdowns.ChannelName}}</a>
+                                        </li>
+
+                                        <li class="fv-list-item"> <a href="javascript:void(0);"
+                                                data-value="entry's html content"
+                                                class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                Entry's Html Content</a>
+                                        </li>
+
+                                        <li class="fv-list-item"> <a href="javascript:void(0);"
+                                                data-value="initiator name"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                {{$Translate.Webhooks.Dropdowns.EventInitiatorName}}</a>
+                                        </li>
+
+                                        <li class="fv-list-item"> <a href="javascript:void(0);"
+                                                data-value="initiator role"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">
+                                                {{$Translate.Webhooks.Dropdowns.EventInitiatorRole}}</a>
+                                        </li>
+                                    </ul>
+                                    <label id="wh_field_value-error"
+                                        class="error text-[#F26674] font-normal text-xs rounded-[4px]"
+                                        style="display: none;" for="wh_field_value">*
+                                        {{$Translate.Webhooks.ValidationErrors.ReqFieldValue}}</label>
+                                </div>
+                                <a id="add-field" href="javascript:void(0)"
+                                    class="bg-[#F7F7F5]  border border-[#EDEDED] text-xl w-[36px] h-[36px] grid place-items-center"
+                                    data-status="0">+</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-start space-x-[8px]">
+                            <label for="toggleTwo"
+                                class="flex items-center justify-start cursor-pointer select-none text-dark dark:text-white">
+                                <div class="relative">
+                                    <input type="checkbox" id="toggleTwo" class="peer sr-only" name="wh_status">
+                                    <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                    <div
+                                        class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                    </div>
+                                </div>
+                            </label>
+                            <label for="toggleTwo"
+                                class="cursor-pointer text-bold-black text-sm font-normal">{{$Translate.Webhooks.EnableWebhook}}
+                                </p>
+                        </div>
+                        <!-- <div class="flex flex-col gap-1.5">
+                            <p class="text-[#152027] text-sm font-normal mb-0">Apply Filters</p>
+                            <div class="border border-[#EDEDED] bg-[#F7F7F5] rounded-[4px] px-[16px] py-6 flex flex-col gap-[16px]">
+                                <div class="relative">
+                                    <div class="flex flex-col gap-[6px]">
+                                        <p class="text-bold-black text-sm font-normal mb-0">Environment</p>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="border border-[#EDEDED] bg-white pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('../img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <p></p>
+                                            </a>
+                                            <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                                <li> <a href="javascript:void(0);" class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Environment
+                                                        1</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Environment
+                                                        2</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Environment
+                                                        3</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="flex flex-col gap-[6px]">
+                                        <p class="text-bold-black text-sm font-normal mb-0">Projects</p>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="border border-[#EDEDED] bg-white pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('../img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <p></p>
+                                            </a>
+                                            <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                                <li> <a href="javascript:void(0);" class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Projects
+                                                        1</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Projects
+                                                        2</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Projects
+                                                        3</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="flex flex-col gap-[6px]">
+                                        <p class="text-bold-black text-sm font-normal mb-0">Tags</p>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="border border-[#EDEDED] bg-white pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('../img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <p></p>
+                                            </a>
+                                            <ul class="dropdown-menu w-full border-0 rounded-[4px] 
+                                                shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] ">
+                                                <li> <a href="javascript:void(0);" class=" block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Tags
+                                                        1</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Tags
+                                                        2</a>
+                                                </li>
+                                                <li> <a href="javascript:void(0);" class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5] ">Tags
+                                                        3</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
+<script src="/public/js/common.js"></script>
+<script src="/public/js/webhook/webhook.js"></script>
+{{template "footerclose" .}}

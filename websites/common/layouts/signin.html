@@ -34,8 +34,9 @@
                     class="text-base font-medium leading-[17px] text-[#83838D] text-center mb-[24px] max-[1300px]:mb-[16px]">
                     Welcome back! Please enter your details.</p>
                 <div class="bg-[#FFFFFF] border border-[#E9E9E9] p-[30px] rounded-[12px]">
-                    <form action="/singin " method="post"
+                    <form action="/sign-in " method="post"
                         name="signinform" id="signinform">
+                         <input type="hidden" name="csrf" value="{{.csrf}}">
                         <div class="mb-[24px] last-of-type:mb-0 relative"><label
                                 class="text-[14px] font-medium leading-[16px] text-[#1D1D1F] block mb-[5px]">Email</label><input
                                 placeholder="Enter your Email" name="emailid"

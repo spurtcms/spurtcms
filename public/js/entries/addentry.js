@@ -67,6 +67,26 @@ $(document).on("click", "#lg-btn", function () {
     $("#log-btn").toggle("show")
 })
 
+function validateRole() {
+
+    let userRole = $("#user_roleid").val().trim();
+    console.log("sadjgas", userRole);
+
+    let errorMsg = $("#user_role_error");
+
+    errorMsg.text(""); // clear previous message
+
+    if (userRole == 0) {
+        errorMsg.text("User role is required");
+        $('a[href="#content-protection"]').tab('show');
+        return false;
+    }
+
+    // success
+    errorMsg.text("");
+    return true
+}
+
 $(document).ready(async function () {
 
     var gurl = window.location.href;
@@ -87,11 +107,20 @@ $(document).ready(async function () {
         languagedata = data
     })
 
+
     // You get innerHTML here    
     document.addEventListener('saveChange', function (event) {
+
+        const accesstype = $('#accesstype-value').val()
+
+        if (accesstype === "logged_in_user" && !validateRole()) {
+            return;
+        }
+
+
         spurtdata = event.detail
 
-        console.log("spurtdata", spurtdata.title, spurtdata.image);
+
 
         if ($("#savetype").val() == "draft") {
             var url = window.location.href;
@@ -119,9 +148,9 @@ $(document).ready(async function () {
             } else {
 
                 if (pageno == null) {
-                    homeurl = "/admin/entries/entrylist"
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id')
                 } else {
-                    homeurl = "/admin/entries/entrylist?page=" + pageno;
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id') + "?page=" + pageno;
                 }
 
             }
@@ -165,16 +194,54 @@ $(document).ready(async function () {
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
                 languageid = $("#languageid").val()
+                              let slug = $('#metaslug').val()
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+                 if (slug == "" ){
+                     slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+                 }
+                let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
+
+                if (!entryslugduplicate){
+                   $("#metaslug").val(slug)
+
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
+                }
+
+                 let mandoryFlag = channelfieldvalidation()
+
+                if (!mandoryFlag){
+
+                    $('.editor-tabs3')
+                        .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                        .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
+                }
+
+
+                 if ((mandoryFlag) && (entryslugduplicate)) {
+
+
+
+
                 $.ajax({
                     url: "/admin/entries/draftentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
+                    data: {
+                        "id": $("#slchannel").attr('data-id'), "cname": channelname,
+                        "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html,
+                        "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()
+                    },
                     success: function (result) {
                         window.location.href = homeurl;
                     }
                 })
             }
+        }
         }
 
         if ($("#savetype").val() == "savePreview") {
@@ -194,11 +261,6 @@ $(document).ready(async function () {
             }
             console.log("pageno", pageno);
 
-            if (pageno == null) {
-                homeurl = "/admin/entries/entrylist"
-            } else {
-                homeurl = "/admin/entries/entrylist?page=" + pageno;
-            }
             Getselectedcatagories()
             if (categoryIds.length == 0) {
                 categoryIds.push($("#cat0").attr("data-id"));
@@ -238,11 +300,47 @@ $(document).ready(async function () {
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
                 languageid = $("#languageid").val()
+
+
+                if (pageno == null) {
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id')
+                } else {
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id') + "?page=" + pageno;
+                }
+                              let slug = $('#metaslug').val()
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+if (slug == "" ){
+    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+}
+                let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
+
+                if (!entryslugduplicate){
+                 $("#metaslug").val(slug)
+
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
+                }
+
+                 let mandoryFlag = channelfieldvalidation()
+
+                if (!mandoryFlag){
+
+                    $('.editor-tabs3')
+                        .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                        .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
+                }
+
+
+                 if ((mandoryFlag) && (entryslugduplicate)) {
                 $.ajax({
                     url: "/admin/entries/draftentry/" + eid,
                     type: "POST",
                     dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()},
                     success: function (result) {
 
                         var anchor = document.createElement('a');
@@ -255,7 +353,10 @@ $(document).ready(async function () {
 
                     }
                 })
+
+
             }
+        }
         }
 
         if ($("#savetype").val() == "publish") {
@@ -273,11 +374,6 @@ $(document).ready(async function () {
                 var eid = $("#eid").val()
             }
 
-            if (pageno == null) {
-                homeurl = "/admin/entries/entrylist"
-            } else {
-                homeurl = "/admin/entries/entrylist?page=" + pageno;
-            }
             channelname = $("#slchannel").val()
             Getselectedcatagories()
             if (categoryIds.length == 0) {
@@ -330,16 +426,54 @@ $(document).ready(async function () {
                 orderindex = $("#orderindex").val()
                 languageid = $("#languageid").val()
 
+                if (pageno == null) {
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id')
+                } else {
+                    homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id') + "?page=" + pageno;
+                }
 
-                $.ajax({
-                    url: "/admin/entries/publishentry/" + eid,
-                    type: "POST",
-                    dataType: "json",
-                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid },
-                    success: function (result) {
-                        window.location.href = homeurl;
-                    }
-                })
+                let slug = $('#metaslug').val()
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+if (slug == "" ){
+    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+}
+                let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
+
+                if (!entryslugduplicate){
+            $("#metaslug").val(slug)
+
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
+                }
+                let mandoryFlag = channelfieldvalidation()
+
+                if (!mandoryFlag){
+
+                    $('.editor-tabs3')
+                        .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
+                        .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
+                }
+
+                if ((mandoryFlag) && (entryslugduplicate)) {
+
+
+                    $.ajax({
+                        url: "/admin/entries/publishentry/" + eid,
+                        type: "POST",
+                        dataType: "json",
+                        data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()},
+                        success: function (result) {
+                             window.location.href = homeurl;
+                        }
+                    })
+
+                }
+
+
             }
         }
     });
@@ -354,6 +488,11 @@ $(document).ready(async function () {
     var url = window.location.href;
 
     console.log("url:", url);
+
+    $('.tab-togg3R').trigger('click')
+
+    $('#availblecate').trigger('click');
+
 
 
 
@@ -399,7 +538,7 @@ $(document).ready(async function () {
                 dataType: "json",
                 data: { "id": id, csrf: $("input[name='csrf']").val() },
                 success: function (result) {
-                    editresult =result
+                    editresult = result
                     var currentDate = new Date();
                     var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
@@ -413,6 +552,45 @@ $(document).ready(async function () {
                     $("#tagname").val(result.Entries.Tags)
                     $("#extxt").val(result.Entries.Excerpt)
                     $("#orderindex").val(result.Entries.OrderIndex)
+                    $("#accesstype-value").val(result.Entries.AccessType)
+
+                    if (result.Entries.AccessType == "logged_in_user") {
+                        $(".accesstypespan").text("Logged in user")
+                        $("#Role-list-div").show();
+                    } else if (result.Entries.AccessType == "no_direct_access") {
+                        $(".accesstypespan").text("No direct access")
+                        $("#Role-list-div").hide();
+                    } else {
+                        $(".accesstypespan").text("Every one")
+                        $("#Role-list-div").hide();
+                    }
+                    $('#user_roleid').val(result.Entries.UserRoleId)
+
+                    if (result.Entries.UserRoleId != 0 && result.Entries.UserRoleId != "" && result.Entries.UserRoleId != "undefined") {
+
+                        $('.user_role').each(function () {
+
+                            if ($(this).attr('data-id') == result.Entries.UserRoleId) {
+
+                                $(this).prop('checked', 'true')
+                            }
+                        })
+
+                    }
+
+                    $('#membership_levelid').val(result.Entries.MembershipLevelId)
+
+                    if (result.Entries.MembershipLevelId != 0 && result.Entries.MembershipLevelId != "" && result.Entries.MembershipLevelId != "undefined") {
+
+                        $('.membership_level').each(function () {
+
+                            if ($(this).attr('data-id') == result.Entries.MembershipLevelId) {
+
+                                $('.membershipspan').text($(this).text())
+                            }
+                        })
+
+                    }
                     formid = result.Entries.CtaId
                     if (result.Entries.Author != "") {
                         $("#author").val(result.Entries.Author)
@@ -472,7 +650,11 @@ $(document).ready(async function () {
                         $(".sl-list").removeClass("hidden")
                         newcatarray = result.Entries.CategoriesId.split(",")
 
+                        categoryIds.push(result.Entries.CategoriesId.split(","))
+
                     }
+
+
                     if (result.Entries.MemebrshipLevelIds != "") {
                         mapentryandmembershiplevel = result.Entries.MemebrshipLevelIds.split(",")
 
@@ -511,18 +693,50 @@ $(document).ready(async function () {
 
 
                     }
+
+                    //  $('#availblecate').trigger('click');
+                    for (let x of newcatarray) {
+                        $('.ncati').each(function () {
+
+                            const $this = $(this);
+                            if ($this.attr('data-id') === x) {
+                                $this.closest('li').find(".selectcheckbox").prop('checked', true);
+                                $this.addClass('cat-val');
+                                const $li = $this.closest('li');
+                                $li.prependTo($('.categry-lst'));
+                            }
+
+                        });
+
+                    }
+
                     if (result.Entries.TblChannelEntryField != null) {
                         result.Entries.TblChannelEntryField.forEach(function (field) {
-                            console.log(field.FieldName,"ggggg")
-                            $(`#${field.FieldId}`).val(field.FieldValue)
+                              $(`#${field.FieldId}`).val(field.FieldValue)
                             $(`#${field.FieldId}`).attr('data-id', field.Id)
 
-                            if (field.FieldName=="File Upload"){
-                                 console.log("qqqqq")
+
+                            $(`#fileupload${field.FieldId}`).val(field.FieldValue)
+                            $(`#fileupload${field.FieldId}`).attr('data-id', field.Id)
+                            $(`#fieldimageBase64_${field.FieldId}`).val(field.FieldValue)
+                            $(`#fieldimageBase64_${field.FieldId}`).attr('data-id', field.Id)
+                            if ((field.FieldName == "File Upload") && (field.FieldValue != "")) {
+
                                 $('.fileuploaddiv').addClass('hidden')
                                 $('.zip-preview').removeClass('hidden')
-                                
+
                             }
+
+                                 
+                              
+                              
+                              if (field.FieldTypeId === 19 && field.FieldValue) {
+                                const fileName = field.FieldValue.split("/").pop();
+                              
+                                $("#uploadBtn_" + field.FieldId).text(fileName).attr("data-id", fileName)
+                                  $(".uploadimagecancelbtn_"+ field.FieldId).removeClass('hidden')
+                             
+                              }
                         })
                     }
                     var radval = $('.radioval').val()
@@ -554,6 +768,7 @@ $(document).ready(async function () {
                                 $(this).find('input').prop('checked', true);
                             }
                         })
+
                     }
                 }
             })
@@ -612,33 +827,33 @@ $(document).ready(async function () {
 })
 
 
-$(document).on('click','.tab-togg3',function(){
- 
- 
-   var url = window.location.href;
-     if (url.includes('edit') || url.includes("edits")) {
-    
-  if (editresult.Entries.TblChannelEntryField.length > 0) {
- 
- 
-                        editresult.Entries.TblChannelEntryField.forEach(function (field) {
-                           
-                            
-                            $(`#${field.FieldId}`).val(field.FieldValue)
-                            $(`#${field.FieldId}`).attr('data-id', field.Id)
-                            
-                            if (field.FieldName=="File Upload"){
-                                
-                                $('.fileuploaddiv').addClass('hidden')
-                                $('.zip-preview').removeClass('hidden')
-                                $('.uploaded-filepath').val(field.FieldValue)
-                                
-                            }
-                        })
-                    }
+$(document).on('click', '.tab-togg3', function () {
+
+
+    var url = window.location.href;
+    if (url.includes('edit') || url.includes("edits")) {
+
+        if (editresult.Entries.TblChannelEntryField.length > 0) {
+
+
+            editresult.Entries.TblChannelEntryField.forEach(function (field) {
+
+
+                $(`#fileupload${field.FieldId}`).val(field.FieldValue)
+                $(`#fileupload${field.FieldId}`).attr('data-id', field.Id)
+
+                if ((field.FieldName == "File Upload") && (field.FieldValue != "")) {
+
+                    $('.fileuploaddiv').addClass('hidden')
+                    $('.zip-preview').removeClass('hidden')
+                    $('.uploaded-filepath').val(field.FieldValue)
+
                 }
+            })
+        }
+    }
 })
- 
+
 // New code 
 $(document).on("click", "#sl-chn", function () {
     $("#chn-list").toggleClass("show")
@@ -802,6 +1017,7 @@ $(document).on('click', '.select-chn', function () {
 })
 
 
+
 $(document).on('click', '#availblecate', function () {
 
     // $('.tabclose').hide()
@@ -813,7 +1029,13 @@ $(document).on('click', '#availblecate', function () {
 
             const $this = $(this);
 
+
+
+
+
             if ($this.attr('data-id') === x) {
+
+
 
                 $this.closest('li').find(".selectcheckbox").prop('checked', true);
                 $this.addClass('cat-val');
@@ -984,7 +1206,7 @@ function Getseodetails() {
 
 function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional fields based on channel 
     for (let x of additionalfields) {
-        console.log(x.MasterFieldId, "checkdifdfdf")
+
         if (x.MasterFieldId == 2 || x.MasterFieldId == 7) {
 
             $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
@@ -997,8 +1219,10 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
 
             $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
                                 <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
-                                <textarea placeholder="Enter Text" class="bg-white  border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[120px] resize-none block w-full  placeholder:text-[#B2B2B2]" id="${x.FieldId}"></textarea>
+                                <textarea placeholder="Enter Texts" class="bg-white  border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[120px] resize-none block w-full  placeholder:text-[#B2B2B2]" id="${x.FieldId}"></textarea>
                            <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label> </div>`)
+
+
         }
         if (x.MasterFieldId == 6) {
 
@@ -1022,6 +1246,15 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                 <input type="number" placeholder="Enter Here" class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:font-normal placeholder:text-[#B2B2B2]" id="${x.FieldId}">
                                                     <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                 </div>`)
+        }
+        if (x.MasterFieldId == 18) {
+            $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
+                                <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
+                                <button data-editor="${x.FieldName}${x.FieldId}" data-fieldname="${x.FieldName}" data-fieldid="${x.FieldId}" class="addlogbutton editorfield p-[8px_12px] w-full flex justify-center items-center relative  rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
+                                Add  ${x.FieldName}                                                                      
+                                </button>
+                                <input type="hidden" id="${x.FieldId}" class="hiddeninput inputeditor${x.FieldId}">
+                           <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label> </div>`)
         }
         if (x.MasterFieldId == 10) {
 
@@ -1101,7 +1334,7 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
 
             $(".add-fl").append(` <div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
                                <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
-                               <input type="hidden" id="${x.FieldId}" class="uploaded-filepath" name="uploadedFilePath">
+                               <input type="hidden" id="fileupload${x.FieldId}" class="uploaded-filepath" name="uploadedFilePath">
 
                                 <div class="fileuploaddiv btn-group w-full block">
                                     <button class="p-[8px_12px] w-full flex justify-center items-center relative  rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid"
@@ -1111,10 +1344,17 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                                         <input type="file" 
                                         class="fileupload absolute w-full h-full opacity-0 text-[0]" accept=".zip">
                                        
+                                       
                                     </button>
+                                     <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label>
                                      
                                  <p class="file-error mt-2 text-[#F26674] text-xs hidden"></p>
                                 </div>
+                               <div class="loader-container hidden">
+                       <div class="loader small-loader"></div>
+                       <div class="loader-text">Loading...</div>
+                                        </div>
+
                                  <div class="zip-preview hidden flex items-center space-x-[8px] mb-[8px] bg-[#FBFBFB] px-3 py-2 mt-2 rounded w-full border-[#E6E6E6] border border-solid">
                                     <div class="w-[32px] h-[32px] rounded  grid place-items-center min-w-[32px]">
                                         <img src="/public/img/Export file icon.svg" alt="">
@@ -1130,6 +1370,51 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                                 </div>
                             </div>`)
         }
+        if (x.MasterFieldId == 19) {
+            
+    $(".add-fl").append(`
+        <div class="mb-[24px] last-of-type:mb-0 getvalue" id="fieldWrap_${x.FieldId}" mandatory-fl="${x.Mandatory}">
+          
+          <label  
+            class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}" data-channelfieldid="${x.MasterFieldId}">
+            ${x.FieldName}
+          </label>
+      
+          <div class="image-upload-wrapper relative flex items-center justify-between">
+            
+            <label
+              for="fieldimage_${x.FieldId}"
+              id="uploadBtn_${x.FieldId}"
+              class=" p-[8px_12px] text-[14px] w-full flex justify-center items-center rounded cursor-pointer gap-1 bg-[#F9F9F9] border border-[#E6E6E6] pr-[40px] uploadimagebtn" data-id="${x.FieldId}">
+              Upload Image
+            </label>
+      
+            <button
+              type="button"
+              class="hidden absolute right-[16px] cursor-pointer uploadimagecancelbtn uploadimagecancelbtn_${x.FieldId}">
+              <img src="/public/img/close-toast.svg" alt="">
+            </button>
+          </div>
+      
+          <input type="hidden" class="fieldimageBase64input" id="fieldimageBase64_${x.FieldId}"  name="fieldimageBase64_${x.FieldId}">
+          <input
+            type="file"
+            id="fieldimage_${x.FieldId}"
+            class="hidden fieldimageupload"
+            data-id="${x.FieldId}"
+            accept=".png,.jpg,.jpeg,.svg">
+      
+          <label
+            id="imageErr_${x.FieldId}"
+            class="text-[#f26674] font-normal text-xs error image-err hidden">
+            *${languagedata?.Channell?.errmsg}
+          </label>
+      
+        </div>
+      `);
+      
+        
+        }
     }
 }
 
@@ -1137,8 +1422,8 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
 //file upload function of additional field//
 $(document).on('change', '.fileupload', function () {
     var file = this.files[0];
-   console.log(file,"fileeee")
- $('.uploaded-filepath').val("")
+
+    $('.uploaded-filepath').val("")
     if (!file) return;
 
     var ext = file.name.split('.').pop().toLowerCase();
@@ -1154,41 +1439,66 @@ $(document).on('change', '.fileupload', function () {
         this.value = '';
         return false;
     }
-  
-
-  
-    $('.file-error').addClass("hidden").text('')
-        $(this).parents('.btn-group').addClass('hidden')
-    $('.zip-preview').removeClass("hidden")
-
-              var formData = new FormData();
-            formData.append('documentdata', file);
-
-            $.ajax({
-                url: '/uploadb64document',
-                method: 'POST',
-                contentType: false,
-                processData: false,
-                data: formData,
-                success: function (response) {
 
 
-                    console.log(response,"responsedatadfdfd")
+    $(this).parents('.btn-group').addClass('hidden')
 
-                    const urlObj = new URL(response.documentpath);
+    var formData = new FormData();
+    formData.append('documentdata', file);
 
-                    const finalpath = urlObj.pathname + urlObj.search;
+    $.ajax({
+        url: '/uploadb64document',
+        method: 'POST',
+        contentType: false,
+        processData: false,
+        data: formData,
+        beforeSend: function () {
+            $('.loader-container').removeClass('hidden');
+            $('.loader').removeClass('hidden');
+        },
+        success: function (response) {
 
-                    $('.uploaded-filepath').val(finalpath)
+
+            console.log(response, "response")
+            if (!response) {
+
+                $('.file-error').removeClass("hidden").text('No response from server.');
+            } else {
+                // const urlObj = new URL(response.documentpath);
+                // const finalpath = urlObj.pathname + urlObj.search;
+
+                if (response.documentname != "") {
+                    $('.file-error').addClass("hidden").text('');
+                    $('.zip-preview').removeClass("hidden");
+                    $('.uploaded-filepath').val(response.documentname);
                 }
-            })
-
+            }
+        },
+        error: function () {
+            $('.file-error').removeClass("hidden").text('Error uploading document.');
+        },
+        complete: function () {
+            $('.loader-container').addClass('hidden');
+            $('.loader').addClass('hidden');
+        }
+    })
 });
+
 $(document).on('click', '.zip-preview button', function () {
     var $preview = $(this).closest('.zip-preview');
     $preview.addClass('hidden')
     $('.fileupload').val('');
-     $preview.siblings('.btn-group').removeClass('hidden')
+    $preview.siblings('.btn-group').removeClass('hidden')
+    $('.uploaded-filepath').val('')
+
+});
+$(document).on('click', '.uploadimagecancelbtn', function () {
+    const $wrapper = $(this).closest('.image-upload-wrapper');
+ 
+    $(this).addClass('hidden');
+    $wrapper.find('.uploadimagebtn').text('Upload Image').addClass('bg-[#F9F9F9]').removeClass('bg-[#E6F0FF]')
+    $wrapper.find('.fieldimageBase64input').val('');
+    $wrapper.find('.fieldimageupload').val('');
 });
 // field dropdown 
 $(document).on('click', '.drop-open', function () {
@@ -1207,12 +1517,21 @@ function GetFieldValue() {
             "fid": $(this).children('.fl-name').attr('data-id'),
             "value": $(this).find('input').val() || $(this).find('textarea').val(),
             "fieldid": $(this).find('input').attr('data-id') || $(this).find('textarea').attr('data-id'),
+            "channelfieldid": $(this).children('.fl-name').attr('data-channelfieldid')
+            
 
         }
         if ((obj.fieldid == undefined) || (obj.fieldid == '')) {
             obj.fieldid = '0'
 
         }
+             if ((obj.channelfieldid == undefined) || (obj.channelfieldid == '')) {
+            obj.channelfieldid = '0'
+
+        }   
+
+console.log(obj.channelfieldid,"channelfieldidvalue");
+
 
         channeldata.push(obj)
 
@@ -1275,29 +1594,29 @@ $(document).on('click', '#optionsid', function () {
 function ChannelFieldsGet() {
     channeldata = []
     GetFieldValue()
-    var flag = channelfieldvalidation()
+    // var flag = channelfieldvalidation()
 
 
 
-    if (flag == true) {
+    // if (flag == true) {
 
-        console.log("check11")
+    //     console.log("check11")
 
-        // $('.tab-togg3').click(function () {
-        $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
-        $('.editor-tabs3').addClass('translate-x-[100%]');
-        $('.editor-tabs').removeClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-        $('.editor-tabs3').addClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
+    //     // $('.tab-togg3').click(function () {
+    //     $('.editor-tabs3').removeClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+    //     $('.editor-tabs3').addClass('translate-x-[100%]');
+    //     $('.editor-tabs').removeClass('shadow-[-2px_0px_6px_0px_#0000000D]');
+    //     $('.editor-tabs3').addClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
 
 
-    } else {
+    // } else {
 
-        console.log("check22")
-        $('.editor-tabs3').addClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
-        $('.editor-tabs3').removeClass('translate-x-[100%]');
-        $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
-        $('.editor-tabs3').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
-    }
+    //     console.log("check22")
+    //     $('.editor-tabs3').addClass('translate-x-[-378px] max-lg:translate-x-[0] max-lg:z-[999]  max-lg:min-w-[378px]');
+    //     $('.editor-tabs3').removeClass('translate-x-[100%]');
+    //     $('.editor-tabs').addClass('shadow-[-2px_0px_6px_0px_#0000000D]');
+    //     $('.editor-tabs3').removeClass(' shadow-[-8px_0px_16px_0px_#0000000D]');
+    // }
 
     channelfieldkeyup()
     console.log("new", channeldata);
@@ -1314,17 +1633,21 @@ function channelfieldvalidation() {
         charallowed = $(this).data('char')
 
         if ((($(this).find('input').val() === '') && ($(this).attr('mandatory-fl') == 1)) || (($(this).find('textarea').val() === '') && ($(this).attr('mandatory-fl') == 1))) {
+            console.log("inside 1");
+
 
             $(this).find('.manerr').show()
             flag = false
         }
-        if (($(this).find('input,textarea').val() !== '') && charallowed != 0) {
-            if ($(this).find('input,textarea').val().length > charallowed) {
+        // if (($(this).find('input,textarea').val() !== '') && charallowed != 0) {
+        //     if ($(this).find('input,textarea').val()) {
+        //         console.log("iinside2");
 
-                $(this).find('.cerr').show()
-                flag = false
-            }
-        }
+
+        //         $(this).find('.cerr').show()
+        //         flag = false
+        //     }
+        // }
     })
     return flag;
 }
@@ -1595,7 +1918,7 @@ $(document).on("click", '#field-update', function () {
 
 function bindData(fields) {
 
-    
+
     fields.forEach(function (field) {
 
         $("#" + field.FieldId).val(field.FieldValue);
@@ -1887,3 +2210,252 @@ $(document).on('click', '.languageselect', function () {
         || new bootstrap.Dropdown(dropdownToggle);
     dropdownInstance.hide();
 });
+
+$(document).on('click', '.dropdown-menu .access_type', function () {
+    $("#user_role_error").text('')
+    var value = $(this).attr("data-value").trim();
+    var valueselect = $(this).attr("data-text").trim();
+
+
+    if (value === 'every_one' || value === 'no_direct_access') {
+        $("#Role-list-div").hide();   // hide
+        $('#user_roleid').val(0)
+    } else {
+        $("#Role-list-div").show();   // show
+    }
+    $(this).closest('.dropdown').find('span.line-clamp-1').text(valueselect);
+
+    $('#accesstype-value').val(value);
+    $(this).closest('.dropdown-menu').removeClass('show');
+    $(this).closest('.dropdown').find('[data-bs-toggle="dropdown"]').attr('aria-expanded', 'false');
+});
+
+
+$(document).on('click', '.user_role', function () {
+    $("#user_role_error").text('')
+    roleid = $(this).attr('data-id')
+    $('#user_roleid').val(roleid)
+
+
+})
+
+$(document).on('click', '.membership_level', function () {
+
+    var value = $(this).text().trim();
+    $(this).closest('.dropdown').find('span.line-clamp-1').text(value);
+    $(this).closest('.dropdown-menu').removeClass('show');
+    $(this).closest('.dropdown').find('[data-bs-toggle="dropdown"]').attr('aria-expanded', 'false');
+    membershipid = $(this).attr('data-id')
+    $('#membership_levelid').val(membershipid)
+})
+
+$(document).on('keyup', '#metaslug', function (e) {
+    const $title = $(this).val();
+
+
+    if (!/^[a-zA-Z_\-\s\/]+$/.test($title)) {
+        $('#mslug-input-error').removeClass('hidden');
+    } else {
+        $('#mslug-input-error').addClass('hidden');
+    }
+});
+
+$(document).ready(function () {
+
+
+    $(document).on("click", ".addlogbutton", function (e) {
+        var fieldname = $(this).data("fieldname")
+        var fieldid = $(this).data("fieldid")
+        var editorName = $(this).data("editor")
+        var content = $(".inputeditor" + fieldid).val()
+        var block = $("spurt-editor").attr("block")
+        var defaultblock = $("spurt-editor").attr("defaultblock")
+        var uploadurl = $("spurt-editor").attr("uploadurl")
+
+        var mode;
+        var path = window.location.pathname;
+
+        if (path.includes("/create/")) {
+            if (!content) {
+                mode = "create"
+            } else {
+                mode = "edit"
+            }
+        } else if (path.includes("/edit/")) {
+            mode = "edit"
+            if (!content) {
+                content = $(".editorinput" + fieldid).val()
+                console.log("content::", content);
+                if (!content) {
+                    mode = "create"
+                }
+            }
+        }
+
+        console.log("mode::", mode);
+
+        $("#customModalTitle").text(fieldname)
+        $("#customModalFields").val("inputeditor" + fieldid)
+        $("#customModal").fadeIn();
+
+        console.log("Button clicked, editor to load:", editorName);
+
+        const container = document.getElementById('editor-container');
+        container.innerHTML = '';
+
+        const newEditor = document.createElement("spurt-editor-new");
+        newEditor.setAttribute('id', editorName);
+        newEditor.setAttribute('mode', mode);
+        newEditor.setAttribute('content', content);
+        newEditor.setAttribute('generated', '');
+        newEditor.setAttribute('defaultblock', defaultblock);
+        newEditor.setAttribute('block', block);
+        newEditor.setAttribute('uploadurl', uploadurl);
+
+        container.appendChild(newEditor);
+
+
+    });
+
+    // Close modal
+    $(document).on("click", ".closeModal", function () {
+        $("#customModal").fadeOut();
+    });
+
+    $(document).on("click", "#saveBtnLog", function () {
+        var fields = $("#customModalFields").val();
+
+        document.dispatchEvent(new CustomEvent("getHTMLnew"));
+
+        function handler(event) {
+            console.log("done::", fields);
+
+            $("." + fields).val(event.detail.html);
+            $("#customModal").fadeOut();
+
+            document.removeEventListener("saveChangeNew", handler);
+            clearModal();
+        }
+
+        document.addEventListener("saveChangeNew", handler);
+    });
+
+    function clearModal() {
+        $("#customModalTitle").text("");
+        $("#customModalFields").val("");
+    }
+
+});
+
+
+$(document).ready(function () {
+    $('.logodropdownmenu').on('click', function (e) {
+        e.stopPropagation();
+    });
+});
+
+
+
+
+
+function PageSlugDuplicate(pagename, pageid) {
+
+    var isDuplicate = true;
+    $.ajax({
+        url: "/admin/checkduplicateroute",
+        type: "POST",
+        async: false,
+        data: {
+            "product_id": pageid,
+            "slug_name": pagename,
+            "module_name": "Entries",
+            csrf: $("input[name='csrf']").val()
+        },
+        datatype: "json",
+        cache: false,
+        success: function (data) {
+            var result = data.trim();
+
+            console.log(result, "resulttt")
+            if (result == 'true') {
+                isDuplicate = false;
+            }
+        }
+    });
+
+    return isDuplicate
+}
+
+// ===================================================
+// additional field image upload
+
+// ==================================================
+
+// Handle image selection (ID-based, safe)
+$(document).on("change", ".fieldimageupload", function () {
+    
+    const inputEl = this;
+    const fieldId = inputEl.dataset.id;
+    const file = inputEl.files && inputEl.files[0];
+  
+    if (!fieldId || !file) return;
+    console.log("isahdiashid1");
+ 
+  
+    const hiddenInput = document.getElementById("fieldimageBase64_" + fieldId);
+    const button = document.getElementById("uploadBtn_" + fieldId);
+    const errorEl = document.getElementById("imageErr_" + fieldId);
+    const cancelBtn = button.closest('.relative').querySelector('.uploadimagecancelbtn');
+  
+    // Reset previous state
+    errorEl.classList.add("hidden");
+    errorEl.textContent = "";
+    hiddenInput.value = "";
+  
+    // Validate type
+    const allowedTypes = ["image/png", "image/jpeg", "image/svg+xml"];
+    if (!allowedTypes.includes(file.type)) {
+      errorEl.textContent = "Only PNG, JPG, JPEG, SVG allowed";
+      errorEl.classList.remove("hidden");
+      inputEl.value = "";
+      console.log("isahdiashid2");
+      
+      return;
+    }
+  
+    // Validate size (2MB)
+    const maxSize = 2 * 1024 * 1024;
+    if (file.size > maxSize) {
+      errorEl.textContent = "Image size must be less than 2MB";
+      errorEl.classList.remove("hidden");
+      inputEl.value = "";
+      console.log("isahdiashid3");
+ 
+      return;
+    }
+  
+    // Read file as base64
+    const reader = new FileReader();
+    reader.onload = () => {
+      // Ensure valid base64 format
+      if (!reader.result || !reader.result.includes(";base64,")) {
+        errorEl.textContent = "Invalid image data";
+        errorEl.classList.remove("hidden");
+        console.log("isahdiashid4");
+ 
+        return;
+      }
+  
+      hiddenInput.value = reader.result;
+  
+      // Update button UI
+      button.textContent = file.name;
+      button.dataset.filename = file.name;
+      cancelBtn.classList.remove('hidden');
+      button.classList.remove("bg-[#F9F9F9]");
+      button.classList.add("bg-[#E6F0FF]");
+    };
+  
+    reader.readAsDataURL(file);
+  });
+  

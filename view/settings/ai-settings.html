@@ -1,0 +1,456 @@
+{{template "header" .}}
+{{$Translate := .translate}}
+{{template "head" .}}
+
+<section
+    class="sectionclass  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
+    <header
+        class="header-rht  max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Setting.Aimodule}}
+            </h2>
+        </div>
+
+        <div class="flex items-center space-x-3">
+
+            <div
+                class="{{if eq .Searchtrue true}} transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] border border-[#ECECEC]   {{else}}transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px] {{end}}">
+                <a href="javascript:void(0);"
+                    class="group top-0 left-0 absolute place-items-center grid hover:bg-[#FAFAFA] w-[32px] h-full srchBtn-togg">
+                    <img src="/public/img/search-icon.svg" alt="search" class="group-hover:hidden block">
+                    <img src="/public/img/search-icon-active.svg" alt="search"
+                        class="group-hover:block hidden searchopen">
+                </a>
+                <form action="" method="get" class="searchform " autocomplete="off">
+                    <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id=""
+                        value="{{.Filter.Keyword}}"
+                        class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none absolute right-0 w-[calc(100%-36px)] h-full block  {{if eq .Searchtrue true}} p-[0_24px_0_0] {{else}} p-0 {{end}}">
+                    {{if eq .Searchtrue true}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+
+                </form>
+            </div>
+            <a href="javascript:void(0);" id="createmodule" data-bs-toggle="modal" data-bs-target="#modalId2"
+                class="flex justify-center place-items-center bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                <span class="mr-[8px] max-sm:mr-0 text-lg leading-none">
+                    <img src="/public/img/generate-ai.svg" alt="..." class="min-w-3" />
+                </span> <span class="max-sm:hidden">{{$Translate.AImodulesettings.Create}}</span></a>
+        </div>
+
+    </header>
+
+
+    <div class="grid grid-cols-[236px_1fr] max-sm:h-fit h-full max-sm:grid-cols-1 max-xl:grid-cols-[180px_1fr]">
+
+        <!--accordion-->
+        {{template "settingsmenu" .}}
+        <!--accordion-->
+
+
+        <div class="block overflow-hidden @container pb-[70px] ">
+
+            <div class="overflow-x-auto scrollbar-thin  ">
+                <table class="w-full min-w-[768px]">
+                    <thead>
+                        <tr>
+                            <th class="px-[16px] py-[12px] pr-0 w-[30px] border-b border-[#EDEDED]">
+                                <div class="chk-group chk-group-label flex justify-center">
+                                    <input type="checkbox" id="Check" class="hidden peer">
+                                    <label for="Check"
+                                        class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                            before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                                </div>
+                            </th>
+                            <th class="px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                <p class="text-[#222222] text-sm font-normal mb-0">{{$Translate.AImodulesettings.Aimodule}}</p>
+                            </th>
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] w-[20%] ">
+                                {{$Translate.AImodulesettings.Description}}
+                            </th>
+
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED]">
+                                {{$Translate.AImodulesettings.Lastupdatedon}}
+                            </th>
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                {{$Translate.AImodulesettings.Status}}
+                            </th>
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] ">
+                                {{$Translate.AImodulesettings.Model}}
+                            </th>
+
+                            <th
+                                class="text-[#222222] font-normal text-sm px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                {{$Translate.AImodulesettings.Action}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{if .list}}
+                        {{range .list}}
+                        <tr>
+                            <td class="px-[16px] py-[12px] pr-0 border-b border-[#EDEDED] align-middle">
+                                <div class="chk-group chk-group-label flex justify-center">
+                                    <input type="checkbox" id="Check{{.Id}}" data-id="{{.Id}}"
+                                        class="selectcheckbox hidden peer">
+                                    <label for="Check{{.Id}}"
+                                        class="w-[14px] h-[14px] relative cursor-pointer flex gap-[6px] items-center mb-0 text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  "></label>
+                                </div>
+                            </td>
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] align-middle text-[#152027] text-xs font-normal">
+                                {{if eq .AIModule "openai"}}
+                                <div class="flex items-center">
+                                    <img src="/public/img/open-ai-back.svg" alt="...">
+                                    <p class="ml-[6px] font-normal text-[#252525] text-xs">{{.AIModule}}</p>
+                                </div>
+                                {{else if eq .AIModule "geminiai"}}
+                                <div class="flex items-center">
+                                    <img src="/public/img/google.svg" alt="...">
+                                    <p class="ml-[6px] font-normal text-[#252525] text-xs">{{.AIModule}}</p>
+                                </div>
+                                {{else if eq .AIModule "deepseekai"}}
+                                <div class="flex items-center">
+                                    <img src="/public/img/deep-blue.svg" alt="...">
+                                    <p class="ml-[6px] font-normal text-[#252525] text-xs">{{.AIModule}}</p>
+                                </div>
+                                {{end}}
+
+                            </td>
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                {{.Description}}
+                                <input type="hidden" value="{{.ApiKey}}">
+                            </td>
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                {{.DateString}}
+                            </td>
+                            <td class="px-[16px] py-[12px] border-b border-[#EDEDED] text-center">
+                                <label for="check{{.Id}}"
+                                    class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
+                                    <div class="relative">
+                                        <input type="checkbox" id="check{{.Id}}" onclick="SubscriptionStatus('{{.Id}}')"
+                                            value="{{.IsActive}}" class="peer sr-only" {{if eq .IsActive
+                                            1}}checked{{end}} />
+                                        <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]"></div>
+                                        <div
+                                            class="absolute w-3 h-3 transition bg-white rounded-full dot dark:bg-dark-4 left-0.5 top-0.5  peer-checked:translate-x-[116%] peer-checked:bg-primary">
+                                        </div>
+                                    </div>
+                                </label>
+                            </td>
+
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle">
+                                {{.AiModel}}
+                            </td>
+                            <td
+                                class="px-[16px] py-[12px] border-b border-[#EDEDED] text-xs text-[#717171] align-middle text-center">
+                                <div class="btn-group position-static">
+                                    <a href="javascript:void(0);" type="button"
+                                        class="border-0 grid place-items-center items-center gap-[5px] w-[24px] h-[24px] rounded-[4px] group hover:bg-[#F5F5F5] focus:bg-[#F5F5F5] show"
+                                        data-bs-toggle="dropdown" aria-expanded="true">
+                                        <img src="/public/img/action-btn-active.svg" alt="dropdown"
+                                            class="hidden group-hover:block">
+                                        <img src="/public/img/action-btn.svg" alt="dropdown"
+                                            class="block group-hover:hidden">
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-start border-0 focus:bg-transparent drop-shadow-4 min-w-220 py-[12px]"
+                                        aria-labelledby="triggerId">
+
+                                        <a class="dropdown-item h-11 flex items-center gap-a-4 text-bold-black text-base font-normal"
+                                            id="editmodule" data-bs-toggle="modal" data-bs-target="#modalId2"
+                                            href="javascript:void(0);" data-id="{{.Id}}"><img
+                                                src="/public/img/edit.svg"> {{$Translate.AImodulesettings.Edit}}</a>
+                                        <div class="w-full h-px bg-gray-100 ma-y-2"></div>
+                                        <a class="dropdown-item h-11 flex items-center gap-a-4 text-bold-black text-base font-normal"
+                                            href="javascript:void(0);" data-bs-target="#deleteModal"
+                                            data-bs-toggle="modal" id="delete-btn" data-id="{{.Id}}"> <img
+                                                src="/public/img/delete.svg">{{$Translate.AImodulesettings.Delete}}</a>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {{end}}
+                        {{ else if or .Searchtrue .Filtertrue}}
+                        <td colspan="8">
+
+                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                <div class="text-center w-fit mx-auto">
+                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                </div>
+                                <h2
+                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                    No data found with current filters</h2>
+                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                    Try changing any other keywords </p>
+
+                            </div>
+                        </td>
+                        {{else}}
+                        <tr>
+                            <td colspan="9">
+                                <div class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                                    <div class="mb-[30px]">
+                                        <img src="/public/img/Ai no data found.svg" alt="">
+
+                                    </div>
+                                    <div class="flex flex-col items-center  w-full">
+                                        <div class="flex flex-col space-y-[16px] w-full">
+                                            <h3 class="mb-0 font-semibold text-[#262626] text-2xl text-center">
+                                                {{$Translate.AImodulesettings.Aiemptytitle}}</h3>
+                                            <p class="font-light text-[#717171] text-center mb-2 text-base">
+                                                {{$Translate.AImodulesettings.Aiemptydesc}}
+                                            </p>
+                                        </div>
+                                        <a href="javascript:void(0);" id="createmodule" data-bs-toggle="modal"
+                                            data-bs-target="#modalId2"
+                                            class="inline-flex items-center px-[16px] rounded h-[34px] font-normal text-sm underline">{{$Translate.AImodulesettings.Create}}</a>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {{end}}
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <!--Create New AI Module-->
+
+    <div class="right modal fade" id="modalId2" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="rounded-none modal-content b-0">
+                <div class="flex justify-between items-center px-6 py-1.5 border-[#EDEDED] border-b">
+                    <h5 class="mb-0 font-medium text-bold-black text-base" id="modalTitleId">
+                        {{$Translate.AImodulesettings.Create}}
+                    </h5>
+                    <div class="flex gap-3">
+                        <a href="javascript:void(0)" data-bs-dismiss="modal" id="Cancel"
+                            class="flex justify-center items-center bg-slate-250 rounded-[4px] h-8 font-normal text-bold-black text-sm no-underline pa-x-3">{{$Translate.AImodulesettings.Cancel}}</a>
+                        <a href="javascript:void(0)" id="Save"
+                            class="flex justify-center items-center bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] h-8 font-normal text-white text-sm no-underline pa-x-3 cursor-pointer">{{$Translate.AImodulesettings.Save}}
+                        </a>
+                    </div>
+                </div>
+                <div class="h-full overflow-auto scrollbar-thin">
+                    <form action="/admin/settings/aisettings/create" method="POST" name="aisettingscreate"
+                        id="aisettingscreate">
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+                        <input type="hidden" id="moduleid" name="moduleid">
+                        <div class="flex flex-col gap-[24px] p-6 h-full">
+                            <div class="flex flex-col gap-[16px]">
+                                <div class="flex flex-col items-start w-full">
+                                    <h3 class="mb-[6px] font-normal text-[#252525] text-sm">{{$Translate.AImodulesettings.Selectmodule}}</h3>
+                                    <p class="font-light text-[#525252] text-xs">
+                                        {{$Translate.AImodulesettings.Selectmoduledesc}}
+                                    </p>
+                                </div>
+                                <div
+                                    class="gap-[14px] grid grid-cols-3 max-[380px]:grid-cols-1 max-[500px]:grid-cols-2">
+                                    <input type="hidden" name="aimodule" id="aimodule" value="openai">
+                                    <a href="javascript:void(0)" id="openai" data-id="1" data-value="openai"
+                                        class="aimodule bg-[#FAFFFE] shadow-[0px_0px_6px_0px_#00000014] px-[16px] py-[12px] border-[#10A37F] border-[1px] border-solid rounded-md">
+                                        <div class="flex items-center mb-[8px]">
+                                            <img src="/public/img/open-ai-back.svg" alt="..." />
+                                            <h3 class="ml-[8px] font-normal text-[#262626] text-sm">{{$Translate.AImodulesettings.Openai}}</h3>
+                                        </div>
+                                        <p class="font-light text-[#525252] text-[10px]">
+                                            {{$Translate.AImodulesettings.Openaidesc}}
+                                        </p>
+
+                                    </a>
+                                    <a href="javascript:void(0)" id="geminiai" data-id="2" data-value="geminiai"
+                                        class="aimodule px-[16px] py-[12px] border-[#ECECEC] border-[1px] hover:border-[#10A37F] border-solid rounded-md">
+                                        <div class="flex items-center mb-[8px]">
+                                            <img src="/public/img/google.svg" alt="..." />
+                                            <h3 class="ml-[8px] font-normal text-[#262626] text-sm">{{$Translate.AImodulesettings.Google}}</h3>
+                                        </div>
+                                        <p class="font-light text-[#525252] text-[10px]">
+                                            {{$Translate.AImodulesettings.Googledesc}}
+                                        </p>
+
+                                    </a>
+                                    <a href="javascript:void(0)" id="deepseekai" data-id="3" data-value="deepseekai"
+                                        class="aimodule px-[16px] py-[12px] border-[#ECECEC] border-[1px] hover:border-[#10A37F] border-solid rounded-md">
+                                        <div class="flex items-center mb-[8px]">
+                                            <img src="/public/img/deep-blue.svg" alt="..." />
+                                            <h3 class="ml-[8px] font-normal text-[#262626] text-sm">{{$Translate.AImodulesettings.Deepseek}}
+                                            </h3>
+                                        </div>
+                                        <p class="font-light text-[#525252] text-[10px]">
+                                            {{$Translate.AImodulesettings.Deepseekdesc}}
+                                        </p>
+
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start gap-[16px]">
+                                <div class="gap-[16px] grid grid-cols-1 w-full">
+                                    <div class="flex flex-col gap-1.5">
+                                        <p class="mb-0 font-normal text-bold-black text-sm">{{$Translate.AImodulesettings.Apikey}}</p>
+                                        <input type="text" id="apikey" name="apikey" placeholder="{{$Translate.AImodulesettings.Apikeyplaceholder}}"
+                                            class="bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[36px] font-normal text-bold-black text-sm [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs" />
+                                    </div>
+                                    <div class="flex flex-col gap-1.5">
+                                        <p class="mb-0 font-normal text-[#152027] text-sm">{{$Translate.AImodulesettings.Description}} </p>
+                                        <textarea type="text" name="desc" id="desc" placeholder="{{$Translate.AImodulesettings.Descriptionplaceholder}}" maxlength="250"
+                                            class="bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-120 font-normal text-bold-black text-sm text-start resize-none"></textarea>
+                                            <div id="error-messagedesc" class="text-red-500 text-xs mt-1"></div>
+                                    </div>
+                                    <div class="dropdown open">
+                                        <p class="mb-[6px] font-normal text-[#152027] text-sm">{{$Translate.AImodulesettings.Aimodel}}
+                                        </p>
+
+                                        <a class="flex justify-between items-center bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-9 no-underline"
+                                            type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span class="font-normal text-bold-gray text-sm" id="triggerspan">
+                                                {{$Translate.AImodulesettings.Selectaimodel}}</span>
+                                            <img src="/public/img/drop-down-img.svg" />
+                                        </a>
+                                        <input type="hidden" id="apimodel" name="apimodel" value=""
+                                            class="bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[36px] font-normal text-bold-black text-sm [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs" />
+
+                                        <div class="focus:bg-transparent drop-shadow-4 border-0 w-full min-w-full dropdown-menu"
+                                            aria-labelledby="triggerId">
+                                            <a class="border-b border-black dropdown-item dropdown-item1"
+                                                href="javascript:void(0)">gpt-4o-mini</a>
+                                            <div class="bg-gray-100 w-full h-px"></div>
+                                            <a class="dropdown-item dropdown-item2"
+                                                href="javascript:void(0)">gpt-3.5</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" value="{{.Limit}}" id="limit">
+    <input type="hidden" value="{{.Count}}" id="count">
+
+    <!--pagination-->
+    <div
+        class="@container space-x-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[978]">
+        <ul class="@[500px]:!ml-auto justify-center items-center space-x-[8px] flex">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href=""
+                    class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+@[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+        @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                    class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+
+
+</section>
+
+
+
+
+
+{{template "footer" .}}
+
+<script src="/public/js/settings/aisettings/aisettings.js"></script>
+
+{{template "footerclose" .}}
