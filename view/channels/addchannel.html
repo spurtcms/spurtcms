@@ -32,7 +32,7 @@
     <div class="flex flex-col h-full">
         <input type="hidden" id="chn-step" value="1">
         <input type="hidden" name="csrf" value="{{.csrf}}">
-        <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}" />
+        <input type="hidden" name="channelid" id="channelid" value="{{.ChannelId}}" />      
         <input type="hidden" name="CurrentPage" id="CurrentPage" value="{{.CurrentPage}}" />
         <div
             class=" flex justify-between sm:flex-row flex-col items-start space-y-[12px] sm:space-y-[0] sm:space-x-[12px] sm:items-center border-b border-[#EDEDED] px-[16px] py-[12px]">
@@ -81,28 +81,16 @@
                     <input type="hidden" name="csrf" value="{{.csrf}}">
                     <input type="hidden" name="channelslug" id="channelslug" value="{{.channel.SlugName}}">
                     <div class="flex flex-col space-y-[6px] m-0">
-                        <label for="channelname"
-                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channelname}}
-                            <span class="text-red-600">*</span>
+                        <label for="channelname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channelname}}  <span class="text-red-600" >*</span> 
                             <div class="cursor-pointer group">
-                                <img src="/public/img/inputdesc.svg" alt="">
-                                <p
-                                    class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
-                                    {{$Translate.Channell.Channelnamelable}}</p>
-                            </div>
-                        </label>
-                        <input type="text" class=" {{if or (eq .channel.ChannelName " Blog") (or (eq
-                            .channel.ChannelName "News" ) (or (eq .channel.ChannelName "Digital Products" ) (or (eq
-                            .channel.ChannelName "1:1 Call" ) (or (eq .channel.ChannelName "Ecommerce" ) (or (eq
-                            .channel.ChannelName "Knowledge base" ) (eq .channel.ChannelName "Jobs"
-                            ))))))}}opacity-[50%]{{end}} [&+label]:text-[#F26674] [&+label]:font-normal
-                            [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5]
-                            text-bold-black text-sm font-normal w-full border border-[#EDEDED]" {{if or (eq
-                            .channel.ChannelName "Blog" ) (or (eq .channel.ChannelName "News" ) (or (eq
-                            .channel.ChannelName "Digital Products" ) (or (eq .channel.ChannelName "1:1 Call" ) (or (eq
-                            .channel.ChannelName "Ecommerce" ) (or (eq .channel.ChannelName "Knowledge base" ) (eq
-                            .channel.ChannelName "Jobs" ))))))}}readonly{{end}}
-                            placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Channell.Channelnamelable}}</p>
+                        </div></label>
+                        <input type="text"
+                            class=" {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "Digital Products") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs"))))))}}opacity-[50%]{{end}} [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
+                            {{if or (eq .channel.ChannelName "Blog") (or (eq .channel.ChannelName "News") (or (eq .channel.ChannelName "Digital Products") (or (eq .channel.ChannelName "1:1 Call") (or (eq .channel.ChannelName "Ecommerce") (or (eq .channel.ChannelName "Knowledge base") (eq .channel.ChannelName "Jobs"))))))}}readonly{{end}}  placeholder="{{$Translate.Channell.Plchlname}}" name="channelname" id="channelname"
                             value="{{.channel.ChannelName}}" />
                     </div>
 
@@ -121,101 +109,32 @@
 
                     </div>
 
-
                     <div class="flex flex-col space-y-[6px]">
-                        <label for="channelname"
-                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channel}}
-                            {{$Translate.Channell.Id}}
+                        <label for="channelname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">{{$Translate.Channell.Channel}} {{$Translate.Channell.Id}}
                             <div class="cursor-pointer group">
-                                <img src="/public/img/inputdesc.svg" alt="">
-                                <p
-                                    class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
-                                    A system-generated unique identifier for the channel, used internally for tracking
-                                    and integration purposes.</p>
-                            </div>
-                        </label>
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                A system-generated unique identifier for the channel, used internally for tracking and integration purposes.</p>
+                        </div></label>
                         <input type="text" readonly
                             class=" [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px] placeholder:text-[#B2B2B2] h-[42px] bg-[#F7F7F5] text-bold-black text-sm font-normal w-full border border-[#EDEDED]"
-                            placeholder="Enter ChannelId" name="channeluniqueid" id="channeluniqueid"
+                            placeholder="Enter ChannelId" name="channeluniqueid" id="channeluniqueid"  
                             value="{{if .channel}}{{.channel.ChannelUniqueId}}{{else}}{{.UniqueId}}{{end}}" />
                     </div>
                     <div class="flex flex-col space-y-[6px]">
-                        <label for="channeldesc"
-                            class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">
-                            {{$Translate.Description}}
+                        <label for="channeldesc" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]"> {{$Translate.Description}}  
                             <div class="cursor-pointer group">
-                                <img src="/public/img/inputdesc.svg" alt="">
-                                <p
-                                    class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
-                                    {{$Translate.Channell.Descriptionlable}}</p>
-                            </div>
-                        </label>
-                        <textarea type="text"
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-full max-w-[400px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Channell.Descriptionlable}}</p>
+                        </div></label>
+                        <textarea type="text" 
                             class="scrollbar-none [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs rounded-[4px] p-[12px]  bg-[#F7F7F5] placeholder:text-[#B2B2B2] resize-none h-[120px] text-bold-black text-sm text-start font-normal w-full border border-[#EDEDED]"
                             placeholder="{{$Translate.Enterdescription}}" name="description"
                             id="channeldesc">{{.channel.ChannelDescription}}</textarea>
                         <div id="error-message" class="text-red-500 text-xs mt-1"></div>
-                    </div>
-                    <div class="flex flex-col space-y-[6px] mb-[16px] last-of-type:mb-0">
-                        <div class="mb-[16px]">
-
-
-                            <label for=""
-                                class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Meta
-                                Title
-                                <!-- <span class="text-red-600" >*</span> -->
-
-                                <div class="cursor-pointer group">
-                                    <img src="/public/img/inputdesc.svg" alt="">
-                                    <p
-                                        class=" hidden group-hover:block absolute left-0 w-[350px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626] !z-[10]">
-                                        SEO title for your entry. This title appears on search engine results and
-                                        should be
-                                        within 60 characters for optimal SEO.Meta</p>
-                                </div>
-                            </label>
-                            <input type="text" placeholder="Enter Title" id="metatitle" name="metatitle"
-                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2] mt-[8px]" value="{{.channel.SeoTitle}}">
-                        </div>
-                        <div class="mb-[16px]">
-
-
-                            <label for=""
-                                class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Meta
-                                Descrition
-                                <!-- <span class="text-red-600" >*</span> -->
-
-                                <div class="cursor-pointer group">
-                                    <img src="/public/img/inputdesc.svg" alt="">
-                                    <p
-                                        class=" hidden group-hover:block absolute left-0 w-[350px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
-                                        Summary of your entry that appears in search engine results. Keep it within
-                                        150
-                                        characters to improve search visibility.</p>
-                                </div>
-                            </label>
-                            <textarea placeholder="Enter Text" id="metadesc" name="metadesc"
-                                class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs rounded-[4px]  bg-[#F7F7F5] border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[120px] resize-none block w-full  placeholder:text-[#B2B2B2] mt-[8px]">{{.channel.SeoDescription}}</textarea>
-                        </div>
-                        <div class="mb-[16px]">
-                            <label for=""
-                                class=" relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px]">Keywords
-                                <!-- <span class="text-red-600" >*</span> -->
-
-                                <div class="cursor-pointer group">
-                                    <img src="/public/img/inputdesc.svg" alt="">
-                                    <p
-                                        class=" hidden group-hover:block absolute left-0 w-[350px] mb-[6px] bottom-full bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
-                                        Add relevant keywords separated by commas to help search engines understand
-                                        the
-                                        content of your entry and improve ranking.</p>
-                                </div>
-                            </label>
-                            <input type="text" placeholder="Keywords" id="metakey" name="metakey"
-                                class="bg-[#F7F7F5] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full placeholder:text-[#B2B2B2]  mt-[8px]" value="{{.channel.SeoKeyword}}">
-                        </div>
-
-
                     </div>
                 </form>
             </div>
@@ -239,7 +158,7 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/text.svg" alt="">
-                            <span> Text</span>
+                           <span> Text</span>
                         </button>
                         {{end}}
                         {{if eq .TypeName "Date & Time"}}
@@ -247,7 +166,7 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/date-time.svg" alt="">
-                            <span> Date & Time</span>
+                          <span>  Date & Time</span>
                         </button>
                         {{end}}
                         {{if eq .TypeName "Select"}}
@@ -255,7 +174,7 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/select.svg" alt="">
-                            <span> Select</span>
+                           <span> Select</span>
                         </button>
                         {{end}}
                         {{if eq .TypeName "Date"}}
@@ -263,7 +182,7 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/date.svg" alt="">
-                            <span> Date</span>
+                           <span> Date</span>
                         </button>
                         {{end}}
                         <!-- {{if eq .TypeName "TextBox"}}
@@ -296,7 +215,7 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/radio.jpg" alt="">
-                            <span> Radio Button</span>
+                           <span> Radio Button</span>
                         </button>
                         {{end}}
                         {{if eq .TypeName "CheckBox"}}
@@ -304,35 +223,44 @@
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/check-box.svg" alt="">
-                            <span> Check Box</span>
+                           <span> Check Box</span>
                         </button>
                         {{end}}
-                        {{if eq .TypeName "Media Gallery"}}
+                          {{if eq .TypeName "Media Gallery"}}
                         <button
                             class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="File Upload">
                             <img src="/public/img/img.svg" alt="">
-                            <span>File Upload</span>
+                            <span>File Upload</span> 
                         </button>
                         {{end}}
                         {{if eq .TypeName "Number"}}
                         <button
-                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/input-box.svg" alt="">
                             <span>Number</span>
                         </button>
                         {{end}}
 
+                        {{if eq .TypeName "Image"}}
+                        <button
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-3"
+                            href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
+                            <img src="/public/img/img.svg" alt="">
+                            <span>Image</span>
+                        </button>
+                        {{end}}
+
                         {{if eq .TypeName "Editor"}}
                         <button
-                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mt-[14px]"
+                            class="field-types dropdown-item flex items-center  h-9 space-x-[14px]  text-bold-black text-base font-normal border border-[#ECECEC] rounded-[4px] mb-0"
                             href="#" data-id="{{.Id}}" type-name="{{.TypeName}}">
                             <img src="/public/img/input-box.svg" alt="">
                             <span>Editor</span>
                         </button>
                         {{end}}
-
+                        
                         {{end}}
                         <!-- <h3 class="text-bold-black font-normal text-base may-4">
                             Relational Fields
@@ -382,7 +310,7 @@
                         <input
                             class="h-10 border border-[#ECECEC] rounded-[4px] w-full pl-10 text-bold-black text-sm parentwithchild"
                             placeholder="{{$Translate.Csearch}}" />
-                        <img src="/public/img\search.svg" class="absolute left-4 top-3" alt="Search icon"/>
+                        <img src="/public/img\search.svg" class="absolute left-4 top-3" />
 
                     </div>
                     <div
@@ -405,8 +333,7 @@
 
                         </div>
                         {{end}}
-                        <li class="noData-foundWrapper" id="categorynodatafound"
-                            style="display: none; list-style: none;">
+                        <li class="noData-foundWrapper" id="categorynodatafound" style="display: none; list-style: none;">
                             <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
                                 <div class="text-center mx-auto w-[48px]">
                                     <img src="/public/img/noFilter.svg" alt="noFilter">
@@ -414,7 +341,8 @@
                                 <h2
                                     class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
                                     No data found with current filters</h2>
-                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                <p
+                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
                                     Try changing any other keywords </p>
 
                             </div>
@@ -431,7 +359,7 @@
                     <div class="relative ma-b-4">
                         <input class="h-10 border border-[#ECECEC] rounded-[4px] w-full pl-10 text-bold-black text-sm"
                             placeholder="{{$Translate.Csearch}}" id="selectcategory" />
-                        <img src="/public/img\search.svg" class="absolute left-4 top-3" alt="Search icon"/>
+                        <img src="/public/img\search.svg" class="absolute left-4 top-3" />
                     </div>
                     <div
                         class="border border-[#ECECEC] rounded-[4px] border-last-0 he-auto sm:h-full selected_category">
@@ -461,8 +389,7 @@
                                 is easily discoverable by selecting relevant categories.</p>
                         </div>
                         {{end}}
-                        <li class="noData-foundWrapper" id="selcategorynodatafound"
-                            style="display: none; list-style: none;">
+                        <li class="noData-foundWrapper" id="selcategorynodatafound" style="display: none; list-style: none;">
                             <div class="max-w-[328px] mx-auto text-center m-[20px_16px_40px]">
                                 <div class="text-center mx-auto w-[48px]">
                                     <img src="/public/img/noFilter.svg" alt="noFilter">
@@ -470,7 +397,8 @@
                                 <h2
                                     class="text-[#262626] text-center text-[14px] font-medium leading-[22.5px] mb-[6px] ">
                                     No data found with current filters</h2>
-                                <p class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                <p
+                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
                                     Try changing any other keywords </p>
 
                             </div>
@@ -595,7 +523,7 @@
                                     <label id="opt-val-error" class="error" for="opt-val" style="display: none;">*Please
                                         enter the option</label>
 
-                                    <!-- <div class="flex items-center gap-[12px] ">
+                                   <div class="flex items-center gap-[12px] ">
 
                                         <div class="border border-[#EDEDED] pd-3 h-[36px] rounded-[4px] block grow text-xs font-normal leading-4 text-[#262626]">
                                             Option 1
@@ -656,12 +584,9 @@
                             <div class="relative">
                                 <div class="flex flex-col gap-[6px]">
                                     <p class="text-bold-black text-sm font-normal mb-0">Field Name</p>
-                                    <input type="text" id="fl-input"
-                                        class="checklength [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] text-bold-black text-sm font-normal">
-                                    <label id="fl-input-error" class="error" for="fl-input"
-                                        style="display: none;">*Please enter the field name</label>
-                                    <p class="text-xs text-[#F26674] mt-2 hidden lengthErr">You have reached a maximum
-                                        limit of 30 characters</p>
+                                    <input type="text" id="fl-input"  class="checklength [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] text-bold-black text-sm font-normal">
+                                    <label id="fl-input-error" class="error" for="fl-input" style="display: none;">*Please enter the field name</label>
+                                    <p class="text-xs text-[#F26674] mt-2 hidden lengthErr">You have reached a maximum limit of 30 characters</p>
                                 </div>
                             </div>
 
@@ -699,7 +624,7 @@
                                     <div class="dropdown">
                                         <a href="javascript:void(0);"
                                             class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px]  flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <p id="tm-f" class="text-sm font-normal"></p>
                                         </a>
                                         <label id="tm-f-error" class="error" for="tm-f" style="display: none;">*Please
@@ -727,8 +652,7 @@
                                         <div
                                             class="flex items-center space-x-[6px] [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
                                             <input type="text" id="opt-val"
-                                                class="border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] block grow text-sm"
-                                                placeholder="Add Option">
+                                                class="border border-[#EDEDED] bg-white  pd-3 h-[36px] rounded-[4px] block grow text-sm" placeholder="Add Option">
                                             <a href="javascript:void(0);" id="add-options"
                                                 class="border bg-[#F7F7F5] border-[#EDEDED] rounded-[4px] w-[36px] h-[36px] grid place-items-center hover:bg-[#e0e0e0] ">
                                                 <img src="/public/img/add-options.svg" alt="add">

@@ -439,114 +439,7 @@
             </div>
         </form>
 
-        <form action="/admin/website/settingpage/?webid={{.websitedetail.Id}}"  method="post" id="SocialmediaForm">
-            <input type="hidden" name="csrf" value="{{.csrf}}">
-
-
-
-       <div class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-            <h3 class="mt-[12px]">Social Media Link</h3>
- 
-        
-            <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-            <input type="hidden" id="social_media_data" name="social_media_data">
-        
-                <div class=" mx-auto space-y-[24px]">
-        
-                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
-                        <label for='ck5' class="cursor-pointer">
-                            <input type="checkbox" id="ck5" class="peer hidden" />
-                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
-                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
-                        </label>
-                        <img src="/public/img/linkedin-circle.svg" class="min-w-[48px]" />
-                        <!-- Input -->
-                        <input type="text" placeholder="http://linkedin/example" id="linkedinlink"
-                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
-                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
-        
-        
-                    </div>
-        
-        
-        
-                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
-                        <label for='ck1' class="cursor-pointer">
-                            <input type="checkbox" id="ck1" class="peer hidden" />
-                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
-                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
-                        </label>
-                        <img src="/public/img/x-circle.svg" class="min-w-[48px]" />
-                        <!-- Input -->
-                        <input type="text" placeholder="http://x/example" id="xlink"
-                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
-                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
-        
-                    </div>
-        
-                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
-                        <label for="ck2" class="cursor-pointer">
-                            <input type="checkbox" id="ck2" class="peer hidden" />
-                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
-                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
-                        </label>
-                        <img src="/public/img/youtube-circle.svg" class="min-w-[48px]" />
-                        <!-- Input -->
-                        <input type="text" placeholder="http://youtube/example" id="youtubelink"
-                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
-                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
-        
-                    </div>
-        
-                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
-                        
-                        <label for="ck3" class="cursor-pointer">
-                            <input type="checkbox" id="ck3" class="peer hidden" />
-                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
-                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
-                        </label>
-                     
- 
-                        <img src="/public/img/instagram-circle.svg" class="min-w-[48px]" />
-                        <!-- Input -->
-                        <input type="text" placeholder="http://instagram/example" id="instagramlink"
-                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
-                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
-        
-                    </div>
-        
-                    <div class=" flex items-center gap-[10px] gap-4 items-center w-full">
-                        <label for="ck4" class="cursor-pointer">
-                            <input type="checkbox" id="ck4" class="peer hidden" />
-                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
-                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
-                        </label>
-                        <img src="/public/img/facebook-circle.svg" class="min-w-[48px]"  />
-                        <!-- Input -->
-                        <input type="text" placeholder="http://facebook/example" id="facebooklink"
-                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
-                                                                    text-[13px] leading-[18px]  placeholder:text-[#757575] w-full">
-        
-                    </div>
-        
-                    <!-- Buttons -->
-                    <div class="flex justify-end gap-4 pt-4">
-        
-                        <a href="javascript:void(0);" id="socialmediaupdate"
-                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-[91px] whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
-                            Update
-                        </a>
-                        
-                    </div>
-        
-                </div>
-        
-        
-        
-            </div>
-        </div>
-        </form>
-
+<!-- 
         <div class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
             <h3 class="mt-[12px]">Header Theme</h3>
         
@@ -600,14 +493,6 @@
                     </div>
         
         
-                    <!-- <div>
-                        <input type="radio" name="radio" id="radio5" class="hidden peer/public">
-        
-                        <label for="radio5"
-                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
-                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('../img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('../img/radio-checked-green.svg')]  ">Republic
-                            day</label>
-                    </div> -->
         
                 </div>
                 <div class="flex justify-end gap-4 mt-[30px] ms-auto">
@@ -620,14 +505,12 @@
                 
                 </form>
         
-                <!-- Buttons -->
-               
         
             </div>
         
         
         
-        </div>
+        </div> -->
 
 
 

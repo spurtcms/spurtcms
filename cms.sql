@@ -58,6 +58,11 @@ INSERT INTO tbl_field_types(id, type_name, type_slug, is_active, is_deleted, cre
 
 INSERT INTO tbl_field_types(id, type_name, type_slug, is_active, is_deleted, created_by, created_on) VALUES (17, 'Number', 'number', 1,  0, 1, 'current_time');
 
+INSERT INTO tbl_field_types(id, type_name, type_slug, is_active, is_deleted, created_by, created_on) VALUES (18, 'Image', 'image', 1,  0, 1, '2026-01-23 11:09:12');
+
+INSERT INTO tbl_field_types(id, type_name, type_slug, is_active, is_deleted, created_by, created_on) VALUES (19, 'Editor', 'editor', 1, 0, 1, '2023-03-14 11:09:12');
+
+
 --Default Insert Menu value
 
 INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES (1, 'Dashboard', 1, 1, 'current_time', 0, 0, 1, '/public/img/dashboard_new.svg', '', 1, 'left',0,0);

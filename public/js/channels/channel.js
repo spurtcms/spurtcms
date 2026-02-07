@@ -498,6 +498,13 @@ function FieldBasedProperties(id) {
     $(".option-field").hide()
   } else if (id == "18") {
 
+    $(".fl-name").text("Properties - Image Upload")
+    $(".dt-field").hide()
+    $(".ti-field").hide()
+    $(".option-field").hide()
+
+  }else if (id == "19") {
+
     $(".fl-name").text("Properties - Editor")
     $(".dt-field").hide()
     $(".ti-field").hide()
