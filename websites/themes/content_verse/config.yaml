@@ -1,5 +1,5 @@
 template_name: "Content Verse"
-template_image: "/image-resize?name=/media/V2-blog2.jpg"
+template_image: "/public/img/content_verse.jpeg"
 description: "A content verse template is a structured outline that guides the arrangement and style of each section or verse within digital content, ensuring clarity and consistency."
 type: "Blog"
 channel: "Blog"

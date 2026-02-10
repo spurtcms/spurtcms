@@ -1,5 +1,5 @@
 template_name: "Support Sphere"
-template_image: "/image-resize?name=/media/KnowledgeBase.jpg"
+template_image: "/public/img/knowledge_base.jpeg"
 description: "A support sphere template visually represents layers of support or assistance, showing how resources or help radiate outward from a central point."
 type: "Knowledge base"
 channel: "Blog,Knowledge Base"

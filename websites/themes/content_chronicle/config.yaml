@@ -1,5 +1,5 @@
 template_name: "Content chronicle"
-template_image: "/image-resize?name=media/blog4.png"
+template_image: "/public/img/content_chronicle.png"
 description: "A chronicle theme presents real or imagined events in chronological order, often focusing on factual details without interpretation. It offers a straightforward account of moments or history, letting the timeline itself tell the story"
 type: "Blog"
 channel: "Blog,Knowledge Base"
