@@ -1,0 +1,186 @@
+{{template "template-header" .}}
+
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full pt-[48px] min-h-screen">
+    {{template "webpageheader" .}}
+
+    <div class="grid grid-cols-[248px_1fr] h-full max-[900px]:grid-cols-1 ">
+        <div class="accordion p-[12px_16px] bg-[#FAFAFA] flex flex-col gap-[12px] " id="accordionPanelsStayOpenExample">
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse gap-[8px] justify-end after:!m-[0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                        Getting Started
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col gap-[8px]">
+                            <li><a href="/documentation/prerequisites"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full ">Prerequisites</a>
+                            </li>
+                            <li><a href="/documentation/cms-admin"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full  ">CMS
+                                    Admin Setup</a>
+                            </li>
+                            
+                            <li><a href="/documentation/templates"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full ">Templates</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse gap-[8px] justify-end after:!m-[0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                        Deployment
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col gap-[8px]">
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full ">From
+                                    Docker</a>
+                            </li>
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full ">From
+                                    CLI</a>
+                            </li>
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] flex items-center gap-[8px] text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full ">From
+                                    Prebuild</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="p-[20px]">
+            <p class="mb-[16px] text-sm font-light leading-[20px]">
+                GraphQL has emerged as a powerful tool for building APIs due to its flexibility and efficiency in data
+                retrieval. In this article, we'll delve into the details of spurtCMS GraphQL APIs that exposes spurtCMS
+                Admin side contents and how developers can harness its potential to consume efficient, self-describing
+                APIs for their CMS website by adding or modifying api fields without impacting existing flow.
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Building Blocks of spurtCMS GraphQL APIs are,
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">GQL Gen library: </h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">To simplify the process of creating GraphQL servers
+                in Go Lang by automating the generation of schemas, types, resolvers, and more.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Custom Go Packages: </h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">To enhance the functionality of GraphQL Playground,
+                spurtCMS team has developed and integrated their custom packages like pkgcore and pkgcontent.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Playground Interface:
+            </h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">To present an intitutive API demo console, spurtCMS
+                GraphQL project has integrated React components served through a CDN for HTML content delivery.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Installation Steps:</h2>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 1: </h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Ensure the pre-requisites of Go Environment is
+                available ready in your system. Check our pre-requisites guideline for more details.
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">spurtCMS Admin application serves as the content
+                source for spurtCMS GraphQL APIs and hence setup the admin application and execute it. Refer the
+                spurtCMS admin setup detailed in this link.
+                <a href=" https://spurtcms.com/documentation/cms-admin"
+                class="text-[#10A37F] underline"> https://spurtcms.com/documentation/cms-admin</a> 
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 2:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">To initiate the setup process, the first step
+                involves cloning the spurtCMS Template project structure from the GIT repository.
+                <a href=" https://github.com/spurtcms/spurtcms-graphql"
+                class="text-[#10A37F] underline"> https://github.com/spurtcms/spurtcms-graphql</a>   
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$git clone https://github.com/spurtcms/spurtcms-graphql.git </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">The cloned repository should have all the project
+                files associated with spurtCMS GraphQL project.
+            </p>
+
+
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 3:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Now it's time to setup the PostgreSQL database, the
+                one which is a replica of spurtCMS Admin application as mentioned in pre-requisites (Step 1) above
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Locate the .env file of the GraphQL project folder
+                and configure it with the details of newly imported admin database such as database name, user name,
+                password etc
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]"># PostgreSQL Database Configuration
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">DB_HOST=localhost DB_PORT=5432 DB_NAME=your_database_name DB_USER=your_database_user DB_PASSWORD=your_database_password DB_SSL_MODE=disable </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Also, configure the admin application's base url i
+                .env which is needed for GraphQL API to output the path of Media files.
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">#DOMAIN_URL ='https://demo.spurtcms.com/' ##Example PORT='8081' </p>
+                  
+                    </code>
+            </div>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 4:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Now it's time to start the GraphqL application. Open
+                the terminal from the GraphQL project folder and execute the following command.
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ go run server.go </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">This command initiates the Go program, installs the
+                dependencies such as GQL Gen library, spurtCMS custom packages such as pkgcore and pkgcontent.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 5:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Your spurtCMS GraphQL API is ready to use now !! You
+                can use the playground interface to check the sample request and response structure of each GraphQL
+                endpoint. https://{your-domain-name}/play
+
+
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Conclusion:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">As GraphQL continues to gain popularity within the
+                developer community, mastering its concepts and tools like GQL Gen opens up a world of possibilities for
+                building modern, data-driven applications. By following the steps outlined in this article, developers
+                can easily integrate spurtCMS GraphQL APIs in their front-end applications to retrive content from
+                spurtCMS admin application.
+            </p>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+
+
+{{template "template-footer"}}
+
+
+
+

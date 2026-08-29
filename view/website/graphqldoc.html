@@ -1,0 +1,145 @@
+{{template "docheader" .}}
+
+<main>
+    <div class="w-full mb-[120px]">
+        <div class="w-full py-[16px] px-6">
+            <div class="flex items-start justify-between max-[576px]:flex-wrap space-x-[8px]">
+                <ul class="flex list-none space-x-[8px] items-baseline">
+                    <li>
+                        <a href="#"
+                            class="text-[#222222] text-xs no-underline hover:text-[#10A37F] font-normal">Opensource</a>
+
+                    </li>
+                    <li>
+                        <span>
+                            <img src="/public/img/breadcrumb-arrow.svg" alt="">
+                        </span>
+                    </li>
+                    <li>
+                        <p class="text-xs no-underline text-[#10A37F] font-normal m-0">spurtcms-graphqL-api</p>
+                    </li>
+                </ul>
+                <a href="#"
+                    class="flex items-center justify-center h-10 w-auto px-[16px] space-x-[5px] bg-[#0FA27F] hover:bg-[#148569] rounded-[3px] text-white text-base font-light ml-auto ">
+                    <img src="/public/img/git-document.svg" alt="">
+                    <span>Edit on Github</span>
+                </a>
+            </div>
+        </div>
+        <div class="w-[calc(100%-80px)] mx-auto mb-[16px] max-[1300px]:w-[calc(100%-32px)]">
+            <div class="flex flex-col space-y-[15px] items-start">
+                <!-- <div class="flex items-center gap-1.5">
+                    <span><img src="/public/img/Icon feather-arrow-left.svg" alt=""></span>
+                    <a href="#" class="text-xs font-semibold text-[#222222] no-underline">Back</a>
+                </div> -->
+                <div class="flex flex-col">
+                    <h3 class="text-[35px] text-[#202224] font-medium mb-2.5">
+                        spurtCMS GraphQL APIs
+                    </h3>
+                    <div class="flex flex-col space-y-[11px]">
+                        <p class="text-base font-normal text-[#202224] ">
+                            spurtCMS admin application offers a comprehensive suite of features and tools for
+                            efficient website management, empowering administrators to create, organize, and
+                            optimize content effectively while ensuring security and performance.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            Integrating other applications with spurtCMS enables organizations to leverage the
+                            power of centralized content management, enhance user experiences, improve
+                            operational efficiency, and extend the reach and impact of their digital initiatives
+                            across diverse platforms and channels. While it's technically possible to access CMS
+                            data without an API, using an API provides a more robust, secure, and
+                            developer-friendly approach to retrieving and interacting with content stored within
+                            the CMS.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            As a step forward, spurtCMS admin application offers GraphQL APIs that provides
+                            several benefits and advantages compared to traditional REST APIs such as,
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">• Flexible Data Retrieval </strong>
+                            - Clients can specify exactly what data they need, and they receive only that data
+                            in the response
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">• Single Endpoint for Data Access </strong>
+                            - TO simplify client-server interactions and reduce the number of network requests
+                            required to fetch data
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">• Client-driven Queries</strong>
+                            - To empower front-end developers to optimize data fetching based on specific UI
+                            requirements without relying on changes to the server-side implementation
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">• Evolutionary API Development </strong>
+                            - New fields or types can be added to the schema without impacting older clients,
+                            providing flexibility for API evolution and versioning
+                        </p>
+                        <div class="aspect-video max-h-[500px] h-auto w-full aspectVdo-class">
+                            <iframe width="100%" height="100%"
+                                src="https://www.youtube.com/embed/aU7_5Wv8uOM?si=qTvmNqSMgojcUe2y"
+                                title="YouTube video player" frameborder="0"></iframe>
+                        </div>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">Understanding Channels and Channel Entries: </strong>
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            In the realm of Content Management Systems (CMS), channels and channel entries play
+                            pivotal roles in organizing and managing content effectively.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            “Channels” in a spurtCMS admin application are logical containers or groupings that
+                            help organize and categorize content. They are often used to represent different
+                            sections or areas within a website, application, or digital platform. Channels serve
+                            as a way to segment content based on topics, types, or any other meaningful
+                            criteria.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            “Channel Entries”, on the other hand, are the individual content items or pieces of
+                            content stored within channels. They represent the actual content assets such as
+                            articles, blog posts, news items, images, videos, or any other type of multimedia or
+                            textual content.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            In spurtCMS GraphQL APIs, various functions are implemented to manage and retrieve
+                            channels and channel entries efficiently. Let's explore some key functions:
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">ChannelList Function:</strong>
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            The ChannelList function acts as the controller for retrieving a list of channels
+                            from the CMS. It considers criteria like access control and membership status to
+                            fetch channels. Users with appropriate permissions can access all channels, while
+                            regular members can only view channels they are part of.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">ChannelEntriesList Function:</strong>
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            This function serves as the controller for retrieving a list of channel entries
+                            based on specified criteria such as access control, membership status, channel ID,
+                            and entry ID. It ensures that users can only access entries they are authorized to
+                            view, maintaining content security and privacy.
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            <strong class="font-bold">ChannelDetail Function:</strong>
+                        </p>
+                        <p class="text-base font-normal text-[#202224] ">
+                            The ChannelDetail function retrieves detailed information about a specific channel
+                            based on the provided channel ID. It ensures that users with the right permissions
+                            can access channel details while restricting access for unauthorized users.
+                        </p>
+                    </div>
+                </div>
+                <p class="text-base font-normal text-[#202224] mt-[16px] mb-0  ">
+                    Explore more about the spurtCMS GraphQL APIs in action using playground interface Link to
+                    <span>
+                        <a href="https://graphql.spurtcms.com/play" target="_blank" class="text-[#05ACD7] underline">https://graphql.spurtcms.com/play</a></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+{{template "websitefooter" .}}

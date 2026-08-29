@@ -27,7 +27,6 @@ $(document).on('click', '#forgotfrm-btn', function () {
         $('#forgotmailform')[0].submit();
     }
     else {
-        console.log("ug");
         EmailValidationcheck()
         $(document).on('keyup', ".field", function () {
             EmailValidationcheck()
@@ -38,7 +37,6 @@ $(document).on('click', '#forgotfrm-btn', function () {
 
 })
 function EmailValidationcheck() {
-console.log("dfgh");
     if ($('#emailid').hasClass('error')) {
         $('#emailgrp').addClass('input-group-error');
     } else {
@@ -53,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var Cookie = getCookie("log-toast");
     var content = getCookie("success");
 
-    console.log("fsrzg", Cookie,content);
     if (Cookie != "") {
 
         $('#emailid-error').show();

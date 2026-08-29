@@ -263,7 +263,6 @@ var username
 $(document).on('click', '.statuss', function () {
 
     statusvalue = $(this).text()
-    console.log("statusvalue",statusvalue);
     $('#triggerId').val(statusvalue)
     $('#statusid').val(statusvalue)
     $('.filter-dropdown-menu').addClass('show').css({
@@ -294,7 +293,6 @@ $("#applyfilter").click(function(){
 
     username = $("#username").val()
 
-    console.log("values",entriesnamefilter,username,statusvalue);
 
     if(statusvalue != undefined || entriesnamefilter != undefined || username != undefined){
         Entrieslist(channelid,"",statusvalue,username,entriesnamefilter,limit,page)
@@ -368,7 +366,6 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
             caches: false,
             success: function (data) {
 
-                console.log(data);
                           
                 if (data.hasOwnProperty('ChanEntrtlist')) {
 
@@ -500,7 +497,6 @@ function Entrieslist(channelid,entriesname,statusvalue,username,entriesnamefilte
                             for (let page of data.Page) {   
                                                 
                                 if(page == crtpagecount){
-                                    console.log("checkcurrent")
                                     classcurrent = "current"
                                     npage =page 
                                 }else{

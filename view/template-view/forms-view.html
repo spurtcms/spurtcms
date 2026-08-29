@@ -1,0 +1,2090 @@
+{{template "template-header" .}}
+
+
+<section
+class=" max-md:ms-0  max-md:max-w-full  w-full  ml-auto pt-[48px] min-h-screen ">
+
+{{template "webpageheader" .}}
+
+<div class="px-[16px] sm:px-[28px] 2xl:px-10 py-6 max-w-[1920px] mx-auto">
+    <div class="flex md:space-x-[24px]   md:flex-row flex-col-reverse justify-between items-start mb-6">
+        <div class="flex flex-col space-y-[24px] items-start max-md:mt-[24px]">
+            <div class="flex flex-col space-y-[24px] max-w-[500px]">
+                <h3 class="text-[32px] lg:text-[44px] text-[#202224] font-bold leading-[44px] mb-0">
+                    Create Forms That Suit Your Purpose</h3>
+                <p class="text-[#202224] text-xl font-light mb-0">Design forms effortlessly with our intuitive form builder. From free text fields to file uploads, create tailored forms that cater to every need—be it feedback, registrations, or submissions.</p>
+            </div>
+        </div>
+        <div>
+            <img src="/public/img/form-banner.svg" />
+        </div>
+    </div>
+
+    <div
+        class="mb-[80px] p-[32px_16px_32px_80px] max-[800px]:p-[32px_16px_32px_32px]  shadow-[-2px_-2px_8px_0px_#00000014] rounded-lg ">
+
+        <div class=" w-full max-md:w-full max-w-[768px] mx-auto ">
+            <div class="mb-[40px] relative last-of-type:mb-0 flex items-start group  " tabindex="0">
+                <h1 class="text-[#BBBAB8]  text-[36px] font-bold  leading-none">Event Title</h1>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-start group " tabindex="0">
+                <div>
+                    <p class="text-[#BBBAB8] text-base font-normal leading-[20px]">Type ‘/‘ to insert blocks
+                    </p>
+                    <div
+                        class="bg-white shadow-[0px_3px_12px_rgba(0,0,0,0.098)] w-[248px] rounded-[8px] p-[12px_4px] scrollbar thin maxh-[380px] overflow-auto mt-[2px]">
+                        <h3
+                            class="px-[10px] mb-[12px] !text-[#898884] font-medium text-[11px] leading-[14px]">
+                            Input
+                            fields</h3>
+                        <div class="border-0 block">
+                            <div
+                                class=" cursor-pointer border-0   !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/short-answer-event.svg" alt="short answer">
+                              <span>  Short Answer</span>
+                            </div>
+
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/long-answer-event.svg" alt="long answer">
+                               <span> Long Answer</span>
+                            </div>
+
+
+
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/check-answer-event.svg" alt="checkboxes">
+                               <span> Checkboxes</span>
+                            </div>
+
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/drop-answer-event.svg" alt="dropdown">
+                             <span>   Dropdown</span>
+                            </div>
+
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/date-answer-event.svg" alt="date">
+                               <span> Date</span>
+                            </div>
+
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/time-answer-event.svg" alt="time">
+                                <span>Time</span>
+                            </div>
+                            <div
+                                class=" cursor-pointer border-0  !p-[6px_10px] flex items-center space-x-[5px] hover:bg-[#F0F1F3] rounded-[5px] !text-[#333333] text-[13px] leading-[16px] font-normal ">
+                                <img src="/public/img/file-answer-event.svg" alt="File Upload">
+                               <span> File Upload</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)" class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center 
+                 max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                    rounded-lg p-0 !translate-y-[-30%] !inset-[30%_100%_auto_auto] 
+                    max-[1280px]:!inset-[30%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                   <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--input question-->
+            <div class="mb-[10px] relative last-of-type:mb-0 flex items-center group  " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px] ">Type a question</p>
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+pe-[4px] 
+     ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <input
+                                            class="text-[#015FF7] text-[14px] leading-[16px] font-medium mb-0 outline-none"
+                                            type="text" value="Untitled short answer field">
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        Save
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required1">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required1">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                               "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters1">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters1">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                               "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters1">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters1">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                               "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="p-[5px]">
+                                    <input type="text"
+                                        class="border border-[#dee2e6] px-[10px] h-[27px] w-full rounded-[6px] outline-none text-[14px]">
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                    <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <div
+                        class=" h-[37px] rounded-[6px] border border-[#DEE2E6] p-[10px] text-[#A0A5A9] text-sm leading-[17px] font-normal">
+                        <span>Type placeholder text</span>
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required2">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required2">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters2">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters2">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters2">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters2">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                    <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--textarea question-->
+
+            <div class="mb-[10px] relative last-of-type:mb-0 flex items-start group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px] ">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required3">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required3">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters4">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters4">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters4">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters4">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                    <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-start group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <div
+                        class=" rounded-[6px] h-[88px] border border-[#DEE2E6] p-[10px] text-[#A0A5A9] text-sm leading-[17px] font-normal cursor-text">
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required5">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required5">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters6">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters6">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters7">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters7">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                    <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--checkbox question-->
+
+            <div class="mb-[10px] relative last-of-type:mb-0 flex items-center group " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px]">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required8">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required8">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters3">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters3">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters3">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters3">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[8px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <div>
+                        <div class="flex items-center space-x-[10px]  last-of-type:mb-0  ">
+                            <div>
+                                <img src="/public/img/check-option-event.svg" alt="option">
+                            </div>
+                            <p class="text-[14px] leading-[17px] text-[#A0A5A9] font-normal">Option 1</p>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required9">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required9">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters9">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters9">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters9">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters9">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <div class="block">
+                        <div
+                            class="flex items-center space-x-[10px] last-of-type:mb-0 group/txt cursor-pointer ">
+                            <div class=" opacity-[0.5] group-hover/txt:opacity-[1]">
+                                <img src="/public/img/check-option-event.svg" alt="option">
+                            </div>
+                            <p
+                                class="text-[14px] leading-[17px] text-[#CED2D4] font-normal group-hover/txt:text-[#45433e]">
+                                Add Option</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+    pe-[4px] 
+         ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                    rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required10">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required10">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters10">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters10">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters10">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters10">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--dropdown question-->
+
+
+            <div class="mb-[10px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px] ">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required4">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required4">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters11">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters11">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters5">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters5">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[8px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <div>
+                        <div
+                            class=" flex items-center space-x-[10px] h-[2.3125rem] px-[0.625rem] border border-[#dee2e6] rounded-[0.375rem] text-[#a0a5a9] text-[0.875rem] font-normal w-fit ">
+                            <img src="/public/img/drop-option-event.svg" alt="arrow">
+                            <p class="text-[#A0A5A9] text-sm leading-[17px] font-normal">Option 1</p>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required11">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required11">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters12">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters12">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters12">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters12">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-center group    " tabindex="0">
+                <div class="w-full  max-w-[720px]">
+                    <div>
+                        <div class="group/txt flex items-center space-x-[10px] h-[2.3125rem] px-[0.625rem] border border-[#dee2e6] rounded-[0.375rem] text-[#a0a5a9] text-[0.875rem] font-normal w-fit 
+                 hover:shadow-[0px_1px_1px_rgba(0,0,0,0.12),0px_0px_1px_rgba(61,59,53,0.16),0px_3px_9px_rgba(61,59,53,0.08),0px_2px_5px_rgba(61,59,53,0.08)]
+                     hover:cursor-pointer opacity-[0.5] hover:opacity-[1] ">
+                            <img src="/public/img/drop-option-event.svg" alt="arrow">
+                            <p
+                                class="text-[#CED2D4] text-sm leading-[17px] font-normal group-hover/txt:text-[#45433e]">
+                                Add Option</p>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required13">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required13">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters13">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters13">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters13">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters13">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--calendar-->
+
+            <div class="mb-[10px] relative last-of-type:mb-0 flex items-start group    " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px]">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required6">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required6">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters14">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters14">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters6">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters6">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-[24px] relative last-of-type:mb-0 flex items-start group    " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <div
+                        class="relative h-[37px] rounded-[6px] border border-[#DEE2E6] p-[10px_34px_10px_10px] text-[#A0A5A9] text-sm leading-[17px] font-normal ">
+                        <div class="inline-block absolute right-[10px] top-[10px]">
+                            <img src="/public/img/calender-event.svg" alt="calender-event">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required14">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required14">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters15">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters15">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters16">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters16">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--time-->
+
+            <div class=" mb-[10px] relative last-of-type:mb-0 flex items-start group " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px] ">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required7">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required7">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters7">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters7">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters17">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters17">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" mb-[24px] relative last-of-type:mb-0 flex items-start group " tabindex="0">
+                <div class="w-full  max-w-[320px]">
+                    <div
+                        class="relative h-[37px] rounded-[6px] border border-[#DEE2E6] p-[10px_34px_10px_10px] text-[#A0A5A9] text-sm leading-[17px] font-normal ">
+                        <a href="javascript:void(0)" class="inline-block absolute right-[10px] top-[10px]">
+                            <img src="/public/img/time-event.svg" alt="calender-event">
+                        </a>
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+                pe-[4px] 
+                    ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                    rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required17">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required17">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters17">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters17">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters18">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters18">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                   "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                     <span> Duplicate</span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--add picture-->
+
+            <div class=" mb-[10px] relative last-of-type:mb-0 flex items-start group " tabindex="0">
+                <div class="w-full  max-w-[424px]">
+                    <p class="text-[#BBBAB8] text-[20px] font-medium leading-[24px]">Type a question</p>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required18">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required18">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters8">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters8">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters8">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters8">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                  <span>
+                                    Duplicate
+                                </span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" mb-[24px] relative last-of-type:mb-0 flex items-start group " tabindex="0">
+                <div class="w-full  max-w-[424px]">
+                    <div
+                        class=" flex flex-col items-center p-[24px] border border-[#DEE2E6] rounded-[6px] text-center ">
+                        <img src="/public/img/upload-new-event.svg" alt="protfolio" class="mb-[10px]">
+                        <h3 class="text-xs font-medium leading-[15px] text-[#212529] mb-[3px] text-center">
+                            Add
+                            pictures of farmland</h3>
+                        <p class="text-[#6E6E80] text-[11px] leading-[14px] font-normal text-center">
+                            Lorem
+                            ipsum dolor sit amet, consetetur sadipscing elitr, sed</p>
+                    </div>
+
+                </div>
+                <div class="  group-hover:flex group-focus:flex  items-center absolute right-full hidden
+        pe-[4px] 
+             ">
+                    <a href="javascript:void(0)"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px]  grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/delete-event.svg" alt="delete"></a>
+                    <a href="#addFields" data-bs-toggle="modal"
+                        class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center  max-[800px]:hidden">
+                        <img src="/public/img/add-event.svg" alt="add"></a>
+
+                    <div class="dropdown">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            class="w-[24px] h-[24px] hover:bg-[#F8F9FA] rounded-[3px] grid place-items-center">
+                            <img src="/public/img/drag-event.svg" alt="drag"></a>
+                        <ul class="dropdown-menu w-[296px] shadow-[rgba(0,_0,_0,_0.098)_0px_3px_12px]
+                        rounded-lg p-0 !translate-y-[-50%] !inset-[50%_100%_auto_auto] max-[1440px]:!inset-[50%_auto_auto_100%] border-0 "
+                            data-popper-placement="bottom-start">
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center space-x-[16px]">
+                                    <div class="flex-grow flex items-center space-x-[5px]">
+                                        <img src="/public/img/edit-bullet.svg" alt="bullet">
+                                        <div
+                                            class="text-[#212529] text-[14px] leading-[16px] font-medium mb-0">
+                                            Untitled short answer field
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="min-w-[16px] w-fit block text-[#bbbab8] text-[14px] font-medium leading-[16px] bg-[#ffffff] cursor-pointer border-none p-[5px] rounded-md hover:bg-[#f8f9fa] hover:text-[#37352f]">
+                                        <img src="/public/img/edit-event.svg" alt="bullet">
+                                    </button>
+                                </div>
+
+                            </li>
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Required</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="required19">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="required19">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Min characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="min-characters18">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="min-characters18">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between space-x-[16px] p-[5px]">
+                                    <h3
+                                        class="text-[14px] leading-[17px] font-normal text-[#212529] mb-0 flex-grow">
+                                        Max characters</h3>
+
+                                    <div class="toggle-bt">
+                                        <input type="checkbox" class="peer hidden" id="max-characters19">
+                                        <label
+                                            class="w-[34px] h-[19px] bg-[#dbe8e9] flex items-center relative cursor-pointer rounded-[10px] transition-colors duration-200 ease-in-out peer-checked:bg-[#023A43] peer-checked:[&>span]:translate-x-[17px]"
+                                            for="max-characters19">
+                                            <span class="w-[15px] h-[15px] absolute inline-block bg-white shadow-[1px_0px_2px_rgba(124,124,124,0.16)] translate-x-[2px] rounded-full transition-transform duration-200 ease-in-out
+                                       "></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="p-[5px] border-b border-[#dee2e6]">
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-delete.svg" alt="delete">
+                                    </div>
+                                    <span>Delete</span>
+                                </div>
+                                <div
+                                    class="flex items-center text-[14px] leading-[17px] font-normal text-[#212529] h-fit cursor-pointer space-x-[5px] p-[6px] hover:bg-[#f8f9fa] ">
+                                    <div>
+                                        <img src="/public/img/event-duplicate.svg" alt="duplicate">
+                                    </div>
+                                  <span>
+                                    Duplicate
+                                </span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--submit-->
+
+            <div class=" relative  flex items-start group " tabindex="0">
+                <div class="dropdown group">
+                    <button
+                        class="bg-[#080808] p-[12px] rounded-md text-white text-base leading-5 font-normal flex items-center space-x-[10px] border-none group h-[44px] "
+                        data-bs-toggle="dropdown">
+                     <span>Submit </span>
+                      <img src="/public/img/submit-arrow.svg" alt="arrow">
+                        <div
+                            class="absolute top-1/2 right-full w-fit transform -translate-y-1/2 pr-1.5 hidden group-hover:block group-[.show]:hidden">
+                            <a href="javascript:void(0)"
+                                class="w-6 h-6 flex items-center justify-center rounded-[0.1875rem] hover:bg-[#f8f9fa]">
+                                <img src="/public/img/submit-setting.svg" alt="setting">
+                            </a>
+                        </div>
+                    </button>
+
+                    <div
+                        class="shadow-[0rem_0.1875rem_0.75rem_rgba(0,0,0,0.1)] rounded-lg p-3.5 w-fit dropdown-menu border-0">
+                        <label for=""
+                            class="text-[#898884] text-[0.6875rem] leading-[0.875rem] font-medium mb-[0.3125rem]">Button
+                            label</label>
+                        <input type="text" value="Submit"
+                            class="border border-[#023a43] rounded-[0.375rem] p-2.5 text-[#333333] text-[0.875rem] leading-[1.0625rem] font-normal block outline-none h-[2.3125rem]">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="flex flex-col space-y-[24px] mb-[24px] sm:mb-10 xl:mb-20">
+        <div class="w-full max-w-[748px] mx-auto">
+            <h3
+                class="text-center text-[32px] lg:text-[44px] text-[#202224] font-bold leading-normal lg:leading-[55px] mb-0 max-w-[800px] mx-auto">
+                Form Building Has Never Been This Simple
+            </h3>
+            <p class="text-[#202224]  text-center text-base font-light">Effortlessly Build Forms that Adapt to your Needs</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[24px] rounded-lg ">
+                <div class="flex flex-col space-y-[12px] items-start pr-8">
+                    <h3 class="text-xl text-[#202224] font-medium">Flexible Input Types</h3>
+                    <p class="text-[#202224] text-base font-light">Choose from a variety of input options, including free text, dropdowns, checkboxes, and long or short answer fields. Create forms that fit your purpose perfectly.</p>
+                </div>
+                <div
+                    class=" rounded-[12px_0_0_0] overflow-hidden  shadow-[-2px_-2px_8px_0px_#00000014] ">
+                    <img src="/public/img/store-doc1.svg" alt="" class="w-full">
+                </div>
+            </div>
+            <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[24px] rounded-lg ">
+                <div class="flex flex-col gap-[12px] items-start pr-8">
+                    <h3 class="text-xl text-[#202224] font-medium">Interactive Date and File Fields</h3>
+                    <p class="text-[#202224] text-base font-light">Add dynamic fields like date and time selection or file uploads to make your forms more interactive and comprehensive.</p>
+                </div>
+                <div
+                    class=" rounded-[12px_0_0_0] overflow-hidden  shadow-[-2px_-2px_8px_0px_#00000014] ">
+                    <img src="/public/img/store-doc2.svg" alt="" class="w-full">
+                </div>
+            </div>
+
+            <div class="flex flex-col space-y-[24px] col-span-full ">
+                <div class="p-8 pb-0 bg-[#F8F8F8] flex flex-col space-y-[24px] rounded-lg max-sm:p-[16px]">
+                    <div class="flex flex-col space-y-[8px] ">
+                        <div class="mb-[4px]">
+                            <img src="/public/img/Seamless Integration.svg" alt="sample">
+                        </div>
+                        <div class="flex flex-col space-y-[12px] items-start">
+                            <h3
+                                class="text-[#202224] text-2xl font-medium leading-[30px] mb-0 max-w-[495px]">
+                                Seamless Integration and Use
+                            </h3>
+                            <p class="text-[#202224] font-light text-base max-w-[461px]">Create, edit, and embed forms directly within your platform. Collect responses efficiently and ensure a smooth user experience.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="w-full  rounded-[12px_12px_0_0] overflow-hidden  shadow-[-2px_-2px_8px_0px_#00000014] ">
+                        <img src="/public/img/create-form-banner.svg" alt="" class="w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</section>
+{{template "template-footer"}}

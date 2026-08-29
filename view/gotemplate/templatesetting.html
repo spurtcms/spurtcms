@@ -1,0 +1,395 @@
+ 
+ {{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<section class="max-md:ms-0 max-md:max-w-full w-full max-w-[calc(100%-232px)] ml-auto max-md:pt-[90px] header-rht max-sm:pt-[64px] min-h-screen">
+    {{template "commonheader" .}} 
+    
+    <!-- <div class="@container setConatiner overflow-hidden">
+            <div class="flex border-b border-solid border-[#E8E8E8] max-md:flex-col">
+                <div class="flex gap-[20px] items-center p-[30px_24px_20px_24px] max-lg:flex-col max-lg:p-[16px] max-lg:items-start w-full">
+                    <div class="min-w-[100px] max-w-[215px] w-full">
+                        <img src="{{.templateInfo.TemplateImage}}" alt="">
+                    </div>
+                    <div class='grow'>
+                        <div class="pr-[1.25rem]">
+                            <h2 class="inline-block mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">{{.templateInfo.TemplateName}}</h2>
+                            <p class="text-center pt-[1px] text-white rounded-full w-[80px] h-[25px] inline-block bg-green-500 rounded-full">Active</p>
+                            <p class="text-[13px] font-light leading-[20px] text-[#616161]">{{.templateInfo.TemplateDescription}}</p>
+                        </div>
+                    </div>
+                    <a href="/admin/browsetheme" class="flex justify-center place-items-center bg-[#EAEAEA] hover:bg-[#616161]/20 max-sm:p-[7px] px-[16px] py-[8px] rounded-[4px] w-fit h-[34px] font-medium text-[14px] text-[#252525] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#EAEAEA]">
+                        <span>Cancel</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-[24px] xl:gap-[46px] w-full p-[10px_24px] border-b border-solid border-[#E8E8E8]">
+                <div class="flex items-center gap-[8px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Created date:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.data.CreatedDate}}</p>
+                    
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Last Updated:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.data.DateString}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Creator:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Admin</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Owner:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Admin</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Publish:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.data.DateString}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Visibility:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Public</p>
+                </div>
+            </div>
+        </div> -->
+<input type="text" class="hidden" value="{{.templateInfo.TemplateName}}" id="templateName">
+<input type="text" value="{{.templateid}}" name="tempid" id="templateId" class="hidden">
+    <section class="p-[12px_0px]">
+           <div class="flex justify-between border-b border-solid border-[#E6E6E6] h-[42px]">
+               <div id="widget-tabs" class="mb-0 flex flex-nowrap justify-between gap-[14px] px-[16px]">
+    <ul class="nav nav-pills overflow-x-auto overflow-y-visible flex flex-nowrap mb-0 gap-[14px] max-sm:gap-[10px]" id="pills-tab" role="tablist">
+        <li class="" role="presentation">
+            <a href="/admin/browsetheme/configure/{{.templateInfo.Id}}" 
+               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] {{if eq .tabactive `widgets`}}active{{end}}">
+               Widgets
+            </a>
+        </li>
+        <li class="" role="presentation">
+            <a href="/admin/browsetheme/templatesetting/{{.templateInfo.Id}}" 
+               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px] {{if eq .tabactive `templatesetting`}}active{{end}}">
+               Template Setting
+            </a>
+        </li>
+        <!--  -->
+        <li class="" role="presentation">
+             <a href="/admin/website/seo" 
+               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px] {{if eq .tabactive `data`}}active{{end}}">
+              Seo 
+            </a>
+    </ul>
+</div>
+</div>
+</div>
+
+
+
+
+                        <div class="p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+                            <div class="grow">
+                                <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">Brand</h3>
+                                <p class="text-[13px] leading-[20px] font-light text-[#616161]">Define your website's identity by setting the site name, logo, favicon, and header theme.</p>
+                            </div>
+                            <button type="submit"  id="siteNameSave" class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">Save</button>
+                        </div>
+                        <form action="/admin/website/settingpage/{{.templateInfo.Id}}" method="post" id="siteNameForm">
+                            <input type="hidden" name="csrf" value="{{.csrf}}">
+                            <input type="hidden" name="tabname" value="brand">
+                            <input type="hidden" name="sitelogoimage" id="sitelogoimage_data" value="{{.settingsdetail.SiteLogoPath}}">
+                            <input type="hidden" name="sitefaviconimage" id="sitefaviconimage_data" value="{{.settingsdetail.SiteFavIconPath}}">
+                            <input type="hidden" name="social_media_data" id="siteNameSave_social_media_data" value="">
+                        <div>
+                            <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                <div>
+                                    <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Site Name *</h3>
+                                    <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Enter the name of your website or brand.</p>
+                                </div>
+                                <div>
+                                    <input value="{{.settingsdetail.SiteName}}" id="siteName" name="siteName" type="text" placeholder="" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full">
+                                    <p id="siteName-error" class="text-red-500 text-xs"></p>
+                                </div>
+                                
+                                
+                            </div>
+                         
+
+                            <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                <div>
+                                    <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Site Logo</h3>
+                                    <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Upload your primary logo. This will appear in the header and other key areas.</p>
+                                </div>
+                                <div class="flex gap-[6px] items-center justify-between">
+                                    {{if .settingsdetail.SiteLogoPath}}
+                                    <div id="sitelogo-preview-wrap" class="w-[60px] h-[60px] border border-[#EDEDED] rounded overflow-hidden flex items-center justify-center bg-[#F7F7F7]">
+                                        <img id="sitelogo-preview" src="/{{.settingsdetail.SiteLogoPath}}" alt="Site Logo" class="w-full h-full object-contain">
+                                    </div>
+                                    {{else}}
+                                    <div id="sitelogo-preview-wrap" class="w-[60px] h-[60px] border border-[#EDEDED] rounded overflow-hidden items-center justify-center bg-[#F7F7F7] hidden">
+                                        <img id="sitelogo-preview" src="" alt="Site Logo" class="w-full h-full object-contain">
+                                    </div>
+                                    {{end}}
+                                    <label for="sitelogo-file-input" id="sitelogo-upload-label" class="cursor-pointer p-[8px_16px] flex items-center gap-[4px] text-sm font-normal text-[#252525] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded h-[34px] {{if .settingsdetail.SiteLogoPath}}hidden{{end}}">
+                                        <img src="/public/img/browse-upload.svg" alt="">Upload
+                                    </label>
+                                    <input id="sitelogoDlt" name="sitelogoDlt" type="hidden" value="0">
+                                    <input id="sitelogo-file-input" type="file" accept="image/*" class="hidden">
+                                    <button type="button" onclick="clearSiteLogo()" id="sitelogo-delete-btn" class="p-[8px_16px] flex items-center gap-[4px] text-sm font-normal text-[#252525] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded h-[34px] {{if not .settingsdetail.SiteLogoPath}}hidden{{end}}">
+                                        <img src="/public/img/delete-btn.svg" alt="">Delete
+                                      
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                <div>
+                                    <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Site Favicon</h3>
+                                    <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Upload a small icon that appears in the browser tab and bookmarks.</p>
+                                </div>
+                                <div class="flex gap-[6px] items-center justify-between">
+                                    {{if .settingsdetail.SiteFavIconPath}}
+                                    <div id="sitefavicon-preview-wrap" class="w-[60px] h-[60px] border border-[#EDEDED] rounded overflow-hidden flex items-center justify-center bg-[#F7F7F7]">
+                                        <img id="sitefavicon-preview" src="/image-resize?name={{.settingsdetail.SiteFavIconPath}}" alt="Favicon" class="w-full h-full object-contain">
+                                    </div>
+                                    {{else}}
+                                    <div id="sitefavicon-preview-wrap" class="w-[60px] h-[60px] border border-[#EDEDED] rounded overflow-hidden items-center justify-center bg-[#F7F7F7] hidden">
+                                        <img id="sitefavicon-preview" src="" alt="Favicon" class="w-full h-full object-contain">
+                                    </div>
+                                    {{end}}
+                                    <label for="sitefavicon-file-input" id="sitefavicon-upload-label" class="cursor-pointer p-[8px_16px] flex items-center gap-[4px] text-sm font-normal text-[#252525] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded h-[34px] {{if .settingsdetail.SiteFavIconPath}}hidden{{end}}">
+                                        <img src="/public/img/browse-upload.svg" alt="">Upload
+                                    </label>
+                                    <input id="sitefaviconDlt" name="sitefaviconDlt" type="hidden" value="0">
+                                    <input id="sitefavicon-file-input" type="file" accept="image/*" class="hidden">
+                                    <button type="button" onclick="clearSiteFavicon()" id="sitefavicon-delete-btn" class="p-[8px_16px] flex items-center gap-[4px] text-sm font-normal text-[#252525] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded h-[34px] {{if not .settingsdetail.SiteFavIconPath}}hidden{{end}}">
+                                        <img src="/public/img/delete-btn.svg" alt="">Delete
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                <div>
+                                    <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Header Theme</h3>
+                                    <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Select or customize the header style to match your branding.</p>
+                                </div>
+                                <div class="flex gap-[20px] flex-wrap justify-between">
+                                    <div class=" flex flex-wrap gap-[20px] md:gap-[30px]">
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_newyear" value="new-year" class="hidden peer/newyear" {{if eq .headerthame "new-year"}}checked{{end}}>
+                                            <label for="th_newyear" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/newyear:before:bg-[url('/public/img/radio-checked-green.svg')]">New Year</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_christmas" value="christmas" class="hidden peer/christmas" {{if eq .headerthame "christmas"}}checked{{end}}>
+                                            <label for="th_christmas" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/christmas:before:bg-[url('/public/img/radio-checked-green.svg')]">Christmas</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_pongal" value="pongal" class="hidden peer/pongal" {{if eq .headerthame "pongal"}}checked{{end}}>
+                                            <label for="th_pongal" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/pongal:before:bg-[url('/public/img/radio-checked-green.svg')]">Pongal</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_diwali" value="diwali" class="hidden peer/diwali" {{if eq .headerthame "diwali"}}checked{{end}}>
+                                            <label for="th_diwali" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/diwali:before:bg-[url('/public/img/radio-checked-green.svg')]">Diwali</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_holi" value="holi" class="hidden peer/holi" {{if eq .headerthame "holi"}}checked{{end}}>
+                                            <label for="th_holi" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/holi:before:bg-[url('/public/img/radio-checked-green.svg')]">Holi</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_vote" value="vote" class="hidden peer/vote" {{if eq .headerthame "vote"}}checked{{end}}>
+                                            <label for="th_vote" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/vote:before:bg-[url('/public/img/radio-checked-green.svg')]">Election</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="headertheme" id="th_default" value="default" class="hidden peer/default" {{if or (eq .headerthame "default") (not .headerthame)}}checked{{end}}>
+                                            <label for="th_default" class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] tracking-[0.005em] before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain peer-checked/default:before:bg-[url('/public/img/radio-checked-green.svg')]">Default</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                            <div
+                                class=" p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+                                <div class="grow">
+                                    <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">Site
+                                        setup
+                                    </h3>
+                                    <p class="text-[13px] leading-[20px] font-light text-[#616161]">Configure your website settings and basic information. </p>
+                                </div>
+                                <a id="channeltemplateupdate" href="javascript:void(0);" class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">Save</a>
+                            </div>
+<form action="/admin/website/settingpage/{{.templateInfo.Id}}" method="post" id="SocialmediaForm">
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <input type="hidden" name="tabname" value="sitesetup">
+    <input type="hidden" id="channel_template_data" name="channel_template_data">
+
+                            <div>
+                                <!-- <div
+                                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                    <div>
+                                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Website
+                                            URL
+                                        </h3>
+                                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Enter your website’s public URL. </p>
+                                    </div>
+                                    <div>
+                                        <input value="{{.subdomainurldemo}}" id="websiteInput" name="websiteInput" readonly type="text" placeholder="https://example.com/random/path/here"
+                                            class="bg-white rounded p-[15px_10px] border border-[#E6E6E6]
+                                                            text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full">
+                                                            <label id="websiteInput-error" style="display: none;" for="websiteInput"
+                                                                class="text-[#F26674] font-normal text-xs mt-1 block ">* Please Enter Your
+                                                                Website URL</label>
+                                    </div>                             
+
+                                </div> -->
+                                <div
+                                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                    <div>
+                                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Channel
+                                            Template *
+                                        </h3>
+                                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Select a template to define your site design.</p>
+                                    </div>
+
+                                    <div class="grid  grid-cols-2 max-[950px]:grid-cols-1 gap-x-[14px] gap-y-[20px]">
+
+                                    {{range $i, $ch := .channelslist}}
+
+                                <!-- Channel Dropdown -->
+                                <div class="dropdown dropdown-channel" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px] overflow-y-auto max-h-[200px]">
+                                        {{range $.channelslist}}
+                                        <li>
+                                            <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.ChannelName}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+                                
+                            
+                                <!-- Template Dropdown -->
+                                <div class="dropdown dropdown-template" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.HtmlTemplate}}
+                                        <li>
+                                            <a href="javascript:void(0);" data-channel="false"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+
+                            
+                            {{end}}
+<div >
+    <p id="Channeltemplate-error" class="text-red-500 text-xs"></p>
+</div>
+
+                            
+                                    </div>
+                    
+                                </div>  
+                            </div>
+                    </div>
+                    </form>
+
+                    <!-- FIX: renamed id from "SocialmediaForm" to "socialLinksForm" -->
+                    <form action="/admin/website/settingpage/{{.templateInfo.Id}}" method="post" id="socialLinksForm">
+                        <input type="hidden" name="csrf" value="{{.csrf}}">
+                          <input type="hidden" id="social_media_data" name="social_media_data">
+
+                        <div class="p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+                            <div class="grow">
+                                <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">Social Media link</h3>
+                                <p class="text-[13px] leading-[20px] font-light text-[#616161]">Connect your social media profiles to display and share your content across platforms.</p>
+                            </div>
+                            <button type="submit" id="socialmediaupdate" class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">Save</button>
+                        </div>
+                        <div>
+                            <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                                <div>
+                                    <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">Social Links</h3>
+                                    <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Connect your social media profiles.</p>
+                                </div>
+                                <div class="w-full mx-auto space-y-[20px]">
+                                    <div class="flex items-center gap-[10px] w-full">
+                                        <label for='ck5' class="cursor-pointer">
+                                            <input type="checkbox" id="ck5" class="peer hidden" />
+                                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block" />
+                                            <img src="/public/img/checked-box-green.svg" alt="" class="min-w-[19px] peer-checked:block hidden" />
+                                        </label>
+                                        <img src="/public/img/linkedin-circle.svg" class="min-w-[48px]" />
+                                        <input type="text" placeholder="http://linkedin/example" id="linkedinlink" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[13px] leading-[18px] placeholder:text-[#757575] w-full">
+                                    </div>
+                                    <div class="flex items-center gap-[10px] w-full">
+                                        <label for="ck1" class="cursor-pointer">
+                                            <input type="checkbox" id="ck1" class="peer hidden">
+                                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block">
+                                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden">
+                                        </label>
+                                        <img src="/public/img/x-circle.svg" class="min-w-[48px]">
+                                        <input type="text" id="xlink" placeholder="http://x.com/example" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full">
+                                    </div>
+                                    <div class="flex items-center gap-[10px] w-full">
+                                        <label for="ck2" class="cursor-pointer">
+                                            <input type="checkbox" id="ck2" class="peer hidden">
+                                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block">
+                                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden">
+                                        </label>
+                                        <img src="/public/img/youtube-circle.svg" class="min-w-[48px]">
+                                        <input type="text" id="youtubelink" placeholder="http://youtube.com/example" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full">
+                                    </div>
+                                    <div class="flex items-center gap-[10px] w-full">
+                                        <label for="ck3" class="cursor-pointer">
+                                            <input type="checkbox" id="ck3" class="peer hidden">
+                                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block">
+                                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden">
+                                        </label>
+                                        <img src="/public/img/instagram-circle.svg" class="min-w-[48px]">
+                                        <input type="text" id="instagramlink" placeholder="http://instagram.com/example" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full">
+                                    </div>
+                                    <div class="flex items-center gap-[10px] w-full">
+                                        <label for="ck4" class="cursor-pointer">
+                                            <input type="checkbox" id="ck4" class="peer hidden">
+                                            <img src="/public/img/unchecked-box-green.svg" alt="" class="min-w-[19px] peer-checked:hidden block">
+                                            <img src="/public/img/checked-box-grn.svg" alt="" class="min-w-[19px] peer-checked:block hidden">
+                                        </label>
+                                        <img src="/public/img/facebook-circle.svg" class="min-w-[48px]">
+                                        <input type="text" placeholder="http://facebook/example" class="bg-white rounded p-[15px_10px] border border-[#E6E6E6] text-[14px] font-light leading-[18px] text-[#252525] placeholder:text-[#757575] h-[48px] w-full" id="facebooklink">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+</section>
+<input type="hidden" id="social_link_json" value="{{ .sociallink }}">
+<input type="hidden" id="template_json" value="{{ .TemplateTypeJSON }}">
+
+{{template "footer" .}}
+{{template "footerclose" .}}
+<script>
+    $('#config-btn').hide();
+    $(window).on('load', function() {
+        $('#config-btn').hide();
+    });
+</script>
+
+<script src="/public/js/gotemplate/template_settings.js"></script>
+<script src="/public/js/gotemplate/widget/create_widget.js"></script>
+<script src="/public/js/gotemplate/widget/widgetlist.js"></script>

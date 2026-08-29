@@ -16,7 +16,7 @@ $(document).ready(function () {
                 caches: false,
                 success: function (data) {
                     result = data.trim();
-                    console.log("result:", result);
+                    // console.log("result:", result);
 
                 }
             })
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 caches: false,
                 success: function (data) {
                     result = data.trim();
-                    console.log(data, "data");
+                    // console.log(data, "data");
 
                 }
             })

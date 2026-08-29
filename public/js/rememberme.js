@@ -6,7 +6,7 @@ let RememberFlg = sessionStorage.getItem("rememberme");
 
 let localremFlg = localStorage.getItem("rememberme");
 
-console.log(RememberFlg,localremFlg,"---");
+// console.log(RememberFlg,localremFlg,"---");
 
 if(RememberFlg == null && localremFlg == null){
 

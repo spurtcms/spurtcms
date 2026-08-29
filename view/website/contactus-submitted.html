@@ -1,0 +1,165 @@
+<body class="min-h-screen flex flex-col">
+
+    {{template "docheader" .}}
+
+    <!-- ================= CONTENT (flex-1 so footer positions correctly) ================= -->
+    <section class="max-w-[1040px] mx-auto p-[48px_16px] max-[1300px]:p-[16px_16px_32px_16px] ">
+        <!-- <div class="w-full max-w-[1920px] mx-auto">
+
+
+
+            <div class="max-w-[328px] mx-auto text-center m-[120px_16px] ui-sortable-handle ">
+                <div class="text-center w-fit mx-auto flex items-center justify-center mb-[16px]">
+                    <img src="/public/img/contact-success.svg" alt="noFilter" width="80px" height="80px">
+                </div>
+                <h2 class="text-[16px] text-[#262626] font-medium leading-10">
+                    Thankyou for contacting us!</h2>
+                <p class="text-base font-medium leading-5 text-[#717171]">
+                    We have received your request. </p>
+                <p class="text-base font-medium leading-5 text-[#717171]">
+                    Our team will review it and respond as soon as
+                    possible.</p>
+
+
+
+
+
+
+            </div>
+
+        </div> -->
+        <div class="w-full max-w-[1920px] mx-auto">
+
+
+
+
+
+            <div class="max-w-[400px] mx-auto text-center m-[120px_16px] ui-sortable-handle ">
+                <div class="text-center w-fit mx-auto flex items-center justify-center mb-[24px]">
+                    <img src="/public/img/contact-success.svg" alt="noFilter" width="80px" height="80px">
+                </div>
+                <h2 class="text-gray-900 text-[20px] mb-[8px] font-semibold ">
+                    Thankyou for contacting us!</h2>
+                <p class="text-[#9d9d9d] text-[16px] font-light">
+                    We have received your request. Our team will review it and respond as soon as
+                    possible. </p>
+                <!-- <p class="mb-[30px] text-[#9d9d9d] text-[16px] font-normal">
+                </p> -->
+
+
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER (mt-auto ensures it stays at bottom) ================= -->
+    <footer class="mt-auto bg-[#F2F2F2] p-[40px] pt-[40px] pb-0 pl-[38px]">
+        <div
+            class="max-w-[1200px] mx-auto grid grid-cols-[270px_repeat(auto-fit,minmax(144px,1fr))] gap-[40px] max-sm:grid-cols-2 max-[1300px]:gap-[24px]">
+            <div class="grid gap-[16px] max-sm:col-span-2">
+                <img class="max-w-[110px]" src="/public/img/SpurtCMSlogov1.2.1.svg" alt="logo">
+                <p class="text-[#616161] text-[0.8125rem]">spurtCMS, an open-source CMS by Golang enthusiasts at
+                    Piccosoft Software Labs India, prioritizes speed, performance, and tailored solutions for diverse
+                    content delivery needs, aiming to redefine the CMS development landscape.</p>
+            </div>
+
+            <div>
+                <h5 class="text-[16px] text-[#616161] font-[500] mb-[16px] flex items-center space-x-[5px]">
+                    <span>Opensource</span>
+                    <img src="/public/img/git-icon.svg" alt="git">
+                </h5>
+                <ul class="flex flex-col space-y-[16px] pl-0">
+                    <li><a href="/opensource/spurtcms-admin" class="text-[#616161] text-[13px] hover:underline">CMS
+                            Admin</a></li>
+                    <li><a href="/opensource/spurtcms-packages"
+                            class="text-[#616161] text-[13px] hover:underline">Packages</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-[16px] text-[#616161] font-[500] mb-[16px]">Developer</h5>
+                <ul class="flex flex-col space-y-[16px] pl-0">
+                    <li><a href="/documentation" class="text-[#616161] text-[13px] hover:underline">Installation</a>
+                    </li>
+                    <li><a href="https://github.com/spurtcms/spurtcms/releases" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">Release Notes</a></li>
+                    <li><a href="https://github.com/orgs/spurtcms/projects/1" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">Roadmap</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-[16px] text-[#616161] font-[500] mb-[16px]">spurtCMS</h5>
+                <ul class="flex flex-col space-y-[16px] pl-0">
+                    <li><a href="/cms-website-development-aboutus"
+                            class="text-[#616161] text-[13px] hover:underline">About us</a></li>
+                    <li><a href="/story/about-spurtcms" class="text-[#616161] text-[13px] hover:underline">Our Story</a>
+                    </li>
+                    <li><a href="https://www.piccosupport.com/" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">Support</a></li>
+                    <li><a href="/contactus" class="text-[#616161] text-[13px] hover:underline">Contact us</a></li>
+                    <li><a href="https://www.spurtcms.com/blog"
+                            class="text-[#616161] text-[13px] hover:underline">Blog</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-[16px] text-[#616161] font-[500] mb-[16px]">Terms</h5>
+                <ul class="flex flex-col space-y-[16px] pl-0">
+                    <li><a href="/commercial-license" class="text-[#616161] text-[13px] hover:underline">Commercial
+                            License</a></li>
+                    <li><a href="/terms-and-policy" class="text-[#616161] text-[13px] hover:underline">Terms &amp;
+                            Policies</a></li>
+                    <li><a href="/download-cms-open-source-code#faq"
+                            class="text-[#616161] text-[13px] hover:underline">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-[16px] text-[#616161] font-[500] mb-[16px]">Social Media</h5>
+                <ul class="flex flex-col space-y-[16px] pl-0">
+                    <li><a href="https://twitter.com/spurtcms" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">Twitter</a></li>
+                    <li><a href="https://discord.com/invite/9TNgqUY24N" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">Discord</a></li>
+                    <li><a href="https://www.youtube.com/@spurtcms" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">YouTube</a></li>
+                    <li><a href="https://www.linkedin.com/company/spurtcms/" target="_blank"
+                            class="text-[#616161] text-[13px] hover:underline">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div
+            class="max-w-[1200px] mx-auto flex justify-between items-center border-t border-[#E9E9E9] flex-wrap gap-x-[10px] mt-6 py-4">
+            <p class="text-[#616161] text-[12px]">Developed and maintained by <a href="http://www.piccosoft.com/"
+                    target="_blank">Piccosoft Software Labs India (P) Limited.</a></p>
+
+            <ul class="flex space-x-[24px] mb-0 pl-0">
+                <li><a href="/terms-and-policy#refund-Policy" target="_blank"
+                        class="text-[#616161] text-[12px] hover:underline">Refund Policy</a></li>
+                <li><a href="/terms-and-policy" target="_blank" class="text-[#616161] text-[12px] hover:underline">Terms
+                        of use</a></li>
+                <li><a href="/terms-and-policy#privacy-Policy" target="_blank"
+                        class="text-[#616161] text-[12px] hover:underline">Privacy policy</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- scripts kept same -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script src="/public/js/script.js"></script>
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+</body>

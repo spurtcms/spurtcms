@@ -13,9 +13,7 @@ $(document).ready(async function () {
 
 $(document).ready(function(){
     var theme_clr = $("#color-val").val()
-    console.log("theme", theme_clr);
     $(".circle-change").each(function () {
-        console.log($(this).css("background-color") == theme_clr, theme_clr, $(this).css("background-color"));
         if ($(this).css("background-color") == theme_clr) {
             // $(this).find(".clr").show();
             $(this).addClass('active')
@@ -30,7 +28,6 @@ $(document).on('click', '.circle-change', function () {
   })
     $(this).addClass('active')
     var color = $(this).css("background-color")
-    console.log("clr", color);
     $("#color-change").val(color)
 })
 
@@ -50,7 +47,6 @@ $(document).on('click', '#delete-expandlogo', function () {
 
 $(document).on('click', '#upload-expandlogo>.upload-button>.browse-btn', function () {
 
-    console.log($(this).attr('data-logo'),"value")
     $("#logo-input").val($(this).attr('data-logo'))
 })
 

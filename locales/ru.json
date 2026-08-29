@@ -155,6 +155,11 @@
   "selling": "Продажа",
   "courses": "Курсы",
   "listing": "Листинг",
+    "browsetheme": "Просмотр тем",
+  "pages":"Страницы",
+  "seo":"Сео",
+  "menuitem": "Меню",
+
   "Setting": {
     "title": "Настройки",
     "manageroles": "Управление ролями",
@@ -1124,6 +1129,8 @@
     "Form Unpublished Successfully": "Форма успешно отменена",
     "Form Created Successfully": "Форма успешно создана",
     "Form Updated Successfully": "Форма успешно обновлена",
+    "Ticket Closed Successfully": "Заявка успешно закрыта.",
+    "Reply Submitted Successfully": "Ответ успешно отправлен.",
     "Block Deleted Successfully": "Блок успешно удален",
     "EmailStatusUpdatedSuccessfully": "Статус электронной почты успешно обновлен",
     "ERRORAWScredentialsnotfound": "Загрузка не удалась: проверьте учетные данные S3 и повторите попытку.",
@@ -1175,7 +1182,10 @@
     "Website Updated Successfully": "Веб-сайт успешно обновлен",
     "Page Created Successfully": "Страница успешно создана",
     "Page Updated Successfully": "Страница успешно обновлена",
-    "Page Deleted Successfully": "Страница успешно удалена"
+    "Page Deleted Successfully": "Страница успешно удалена",
+    "Widget Created Successfully": "Виджет успешно создан",
+    "Widget Updated Successfully": "Виджет успешно обновлен",
+    "Widget Deleted Successfully": "Виджет успешно удален"
   },
   "DashBoard": {
     "lastactive": "Последняя активность",

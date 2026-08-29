@@ -472,22 +472,19 @@
                             </div>
                         </div>
                         <div class="flex space-x-[8px] items-center">
-
-                            <div>
-
-
-
-
-                                {{ range $i, $cat := .Categoriesnew }}
-                                {{ if $i }}, {{ end }}
-                                <span class="text-[#262626] text-xs font-normal leading-4">
-                                    {{ $cat.CategoryName }}
-                                </span>
-                                {{ end }}
-
-
-                            </div>
-                        </div>
+                             <div>
+                                     {{ if .Categoriesnew }}
+                                     {{ range $i, $cat := .Categoriesnew }}
+                                     {{ if $i }}, {{ end }}
+                                     <span class="text-[#262626] text-xs font-normal leading-4">
+                                         {{ $cat.CategoryName }}
+                                     </span>
+                                     {{ end }}
+                                     {{ else }}
+                                     <span class="text-[#262626] text-xs font-normal leading-4">default</span>
+                                     {{ end }}
+                                 </div>
+                             </div>
 
                         <div>
                             {{if eq .Status 1}}

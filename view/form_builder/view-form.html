@@ -1,0 +1,37 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$slchannelid := .Slchannelid}}
+{{$EntryId := .EntryId}}
+
+
+<section class=" flex-grow overflow-hidden pt-[48px] min-h-screen form-build">
+    <header
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">
+                {{.formresponse.Ticket}}
+            </h2>
+        </div>
+    </header>
+    <div
+        class=" max-[1440px]:w-full w-[calc(100%-650px)] max-md:w-full max-w-[704px] mx-auto max-[1204px]:p-[40px_32px] p-[40px_64px] font-inter">
+
+        <input type="hidden" name="csrf" value="{{.csrf}}">
+        <form-builder mode="preview" content='{"data":{{.formdata}}}'
+ >
+
+ 
+        </form-builder>
+
+    </div>
+
+
+    {{template "footer" .}}
+    <script src="/public/js/form.js"></script>
+
+    {{template "footerclose" .}}

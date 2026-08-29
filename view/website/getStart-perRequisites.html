@@ -1,0 +1,223 @@
+{{template "docheader" .}}
+
+
+    <main class="flex max-[768px]:flex-col">
+        <div class="offcanvas offcanvas-end border-0 min-[769px]:static min-[769px]:!transform-none min-[769px]:visible min-[769px]:z-0 bg-[#F8F8F8] max-w-[20rem]"
+            tabindex="-1" id="templateCanvas">
+            <button type="button" class="p-[16px_16px_0_16px] hidden max-[768px]:block z-50 "
+                data-bs-dismiss="offcanvas" aria-label="Close">
+                <img src="/public/img/close-transform.svg" alt="arrow">
+            </button>
+            <aside
+                class="bg-[#F8F8F8] p-[0.9375rem_1rem] sticky top-[4.5rem] h-full  min-w-[20rem] w-full overflow-auto">
+                <div class="flex flex-col gap-[0.5rem] h-full overflow-auto">
+
+                    <div class="documentAccord">
+                        <button
+                            class="bg-transparent border-none h-[2.125rem] p-[0.5rem] text-[0.875rem] font-medium text-[#202224] w-full leading-[1.375rem] text-left flex items-center gap-[0.3125rem] before:inline-block before:w-[1rem] before:h-[1rem] before:bg-contain before:bg-[url(/public/img/documentAccord.svg)]"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
+                            aria-controls="collapseOne">
+                            Getting Started
+                        </button>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample" style="">
+
+                            <ul class="max-h-[31.25rem] overflow-hidden">
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]">
+                                    <a class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]    active  "
+                                        href="getStart-perRequisites.html">Prerequisites</a>
+                                </li>
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]   "
+                                        href="getStart-adminSetup.html">CMS Admin Setup</a></li>
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]   "
+                                        href="getStart-apiSetup.html">GraphQL API Setup</a></li>
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                    text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]   "
+                                        href="getStart-template.html">Templates</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="documentAccord">
+                        <button
+                            class="bg-transparent border-none h-[2.125rem] p-[0.5rem] text-[0.875rem] font-medium text-[#202224] w-full leading-[1.375rem] text-left flex items-center gap-[0.3125rem]  before:inline-block before:w-[1rem] before:h-[1rem] before:bg-contain before:bg-[url(/public/img/documentAccord.svg)]"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded="true"
+                            aria-controls="collapsefour">
+                            Deployment
+                        </button>
+
+                        <div id="collapsefour" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <ul class="max-h-[31.25rem] overflow-hidden">
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]  "
+                                        href="javascript:void(0);">From Docker</a>
+                                </li>
+
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]   "
+                                        href="javascript:void(0);">From CLI</a></li>
+                                <li class="p-[.5rem_1.1875rem_.5rem_2.5rem;]"><a
+                                        class="
+                                text-[0.875rem] font-light text-[#202224] leading-[1.375rem] flex gap-[0.3125rem] items-center before:inline-block before:w-[0.25rem] before:min-w-[0.25rem] before:h-[0.25rem] before:bg-[#DDDDDD] before:rounded-full [&.active]:text-[#00ACD7]  [&.active]:before:bg-[#00ACD7]  hover:text-[#00ACD7]  hover:before:bg-[#00ACD7]   "
+                                        href="javascript:void(0);">From PreBuild</a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </aside>
+        </div>
+        <section class="p-[1.5rem_2rem_7.5rem_2rem] max-[1300px]:p-[16px]">
+            <a class="w-[32px] h-[32px] rounded-[4px] bg-white shadow-[0px_1px_5px_0px_rgba(0,0,0,0.1)] place-items-center rotate-180 fixed top-[100px] right-[16px]   hidden max-[768px]:grid z-50 "
+                type="button" data-bs-toggle="offcanvas" href="#templateCanvas" aria-controls="templateCanvas">
+                <img src="/public/img/close-transform.svg" alt="arrow">
+            </a>
+
+            <div class="basicSteps">
+                <div class="basic template-videos">
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">
+                        Before diving into the spurtCMS Admin application setup, it's essential to confirm that your
+                        system is adequately equipped with the required tools and configurations. This article aims to
+                        provide guidance on the essential prerequisites for a successful spurtCMS Admin application
+                        installation.
+                    </p>
+
+                    <h2 class="text-[1.5rem] font-medium leading-[1.875rem] text-[#202224] mb-[1.5rem] block">
+                        Step 1: Install Golang:</h2>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">spurtCMS LMS Template
+                        Begin by downloading the stable version of Golang, preferably 1.20.12 version, from the official
+                        Go website: <a href="https://go.dev/dl/"
+                            class="text-[#2e74b5] hover:underline">https://go.dev/dl/</a></p>
+
+
+
+                    <h2 class="text-[1.5rem] font-medium leading-[1.875rem] text-[#202224] mb-[1.5rem]  block">
+                        Step 2: Set up Golang Environment:</h2>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">Open the terminal and
+                        use the following commands to install Golang:</p>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        1 /login - GET: </h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                $ sudo wget https://golang.org/dl/go1.20.12.linux-amd64.tar.gz
+                    </code>
+                    </pre>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        Extract the binary archive:</h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                $ sudo tar -xzf go1.20.12.linux-amd64.tar.gz -C /usr/local/
+                    </code>
+                    </pre>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        Adjust the path variable for Go:</h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                $ sudo nano /etc/profile
+                    </code>
+                    </pre>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        Add the following path at the end of the file:</h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                export PATH=$PATH:/usr/local/go/bin
+                    </code>
+                    </pre>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        Activate the PATH of the environment variable:</h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                $ source /etc/profile
+                    </code>
+                    </pre>
+
+                    <h3 class="text-[1rem] font-medium leading-[1.5rem] text-[#202224] mb-[1rem]  block">
+                        Check Go version:</h3>
+
+
+                    <pre
+                        class="bg-[#1F2426] rounded-[.1875rem] p-[.75rem_1rem] relative mt-[16px] mb-[24px] whitespace-normal ">
+                            <code class="block w-[calc(100%-0.875rem)] text-[.875rem] font-light text-white leading-[1.125rem] break-words font-lexend">
+                                $ go version
+                    </code>
+                    </pre>
+
+                    <h2 class="text-[1.5rem] font-medium leading-[1.875rem] text-[#202224] mb-[1.5rem] block">
+                        Step 3: Install PostgreSQL:</h2>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">Install PostgreSQL
+                        14.8 version.</p>
+
+                    <h2 class="text-[1.5rem] font-medium leading-[1.875rem] text-[#202224] mb-[1.5rem] block">
+                        Step 4: Install PgAdmin:</h2>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">Install PgAdmin4
+                        workbench (optional).Reference link: <a href="https://go.dev/dl/"
+                            class="text-[#2e74b5] hover:underline">k:
+                            https://www.pgadmin.org/download/</a></p>
+
+                    <h2 class="text-[1.5rem] font-medium leading-[1.875rem] text-[#202224] mb-[1.5rem] block">
+                        Step 5: Database Setup:</h2>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">Create a new database
+                        using PgAdmin and name it of your choice. We will use this database name in .env in subsequent
+                        steps in next article when setting up spurtCMS admin application.</p>
+
+                    <p class="text-[1rem] font-light text-[#202224] leading-[1.5rem] mb-[1.5rem]">The above steps
+                        concludes the prerequisites for setting up spurtCMS Admin application. Once these steps are
+                        completed, you are ready to move on to the installation and configuration of the spurtCMS Admin
+                        application.</p>
+
+                </div>
+
+
+
+
+            </div>
+        </section>
+
+    </main>
+
+
+    {{template "websitefooter" .}}

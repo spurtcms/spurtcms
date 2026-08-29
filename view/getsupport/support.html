@@ -1,0 +1,429 @@
+
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+
+
+
+
+
+
+<section
+class="max-md:ms-0 ml-auto max-md:pt-[65px] w-full max-w-[calc(100%-232px)] max-md:max-w-full min-h-screen">
+<header
+    class="hidden top-0 right-0 z-20 fixed max-md:flex justify-end items-center gap-[12px] bg-white max-md:ms-0 p-[16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+    <div class="flex items-center gap-[6px] mr-auto">
+        <a href="javascript:void(0);"
+            class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+            <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+        </a>
+        <div class="max-w-[640px]">
+            <h2 class="mb-[4px] font-medium text-[#252525] text-[16px] leading-[20px] whitespace-nowrap">
+                Payment</h2>
+            <p class="max-sm:!hidden font-light text-[#525252] text-[12px] line-clamp-2 leading-[15px]">
+                Individual content pieces within a channel.</p>
+        </div>
+    </div>
+</header>
+
+<div class="block bg-[#F5F6F7] p-[32px] max-1289:p-[16px]">
+    <h2
+        class="mb-[32px] max-1289:mb-[24px] font-semibold text-[#262626] text-[36px] max-1289:text-[24px] text-center">
+       {{$Translate.Integrations.Headtitle}}🚀</h2>
+
+    <div class="gap-[48px] max-1289:gap-[32px] grid grid-cols-1 lg:grid-cols-2 mb-[48px]">
+
+        <form id="supportserviceform" action="/admin/get-spurtcmspro/payment" method="post">
+
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <input type="text" class="hidden" id="interval" name="interval" value="month">
+
+        <div
+            class="flex flex-col items-center bg-[#FFFFFF] p-[24px] max-1289:p-[16px] border-[#ECECEC] border-[1px] border-solid rounded-[12px]">
+            <!-- <div
+                class="items-center gap-[16px] grid grid-cols-2 mx-auto mb-[24px] max-1289:mb-[16px] px-[16px] max-1289:px-[12px] py-[8px] max-1289:py-[8px] border-[#000000] border-[1px] border-solid rounded-[131px] w-full max-w-[224px]">
+                <a id="monthlyplan"
+                    class="cursor-pointer flex justify-center items-center bg-[#262626] px-[16px] max-1289:px-[12px] hover:border-[1px] max-1289:py-[8px] border-[#262626] border-solid rounded-[115px] w-full h-[36px] font-normal text-[16px] text-white">
+                    Monthly
+                </a>
+                <a id="Yearlyplan"
+                    class="cursor-pointer flex justify-center items-center bg-transparent px-[16px] hover:border-[1px] border-solid rounded-[115px] w-full h-[36px] font-normal text-[#262626] text-[16px]">
+                    Yearly
+                </a>
+            </div> -->
+            <div
+                class="mb-[24px] max-1289:mb-[16px] pb-[24px] max-1289:pb-[8px] border-[#D3D3D3] border-b w-full">
+                <div class="flex items-center">
+                    <h3 id="subscriptionamount" class="font-inter font-bold text-[#000000] text-[40px] max-1289:text-[40px] pr-4SpurtCMS Pro v1.2 is cloud-ready and can be deployed on:">$499
+                    </h3>
+                    <!-- <p id="subscriptionintervel" class="mb-[8px] font-normal text-[#262626] text-sm">
+                        /month</p> -->
+                        <div
+                        class="flex border-[#BEE0E8] bg-[#E9F4F7] ml-[12px] p-[5px] border rounded-[5px] font-normal text-[#202224] text-[1rem] whitespace-nowrap">
+                        <img src="/public/img/charity.svg" alt="" class="flex"> &nbsp; One Time for Life Time Updates
+                    </div>
+
+                </div>
+            </div>
+            <div class="flex flex-col items-start mb-[24px] max-1289:mb-[24px] w-full">
+                <div class="flex flex-col items-start mb-[16px] last:mb-0 max-1289:mb-[8px] w-full">
+                    <p class="mb-[4px] font-normal text-[#262626] text-sm">Company Name/ Full Name</p>
+                    <input type="text" id="companyname" name="companyname" 
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs px-[12px] border-[#F2F2F2] border-[1px] border-solid rounded w-full h-[36px]" />
+                </div>
+                <div class="flex flex-col items-start mb-[16px] last:mb-0 max-1289:mb-[8px] w-full">
+                    <p class="mb-[4px] font-normal text-[#262626] text-sm">Email</p>
+                    <input type="text" id="contectemail" name="contectemail" 
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs px-[12px] border-[#F2F2F2] border-[1px] border-solid rounded w-full h-[36px]" />
+                </div>
+                <div class="flex flex-col items-start mb-[16px] last:mb-0 max-1289:mb-[8px] w-full">
+                    <p class="mb-[4px] font-normal text-[#262626] text-sm">Contact Number</p>
+                    <input type="text" id="contectnumber" name="contectnumber" maxlength="15" 
+                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs px-[12px] border-[#F2F2F2] border-[1px] border-solid rounded w-full h-[36px]" />
+                </div>
+                <div class="flex flex-col items-start mb-[16px] last:mb-0 max-1289:mb-[8px] w-full">
+                    <p class="mb-[4px] font-normal text-[#262626] text-sm">Country</p>
+                    <!-- <div class="w-full dropdown open">
+                        <a href="#"
+                            class="flex justify-between items-center bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-9 no-underline"
+                            type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="font-normal text-bold-gray text-sm"> Select category</span>
+                            <img src="/public/img/drop-down-img.svg" />
+                        </a>
+                        <div class="focus:bg-transparent drop-shadow-4 border-0 w-full min-w-full dropdown-menu"
+                            aria-labelledby="triggerId">
+                            <a
+                                class="flex items-center h-8 font-normal text-[#262626] leading-[1] dropdown-item ext-[14px]">
+                                category-1
+                            </a>
+                          
+                        </div>
+
+                    </div> -->
+
+
+                    <select  class="flex font-normal text-[#262626] text-sm justify-between items-center  border border-[#EDEDED] rounded-[4px] w-full h-9 no-underline" name="Countrys" id="CountrySelect">
+                        <option value="" disabled selected>Select Country</option>
+                        {{range .CountryList}}
+                        <option value="{{.CountryName}}" >{{.CountryName}}</option>
+                        {{end}}
+    
+                    </select>
+                   
+    
+                            <input type="text" id="Country" name="Country"  
+                            class="hidden [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs px-[12px] border-[#F2F2F2] border-[1px] border-solid rounded w-full h-[36px]" />
+                  
+                </div>
+            </div>
+
+            <!-- value="Afghanistan" -->
+            <!-- <a href="#"
+                class="flex justify-center items-center bg-[#6772E5] hover:bg-[#5863cf] rounded-[2px] w-full h-[44px] font-normal text-white text-base">Get
+                Premium with <span class="ml-[4px]"><img src="/public/img/stripe-without-bg.svg"
+                        alt="..."></span></a> -->
+
+                        <button  id="supportformsubmit" type="button"
+                        class="flex justify-center items-center bg-[#6772E5] hover:bg-[#5863cf] rounded-[2px] w-full h-[44px] font-normal text-white text-base">Buy
+                        Premium with <span class="ml-[4px]"><img src="/public/img/stripe-without-bg.svg"
+                                alt="..."></span></button>
+        </div>
+        </form>
+        <div class="flex flex-col justify-items-start">
+            <h2 class="mb-[24px] font-light text-[#262626] text-[20px]">{{$Translate.Integrations.Title}}</h2>
+            <div class="flex flex-col items-start mb-[64px] max-1289:mb-[24px]">
+                <p
+                class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                {{$Translate.Integrations.Keypoint7}}
+            </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint1}}
+                </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint2}}
+                </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint3}}
+                </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint4}}
+                </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint5}}
+                </p>
+                <p
+                    class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[16px] last:mb-0 pl-[28px] font-medium text-[#262626] text-base">
+                    {{$Translate.Integrations.Keypoint6}}
+                </p>
+            </div>
+            <div class="w-full">
+                <h4 class="mb-[16px] font-medium text-[#262626] text-2xl">{{$Translate.Integrations.Cloudtite}}</h4>
+                <div class="flex flex-wrap justify-between items-center gap-6 max-1289:gap-[16px] max-w-[612px]">
+                    <a >
+                        <img src="/public/img/dwn-golang.svg" alt="" class="w-auto h-auto">
+                    </a>
+                    <a >
+                        <img src="/public/img/dwn-postgreSQL.svg" alt="" class="w-auto h-auto">
+                    </a>
+                    <a >
+                        <img src="/public/img/dwn-graphql.svg" alt="" class="w-auto h-auto">
+                    </a>
+                    <a >
+                        <img src="/public/img/dwn-js.svg" alt="" class="w-auto h-auto">
+                    </a>
+                    <a >
+                        <img src="/public/img/dwn-mySQL.svg" alt="" class="w-auto h-auto">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mx-auto max-w-[880px]">
+        <h3 class="mb-[24px] sm:mb-[48px] font-semibold text-[#262626] text-[32px] text-center">💰 {{$Translate.Integrations.Deschead}}</h3>
+
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List1}}</p>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show"
+                    data-bs-parent="#accordionExample">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist1}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample2">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List2}}</p>
+                    </button>
+                </h2>
+                <div id="collapsetwo" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample2">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist2}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample3">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List3}}</p>
+                    </button>
+                </h2>
+                <div id="collapsethree" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample3">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist3}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample4">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsefour" aria-expanded="true" aria-controls="collapsethree">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List4}}</p>
+                    </button>
+                </h2>
+                <div id="collapsefour" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample4">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist4}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample10">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseten" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List5}}</p>
+                    </button>
+                </h2>
+                <div id="collapseten" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample10">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="mb-[16px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist5}}
+                        </p>
+
+                        <p
+                            class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[12px] last:mb-0 pl-[24px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist6}}
+                        </p>
+                        <p
+                            class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[12px] last:mb-0 pl-[24px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist7}}
+                        </p>
+
+                        <p
+                            class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat mb-[12px] last:mb-0 pl-[24px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist8}}
+                        </p>
+                        <p
+                            class="bg-[left_7px]  bg-[url(/public/img/green-tick.svg)] bg-no-repeat last:mb-0 pl-[24px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist9}}
+                        </p>
+
+                        <p class="mt-[16px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist10}}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample5">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsefive" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List6}}</p>
+                    </button>
+                </h2>
+                <div id="collapsefive" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample5">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist11}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample6">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsesix" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List7}}</p>
+                    </button>
+                </h2>
+                <div id="collapsesix" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample6">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist12}}
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample7">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseseven" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List8}}</p>
+                    </button>
+                </h2>
+                <div id="collapseseven" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample7">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist13}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample8">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseeight" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List9}}</p>
+                    </button>
+                </h2>
+                <div id="collapseeight" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample8">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist14}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-[32px] border-[#D9D9D9] border-b last:border-b-0 accordion" id="accordionExample9">
+            <div class="bg-transparent border-0 accordion-item">
+                <h2 class="accordion-header">
+                    <button class="collapsed flex items-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsenine" aria-expanded="true" aria-controls="collapseOne">
+                        <img src="/public/img/accordian-arrow.svg" alt="..." class="mt-[11px] accord-arrow">
+                        <p class="ml-[12px] font-medium text-[#262626] text-2xl text-left">{{$Translate.Integrations.List10}}</p>
+                    </button>
+                </h2>
+                <div id="collapsenine" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample9">
+                    <div class="!px-[28px] pb-0 accordion-body">
+                        <p class="mb-[16px] font-normal text-[#262626] text-base">
+                            {{$Translate.Integrations.Sublist15}}
+                        </p>
+                        <p class="mb-[16px] font-normal text-[#262626] text-base">
+                            📩 {{$Translate.Integrations.Sublist16}}
+                        </p>
+                        <p class="mb-[16px] font-normal text-[#262626] text-base">
+                            📖 {{$Translate.Integrations.Sublist17}}
+                        </p>
+                        <p class="mb-[16px] font-normal text-[#262626] text-base">
+                            🛠️ {{$Translate.Integrations.Sublist18}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</section>
+
+
+{{template "footer" .}}
+<script src="/public/js/supportservice/supportservice.js"></script>
+{{template "footerclose" .}}

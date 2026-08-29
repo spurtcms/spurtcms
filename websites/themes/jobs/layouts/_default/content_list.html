@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{template "templatehead" .}}
+</head>
+
+<body>
+
+
+ <main class="bg-white font-lexend">
+        <header class="bg-white shadow-md shadow-black/860">
+            <nav class="mx-auto flex max-w-screen-2xl items-center justify-between lg:px-[120px] p-[16px] lg:py-6 h-[72px]"
+                aria-label="Global"><a href="/"><img src="/jobs/assets/img/job-theme-logo.svg"></a>
+                <div class="relative inline-block text-center"><a href="/signin"><button
+                        class="flex justify-center items-center bg-[#2563EB] hover:bg-[#4c7eea] px-[32px] max-[700px]:px-4 rounded-[50px] h-[47px] font-[700] text-base text-white whitespace-nowrap">Join
+                        Now</button></a></div>
+            </nav>
+        </header><!--$-->
+        <main class="min-h-screen">
+            <div class="bg-blue-50 w-full ">
+                <div
+                    class="max-w-screen-2xl m-[auto] flex  gap-[130.65px] flex-col lg:flex-row lg:pt-[85px] items-start lg:ps-[120px] lg:pe-[234.5px] lg:pb-[26.89px] md:px-10 md:py-20 px-6 py-10 relative">
+                    <div class="lg:pt-[69px] pt-[0]">
+                        <h2
+                            class="mb-1.5 sm:text-[64px] text-4xl font-semibold text-black-100 sm:leading-[80px] leading-10">
+                            Find your dreamcareer</h2>
+                        <p class="text-gray-500 text-sm leading-4 font-normal">Match with Companies that Share Your
+                            Values</p>
+                    </div><img src="/jobs/assets/img/banner.svg" class="hidden lg:block">
+                     <form action="/" method="get" class="searchform " autocomplete="off">
+                    <div
+                        class="lg:px-[120px] max-w-screen-2xl m-[auto] sm:h-[76px] h-[auto] absolute  w-full left-0 -bottom-[11rem]  sm:-bottom-16  md:px-10 px-6 mb-6">
+                     
+                        <div
+                            class="w-full bg-white h-full flex gap-px items-center p-2 rounded-md shadow-[0_0_20px_0_rgba(0,0,0,.1)] border border-gray mb-6 flex-col sm:flex-row">
+                            <div class="w-full relative flex"><input type="text" name="Title"
+                                    class="sm:h-full sm:border-0 border-b border-gray  h-10 py-[0] sm:py-7 w-full focus-visible:outline-none ps-14 text-sm leading-4 font-light placeholder:text-slate-300"
+                                    placeholder="Search by Job Title/Role" value="{{.filters.Keyword}}">
+                                <div><img src="/jobs/assets/img/search.svg" class="absolute top-[10px] sm:top-[27px] left-6"></div>
+                            </div>
+                            <div class="h-[50px] w-0.5 bg-gray-200 hidden sm:flex"></div>
+                            <div class="w-full relative"><input type="text" name="location"
+                                    class="sm:h-full h-10 py-[0] sm:py-7 w-full sm:border-0 border-b border-gray focus-visible:outline-none ps-14 text-sm leading-4 font-light placeholder:text-slate-300"
+                                    placeholder="Location" value="{{.filters.Title}}">
+                                <div><img src="/jobs/assets/img/location.svg" class="absolute top-[10px] sm:top-[27px] left-6"></div>
+                            </div><button type="submit"
+                                class="sm:h-[58px] h-10 min-w-[177px] sm:mt-0 mt-[12px] rounded bg-blue-400 text-white text-base leading-5 font-medium"
+                                >Search Jobs</button> 
+                        </div>
+                       
+                        <div class="w-full h-px bg-gray-200"></div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <div class="lg:px-[120px] max-w-screen-2xl m-[auto] md:px-10 px-6 mt-[11rem] sm:mt-20">
+                <div class="grid md:grid-cols-[1fr_1fr_1fr_1fr_150px] grid-cols-2  gap-[16px] mb-4">
+
+                    <div class="dropdown">
+                        <button
+                            class="h-[38px] rounded-[4px] border-gray-500 border w-full focus-visible:outline-none bg-transparent focus:border-[#2684FF] hover-blue p-[6px_12px] text-sm font-normal placeholder:text-slate-300 bg-[url('/jobs/assets/img/drop-option-event.svg')] bg-no-repeat bg-[right_16px_center] pr-9"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <input type="text"
+                                class="form-control border-0 shadow-none p-0 text-[14px] font-normal text-black placeholder:text-slate-300"
+                                placeholder="Job Category">
+                        </button>
+                        <ul class="dropdown-menu w-full rounded-[4px] shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_4px_11px_rgba(0,0,0,0.1)] border-none"
+                            aria-labelledby="dropdownInputBtn">
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">engineering</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">marketing_sales</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">finance</a></li>
+                        </ul>
+                    </div>
+
+
+                    <!-- <input type="text"
+                        class="form-control shadow-none text-[14px] text-black h-[38px] rounded-[4px] border-gray-500 border w-full focus-visible:outline-none bg-transparent focus:border-[#2684FF] hover-blue p-[6px_12px] text-sm font-normal placeholder:text-slate-300 bg-[url('/jobs/assets/img/arrow-drop.svg')] block"
+                        placeholder="Job Category"> -->
+
+                    <div class="dropdown">
+                        <button
+                            class="h-[38px] rounded-[4px] border-gray-500 border w-full focus-visible:outline-none bg-transparent focus:border-[#2684FF] hover-blue p-[6px_12px] text-sm font-normal placeholder:text-slate-300 bg-[url('/jobs/assets/img/drop-option-event.svg')] bg-no-repeat bg-[right_16px_center] pr-9"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <input type="text"
+                                class="form-control border-0 shadow-none p-0 text-[14px] font-normal text-black placeholder:text-slate-300"
+                                placeholder="Experienced Level">
+                        </button>
+                        <ul class="dropdown-menu w-full rounded-[4px] shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_4px_11px_rgba(0,0,0,0.1)] border-none"
+                            aria-labelledby="dropdownInputBtn">
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">0-1</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">1-2</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">2-3</a></li>
+                                       <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">3-4</a></li>
+                                       <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">4-5</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button
+                            class="h-[38px] rounded-[4px] border-gray-500 border w-full focus-visible:outline-none bg-transparent focus:border-[#2684FF] hover-blue p-[6px_12px] text-sm font-normal placeholder:text-slate-300 bg-[url('/jobs/assets/img/drop-option-event.svg')] bg-no-repeat bg-[right_16px_center] pr-9"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <input type="text"
+                                class="form-control border-0 shadow-none p-0 text-[14px] font-normal text-black placeholder:text-slate-300"
+                                placeholder="Date Posted">
+                        </button>
+                        <ul class="dropdown-menu w-full rounded-[4px] shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_4px_11px_rgba(0,0,0,0.1)] border-none"
+                            aria-labelledby="dropdownInputBtn">
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">engineering</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">marketing_sales</a></li>
+                            <li><a class="dropdown-item text-sm font-normal text-black hover:bg-[#deebff] p-[8px_16px]"
+                                    href="#">finance</a></li>
+                        </ul>
+                    </div>
+
+                    <button
+                        class="min-w-[138px] h-[42px] bg-blue-600 text-white rounded text-sm font-medium md:col-auto col-span-2"
+                        style="">Filter Jobs</button>
+                </div>
+                <!-- <div class="flex justify-between sm:items-center items-end pb-6 border-gray border-b mb-6">
+                    <div class="flex flex-wrap gap-[16px]">
+                        <div
+                            class="flex gap-2 p-3 whitespace-nowrap bg-slate-50 border-gray-500 border rounded-md text-sm font-light text-black leading-4">
+                            0-1 Years<img src="/jobs/assets/img/cancel.svg" class="cursor-pointer"></div><button
+                            class="text-sm whitespace-nowrap font-light text-black leading-4 p-3 border-gray-500 rounded-md border bg-white">Clear
+                            All</button>
+                    </div>
+                </div> -->
+                <!-- <div class="flex justify-between sm:items-center items-end pb-6 border-gray border-b"><button
+                        class="p-[6x] flex gap-2 justify-center items-center min-w-[110px] whitespace-nowrap h-[42px] text-blue-600 border-blue-600 border rounded-md ml-auto"><img
+                            src="/jobs/assets/img/list.svg">List View</button></div> -->
+                <div>
+                    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 grid-cols-1 mt-6 mb-10">
+                       {{if .entries}}
+    {{range .entries}}
+        <div class="border-gray-300 border rounded p-[16px] hover:shadow-lg flex flex-col">
+            <span class="px-2.5 py-1 rounded-3xl bg-blue-100 text-black text-xs font-normal w-fit">
+                {{.CategoryGroup}}
+            </span>
+            <a class="block text-black text-2xl leading-8 font-normal my-2"
+                href="/channel/{{.ChannelName}}/{{.Slug}}">
+                {{.Title}}
+            </a>
+          
+            {{range .Fields}}
+                {{if eq .FieldName "Job Code"}}
+                    <p class="text-sm font-light leading-4 text-blue-600 mb-4">
+                        Job code: <span class="text-gray-500">{{.FieldValue.FieldValue }}</span>
+                    </p>
+                {{end}}
+            {{end}}
+            <div class="flex flex-col gap-[16px] mb-6">
+                <div class="flex items-center gap-2">
+                    <img src="/jobs/assets/img/exp.svg">
+                    <p class="text-sm font-normal leading-4 text-blue-600 ">
+                        Experience:
+                        <span class="text-gray-500 font-light">
+                            {{range .Fields}}
+                                {{if eq .FieldName "Experience"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}
+                        </span>
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <img src="/jobs/assets/img/Time.svg">
+                    <p class="text-sm font-normal leading-4 text-blue-600 ">
+                        Job Type:
+                        <span class="text-gray-500 font-light">
+                            {{range .Fields}}
+                                {{if eq .FieldName "Job Type"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}
+                        </span>
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <img src="/jobs/assets/img/job-type.svg">
+                    <p class="text-sm font-normal leading-4 text-blue-600 ">
+                        Location:
+                        <span class="text-gray-500 font-light">
+                            {{range .Fields}}
+                                {{if eq .FieldName "Location"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+           
+            <h5 class="text-gray-500 text-xs font-light mb-4 ">
+                Posted Date:
+                {{range .Fields}}
+                    {{if eq .FieldName "Date"}}{{.FieldValue.FieldValue }}{{end}}
+                {{end}}
+            </h5>
+            <a class="w-full h-11 bg-blue-600 text-white text-base font-normal rounded flex justify-center items-center mt-auto"
+                href="/channel/{{.ChannelName}}/{{.Slug}}">
+                View Job
+            </a>
+        </div>
+    {{end}}
+{{end}}
+
+                     
+                    </div>
+
+                </div>
+            </div>
+            <!-- <ul class="w-full flex flex-row flex-wrap justify-center items-center my-8 gap-[6px]" role="navigation"
+                aria-label="Pagination">
+                <li class="previous paginations__link--disabled"><a
+                        class="w-10 h-10 rounded-full flex justify-center items-center font-normal text-base text-[#828ea5] cursor-pointer [&.active]:bg-[#2563eb] [&.active]:text-white [&.active]:pointer-events-none "
+                        tabindex="-1" role="button" aria-disabled="true" aria-label="Previous page" rel="prev"><img
+                            src="/jobs/assets/img/icon-arrow-left-sharp-pag.svg"></a></li>
+                <li class="pagination-new-active"><a rel="canonical" role="button"
+                        class="w-10 h-10 rounded-full flex justify-center items-center font-normal text-base text-[#828ea5] cursor-pointer [&.active]:bg-[#2563eb] [&.active]:text-white [&.active]:pointer-events-none active"
+                        tabindex="-1" aria-label="Page 1 is your current page" aria-current="page">1</a></li>
+                <li><a rel="next" role="button"
+                        class="w-10 h-10 rounded-full flex justify-center items-center font-normal text-base text-[#828ea5] cursor-pointer [&.active]:bg-[#2563eb] [&.active]:text-white [&.active]:pointer-events-none"
+                        tabindex="0" aria-label="Page 2">2</a>
+                </li>
+                <li><a role="button"
+                        class="w-10 h-10 rounded-full flex justify-center items-center font-normal text-base text-[#828ea5] cursor-pointer [&.active]:bg-[#2563eb] [&.active]:text-white [&.active]:pointer-events-none"
+                        tabindex="0" aria-label="Page 3">3</a></li>
+                <li class="next"><a
+                        class="w-10 h-10 rounded-full flex justify-center items-center font-normal text-base text-[#828ea5] cursor-pointer [&.active]:bg-[#2563eb] [&.active]:text-white [&.active]:pointer-events-none"
+                        tabindex="0" role="button" aria-disabled="false" aria-label="Next page" rel="next"><img
+                            src="/jobs/assets/img/icon-arrow-right-sharp-pag.svg"></a></li>
+            </ul> -->
+        </main>
+ {{template "templatefooter" .}}

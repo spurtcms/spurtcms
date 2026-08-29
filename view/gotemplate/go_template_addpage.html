@@ -25,7 +25,7 @@
                         {{.templatedetail.TemplateName}}</h2>
                     <ul class="flex items-center gap-[4px]">
                         <li>
-                            <a href="/admin/website/pages/{{$webdetail.Id}}">
+                            <a href="/admin/website/pages/">
                                 <p class="text-[12px] font-normal text-[#757575] leading-[15px]">Pages</p>
                             </a>
                         </li>
@@ -39,8 +39,8 @@
                     </ul>
                 </div>
                 <div class="ms-auto flex">
-                    <a href="/admin/website/pages/{{$webdetail.Id}}"
-                        class="place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] max-sm:p-[8px] px-[16px] py-[7px] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Cancel</a>
+                    <a href="/admin/website/pages/"
+                        class="place-items-center grid bg-[#F7F7F5] hover:bg-[#F5F5F5] max-sm:p-[8px] px-[16px] py-[7px] rounded-md w-fit h-8 font-normal text-[#717171] hover:text-[#717171] text-sm text-center leading-tight tracking-tight whitespace-nowrap">Close</a>
                     <a href="javascript:void(0)" id="pagesave"
                         class="ms-2 place-items-center grid bg-[#10A37F] hover:bg-[#148569] max-sm:p-[8px] px-[16px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
                         Save </a>
@@ -263,9 +263,9 @@
             </div>
 
 
-            <spurt-editor id="spurt-editor" block="{{.blocks}}" defaultblock="{{.defaultblocks}}" mode="{{.Mode}}"
+            <spurt-editor id="spurt-editor" block="{{.blocks}}" defaultblock="{{.defaultblocks}}" publicdata="{{.publicdata}}" mode="{{.Mode}}"
                 widgetlist="{{.widgetlist}}" widgetblock="{}" storagepath="{{.Storagepath}}" uploadurl="{{.uploadurl}}"
-                content="{{.PageDetail.PageDescription}}">
+                content="{{.PageDetail.PageDescription}}" blockurl="{{.BlockURL}}" templateblock="{{.blocks}}" template="{{.TemplateName}}">
             </spurt-editor>
 
 
@@ -409,12 +409,49 @@
                         </div>
 
 
+                        <!-- ==================== -->
+
+                               <div class="dropdown open input-group mb-2" id="templategrp">
+    <label for=""
+        class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] mb-[6px] w-full">
+        Select Template
+    </label>
+
+    <a id="templateTriggerId"
+        class="rounded-[4px] p-[12px] h-9 border border-light-300 no-underline w-full flex justify-between items-center field text-[14px] cursor-pointer"
+        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        data-bs-auto-close="outside">
+        <span id="showtemplate" class="text-bold-gray text-sm font-normal">Choose Template</span>
+        <img src="/public/img/drop-down-img.svg" />
+    </a>
+
+    <input type="hidden" name="templatename" id="selectedtemplatename" value="">
+
+    <div class="dropdown-menu min-w-full w-full border-0 focus:bg-transparent pt-0 drop-shadow-4 max-h-52 overflow-auto"
+        aria-labelledby="templateTriggerId" data-dropdown="down">
+
+        {{range .templatelist}}
+        <li>
+            <a class="template-item dropdown-item flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px] bg-white cursor-pointer hover:bg-[#F5F5F5]"
+                data-name="{{.TemplateName}}">
+                <p class="text-[14px] font-normal text-[#262626] ">{{.TemplateName}}</p>
+            </a>
+        </li>
+        {{end}}
+
+    </div>
+</div>
+            
+
+                        <!-- ===================== -->
+
+
 
 
                         <div class="flex flex-col items-start mb-[16px] last:mb-0 w-full">
 
                             <label for=""
-                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] w-full">{{$Translate.Uploadcoverimage}}
+                                class="relative text-[14px] font-normal mt-[8px] leading-[17px] text-[#262626] flex items-center gap-[6px] w-full">{{$Translate.Uploadcoverimage}} 
                                 <span class="text-red-600">*</span>
                                 <div class="cursor-pointer group">
                                     <img src="/public/img/inputdesc.svg" alt="">
@@ -540,7 +577,7 @@
 
                             <input type="text" name="dynamicpage_name"
                                 class="dynamicpage_name rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
-                                placeholder="Eg: home page, featured page">
+                                placeholder="Eg: home page, featured page" id="dynamicpage_name">
                             <p class="dynamicnameerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
                                 Enter Page Name</p>
 
@@ -551,7 +588,7 @@
 
                             <input type="text" name="dynamicpage_slug"
                                 class="dynamicpage_slug rounded-[8px] p-[12px_16px] placeholder:text-[#B2B2B2] h-[48px] bg-white border border-[#EDEDED] text-bold-black placeholder:text-[#757575] text-sm leading-[18px] font-light w-full"
-                                placeholder="Enter Page Slug">
+                                placeholder="Enter Page Slug" id="dynamicpage_slug">
                             <p class="dynamicslugerr relative bottom-0  hidden text-[#F26674] text-xs mt-1">Please
                                 Enter Page Slug</p>
 

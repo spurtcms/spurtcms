@@ -251,3 +251,196 @@ $('.hd-crd-btn').click(function () {
         document.cookie = `webbanner=true; path=/;`; 
     }
 });
+
+  /* ── StoreData save ─────────────────────────────────────────────────────── */
+    $('#StoreSave').click(function () {
+        $('#StoreData').validate({
+            ignore: [],
+            rules:    { storetitle: { required: true }, storedescription: { required: true }, storekeyword: { required: true } },
+            messages: {
+                storetitle:       { required: '* ' + languagedata.Seo.pleaseentertitle },
+                storedescription: { required: '* ' + languagedata.Seo.pleaseenterdescripion },
+                storekeyword:     { required: '* ' + languagedata.Seo.pleaseenterkeyword }
+            }
+        });
+        if ($('#StoreData').valid()) $('#StoreData')[0].submit();
+    });
+ 
+/* ── Sitemap XML upload ───────────────────────────────────────────────────── */
+ 
+/**
+* Three display states:
+*  'upload'  → show the Upload XML button  (no file selected / file deleted)
+*  'server'  → show the saved-file chip    (file already saved on server)
+*  'js'      → show the newly-picked chip  (file chosen, not yet saved)
+*/
+function showSitemapState(state) {
+    $('#upload-placeholder').toggleClass('hidden', state !== 'upload');
+    $('#server-file-wrap').toggleClass('hidden',   state !== 'server');
+    $('#js-file-preview').toggleClass('hidden',    state !== 'js');
+}
+ 
+/* File picked */
+$('#sitemap').on('change', function () {
+    var files = $(this).prop('files');
+    if (!files || files.length === 0) return;
+ 
+    var file  = files[0];
+    var isXml = ['text/xml', 'application/xml'].includes(file.type)
+                || file.name.toLowerCase().endsWith('.xml');
+ 
+    if (!isXml) {
+        $('#error-sitemap').text('Please upload a valid XML file only.');
+        $(this).val('');
+        return;
+    }
+ 
+    $('#error-sitemap').text('');
+    $('#js-file-name').text(file.name);
+    $('#js-file-icon').html('<img src="/public/img/xml.jpg" class="w-[60px] h-[60px] object-contain rounded" alt="xml file">');
+    showSitemapState('js');
+});
+ 
+/* Delete newly-picked file  →  back to upload */
+$(document).on('click', '#deleteFileJs', function () {
+    $('#sitemap').val('');
+    $('#js-file-name').text('');
+    showSitemapState('upload');
+});
+ 
+/* Delete existing server file  →  back to upload + mark for removal */
+$(document).on('click', '#deleteFile', function () {
+    $('#sitemap').val('');
+    $('#deleteSitemap').val('1');   // tells the backend to clear the record
+    showSitemapState('upload');
+});
+ 
+/* SiteMap save */
+$('#SiteMapSave').off('click').on('click', function () {
+    $('#SiteMap').validate({
+        ignore: [],
+        rules:    { sitemap: { required: true } },
+        messages: { sitemap: { required: '* ' + languagedata.Seo.pleasechooseimage } }
+    });
+    if ($('#SiteMap').valid()) $('#SiteMap')[0].submit();
+});
+ 
+/* Web-banner toggle */
+$('.hd-crd-btn').click(function () {
+    if ($('#hd-crd').is(':visible')) {
+        $('#hd-crd').addClass('hidden').removeClass('show');
+        document.cookie = 'webbanner=false; path=/;';
+    } else {
+        $('#hd-crd').addClass('show').removeClass('hidden');
+        document.cookie = 'webbanner=true; path=/;';
+    }
+});
+
+
+
+// File type detection for server files
+document.addEventListener('DOMContentLoaded', function() {
+    const filename = document.getElementById('server-filename')?.textContent?.trim();
+    if (!filename) return;
+    if (!filename.toLowerCase().endsWith('.xml')) {
+        document.getElementById('server-xml-icon').style.display = 'none';
+        document.getElementById('server-image-preview').classList.remove('hidden');
+    } else {
+        document.getElementById('server-xml-icon').src = '/public/img/xml.jpg';
+    }
+});
+
+// File input handling (existing JS should handle this)
+// document.getElementById('sitemap')?.addEventListener('change', function(e) {
+//     // Your existing file preview logic
+// });
+
+// Add to your seo.js
+const sitemapInput = document.getElementById('sitemap');
+const sitemapImageInput = document.getElementById('sitemapimage');
+const uploadPlaceholder = document.getElementById('upload-placeholder');
+const serverFileWrap = document.getElementById('server-file-wrap');
+const jsFilePreview = document.getElementById('js-file-preview');
+const jsFileIcon = document.getElementById('js-file-icon');
+const jsFileName = document.getElementById('js-file-name');
+const deleteFile = document.getElementById('deleteFile');
+const deleteFileJs = document.getElementById('deleteFileJs');
+
+sitemapInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        jsFileName.textContent = file.name;
+        
+        // Show correct icon
+       if (file.name.toLowerCase().endsWith('.xml')) {
+    jsFileIcon.innerHTML = `<img src="/public/img/xml.jpg" class="w-[60px] h-[60px] object-contain rounded" alt="xml file">`;
+}
+     else {
+            // Image preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                jsFileIcon.innerHTML = `<img src="${e.target.result}" class="w-[20px] h-[20px] object-cover rounded" />`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Convert to base64 for backend
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let mimeType = file.type || 'application/octet-stream';
+            if (file.name.toLowerCase().endsWith('.xml')) {
+                mimeType = 'application/xml';
+            }
+            sitemapImageInput.value = `data:${mimeType};base64,${btoa(String.fromCharCode(...new Uint8Array(e.target.result)))}`;
+            
+            // Show preview
+            uploadPlaceholder.classList.add('hidden');
+            jsFilePreview.classList.remove('hidden');
+            serverFileWrap.classList.add('hidden');
+        };
+        reader.readAsArrayBuffer(file);
+    }
+});
+
+// Delete buttons
+deleteFile.addEventListener('click', () => {
+    sitemapImageInput.value = '';
+    serverFileWrap.classList.add('hidden');
+    uploadPlaceholder.classList.remove('hidden');
+});
+
+deleteFileJs.addEventListener('click', () => {
+    sitemapInput.value = '';
+    sitemapImageInput.value = '';
+    jsFilePreview.classList.add('hidden');
+    uploadPlaceholder.classList.remove('hidden');
+});
+
+/* SiteMap Save - FIXED validation */
+$('#SiteMapSave').off('click').on('click', function () {
+    // Destroy existing validation first
+    $('#SiteMap').validate().destroy();
+    
+    $('#SiteMap').validate({
+        ignore: [],
+        errorClass: 'custom-error',
+        errorElement: 'div',
+        errorPlacement: function(error, element) {
+            // Place error DIRECTLY in your #error-sitemap div
+            
+            $('#error-sitemap').html(error.text()).show();
+        },
+        rules: { 
+            sitemap: { required: true }  // Changed from sitemapimage to sitemap
+        },
+        messages: { 
+            sitemap: { 
+                required: '* ' + languagedata.Seo.pleasechooseimage 
+            } 
+        }
+    });
+    
+    if ($('#SiteMap').valid()) {
+        $('#SiteMap')[0].submit();
+    }
+});

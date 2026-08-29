@@ -1,131 +1,60 @@
 $(document).ready(function () {
 
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ list: 'ordered' }, { list: 'bullet' }]
-            ]
-        }
-    });
+    $('.hd-crd-btn').click(function () {
 
-
-    $(".ql-snow").addClass("hidden")
-
-    $("#replyButton").click(function () {
-        $(".ql-snow").removeClass("hidden")
-        $("#editor").removeClass("hidden")
-        $("#editorSaveandCancel").removeClass("hidden")
-        $("#replyButton").addClass("hidden")
-    })
-
-    $("#editorCancelBtn").click(function () {
-        quill.setContents([]); // 🔥 clears editor
-
-        $(".ql-snow").addClass("hidden");
-        $("#editor").addClass("hidden");
-        $("#editorSaveandCancel").addClass("hidden");
-        $("#replyButton").removeClass("hidden");
-    });
-
-    $("#editorSubmitBtn").click(function () {
-
-        const text = quill.getText().trim();
-
-        if (!text) {
-
-            notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >Please Enter the Content</p ></div ></div ></li></ul> `;
-            $(notify_content).insertBefore(".editorerror");
-            setTimeout(function () {
-                $('.toast-msg').fadeOut('slow', function () {
-                    $(this).remove();
-                });
-            }, 5000); // 5000 milliseconds = 5 seconds
-            return;
-        }
-
-        let email = $("#editorEmail").val()
-
-        let ticket = $("#ticketNumber").val()
-
-        let username = $("#UserName").val()
-
-        const htmlContent = quill.root.innerHTML;
-
-        console.log("htmlContent::", htmlContent, "email::", email, "ticket::", ticket);
-
-        $.ajax({
-            url: "/admin/cta/replyforresponse",
-            type: "POST",
-            async: false,
-            data: { csrf: $("input[name='csrf']").val(), "htmlContent": htmlContent, "email": email, "ticket": ticket, "username": username },
-            datatype: "json",
-            caches: false,
-            success: function (data) {
-
-                console.log("data:", data.status);
-
-                if (data.status == true) {
-
-                    setCookie("get-toast", "Reply Submitted Successfully")
-
-                    window.location.href = "/admin/cta/form-responses"
-
-                }
-            }
-        })
-
-
-    })
-
-    // Preview click
-    $(document).on('click', '.responsepreview', function () {
-
-        ctaid = $(this).attr('data-id')
-
-        email = $(this).attr('data-email')
-
-        ticket = $(this).attr('data-ticket')
-
-        reply = $(this).attr('data-reply')
-
-        username = $(this).attr('data-name')
-
-        if (reply != "") {
-
-            $("#replyButton").addClass("hidden")
-
+        if ($('#hd-crd').is(':visible')) {
+            $('#hd-crd').addClass('hidden').removeClass("show");
+            document.cookie = `ctabanner=false; path=/;`;
         } else {
-            $("#replyButton").removeClass("hidden")
+            $('#hd-crd').addClass("show").removeClass('hidden');
+            document.cookie = `ctabanner=true; path=/;`;
         }
+    });
 
-        $(".allResponses").addClass("hidden")
 
-        $(".allReply").addClass("hidden")
 
-        $("#response" + ctaid).removeClass("hidden")
+    $(document).on("click", ".Closebtn", function () {
+        $(".search").val('')
+        $(".Closebtn").addClass("hidden")
+        $(".SearchClosebtn").removeClass("hidden")
+        $(".srchBtn-togg").removeClass("pointer-events-none")
+    })
 
-        $("#reply" + ctaid).removeClass("hidden")
+    $(document).on("click", ".searchClosebtn", function () {
+        $(".search").val('')
+        window.location.href = "/admin/cta/form-responses"
+    })
 
-        $("#editorEmail").val(email)
+    $(document).ready(function () {
 
-        $("#ticketNumber").val(ticket)
+        $('.search').on('input', function () {
+            if ($(this).val().length >= 1) {
+                var value = $(".search").val();
+                $(".Closebtn").removeClass("hidden")
+                $(".srchBtn-togg").addClass("pointer-events-none")
+                $(".SearchClosebtn").addClass("hidden")
+            } else {
+                $(".SearchClosebtn").removeClass("hidden")
+                $(".Closebtn").addClass("hidden")
+                $(".srchBtn-togg").removeClass("pointer-events-none")
+            }
+        });
+    })
 
-        $("#UserName").val(username)
+    $(document).on("click", ".SearchClosebtn", function () {
+        $(".SearchClosebtn").addClass("hidden")
+        $(".transitionSearch").removeClass("w-[300px] justify-start p-2.5 border border-[#ECECEC] rounded-sm gap-3 overflow-hidden")
+        $(".transitionSearch").addClass("w-[32px]")
 
 
     })
 
-    // Cancel the preview
-    $("#cancel").click(function () {
-        quill.setContents([]); // 🔥 clears editor
+    $(document).on("click", ".searchopen", function () {
 
-        $(".ql-snow").addClass("hidden");
-        $("#editor").addClass("hidden");
-        $("#editorSaveandCancel").addClass("hidden");
-        $("#replyButton").removeClass("hidden");
-        $(".allResponses").addClass("hidden")
-    });
+        $(".SearchClosebtn").removeClass("hidden")
+
+    })
+
+
 
 })

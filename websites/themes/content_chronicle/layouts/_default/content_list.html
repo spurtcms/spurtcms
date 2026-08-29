@@ -32,14 +32,14 @@
             <p class="text-gray-500 text-lg font-light line-clamp-5 mb-3">{{$entry.Description}}</p>
             <div class="flex items-center gap-3">
               <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white dark:text-white">
-                {{if ne $entry.ProfileImagePath ""}}
+                {{if ne $entry.AuthorDetail.ProfileImagePath ""}}
                 <img src="{{$entry.ProfileImagePath}}" class="h-[34px] rounded-3xl" />
                 {{else}}
-                <span class="text-[14px] text-[#222222] font-normal">{{$entry.NameString}}</span>
+                <span class="text-[14px] text-[#222222] font-normal">{{$entry.AuthorDetail.NameString}}</span>
                 {{end}}
                
               </div>
-               <h5 class="text-primary text-[#2facd6] text-base font-normal"> {{$entry.Username}}</h5>
+               <h5 class="text-primary text-[#2facd6] text-base font-normal"> {{$entry.AuthorDetail.Username}}</h5>
               <p class="text-black font-normal text-base"> {{$entry.CreatedDate}}</p>
             </div>
           </div>
@@ -61,14 +61,14 @@
               </div>
               <div class="flex items-center gap-3 mt-10">
                 <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
-                  {{if ne $entry.ProfileImagePath ""}}
-                  <img src="{{$entry.ProfileImagePath}}" class="h-[34px] rounded-3xl" />
+                  {{if ne $entry.AuthorDetail.ProfileImagePath ""}}
+                  <img src="{{$entry.AuthorDetail.ProfileImagePath}}" class="h-[34px] rounded-3xl" />
                   {{else}}
-                  <span class="text-[14px] text-[#222222] font-normal">{{$entry.NameString}}</span>
+                  <span class="text-[14px] text-[#222222] font-normal">{{$entry.AuthorDetail.NameString}}</span>
                   {{end}}
                  
                 </div>
-                 <h5 class="text-primary text-base font-normal text-[#2facd6]">{{$entry.Username}}
+                 <h5 class="text-primary text-base font-normal text-[#2facd6]">{{$entry.AuthorDetail.Username}}
                   </h5>
                 <p class="text-black font-normal text-base">{{$entry.CreatedDate}}</p>
               </div>

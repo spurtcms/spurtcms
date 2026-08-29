@@ -47,7 +47,6 @@ $(document).on('click', '.choosetemplate', function () {
                 url: '/admin/website/checksitename', // Change to your API endpoint
                 data: { "sitename": $('.Sitename').val().trim(),"webid":$('.website_id').val(), csrf: $("input[name='csrf']").val()},
                 success: function (response) {
-                    console.log("responses",response)
                     if (response) {
 
                       
@@ -124,7 +123,6 @@ $(document).on('click', '.channelchkbox', function () {
         }
 
         $('.channel_name').val(name)
-        console.log(selectedSlugs);
     }, 10);
 });
 
@@ -144,7 +142,6 @@ $(document).on('click', '.selecttemplate', function () {
 
     selectedtemplate = $(this).data('name');
 
-    console.log(selectedtemplate, "hhhh")
 
     $('.template_name').val(selectedtemplate)
     $('.template_desc').val($(this).find('.desc').text())
@@ -152,7 +149,6 @@ $(document).on('click', '.selecttemplate', function () {
     $('.template_type').val($(this).data('type'))
     $('#template_id').val('')
 
-    console.log('Selected Template ID:', selectedtemplate);
 });
 
 
@@ -213,7 +209,6 @@ $(document).on('click', '#edit', function () {
     })
 
     selectedname.push(channame)
-    console.log("sitenames", sitename, channame, templatename);
 });
 
 
@@ -249,7 +244,6 @@ $(document).on('click', '.cancelbtn', function () {
         'aria-hidden': 'true',
         'aria-modal': ''
     });
-    console.log("selectedSlugs", selectedSlugs)
 })
 
 
@@ -286,7 +280,6 @@ $(document).on('click', '.changetemplate', function () {
     $('#createwebsite').attr('action', '/admin/website/updatewebsite')
     $('.website_id').val(webid)
 
-    console.log("lll", templateid)
     $('.selecttemplate').each(function () {
         $(this).removeClass('hidden')
         if ($(this).attr('data-name') === templatename) {

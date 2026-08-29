@@ -2,158 +2,251 @@
 {{template "head" .}}
 {{$Translate := .translate}}
 
-
-
 <section
-    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto {{if .gotemplatepageheader}}pt-0{{else}} pt-[90px]{{end}}  max-sm:pt-[64px] min-h-screen">
+    class="header-rht max-md:ms-0 max-md:max-w-full w-full max-w-[calc(100%-232px)] ml-auto {{if .gotemplatepageheader}}pt-0{{else}} pt-[0px]{{end}} max-sm:pt-[64px] min-h-screen">
 
-    <div class=" max-sm:h-fit h-full ">
-
-     {{if .gotemplatepageheader}} {{template "gotemplatepageheader" .}} </div>{{else}}
-    {{template "gotemplateheader" .}} {{end}}
-        <div class="p-[50px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
-
-            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="HomePage">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.Seo.HomePage}}</h3>
-
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageTitle}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.HomePageTitle}}" id="pagetitle"
-                                name="pagetitle" value="{{.seodetail.PageTitle}}" maxlength="95"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-pagetitle" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageDescription}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.HomePageDescription}}" id="pagedescription"
-                                name="pagedescription" value="{{.seodetail.PageDescription}}" maxlength="250"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-pagedescription" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.PageKeyword}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.HomePageKeyword}}" id="pagekeyword"
-                                name="pagekeyword" value="{{.seodetail.PageKeyword}}" maxlength="250"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-pagekeyword" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-
-                        <a href="javascript:void(0);" id="PageSave"
-                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
-                            {{$Translate.Seo.Save}}
-                        </a>
-                    </div>
-                </div>
-            </form>
-
-
-            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="StoreData">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.Seo.Store}}</h3>
-
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreTitle}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.StorePageTitle}}" id="storetitle"
-                                name="storetitle" value="{{.seodetail.StoreTitle}}" maxlength="55"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-storetitle" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreDescription}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.StorePageDescription}}"
-                                id="storedescription" name="storedescription" value="{{.seodetail.StoreDescription}}"
-                                maxlength="155"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-storedescription" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <label for=""
-                                class="text-[14px] font-normal leading-[18px] text-[#252525] mb-[8px]">{{$Translate.Seo.StoreKeyword}}</label>
-                            <input type="text" placeholder="{{$Translate.Seo.StorePageKeyword}}" id="storekeyword"
-                                name="storekeyword" value="{{.seodetail.StoreKeyword}}" maxlength="155"
-                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs ">
-                            <div id="error-storekeyword" class="text-[#F26674] text-xs mt-1"></div>
-                        </div>
-
-                        <a href="javascript:void(0);" id="StoreSave"
-                            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
-                            {{$Translate.Seo.Save}}
-                        </a>
-                    </div>
-                </div>
-            </form>
-
-            <form action="/admin/website/seopage?webid={{.websitedetail.Id}}" method="post" id="SiteMap" enctype="multipart/form-data">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
-                <div
-                    class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
-                    <h3 class="mt-[12px]">{{$Translate.Seo.SiteMap}}</h3>
-
-                    <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
-                        <div class="mb-[20px] last-of-type:mb-0">
-                            <div
-                                class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
-                                <label for="sitemap"
-                                    class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
-                                    {{$Translate.Seo.Choosefile}}
-                                </label>
-                                <p id="filenameDisplay" class="text-[13px] font-light leading-[18px] text-[#252525]">
-                                    {{if .seodetail.SiteMapName}}
-                                    {{.seodetail.SiteMapName}}
-                                    {{else}}
-                                    {{$Translate.Seo.Nofilechose}}
-                                    {{end}}
-                                </p>
-                                <a href="javascript:void(0);" id="deleteFile" class="ms-auto hidden">
-                                    <img src="/public/img/delete-red.svg" alt="Delete">
-                                </a>
-                            </div>
-                            <input id="sitemap" name="sitemap" type="file"
-                                class="fileInput hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
-                                accept="image/png, image/jpeg,image/jpg,image/svg">
-                            <input type="hidden" id="sitemapimage" value="{{.seodetail.SiteMapName}}"
-                                name="sitemapimage"
-                                class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
-                        </div>
-
-
-                        <div class="flex items-start gap-4 mt-[20px]">
-                            {{if .seodetail.SiteMapName}}
-                            <div class="grow">
-                                <img src="/image-resize?name={{.seodetail.SiteMapPath}}" class="max-w-[120px]" alt="">
-                            </div>
-                            {{end}}
-                            <a href="javascript:void(0);" id="SiteMapSave"
-                                class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
-                                {{$Translate.Seo.Update}}
+   {{template "commonheader" .}}
+ <div class="">
+        <header class="md:hidden top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+            <div class="flex items-center gap-[6px] mr-auto">
+                <a href="javascript:void(0);" class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                    <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                </a>
+            </div>
+        </header>
+ <section class="p-[12px_0px]">
+            <div class="flex justify-between border-b border-solid border-[#E6E6E6] h-[42px]">
+                <div id="widget-tabs" class="mb-0 flex flex-nowrap justify-between gap-[14px] px-[16px]">
+                    <ul class="nav nav-pills overflow-x-auto overflow-y-visible flex flex-nowrap mb-0 gap-[14px] max-sm:gap-[10px]" id="pills-tab" role="tablist">
+                        <li class="" role="presentation">
+                            <a href="/admin/browsetheme/configure/{{.web.TemplateId}}"
+                               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] {{if eq .tabactive `widgets`}}active{{end}}">
+                               Widgets
                             </a>
-                        </div>
+                        </li>
+                        <li class="" role="presentation">
+                            <a href="/admin/browsetheme/templatesetting/{{.web.TemplateId}}"
+                               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] {{if eq .tabactive `templatesetting`}}active{{end}}">
+                               Template Setting
+                            </a>
+                        </li>
+                        <li class="" role="presentation">
+                            <a href="/admin/website/seo"
+                               class="max-sm:text-sm max-sm:leading-normal text-base font-normal leading-[20px] text-[#757575] [&.active]:text-[#10A37F] border-b-[2px] border-solid border-transparent [&.active]:!border-[#10A37F] p-[4px_8px_16px_8px] {{if eq .tabactive `seo`}}active{{end}}">
+                               Seo
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+    <section class=" ">
+        <div class="p-[16px] lg:p-[14px_24px] border-b border-solid border-[#E8E8E8]">
+            <h2 class="text-[20px] leading-[25px] font-medium text-[#252525]">SEO</h2>
+        </div>
+
+        <!-- Home Page -->
+        <form action="/admin/website/seopage" method="post" id="HomePage">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+
+            <div
+                class="p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+                <div class="grow">
+                    <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">
+                        {{$Translate.Seo.HomePage}}
+                    </h3>
+                    <p class="text-[13px] leading-[20px] font-light text-[#616161]">Welcome to the Home Page where you can find the latest updates and important information about our services. </p>
+                </div>
+                <a href="javascript:void(0);" id="PageSave"
+                    class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                    {{$Translate.Seo.Save}}
+                </a>
+            </div>
+
+            <div>
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.PageTitle}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Your gateway to our platform, providing clear and concise page titles for better navigation. </p>
+                    </div>
+                    <div>
+                        <input type="text" id="pagetitle" name="pagetitle" value="{{.seodetail.PageTitle}}"placeholder="{{$Translate.Seo.HomePageTitle}}"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+                        <div id="error-pagetitle" class="text-[#F26674] text-xs mt-1"></div>
                     </div>
                 </div>
-            </form>
+
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.PageDescription}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">A brief summary of the page content designed to help users and search engines understand the purpose of this page. </p>
+                    </div>
+                    <div>
+                        <input type="text" id="pagedescription" name="pagedescription" value="{{.seodetail.PageDescription}}" placeholder="{{$Translate.Seo.HomePageDescription}}"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+
+                        <div id="error-pagedescription" class="text-[#F26674] text-xs mt-1"></div>
+                    </div>
+                </div>
+
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.PageKeyword}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Relevant keywords and phrases that improve the searchability and SEO ranking of your website.</p>
+                    </div>
+                    <div>
+                                                    <input type="text" id="pagekeyword" name="pagekeyword" value="{{.seodetail.PageKeyword}}" placeholder="{{$Translate.Seo.HomePageKeyword}}"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+ 
+                        <div id="error-pagekeyword" class="text-[#F26674] text-xs mt-1"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Store -->
+        <form action="/admin/website/seopage" method="post" id="StoreData">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+
+            <div
+                class="p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+                <div class="grow">
+                    <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">
+                        {{$Translate.Seo.Store}}
+                    </h3>
+                    <p class="text-[13px] leading-[20px] font-light text-[#616161]">Manage your store settings including titles, descriptions, and keywords to optimize your e-commerce presence.</p>
+                </div>
+                <a href="javascript:void(0);" id="StoreSave"
+                    class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                    {{$Translate.Seo.Save}}
+                </a>
+            </div>
+
+            <div>
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.StoreTitle}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Enter the official title of your store as it should appear to your customers. </p>
+                    </div>
+                    <div>
+                    <input type="text" id="storetitle" name="storetitle"value="{{.seodetail.StoreTitle}}"placeholder={{$Translate.Seo.StorePageTitle}}
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+                        <div id="error-storetitle" class="text-[#F26674] text-xs mt-1"></div>
+                    </div>
+                </div>
+
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.StoreDescription}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Provide a detailed description of your store to highlight your products and unique offerings. </p>
+                    </div>
+                    <div>
+                        <input type="text" id="storedescription" name="storedescription" value="{{.seodetail.StoreDescription}}"placeholder="{{$Translate.Seo.StorePageDescription}}"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+
+                        <div id="error-storedescription" class="text-[#F26674] text-xs mt-1"></div>
+                    </div>
+                </div>
+
+                <div
+                    class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+                    <div>
+                        <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.StoreKeyword}}</h3>
+                        <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Add keywords relevant to your store to help improve search engine visibility. </p>
+                    </div>
+                    <div>
+                        <input type="text" id="storekeyword" name="storekeyword"value="{{.seodetail.StoreKeyword}}"placeholder="{{$Translate.Seo.StorePageKeyword}}"
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
+
+                        <div id="error-storekeyword" class="text-[#F26674] text-xs mt-1"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+<!-- SiteMap Section - EXACT Store Structure -->
+<!-- SiteMap Section - CORRECTED -->
+<form action="/admin/website/seopage" method="post" id="SiteMap" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{.csrf}}">
+    <input type="hidden" name="deleteSitemap" id="deleteSitemap" value="0">
+
+    <div class="p-[20px_24px] bg-[#F8F8F8] border-b border-solid border-[#F0F0F0] flex gap-[16px] items-center">
+        <div class="grow">
+            <h3 class="text-[18px] leading-[23px] font-medium text-[#252525] mb-[8px]">{{$Translate.Seo.SiteMap}}</h3>
+            <p class="text-[13px] leading-[20px] font-light text-[#616161]">Upload XML sitemap</p>
         </div>
-        <!-- </div> -->
+        <a href="javascript:void(0);" id="SiteMapSave"
+            class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+            {{$Translate.Seo.Save}}
+        </a>
+    </div>
 
-        {{template "footer" .}}
+    <div>
+        <div class="p-[16px] lg:p-[16px_24px] grid sm:grid-cols-2 gap-[16px] md:mt-[10px] md:last:mb-[20px]">
+            <div>
+                <h3 class="text-sm leading-[18px] font-normal text-[#252525] mb-[4px]">{{$Translate.Seo.Choosefile}}</h3>
+                <p class="text-[13px] leading-[20px] font-medium text-[#616161]">Upload XML sitemap</p>
+            </div>
+            <div>
+                <!-- Hidden File Input -->
+                <input id="sitemap" name="sitemap" type="file" class="hidden" accept=".xml,text/xml,application/xml">
+                
+                <!-- Upload placeholder -->
+                <div id="upload-placeholder" {{if .seodetail.SiteMapName}}class="hidden"{{end}}>
+                    <label for="sitemap" class="inline-flex items-center justify-center gap-[6px] cursor-pointer border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded-[4px] h-[40px] px-[16px] text-sm font-normal text-[#252525] w-full">
+                        <img src="/public/img/browse-upload.svg" alt="upload" class="w-[14px] h-[14px]">
+                        Upload XML
+                    </label>
+                </div>
 
-        <script src="/public/js/gotemplate/seo.js"></script>
+                <!-- Server file -->
+                <div id="server-file-wrap" class="{{if not .seodetail.SiteMapName}}hidden{{end}}">
+                    <div class="flex items-center gap-[12px] flex-wrap">
+                        <div class="flex items-center gap-[10px] flex-1 min-w-0">
+                            <img id="server-xml-icon" src="/public/img/xml.jpg" alt="xml file" class="w-[60px] h-[60px] flex-shrink-0 rounded object-cover">
+                            <div id="server-image-preview" class="w-[60px] h-[60px] flex-shrink-0 hidden">
+                                <img src="/image-resize?name={{.seodetail.SiteMapPath}}" class="w-full h-full object-cover rounded" alt="{{.seodetail.SiteMapName}}" onerror="this.parentElement.classList.add('hidden'); document.getElementById('server-xml-icon').classList.remove('hidden')">
+                            </div>
+                            <span class="text-sm text-[#252525] truncate flex-1 min-w-0" id="server-filename">{{.seodetail.SiteMapName}}</span>
+                        </div>
+                        <button type="button" id="deleteFile" class="flex-shrink-0 inline-flex items-center gap-[6px] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded-[4px] h-[40px] px-[12px] text-sm font-normal text-[#252525]">
+                            <img src="/public/img/delete icon.svg" alt="delete" class="w-[14px] h-[14px]">
+                            Delete
+                        </button>
+                    </div>
+                </div>
 
+                <!-- JS file preview -->
+                <div id="js-file-preview" class="hidden">
+                    <div class="flex items-center gap-[12px] flex-wrap">
+                        <div class="flex items-center gap-[10px] flex-1 min-w-0">
+                            <div id="js-file-icon" class="flex-shrink-0 w-[60px] h-[60px]"></div>
+                            <span id="js-file-name" class="text-sm text-[#252525] truncate flex-1 min-w-0"></span>
+                        </div>
+                        <button type="button" id="deleteFileJs" class="flex-shrink-0 inline-flex items-center gap-[6px] border border-solid border-[#EAEAEA] bg-[#F7F7F5] hover:bg-[#EAEAEA] rounded-[4px] h-[40px] px-[12px] text-sm font-normal text-[#252525]">
+                            <img src="/public/img/delete icon.svg" alt="delete" class="w-[14px] h-[14px]">
+                            Delete
+                        </button>
+                    </div>
+                </div>
 
-        {{template "footerclose" .}}
+                <!-- SINGLE ERROR DIV - AT THE BOTTOM AFTER ALL UI ELEMENTS -->
+                <div id="error-sitemap" class="text-[#F26674] text-xs mt-2"></div>
+            </div>
+        </div>
+    </div>
+</form>
+    </section>
+    </section>
+
+    {{template "footer" .}}
+    <script src="/public/js/gotemplate/seo.js"></script>
+    {{template "footerclose" .}}
+
+</section>

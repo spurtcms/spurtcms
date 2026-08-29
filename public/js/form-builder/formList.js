@@ -37,7 +37,6 @@ function CtaStatus(id) {
     }).change();
     var isactive = $('#cb' + id).val();
 
-    console.log("isactive",isactive)
     $.ajax({
       url: '/admin/cta/isactive',
       type: 'POST',
@@ -123,7 +122,6 @@ $(document).on("click", "#unpublish", function () {
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
     pageno = urlpar.get('page')
-    console.log("page:", pageno);
 
 
     $('#content').text("Are you Sure you Want to Unpublish this Form into Website?");
@@ -151,7 +149,6 @@ $(document).on("click", "#publish", function () {
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
     pageno = urlpar.get('page')
-    console.log("page:", pageno);
 
 
     $('#content').text("Are you Sure you Want to Publish this Form into Website?");
@@ -179,7 +176,6 @@ $(document).on('click', "#delete-btn", function () {
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
     pageno = urlpar.get('page')
-    console.log("page:", pageno);
 
     $('#content').text(languagedata.FormBuilder.areyousurewantdelete);
     $('.delname').text(formName)
@@ -324,7 +320,6 @@ $(document).on('click', '.checkboxdelete', function () {
     pageno = urlpar.get('page')
 
 
-    console.log("selectedcheckboxarr:1", selectedcheckboxarr);
 
     $('.selected-numbers').hide()
 
@@ -360,7 +355,6 @@ $(document).on('click', '#unbulishslt', function () {
 
     var urlvalue = url.substring(url.lastIndexOf('/') + 1);
 
-    console.log("urlvalue:", urlvalue);
 
     if (urlvalue == "unpublished" || urlvalue == "draft") {
 
@@ -419,7 +413,6 @@ $(document).on('click', '.checkboxstatuschange', function () {
     pageno = urlpar.get('page')
 
 
-    console.log("selectedcheckboxarr:1", selectedcheckboxarr);
 
     $('.selected-numbers').hide()
 
@@ -494,7 +487,6 @@ $(document).on("click", '.copyButton', function () {
 
     // Copy the data value to the clipboard
     navigator.clipboard.writeText(dataValue).then(function () {
-        console.log('Data attribute value copied to clipboard: ' + dataValue);
         notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex  w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >Link Copied</p ></div ></div ></li></ul> `;
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
@@ -596,7 +588,6 @@ $(document).on('click','#ctapreview',function(){
 
 $(document).on('click','#addtocollect',function(){
 
-    console.log("checkajax")
 
     cimg =$(this).attr('data-img')
     title =$(this).attr('data-title')

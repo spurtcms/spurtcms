@@ -1,0 +1,7 @@
+<svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.3" y="2.3" width="13.4" height="9.4" rx="0.7" stroke="#6B7280" stroke-width="0.6"/>
+<mask id="path-2-inside-1_217_410" fill="white">
+<path d="M4 0.5C4 0.223858 4.22386 0 4.5 0H9.5C9.77614 0 10 0.223858 10 0.5V2H4V0.5Z"/>
+</mask>
+<path d="M3.4 0.5C3.4 -0.107513 3.89249 -0.6 4.5 -0.6H9.5C10.1075 -0.6 10.6 -0.107513 10.6 0.5L9.4 0.6H4.6L3.4 0.5ZM10 2H4H10ZM3.4 2V0.5C3.4 -0.107513 3.89249 -0.6 4.5 -0.6L4.6 0.6V2H3.4ZM9.5 -0.6C10.1075 -0.6 10.6 -0.107513 10.6 0.5V2H9.4V0.6L9.5 -0.6Z" fill="#6B7280" mask="url(#path-2-inside-1_217_410)"/>
+</svg>

@@ -59,7 +59,6 @@ $(document).on('click', '.dropdown-items', function () {
 /* Create User */
 
 $("#saveuser").click(function () {
-    console.log($(this).text().trim(),"text lang save",languagedata.save);
 
     if ($(this).text().trim() == languagedata.save) {
 
@@ -115,7 +114,6 @@ $("#saveuser").click(function () {
                 datatype: "json",
                 caches: false,
                 success: function (data) {
-                    console.log(data,"email");
                     result = data.trim();
                 }
             })
@@ -232,7 +230,6 @@ $("#saveuser").click(function () {
 
 
         var formcheck = $("#userform").valid();
-        console.log(formcheck,"validat");
         if (formcheck == true) {
             $('#userform')[0].submit();
             $('#saveuser').prop('disabled', true);
@@ -371,7 +368,6 @@ $(document).on('click', '#edit-btn', function () {
                 $('#rolen').text(result.RoleId)
                 $('#rolen').siblings('.dropdown-menu').find('button[data-id="' + result.RoleId + '"]').click();
                 if (result.ProfileImagePath != "") {
-                    console.log(result.ProfileImagePath);
                     $('#profpic-user').attr('src', result.ProfileImagePath).show();
                     $(".name-string").hide()
                 } else {
@@ -381,7 +377,6 @@ $(document).on('click', '#edit-btn', function () {
                 $('.tgl-btn').val(isactive)
                 $('.chk1').val(dataacc)
                 if ($('#cb1').val() == 1) {
-                    console.log("box")
                     $('input[name=mem_activestat]').prop('checked', true)
                 }
                 if ($('#chk1').val() == 1) {
@@ -625,7 +620,6 @@ $(document).on('click', '#saveuser', function () {
             var email = $("#user_email").val()
             var mob = $("#user_mob").val()
             var uname = $('#user_name').val()
-            console.log("dfgh", email, mob, uname);
             var user_id = $("#userid").val()
 
             // $.ajax({
@@ -776,10 +770,8 @@ function Validationcheck() {
         // var inputName = inputField.getAttribute('name');
 
         if (inputField.classList.contains('error')) {
-            console.log("error")
             inputGroup.classList.add('input-group-error');
         } else {
-            console.log("errorsssss")
             inputGroup.classList.remove('input-group-error');
         }
 
@@ -936,7 +928,6 @@ $(document).on('click', '#crop-button', function () {
 // eye icon open and close function
 
 $(document).on('click', '#eye', function () {
-    console.log("working");
 
     var This = $("#user_pass")
 
@@ -960,11 +951,9 @@ $(document).on('click', '#eye', function () {
 
 $("#searchdropdownrole").keyup(function () {
     var keyword = $(this).val().trim().toLowerCase()
-    console.log("keyword", keyword);
     $(".dropdown-filter-roless").each(function (index, element) {
         var title = $(element).text().toLowerCase()
 
-        console.log("title", title);
         if (title.includes(keyword)) {
             $(element).show()
             $("#nodatafounddesign").addClass("hidden")
@@ -1034,7 +1023,6 @@ $(document).on('click', '.selectcheckbox', function () {
 
         if (index !== -1) {
 
-            console.log(index, "sssss")
             selectedcheckboxarr.splice(index, 1);
         }
 
@@ -1287,7 +1275,6 @@ $(document).on('click', '.checkboxdelete', function () {
 
     var url = window.location.href;
 
-    console.log("clicked the deleted button" + url + " " + JSON.stringify(selectedcheckboxarr))
 
     var pageurl = window.location.search
 
@@ -1295,7 +1282,6 @@ $(document).on('click', '.checkboxdelete', function () {
 
     pageno = urlpar.get('page')
 
-    console.log($("#userform input[name='csrf']").val());
 
     $(".selected-numbers").hide()
     $.ajax({
@@ -1336,7 +1322,6 @@ $(document).on('click', '.selectedunpublish', function () {
     var pageno = urlpar.get('page')
     $('.selected-numbers').hide()
 
-    console.log(JSON.stringify(selectedcheckboxarr));
 
 
     $.ajax({
@@ -1351,7 +1336,6 @@ $(document).on('click', '.selectedunpublish', function () {
         },
         success: function (data) {
 
-            console.log(data, "data");
 
             var dataStatus
 
@@ -1394,7 +1378,6 @@ function UserStatus(id) {
         this.value = this.checked ? 1 : 0;
     }).change();
     var isActive = $('#cbox' + id).val();
-    console.log("isactive", isActive);
 
     $.ajax({
         url: '/admin/settings/users/changeActiveStatus',
@@ -1444,7 +1427,6 @@ $(document).on('click', '.selectedIsActive', function () {
 
     pageno = urlpar.get('page')
 
-    console.log(selectedcheckboxarr);
 
     $('.selected-numbers').hide()
 

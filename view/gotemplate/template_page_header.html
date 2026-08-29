@@ -3,7 +3,7 @@
 {{$Translate := .translate}}
 
 <input type="hidden" class="templateid" value="{{.websitedetail.Id}}">
-  <div class="header-rht flex border-b border-solid border-[#E8E8E8] max-md:flex-col">
+  <div class="header-rht flex border-b border-solid border-[#E8E8E8] max-md:flex-col max-lg:flex-col">
                         <div
                             class="flex gap-[20px] items-center p-[30px_0_20px_24px] max-lg:flex-col max-lg:p-[16px] max-lg:items-start">
 
@@ -73,52 +73,89 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <section class="p-[12px_16px]">
+                        {{$isTemplateSetting := or (eq .linktitle `Setting`) (or (eq .linktitle `Brand`) (or (eq .linktitle `Setup`) (eq .linktitle `SocialMedia`))) }}
+                        {{$isSiteSetting := not $isTemplateSetting}}
+                        
+
+                        <!-- Row 1: Site Setting and Template Setting (Closed container) -->
+                        <div class="border-b border-solid border-[#E6E6E6] mb-0 flex flex-nowrap justify-between gap-[14px]">
+                            <ul class="nav nav-pills flex flex-nowrap mb-0 gap-[14px]" role="tablist">
+                                <li class="" role="presentation">
+                                    <a href="/admin/website/pages/{{.websitedetail.Id}}">
+                                        <button class="text-base font-normal leading-[20px] {{if $isSiteSetting}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] whitespace-nowrap" type="button">Site Setting</button>
+                                    </a>
+                                </li>
+                                <li class="" role="presentation">
+                                    <a href="/admin/website/templatesettings/brand?webid={{.websitedetail.Id}}">
+                                        <button class="text-base font-normal leading-[20px] {{if $isTemplateSetting}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] whitespace-nowrap" type="button">Template Setting</button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Row 2: Sub-menus (OPEN container to allow Search/Filters from main page) -->
                     <section class="mb-[60px] p-[12px_16px]">
                         <div
                             class="border-b boder-solid border-[#E6E6E6] mb-0  flex flex-nowrap justify-between gap-[14px]">
                             <ul class="nav nav-pills overflow-x-auto overflow-y-visible flex flex-nowrap  mb-0 gap-[14px]" id="pills-tab" role="tablist">
+                                {{if $isSiteSetting}}
                                 <li class="" role="presentation">
                                  <a href="/admin/website/pages/{{.websitedetail.Id}}">   <button
-                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Website Page`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px] "
-                                        id="pills-themes-tab" data-bs-toggle="pill" data-bs-target="#pills-themes"
-                                        type="button" role="tab" aria-controls="pills-themes"
-                                        aria-selected="true">Pages</button></a>
+                                         class="text-base font-normal leading-[20px] {{if eq .linktitle `Website Page`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px] "
+                                         id="pills-themes-tab" data-bs-toggle="pill" data-bs-target="#pills-themes"
+                                         type="button" role="tab" aria-controls="pills-themes"
+                                         aria-selected="true">Pages</button></a>
                                 </li>
                                 <li class="" role="presentation">
                                   <a href="/admin/website/menu/?webid={{.websitedetail.Id}}">  <button
-                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Menus`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
-                                        id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu"
-                                        type="button" role="tab" aria-controls="pills-menu"
-                                        aria-selected="false">Menu</button></a>
+                                         class="text-base font-normal leading-[20px] {{if eq .linktitle `Menus`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                         id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu"
+                                         type="button" role="tab" aria-controls="pills-menu"
+                                         aria-selected="false">Menu</button></a>
                                 </li>
                                   <li class="" role="presentation">
                                   <a href="/admin/website/widgets/?webid={{.websitedetail.Id}}">  <button
-                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Widgets`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
-                                        id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu"
-                                        type="button" role="tab" aria-controls="pills-menu"
-                                        aria-selected="false">Widgets</button></a>
+                                         class="text-base font-normal leading-[20px] {{if eq .linktitle `Widgets`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                         id="pills-widgets-tab" data-bs-toggle="pill" data-bs-target="#pills-widgets"
+                                         type="button" role="tab" aria-controls="pills-widgets"
+                                         aria-selected="false">Widgets</button></a>
                                 </li>
                                 <li class="" role="presentation">
-                                  <a href="/admin/website/seo/?webid={{.websitedetail.Id}}"> <button
-                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `SEO`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
-                                        id="pills-seo-tab" data-bs-toggle="pill" data-bs-target="#pills-seo"
-                                        type="button" role="tab" aria-controls="pills-seo"
-                                        aria-selected="false">SEO</button></a> 
+                                  <a href="/admin/website/seo?webid={{.websitedetail.Id}}"> <button
+                                         class="text-base font-normal leading-[20px] {{if eq .linktitle `SEO`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                         id="pills-seo-tab" data-bs-toggle="pill" data-bs-target="#pills-seo"
+                                         type="button" role="tab" aria-controls="pills-seo"
+                                         aria-selected="false">SEO</button></a> 
                                 </li>
+                                {{else}}
                                 <li class="" role="presentation">
-                                   <a href="/admin/website/setting/?webid={{.websitedetail.Id}}">  <button
-                                        class="text-base font-normal leading-[20px] text-[#757575] {{if eq .linktitle `Setting`}}active [&.active]:text-[#10A37F]{{end}} border-b-[2px] border-solid border-transparent [&.active]:border-[#10A37F] p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
-                                        id="pills-setting-tab" data-bs-toggle="pill" data-bs-target="#pills-setting"
-                                        type="button" role="tab" aria-controls="pills-setting"
-                                        aria-selected="false">Appearance</button></a>
+                                   <a href="/admin/website/templatesettings/brand?webid={{.websitedetail.Id}}">  <button
+                                        class="text-base font-normal leading-[20px] {{if eq .linktitle `Brand`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-brand-tab" data-bs-toggle="pill" data-bs-target="#pills-brand"
+                                        type="button" role="tab" aria-controls="pills-brand"
+                                        aria-selected="false">Brand</button></a>
                                 </li>
 
+                               <li class="" role="presentation">
+                                  <a href="/admin/website/templatesettings/setup?webid={{.websitedetail.Id}}">  <button
+                                        class="text-base font-normal leading-[20px] {{if eq .linktitle `Setup`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-setup-tab" data-bs-toggle="pill" data-bs-target="#pills-setup"
+                                        type="button" role="tab" aria-controls="pills-setup"
+                                        aria-selected="false">Setup</button></a>
+                                </li>
 
+                                <li class="" role="presentation">
+                                  <a href="/admin/website/templatesettings/social?webid={{.websitedetail.Id}}">  <button
+                                        class="text-base font-normal leading-[20px] {{if eq .linktitle `SocialMedia`}}text-[#10A37F] border-[#10A37F] active{{else}}text-[#757575] border-transparent{{end}} border-b-[2px] border-solid p-[4px_8px_16px_8px] max-md:p-[4px_8px_16px_8px]"
+                                        id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social"
+                                        type="button" role="tab" aria-controls="pills-social"
+                                        aria-selected="false">Social</button></a>
+                                </li>
+                                {{end}}
                             </ul>
-                 
-            
-           
-                        
-
-
-         {{end}}               
+                      
+                            <!-- Tags are LEFT OPEN here just like the original code, to allow main pages to append buttons/filters -->
+{{end}}

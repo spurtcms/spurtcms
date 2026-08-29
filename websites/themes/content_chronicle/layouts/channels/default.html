@@ -32,11 +32,11 @@
           <div class="flex items-center gap-3 mt-auto">
             <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
               <div class="flex items-center justify-center relative h-8 w-8 overflow-hidden rounded-full bg-slate-300 dark:text-white">
-                {{if ne .ProfileImagePath ""}}
+                {{if ne .AuthorDetail.ProfileImagePath ""}}
                 <img alt="Picture of the author" loading="lazy" width="32" height="32" decoding="async" data-nimg="1"
-                  srcset="" src="{{.ProfileImagePath}}" class="h-[34px] rounded-3xl">
+                  srcset="" src="{{.AuthorDetail.ProfileImagePath}}" class="h-[34px] rounded-3xl">
                 {{else}}
-                <span class="text-[14px] text-[#222222] font-normal">{{.NameString}}</span>
+                <span class="text-[14px] text-[#222222] font-normal">{{.AuthorDetail.NameString}}</span>
                 {{end}}
               </div>
              

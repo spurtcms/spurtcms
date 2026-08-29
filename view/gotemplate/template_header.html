@@ -22,12 +22,16 @@
     <div class="flex items-center gap-[6px] ">
         <a href="javascript:void(0);"
             class=" hd-crd-btn [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] min-w-[32px] h-[32px] grid place-content-center   hover:bg-[#FAFAFA] ">
-            <img src="/public/img\bt-show.svg" alt="show" class="hidden" id="show">
-            <img src="/public/img\bt-hide.svg" alt="hide" id="hide">
+            <img src="/public/img/bt-show.svg" alt="show" class="hidden" id="show">
+            <img src="/public/img/bt-hide.svg" alt="hide" id="hide">
         </a>
          <div class="flex items-center space-x-3">
 
-                    
+                        <a 
+                            class="newsite flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[40px] h-[40px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap cursor-pointer">
+                            <span class="mr-[8px] max-sm:mr-0 text-lg leading-none w-[14px] min-w-[14px] ">
+                                <img src="/public/img/add-white.svg" alt="">
+                            </span> <span class="max-sm:hidden">Add New Site</span></a>
 
                     </div>
         {{if eq .linktitle `Menus`}}
@@ -182,14 +186,14 @@
                     </p>
                     <div class="flex items-center space-x-[24px] flex-wrap">
                         <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
-                            <img src="/public/img\how-to.svg" alt="How to use">
+                            <img src="/public/img/how-to.svg" alt="How to use">
                             <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
                                 {{$Translate.Blocks.HowToUse}}
                             </p>
                         </a>
                         <a href="https://github.com/spurtcms/menu" target="_blank"
                             class="flex items-center space-x-[8px] hover:underline">
-                            <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                            <img src="/public/img/explore-documentation.svg" alt="Explore Documentation">
                             <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
                                 {{$Translate.Blocks.ExploreDocumentation}}</p>
                         </a>

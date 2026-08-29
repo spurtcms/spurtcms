@@ -139,6 +139,10 @@ a {
     background-color: #00DB90;
 }
 
+.peer:checked ~ .peer-checked\:bg-primary {
+    background-color: var(--btn-bg);
+}
+
 .bg-green-300 {
     background-color: #10A37F;
 }
@@ -794,6 +798,10 @@ a {
 
 .peer:checked~.bg-gray-3 {
     background-color: #00DB90;
+}
+
+.peer:checked ~ .peer-checked\:bg-primary {
+    background-color: var(--btn-bg);
 }
 
 .bg-green-300 {
@@ -3432,3 +3440,11 @@ select:focus {
   vertical-align: middle;
 }
 
+.quill-editor .ql-container {
+    height: 200px;
+}
+
+.quill-editor .ql-editor {
+    min-height: 200px;
+    max-height: 200px;
+}

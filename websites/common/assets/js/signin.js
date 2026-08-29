@@ -41,10 +41,10 @@ $(document).on('click', '#signintbn', function () {
         }
     })
 
-    console.log("lliiii")
+    // console.log("lliiii")
     var formcheck = $("#signinform").valid();
     if (formcheck == true) {
-        console.log("truedfdf")
+        // console.log("truedfdf")
         $('#signinform')[0].submit();
     }
     return false
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var content = getCookie("pass-toast");
     var username = getCookie("email");
 
-    console.log("fsrzg", Cookie);
+    // console.log("fsrzg", Cookie);
 
     if (Cookie == "You+are+not+registered+with+us") {
         $('#em-error').show();
@@ -98,7 +98,7 @@ function delete_cookie(name) {
 
 $(document).on('click', '#eyeicon', function () {
 
-    console.log("checklogin")
+    // console.log("checklogin")
 
     value = $("#password").attr('type')
 

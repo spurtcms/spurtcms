@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{template "templatehead" .}}
+</head>
+
+<body class="font-sans">
+    <main class="bg-white font-lexend">
+        <header class="bg-white shadow-md shadow-black/860">
+            <nav class="mx-auto flex max-w-screen-2xl items-center justify-between lg:px-[120px] p-[16px] lg:py-6 h-[72px]"
+                aria-label="Global"><a href="/"><img src="/jobs/assets/img/job-theme-logo.svg"></a>
+                <div class="relative inline-block text-center"><a href="/signin"><button
+                        class="flex justify-center items-center bg-[#2563EB] hover:bg-[#4c7eea] px-[32px] max-[700px]:px-4 rounded-[50px] h-[47px] font-[700] text-base text-white whitespace-nowrap">Join
+                        Now</button></a></div>
+            </nav>
+        </header>
+        <main class="min-h-screen max-w-screen-2xl m-auto md:py-8 lg:px-[120px] md:px-10 p-6"><a
+                class="flex gap-1 items-center text-gray-500 text-xs font-light leading-4" href="/"> <img
+                    src="/jobs/assets/img/left-arrow.svg"> Back </a>
+            <div class="mt-8"><span
+                    class="px-2.5 py-1 rounded-3xl bg-blue-100 text-black text-xs font-normal"> {{.entrydetail.CategoryGroup}}</span>
+                <h2 class="mt-2 mb-4 sm:text-4xl sm:leading-[45px] font-normal text-blue-600 text-3xl"> {{.entrydetail.Title}}</h2>
+                <div class="flex gap-6 mb-6 flex-wrap">
+                    <div class="flex items-center gap-2"><img src="/jobs/assets/img/exp.svg">
+                        <p class="text-sm  leading-4  text-gray-500 font-light"> {{range .entrydetail.Fields}} {{if eq .FieldName "Experience"}}{{.FieldValue.FieldValue }}{{end}}{{end}}</p>
+                    </div>
+                    <div class="w-0.5 h-4 bg-gray-200"></div>
+                    <div class="flex items-center gap-2"><img src="/jobs/assets/img/Time.svg">
+                        <p class="text-sm  leading-4 text-gray-500 font-light">{{range .entrydetail.Fields}} {{if eq .FieldName "Job Type"}}{{.FieldValue.FieldValue }}{{end}}{{end}}</p>
+                    </div>
+                    <div class="w-0.5 h-4 bg-gray-200"></div>
+                    <div class="flex items-center gap-2"><img src="/jobs/assets/img/job-type.svg">
+                        <p class="text-sm  leading-4 text-gray-500 font-light">{{range .entrydetail.Fields}} {{if eq .FieldName "Location"}}{{.FieldValue.FieldValue }}{{end}}{{end}}</p>
+                    </div>
+                </div>
+                <div class="flex gap-[16px] items-center pb-6 border-b border-gray mb-6"><a target="_blank"
+                        class="w-auto p-[16px] h-11 bg-blue-600 text-white text-base font-normal rounded flex justify-center items-center"
+                        href="https://dev.spurtcms.com/preview/forms/apply-2f60aebdc0c9?id=168">Apply Now</a></div>
+                <div class="pb-6 border-b border-gray mb-6">
+                    <h2 class="text-2xl font-medium leading-[30px] mb-4 text-black">Job Description </h2>
+                    <div class="flex flex-col gap-3 mb-4">
+                        <div class="pr-[12px] max-[700px]:pr-0 " style="color: black;">
+                            <div class="w-full h-full p-[24px_60px_10px] max-md:p-[32px_16px]">
+                                <div class="relative mb-[22px] group cls-hvr-dp">
+                                    <div tabindex="0" id="affc1d10-f29c-11ef-9e84-0d65dd59d04b" data-v-1ff8dde0="">
+                                {{.content}}
+                                    </div>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              {{if .filteredEntries}}
+            <div>
+               
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-medium leading-[30px]  text-black">Related Jobs</h2><a
+                        class="flex items-center gap-2 text-xs font-light text-blue-600" href="/"> View All <img
+                            src="/jobs/assets/img/right-arrow.svg"> </a>
+                </div>
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 grid-cols-1 mt-6 mb-10">
+                   
+                    {{range .filteredEntries}}
+                    <div class="border-gray-300 border rounded p-[16px] hover:shadow-lg flex flex-col"><span
+                            class="px-2.5 py-1 rounded-3xl bg-blue-100 text-black text-xs font-normal w-fit">{{.CategoryGroup}}</span><a
+                            class="block text-black text-2xl leading-8 font-normal my-2"
+                            href="/channel/{{.ChannelName}}/{{.Slug}}">{{.Title}}</a>
+                        <p class="text-sm font-light leading-4 text-blue-600 mb-4">Job code: <span
+                                class="text-gray-500">     {{range .Fields}}
+                {{if eq .FieldName "Job Code"}}{{.FieldValue.FieldValue }}{{end}}{{end}}</span></p>
+                        <div class="flex flex-col gap-[16px] mb-6">
+                            <div class="flex items-center gap-2"><img src="/jobs/assets/img/exp.svg">
+                                <p class="text-sm font-normal leading-4 text-blue-600 ">Experience:  {{range .Fields}}
+                                {{if eq .FieldName "Experience"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}</p>
+                            </div>
+                            <div class="flex items-center gap-2"><img src="/jobs/assets/img/Time.svg">
+                                <p class="text-sm font-normal leading-4 text-blue-600 ">Job Type:  {{range .Fields}}
+                                {{if eq .FieldName "Job Type"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}</p>
+                            </div>
+                            <div class="flex items-center gap-2"><img src="/jobs/assets/img/job-type.svg">
+                                <p class="text-sm font-normal leading-4 text-blue-600 ">Location: {{range .Fields}}
+                                {{if eq .FieldName "Location"}}{{.FieldValue.FieldValue }}{{end}}
+                            {{end}}</p>
+                            </div>
+                        </div>
+                        <h5 class="text-gray-500 text-xs font-light mb-4">Posted Date:  {{range .Fields}}
+                    {{if eq .FieldName "Date"}}{{.FieldValue.FieldValue }}{{end}}
+                {{end}}</h5><a
+                            class="w-full h-11 bg-blue-600 text-white text-base font-normal rounded flex justify-center items-center mt-auto"
+                            href="/channel/{{.ChannelName}}/{{.Slug}}">View Job</a>
+                    </div>
+                   {{end}}
+                  
+                </div>
+            </div>
+             {{end}}
+        </main>
+    </main>
+</body>
+
+</html>

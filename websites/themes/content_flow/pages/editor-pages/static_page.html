@@ -4,22 +4,25 @@
 <head>
     {{template "templatehead" .}}
 </head>
+<main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]">
+{{ template "templateheader" . }}
+{{$template_name:=.template_name}}
 
-<body>
 
-  <main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]">
-    {{- block "templateheader" .}}{{end}}
 
-    <!-- <main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]"> -->
-        <div class="my-10">
-          
-  
+<section id="content-area" class="parent min-h-[calc(100dvh-60px)] min-h-screen flex flex-col">
+    <input id="URL" value="{{.FormURL}}" type="hidden">
 
-              <div id="description">{{.PageDescription}}</div>
-        </div>
-  </main>
+    <div class="w-full mx-auto [&>div]:p-0 [&>div>div>.outline-none]:!m-0 [&>div>div]:!m-0">
+        {{.PageDescription}}
 
-</body>
+    </div>
 
+
+</section>
+
+</main>
+
+<script src="/public/js/form.js"></script>
 
 </html>

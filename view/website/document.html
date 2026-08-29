@@ -1,0 +1,187 @@
+{{template "template-header" .}}
+
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full pt-[48px] min-h-screen">
+    {{template "webpageheader" .}}
+
+    <div class="grid grid-cols-[248px_1fr] h-full max-[900px]:grid-cols-1 ">
+        <div class="accordion p-[12px_16px] bg-[#FAFAFA] flex flex-col space-y-[12px] " id="accordionPanelsStayOpenExample">
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-y-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                      <span>
+                        Getting Started
+                      </span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px] ">
+                            <li><a href="/documentation/prerequisites"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full {{if .Document }} active [&.active]:bg-[#F0F0F0]{{end}}"><span>Prerequisites</span></a>
+                            </li>
+                            <li><a href="/documentation/cms-admin"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full  "><span>
+                                        CMS
+                                    Admin Setup
+                                    </span></a>
+                            </li>                           
+                            <li><a href="/documentation/templates"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>
+                                        Templates
+                                    </span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-x-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                        <span>Deployment</span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px]">
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Docker</span></a>
+                            </li>
+                            <li><a href="/documentation/cli"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        CLI</span></a>
+                            </li>
+                            <li><a href="/documentation/prebuild"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr]  items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Prebuild</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="p-[20px]">
+            <p class="mb-[16px] text-sm font-light leading-[20px]">
+                Before diving into the spurtCMS Admin application setup, it's essential to confirm that your system is adequately equipped with the required tools and configurations. This article aims to provide guidance on the essential prerequisites for a successful spurtCMS Admin application installation.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 1: Install Golang:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Begin by downloading the stable version of Golang, preferably 1.20.12 version, from the official Go website:
+                <a href="https://go.dev/dl/" target="_blank"
+                    class="text-[#10A37F] underline">https://go.dev/dl/
+                  
+                </a> 
+
+                    
+             </p>
+
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 2: Set up Golang Environment:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Open the terminal and use the following commands to install Golang:
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Download the Go binary archive: 
+            </p>
+            
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px]  justify-between">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ sudo wget https://golang.org/dl/go1.20.12.linux-amd64.tar.gz </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+                    
+                 
+            </div>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Extract the binary archive:</p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ sudo tar -xzf go1.20.12.linux-amd64.tar.gz -C /usr/local/ </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Adjust the path variable for Go:</p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ sudo nano /etc/profile </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Add the following path at the end of the file:
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">export PATH=$PATH:/usr/local/go/bin </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Activate the PATH of the environment variable:</p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ source /etc/profile </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Check Go version:</p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$ go version </p>
+                        <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                        <div  class="flex items-center space-x-2 hidden copiedbtn">
+                          <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                          <img src="/public/img/feature-check.svg" alt="copied" >
+                        </div>
+                    </code>
+            </div>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 3:   Install PostgreSQL:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Install PostgreSQL 14.8 version.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 4:  Install PgAdmin:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Install PgAdmin4 workbench (optional).Reference link: 
+                <a href="https://www.pgadmin.org/download/" target="_blank"
+                    class="text-[#10A37F] underline">https://www.pgadmin.org/download/</a> 
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 5: Database Setup:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Create a new database using PgAdmin and name it of your choice. We will use this database name in .env in subsequent steps in next article when setting up spurtCMS admin application.
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">The above steps concludes the prerequisites for setting up spurtCMS Admin application. Once these steps are completed, you are ready to move on to the installation and configuration of the spurtCMS Admin application.
+            </p>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+
+
+{{template "template-footer"}}

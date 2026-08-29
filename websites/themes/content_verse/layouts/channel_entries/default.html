@@ -43,25 +43,7 @@
 
             <div id="description">{{.content}}</div>
 
-            <div
-                class="flex max-[500px]:flex-col justify-between items-start gap-[16px] mx-auto mb-[47px] px-[16px] max-w-[1296px]">
-                <a href="#" class="flex flex-col items-start">      
-                        {{if gt (len .filteredEntries) 0}}
-                        {{with index .filteredEntries 0}}
-                </a>
-                <a href="{{.Slug}}"
-                    class="flex flex-col items-end pb-[15px]">
-                    <p
-                        class="text-right border-[#EDEDED] mb-[17px] max-[500px]:mb-[12px] pb-[20px] max-[500px]:pb-[14px] border-b border-solid font-normal text-[25px] max-[500px]:text-[18px]">
-                        Next blog</p>
-
-                    <h5
-                        class="text-right py-[15px] line-clamp-3 max-w-[458px] font-normal text-[#120B14] text-[36px] max-[500px]:text-[24px] pb-0">
-                        {{.Title}}</h5>
-                </a>
-                {{end}}
-                {{end}}
-            </div>
+        
 
 
             <div class="relative bg-image">

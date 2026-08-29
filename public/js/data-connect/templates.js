@@ -46,7 +46,6 @@ $(document).on('keypress', '#templateSearchBar', function (e) {
 
     if (e.which == 13) {
         var searchText = $('#templateSearchBar').val()
-        console.log(searchText, "searchText");
 
 
         if (searchText != "") {

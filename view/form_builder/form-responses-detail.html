@@ -1,0 +1,227 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$NameString := .NameString}}
+{{$Viewbaseurl := .Viewbaseurl}}
+{{$ResponseCounts:=.ResponseCount}}
+{{$resp:=.Responses}}
+
+
+<section class="max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+
+        <div class=" @container setConatiner overflow-hidden ">
+
+            <div
+                class="flex border-b border-solid border-[#E8E8E8] max-md:flex-col max-md:p-[16px] max-md:flex-col  p-[30px_24px_20px_24px]">
+                <div class="flex gap-[14px] items-start w-full ">
+                    <a href="javascript:void(0);"
+                        class="place-items-center hidden max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                        <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                    </a>
+                    <div class="grow flex gap-[14px] items-start flex-wrap justify-between">
+                        <div>
+                            <p class="text-[14px] font-light leading-[18px] text-[#616161] mb-[10px]">
+                                {{.response.Ticket}}
+                            </p>
+                            <h2
+                                class="mb-[14px] font-medium text-[#202124] text-[20px] leading-[25px] whitespace-nowrap">
+                                {{.response.FormTitle}}
+                            </h2>
+                            {{if eq .response.CloseTicket 0}}
+                            <div
+                                class=" flex items-center gap-[4px] bg-[#DFF3F3] w-fit rounded-[50px] p-[4px_8px_4px_4px]">
+                                <img src="/public/img/open-status.svg" alt="">
+                                <p class="text-[12px] leading-[15px] font-normal text-[#30749F]">
+                                    Open
+                                </p>
+                            </div>
+                            {{else}}
+                            <div
+                                class=" flex items-center gap-[4px] bg-[#D4F2EA] w-fit rounded-[50px] p-[4px_8px_4px_4px]">
+                                <img src="/public/img/close-status.svg" alt="">
+                                <p class="text-[12px] leading-[15px] font-normal text-[#10A37F]">
+                                    Closed
+                                </p>
+                            </div>
+                            {{end}}
+                        </div>
+
+                        {{if eq .response.CloseTicket 0}}
+                        <a href="/admin/cta/close-ticket/{{.response.Ticket}}"
+                            class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                            Close Ticket</a>
+                        {{end}}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class=" @container setConatiner flex flex-col grow ">
+
+
+                <section class="mb-[60px] flex flex-col grow">
+
+                    <div
+                        class="p-[14px_24px] max-md:p-[6px_16px_6px] flex items-center gap-x-[32px] gap-y-[32px] lg:gap-x-[64px] max-sm:flex-wrap border-b border-solid border-[#E8E8E8] ">
+
+                        <div>
+                            <h3 class="text-sm leading-[18px] font-light text-[#636363] mb-[7px]">Customer</h3>
+                            <p class="text-base leading-[20px] font-normal text-[#252525]">{{.name}}</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm leading-[18px] font-light text-[#636363] mb-[7px]">Email ID</h3>
+                            <p class="text-base leading-[20px] font-normal text-[#252525]">{{.email}}</p>
+                        </div>
+
+
+                        <div>
+                            <h3 class="text-sm leading-[18px] font-light text-[#636363] mb-[7px]">Request Date
+                            </h3>
+                            <p class="text-base leading-[20px] font-normal text-[#252525]">
+                                {{.DateString}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="grow p-[16px] md:p-[26px_24px]">
+                        <pre
+                            class="text-sm leading-normal font-light text-[#252525] mb-[35px] whitespace-pre-wrap break-words">{{.message}}</pre>
+                        {{if eq .response.CloseTicket 0}}
+                        <a href="javascript:void(0);" id="replyButton"
+                            class="mt-[20px] flex items-center justify-center  bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[12px] py-[8px] rounded-[4px] w-fit  max-sm:min-w-[32px] h-[33px] font-medium text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap font-inter gap-[4px]">
+                            <img src="/public/img/reply.svg" alt="" class="min-w-[16px]"> Reply</a>
+                        {{end}}
+                    </div>
+
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" id="editorEmail" name="editorEmail" value="{{.email}}">
+                    <input type="hidden" id="ticketNumber" name="ticketNumber" value="{{.response.Ticket}}">
+                    <input type="hidden" id="UserName" name="UserName" value="{{.name}}">
+
+
+                    <div class="border-t border-solid border-[#EEEEEE] p-[24px_16px] lg:p-[25px_24px]">
+                        <div class="flex items-center gap-[16px] justify-between max-w-[790px] mb-[10px] hidden">
+                            <div class="flex items-center gap-[8px]">
+                                <div
+                                    class="text-sm leading-[18px] font-normal text-[#ffffff] bg-[#EFB803] w-[32px] h-[32px] rounded-full grid place-items-center min-w-[32px]">
+                                    S
+                                </div>
+                                <p class="text-sm leading-[18px] font-normal text-[#252525]">Support Team</p>
+                            </div>
+                            <!-- <a href=""
+                                class="flex items-center gap-[4px] text-sm leading-[18px] text-[#10A37F] font-normal p-[4px] rounded hover:bg-[#10A37F]/5">
+                                <img src="/public/img/upload-green.svg" alt="">
+                                Upload
+                            </a> -->
+                        </div>
+
+                        <div id="editor" class="quill-editor hidden"></div>
+
+
+                        <a href="javascript:void(0);" id="editorSubmitBtn"
+                            class="hidden mt-[20px] flex items-center justify-center  bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[12px] py-[8px] rounded-[4px] w-fit  max-sm:min-w-[32px] h-[33px] font-medium text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap font-inter gap-[4px]">
+                            Send
+                            <img src="/public/img/send.svg" alt="" class="min-w-[16px]"></a>
+
+
+                        <div class="p-6 bg-white hidden" id="quickMessages">
+                            <h2 class="text-sm font-semibold text-gray-700 mb-4">
+                                Quick Message
+                            </h2>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
+
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        General Acknowledgement
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        Product / Service Enquiry Reply
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        Support Request Acknowledgement
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        Sales / Demo / Pricing Enquiry
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        Request for More Information
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="rounded-lg bg-gray-100 p-4 border-[1px] overflow-hidden border-solid border-transparent  hover:bg-[#EFF9F5] hover:!border-[#3CA37E]">
+                                    <p class="text-sm text-gray-700 leading-relaxed quickMessages">
+                                        Closure / Resolution Message
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {{$MAIL_USERNAME:=.MAIL_USERNAME}}
+                        {{if .replyforresponse}}
+                        {{range .replyforresponse}}
+                        <div
+                            class="mt-[20px] p-[16px] lg:p-[20px] rounded-[8px] border border-solid boder-[#DDDDDD] bg-[#F7F7F7] mb-[10px]">
+                            <div
+                                class="mb-[16px] pb-[16px] border-b border-solid border-[#E2E4E8] flex items-start gap-[16px] justify-between max-md:flex-wrap">
+                                <div class="flex items-center gap-[10px] ">
+                                    <div
+                                        class="text-[20px] leading-[25px] font-normal text-[#ffffff] bg-[#EFB803] w-[42px] h-[42px] rounded-full grid place-items-center min-w-[32px]">
+                                        S
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm leading-[18px] font-semibold text-[#191919] mb-[4px]">Support
+                                            Team</h3>
+                                        <p class="text-sm leading-[17px] font-normal text-[#616161]">
+                                            {{$MAIL_USERNAME}}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <p class="text-sm leading-[17px] font-normal text-[#636363]">
+                                    {{.DateString}}
+                                </p>
+                            </div>
+                            <p class="text-sm leading-[22px] font-normal text-[#191919] mb-[20px] last:mb-0">
+                                {{.Replycontent}}
+                            </p>
+                        </div>
+                        {{end}}
+                        {{end}}
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{template "footer" .}}
+<script src="/public/js/form-builder/form-response-detail.js"></script>
+<script defer src="/public/js/form.js"></script>
+{{template "footerclose" .}}

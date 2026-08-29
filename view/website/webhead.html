@@ -1,0 +1,68 @@
+{{define "webhead"}}
+<!doctype html>
+<html>
+
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-P58WM9FN');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{.linktitle}} </title>
+  <!-- <link rel="icon" href="/public/img/spurtCMSlogonew.jpg"> -->
+  <link rel="icon" type="image/x-icon" href="https://spurtcms.com/public/img/spurtCMSlogonew.jpg">
+
+  <meta name="description" content="{{.description}}">
+  <meta name="keywords" content="{{.keywords}}">
+  <meta name="google-site-verification" content="anpCMNY1krcGIVX0wccuDDg65mHAT8EIXPRRBIv5ECQ" />
+  <link rel="canonical" href="https://spurtcms.com/" />
+  <meta content="{{if .OGImage}}https://spurtcms.com{{.OGImage}}{{else}}https://spurtcms.com/public/img/channellistpage.png{{end}}" itemprop="image">
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="spurtcms.com" />
+  <meta property="og:site_name" content="spurtcms.com" />
+  <meta property="og:image" content="{{if .OGImage}}https://spurtcms.com{{.OGImage}}{{else}}https://spurtcms.com/public/img/channellistpage.png{{end}}" title="Open Source Golang Based CMS Solution | spurtCMS" />
+  <meta property="og:title" content="{{.linktitle}}" />
+  <meta property="og:description" content="{{.description}}" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@spurtcms">
+  <meta name="twitter:title" content="{{.linktitle}}">
+  <meta name="twitter:description" content="{{.description}}">
+
+  <meta name="twitter:image" content="{{if .OGImage}}https://spurtcms.com{{.OGImage}}{{else}}https://spurtcms.com/public/img/channellistpage.png{{end}}">
+  <!-- Bootstrap CSS -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- 
+   <link rel="stylesheet" href="/public/css/bootstrap-material-datetimepicker.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!--tailwind-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/newstyle.css">
+  <link rel="stylesheet" href="/public/css/output.css">
+
+
+
+
+</head>
+
+{{end}}

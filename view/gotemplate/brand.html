@@ -1,0 +1,231 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$templatedetail :=.templatedetail}}
+{{$webdetail :=.websitedetail}}
+{{$baseurl :=.baseurl}}
+<section
+    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto max-md:pt-[90px] max-sm:pt-[64px] min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+
+        <header
+            class="header-rht md:hidden top-0 h-[90px] max-sm:h-[64px] right-0 z-20 fixed flex justify-end items-center gap-[6px] bg-white max-md:ms-0 p-[24px_16px_20px_16px] border-[#D9D9D9] border-b w-[calc(100%-232px)] max-md:w-full">
+            <div class="flex items-center gap-[6px] mr-auto">
+                <a href="javascript:void(0);"
+                    class="hidden place-items-center max-md:grid bg-[#F5F5F5] w-[32px] min-w-[32px] h-[32px]">
+                    <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+                </a>
+            </div>
+
+        </header>
+
+            {{template "gotemplatepageheader" .}}
+            
+        </div>
+    </section>
+    <div class="p-[30px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
+
+
+
+       <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}" method="post" id="siteNameForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <!-- tabname -->
+           <input type="hidden" name="tabname" value="brand">
+
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">
+                     SiteName
+                </h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                    <div class="mb-[20px] last-of-type:mb-0">
+                        <input type="text" placeholder="Spurtcms"
+                            value="{{.settingsdetail.SiteName}}" id="siteName" name="siteName" maxlength="20"
+                            class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    </div>
+                    <label id="siteName-error" style="display: none;" for="siteName"
+                        class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
+                        Website URL</label>
+
+
+                    <a href="javascript:void(0);" id="siteNameSave"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                       Update
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}" method="post" id="siteLogoForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+             <input type="hidden" name="tabname" value="brand">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">
+                   SiteLogo</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                    <div class="mb-[20px] last-of-type:mb-0">
+                        <div
+                            class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
+                            <label for="sitelogo"
+                                class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
+                               Choosefile
+
+                            </label>
+                            <p id="filenameDisplay" class="text-[13px] font-light leading-[18px] text-[#252525]">
+                                {{if .settingsdetail.SiteLogo}}
+                                {{.settingsdetail.SiteLogo}}
+                                {{else}}
+                                SiteLogo
+                                {{end}}
+                            </p>
+                            <a href="javascript:void(0);" id="deleteFile" class="ms-auto hidden">
+                                <img src="/public/img/delete-red.svg" alt="Delete">
+                            </a>
+                        </div>
+                        <input id="sitelogo" name="sitelogo" type="file"
+                            class="fileInput hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                            accept="image/png, image/jpeg,image/jpg,image/svg">
+                        <input type="hidden" value="{{.settingsdetail.SiteLogo}}" id="sitelogoimage"
+                            name="sitelogoimage"
+                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    </div>
+
+                    <div class="flex items-start gap-4 mt-[20px]">
+                        {{if .settingsdetail.SiteLogoPath}}
+                        <div class="grow">
+                            <img id="sitelogopathsrc" src="/{{.settingsdetail.SiteLogoPath}}"
+                                class="max-w-[120px]" alt="">
+                        </div>
+                        {{end}}
+                        <a href="javascript:void(0);" id="siteLogoSave"
+                            class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                           Update
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+     <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}" method="post" id="siteFavIconForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+             <input type="hidden" name="tabname" value="brand">
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">SiteFavIcon</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+                    <div class="mb-[20px] last-of-type:mb-0">
+                        <div
+                            class="flex items-center gap-[10px] bg-white rounded p-[6px_12px_6px_6px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] w-full">
+                            <label for="sitefavicon"
+                                class="text-[13px] font-light leading-[16px] text-[#202124] border border-solid border-[#D0D0D0] p-[10px] bg-[#F0F0F0] rounded-[2px] cursor-pointer">
+                               Choosefile
+                            </label>
+                            <p id="filenameDisplayFavIcon" class="text-[13px] font-light leading-[18px] text-[#252525]">
+                                {{if .settingsdetail.SiteFavIcon}}
+                                {{.settingsdetail.SiteFavIcon}}
+                                {{else}}
+                              Nofilechose
+                                {{end}}
+                            </p>
+                            <a href="javascript:void(0);" id="deleteFileFavIcon" class="ms-auto hidden">
+                                <img src="/public/img/delete-red.svg" alt="Delete">
+                            </a>
+                        </div>
+                        <input id="sitefavicon" name="sitefavicon" type="file"
+                            class="fileInputFavIcon hidden [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                            accept="image/png, image/jpeg,image/jpg,image/svg">
+                        <input type="hidden" value="{{.settingsdetail.SiteFavIcon}}" id="sitefaviconimage"
+                            name="sitefaviconimage"
+                            class="[&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs">
+                    </div>
+
+                    <div class="flex items-start gap-4 mt-[20px]">
+                        {{if .settingsdetail.SiteFavIcon}}
+                        <div class="grow">
+                            <img id="siteaviconsrc" src="/image-resize?name={{.settingsdetail.SiteFavIconPath}}"
+                                class="max-w-[75px]" alt="">
+                        </div>
+                        {{end}}
+                        <a href="javascript:void(0);" id="siteFavIconSave"
+                            class=" text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ms-auto">
+                           Update
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+           <div class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+            <h3 class="mt-[12px]">Header Theme</h3>
+        
+            <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+
+        
+        
+
+               <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}"  method="post" >
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <input type="hidden" name="tabname" value="brand">
+
+                <div class=" mx-auto flex flex-wrap gap-[20px] md:gap-[30px]">
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio" class="hidden peer/member" value="new-year" {{if eq .headerthame "new-year"}}checked{{end}}>
+                        <label for="radio"
+                            class=" relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/member:text-[#252525] tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/member:before:bg-[url('/public/img/radio-checked-green.svg')]  ">New
+                            Year</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio1" class="hidden peer/public" value="christmas" {{if eq .headerthame "christmas"}}checked{{end}}>
+                        <label for="radio1"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Christmas</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio2" class="hidden peer/public" value="pongal" {{if eq .headerthame "pongal"}}checked{{end}}>
+                        <label for="radio2"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Pongal</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio3" class="hidden peer/public" value="diwali" {{if eq .headerthame "diwali"}}checked{{end}}>
+                        <label for="radio3"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  ">Diwali</label>
+                    </div>
+        
+                    <div>
+                        <input type="radio" name="radio" id="radio4" class="hidden peer/public" value="default" {{if or (eq .headerthame "default") (not .headerthame)}}checked{{end}}>
+                        <label for="radio4"
+                            class="relative cursor-pointer flex gap-[16px] items-center mb-0 text-sm font-normal leading-[18px] text-[#252525] peer-checked/public:text-[#252525]  tracking-[0.005em]
+                                        before:bg-transparent before:w-[16px] before:h-[16px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/radio-unchecked.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked/public:before:bg-[url('/public/img/radio-checked-green.svg')]  "> Default</label>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4 mt-[30px] ms-auto">
+                    <button type="submit"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center tracking-[0.7px] w-[91px] whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] ">
+                        Update
+                    </button>
+                </div>
+                </form>
+            </div>
+       
+
+
+    </div>
+</section>
+    <input type="hidden" id="headerthame" value="{{ .headerthame}}">
+{{template "footer" .}}
+    <script src="/public/js/gotemplate/template_settings.js"></script>
+
+    {{template "footerclose" .}}

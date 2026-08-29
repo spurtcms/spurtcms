@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="flex space-x-[12px]">
-                <a href="{{if .gotemplatepageheader}}/admin/website/menu/?webid={{.websitedetail.Id}}{{else}}/admin/website/menu/{{end}}"
+                <a href="{{if .gotemplatepageheader}}/admin/website/menu/{{else}}/admin/website/menu/{{end}}"
                     class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline"
                     id="previous-btn">{{$Translate.Cancel}}</a>
                 <!-- <a class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline"
@@ -544,7 +544,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
+                                <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
                                     <button
                                         class="opentab bg-[#F5F4F5] [&.collapsed]:!border-none border-b  border-[#E0E0E0] border-solid [&.collapsed]:bg-white flex items-center justify-between w-full p-[11px_16px] collapsed"
                                         type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive"
@@ -668,7 +668,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <div class=" border-b border-solid border-[#E0E0E0] last-of-type:border-b-0">
                                     <button
@@ -898,7 +898,7 @@
                                 <a href="javascript:void(0);" class="flex items-center gap-[2px] hover:underline"
                                     data-bs-target="#modalId3" data-bs-toggle="modal" id="editbtnn"
                                     data-id="{{.menudetails.Id}}" data-title="{{.menudetails.MenuTitle}}" data-desc="{{.menudetails.Description}}"
-                                    data-name="{{.menudetails.Name}}" data-status="{{.menudetails.Status}}">
+                                    data-name="{{.menudetails.Name}}" data-status="{{.menudetails.Status}}" data-group="{{.menudetails.MenuGroup}}" data-order="{{.menudetails.OrderIndex}}">
                                     <img src="/public/img/edit-green.svg" alt="">
                                     <p class="text-sm font-light leading-[18px] text-[#10A37F]">{{$Translate.Edit}}</p>
                                 </a>
@@ -939,7 +939,6 @@
 
                                 {{$menuid := .menuid}}
                                 {{if gt (len .menuitemslist) 1}}
-
                                 {{range .menuitemslist}}
                                 {{if eq .ParentId $menuid}}
                                 <div class="border-[#EDEDED] border-[1px] rounded-[8px] mb-[12px] pt-[12px] px-[8px] menuitemsdiv"
@@ -975,8 +974,8 @@
                                                 data-bs-parent="#accordionExample1" style="">
                                                 <div
                                                     class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px] ">
-                                                    <input type="text" placeholder="Navigation Lable" value="{{.Name}}"
-                                                        maxlength="300"
+                                                    <input type="text" placeholder="Navigation Lable" value="{{.Name}}" id="Menu_Name"
+                                                        maxlength="300" data-group="{{.MenuGroup}}"
                                                         class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
                                                     <label id="lablename-error"
                                                         class="lablename-error error hidden">*Please
@@ -1074,12 +1073,173 @@
                                             </div>
 
                                             {{ $currentId := .Id }}
+                                            {{ $hasChildItems := false }}
+                                            {{ range $menuitemslist }}
+                                                {{ if eq .ParentId $currentId }}
+                                                    {{ $hasChildItems = true }}
+                                                {{ end }}
+                                            {{ end }}
+
+                                            {{ if $hasChildItems }}
+                                            <div class="child-container" data-parent-id="{{$currentId}}">
                                             {{ range $menuitemslist }}
                                             {{ if eq .ParentId $currentId }}
-                                            <div class="child-container" data-parent-id="{{.ParentId}}">
                                                 <div class="childdiv flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group ms-[20px]"
                                                     data-id="{{.Id}}" data-parent="{{.ParentId}}">
 
+                                                    <div
+                                                        class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
+                                                        <img src="/public/img/drag.svg" alt="">
+                                                    </div>
+                                                    <div class="accordion-item grow max-w-[573px] ">
+                                                        <button
+                                                            class="bg-[#F0F0F0] p-[12px_20px] rounded-[8px] w-full border-[#EBEBEB] brder border-solid justify-between flex items-center mb-[8px] h-[48px] collapsed"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{.Id}}" aria-expanded="false"
+                                                            aria-controls="collapse{{.Id}}">
+                                                            <p
+                                                                class="text-sm font-normal leading-[20px] text-[#252525] text-start line-clamp-1">
+                                                                {{.Name}}</p>
+                                                            <div class="flex items-center gap-[10px]">
+                                                                <p
+                                                                    class="text-[13px] font-light text-[#757575] leading-[16px] line-clamp-1">
+                                                                    {{.Name}}</p>
+                                                                <img src="/public/img/accord-arrow.svg" alt="">
+                                                            </div>
+                                                        </button>
+
+                                                        <div id="collapse{{.Id}}"
+                                                            class="accordion-collapse [&amp;.collapse]:!visible collapse"
+                                                            data-bs-parent="#accordionExample1" style="">
+                                                            <div
+                                                                class="accordion-body p-[24px_14px_20px] border border-solid border-[#E0E0E0] rounded-[8px]">
+                                                                <input type="text" placeholder="Navigation Lable"
+                                                                    value="{{.Name}}" maxlength="300" data-desc="{{.Description}}"
+                                                                    class="labelname  [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs p-[15px_14px] border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+                                                                <label id="lablename-error"
+                                                                    class="lablename-error error hidden">*Please
+                                                                    Enter
+                                                                    300 Characters Only</label>
+
+                                                                <!-- Toolbar - UNIQUE ID per menu item -->
+                                                                <div id="toolbar-container-{{.Id}}" class="">
+                                                                    <span class="ql-formats">
+                                                                        <button class="ql-bold" title="Bold"></button>
+                                                                        <button class="ql-italic"
+                                                                            title="Italic"></button>
+                                                                    </span>
+                                                                    <span class="ql-formats">
+                                                                        <button class="ql-list"
+                                                                            value="ordered"></button>
+                                                                        <button class="ql-list" value="bullet"></button>
+                                                                        <button class="ql-list" value="check"></button>
+                                                                    </span>
+                                                                </div>
+
+                                                                <!-- Editor - UNIQUE ID per menu item -->
+                                                                <div id="editor-{{.Id}}" data-description="{{.Description}}"
+                                                                    class="quill-editor-container border border-[#EDEDED] rounded-[4px] min-h-[120px] bg-white">{{.HtmlDescription}}
+                                                                </div>
+
+                                                                <div
+                                                                    class="{{if .ImagePath}}{{else}}hidden{{end}} imageRemoveDiv flex mb-[24px] mt-[24px] max-[1300px]:mb-[16px] last-of-type:mb-0">
+                                                                    <p
+                                                                        class="ImageName text-[14px] font-normal leading-[18px] text-[#10A37F] mb-[8px]">
+                                                                        {{.ImageName}}
+                                                                    </p>
+                                                                    <input type="hidden" class="svgDelete" value="">
+                                                                    <span
+                                                                        class="{{if .ImagePath}}{{else}}hidden{{end}} deleteimg pl-[10px] cursor-pointer "><img
+                                                                            src="/public/img/delete-drop.svg"
+                                                                            alt=""></span>
+
+                                                                </div>
+
+
+                                                                <div
+                                                                    class="  {{if .ImagePath}}hidden {{end}} imgupldiv mt-[24px] flex flex-col gap-1.5">
+
+                                                                    <input type="hidden" class="svgval" value="">
+                                                                    <button
+                                                                        class="p-[9px_10px] w-full flex justify-center items-center relative w-fit rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
+                                                                        <img src="/public/img/upload-folder.svg" alt="">
+                                                                        <p
+                                                                            class="text-[14px] font-normal leading-[18px] text-[#616161]">
+                                                                            Upload Icon
+                                                                        </p>
+                                                                        <input type="file" accept=".svg"
+                                                                            class="imguploadd absolute w-full h-full opacity-0 text-[0] cursor-pointer top-0 left-0">
+                                                                    </button>
+                                                                    <p
+                                                                        class="svgins text-[12px] text-[#8A8A8A] mb-[20px] text-right">
+                                                                        Only *SVG files are allowed
+                                                                    </p>
+                                                                </div>
+                                                                <input type="text" placeholder="Path link"
+                                                                    value="{{.UrlPath}}" {{if ne .Type `custom_url`}}
+                                                                    disabled {{end}}
+                                                                    class="p-[15px_14px] {{if ne .Type `custom_url`}} opacity-[0.5]{{end}} border border-solid border-[#EDEDED] rounded-[4px] h-[48px] text-[14px] leading-light placeholder:text-[#8A8A8A] w-full mb-[24px]">
+                                                                <div class="chk-group chk-group-label ">
+                                                                    <input type="checkbox" {{if eq .SeparateWindow
+                                                                        1}}checked{{end}}
+                                                                        class="separatewindow hidden peer "
+                                                                        id="separatewindow{{.Id}}"
+                                                                        value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                                                        onclick="this.value = this.checked ? 1 : 0;">
+                                                                    <label for="separatewindow{{.Id}}"
+                                                                        class="h-[14px] relative cursor-pointer flex gap-[10px] mb-[15px] items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                                           before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box-grey.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box-green.svg')]">
+                                                                        <p
+                                                                            class="text-[#252525] text-[13px] font-light mb-0">
+                                                                            {{$Translate.Menu.SeparateWindow}}</p>
+                                                                    </label>
+                                                                </div>
+
+                                                                <!-- <div class="flex flex-col gap-1.5">
+                                                    <p class="mb-0 font-normal text-[#152027] text-sm">
+                                                        <input id="separatewindow" type="checkbox" class="pr-3"
+                                                            name="separatewindow"
+                                                            value="{{if eq .SeparateWindow 1}}1{{else}}0{{end}}"
+                                                            onclick="this.value = this.checked ? 1 : 0;" />
+                                                        {{$Translate.Menu.SeparateWindow}}
+                                                    </p>
+
+
+                                                </div> -->
+                                                                <div class="flex items-center justify-end gap-[10px]">
+                                                                    <a href="#" id="" data-id="{{.Id}}"
+                                                                        data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapse{{.Id}}"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapse{{.Id}}"
+                                                                        class="flex justify-center place-items-center bg-[#ffffff] hover:bg-[#F5F5F5] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-light text-[14px] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#E6E6E6] text-[#989898]">
+                                                                        Cancel
+                                                                    </a>
+                                                                    <a href="#" id="updatebtn" data-id="{{.Id}}"
+                                                                        data-type="{{.Type}}" data-typeid="{{.TypeId}}"
+                                                                        data-name="{{.Name}}"
+                                                                        data-parent="{{.ParentId}}"
+                                                                        class="flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] px-[14px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap">
+                                                                        Save
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {{ $level2Id := .Id }}
+                                                        {{ $hasLevel3 := false }}
+                                                        {{ range $menuitemslist }}
+                                                            {{ if eq .ParentId $level2Id }}
+                                                                {{ $hasLevel3 = true }}
+                                                            {{ end }}
+                                                        {{ end }}
+
+                                                        {{ if $hasLevel3 }}
+                                                        <div class="subchild-container mt-[8px]" data-parent-id="{{$level2Id}}">
+                                                            {{ range $menuitemslist }}
+                                                            {{ if eq .ParentId $level2Id }}
+                                                                <div class="childdiv flex items-start gap-[10px] mt-[8px] first-of-type:mt-0 w-full group ms-[40px]"
+                                                                    data-id="{{.Id}}" data-parent="{{.ParentId}}">
                                                     <div
                                                         class="drag-handle p-[16px_0] min-w-[14px] opacity-[0.5] group-hover:opacity-100 cursor-pointer">
                                                         <img src="/public/img/drag.svg" alt="">
@@ -1235,8 +1395,31 @@
                                                                 src="/public/form-img/img/delete.svg" alt=""></button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                            {{ end }}
+                                                            {{ end }}
+                                                        </div>
+                                                        {{ end }}
+
+                                                    </div>
+                                                    <!-- <div>
+                                                    <button
+                                                        class="menuitemeditbtn pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                                        data-id="{{.Id}}" data-name="{{.Name}}"
+                                                        data-bs-target="#modalIdd2" data-bs-toggle="modal"> <img
+                                                            src="/public/img/edit.svg" alt=""></button>
+                                                </div> -->
+                                                    <div class="w-[40px]">
+                                                        <button
+                                                            class="pt-[16px] opacity-[0.5] group-hover:opacity-100 cursor-pointer"
+                                                            id="menuitemdeletebtn" data-id="{{.Id}}"
+                                                            data-name="{{.Name}}" data-bs-target="#deleteModal"
+                                                            data-bs-toggle="modal"> <img
+                                                                src="/public/form-img/img/delete.svg" alt=""></button>
+                                                    </div>
+                                                </div>
                                             {{ end }}
+                                            {{ end }}
+                                            </div>
                                             {{ end }}
                                         </div>
                                         <!-- <div>
@@ -1309,6 +1492,8 @@
         <input type="hidden" name="redirectid" class="redirectid" value="{{.menuid}}">
         <input type="hidden" name="menuitem_id" class="menuitem_id" value="">
         <input type="hidden" name="menu_typeid" class="menu_typeid" value="">
+        <input type="hidden" name="parentmenu_grouptype" id="parentmenu_grouptype" value="{{.menudetails.MenuGroup}}">
+
         <div class="modal-dialog modal-dialog-scrollable max-w-[580px]" role="document">
             <div class="rounded-none modal-content b-0">
 
@@ -1809,7 +1994,7 @@
 
 <div class="right modal fade" id="modalId3" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
     role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <form action="/admin/website/menu/updatemenu/?webid={{.websitedetail.Id}}" name="createmenu" method="POST"
+    <form action="/admin/website/menu/updatemenu" name="createmenu" method="POST"
         id="menuform">
         <div class="modal-dialog modal-dialog-scrollable max-w-[580px]" role="document">
 
@@ -1821,7 +2006,7 @@
                 <input type="hidden" name="menupageno" id="menupageno" value="">
                 <div class="flex justify-between items-center p-[59px_30px_22px] max-[1300px]:p-[16px_30px] ">
                     <h5 class="mb-0 font-medium text-bold-black text-base" id="modalTitleIdd">
-                        {{$Translate.Menu.CreateNewMenu}}
+                        {{$Translate.Menu.CreateNewMenu}} 
                     </h5>
                     <div class="flex gap-3">
                         <a href="#" data-bs-dismiss="modal" class="flex justify-center items-center cancelbtn">
@@ -1840,8 +2025,8 @@
 
                                 <div class="flex flex-col gap-1.5">
                                     <p class="mb-0 font-normal text-bold-black text-sm">{{$Translate.Menu.MenuName}}</p>
-                                    <input type="text" id="menu_name" name="menu_name"
-                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm" />
+                                    <input type="text" id="menu_name" name="menu_name" disabled
+                                        class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) menu_name bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm  " />
                                 </div>
 
                                 <div class="flex flex-col gap-1.5">
@@ -1856,6 +2041,114 @@
                                     <textarea type="text" id="menu_desc" name="menu_desc"
                                         class="focus:!border-[#373737] menu_desc [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-120 font-normal text-bold-black text-sm text-start resize-none"></textarea>
                                 </div>
+
+                                 <!-- Template Dropdown -->
+
+                                 <div class="dropdown dropdown-template">
+                  <a href="javascript:void(0);" id="menu-group-head"
+                      class="border font-normal border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      Choose Menu Group
+                  </a>
+          
+                  <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                    
+                      <li>
+                          <a href="javascript:void(0);" data-value="picco-service"
+                              class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                             Picco Service
+                          </a>
+                      </li>
+                      <li>
+                        <a href="javascript:void(0);" data-value="picco-talent"
+                            class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                            Picco Talent
+                        </a>
+                    </li>   <li>
+                      <a href="javascript:void(0);" data-value="picco-support"
+                          class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          Picco Support
+                      </a>
+                  </li>   <li>
+                    <a href="javascript:void(0);" data-value="picco-labs"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Labs
+                    </a>
+                </li>   <li>
+                  <a href="javascript:void(0);" data-value="picco-ai"
+                      class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                      Picco AI 
+                  </a>
+              </li>
+               <a href="javascript:void(0);" data-value="picco-startup"
+                      class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                      Picco Startup
+                  </a>
+              </li>
+              <li>
+                      <a href="javascript:void(0);" data-value="footer"
+                          class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          Footer
+                      </a>
+                  </li>
+              <li>
+                      <a href="javascript:void(0);" data-value="default"
+                          class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          Default
+                      </a>
+                  </li>
+                  </ul>
+              </div>
+         
+              <input type="hidden" id="menu_group" name="menu_group" class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm">
+
+              <div class="dropdown dropdown-template">
+                <a href="javascript:void(0);" id="menu-order-head"
+                    class="border font-normal border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose Menu Order
+                </a>
+        
+                <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                    <li>
+                        <a href="javascript:void(0);" data-value="1"
+                            class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                           1
+                        </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="2"
+                          class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          2
+                      </a>
+                  </li>   <li>
+                    <a href="javascript:void(0);" data-value="3"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        3
+                    </a>
+                </li>   <li>
+                  <a href="javascript:void(0);" data-value="4"
+                      class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                      4
+                  </a>
+              </li>   <li>
+                <a href="javascript:void(0);" data-value="5"
+                    class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                    5
+                </a>
+            </li>
+            <li></li>
+                <a href="javascript:void(0);" data-value="6"
+                    class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                    6
+                </a>
+            </li>
+                </ul>
+            </div>
+       
+            <input type="hidden" id="menu_order" name="menu_order" class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm">
+
+
                                 <div class="flexmt-[21px]">
                                     <label for="toggleSeven"
                                         class="flex  gap-[14px] items-center justify-start cursor-pointer select-none text-dark dark:text-white">

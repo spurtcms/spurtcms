@@ -238,7 +238,6 @@ $(document).on('click', '.genkey', function () {
         data: { 'topic': topicval, csrf: $("input[name='csrf']").val() },
         success: function (result) {
             const data = JSON.parse(result.data);
-            console.log(data.keywords);
             $('#titletopic').val(data.topic);
             $("#articlelength").val(data.articleLength)
 
@@ -265,7 +264,6 @@ $('#ecnextbtn').on('click', function () {
         data: { 'productname': productname, csrf: $("input[name='csrf']").val() },
         success: function (result) {
             const data = JSON.parse(result.data);
-            console.log(data.keywords);
             $('#titleproduct').val(productname);
             $("#descriptionlength").val(data.articleLength)
 
@@ -372,13 +370,10 @@ $(document).on('keyup', '#articlelength', function () {
 $(document).on('click', '#aiarticle', function () {
 
     count = $("#articlecount").val()
-    console.log('Clicked!', count);
 
     var OwnApiKey = $("#OwnApiKey").val()
-    console.log("OwnApiKey:",OwnApiKey);
     
     if (OwnApiKey=="openai") {
-        console.log("trueeee");
         
 
         $('#Id2').css('display', 'block');
@@ -389,7 +384,6 @@ $(document).on('click', '#aiarticle', function () {
 
     } else {
         if (count == 5) {
-            console.log("falseeee");
 
             notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="toast-msg flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/danger-group-12.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">Article Limit Reached! You can only create up to 5 articles.</p></div></div> </li></ul>`;
 
@@ -402,7 +396,6 @@ $(document).on('click', '#aiarticle', function () {
             }, 5000); // 5000 milliseconds = 5 seconds
         } else {
 
-            console.log("falseeeeok");
             $('#Id2').css('display', 'block');
             $('#Id2').addClass("show");
 

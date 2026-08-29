@@ -2,6 +2,56 @@ let button
 var channelid = []
 var channelname = []
 
+$(document).ready(function () {
+    let formimages = $("#formimages").val()
+
+    if (formimages == "") {
+        $("#ctimagehide").hide()
+        $("#catdel-img").hide()
+    } else {
+        $("#ctimagehide").show()
+        $("#catdel-img").show()
+        $("#browse").hide()
+        $("#uploadLine").hide()
+        $("#uploadFormat").hide()
+    }
+
+
+    $('#catdel-img').click(function () {
+        $('#categoryimages').val("")
+        $('#ctimagehide').attr('src', '')
+        $('#ctimagehide').hide()
+        $('#browse').show()
+        $("#mediadesc").css("margin-top", "1%")
+
+        $(this).siblings('p,button').show()
+        $(this).hide()
+
+    })
+
+    $('.tab-togg').click(function () {
+        $('.editor-tabs').toggleClass('translate-x-[100%]');
+        $(".imgtoogle").toggleClass('rotate-180')
+
+    });
+
+    $("#formTitle").on("input", function () {
+        let formTitle = $(this).val().trim();
+
+        if (!formTitle) {
+            if (!$("#formTitleError").length) {
+                $(this).after(
+                    '<label id="formTitleError" class="text-sm mt-1 error" style="color:#F26674;font-weight: 400;font-size: 0.75rem;line-height: 1rem;">* This field is required</label>'
+                );
+            }
+        } else {
+            $("#formTitleError").remove();
+        }
+    });
+
+
+});
+
 
 $(document).ready(async function () {
 
@@ -34,78 +84,81 @@ $(document).ready(async function () {
         // $(".select-chn:first").trigger("click");
     }
 
+    $(document).on('click', '#formimage', function () {
+        $("#prof-crop").val("12")
+    })
+
+    // publish btn
+    $(document).on("click", "#publish-form", function () {
+        let formTitle = $("#formTitle").val().trim();
+        if (formTitle != "") {
+            button = "publish-form"
+            const event = new CustomEvent("getHTML", {
+            });
+            document.dispatchEvent(event);
+            return
+        } else {
+            $("#formTitleError").remove();
+            $("#formTitle").after(
+                '<label id="formTitleError" class="text-sm mt-1 error" style="color:#F26674;font-weight: 400;font-size: 0.75rem;line-height: 1rem;">* This field is required</label>'
+            );
+            $('.editor-tabs').removeClass('translate-x-[100%]');
+            $(".imgtoogle").addClass('rotate-180')
+        }
+    })
+
 
     // You get innerHTML here    
     document.addEventListener('saveChange', function (event) {
-        let homeurl
+
         spurtdata = event.detail
         if (button == "save-form") {
             homeurl = "/admin/cta/draft"
         } else {
             homeurl = "/admin/cta"
         }
+
         let first = spurtdata.data[0]
 
         var image = spurtdata.formImage
         let newimage = image.split('?name=')[1];
-        var imagename =spurtdata.formImageName
+        var imagename = spurtdata.formImageName
         let value = first.value
         var id = $("#formid").val()
+        let formTitle = $("#formTitle").val().trim();
+        let description = $("#description").val().trim()
+        let formimages = $("#formimages").val()
 
-        if (channelid.length ==0 && channelname.length ==0){
+        if (channelid.length == 0 && channelname.length == 0) {
 
-           channelid.push( $('#defaultchnid').val())
+            channelid.push($('#defaultchnid').val())
 
-           channelname.push('Default Channel')
+            channelname.push('Default Channel')
         }
         if (id == "") {
             $.ajax({
                 url: "/admin/cta/createforms",
-                type: "POST",
-                async: false,
-                data: { "button": button, "form": JSON.stringify(spurtdata), "image":newimage, "imagename":imagename, csrf: $("input[name='csrf']").val(), "title": value, "channelid": channelid, "channelname": channelname },
-                datatype: "json",
-                caches: false,
-                success: function (data) {
-                    window.location.href = homeurl
+                method: "POST",
+                dataType: 'json',
+                data: { "button": button, "form": JSON.stringify(spurtdata), "image": newimage, "imagename": imagename, csrf: $("input[name='csrf']").val(), "title": formTitle, "description": description, "formimages": formimages, "channelid": channelid, "channelname": channelname },
+                success: function (response) {
+                    window.location.href = response.data
                 }
             })
         } else {
             $.ajax({
                 url: "/admin/cta/updateforms",
-                type: "POST",
-                async: false,
-                data: { "button": button, "form": JSON.stringify(spurtdata),"image":newimage, "imagename":imagename,csrf: $("input[name='csrf']").val(), "title": value, "id": id, "channelid": channelid, "channelname": channelname },
-                datatype: "json",
-                caches: false,
-                success: function (data) {
-                    window.location.href = homeurl
+                method: "POST",
+                dataType: 'json',
+                data: { "button": button, "form": JSON.stringify(spurtdata), "image": newimage, "imagename": imagename, csrf: $("input[name='csrf']").val(), "title": formTitle, "description": description, "formimages": formimages, "id": id, "channelid": channelid, "channelname": channelname },
+                success: function (response) {
+                    window.location.href = response.data
                 }
             })
         }
 
 
     })
-})
-
-
-// publish btn
-$(document).on("click", "#publish-form", function () {
-    button = "publish-form"
-    const event = new CustomEvent("getHTML", {
-    });
-    document.dispatchEvent(event);
-
-
-})
-
-// save btn
-$(document).on("click", "#save-form", function () {
-    button = "save-form"
-    const event = new CustomEvent("getHTML", {
-    });
-    document.dispatchEvent(event);
-
 })
 
 // New code 
@@ -144,5 +197,4 @@ $(document).on('click', '.select-chn', function () {
             channelid.splice(index2, 1);
         }
     }
-    console.log(channelid, channelname, "arraylll")
 })

@@ -73,9 +73,9 @@ $(document).on('click', '#removecategory', function () {
 document.querySelectorAll('.no-drag').forEach(element => {
     element.setAttribute('draggable', 'false');
 
-    console.log("draggg")
+  
     element.addEventListener('dragstart', (event) => {
-        console.log("chekcdragg")
+        
         event.preventDefault();
     });
     element.addEventListener('mousedown', (event) => {
@@ -886,7 +886,7 @@ $(document).on('click', '.statuss', function () {
 
 $(document).on('click', '.deleteentry', function () {
 
-    console.log("deleteentryyyy")
+   
 
     var currentLocation = window.location.href;
 
@@ -1037,7 +1037,7 @@ $(document).on("click", "#feature", function () {
     $('#dynamicImage').attr('src', '/public/img/info-icon.svg')
     $('.deldesc').text("Are you Sure you Want to Feature this Entries into Website?");
     $('.delname').text(entrytitle)
-    console.log("entrytitle:",entrytitle)
+  
     $('.deltitle').text("Feature Entry")
     $("#delid").text("Feature")
     $("#delid").addClass("featurebtn")
@@ -1578,7 +1578,7 @@ $(document).on('click', '.selectcheckbox', function () {
         $('#Check').prop('checked', false)
 
     }
-    console.log(selectedcheckboxarr, "arrayvalue")
+  
 
     if (selectedcheckboxarr.length != 0) {
 
@@ -1909,7 +1909,7 @@ $(document).on('click', '.selectedunpublish', function () {
         },
         success: function (data) {
 
-            console.log(data, "result")
+        
 
             var datastatus
 
@@ -2365,7 +2365,6 @@ $(document).on('click', '#channelfieldsave', function () {
             data: { "chid": $("#chanid").val(), csrf: $("input[name='csrf']").val(), "order": sortorder, "eid": eid },
             success: function (data) {
 
-                console.log("result", data.value, data.value == true);
 
                 if (data.value == true) {
 
@@ -2393,7 +2392,6 @@ $(document).on('click', '#channelfieldsave', function () {
             "fieldid": $(this).find('input').attr('data-id') || $(this).find('textarea').attr('data-id') || $(this).find('.fieldid').attr('data-id') || $(this).find('.fieldid1').attr('data-id') || $(this).find(".fl-pathfld").attr('data-id') || $(this).find('#urldatas').attr('data-id'),
 
         }
-        console.log("object", obj.value)
         if ((obj.fieldid == undefined) || (obj.fieldid == '')) {
             obj.fieldid = '0'
 
@@ -2452,13 +2450,10 @@ $(document).on('click', '#addcategory', function () {
 
     // categoryIds = catid.split(',');
 
-    console.log("categorids", categoryIds)
     var catselect = document.querySelectorAll('.categories-list-child');
-    console.log(catselect, "catelist");
     if (Channelid == channelid) {
         categoryIds.forEach(function (categoryId) {
             var matchedH3 = document.querySelector('a[data-id="' + categoryId + '"]');
-            console.log("match", matchedH3);
 
             matchedH3.click()
 
@@ -2471,10 +2466,8 @@ $(document).on('click', '#addcategory', function () {
 
 $(document).on('click', '#channelfield', function () {
 
-    console.log(newchanneldata, "channeldata")
 
     var radval = $('.radioval').val()
-    console.log(radval, "radiovalue")
 
     if (newchanneldata != '') {
         bindchanneldata()
@@ -2550,7 +2543,6 @@ $(document).on('click', '#configbtn', function () {
         },
         success: function (data) {
 
-            console.log("dataaaa", data)
 
             sections = data.Section
 
@@ -2664,7 +2656,6 @@ $(document).on('click', '#configbtn', function () {
                     var name = ui.draggable.text().trim().split("\n");
                     var img = ui.draggable.find("img").attr("src");
                     var newsection = ui.draggable[0]['id']
-                    console.log("newsectiondrop1111", id, name, img, newsection)
                     if (newsection != "newsection") {
                         $(this).append(`
                     <div class="section-fields-content-child fieldapp" data-masterfieldid=`+ id + ` data-newfieldid=` + newFieldid + ` data-fieldid=` + fielid + ` data-orderindex=` + orderindex + ` id=fieldapp` + fielid + `` + newFieldid + `>
@@ -2757,7 +2748,6 @@ function channelfieldkeyup() {
 
 $(document).on('click', '#optionsid', function () {
     option = $(this).text()
-    console.log("dropdown", option)
     $('.fieldid').val(option)
 
     if (($('.fieldid').val()) !== '') {
@@ -2770,7 +2760,6 @@ $(document).on('click', '#optionsid', function () {
 })
 $(document).on('click', '#optionsid1', function () {
     option = $(this).attr('data-id')
-    console.log("dropdown", option)
     $('.fieldid1').val(option)
     test = $(this).text()
     $('#searchdropdownrole').val(test)
@@ -2855,7 +2844,6 @@ $(document).on('click', '.checkboxid', function () {
     if ($(this).is(':checked')) {
 
         option = $(this).next('label').text()
-        console.log("option", option)
 
         checkboxarr.push(option)
         $('.checkfieldid').val(checkboxarr.join(','))
@@ -2864,7 +2852,6 @@ $(document).on('click', '.checkboxid', function () {
     else {
         var option = $(this).next('label').text();
         checkboxarr.splice(checkboxarr.indexOf(option), 1);
-        console.log("may", option, checkboxarr)
         $('.checkfieldid').val(checkboxarr.join(','));
     }
 
@@ -2886,7 +2873,6 @@ $(document).on('click', '.checkboxid1', function () {
     if ($(this).is(':checked')) {
 
         option = $(this).attr('data-id')
-        console.log("option", option)
 
         membercheckarr.push(option)
         $('.checkfieldid1').val(membercheckarr.join(','))
@@ -2895,7 +2881,6 @@ $(document).on('click', '.checkboxid1', function () {
     else {
         var option = $(this).attr('data-id');
         membercheckarr.splice(membercheckarr.indexOf(option), 1);
-        console.log("may", option, membercheckarr)
         $('.checkfieldid1').val(membercheckarr.join(','));
     }
 
@@ -2914,7 +2899,6 @@ $(document).on('click', '.checkboxid1', function () {
 $(document).on('click', '.radbtn', function () {
 
     option = $(this).next('label').text()
-    console.log("optiongggg", option)
     $('.radioval').val(option)
     if ($('.radioval').val() != '') {
         $('#radiogrb').removeClass('input-group-error')
@@ -2936,7 +2920,6 @@ $(document).on('focus', '.date', function () {
 
     var timeformat = $(this).attr('data-time');
 
-    console.log(timeformat, dateformat, "format")
 
     if (dateformat != "" && timeformat != "" && timeformat != undefined) {
 
@@ -2944,7 +2927,6 @@ $(document).on('focus', '.date', function () {
 
         formatset = dateformat + " hh:mm a "
 
-        console.log(formatset, "set")
 
         $('#' + $(this).attr('id')).bootstrapMaterialDatePicker({
             setMaxDate: moment(),
@@ -3130,7 +3112,6 @@ $(document).on('click', '#uptchannelfield', function () {
 
             fiedlvalue.push(obj)
 
-            console.log(fiedlvalue, "arrayfield")
         })
     }
 
@@ -3342,7 +3323,6 @@ function bindchanneldata() {
 }
 function FieldValidation1() {
 
-    console.log(fiedlvalue, "validation")
 
     // if (fiedlvalue.length == 0) {
 
@@ -3414,7 +3394,6 @@ function FieldValidation1() {
 
                     $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
 
-                    console.log("timeformat empty");
 
                     $('#time-error').show();
 
@@ -3425,7 +3404,6 @@ function FieldValidation1() {
 
                 if (!flg || !flg2) {
 
-                    console.log("11");
 
                     return false
 
@@ -3442,7 +3420,6 @@ function FieldValidation1() {
 
                     $('#fieldapp' + x["FieldId"].toString() + x["NewFieldId"].toString()).trigger('click');
 
-                    console.log("options empty");
 
                     return false
 
@@ -3458,7 +3435,6 @@ function FieldValidation1() {
 
                     $('#date-error').show();
 
-                    console.log("dateformat empty");
 
                     return false
 
@@ -3761,7 +3737,6 @@ $(document).on("click", '.copyButton', function () {
 
     // Copy the data value to the clipboard
     navigator.clipboard.writeText(dataValue).then(function () {
-        console.log('Data attribute value copied to clipboard: ' + dataValue);
         notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex  w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >Link Copied</p ></div ></div ></li></ul> `;
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
@@ -3776,12 +3751,10 @@ $(document).on("click", '.copyButton', function () {
 
 function EntryStatus(id) {
     $('#Status' + id).on('change', function () {
-        console.log("printf");
         this.value = this.checked ? 1 : 0;
     }).change();
     var isactive = $('#Status' + id).val();
 
-    console.log("check", isactive, id)
 
     $.ajax({
         url: '/admin/entries/entryisactive',
@@ -3882,7 +3855,6 @@ $(document).on("click", ".selectall", function () {
 
         if (allSame) {
 
-            console.log("checksame")
 
             htmlContent = '<img style="width: 14px; height: 14px;" src="' + img + '" >' + '<span class="max-sm:hidden @[550px]:inline-block hidden">' + setstatus + '</span>';
 
@@ -3893,7 +3865,6 @@ $(document).on("click", ".selectall", function () {
 
         }
 
-        console.log(htmlContent, "htmlcontent")
 
         // $('#unbulishslt').html(htmlContent);
 
@@ -3928,7 +3899,6 @@ $(function () {
             newOrder = $(this).sortable('toArray', { attribute: 'data-id' });
             var pageno = $(".pagno").attr("data-page");
 
-            console.log(pageno, "pageno");
 
             $.ajax({
                 url: '/admin/entries/reorder',
@@ -3977,7 +3947,6 @@ $(document).on('click', '#memgrp-slctall', function () {
 
     }
 
-    console.log("memgrps", access_granted_memgrps);
 })
 
 
@@ -3986,7 +3955,6 @@ $('.memgrp-chkboxes').each(function (chk_index, chk_element) {
 
     $(chk_element).click(function () {
 
-        console.log('checked', $(this).prop('checked'));
 
         var memgrp_id = $(this).attr('data-id')
 
@@ -4146,7 +4114,6 @@ $(document).on('click', '#permissionupdate', function () {
         data: { "entryid": pentryid, csrf: $("input[name='csrf']").val(), "memgrpids": access_granted_memgrps },
         success: function (result) {
 
-            console.log("resultt", result)
             if (result) {
 
                 notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " > Entry Updated Successfully</p ></div ></div ></li></ul> `;
@@ -4186,7 +4153,6 @@ $(document).on("click", ".Closebtn", function () {
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
     var value = $(".entryclosebutton").val()
-    console.log("value:", value);
     if (value == 1) {
         window.location.href = "/admin/entries/entrylist"
     } else if (value == 2) {

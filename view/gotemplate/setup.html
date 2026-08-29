@@ -1,0 +1,142 @@
+  
+  {{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+<section
+    class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-0  max-sm:pt-[64px] min-h-screen">
+
+    <div class=" max-sm:h-fit h-full ">
+
+            {{template "gotemplatepageheader" .}}
+        </div>
+    </section>
+    <div class="p-[30px] grid gap-[40px] max-lg:p-[16px] max-md:p-0">
+  <!-- Website Url -->
+      <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}" method="post" id="websiteUrlForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+                         <input type="hidden" name="tabname" value="setup">
+
+            <div
+                class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                <h3 class="mt-[12px]">{{$Translate.WebsiteSettings.WebsiteUrl}}</h3>
+
+                <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                    <div class="mb-[20px] last-of-type:mb-0">
+
+                        <div class="relative">
+                            <input type="text" id="websiteInput" name="websiteInput" value="{{.websitedetail.Name}}"
+                                placeholder="{{$Translate.WebsiteSettings.Subdomain}}"
+                                class="bg-white rounded p-[15px_10px] border border-solid border-[#E6E6E6] text-[13px] font-normal leading-[18px] placeholder:text-[#757575] block w-full [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                                maxlength="20">
+                            <div
+                                class="absolute right-0 top-0 h-full w-fit p-3 flex items-center bg-[#F8F9FA] text-[13px] font-normal text-[#408686] border border-solid border-[#E6E6E6] ">
+                                {{.baseurl}}</div>
+                        </div>
+                        <label id="websiteInput-error" style="display: none;" for="websiteInput"
+                            class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
+                            Website URL</label>
+                    </div>
+
+
+
+
+                    <a href="javascript:void(0);" id="websiteUrlSave"
+                        class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                        Update
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <form action="/admin/website/settingpage?webid={{.websitedetail.Id}}" method="post" id="channeltemplatform">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <input type="hidden" name="tabname" value="setup">
+            <input type="hidden" id="channel_template_data" name="channel_template_data">
+
+
+
+            <div class="" id="pills-setting" role="tabpanel" aria-labelledby="pills-setting-tab">
+                <div class="pt-[50px] max-lg:p-[16px] max-md:p-0">
+                    <div
+                        class="grid grid-cols-[1fr_2fr] gap-[16px]  mb-[67px] last-of-type:mb-0 max-lg:mb-[24px] max-[768px]:grid-cols-1">
+                        <h3 class="mt-[12px]">Channel template</h3>
+
+                        <div class="p-[30px] rounded-[12px] bg-[#F8F9FA] max-lg:p-[16px]">
+
+                            <div class="grid  grid-cols-2 max-[950px]:grid-cols-1 gap-x-[20px] gap-y-[40px]">
+
+                               
+                                {{range $i, $ch := .channelslist}}
+
+                                <!-- Channel Dropdown -->
+                                <div class="dropdown dropdown-channel" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Channel
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.channelslist}}
+                                        <li>
+                                            <a data-id="{{.Id}}" href="javascript:void(0);" data-channel="true"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.ChannelName}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+                            
+                                <!-- Template Dropdown -->
+                                <div class="dropdown dropdown-template" data-index="{{$i}}">
+                                    <a href="javascript:void(0);"
+                                        class="border border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Choose Template
+                                    </a>
+                            
+                                    <ul class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                                        {{range $.HtmlTemplate}}
+                                        <li>
+                                            <a href="javascript:void(0);" data-channel="false"
+                                                class="block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                                                {{.}}
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                    </ul>
+                                </div>
+                            
+                            {{end}}
+                            
+
+                            
+
+
+                            </div>
+
+                            <p id="Channeltemplate-error" class="text-[#F26674] font-normal text-xs mt-2 hidden"></p>
+
+
+                            <a href="javascript:void(0);" id="channeltemplateupdate"
+                                class="text-[14px] leading-none font-normal text-center py-[8px] px-[20px] h-[34px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-fit whitespace-nowrap text-white bg-[#10A37F] hover:bg-[#148569] mt-[20px] ms-auto">
+                                Update
+                            </a>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+        </form>
+        <input type="hidden" id="template_json" value="{{ .TemplateTypeJSON }}">
+        <input type="hidden" id="social_link_json" value="{{ .sociallink }}">
+{{template "footer" .}}
+    <script src="/public/js/gotemplate/template_settings.js"></script>
+
+    {{template "footerclose" .}}

@@ -1,0 +1,289 @@
+{{template "template-header" .}}
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full  ml-auto pt-[48px] min-h-screen  overflow-hidden">
+
+    {{template "webpageheader" .}}
+
+    <div class="px-[16px] sm:px-[28px] 2xl:px-10 py-6">
+        <div class="flex md:space-x-[24px]  md:flex-row flex-col-reverse justify-between items-center mb-6 sm:mb-[32px] xl:mb-[56px]">
+            <div class="flex flex-col space-y-[24px] items-start max-md:mt-[24px]">
+                <div class="flex flex-col space-y-[16px] max-w-[664px]">
+                    <h3 class="text-[32px] lg:text-[44px] text-[#202224] font-bold leading-[55px] mb-0">
+                        Build Perfect Content Structures with Blocks</h3>
+                    <p class="text-[#202224] text-xl font-light mb-0">Form the foundation for creating professional, organized, and visually stunning layouts. SpurtCMS’s Blocks make it simple to design and structure your content exactly how you want.</p>
+                </div>
+                <a href="/admin" class="bg-[#10A37F] hover:bg-[#148569] rounded-[3px] h-9 px-[16px] text-white font-medium text-base flex justify-center items-center">Build with Blocks</a>
+            </div>
+            <div>
+                <img src="/public/img/banner-2.svg">
+            </div>
+        </div>
+        <div class="flex flex-col space-y-[21px] mb-[24px] sm:mb-10 xl:mb-20">
+            <div>
+
+                <ul class=" flex-nowrap border-0 flex space-x-[16px]  overflow-auto  [&amp;::-webkit-scrollbar]:h-0">
+                    <li class="nav-item list-none">
+                        <a href="javascript:void(0)" id="home-tab" onmouseover="hovertab(event, 'home')" class="p-[16px] bg-[#F8F8F8] rounded-lg block nav-link-tab text-[#202224] m-0 h-full relative group hover:bg-white border-transparent hover:border-[#EDEDED] border pb-[49px] min-w-[256px] lg:min-w-auto active">
+                            <div class="flex flex-col space-y-[5px]">
+                                <h3 class="text-[#202224] text-2xl font-bold">Personalize</h3>
+                                <p class="text-[#202224] text-base font-light">Tailor your content layout with flexible blocks to suit your needs.</p>
+                            </div>
+                            <!-- <div class="absolute bottom-4 left-4 flex items-center space-x-[8px] group-hover:opacity-100 opacity-0">
+                                <p class="text-[#00ACD7] text-sm font-light">Use Blocks</p>
+                                <img src="/public/img/arrow-right.svg" alt="">
+                            </div> -->
+                        </a>
+                    </li>
+                    <li class="nav-item list-none" role="presentation">
+                        <a href="javascript:void(0)" id="home-tab2" onmouseover="hovertab(event, 'home2')" class="p-[16px] bg-[#F8F8F8] rounded-lg block nav-link-tab text-[#202224] relative group m-0 h-full hover:bg-white border-transparent hover:border-[#EDEDED] border pb-[49px] min-w-[256px] lg:min-w-auto">
+                            <div class="flex flex-col space-y-[5px]">
+                                <h3 class="text-[#202224] text-2xl font-bold">Interactive</h3>
+                                <p class="text-[#202224] text-base font-light">Combine text, images, and media to create engaging, interactive pages.</p>
+                            </div>
+                            <!-- <div class="absolute bottom-4 left-4 flex items-center space-x-[8px] group-hover:opacity-100  opacity-0 ">
+                                <p class="text-[#00ACD7] text-sm font-light">Use Blocks</p>
+                                <img src="/public/img/arrow-right.svg" alt="">
+                            </div> -->
+                        </a>
+                    </li>
+                    <li class="nav-item list-none" role="presentation">
+                        <a href="javascript:void(0)" id="home-tab3" onmouseover="hovertab(event, 'home3')" class="p-[16px] bg-[#F8F8F8] rounded-lg  block nav-link-tab text-[#202224] relative group m-0 h-full hover:bg-white border-transparent hover:border-[#EDEDED] border pb-[49px] min-w-[256px] lg:min-w-auto">
+                            <div class="flex flex-col space-y-[5px]">
+                                <h3 class="text-[#202224] text-2xl font-bold">Replicable</h3>
+                                <p class="text-[#202224] text-base font-light">Save and reuse blocks for consistent design across your site effortlessly.</p>
+                            </div>
+                            <!-- <div class="absolute bottom-4 left-4 flex items-center space-x-[8px]  group-hover:opacity-100  opacity-0 ">
+                                <p class="text-[#00ACD7] text-sm font-light">Use Blocks</p>
+                                <img src="/public/img/arrow-right.svg" alt="">
+                            </div> -->
+                        </a>
+                    </li>
+                    <li class="nav-item list-none" role="presentation">
+                        <a href="javascript:void(0)" id="home-tab4" onmouseover="hovertab(event, 'home4')" class="p-[16px] bg-[#F8F8F8] rounded-lg block nav-link-tab text-[#202224] relative group m-0 h-full hover:bg-white border-transparent hover:border-[#EDEDED] border pb-[49px] min-w-[256px] lg:min-w-auto">
+                            <div class="flex flex-col space-y-[5px]">
+                                <h3 class="text-[#202224] text-2xl font-bold">Adaptive</h3>
+                                <p class="text-[#202224] text-base font-light">Blocks adapt seamlessly to any device, ensuring a perfect view everywhere.</p>
+                            </div>
+                            <!-- <div class="absolute bottom-4 left-4 flex items-center space-x-[8px] group-hover:opacity-100  opacity-0 ">
+                                <p class="text-[#00ACD7] text-sm font-light">Use Blocks</p>
+                                <img src="/public/img/arrow-right.svg" alt="">
+                            </div> -->
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content relative">
+                <!-- <div class="w-1/2  opacity-[0]  flex h-full items-center absolute left-0 hover:opacity-100 justify-start">
+                    <button class="w-2/5 sm:w-auto" id="prev"><img src="/public/img/arrow-prev.svg" alt=""></button>
+                </div>
+                <div class="w-1/2  opacity-[0]  flex h-full items-center absolute right-0 hover:opacity-100 justify-end">
+                    <button class="w-2/5 sm:w-auto" id="next">
+                        <img src="/public/img/arrow-next.svg" alt="" class="ml-auto"></button>
+                </div> -->
+                <div class="tab-pane active w-full hidden" id="home" role="tabpanel" aria-labelledby="home-tab" style="display: block;">
+                    <img src="/public/img/Blocks1.jpg" class="shadow-low rounded-lg w-full">
+                </div>
+                <div class="tab-pane  w-full hidden" id="home2" role="tabpanel" aria-labelledby="home-tab2" style="display: none;">
+                    <img src="/public/img/blog-image2.png" class="shadow-low rounded-lg w-full">
+                </div>
+                <div class="tab-pane  w-full hidden" id="home3" role="tabpanel" aria-labelledby="home-tab3" style="display: none;">
+                    <img src="/public/img/Blocks1.jpg" class="shadow-low rounded-lg w-full">
+                </div>
+                <div class="tab-pane  w-full hidden" id="home4" role="tabpanel" aria-labelledby="home-tab4" style="display: none;">
+                    <img src="/public/img/Blocks1.jpg" class="shadow-low rounded-lg w-full">
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col space-y-[32px] mb-[24px] sm:mb-10 xl:mb-20">
+            <div class="w-full">
+                <h3 class="text-center text-[32px] lg:text-[44px] text-[#202224] font-bold leading-normal lg:leading-[55px] mb-0">
+                    Infuse Your Content with Captivating and Immersive Effects
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-1.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Customizable Layouts</h3>
+                            <p class="text-[#202224] text-base font-light">Design pages your way with fully adjustable blocks. Arrange text, images, or videos into testimonials, galleries, or timelines effortlessly.</p>
+                        </div>
+                    </div>
+                    <div class="">
+                        <img src="/public/img/text-blocks1.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-6.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Drag-and-Drop Simplicity</h3>
+                            <p class="text-[#202224] text-base font-light">No technical expertise needed—just drag, drop, and position your blocks to create seamless layouts in seconds.</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <img src="/public/img/text-blocks2.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-5.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Reusable Blocks</h3>
+                            <p class="text-[#202224] text-base font-light">Save time and maintain consistency by reusing pre-designed blocks. Perfect for frequently used sections like testimonials or headers.</p>
+                        </div>
+                    </div>
+                    <div >
+                        <img src="/public/img/text-blocks3.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg ">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-4.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Dynamic Content Integration</h3>
+                            <p class="text-[#202224] text-base font-light">Bring your pages to life with text, images, audio, or video blocks. Update galleries or event highlights dynamically without extra effort.</p>
+                        </div>
+                    </div>
+                    <div >
+                        <img src="/public/img/text-blocks4.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg ">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-3.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Custom Block Creation</h3>
+                            <p class="text-[#202224] text-base font-light">Need something unique? Build your own blocks with tailored styles, layouts, and content types to match your specific requirements.</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <img src="/public/img/text-blocks5.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[32px] rounded-lg ">
+                    <div class="flex flex-col space-y-[16px] items-start pr-8">
+                        <div class="w-8">
+                            <img src="/public/img/text-2.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <h3 class="text-xl text-[#202224] font-medium">Responsive and Ready</h3>
+                            <p class="text-[#202224] text-base font-light">Every block is optimized for all devices. Whether it’s viewed on a desktop, tablet, or mobile, your content always looks perfect.</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <img src="/public/img/text-blocks6.png" alt="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="flex flex-col space-y-[32px] mb-[24px] sm:mb-10 xl:mb-20">
+            <div class="w-full">
+                <h3 class="text-center text-[32px] lg:text-[44px] text-[#202224] font-bold leading-normal lg:leading-[55px] mb-0 max-w-[800px] mx-auto">
+                    Design content layouts that readers love to explore
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-[24px]">
+                <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[56px] rounded-lg">
+                    <div class="flex flex-col space-y-[12px] items-start pr-8">
+                        <h3 class="text-xl text-[#202224] font-medium">Layouts with the Flexibility You Aspire</h3>
+                        <p class="text-[#202224] text-base font-light">IRigid designs limit creativity. With SpurtCMS Blocks, craft content structures that adapt to your unique vision effortlessly.</p>
+                    </div>
+                    <div >
+                        <img src="/public/img/store-docs.png" alt="">
+                    </div>
+                </div>
+                <div class="p-8  bg-[#F8F8F8] flex flex-col space-y-[80px] justify-between items-start rounded-lg ">
+                    <div class="max-w-[85px]">
+                        <img src="/public/img/store-docs-logo.png" alt="" class="w-full">
+                    </div>
+                    <div>
+                        <h6 class="text-[#202224] font-light text-3xl">“Using SpurtCMS Blocks to design our pages has made content creation intuitive and visually stunning, saving us time and effort.”</h6>
+                    </div>
+                    <div class="flex flex-col space-y-[2px] items-start">
+                        <h3 class="text-sm text-[#202224] font-medium">Alex Carter</h3>
+                        <p class="m-0 font-light text-sm text-[#202224]">Content Strategist,Creative Hub</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col space-y-[32px] mb-[24px] sm:mb-10 xl:mb-20">
+            <div class="w-full max-w-[664px]">
+                <h3 class="text-[32px] lg:text-[44px] text-[#202224] font-bold leading-normal lg:leading-[55px] mb-0 ">
+                    Blocks for Every Need, All in One Place
+                </h3>
+            </div>
+            <div class="flex flex-col space-y-[24px]">
+                <div class="p-8 pb-0 bg-[#F8F8F8] flex flex-col space-y-[40px] rounded-lg">
+                    <div class="flex flex-col space-y-[16px]">
+                        <div class="w-8">
+                            <img src="/public/img/wikkis-docs1.png" class="w-full">
+                        </div>
+                        <div class="flex flex-col space-y-[12px] items-start">
+                            <h3 class="text-[#202224] text-lg font-bold mb-0">Collaborate seamlessly and design together.
+                            <p class="text-[#202224] font-light text-base m-0"> Say goodbye to rigid layouts and disorganized content—SpurtCMS Blocks help you structure and showcase everything effortlessly.</p>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <img src="/public/img/Blocks1.jpg" alt="" class="w-full shadow-low rounded-lg">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-[24px]">
+                    <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[56px] rounded-lsg">
+                        <div class="flex flex-col space-y-[12px] items-start pr-8">
+                            <h3 class="text-xl text-[#202224] font-medium">Every Content Block, at Your Command</h3>
+                            <p class="text-[#202224] text-base font-light">Creating impactful content shouldn’t feel restrictive. With SpurtCMS, organize and design your layouts with blocks that adapt to your needs effortlessly.</p>
+                        </div>
+                        <div >
+                            <img src="/public/img/store-docs.png" alt="">
+                        </div>
+                    </div>
+                    <div class="p-8  bg-[#F8F8F8] flex flex-col space-y-[80px] justify-between items-start rounded-lg">
+                        <div class="max-w-[85px]">
+                            <img src="/public/img/store-docs-logo.png" alt="" class="w-full">
+                        </div>
+                        <div>
+                            <h6 class="text-[#202224] font-light text-3xl">“SpurtCMS Blocks have transformed the way we manage content—simple, flexible, and beautifully organized.”</h6>
+                        </div>
+                        <div class="flex flex-col space-y-[2px] items-start">
+                            <h3 class="text-sm text-[#202224] font-medium">Priya Mehta</h3>
+                            <p class="m-0 font-light text-sm text-[#202224]">Digital Content Lead, VisionUpheld</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+<script>
+    function hovertab(evt, tabid) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-pane");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("nav-link-tab");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabid).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+
+{{template "template-footer" .}}

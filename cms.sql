@@ -163,19 +163,36 @@ INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, defa
 
 -- INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(48, 'Courses', 1, 1, 'current_time', 0, 47, 0, '/public/img/Course black.svg', '', 47, 'tab',1,0)
 
-INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(49, 'Integration', 1, 1, 'current_time', 0, 0, 0, '/public/img/integration.svg', '', 48, 'left',1,0)
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(49, 'Integration', 1, 1, 'current_time', 0, 0, 0, '/public/img/integration.svg', '', 62, 'left',1,0)
 
-INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(50, 'Integration', 1, 1, 'current_time', 0, 49, 0, '/public/img/integration.svg', '', 49, 'tab',1,0)
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(50, 'Integration', 1, 1, 'current_time', 0, 49, 0, '/public/img/integration.svg', '', 63, 'tab',1,0)
 
 -- INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(51, 'Listing', 1, 1, 'current_time', 0, 0, 0, '/public/img/Default Listing.svg', '', 50, 'left',1,0)
 
 -- INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(52, 'Listing', 1, 1, 'current_time', 0, 51, 0, '/public/img/Default Listing.svg', '', 51, 'tab',1,0)
 
-INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(53, 'Website', 1, 1, 'current_time', 0, 0, 0, '/public/img/Default state.svg', '', 52, 'left',1,0)
+-- INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(53, 'Website', 1, 1, 'current_time', 0, 0, 0, '/public/img/Default state.svg', '', 52, 'left',1,0)
 
-INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(54, 'Website', 1, 1, 'current_time', 0, 53, 0, '/public/img/Default state.svg', '', 53, 'tab',1,0)
+-- INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(54, 'Website', 1, 1, 'current_time', 0, 53, 0, '/public/img/Default state.svg', '', 53, 'tab',1,0)
 
-UPDATE tbl_modules set module_name='Website' WHERE  id IN (53,54)
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(55, 'Browse theme', 1, 1, '2023-03-14 11:09:12', 0, 0, 0, '/public/img/group.svg', 'Create groups and categorize members into various groups like Elite Members or Favorite Members', 55, 'left',0,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(56, 'Browse theme', 1, 1, '2023-03-14 11:09:12', 0, 55, 0, '/public/img/Default state.svg', '', 56, 'tab',1,0)
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(57, 'Pages', 1, 1, '2026-03-30 12:13:12', 0, 0, 0, '/public/img/pages-theme.svg', 'New Pages Menu integration', 57, 'left',1,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(58, 'Pages', 1, 1, '2026-03-30 12:13:12', 0, 57, 0, '/public/img/pages-theme.svg', 'New Pages Menu integration', 59, 'tab',1,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(59, 'SEO', 1, 1, '2026-03-30 12:13:12', 0, 0, 0, '/public/img/seo-theme.svg', 'New SEO Menu integration', 62, 'left',1,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(60, 'SEO', 1, 1, '2026-03-30 12:13:12', 0, 59, 0, '/public/img/menu-theme.svg', 'New SEO Menu integration', 63, 'tab',1,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(61, 'Menu', 1, 1, '2026-03-30 12:13:12', 0, 0, 0, '/public/img/seo-theme.svg', 'New  Menu integration', 60, 'left',1,0);
+
+INSERT INTO tbl_modules(id, module_name, is_active, created_by, created_on, default_module, parent_id, assign_permission, icon_path, description, order_index, menu_type,full_access_permission,group_flg) VALUES(62, 'Menu', 1, 1, '2026-03-30 12:13:12', 0, 61, 0, '/public/img/menu-theme.svg', 'New  Menu integration', 61, 'tab',1,0);
+
+
+-- UPDATE tbl_modules set module_name='Website' WHERE  id IN (53,54)
 --Default Module Permission Routes
 
 INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (1, '/dashboard', 'Dashboard', '', 23, 1, 'current_time', 1, 0, 1, 1, 'dashboard')
@@ -242,7 +259,7 @@ INSERT INTO tbl_module_permissions(id, route_name, display_name, description, mo
 
 INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES(35, '/templates', 'Template', 'Give full access to the template', 36, 1, 'current_time', 1, 0, 1, 2, 'template')
 
-INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (36, '/blocks', 'Blocks', 'Give full access to the blocks', 34, 1, 'current_time', 1, 0, 1, 2, 'blocks')
+-- INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (36, '/blocks', 'Blocks', 'Give full access to the blocks', 34, 1, 'current_time', 1, 0, 1, 2, 'blocks')
 
 -- INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (37, '/graphql/playground', 'Graphql Playground', 'Give full access to the graphql playground', 31, 1, 'current_time', 1, 0, 1, 2, 'graphqlplayground')
 
@@ -260,10 +277,21 @@ INSERT INTO tbl_module_permissions(id,route_name, display_name, description, mod
 
 INSERT INTO tbl_module_permissions(id,route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (44,'/integration', 'Integration', 'Give full access to the Integration', 50, 1, 'current_time', 1, 0, 1, 2, 'integration')
 
+
+
 -- DELETE FROM tbl_module_permissions WHERE id = 45;
 -- INSERT INTO tbl_module_permissions(id,route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (45,'/listing', 'Listing', 'Give full access to the Listing', 52, 1, 'current_time', 1, 0, 1, 2, 'listing')
 
-INSERT INTO tbl_module_permissions(id,route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (46,'/website', 'Website', 'Give full access to the Content Website', 54, 1, 'current_time', 1, 0, 1, 2, 'website')
+-- INSERT INTO tbl_module_permissions(id,route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (46,'/website', 'Website', 'Give full access to the Content Website', 54, 1, 'current_time', 1, 0, 1, 2, 'website')
+
+INSERT INTO tbl_module_permissions(id,route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (47,'/browsetheme', 'Browse theme', 'Give full access to the Content Website', 56, 1, '2023-03-14 11:09:12', 1, 0, 1, 2, 'browsetheme')
+
+INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (48, '/pages', 'View', 'Give view access to the Pages', 58, 1, '2023-03-14 11:09:12', 0, 0, 1, 1, 'view')
+
+INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (49, '/seo', 'View', 'Give view access to the SEO', 60, 1, '2023-03-14 11:09:12', 0, 0, 1, 1, 'view')
+
+INSERT INTO tbl_module_permissions(id, route_name, display_name, description, module_id, created_by, created_on, full_access_permission, parent_id, assign_permission,order_index, slug_name) VALUES (50, '/menu', 'View', 'Give view access to the Menu', 62, 1, '2023-03-14 11:09:12', 0, 0, 1, 1, 'view')
+
 
 
 --default ai prompts
@@ -319,7 +347,7 @@ INSERT INTO tbl_countries (id, country_code, country_name) VALUES (1, 'AF', 'Afg
 
 -- truncate table tbl_go_templates
 
-INSERT INTO tbl_go_templates (id,template_name,template_image,is_deleted,channel_slug_name,template_module_name,created_on,template_description,tenant_id,created_by) VALUES (1,'Content Verse','/public/img/content_verse.jpeg',0,'blog','Blog','current_time','A content verse template is a structured outline that guides the arrangement and style of each section or verse within digital content, ensuring clarity and consistency.','1',1)
+INSERT INTO tbl_go_templates (id,template_name,template_image,is_deleted,channel_slug_name,template_module_name,created_on,template_description,tenant_id,created_by) VALUES (1,'Content Verse','/websites/public/img/contentverse.jpg',0,'blog','Blog','current_time','A content verse template is a structured outline that guides the arrangement and style of each section or verse within digital content, ensuring clarity and consistency.','1',1)
 -- truncate table tbl_websites
 INSERT INTO tbl_websites(id,name,channel_names,template_id,tenant_id,is_deleted,created_by,created_on)values(1,'base_url','Blog',1,'1',0,1,'current_time')
 

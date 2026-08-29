@@ -70,7 +70,6 @@ $(document).on("click", "#lg-btn", function () {
 function validateRole() {
 
     let userRole = $("#user_roleid").val().trim();
-    console.log("sadjgas", userRole);
 
     let errorMsg = $("#user_role_error");
 
@@ -120,17 +119,6 @@ $(document).ready(async function () {
 
         spurtdata = event.detail
 
-        // let checkedtechstacklogos = $('.techstack:checked').map(function () {
-        //     return $(this).val();
-        // }).get().join(',');
-
-        // if (!checkedtechstacklogos) {
-        //     $("#techstackerr").show()
-        //     $('a[href="#addCategories"]').tab('show');
-        //     return;
-        // } else {
-        //     $("#techstackerr").hide()
-        // }
 
 
         if ($("#savetype").val() == "draft") {
@@ -148,7 +136,6 @@ $(document).ready(async function () {
                 var eid = $("#eid").val()
 
             }
-            console.log("pageno", pageno);
 
             var urlredirect = $("#dltCancelBtn").data('save')
 
@@ -181,7 +168,6 @@ $(document).ready(async function () {
 
                     spurtdata.title = "Untitled Entries"
 
-                    console.log("The string contains HTML elements");
                 } else {
 
                     var wordsArray = spurtdata.title.split(' ');
@@ -190,42 +176,41 @@ $(document).ready(async function () {
 
                     spurtdata.title = first30Words.join(' ');
 
-                    console.log("The string does not contain HTML elements");
                 }
                 Getseodetails()
                 ChannelFieldsGet()
                 authername = $("#author").val()
                 createtime = $("#cdtime").val()
                 publishtime = $("#publishtime").val()
-                // createtime = createtime.replace(" ", "T")
-                // publishtime = publishtime.replace(" ", "T")
+                createtime = createtime.replace(" ", "T")
+                publishtime = publishtime.replace(" ", "T")
                 readingtime = $("#readingtime").val()
                 orderindex = $("#orderindex").val()
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
                 extxt = $("#extxt").val()
                 languageid = $("#languageid").val()
-                let slug = $('#metaslug').val()
-                    .toLowerCase()
-                    .trim()
-                    .replace(/\s+/g, '-');
-                if (slug == "") {
-                    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-');
-                }
+                              let slug = $('#metaslug').val()
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+                 if (slug == "" ){
+                     slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+                 }
                 let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
 
+                if (!entryslugduplicate){
+                   $("#metaslug").val(slug)
 
-                if (!entryslugduplicate) {
-                    $("#metaslug").val(slug)
-
-                    $("#mslug-input-error").text("Slug Name Already Exits").show()
-                    $('a[href="#seo"]').tab('show');
-                    return;
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
                 }
 
-                let mandoryFlag = channelfieldvalidation()
+                 let mandoryFlag = channelfieldvalidation()
 
-                if (!mandoryFlag) {
+                if (!mandoryFlag){
 
                     $('.editor-tabs3')
                         .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
@@ -233,23 +218,26 @@ $(document).ready(async function () {
                 }
 
 
-                if ((mandoryFlag) && (entryslugduplicate)) {
+                 if ((mandoryFlag) && (entryslugduplicate)) {
 
-                    $.ajax({
-                        url: "/admin/entries/draftentry/" + eid,
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            "id": $("#slchannel").attr('data-id'), "cname": channelname,
-                            "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html,
-                            "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val(),
-                        },
-                        success: function (result) {
-                            window.location.href = homeurl;
-                        }
-                    })
-                }
+
+
+
+                $.ajax({
+                    url: "/admin/entries/draftentry/" + eid,
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "id": $("#slchannel").attr('data-id'), "cname": channelname,
+                        "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html,
+                        "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()
+                    },
+                    success: function (result) {
+                        window.location.href = homeurl;
+                    }
+                })
             }
+        }
         }
 
         if ($("#savetype").val() == "savePreview") {
@@ -267,7 +255,6 @@ $(document).ready(async function () {
                 var eid = $("#eid").val()
 
             }
-            console.log("pageno", pageno);
 
             Getselectedcatagories()
             if (categoryIds.length == 0) {
@@ -284,7 +271,6 @@ $(document).ready(async function () {
 
                     spurtdata.title = "Untitled Entries"
 
-                    console.log("The string contains HTML elements");
                 } else {
 
                     var wordsArray = spurtdata.title.split(' ');
@@ -293,7 +279,6 @@ $(document).ready(async function () {
 
                     spurtdata.title = first30Words.join(' ');
 
-                    console.log("The string does not contain HTML elements");
                 }
                 Getseodetails()
                 ChannelFieldsGet()
@@ -315,27 +300,27 @@ $(document).ready(async function () {
                 } else {
                     homeurl = "/admin/entries/entrylist/" + $("#slchannel").attr('data-id') + "?page=" + pageno;
                 }
-                let slug = $('#metaslug').val()
-                    .toLowerCase()
-                    .trim()
-                    .replace(/\s+/g, '-');
-                if (slug == "") {
-                    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-');
-                }
+                              let slug = $('#metaslug').val()
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+if (slug == "" ){
+    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+}
                 let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
 
+                if (!entryslugduplicate){
+                 $("#metaslug").val(slug)
 
-                if (!entryslugduplicate) {
-                    $("#metaslug").val(slug)
-
-                    $("#mslug-input-error").text("Slug Name Already Exits").show()
-                    $('a[href="#seo"]').tab('show');
-                    return;
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
                 }
 
-                let mandoryFlag = channelfieldvalidation()
+                 let mandoryFlag = channelfieldvalidation()
 
-                if (!mandoryFlag) {
+                if (!mandoryFlag){
 
                     $('.editor-tabs3')
                         .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
@@ -343,28 +328,28 @@ $(document).ready(async function () {
                 }
 
 
-                if ((mandoryFlag) && (entryslugduplicate)) {
+                 if ((mandoryFlag) && (entryslugduplicate)) {
+                $.ajax({
+                    url: "/admin/entries/draftentry/" + eid,
+                    type: "POST",
+                    dataType: "json",
+                    data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()},
+                    success: function (result) {
 
-                    $.ajax({
-                        url: "/admin/entries/draftentry/" + eid,
-                        type: "POST",
-                        dataType: "json",
-                        data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 0, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val(), },
-                        success: function (result) {
+                        var anchor = document.createElement('a');
+                        anchor.href = result.previewurl; // Replace with your desired link
+                        anchor.target = '_blank'; // Open in a new tab/window
+                        document.body.appendChild(anchor);
+                        anchor.click(); // Simulate a click on the anchor
 
-                            var anchor = document.createElement('a');
-                            anchor.href = result.previewurl; // Replace with your desired link
-                            anchor.target = '_blank'; // Open in a new tab/window
-                            document.body.appendChild(anchor);
-                            anchor.click(); // Simulate a click on the anchor
+                        window.location.href = homeurl;
 
-                            window.location.href = homeurl;
+                    }
+                })
 
-                        }
-                    })
-                }
 
             }
+        }
         }
 
         if ($("#savetype").val() == "publish") {
@@ -408,7 +393,6 @@ $(document).ready(async function () {
 
                     spurtdata.title = "Untitled Entries"
 
-                    console.log("The string contains HTML elements");
                 } else {
 
                     var wordsArray = spurtdata.title.split(' ');
@@ -417,7 +401,6 @@ $(document).ready(async function () {
 
                     spurtdata.title = first30Words.join(' ');
 
-                    console.log("The string does not contain HTML elements");
                 }
 
                 Getseodetails()
@@ -425,8 +408,8 @@ $(document).ready(async function () {
                 authername = $("#author").val()
                 createtime = $("#cdtime").val()
                 publishtime = $("#publishtime").val()
-                // createtime = createtime.replace(" ", "T")
-                // publishtime = publishtime.replace(" ", "T")
+                createtime = createtime.replace(" ", "T")
+                publishtime = publishtime.replace(" ", "T")
                 readingtime = $("#readingtime").val()
                 // sortorder = $("#article").val()
                 tagname = $("#tagname").val()
@@ -441,32 +424,30 @@ $(document).ready(async function () {
                 }
 
                 let slug = $('#metaslug').val()
-                    .toLowerCase()
-                    .trim()
-                    .replace(/\s+/g, '-');
-                if (slug == "") {
-                    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-');
-                }
+                    .toLowerCase()         
+                    .trim()                
+                    .replace(/\s+/g, '-');  
+if (slug == "" ){
+    slug = (spurtdata.title).toLowerCase().trim().replace(/\s+/g, '-'); 
+}
                 let entryslugduplicate = PageSlugDuplicate(slug, eid)
+                
 
+                if (!entryslugduplicate){
+            $("#metaslug").val(slug)
 
-                if (!entryslugduplicate) {
-                    $("#metaslug").val(slug)
-
-                    $("#mslug-input-error").text("Slug Name Already Exits").show()
-                    $('a[href="#seo"]').tab('show');
-                    return;
+                $("#mslug-input-error").text("Slug Name Already Exits").show()
+            $('a[href="#seo"]').tab('show');
+            return;
                 }
-
                 let mandoryFlag = channelfieldvalidation()
 
-                if (!mandoryFlag) {
+                if (!mandoryFlag){
 
                     $('.editor-tabs3')
                         .addClass('translate-x-[-378px] min-[1440px]:translate-x-[-478px] shadow-[-8px_0px_16px_0px_#0000000D]')
                         .removeClass('translate-x-[378px] min-[1440px]:translate-x-[478px] ');
                 }
-
 
                 if ((mandoryFlag) && (entryslugduplicate)) {
 
@@ -475,9 +456,9 @@ $(document).ready(async function () {
                         url: "/admin/entries/publishentry/" + eid,
                         type: "POST",
                         dataType: "json",
-                        data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val(), },
+                        data: { "id": $("#slchannel").attr('data-id'), "cname": channelname, "image": spurtdata.image, "title": spurtdata.title, "status": 1, "text": spurtdata.html, "categoryids": categoryIds, "channeldata": JSON.stringify(channeldata), "seodetails": JSON.stringify(seodetails), csrf: $("input[name='csrf']").val(), "author": authername, "createtime": createtime, "publishtime": publishtime, "readingtime": readingtime, "sortorder": "", "tagname": tagname, "extxt": extxt, "orderindex": orderindex, "ctaid": formid, "membershiplevels": mapentryandmembershiplevel, "languageid": languageid, "access_type": $('#accesstype-value').val(), "user_roleid": $('#user_roleid').val(), "membershiplevel_id": $('#membership_levelid').val()},
                         success: function (result) {
-                            window.location.href = homeurl;
+                             window.location.href = homeurl;
                         }
                     })
 
@@ -497,8 +478,7 @@ $(document).ready(async function () {
     }
     var url = window.location.href;
 
-    console.log("url:", url);
-
+    
     $('.tab-togg3R').trigger('click')
 
     $('#availblecate').trigger('click');
@@ -549,9 +529,9 @@ $(document).ready(async function () {
                 data: { "id": id, csrf: $("input[name='csrf']").val() },
                 success: function (result) {
                     editresult = result
-                    // var currentDate = new Date();
-                    // var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                    var formattedDate = $("#cdtime").val();
+                    var currentDate = new Date();
+                    var formattedDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
 
 
                     $('#metatitle').val(result.Entries.MetaTitle)
@@ -607,10 +587,19 @@ $(document).ready(async function () {
                     }
                     if (result.Createtime != "") {
 
-                        $("#cdtime").val(result.Createtime)
-                        if (document.querySelector("#cdtime")._flatpickr) {
-                            document.querySelector("#cdtime")._flatpickr.setDate(result.Createtime);
+                        const date = new Date(result.Createtime);
+                        function formatDate(date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                            return `${year}-${month}-${day} ${hours}:${minutes}`;
                         }
+                        const datetime = formatDate(date);
+
+                        $("#cdtime").val(datetime)
 
                     } else {
 
@@ -620,10 +609,22 @@ $(document).ready(async function () {
 
                     if (result.Publishedtime != "") {
 
-                        $("#publishtime").val(result.Publishedtime)
-                        if (document.querySelector("#publishtime")._flatpickr) {
-                            document.querySelector("#publishtime")._flatpickr.setDate(result.Publishedtime);
+                        const date = new Date(result.Publishedtime);
+                        function formatDate(date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                            return `${year}-${month}-${day} ${hours}:${minutes}`;
                         }
+                        const datetime = formatDate(date);
+
+
+
+                        $("#publishtime").val(datetime)
+
 
                     } else {
 
@@ -669,7 +670,7 @@ $(document).ready(async function () {
                     if (result.Entries.CtaId != 0) {
 
                         entryctaid = result.Entries.CtaId
-                        console.log("ctacheck", result.Entries.CtaId)
+                        
 
                     }
 
@@ -701,31 +702,31 @@ $(document).ready(async function () {
 
                     if (result.Entries.TblChannelEntryField != null) {
                         result.Entries.TblChannelEntryField.forEach(function (field) {
-
-                            $(`#${field.FieldId}`).val(field.FieldValue)
+                              $(`#${field.FieldId}`).val(field.FieldValue)
                             $(`#${field.FieldId}`).attr('data-id', field.Id)
+
+
                             $(`#fileupload${field.FieldId}`).val(field.FieldValue)
                             $(`#fileupload${field.FieldId}`).attr('data-id', field.Id)
-
                             $(`#fieldimageBase64_${field.FieldId}`).val(field.FieldValue)
                             $(`#fieldimageBase64_${field.FieldId}`).attr('data-id', field.Id)
-
                             if ((field.FieldName == "File Upload") && (field.FieldValue != "")) {
 
                                 $('.fileuploaddiv').addClass('hidden')
+                                $('.zip-preview').removeClass('hidden')
 
                             }
 
-
-                            if (field.FieldTypeId === 18 && field.FieldValue) {
+                                 
+                              
+                              
+                              if (field.FieldTypeId === 19 && field.FieldValue) {
                                 const fileName = field.FieldValue.split("/").pop();
-
+                              
                                 $("#uploadBtn_" + field.FieldId).text(fileName).attr("data-id", fileName)
-                                $(".uploadimagecancelbtn_" + field.FieldId).removeClass('hidden')
-
-                            }
-
-
+                                  $(".uploadimagecancelbtn_"+ field.FieldId).removeClass('hidden')
+                             
+                              }
                         })
                     }
                     var radval = $('.radioval').val()
@@ -853,7 +854,7 @@ $(document).on('click', '.tab-togg55', function () {
 
     $('.ctacard').each(function () {
         if ($(this).attr('data-id') == entryctaid) {
-            console.log("ctacheck")
+         
             $(this).find('h5').removeClass('text-[#717171]').addClass('text-[#10A37F]')
             $(this).removeClass('border-[#EDEDED]')
             $(this).addClass('border-[#10A37F]')
@@ -958,14 +959,14 @@ $(document).on('click', '.select-chn', function () {
             $('.initaildatadiv').addClass('hidden')
             if (result.ctalist !== null && result.ctalist !== "" && result.ctalist.length != 0) {
 
-                console.log(result.ctalist, "listcta")
+         
 
                 for (let x of result.ctalist) {
-                    console.log("x", x.Id)
+              
                     let str = `<div class="flex flex-col items-center space-y-2  border-[1px]  p-[12px] rounded-[4px] cursor-pointer ctacard" data-id="${x.Id}">`;
 
                     if (x.FormImagePath != "") {
-                        console.log("jjjjiii")
+                      
                         str += `   <img src="${x.FormImagePath}" alt="meta title">`;
                     }
 
@@ -1114,7 +1115,7 @@ $(document).ready(function () {
 
     updateCategoryCount();
     if ($('.selectcheckbox:checked').length === 0) {
-        console.log("lll")
+   
         $('.itemselecteddiv').addClass("hidden");
     }
 });
@@ -1131,10 +1132,9 @@ function updateCategoryCount() {
 
 $(document).on('click', '.sl-cat', function () {
 
-    console.log("removesdfdsfdsfdsfd")
     cid = $(this).attr("data-id")
     $(this).remove()
-    console.log("cid", cid)
+
     $("#Check" + cid).prop("checked", false)
     $("#Check" + cid).parents("li").removeClass("hidden")
     if ($(".selected-cat").find('li').length === 0) {
@@ -1237,56 +1237,14 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                 </div>`)
         }
         if (x.MasterFieldId == 18) {
-            $(".add-fl").append(`
-        <div class="mb-[24px] last-of-type:mb-0 getvalue" id="fieldWrap_${x.FieldId}" mandatory-fl="${x.Mandatory}">
-          
-          <label  
-            class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-channelfield="${x.MasterFieldId}" data-id="${x.FieldId}">
-            ${x.FieldName}
-          </label>
-      
-          <div class="image-upload-wrapper relative flex items-center justify-between">
-            
-            <label
-              for="fieldimage_${x.FieldId}"
-              id="uploadBtn_${x.FieldId}"
-              class=" p-[8px_12px] text-[14px] w-full flex justify-center items-center rounded cursor-pointer gap-1 bg-[#F9F9F9] border border-[#E6E6E6] pr-[40px] uploadimagebtn" data-id="${x.FieldId}">
-              Upload Image
-            </label>
-      
-            <button
-              type="button"
-              class="hidden absolute right-[16px] cursor-pointer uploadimagecancelbtn uploadimagecancelbtn_${x.FieldId}">
-              <img src="/public/img/close-toast.svg" alt="">
-            </button>
-            <input type="hidden" class="fieldimageBase64input" id="fieldimageBase64_${x.FieldId}" name="fieldimageBase64_${x.FieldId}">
-          <input type="file" data-id="${x.FieldId}" id="fieldimage_${x.FieldId}" class="hidden fieldimageupload" accept=".png,.jpg,.jpeg,.svg">
-      
-          </div>
-      
-       
-          <label
-            id="imageErr_${x.FieldId}"
-            class="text-[#f26674] font-normal text-xs error image-err hidden manerr">
-            *${languagedata?.Channell?.errmsg}
-          </label>
-      
-        </div>
-      `);
-
-
-        }
-
-        if (x.MasterFieldId == 19) {
             $(".add-fl").append(`<div class="mb-[24px] last-of-type:mb-0 getvalue" mandatory-fl="${x.Mandatory}">
-                                <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-channelfield="${x.MasterFieldId}" data-id="${x.FieldId}">${x.FieldName}</label>
+                                <label class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}">${x.FieldName}</label>
                                 <button data-editor="${x.FieldName}${x.FieldId}" data-fieldname="${x.FieldName}" data-fieldid="${x.FieldId}" class="addlogbutton editorfield p-[8px_12px] w-full flex justify-center items-center relative  rounded cursor-pointer gap-1 bg-[#F9F9F9] hover:bg-[#e0e0e0] border-[#E6E6E6] border border-solid">
                                 Add  ${x.FieldName}                                                                      
                                 </button>
                                 <input type="hidden" id="${x.FieldId}" class="hiddeninput inputeditor${x.FieldId}">
                            <label   class="text-[#f26674] font-normal text-xs error manerr" id="opterrr" style="display: none">*`+ languagedata?.Channell?.errmsg + `</label> </div>`)
         }
-
         if (x.MasterFieldId == 10) {
 
             var txt = ""
@@ -1296,8 +1254,8 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
 
                 for (let y of x.OptionValue) {
                     txt += ` <a class="chk-group chk-group-label dropdown-item  lg items-center flex border-b border-solid border-[#ECECEC] last-of-type:border-b-0 !p-[8px_0] bg-white checkboxdiv">
-                                            <input type="checkbox"  id="CheckBoxOption${y.Id}" class="hidden peer checkboxid">
-                                            <label for="CheckBoxOption${y.Id}" class="checkbox-field h-[14px] relative cursor-pointer flex gap-[6px] w-full  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
+                                            <input type="checkbox"  id="Check${y.Id}" class="hidden peer checkboxid">
+                                            <label for="Check${y.Id}" class="checkbox-field h-[14px] relative cursor-pointer flex gap-[6px] w-full  items-center text-[14px] font-normal leading-[1] text-[#262626] tracking-[0.005em]
                                             before:bg-transparent before:w-[14px] before:h-[14px] before:inline-block before:relative before:align-middle before:cursor-pointer before:bg-[url('/public/img/unchecked-box.svg')] before:bg-no-repeat before:bg-contain before:-webkit-appearance-none peer-checked:before:bg-[url('/public/img/checked-box.svg')]  ">${y.Value}</label>
                                         </a>`
                 }
@@ -1401,6 +1359,51 @@ function GetDaynamicChannelFields(additionalfields) {  // get dynamic additional
                                 </div>
                             </div>`)
         }
+        if (x.MasterFieldId == 19) {
+            
+    $(".add-fl").append(`
+        <div class="mb-[24px] last-of-type:mb-0 getvalue" id="fieldWrap_${x.FieldId}" mandatory-fl="${x.Mandatory}">
+          
+          <label  
+            class="fl-name text-[14px] font-normal leading-[17.5px] text-[#262626] mb-[6px]" data-id="${x.FieldId}" data-channelfieldid="${x.MasterFieldId}">
+            ${x.FieldName}
+          </label>
+      
+          <div class="image-upload-wrapper relative flex items-center justify-between">
+            
+            <label
+              for="fieldimage_${x.FieldId}"
+              id="uploadBtn_${x.FieldId}"
+              class=" p-[8px_12px] text-[14px] w-full flex justify-center items-center rounded cursor-pointer gap-1 bg-[#F9F9F9] border border-[#E6E6E6] pr-[40px] uploadimagebtn" data-id="${x.FieldId}">
+              Upload Image
+            </label>
+      
+            <button
+              type="button"
+              class="hidden absolute right-[16px] cursor-pointer uploadimagecancelbtn uploadimagecancelbtn_${x.FieldId}">
+              <img src="/public/img/close-toast.svg" alt="">
+            </button>
+          </div>
+      
+          <input type="hidden" class="fieldimageBase64input" id="fieldimageBase64_${x.FieldId}"  name="fieldimageBase64_${x.FieldId}">
+          <input
+            type="file"
+            id="fieldimage_${x.FieldId}"
+            class="hidden fieldimageupload"
+            data-id="${x.FieldId}"
+            accept=".png,.jpg,.jpeg,.svg">
+      
+          <label
+            id="imageErr_${x.FieldId}"
+            class="text-[#f26674] font-normal text-xs error image-err hidden">
+            *${languagedata?.Channell?.errmsg}
+          </label>
+      
+        </div>
+      `);
+      
+        
+        }
     }
 }
 
@@ -1445,7 +1448,7 @@ $(document).on('change', '.fileupload', function () {
         success: function (response) {
 
 
-            console.log(response, "response")
+          
             if (!response) {
 
                 $('.file-error').removeClass("hidden").text('No response from server.');
@@ -1478,17 +1481,14 @@ $(document).on('click', '.zip-preview button', function () {
     $('.uploaded-filepath').val('')
 
 });
-
 $(document).on('click', '.uploadimagecancelbtn', function () {
     const $wrapper = $(this).closest('.image-upload-wrapper');
-
+ 
     $(this).addClass('hidden');
     $wrapper.find('.uploadimagebtn').text('Upload Image').addClass('bg-[#F9F9F9]').removeClass('bg-[#E6F0FF]')
     $wrapper.find('.fieldimageBase64input').val('');
     $wrapper.find('.fieldimageupload').val('');
 });
-
-
 // field dropdown 
 $(document).on('click', '.drop-open', function () {
 
@@ -1504,20 +1504,22 @@ function GetFieldValue() {
         obj = {
             "name": $(this).children('.fl-name').text().trim(),
             "fid": $(this).children('.fl-name').attr('data-id'),
-            "channelfieldid": $(this).children('.fl-name').attr('data-channelfield'),
             "value": $(this).find('input').val() || $(this).find('textarea').val(),
             "fieldid": $(this).find('input').attr('data-id') || $(this).find('textarea').attr('data-id'),
+            "channelfieldid": $(this).children('.fl-name').attr('data-channelfieldid')
+            
 
         }
         if ((obj.fieldid == undefined) || (obj.fieldid == '')) {
             obj.fieldid = '0'
 
         }
-
-        if ((obj.channelfieldid == undefined) || (obj.channelfieldid == '')) {
+             if ((obj.channelfieldid == undefined) || (obj.channelfieldid == '')) {
             obj.channelfieldid = '0'
 
-        }
+        }   
+
+
 
 
         channeldata.push(obj)
@@ -1540,7 +1542,7 @@ $(document).on('click', '.checkboxid', function () {
     else {
         var option = $(this).next('label').text();
         checkboxarr.splice(checkboxarr.indexOf(option), 1);
-        console.log(checkboxarr, "checkboxarray")
+       
         $(this).parents(".getvalue").find('.checkfieldid').val(checkboxarr.join(','));
         // $(this).parents(".getvalue").find('.manerr').show()
 
@@ -1568,6 +1570,8 @@ $(document).on('click', '#optionsid', function () {
 
     $('.fieldid').val(option)
     $('#selectval').text(option)
+
+    $(this).closest(".option-drop").removeClass("show")
 
     if (($('.fieldid').val()) !== '') {
 
@@ -1607,6 +1611,7 @@ function ChannelFieldsGet() {
 
     channelfieldkeyup()
 
+
 }
 
 function channelfieldvalidation() {
@@ -1619,7 +1624,7 @@ function channelfieldvalidation() {
         charallowed = $(this).data('char')
 
         if ((($(this).find('input').val() === '') && ($(this).attr('mandatory-fl') == 1)) || (($(this).find('textarea').val() === '') && ($(this).attr('mandatory-fl') == 1))) {
-            console.log("inside 1");
+    
 
 
             $(this).find('.manerr').show()
@@ -1742,7 +1747,6 @@ $(document).on("keyup", "#author", function () {
 
                     for (let x of data) {
 
-                        console.log(x);
 
                         $('.userlistdiv').append(`<li style="width: 100%"><a class="optionsid2 dropdown-item p-[12px_16px] border-b border-solid border-[#EDEDED] text-[12px] font-normal leading-[16px] text-[#152027] hover:bg-[#F5F5F5]" href="javascript:void(0);" data-id=${x.Id}>${x.FirstName} ${x.LastName}</a></li>`)
 
@@ -2097,17 +2101,17 @@ $(document).on('keyup', '.ctasearch', function () {
         $('.listempydes').removeClass('hidden')
     }
 });
-var jsDateLayout = $("#jsDateLayout").val() || "d M Y h:i K";
+
 
 flatpickr("#publishtime", {
     enableTime: true,
-    dateFormat: jsDateLayout,
+    dateFormat: "d M Y h:i K",
 });
 
 
 flatpickr("#cdtime", {
     enableTime: true,
-    dateFormat: jsDateLayout,
+    dateFormat: "d M Y h:i K",
 });
 
 
@@ -2186,7 +2190,7 @@ $(document).on('click', '.languageselect', function () {
 
     let languagename = $(this).text()
 
-    console.log("languagename::", languagename);
+  
 
     $("#selectedLanguage").text(languagename)
 
@@ -2271,20 +2275,19 @@ $(document).ready(function () {
             mode = "edit"
             if (!content) {
                 content = $(".editorinput" + fieldid).val()
-                console.log("content::", content);
+           
                 if (!content) {
                     mode = "create"
                 }
             }
         }
 
-        console.log("mode::", mode);
+      
 
         $("#customModalTitle").text(fieldname)
         $("#customModalFields").val("inputeditor" + fieldid)
         $("#customModal").fadeIn();
 
-        console.log("Button clicked, editor to load:", editorName);
 
         const container = document.getElementById('editor-container');
         container.innerHTML = '';
@@ -2314,7 +2317,7 @@ $(document).ready(function () {
         document.dispatchEvent(new CustomEvent("getHTMLnew"));
 
         function handler(event) {
-            console.log("done::", fields);
+       
 
             $("." + fields).val(event.detail.html);
             $("#customModal").fadeOut();
@@ -2340,40 +2343,8 @@ $(document).ready(function () {
     });
 });
 
-// $(document).ready(function () {
-//     let selected = $('#checkedlogos').val(); // read hidden input
-//     if (!selected) return;
 
-//     let arr = selected.split(','); // convert to array
 
-//     arr.forEach(function (val) {
-//         $(`.techstack[value="${val}"]`).prop('checked', true);
-//     });
-// });
-
-$(document).ready(function () {
-    $(".logodropdownmenu input[type='text']").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-
-        // Loop through li items except the first (search input li)
-        $(".logodropdownmenu li").not(":first").filter(function () {
-            $(this).toggle(
-                $(this).text().toLowerCase().indexOf(value) > -1
-            );
-        });
-    });
-
-    // $('.techstack').on('change', function () {
-    //     let selected = $('.techstack:checked').length;
-
-    //     if (selected > 0) {
-    //         $('#techstackerr').hide();     // Hide error
-    //     } else {
-    //         $('#techstackerr').show();     // Show error if unselected
-    //     }
-    // });
-
-});
 
 
 function PageSlugDuplicate(pagename, pageid) {
@@ -2394,7 +2365,6 @@ function PageSlugDuplicate(pagename, pageid) {
         success: function (data) {
             var result = data.trim();
 
-            console.log(result, "resulttt")
             if (result == 'true') {
                 isDuplicate = false;
             }
@@ -2404,162 +2374,76 @@ function PageSlugDuplicate(pagename, pageid) {
     return isDuplicate
 }
 
-// JAN 13
+// ===================================================
+// additional field image upload
 
-function toggleAccordionfaq(index) {
-    const content = document.getElementById(`content-${index}`);
-    const button = document.getElementById(`btn-${index}`);
-    const icon = document.getElementById(`icon-${index}`);
-    const wrapper = document.querySelector(`.accord-${index}`);
-
-    const minusSVG = `<img src="/picco_template/assets/img/accord-up.svg" alt="">`;
-    const plusSVG = `<img src="/picco_template/assets/img/accord-down.svg" alt="">`;
-
-    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-        content.style.maxHeight = '0';
-        icon.innerHTML = plusSVG;
-        button.classList.remove('active');
-        wrapper.classList.remove('active')
-    } else {
-        content.style.maxHeight = content.scrollHeight + 'px';
-        icon.innerHTML = minusSVG;
-        button.classList.add('active');
-        wrapper.classList.add('active')
-    }
-}
-
-
-//   
-
-
-
-// 
-
-async function openItem(item) {
-    if (!item) return;
-
-    const desc = item.querySelector('.desc');
-    if (!desc) return;
-
-    item.classList.add('industries-titles-right-active');
-    desc.classList.add('open-desc');
-
-    await animateHeight(desc, 0, desc.scrollHeight, OPEN_TIME);
-}
-
-
-//   
-
-async function closeItem(item) {
-    if (!item) return;
-
-    const desc = item.querySelector('.desc');
-    if (!desc) return;
-
-    await animateHeight(desc, desc.scrollHeight, 0, CLOSE_TIME);
-
-    desc.classList.remove('open-desc');
-    item.classList.remove('industries-titles-right-active');
-}
-
-// 
-
-const OPEN_TIME = 400;
-const CLOSE_TIME = 300;
-
-function animateHeight(el, from, to, duration) {
-    return new Promise(resolve => {
-        el.style.overflow = 'hidden';
-        el.style.maxHeight = from + 'px';
-        el.style.transition = `max-height ${duration}ms ease`;
-
-        requestAnimationFrame(() => {
-            el.style.maxHeight = to + 'px';
-        });
-
-        setTimeout(() => {
-            if (to !== 0) el.style.maxHeight = 'none';
-            resolve();
-        }, duration);
-    });
-}
-
-// 
-
-
-$(document).on('click', '.industries_titles_right', async function () {
-    console.log('clicked element:', this);
-
-    await openItem(this);
-    activeIndex = this;
-});
-
+// ==================================================
 
 // Handle image selection (ID-based, safe)
 $(document).on("change", ".fieldimageupload", function () {
-
+    
     const inputEl = this;
     const fieldId = inputEl.dataset.id;
     const file = inputEl.files && inputEl.files[0];
-
+  
     if (!fieldId || !file) return;
-    console.log("isahdiashid1");
-
-
+  
+ 
+  
     const hiddenInput = document.getElementById("fieldimageBase64_" + fieldId);
     const button = document.getElementById("uploadBtn_" + fieldId);
     const errorEl = document.getElementById("imageErr_" + fieldId);
     const cancelBtn = button.closest('.relative').querySelector('.uploadimagecancelbtn');
-
+  
     // Reset previous state
     errorEl.classList.add("hidden");
     errorEl.textContent = "";
     hiddenInput.value = "";
-
+  
     // Validate type
     const allowedTypes = ["image/png", "image/jpeg", "image/svg+xml"];
     if (!allowedTypes.includes(file.type)) {
-        errorEl.textContent = "Only PNG, JPG, JPEG, SVG allowed";
-        errorEl.classList.remove("hidden");
-        inputEl.value = "";
-        console.log("isahdiashid2");
-
-        return;
+      errorEl.textContent = "Only PNG, JPG, JPEG, SVG allowed";
+      errorEl.classList.remove("hidden");
+      inputEl.value = "";
+     
+      
+      return;
     }
-
+  
     // Validate size (2MB)
     const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
-        errorEl.textContent = "Image size must be less than 2MB";
-        errorEl.classList.remove("hidden");
-        inputEl.value = "";
-        console.log("isahdiashid3");
-
-        return;
+      errorEl.textContent = "Image size must be less than 2MB";
+      errorEl.classList.remove("hidden");
+      inputEl.value = "";
+     
+ 
+      return;
     }
-
+  
     // Read file as base64
     const reader = new FileReader();
     reader.onload = () => {
-        // Ensure valid base64 format
-        if (!reader.result || !reader.result.includes(";base64,")) {
-            errorEl.textContent = "Invalid image data";
-            errorEl.classList.remove("hidden");
-            console.log("isahdiashid4");
-
-            return;
-        }
-
-        hiddenInput.value = reader.result;
-
-        // Update button UI
-        button.textContent = file.name;
-        button.dataset.filename = file.name;
-        cancelBtn.classList.remove('hidden');
-        button.classList.remove("bg-[#F9F9F9]");
-        button.classList.add("bg-[#E6F0FF]");
+      // Ensure valid base64 format
+      if (!reader.result || !reader.result.includes(";base64,")) {
+        errorEl.textContent = "Invalid image data";
+        errorEl.classList.remove("hidden");
+   
+ 
+        return;
+      }
+  
+      hiddenInput.value = reader.result;
+  
+      // Update button UI
+      button.textContent = file.name;
+      button.dataset.filename = file.name;
+      cancelBtn.classList.remove('hidden');
+      button.classList.remove("bg-[#F9F9F9]");
+      button.classList.add("bg-[#E6F0FF]");
     };
-
+  
     reader.readAsDataURL(file);
-});
-
+  });
+  

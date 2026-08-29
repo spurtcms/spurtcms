@@ -1,0 +1,37 @@
+{{define "template-footer"}}
+</main>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+    <script  src="/public/js/script.js"></script>
+
+<script>
+ 
+    function myFunction() {
+        var element = document.getElementById("sk-aside");
+        element.classList.remove("max-md:-translate-x-full");
+    }
+    function closeFunction() {
+
+        var element = document.getElementById("sk-aside");
+        element.classList.add("max-md:-translate-x-full");
+    }
+
+    var hoverDiv = document.getElementById('hoverDiv');
+    if (hoverDiv) { // Check if hoverDiv exists
+        hoverDiv.addEventListener('mouseover', function () {
+            this.classList.add('hovered-class');
+        });
+    } 
+
+    </script>
+
+</html>
+{{end}}

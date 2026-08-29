@@ -1,0 +1,193 @@
+{{template "docheader" .}}
+<!--section-->
+
+<section class="position-relative">
+    <img src="/public/img/home-background.svg" alt="background"
+        class="absolute z-[-1] w-full h-full object-cover top-[-31.3%] max-[1299.5px]:top-[-34.1%] max-[768px]:top-[-56px]">
+
+    <section class="p-[64px_32px_0_32px] max-[1200px]:p-[32px_16px_16px_16px] max-[768px]:p-[32px_16px_72px_16px]">
+        <h1
+            class="text-[#202224] max-[1200px]:mb-[32px] text-[36px] leading-[45px] font-normal max-w-[1050px] mx-auto text-center mb-[64px] max-[576px]:text-[32px] ">
+            An Open Source Content Management System on Golang, Designed for Every Need and Industry.
+        </h1>
+
+        <ul
+            class=" p-[12px_24px] bg-[#FFFFFF] rounded-[22px] flex items-center space-x-[32px] w-fit mx-auto mb-[33px]   max-[768px]:space-x-[16px] max-[426px]:grid  max-[426px]:grid-cols-2 max-[426px]:gap-[16px]  max-[600px]:space-x-0 max-[600px]:gap-x-[16px]  max-[600px]:w-full max-[600px]:p-[16px]  max-[1299.5px]:mb-[32px]  justify-center max-[600px]:flex-wrap">
+            <li
+                class="flex items-center space-x-[5px] text-base leading-5 font-medium  max-[768px]:text-sm text-[#202224]  justify-center max-[600px]:min-w-[30%]">
+                <img src="/public/img/logo-go.svg" alt="check"> <span>Golang</span>
+            </li>
+            <li
+                class="flex items-center space-x-[5px] text-base leading-5 font-medium max-[768px]:text-sm text-[#202224]  justify-center max-[600px]:min-w-[30%]">
+                <img src="/public/img/logo-postgre.svg" alt="check"> <span>PostgreSQL</span>
+            </li>
+            <li
+                class="flex items-center space-x-[5px] text-base leading-5 font-medium max-[768px]:text-sm text-[#202224]  justify-center max-[600px]:min-w-[30%]">
+                <img src="/public/img/logo-grapl.svg" alt="check"> <span>GraphQL</span>
+            </li>
+            <li
+                class="max-[426px]:mt-0 max-[600px]:mt-[16px]  flex items-center space-x-[5px] text-base leading-5 font-medium max-[768px]:text-sm text-[#202224]  justify-center max-[600px]:min-w-[30%]">
+                <img src="/public/img/logo-js.svg" alt="check"> <span>JavaScript</span>
+            </li>
+
+            <li
+                class="max-[426px]:mt-0 max-[600px]:mt-[16px] flex items-center space-x-[5px] text-base leading-5 font-medium max-[768px]:text-sm text-[#202224] justify-center max-[600px]:min-w-[30%] max-[426px]:col-span-2">
+                <img src="/public/img/logo-sql.svg" alt="check"> <span>MySQL</span>
+            </li>
+        </ul>
+
+        <div class="flex items-center space-x-[40px] justify-center mb-[33px] max-[500px]:space-x-[0px] max-[500px]:space-y-[16px] max-[500px]:flex-col max-[768px]:space-x-[16px]">
+            <div class="bg-[#1F2426] rounded-[22px] p-[12px_20px] max-w-[280px] flex  items-center h-[44px] justify-between space-x-[16px] max-[768px]:p-[8px_16px]  relative min-w-[220px] min-[1200px]:w-full ">
+                <p class="text-[#FFFFFF] text-base font-light leading-none">snap install spurtcms</p>
+                <!-- <a href="javascript:void(0)" tabindex="0" class="peer focus:[&>img]:first-of-type:hidden hover:bg-[#ffffff24] w-[22px] h-[22px] grid place-items-center p-[4px] rounded-[4px] transition-all duration-300 "> -->
+                  <!-- <p class="text-white">copied</p> -->
+                  <a  tabindex="0" class="cursor-pointer peer focus:[&>img]:first-of-type:hidden hover:bg-[#ffffff24] min-w-[30px] h-[22px] absolute right-[10px] grid place-items-center p-[4px_8px] rounded-[4px] transition-all duration-300 ">
+                   
+                      <img src="/public/img/copy-snap.svg" alt="copy" id="copybtn" class="peer-focus:hidden inline-block">
+                      <div id="copiedbtn" class="flex items-center space-x-2 hidden">
+                        <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                        <img src="/public/img/feature-check.svg" alt="copied" >
+                      </div>
+                </a>
+            </div>
+
+            <a href="https://discord.com/invite/9TNgqUY24N" target="_blank" class="max-[450px]:w-full justify-center max-[768px]:p-[8px_16px] space-x-[8px] flex items-center hover:bg-[#4554e6] bg-[#5765F2] rounded-[22px] p-[14px_33px] max-w-fit h-[44px]  transition-all duration-300 min-w-[170px] " data-bs-custom-class="custom-tooltip" >
+                <img src="/public/img/connect.svg" alt="connect">
+                <p class="text-white text-base font-normal leading-5">Join Community Now</p>
+            </a>
+        </div>
+
+        <div class="max-w-[1120px] mx-auto relative">
+            <!-- <img src="/public/img/home-banner.png" alt="banner" class=" w-full object-cover object-top" id="vf"> -->
+            <video class="w-full" autoplay loop muted>
+                <source src="/public/video/All cms video web fi.mp4" type="video/mp4">
+            </video>
+            <div
+                class=" max-[576px]:static max-[576px]:translate-y-0 max-[576px]:translate-x-0 max-w-[228px] space-y-[16px] absolute translate-y-[-50%] translate-x-[-50%] max-[576px]:mx-auto max-[576px]:mt-[16px] top-2/4 left-2/4">
+                <a href="/admin"
+                    class="bg-[#171717] text-white tex-center text-base leading-5 font-normal p-[16px] block border-[#171717] rounded-[3px] border-[1px] border-solid text-center hover:bg-[#2D2D2D] transition-all duration-150">Live
+                    demo</a>
+                <a href="/documentation/"
+                    class="border-[#171717] border-[1px] border-solid text-[#171717] text-base leading-5 font-normal p-[16px] rounded-[3px] block text-center hover:bg-[#f7f3f3] bg-[#ffffff]  transition-all duration-150">Read
+                    the
+                    documentation</a>
+            </div>
+        </div>
+
+    </section>
+
+</section>
+
+<section class="max-w-[1920px] mx-auto">
+    <div class="p-[80px_80px_40px_80px] max-[1200px]:p-[16px_16px_30px_16px]  max-[768px]:pt-0">
+        <div class="flex items-center space-y-[16px] flex-col lg:mb-[80px] sm:mb-10 mb-6">
+            <h4 class="text-center text-[#202224] text-[32px] max-[576px]:text-[30px] lg:text-[44px] font-medium mb-0">Powerful Golang-Based Admin Panel + TailwindCSS Templates</h4>
+            <p class="text-[#202224] text-xl font-light leading-[29px] mb-0 text-center max-w-[800px] mx-auto max-[576px]:text-[18px]">
+              Experience the perfect combination of a robust Golang-based admin panel and the elegance of TailwindCSS. Manage your content effortlessly with advanced tools while starting your journey with beautifully designed, ready-to-use templates.</p>
+        </div>
+        <div class="flex flex-col space-y-[80px] max-[1200px]:space-y-[54px]">
+            <div class="grid grid-cols-2 max-md:grid-cols-1 items-center gap-[64px] max-[1200px]:gap-[32px]  max-[768px]:gap-[54px]">
+                <div class=" overflow-hidden md:row-start-auto row-start-1 rounded-[8px] border-[1px] border-solid border-[#D9DCE0]">
+                    <div id="carouselExample" class="carousel slide">
+                        <div class="carousel-inner">
+                          <div class="carousel-item active aspectVdo-class">
+                            <img src="/public/img/categorygrouppage.png" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                          <div class="carousel-item aspectVdo-class">
+                            <img src="/public/img/channellistpage.png" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                          <div class="carousel-item aspectVdo-class">
+                            <img src="/public/img/entrieslistpage.png" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev !opacity-100 group bg-gradient-to-l from-transparent via-[#6997FF0A] to-[#6997FF0A] bg-no-repeat bg-[length:auto] w-[64px] " type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon w-[32px] shadow-[0px_0px_6px_#00000029] h-[32p] rounded-full bg-white group-hover:scale-[1.5] grid place-items-center transition-all duration-150" aria-hidden="true">
+                            <img src="/public/img/arrow-left.svg" alt="arrow left">
+                          </span>
+                        </button>
+                        <button class="carousel-control-next !opacity-100 group bg-gradient-to-r from-transparent via-[#6997FF0A] to-[#6997FF0A] bg-no-repeat bg-[length:auto] w-[64px]" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                          <span class="carousel-control-next-icon w-[32px] h-[32p] rounded-full 
+                          shadow-[0px_0px_6px_#00000029]  group-hover:scale-[1.5] place-items-center grid transition-all duration-150 bg-white" aria-hidden="true">
+                          <img src="/public/img/arrow-right-dark.svg" alt="arrow left">
+                        </span>
+                        </button>
+                      </div>
+                </div>
+
+
+                <div class="flex flex-col space-y-[16px] items-center max-w-[768pxpx] mx-auto ">
+                  <h3 class="text-2xl text-[#202224] leading-8  mb-0 text-center max-[768px]:text-[22px] font-medium">Control Like Never Before
+                  </h3>
+                    <p class="text-[#202224] text-xl font-light leading-[29px] mb-0 text-center max-w-[768px] mx-auto max-[576px]:text-[18px]">Manage your content seamlessly with spurtCMS’s admin panel. Organize channels, create layouts, and customize workflows-all in one intuitive interface.
+                    </p>
+                    <a href="/admin" class="  max-[768px]:text-[16px] text-[#202224] text-lg font-light underline hover:text-[#05acd7]">Explore guides
+                        →</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 max-md:grid-cols-1 items-center gap-[64px] max-[1200px]:gap-[32px] max-[768px]:gap-[54px] ">
+
+                <div class="flex flex-col space-y-[16px] items-center max-w-[768px] mx-auto  ">
+                  <h3 class="text-2xl text-[#202224] leading-8 font-medium mb-0 text-center max-[768px]:text-[22px]">TailwindCSS Creativity Unleashed 
+                  </h3>
+                    <p class="text-[#202224] text-xl font-light leading-[29px] mb-0 text-center max-w-[720px] mx-auto max-[576px]:text-[18px]">
+                      Build faster with TailwindCSS templates crafted for speed and style. Fully customizable and ideal for creating versatile and impactful content websites.
+                    </p>
+                    <a href="/templates-for-cms-websites" class="max-[768px]:text-[16px]  text-[#202224] text-lg font-light underline hover:text-[#05acd7]">Explore guides
+                        →</a>
+                </div>
+
+                <div class=" overflow-hidden md:row-start-auto row-start-1 rounded-[8px] border-[1px] border-solid border-[#D9DCE0]">
+                    <div id="carouselExample1" class="carousel slide">
+                        <div class="carousel-inner">
+                          <div class="carousel-item active aspectVdo-class">
+                            <img src="/public/img/slider-image.png" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                          <div class="carousel-item aspectVdo-class">
+                            <img src="/public/img/knowledgebase.png" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                          <div class="carousel-item aspectVdo-class">
+                            <img src="/public/img/blog4.jpg" class="d-block w-100 aspect-video" alt="...">
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev !opacity-100 group bg-gradient-to-l from-transparent via-[#6997FF0A] to-[#6997FF0A] bg-no-repeat bg-[length:auto]  w-[64px]" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon w-[32px] shadow-[0px_0px_6px_#00000029] h-[32p] rounded-full bg-white group-hover:scale-[1.5] transition-all duration-150 grid place-items-center" aria-hidden="true">
+                            <img src="/public/img/arrow-left.svg" alt="arrow left">
+                          </span>
+                        </button>
+                        <button class="carousel-control-next !opacity-100 group bg-gradient-to-r from-transparent via-[#6997FF0A] to-[#6997FF0A] bg-no-repeat bg-[length:auto] w-[64px]" type="button" data-bs-target="#carouselExample1" data-bs-slide="next">
+                          <span class="carousel-control-next-icon w-[32px] h-[32p] rounded-full 
+                          shadow-[0px_0px_6px_#00000029]  group-hover:scale-[1.5] transition-all duration-150 bg-white grid place-items-center" aria-hidden="true">
+                          <img src="/public/img/arrow-right-dark.svg" alt="arrow left"></span>
+                        </button>
+                      </div>
+                </div>                      
+
+                
+            </div>
+          
+        </div>
+    </div>
+</section>
+
+
+<section class="max-w-[1920px] mx-auto">
+    <div class="p-[40px_80px_80px_80px] max-[1200px]:p-[30px_16px_16px_16px] ">
+        <div class="flex items-center space-y-[16px] flex-col lg:mb-[80px] sm:mb-10 mb-6">
+            <h4 class="text-center text-[#202224] max-[576px]:text-[30px] text-[32px] lg:text-[44px] font-medium mb-0">Easy Development, Quick Deployment </h4>
+            <p class="text-[#202224] text-xl font-light leading-[29px] mb-0 text-center max-w-[720px] mx-auto [576px]:text-[18px]">
+              Deliver content efficiently with spurtCMS’s <span class="font-medium ">GraphQL APIs</span>. Fetch precise data, handle complex queries, and scale effortlessly for modern applications.</p>
+        </div>
+
+        <div>
+          <img src="/public/img/garphQl-playground.png" alt="GraphQL">
+        </div>
+        </div>
+        </section>
+
+
+
+        
+</main>
+
+    {{template "websitefooter" .}}

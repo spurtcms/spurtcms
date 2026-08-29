@@ -211,7 +211,6 @@
                     <label for="cb{{.Id}}"
                       class="flex items-center justify-center cursor-pointer select-none text-dark dark:text-white">
                       <div class="relative">
-                        <input type="checkbox" id="toggleTwo" class="peer sr-only" />
                         <input type="checkbox" id="cb{{.Id}}" value="{{.Status}}" onclick="WidgetStatus('{{.Id}}')" {{if
                           eq .Status 1}}checked{{end}} data-id="{{.Id}}" class="peer sr-only tgl-light" />
                         <div class="block h-4 rounded-full dark:bg-dark-2 bg-gray-3 w-[30px]">

@@ -53,7 +53,6 @@ $(document).on('click', '#loginf', function () {
     if (formcheck == true) {
 
         if ($("#Check2").val() == 0) {
-            console.log($("#Check2").val());
             sessionStorage.setItem("rememberme", "0");
         } else {
 
@@ -94,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var content = getCookie("pass-toast");
     var username = getCookie("username");
 
-    console.log("fsrzg", Cookie);
 
     if (Cookie == "You+are+not+registered+with+us") {
         $('#em-error').show();

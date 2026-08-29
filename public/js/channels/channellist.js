@@ -119,7 +119,7 @@ function ChannelStatus(id) {
 
         $(this).val(result.IsActive);
       } else {
-        notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Toast.internalserverr + `</p ></div ></div ></li></ul>`
+        notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#A32D2D] bg-[#FCEBEB]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/danger-group-12.svg" alt = "toast error"></div> <div> <h3 class="text-[#A32D2D] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Toast.internalserverr + `</p ></div ></div ></li></ul>`
         $(notify_content).insertBefore(".header-rht");
         setTimeout(function () {
           $('.toast-msg').fadeOut('slow', function () {

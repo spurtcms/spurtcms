@@ -1,0 +1,74 @@
+
+{{template "gshead" .}}
+{{template "gsheader" .}}
+
+
+
+
+
+    <main class="flex-1 flex justify-center items-center pt-[5rem] px-4">
+      
+        <div class="max-w-[966px] w-full mx-auto relative pt-[60px]">
+            
+            <div class="absolute top-0 left-0 h-[1px] bg-[#F5F5F5] max-w-[740px] w-full mx-auto">
+                <span class="absolute t-0 l-0 h-[2px] w-[33%] bg-[#10A37F]"></span>
+            </div>
+
+            <h1 class="text-center font-bold text-3xl text-[#252525]">What are you planning to create?</h1>
+
+            <p class="text-center font-normal text-base text-[#616161] mt-3 mb-[60px]">This help us suggest template that help your team do their best work.</p>
+
+            <form action="/admin/getting-started/updateselectchannel" method="post" name="channelform" id="channelform">
+                 <input type="hidden" name="channelid" id="channelid" value="{{.userinfo.ChannelId}}">
+                 <input type="hidden" name="choose_type" id="choose_type" value="{{.userinfo.ChooseType}}">
+                 <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-[1.25rem] mb-[60px]">
+
+                {{$chanid := .userinfo.ChannelId}}
+                {{if .channellist}}
+                {{range $i, $channel := .channellist}}
+                {{if or (eq $channel.Id 1) (eq $channel.Id 2)}}
+                <label class="bg-white border border-gray-200 rounded-xl p-4 flex items-center space-x-4 cursor-pointer">
+               
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#EAF4F1]">
+                        <img src="{{$channel.ImagePath}}" alt="Blog Icon" class="" />
+                    </div>
+
+                 
+                    <div class="flex-1">
+                        <h4 class="text-sm font-semibold text-gray-900">{{$channel.ChannelName}}</h4>
+                        <p class="text-sm text-gray-500 line-clamp-1">{{$channel.ChannelDescription}}</p>
+                    </div>
+
+                  
+                    <input
+                        type="radio"
+                        name="courseOption" id="radiobtn"data-type="{{$channel.ChannelName}}" data-id="{{$channel.Id}}" {{if eq $channel.Id $chanid}}checked{{end}}
+                   
+                        class="radiobtn w-5 h-5 border-gray-300 accent-[#10A37F]"  />
+                </label>
+                {{end}}
+                {{end}}
+                {{end}}
+         
+            </div>
+
+            <div class="flex justify-between">
+                <a href="/admin/getting-started" class="flex justify-center items-center border-[1px] border-[#F3F3F3] rounded-md h-[41px] w-[96px] bg-[#fff] text-[#252525] text-sm hover:bg-[#f4f4f4] transition-all duration-200">  <img src="/public/img/caret-left-dark.svg" alt="" class="me-2"> Back </a>
+                <button href="javascript:void(0)" type="button" class="channelnextbtn flex justify-center items-center rounded-md h-[41px] w-[96px] bg-[#10A37F] text-white text-sm hover:bg-[#047b5e] transition-all duration-200"> Next <img src="/public/img/caret-right-white.svg" alt="" class="ms-2"> </a>
+            </div>
+        </form>
+        </div>
+
+    </main>
+
+  </div>
+
+
+
+
+
+    {{template "footer" .}}
+
+    <script src="/public/js/getting_started/gs_selection.js"></script>
+    {{template "footerclose" .}}

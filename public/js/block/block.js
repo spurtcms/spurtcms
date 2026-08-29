@@ -435,7 +435,6 @@ $(document).on("click", "#tagdeletebtn", function () {
 
     spanval = $(this).siblings('span').text().trim()
 
-    console.log(spanval, "val")
 
     if (deltagname == spanval) {
 
@@ -567,7 +566,6 @@ $(document).on("click", "#previewclose", function () {
 
 $(document).on("click", ".deleteblock", function () {
     id = $(this).attr("data-id")
-  console.log(id,"dataid");
   
     fetch(`/admin/blocks/deleteblock?id=${id}`, {
         method: "GET"
@@ -868,7 +866,6 @@ $('#catdel-img').click(function () {
 })
 // Cover Image crop 
 $(document).on('click', '#blockimg', function () {
-    console.log("proidd::");
 
     $("#prof-crop").val("8")
 })
@@ -999,7 +996,6 @@ $(document).on('click', '.select-channel', function () {
 $("#searchmembergrp").keyup(function () {
 
     var keyword = $(this).val().trim().toLowerCase()
-    console.log(keyword);
     $(".channel-list-row").each(function (index, element) {
         var title = $(element).text().toLowerCase()
 
@@ -1023,7 +1019,6 @@ $("#searchmembergrp").keyup(function () {
 
 $(document).on('click', '#addtocollect', function () {
 
-    console.log("checkajax")
 
     blockimg = $(this).attr('data-blockimg')
     blocktitle = $(this).attr('data-title')
@@ -1041,7 +1036,6 @@ $(document).on('click', '#addtocollect', function () {
         caches: false,
         success: function (result) {
 
-            console.log(result.data, "reedf")
             if (result.data == true) {
 
 

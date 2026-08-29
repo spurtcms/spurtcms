@@ -11,13 +11,107 @@
 
     <main class="container min-h-screen mx-auto max-w-screen-lg px-[16px]">
         <div class="my-10">
-          
+           <input id="URL" value="{{.FormURL}}" type="hidden">
   
 
               <div id="description">{{.PageDescription}}</div>
         </div>
     </main>
+    
+<script src="/public/js/form.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script>
+    // FORM SUBMIT EVENT
+document.addEventListener('formSubmit', function (event) {
+
+  if (event.detail.data) {
+
+    let formArray = event.detail.data;
+
+    $.each(formArray, function (index, item) {
+
+      if (item.question === "Name") {
+        nameValue = item.value
+      }
+
+    });
+    let formBuilder = $("form-builder");
+    let formId = formBuilder.attr("data-id");
+    let userId = formBuilder.attr("data-userid");
+    let URL = $("#URL").val().trim()
+    let successTitle = formBuilder.attr("data-successtitle");
+    let successDesc = formBuilder.attr("data-successdesc");
+
+    $.ajax({
+
+      url: URL,
+      type: "POST",
+      data: {
+        "data": JSON.stringify(formArray),
+        "Id": formId,
+        "UserId": userId,
+        "nameValue": nameValue
+      },
+
+      success: function (data) {
+
+        var url = window.location.search;
+        const urlpar = new URLSearchParams(url);
+
+        if (data.status == 1) {
+          let finalTitle = successTitle && successTitle.trim() !== ""
+            ? successTitle
+            : "Thank you for your submission";
+
+          let finalDesc = successDesc && successDesc.trim() !== ""
+            ? successDesc
+            : "We have successfully received your request. Our team will review the submitted information and get back to you if necessary";
+
+          let template = ` <div class="max-w-[612px] mx-auto w-full flex flex-col justify-center items-center pt-[120px]">
+            
+                        <img src="/picco_template/assets/img/success-img.svg" class="w-[102px]">
+            
+                        <h3 class="my-[20px_6px] text-center text-[20px] font-semibold text-[#3B4045]">
+                           ${finalTitle}
+                        </h3>
+            
+                        <p class="mb-[32px] text-center text-[14px] font-normal text-[#3B4045]">
+                           ${finalDesc}
+                        </p>
+            
+                        <div class="flex justify-center items-center gap-[16px]">
+            
+                            <a href="${urlpar}"
+                                class="border hover:bg-gray-50 border-solid border-[#1C2024] p-[6px_12px] rounded-[3px] text-sm leading-[17px] font-normal max-w-max h-[28px] flex items-center">
+                                Go back
+                            </a>
+            
+                            <a href="/"
+                                class="dark-btn text-sm leading-[17px] font-normal text-[#FFFFFF] max-w-max h-[28px] rounded-[3px]">
+                                Homepage
+                            </a>
+            
+                        </div>
+            
+                    </div>
+                `;
+
+          // Clear old content
+          $("#parentClass").empty();
+
+          // Append new content
+          $("#parentClass").append(template);
+        }
+
+      }
+
+    })
+  }
+
+});
+</script>
 </body>
 
 

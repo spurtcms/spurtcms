@@ -1,0 +1,113 @@
+{{define "docheader"}}
+{{template "webhead" .}}
+
+<body class="">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P58WM9FN"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+     <!--header-->
+     <header class="bg-white sticky left-0 w-full top-0 z-20 ">
+      
+        <div  id="blur" class="absolute top-0 bottom-0 left-0 right-0"></div>  
+           <nav class="navbar navbar-light flex-nowrap max-w-[1920px] mx-auto 
+       p-[12px_40px] max-[1400px]:p-[12px_24px] max-[1200px]:p-[12px_16px] ">
+
+               <div class=" flex gap-[48px] items-center  max-[1400px]:gap-[24px] max-[576px]:w-[30%]">
+                   <!--logo-->
+                   <a class="navbar-brand -mt-[12px] p-0 max-w-[110px] block" href="/">
+                       <img src="/public/img/SpurtCMSlogov1.2.1.svg" />
+                   </a>
+               </div>
+
+               <!--list-->
+
+               <div class="offcanvas offcanvas-start min-[1099px]:!border-0 min-[1099px]:static min-[1099px]:!transform-none min-[1099px]:visible  min-[1099px]:!w-fit min-[1099px]:bg-transparent min-[1099px]:ml-auto h-[100vh] min-[1099px]:h-fit max-[1099px]:rounded-[0_12px_0_0]  max-[1099px]:border-[1px] max-[1099px]:border-solid !border-[#ffffff] border-none max-[600px]:!w-full max-[600px]:!max-w-[100%] max-[600px]:rounded-[0] max-[600px]:!border-none [&~.offcanvas-backdrop]:!bg-transparent 
+               max-[1099px]:backdrop-blur-3xl max-[1099px]:bg-transparent" tabindex="-1"
+                   id="header-canvas" aria-labelledby="offcanvasExampleLabel">
+                   <div
+                       class="justify-between offcanvas-header min-[1099px]:hidden p-[12px_16px] border-solid border-b border-[#ffffff] backdrop-blur-3xl ">
+                       <a class="navbar-brand m-0 p-0  w-[25%] max-w-[110px] block " href="#">
+                           <img src="/public/img/SpurtCMSlogov1.2.1.svg" />
+                       </a>
+                       <button type="button" class="rotate-180 p-0 m-0" data-bs-dismiss="offcanvas" aria-label="Close">
+                           <img src="/public/img/close-transform.svg" alt="close">
+                       </button>
+                   </div>
+                   <div class="offcanvas-body min-[1099px]:p-0 max-xl:p-[12px_16px] border-none ">
+                       <ul
+                           class="min-[1099px]:flex min-[1099px]:items-center min-[1099px]:flex-row 
+                           max-[1299.5px]:space-x-[24px] max-[1200px]:space-x-[16px]  space-x-[32px]  items-start  max-[1099px]:space-y-[8px] max-[1099px]:space-x-[0px]">
+                           <li>
+                               <a href="/ai-writing-page"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full space-x-[4px] ">
+                                   <span>AI writing</span>
+                                   <span class="min-w-[16px]"><img src="/public/img/ai-icon.svg" alt="star"></span> </a>
+                           </li>
+                           <li>
+                            <a href="/documentation/"
+                                class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full space-x-[4px]">
+                                <span>Developer</span>
+                                <img src="/public/img/for-developers.svg" alt="star"> </a>
+                        </li>
+
+                           <li><a href="/opensource-cms-channel"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap  hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full">Channels</a>
+                           </li>
+                           <li><a href="/entreies-for-cms-website"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap  hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full">Entries</a>
+                           </li>
+                           <li><a href="/blocks-for-cms-website"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap  hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full">Blocks</a>
+                           </li>
+                           <li><a href="/templates-for-cms-websites"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap  hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full">Templates</a>
+                           </li>
+                           <li><a href="/open-source-cms-forms"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded  max-[1099px]:w-full">Forms</a>
+                           </li>
+                           <!-- <li><a href="javascript:void(0)"
+                                   class="text-[#202224] text-base font-light leading-5 flex items-center max-[1299.5px]:space-x-[8px]  whitespace-nowrap hover:text-[#000000]  max-[1099px]:p-[8px] max-[1099px]:bg-[#fff9] max-[1099px]:rounded max-[1099px]:w-full ">Discord
+                                   Badges</a></li> -->
+                       </ul>
+                   </div>
+               </div>
+
+
+
+               <!--buttons-->
+               <div
+                   class="flex space-x-[16px] items-center ml-[32px] max-[1200px]:space-x-[8px] max-[1200px]:ml-[16px] ">
+                   <a href="/download-cms-open-source-code" class="text-[#171717]  text-base font-normal flex items-center justify-center max-[1299.5px]:px-[8px] px-[16px] rounded-[4px] whitespace-nowrap transition-all border-[1px] border-solid border-[#171717]  h-10 leading-5 bg-[#FFFFFF] hover:bg-[transparent]  
+                    max-[1299.5px]:h-[32px]">
+
+                       <img src="/public/img/Download.svg" alt="download" class="max-[576px]:block hidden">
+                       <span class=" max-[576px]:hidden">Download </span>
+                   </a>
+
+                   <a href="/admin"
+                       class="text-[#171717]  text-base font-normal flex items-center justify-center   max-[1299.5px]:px-[8px] px-[16px] rounded-[4px] whitespace-nowrap transition-all border-[1px] border-solid border-[#171717] h-10 leading-5 bg-[#FFFFFF] hover:bg-[transparent] max-[1299.5px]:h-[32px] ">
+                        TRY FOR DEMO</a>
+
+                   <a href="/contactus" target="_blank"
+                       class="text-[#ffffff]  text-base font-normal flex items-center justify-center max-[1299.5px]:px-[8px] px-[16px] rounded-[4px] whitespace-nowrap transition-all border-[1px] border-solid border-[#171717]  h-10 leading-5 bg-[#171717] space-x-[5px] hover:bg-[#2D2D2D] max-[1299.5px]:h-[32px]">
+                       <!-- <img src="https://www.foodtraze.com/img/Mask" alt="git" class="min-w-[16px]"> -->
+                       <span class="max-[576px]:hidden "> Contact us </span>
+                   </a>
+
+                   <a class="hidden max-[1099.5px]:grid" data-bs-toggle="offcanvas" href="#header-canvas" role="button"
+                       aria-controls="offcanvasExample">
+                       <img class="w-[24px]" src="/public/img/menu-button.svg" />
+                   </a>
+               </div>
+
+           </nav>
+       </header>
+     <main>
+
+    
+
+
+    
+
+{{end}}

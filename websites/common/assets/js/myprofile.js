@@ -1,11 +1,11 @@
 // update membes
 $(document).on('click', '#update', function () {
 
-    console.log("cccccc")
+    // console.log("cccccc")
 
      var mem_id = $("#memberid").val()
 
-      console.log(mem_id,"checkmemberid")
+    //   console.log(mem_id,"checkmemberid")
 
     jQuery.validator.addMethod("duplicateemail", function (value) {
  
@@ -20,7 +20,7 @@ $(document).on('click', '#update', function () {
                 caches: false,
                 success: function (data) {
                     result = data.trim();
-                    console.log(data, "data");
+                    // console.log(data, "data");
  
                 }
             })
@@ -112,11 +112,11 @@ $(document).on('click', '#update', function () {
 
 
     var formcheck = $("#myprofileform").valid();
-    console.log("working this ", formcheck);
+    // console.log("working this ", formcheck);
     if (formcheck == true) {
         $('#myprofileform')[0].submit();
     } else {
-        console.log(" not working this ");
+        // console.log(" not working this ");
 
     }
 

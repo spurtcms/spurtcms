@@ -13,13 +13,11 @@ $(document).ready(async function () {
 
 $(document).on('click', '#uptprofile', function () {
 
-    console.log("checking")
 
     jQuery.validator.addMethod("duplicateemail", function (value) {
 
         var result;
         user_id = $("#id").val()
-        console.log("id", user_id)
         $.ajax({
             url: "/admin/settings/checkemail",
             type: "POST",

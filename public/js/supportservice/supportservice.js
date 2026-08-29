@@ -172,7 +172,6 @@ $(document).on('click','#CountrySelect',function(){
     $(document).on('click', '.service-type', function () {
         var Service = $(this).text().trim()
         $('#services').val(Service)
-        console.log($('#services').val());
 
     })
 

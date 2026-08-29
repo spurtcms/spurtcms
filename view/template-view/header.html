@@ -1,0 +1,475 @@
+{{define "template-header"}}
+
+{{template "webhead" .}}
+
+
+
+<body>
+    <main class="grid grid-cols-[232px_1fr] max-md:grid-cols-1">
+        <aside id="sk-aside"
+            class="  max-sm:w-full max-md:border-r-0 max-md:min-w-[50%] max-md:overflow-auto max-md:fixed max-md:top-0 z-[998] max-md:-translate-x-full w-[232px] bg-[#FAFAFA] border-r border-[#D9D9D9] border-t-0 border-b-0 transition ease-in-out duration-300 transform-none will-change-transform min-h-screen h-[100vh] sticky top-0 flex ">
+            <a href="javascript:void(0);"
+                class=" max-md:grid max-md:place-items-center toggle-button absolute right-[16px] top-2 z-50 rounded-md hidden h-8 w-8 min-w-8 place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/filter-close.svg" alt="close" class="w-[14px] h-[14px]">
+            </a>
+            <div class="flex flex-col w-full h-full flex-1 bg-[#FAFAFA]">
+                <div class="dropdown bg-[#fafafa] z-[20] sticky top-0 ">
+                    <a href="/" class="p-[8px] w-full h-12 border-b border-[#D9D9D9] flex">
+                        <img src="/public/img/SpurtCMSlogov1.2.1.svg" />
+                    </a>
+                </div>
+                <div class="bg-[#F5F5F5] border-b border-[#D9D9D9] py-[8px] px-[12px] relative">
+
+                    <a href="/admin"
+                        class="bg-[#10A37F] crt-bt rounded-[4px] grid grid-cols-[1fr_auto] place-items-center hover:bg-[#148569]">
+                        <p
+                            class="text-base font-medium leading-none text-white p-1.5  w-full h-full grid place-items-center">
+                            + Create</p>
+                    </a>
+
+
+                </div>
+                <div class="p-2 w-full flex flex-col flex-1 overflow-y-auto scrollbar-thin">
+                    <div class="sk-doc-tp">
+                        <div class="" id="grp-one">
+                            <div
+                                class="text-[#717171] text-xs font-semibold uppercase mb-1 mt-0 ml-3 mr-0 flex justify-between items-center">
+                                <p class=" text-xs font-normal text-[#717171] ">Content</p>
+
+                            </div>
+                            <ul>
+                               
+                                <!-- <li class=" doc-lst  relative active">
+                                    <div>
+                                        <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                            href="javascript:void(0)">
+                                            <div class="relative grid place-items-center">
+                                                <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                    src="/public/img/dashboard_new.svg" alt="channels">
+                                                <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0"
+                                                    src="/public/img/dashboard_active.svg" alt="channels">
+                                            </div>
+                                            <p
+                                                class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                                Dashboard</p>
+                                        </a>
+                                    </div>
+                                </li> -->
+                                <li class=" doc-lst  relative active">
+                                    <div>
+                                        <a class="group {{if eq .Active `Categories`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                            href="/create-cms-category">
+                                            <div class="relative grid place-items-center">
+                                                {{if ne .Active "Categories"}}
+                                                <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                    src="/public/img/categories.svg" alt="channels">
+                                                    {{else}}
+                                                <img class="  h-4 mr-3 flex-shrink-0"
+                                                    src="/public/img/categories-active.svg" alt="channels">
+                                                    {{end}}
+                                            </div>
+                                            <p
+                                                class="{{if ne .Active `Categories`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                                Categories</p>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class=" doc-lst   relative">
+                                    <a class="group  {{if eq .Active `Channels`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/opensource-cms-channel">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Channels"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/channels.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/channels-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Channels`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Channels</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group  {{if eq .Active `Entries`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}}   w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/entreies-for-cms-website">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Entries"}}
+                                            <img class=" opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/left-entries.svg" alt="channels">
+                                            {{else}}
+                                            <img class=" h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/left-entries-active.svg" alt="channels">
+                                            {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Entries`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Entries</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group  {{if eq .Active `AI Writing`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/ai-writing-page">
+                                        
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "AI Writing"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Group%20102.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/ai-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `AI Writing`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            AI Writing</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group  {{if eq .Active `Members`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/personalized-members-for-cms-webite">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Members"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/member.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/member-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Members`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Members</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group {{if eq .Active `Blocks`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}}   w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/blocks-for-cms-website">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Blocks"}}
+                                            <img class=" opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Blocks.svg" alt="channels">
+                                            {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Blocks-active.svg" alt="channels">
+                                            {{end}}
+                                        </div>
+                                        <p
+                                            class=" {{if ne .Active `Blocks`}} text-[#262626] {{else}} text-[#f26726]  {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Blocks </p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class=" group {{if eq .Active `Templates`}}  bg-[#F26726]/10 {{else}}hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/templates-for-cms-websites">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Templates"}}
+                                            <img class=" opacity-55   group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/templates1.svg" alt="Documents">
+                                            {{else}}
+                                            <img class=" h-4 mr-3 flex-shrink-0 "
+                                                src="/public/img/templates-active1.svg" alt="Documents">
+                                            {{end}}
+                                        </div>
+                                        <p class="overflow-hidden text-ellipsis whitespace-nowrap pr-1 pointer-events-none font-light text-sm leading-[18px]
+                                {{if ne .Active `Templates`}} text-[#262626] {{else}} text-[#f26726] {{end}} ">
+                                            Templates </p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group   {{if eq .Active `Forms`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/open-source-cms-forms">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Forms"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/courses.svg" alt="channels">
+                                                {{else}}
+                                            <img class=" h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/courses-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class=" {{if ne .Active `Forms`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Forms Builder</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-[16px]">
+                    </div>
+                    <!-- <div class="sk-doc-tp">
+                        <div class="" id="grp-twp">
+                            <div
+                                class="text-[#717171] text-xs font-semibold uppercase mb-1 mt-0 ml-3 mr-0 flex justify-between items-center">
+                                <p class=" text-xs font-normal text-[#717171] ">Data Connect</p>
+
+                            </div>
+                            <ul>
+                                <li class=" doc-lst   relative">
+                                    <a class="group  {{if eq .Active `Graphql Playground`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/graphqlpage">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Graphql Playground"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Graphql Playground`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Graphql Playground</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group  {{if eq .Active `Graphql API`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/apikeypage">
+                                        
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Graphql API"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql-key.svg" alt="channels">
+                                                {{else}}
+                                            <img class=" h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql-key-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Graphql API`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            API Keys</p>
+                                    </a>
+                                </li>
+                                <li class=" doc-lst  relative">
+                                    <a class="group {{if eq .Active `Webhook`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/webhookpage">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Webhook"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Webhooks.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Webhooks-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Webhook`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Webhooks</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> -->
+                    <!-- <div>
+
+                        <a id="view-more"
+                            class="group  w-full h-8 inline-flex items-center  rounded-md font-normal text-sm leading-[18px] cursor-pointer gap-[12px] justify-between m-[8px_0_4px] pl-[12px] max-[1300px]:m-[4px_0] "
+                            href="javascript:void(0)  ">
+
+                            <p class="text-[#717171] overflow-hidden text-ellipsis whitespace-nowrap pr-1 
+                            font-normal text-xs leading-[15px]">
+                                VIEW MORE </p>
+                            <div class="relative grid place-items-center group-[&.active]:rotate-0 rotate-180
+                             group-hover:bg-[#0000000a]  px-[12px]  py-2 rounded-[4px]">
+                                <img src="/public/img/aside-arrow.svg" alt="arrow">
+                            </div>
+                        </a>
+                    </div> -->
+
+
+                    <div class="sk-doc-tp " >
+                        <div class="">
+                            <div class="text-[#717171] text-xs font-semibold uppercase flex justify-between
+                        p-[0px_12px_0px_12px]  items-center  ">
+                                <p
+                                    class=" w-full text-xs font-normal text-[#262626] leading-4 pb-[8px] border-b border-[#D9D9D9] ">
+                                    Data Connect</p>
+
+                            </div>
+                            <ul class="my-[5px]">
+                                <li class=" doc-lst   relative">
+                                    <a class="group  {{if eq .Active `Graphql Playground`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/cms-for-graphql">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Graphql Playground"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Graphql Playground`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Graphql Playground</p>
+                                    </a>
+                                </li>
+                                <!-- <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                        href="javascript:void(0)">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/graph-ql-active.svg" alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            GraphQL Play Ground</p>
+                                    </a>
+                                </li> -->
+
+                                <li class=" doc-lst  relative">
+                                    <a class="group {{if eq .Active `Webhook`}} bg-[#F26726]/10 {{else}} hover:bg-[#0000000a] {{end}} w-full h-8 inline-flex items-center   px-[12px]  py-2 rounded-md font-normal text-sm leading-[18px] cursor-pointer "
+                                        href="/cms-for-webhooks">
+                                        <div class="relative grid place-items-center">
+                                            {{if ne .Active "Webhook"}}
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Webhooks.svg" alt="channels">
+                                                {{else}}
+                                            <img class="  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/Webhooks-active.svg" alt="channels">
+                                                {{end}}
+                                        </div>
+                                        <p
+                                            class="{{if ne .Active `Webhook`}} text-[#262626] {{else}} text-[#f26726] {{end}} overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Webhooks</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+                        <div class="">
+                            <div class="text-[#717171] text-xs font-semibold uppercase flex justify-between
+                        p-[0px_12px_0px_12px]  items-center ">
+                                <p
+                                    class=" w-full text-xs font-normal text-[#262626] leading-4 pb-[8px] border-b border-[#D9D9D9] ">
+                                    Developers</p>
+
+                            </div>
+                            <ul class="my-[5px]">
+                                <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                        href="/documentation">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/documentation.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/documentation-active.svg" alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Documentation</p>
+                                    </a>
+                                </li>
+
+                                <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                    target="_blank" href="https://github.com/spurtcms">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/git.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0" src="/public/img/git.svg"
+                                                alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            GitHub</p>
+                                    </a>
+                                </li>
+
+                                <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                    target="_blank"  href="https://github.com/spurtcms/spurtcms-admin/issues/new">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/git.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0" src="/public/img/git.svg"
+                                                alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Support Forum</p>
+                                    </a>
+                                </li>
+
+                                <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                    target="_blank"  href="https://discord.com/invite/9TNgqUY24N">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/discord.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/discord-active.svg" alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Discord Community</p>
+                                    </a>
+                                </li>
+
+                                <li class=" doc-lst   relative">
+                                    <a class="group  hover:bg-[#0000000a] w-full h-8 inline-flex items-center   px-[12px]  py-[9px] rounded-md font-normal text-sm leading-[18px] cursor-pointer max-[1300px]:h-[30px]  "
+                                    target="_blank" href="https://www.youtube.com/@spurtcms">
+                                        <div class="relative grid place-items-center">
+                                            <img class="first-of-type:inline-block opacity-55  group-hover:opacity-100  h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/youtube.svg" alt="channels">
+                                            <img class=" last-of-type:hidden h-4 mr-3 flex-shrink-0"
+                                                src="/public/img/youtube-active.svg" alt="channels">
+                                        </div>
+                                        <p
+                                            class="text-[#262626] overflow-hidden text-ellipsis whitespace-nowrap pr-1 font-light text-sm leading-[18px]">
+                                            Youtube Channel</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-[#D9D9D9]  bg-[#fafafa]  sticky bottom-[0] ">
+                  
+                       
+              
+                    <div class=" p-[16px_8px]">
+                        <!-- <div class="shadow-[0px_0px_5px_0px_#00000026] bg-white p-[16px_12px] rounded-[6px] 
+                       text-center  max-[1300px]:p-[9px_12px_9px] "> -->
+                           
+                            <!-- <div class="shadow-[1px_0px_12px_3px_#75EB0080] w-[160px] mx-auto max-[768px]:w-full "> -->
+                                <a href="/download-cms-open-source-code"
+                                    class="text-center hover:bg-[#2D2D2D] block w-full  p-[8px_32px] bg-[#000000] rounded-[4px] text-white text-base font-normal  max-[1300px]:text-[14px] max-[1300px]:leading-[16px]">Download</a>
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    </div>
+                    <ul>
+                        <li class="w-full px-[16px] py-[8px]">
+                            <div
+                                class=" flex items-center border-none bg-transparent appearance-none tap-highlight-transparent cursor-pointer text-left flex items-center w-full transition-colors duration-200 ease-in-out">
+                                <span class="w-[47px] h-[32px] mr-[12px] grid place-items-center">
+                                    <img src="/public/img/Spurt ver V2 .svg" alt="logo"
+                                        class="w-full object-contain h-full">
+                                </span>
+                                <a href="https://www.piccosoft.com/">
+                                    <div class="flex-grow">
+                                
+                                        <p 
+                                        class="text-[10px] font-normal leading-[11.72px] mb-[4px] text-[#262626] mr-0 text-center">
+                                        developed by piccosoft.com
+                            </p>
+                              
+                            </div>
+                                </a>
+                       
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        {{end}}

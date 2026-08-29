@@ -1,0 +1,46 @@
+{{define "gshead"}}
+
+
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spurtCMS Getting Started</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="https://dev.spurtcms.com/public/img/spurtCMSlogonew.jpg">
+
+    <!-- Boostrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
+    <!-- Tailwind CDN -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+   <link rel="stylesheet" href="/public/css/output.css">
+    <!-- Tailwind Config (after CDN) -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'dropdown': '0px 4px 10px 0px #0000001F',
+                    }
+                },
+            },
+            corePlugins: {
+                preflight: true,
+            },
+        };
+    </script>
+
+
+</head>
+
+{{end}}

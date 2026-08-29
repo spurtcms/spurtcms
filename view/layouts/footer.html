@@ -213,21 +213,22 @@
 
 </script>
 
-<div class="right modal fade" id="modalIdd2" tabindex="" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-  aria-labelledby="modalTitleId" aria-hidden="true">
+<div class="right modal fade" id="modalIdd2" tabindex="" data-bs-backdrop="static" data-bs-keyboard="false"
+  role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 
-  <form action="/admin/website/menu/createmenu?webid={{.websitedetail.Id}}" name="createmenu" method="POST" id="menuform">
+  <form action="/admin/website/menu/createmenu?webid=1" name="createmenu" method="POST"
+    id="menuform">
 
-  <div class="modal-dialog modal-dialog-scrollable max-w-[580px] z-[1056]" role="document">
+    <div class="modal-dialog modal-dialog-scrollable max-w-[580px] z-[1056]" role="document">
 
-    <div class="rounded-none modal-content b-0">
-    
+      <div class="rounded-none modal-content b-0">
+
         <input type="hidden" name="csrf" value="{{.csrf}}">
         <input type="hidden" name="menu_id" id="menu_id" value="">
         <input type="hidden" name="menupageno" id="menupageno" value="">
         <div class="flex justify-between items-center p-[59px_30px_22px] max-[1300px]:p-[16px_30px] ">
           <h5 class="mb-0 font-medium text-bold-black text-base" id="modalTitleId">
-          {{$Translate.Menu.CreateNewMenu}}
+            {{$Translate.Menu.CreateNewMenu}}
           </h5>
           <div class="flex gap-3">
             <a href="#" data-bs-dismiss="modal" class="flex justify-center items-center cancelbtn">
@@ -259,6 +260,128 @@
                   <textarea type="text" id="menu_desc" name="menu_desc"
                     class="focus:!border-[#373737] menu_desc [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-120 font-normal text-bold-black text-sm text-start resize-none"></textarea>
                 </div>
+                <!-- Template Dropdown -->
+                <div class="dropdown dropdown-template">
+                  <a href="javascript:void(0);" id="menu-group-head"
+                    class="border font-normal border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose Menu Group
+                  </a>
+
+                  <ul
+                    class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                    <!-- <li>
+                      <a href="javascript:void(0);" data-value="picco-service"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Service
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="picco-talent"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Talent
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="picco-support"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Support
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="picco-labs"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Labs
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="picco-ai"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco AI
+                      </a>
+                    </li>
+                      <li>
+                      <a href="javascript:void(0);" data-value="picco-startup"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Picco Startup
+                      </a>
+                    </li> -->
+                      <li>
+                      <a href="javascript:void(0);" data-value="footer"
+                          class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          Header
+                      </a>
+                    </li>
+                     <li>
+                      <a href="javascript:void(0);" data-value="footer"
+                          class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                          Footer
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="default"
+                        class="menu-group-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        Default
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <input type="hidden" id="menu_group" name="menu_group"
+                  class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm">
+
+                <div class="dropdown dropdown-template">
+                  <a href="javascript:void(0);" id="menu-order-head"
+                    class="border font-normal border-[#EDEDED] bg-white pd-3 h-[48px] rounded-[4px] flex items-center bg-[url('/public/img/property-arrow.svg')] bg-no-repeat bg-[right_12px_center]"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Choose Menu Order
+                  </a>
+
+                  <ul
+                    class="dropdown-menu w-full border-0 rounded-[4px] shadow-[0px_8px_24px_-4px_#0000001F] p-[4px_0] !mt-[4px]">
+                    <li>
+                      <a href="javascript:void(0);" data-value="1"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        1
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="2"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        2
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="3"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        3
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="4"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        4
+                      </a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" data-value="5"
+                        class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                        5
+                      </a>
+                    </li>
+                    <li></li>
+                    <a href="javascript:void(0);" data-value="6"
+                      class="menu-order-list block p-[8px_16px] text-xs font-normal leading-4 text-[#262626] hover:bg-[#F5F5F5]">
+                      6
+                    </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <input type="hidden" id="menu_order" name="menu_order"
+                  class="focus:!border-[#373737] [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)  bg-white p-3 border border-[#EDEDED] rounded-[4px] w-full h-[48px] font-normal text-bold-black text-sm">
+
+
                 <div class="flexmt-[21px]">
                   <label for="toggleSeven"
                     class="flex  gap-[14px] items-center justify-start cursor-pointer select-none text-dark dark:text-white">
@@ -289,10 +412,10 @@
           </button>
         </div>
 
+      </div>
+
     </div>
- 
-  </div>
-</form>
+  </form>
 </div>
 
 

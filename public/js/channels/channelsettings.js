@@ -19,7 +19,6 @@ $(document).on('click','.open-emailtemp',function(){
       dataType: "json",
       data: { "id": tempid },
       success: function (result) {
-          console.log("result",result)
         if (result.Id != 0) {
           var pathname = window.location.pathname
           $('#input-pagefind').val(pathname)
@@ -202,7 +201,6 @@ $(document).on('click','#update',function(){
     var templateJSON = JSON.stringify(templatestatus)
 
     $("#templatestatus").val(templateJSON)
-    console.log("templateJSON",templateJSON);
 
    $('#channelsettingform')[0].submit();
 
@@ -244,6 +242,5 @@ $(document).on('click','#cancel',function(){
     templatestatus[existingIndex].status = status;
   }
 
-   console.log(templatestatus,"arraycheckk")
 
  })

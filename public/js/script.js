@@ -169,12 +169,10 @@ function hovertab(evt, tabid) {
 
 //
 $("#home").on("click", function () {
-  console.log("hjl");
   $("#home-tab").addClass("active");
 });
 
 $("#nextbutton").on("click", function () {
-  console.log("happy");
 });
 
 $(document).on("click", ".plussim", function () {
@@ -269,7 +267,6 @@ updateTabs(); // initialize the first tab
 
 $(document)
   .on("mouseenter", "#home-tab2", function () {
-    console.log("hover");
     $(".homehead").addClass("before:w-[66%]");
     $(".homehead").removeClass("before:w-[33%]");
   })

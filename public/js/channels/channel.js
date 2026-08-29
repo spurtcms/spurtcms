@@ -77,7 +77,6 @@ $(document).ready(async function () {
           success: function (data) {
               var result = data.trim();
    
-              console.log(result, "resulttt")
               if (result == 'true') {
                   isDuplicate = false;
               }
@@ -400,7 +399,6 @@ $(document).on('click', '.edit-field', function () {
 // set property field based on field type
 function FieldBasedProperties(id) {
 
-  console.log("checkidfdf", id)
 
   if (id == "2") {
 
@@ -477,7 +475,6 @@ function FieldBasedProperties(id) {
 
   } else if (id == "15") {
 
-    console.log("chedfdfdfdf")
     $(".fl-name").text("Properties - File Upload")
     $(".dt-field").hide()
     $(".ti-field").hide()
@@ -497,13 +494,6 @@ function FieldBasedProperties(id) {
     $(".ti-field").hide()
     $(".option-field").hide()
   } else if (id == "18") {
-
-    $(".fl-name").text("Properties - Image Upload")
-    $(".dt-field").hide()
-    $(".ti-field").hide()
-    $(".option-field").hide()
-
-  }else if (id == "19") {
 
     $(".fl-name").text("Properties - Editor")
     $(".dt-field").hide()
@@ -657,7 +647,6 @@ $(document).on("click", "#cln-modal", function () {
 $(document).on('click', '.channelsave', function () {
   fiedlvalue = []
   GetfieldsValue()  //get field value
-  console.log("myfields", fiedlvalue);
 
   var name = $('#channelname').val();
   var ChannelSlugName = $('#ChannelSlugName').val();
@@ -677,7 +666,7 @@ $(document).on('click', '.channelsave', function () {
 
     if (SelectedCategoryValue.length == 0) {
 
-      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
+      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#A32D2D] bg-[#FCEBEB]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#A32D2D] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
       $(notify_content).insertBefore(".header-rht");
       setTimeout(function () {
         $('.toast-msg').fadeOut('slow', function () {
@@ -718,7 +707,7 @@ $(document).on('click', '.channelsave', function () {
 
     if (SelectedCategoryValue.length == 0) {
 
-      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
+      notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  flex relative max-sm:max-w-[300px] items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#A32D2D] bg-[#FCEBEB]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-error.svg" alt = "toast error"></div> <div> <h3 class="text-[#A32D2D] text-normal leading-[17px] font-normal mb-[5px] ">Error</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px] " >` + languagedata.Channell.selectcatvalid + `</p ></div ></div ></li></ul> `;
       $(notify_content).insertBefore(".header-rht");
       setTimeout(function () {
         $('.toast-msg').fadeOut('slow', function () {

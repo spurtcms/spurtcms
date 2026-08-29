@@ -11,7 +11,7 @@
         <div class="flex items-center space-x-6 w-full">
             {{if .settingsdetail.SiteLogoPath}}
             <a href="/ "><img class="w-[100px] h-[50px]"
-                    src="/{{.settingsdetail.SiteLogoPath}}"></a>
+                    src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
             {{else}}
             <a href="/ "><img
                     src="/websites/themes/content_verse/assets/images/SpurtCMS.svg"></a>
@@ -67,7 +67,7 @@
                 </ul>
             </div>
 
-            {{if .memberdet}}
+          {{if .memberdet}}
 
             <div class="relative  inline-block text-center">
                 <div >

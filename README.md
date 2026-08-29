@@ -47,7 +47,7 @@ spurtCMS Admin Panel prioritizes user-friendly administration, offering powerful
 This is the official repository of Spurtcms.You can easily deploy spurtcms in your local server.
 
 ### Step 1: Download the source files:
-
+Username
 Clone the Git repository that contains spurtCMS Admin project files, and .env file from the path https://github.com/spurtcms/spurtcms using the “git clone” command.
 
 ```

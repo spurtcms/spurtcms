@@ -6,7 +6,7 @@
     <div class="container mx-auto max-w-screen-xl">
         {{if .settingsdetail.SiteLogoPath}}
         <a href="/ "><img class="w-[100px] h-[50px]"
-                src="/{{.settingsdetail.SiteLogoPath}}"></a>
+                src="/image-resize?name={{.settingsdetail.SiteLogoPath}}"></a>
         {{else}}
         <a href="/ "><img
                 src="/websites/public/img/Spurt-logo.svg"></a>
@@ -25,7 +25,7 @@
                  {{ $HeaderId := "" }}
 
                 {{ range .menulist }}
-                {{ if eq .Name "Headers" }}
+                    {{ if eq .Name "Headers" }}
                 {{ $HeaderId = .Id }}
                 {{ end }}
                 {{ end }}

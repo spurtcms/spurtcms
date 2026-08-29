@@ -1,0 +1,31 @@
+{{define "webpageheader"}}
+
+
+<header
+class=" max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+<div class="mr-auto flex items-center gap-[6px]">
+    <a href="javascript:void(0);"
+        class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+        <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+    </a>
+</div>
+
+<div class="flex  items-center space-x-[8px]">
+
+    <a href="/admin" class="text-[#262626] text-base font-normal leading-[20px]">Sign
+        In</a>
+  
+    <a href="/admin" class=" hover:bg-[#148569] bg-[#10A37F] p-[6px_16px] rounded-[4px] text-[#FFFFFF]
+         text-base font-normal  h-[32px] flex items-center ">Register</a>
+
+         <a href="/githublogin"
+         class="flex items-center gap-[6px] p-[8px] rounded-[4px] text-[#FFFFFF]
+     text-base font-normal bg-[#171717] hover:bg-[#2D2D2D] w-[116px] h-[32px] leading-none max-sm:w-fit"> <img
+             src="/public/img/git-dark.svg" alt="git" class="min-w-[16px]">
+         <span class="max-sm:hidden"> Star
+             Repo</span></a>
+</div>
+
+</header>
+
+{{end}}

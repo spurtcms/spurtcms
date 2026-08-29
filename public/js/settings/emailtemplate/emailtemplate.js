@@ -39,7 +39,6 @@ $(document).on('click', '.emailEditBtn', function () {
         dataType: "json",
         data: { "id": tempid },
         success: function (result) {
-            console.log("result", result)
 
             if (result.Id != 0) {
 
@@ -156,7 +155,6 @@ $(document).on('click', '#emailEditCloseBtn', function () {
 
 $(document).on('click', '#update-templatebtn', function () {
 
-    console.log("checking")
 
     $("form[name='emailtemplateform']").validate({
         rules: {
@@ -217,7 +215,6 @@ function Validationcheck() {
 
     if ($('#emailsub').hasClass('error')) {
 
-        console.log("checkkkuuuuuuuuuu")
         $('#subgrb').addClass('input-group-error');
     } else {
         $('#subgrb').removeClass('input-group-error');

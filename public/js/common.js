@@ -36,13 +36,13 @@ $(document).ready(function () {
     let cropper;
 
 
-    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1 || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
+    if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") != -1 || window.location.href.indexOf("listing") != -1 || window.location.href.indexOf("pages") != -1 || window.location.href.indexOf("cta") != -1) {
 
-        console.log("test");
+        // console.log("test");
 
 
         // Image Value Empty
-        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#flagFile,#blockimg,#categoryimage,#courseimg,#listing",).click(function () {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#flagFile,#blockimg,#categoryimage,#courseimg,#listing,#formimage",).click(function () {
             $(this).val("")
         })
 
@@ -51,7 +51,7 @@ $(document).ready(function () {
         var height
 
         // Change Image with cropper
-        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#logoLabel,#flagFile,#blockimg,#categoryimage,#courseimg,#listing").change(function () {
+        $("#profileImgLabel,#myfile,#cmpymyfile,#profileImg,#logoLabel,#flagFile,#blockimg,#categoryimage,#courseimg,#listing,#formimage").change(function () {
 
 
             var file;
@@ -62,48 +62,51 @@ $(document).ready(function () {
                 // console.log(file, "profileImage");
 
                 file = $('#profileImgLabel')[0].files[0];
-                console.log(file, "profileImgLabel");
+                // console.log(file, "profileImgLabel");
 
             } else if ($(this).attr("id") == 'myfile') {
 
                 file = $('#myfile')[0].files[0];
 
-                console.log(file, "file");
+                // console.log(file, "file");
 
             } else if ($(this).attr("id") == 'cmpymyfile') {
                 file = $('#cmpymyfile')[0].files[0];
-                console.log(file, "cmpymyfile");
+                // console.log(file, "cmpymyfile");
 
             } else if ($(this).attr("id") == 'profileImg') {
 
                 file = $('#profileImage')[0].files[0];
-                console.log(file, "profileImage");
+                // console.log(file, "profileImage");
             } else if ($(this).attr("id") == 'logoLabel') {
 
                 file = $('#logo')[0].files[0];
-                console.log(file, "cmpymyfile");
+                // console.log(file, "cmpymyfile");
 
             } else if ($(this).attr("id") == 'flagFile') {
 
                 file = $(this)[0].files[0];
-                console.log(file, "flagFile");
+                // console.log(file, "flagFile");
 
             } else if ($(this).attr("id") == 'blockimg') {
                 file = $("#blockimg")[0].files[0];
-                console.log(file, "BlockFile");
+                // console.log(file, "BlockFile");
             } else if ($(this).attr("id") == 'categoryimage') {
                 file = $("#categoryimage")[0].files[0];
-                console.log(file, "categoryimage");
-            }else if ($(this).attr("id") == 'courseimg') {
+                // console.log(file, "categoryimage");
+            } else if ($(this).attr("id") == 'courseimg') {
                 file = $("#courseimg")[0].files[0];
-                console.log(file, "courseimg");
-            }else if ($(this).attr("id") == 'listing') {
+                // console.log(file, "courseimg");
+            } else if ($(this).attr("id") == 'listing') {
                 file = $("#listing")[0].files[0];
-                console.log(file, "listing");
+                // console.log(file, "listing");
+            } else if ($(this).attr("id") == 'formimage') {
+                file = $("#formimage")[0].files[0];
+                // console.log(file, "formimage");
             }
 
             filename = file.name;
-            console.log(filename);
+            // console.log(filename);
             // $("#blockfilename").text(filename)
 
             var ext = filename.split(".").pop().toLowerCase();
@@ -113,12 +116,12 @@ $(document).ready(function () {
 
                 $("#myfile-error").addClass('hidden')
 
-                console.log("crop is worked");
+                // console.log("crop is worked");
 
                 $('#imageSpace').removeClass('croppie-container').empty().show()
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") !=-1 || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
-                    console.log("F2");
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("entries") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("courses") != -1 || window.location.href.indexOf("listing") != -1 || window.location.href.indexOf("pages") != -1 || window.location.href.indexOf("cta") != -1) {
+                    // console.log("F2");
 
                     if (window.location.href.indexOf("myprofile") != -1) {
 
@@ -170,8 +173,8 @@ $(document).ready(function () {
 
                     } else if (window.location.href.indexOf("entries") != -1) {
 
-                        console.log("entries::");
-                        
+                        // console.log("entries::");
+
                         $("#prof-crop").attr('data-id', '8')
 
                         $('#cricleCropper-head').text('Crop Block Image')
@@ -197,7 +200,7 @@ $(document).ready(function () {
                         $('.mainsection').hide()
                         $('#create-course-modal').modal('hide')
 
-                    }else if (window.location.href.indexOf("listing") != -1) {
+                    } else if (window.location.href.indexOf("listing") != -1) {
 
                         $("#prof-crop").attr('data-id', '11')
 
@@ -205,10 +208,10 @@ $(document).ready(function () {
                         $('.CropperSection').removeClass('hidden')
                         $('.mainsection').hide()
 
-                    }else if (window.location.href.indexOf("pages") != -1) {
+                    } else if (window.location.href.indexOf("pages") != -1) {
 
-                      console.log("entries::");
-                        
+                        // console.log("entries::");
+
                         $("#prof-crop").attr('data-id', '8')
 
                         $('#cricleCropper-head').text('Crop Block Image')
@@ -216,11 +219,18 @@ $(document).ready(function () {
                         $('.mainsection').hide()
                         $('#createModal').modal('hide')
                         $('body').css("overflow", "visible")
+                    } else if (window.location.href.indexOf("cta") != -1) {
+                        $("#prof-crop").attr('data-id', '12')
+
+                        $('#cricleCropper-head').text('Crop form Image')
+                        $('.CropperSection').removeClass('hidden')
+                        $('.mainsection').hide()
+
                     }
 
                 }
 
-                if ($(this).attr("id") == 'cmpymyfile' || $(this).attr('id') == 'categoryimage' || $(this).attr('id') =='courseimg' || $(this).attr('id') =='listing') {
+                if ($(this).attr("id") == 'cmpymyfile' || $(this).attr('id') == 'categoryimage' || $(this).attr('id') == 'courseimg' || $(this).attr('id') == 'listing' || $(this).attr('id') == 'formimage') {
 
                     viewportType = 'square'
                     $('#extrawidth').show()
@@ -235,14 +245,14 @@ $(document).ready(function () {
                     viewportType = 'circle'
                     width = 600
                     height = 600,
-                    $('#extrawidth').hide()
+                        $('#extrawidth').hide()
                     $("#imageSpace").addClass("mt-[50px]")
 
                 }
 
 
 
-                console.log(viewportType, "view");
+                // console.log(viewportType, "view");
 
                 var reader = new FileReader();
                 reader.onload = function (event) {
@@ -315,7 +325,7 @@ $(document).ready(function () {
             } else {
 
 
-                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("courses") !=-1  || window.location.href.indexOf("listing") !=-1 || window.location.href.indexOf("pages") != -1) {
+                if (window.location.href.indexOf("myprofile") != -1 || window.location.href.indexOf("users") != -1 || window.location.href.indexOf("user") != -1 || window.location.href.indexOf("customer") != -1 || window.location.href.indexOf("general-settings/") != -1 || window.location.href.indexOf("blocks") != -1 || window.location.href.indexOf("categories") != -1 || window.location.href.indexOf("languages/") != -1 || window.location.href.indexOf("courses") != -1 || window.location.href.indexOf("listing") != -1 || window.location.href.indexOf("pages") != -1 || window.location.href.indexOf("cta") != -1) {
 
                     $("#myfile-error").removeClass('hidden')
 
@@ -326,7 +336,7 @@ $(document).ready(function () {
 
 
 
-                    console.log("profie have error");
+                    // console.log("profie have error");
                     // $('"#myfile-error').css('display', 'block !important')
                 }
             }
@@ -338,7 +348,7 @@ $(document).ready(function () {
                 url: imgurl,
             }).then(function () {
                 cropper.croppie('setZoom', 0)
-                console.log("cropper initialized!");
+                // console.log("cropper initialized!");
             })
             canvas = document.querySelector('canvas[class=cr-image]');
             ctx = canvas.getContext('2d');
@@ -386,7 +396,7 @@ $(document).ready(function () {
 
 
         $('#crop-button').click(function () {
-            console.log("works");
+            // console.log("works");
 
             var in_val
             if (window.location.href.indexOf("user") != -1 || window.location.href.indexOf("users") != -1) {
@@ -415,7 +425,7 @@ $(document).ready(function () {
 
 
             if (in_val == 2) {
-                console.log("mem edit");
+                // console.log("mem edit");
                 cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'png', }).then(function (dataUrl) {
                     $('#profpic2').attr('src', dataUrl)
                     $("#cname-string").hide()
@@ -430,7 +440,7 @@ $(document).ready(function () {
             }
             //Member Edit
             if (in_val == 3) {
-                console.log("mem edit");
+                // console.log("mem edit");
                 cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'png', }).then(function (dataUrl) {
                     $('#profpicture').attr('src', dataUrl)
                     $("#cname-string").hide()
@@ -446,7 +456,7 @@ $(document).ready(function () {
 
             if (in_val == 5) {
                 cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', circle: true, }).then(function (dataUrl) {
-                    console.log("mem");
+                    // console.log("mem");
                     $('#prof-crop').attr('src', dataUrl)
                     $('#cropData').attr('value', dataUrl)
                     $('#profPicWarn').addClass('hidden')
@@ -591,7 +601,7 @@ $(document).ready(function () {
             }
             if (in_val == 11) {
                 cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
-                    console.log("in_val",in_val);
+                    // console.log("in_val", in_val);
                     $('#imageurl').val(dataUrl)
                     $("#ImageName").text(filename)
                     // $('.listingimage').attr('src', dataUrl)
@@ -599,6 +609,24 @@ $(document).ready(function () {
                     $('.mainsection').show()
                     $("#imageRemoveDiv").show()
                     $("#imageUploadDiv").hide()
+
+                });
+            }
+            if (in_val == 12) {
+                cropper.croppie('result', { type: 'base64', size: 'original', quality: 0.5, format: 'jpeg', }).then(function (dataUrl) {
+                    // console.log("in_val", in_val);
+                    $('#formimages').val(dataUrl)
+                    $('#ctimagehide').attr('src', dataUrl)
+                    $('#ctimagehide').show()
+                    $('#browse').hide()
+                    $('#uploadLine').hide()
+                    $('#uploadFormat').hide()
+                    $('#catdel-img').show()
+                    $('canvas[class=cr-image]').css('opacity', '0')
+                    $("#changepicModal").modal('hide');
+                    $('#imageSpace').removeClass('croppie-container').empty()
+                    $('.CropperSection').addClass('hidden')
+                    $('.mainsection').show()
 
                 });
             }
@@ -694,8 +722,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         for (let key in languagedata.Toast) {
             if (key == msg) {
-                console.log(msg,"msg");
-                notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="toast-msg flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#FF8964] bg-[#FFF1ED]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/danger-group-12.svg" alt="toast error"> </div> <div> <h3 class="text-[#FF8964] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + languagedata.Toast[key] + `</p></div></div> </li></ul>`;
+                // console.log(msg, "msg");
+                notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li> <div class="toast-msg flex  max-sm:max-w-[300px] relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#A32D2D] bg-[#FCEBEB]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify" > <img src="/public/img/close-toast.svg" alt="close"> </a> <div> <img src="/public/img/danger-group-12.svg" alt="toast error"> </div> <div> <h3 class="text-[#A32D2D] text-normal leading-[17px] font-normal mb-[5px] ">Warning</h3><p class="text-[#262626] text-[12px] font-normal leading-[15px] ">` + languagedata.Toast[key] + `</p></div></div> </li></ul>`;
 
 
                 $(notify_content).insertBefore(".header-rht");
@@ -798,11 +826,11 @@ $(document).ready(function () {
 
     $('#date-end-clear').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'DD MMM YYYY', maxDate: moment(), clearButton: true }).on('change', function (e, date) {
 
-        console.log('calendar event:', e, date)
+        // console.log('calendar event:', e, date)
         $('#date-start-clear').bootstrapMaterialDatePicker('setMaxDate', date);
     });
     $('#date-start-clear').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'DD MMM YYYY', maxDate: moment(), clearButton: true }).on('change', function (e, date) {
-        console.log('calendar event:', e, date)
+        // console.log('calendar event:', e, date)
         $('#date-end-clear').bootstrapMaterialDatePicker('setMinDate', date);
     });
     if (fendDateclear !== '') {
@@ -1000,6 +1028,10 @@ $(document).on('click', '.category-select-btn', function () {
 
     $(this).parent('.categorypdiv').remove();
 
+    if ($('.categories-list .categorypdiv').length == 0) {
+        $("#categorynodatafound").show();
+    }
+
     var idstr = [];
 
     $(this).siblings('.cal-list').children('.categoryname').each(function () {
@@ -1060,7 +1092,11 @@ $(document).on('click', '.category-unselect-btn', function () {
 
     $('.categories-list').append(div);
 
+    $("#categorynodatafound").hide();
 
+    if ($('.selected_category .selectedcategorydiv').length == 0) {
+        $("#no-data").show();
+    }
 
     var idstr = [];
 
@@ -1407,7 +1443,7 @@ $(document).ready(function () {
 
 $(document).on("click", "#logout", function () {
 
-    console.log("this log working properlly");
+    // console.log("this log working properlly");
 
     sessionStorage.removeItem("rememberme");
     localStorage.removeItem("rememberme");
@@ -1422,36 +1458,36 @@ $(document).on("click", "#logout", function () {
 
 $(document).ready(function () {
 
-    $(document).on('click',"#manual-content-home", function () {
+    $(document).on('click', "#manual-content-home", function () {
 
-        $("#manual-content-home-input").prop("checked",true)
-        
-        window.location.href=$("#manual-content-home-input").attr("data-id")
+        $("#manual-content-home-input").prop("checked", true)
 
-    });
-
-    $(document).on('click',"#ai-content-home", function () {
-
-        $("#ai-content-home-input").prop("checked",true)
-        
-        window.location.href=$("#ai-content-home-input").data('id')     
-          
-    });
-
-    $(document).on('click',"#manual-content-entry", function () {
-
-        $("#manual-content-entry-input").prop("checked",true)
-        
-        window.location.href=$("#manual-content-entry-input").attr("data-id")
+        window.location.href = $("#manual-content-home-input").attr("data-id")
 
     });
 
-    $(document).on('click',"#ai-content-entry", function () {
+    $(document).on('click', "#ai-content-home", function () {
 
-        $("#ai-content-entry-input").prop("checked",true)
-        
-        window.location.href=$("#ai-content-entry-input").data('id')     
-          
+        $("#ai-content-home-input").prop("checked", true)
+
+        window.location.href = $("#ai-content-home-input").data('id')
+
+    });
+
+    $(document).on('click', "#manual-content-entry", function () {
+
+        $("#manual-content-entry-input").prop("checked", true)
+
+        window.location.href = $("#manual-content-entry-input").attr("data-id")
+
+    });
+
+    $(document).on('click', "#ai-content-entry", function () {
+
+        $("#ai-content-entry-input").prop("checked", true)
+
+        window.location.href = $("#ai-content-entry-input").data('id')
+
     });
 
 

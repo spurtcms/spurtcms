@@ -33,10 +33,8 @@ $(document).on('change', '#jsonFile', function () {
 
     var fileExtension = fileName.split(".").pop().toLowerCase()
 
-    console.log(fileExtension);
 
     if (fileExtension == "json") {
-        console.log("test");
 
         $('#jsonDesc').text(fileName)
 
@@ -85,7 +83,6 @@ $(document).ready(function () {
 
     });
 
-    console.log(langCodeArr);
 
 })
 
@@ -129,7 +126,6 @@ $(document).ready(function () {
                 datatype: "json",
                 caches: false,
                 success: function (data) {
-                    console.log("data", data);
                     result = data.trim();
                 }
             })
@@ -212,7 +208,6 @@ $(document).on('keypress', '#langSearchBar', function (e) {
 
     if (e.which == 13) {
         var searchText = $('#langSearchBar').val()
-        console.log(searchText, "searchText");
 
 
         if (searchText != "") {
@@ -252,7 +247,6 @@ $(document).on('click', '#setdefault', function () {
 
 $(document).on('click', '.langEditBtn', function () {
     var langId = $(this).attr('data-id')
-    console.log(langId);
 
     $('#langId').val(langId)
 
@@ -262,7 +256,6 @@ $(document).on('click', '.langEditBtn', function () {
         type: 'GET',
         dataType: 'JSON',
         success: function (data) {
-            console.log("data", data)
             $('form[name=language-form]').validate({
                 ignore: [],
                 rules: {
@@ -321,7 +314,6 @@ $(document).on('click', '.langEditBtn', function () {
             var jsonFileName = jsonPath.split("/").pop()
 
             $('#jsonDesc').text(jsonFileName)
-            console.log(data.Language.ImagePath);
             $('#flagSpan').addClass('hidden')
             $('#flaggFileLabel').addClass('hidden')
             $('#flagPara').addClass('hidden')
@@ -394,7 +386,6 @@ $(document).on('click', '.langDeleteBtn', function () {
 
     var langId = $(this).attr("data-id")
 
-    console.log("langid", langId);
 
     $('.deltitle').text(languagedata.Languages.deletelanguage + "?")
 
@@ -416,7 +407,6 @@ $('#addnewimageModal').on('hide.bs.modal', function () {
 
 $(document).on('click', '.selectcheckbox', function () {
 
-    console.log(selectedcheckboxarr);
 
     var languageId = $(this).attr('data-id')
 
@@ -510,7 +500,6 @@ $(document).on('click', '.selectcheckbox', function () {
 
     $('#Check').prop('checked', allChecked);
 
-    console.log(selectedcheckboxarr, "checkkkk")
 })
 
 
@@ -534,7 +523,6 @@ $(document).on('click', '#Check', function () {
 
             var status = $(`#toggle${languageId}`).val();
 
-            console.log(status, "state");
 
             selectedcheckboxarr.push({ "languageId": languageId, "status": status })
         })
@@ -547,7 +535,6 @@ $(document).on('click', '#Check', function () {
             return item.status === selectedcheckboxarr[0].status;
         });
 
-        console.log(allSame, "allsome");
 
 
 
@@ -643,7 +630,6 @@ $(document).on('click', '.checkboxdelete', function () {
 
     var url = window.location.href;
 
-    console.log("url", url)
 
     var pageurl = window.location.search
 
@@ -666,7 +652,6 @@ $(document).on('click', '.checkboxdelete', function () {
         },
         success: function (data) {
 
-            console.log(data, "result")
 
             if (data.value == true) {
 
@@ -820,7 +805,6 @@ $(document).on('click', '.langStatusBtn', function () {
             SetDefaultLang(langId, isDefault, dataRoleId)
         }
     } else {
-        console.log("ulla vra");
 
         var isChecked = false
         $('.langStatusBtn').each(function (index, element) {

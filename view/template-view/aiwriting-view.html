@@ -1,0 +1,190 @@
+{{template "template-header" .}}
+
+<section
+class=" max-md:ms-0  max-md:max-w-full  w-full  ml-auto pt-[48px] min-h-screen  overflow-hidden">
+
+
+{{template "webpageheader" .}}
+
+<div class="px-[16px] sm:px-[28px] 2xl:px-10 py-6 max-w-[1920px] mx-auto">
+
+
+    <div class="flex items-center flex-col">
+        <h1  class="text-[#262626] text-[40px] max-xl:text-[32px] font-bold  mb-[12px] text-center">
+            Writing Simplified with the Power of AI
+        </h1>
+        <p class="text-[20px] font-light mb-[24px] text-center">Effortlessly create blogs, publications, or press releases. Just set the tone, keywords, and word count—AI takes care of the rest.</p>
+        <a href="/admin"
+            class="bg-[#10A37F] p-[8px_24px] rounded-[4px] text-white text-base font-normal flex space-x-[16px] items-center hover:bg-[#148569] w-fit mb-[24px]"><span>Generate Content Now </span>
+           
+            <img src="/public/img/ai-arrow.svg" alt="arrow">
+        </a>
+        <div>
+            <img src="/public/img/ai-banner.svg" alt="ai banner">
+        </div>
+    </div>
+
+    <div class="flex flex-col space-y-[21px] mb-[80px] ">
+        <div>
+
+            <ul
+                class="homehead before:transition-all flex-nowrap flex overflow-auto [&::-webkit-scrollbar]:h-0 border-t border-solid border-[#ECECEC] relative before:block before:w-[33%] before:h-[2px] before:absolute before:top-0 before:bg-[#10A37F] before:animate-growWidth">
+                <li class="nav-item list-none basis-full ">
+                    <a href="javascript:void(0)" id="home-tab" onmouseover="hovertab(event, 'home')"
+                        class="p-[16px_40px_0_0] block relative active group min-w-[250px] active">
+                        <div class="flex flex-col space-y-[6px]  ">
+                            <h2
+                                class=" text-[#717171] text-[48px] font-semibold leading-[60px] group-[&.active]:text-[#10A37F]">
+                                1</h2>
+                            <h3 class="text-[#202224] text-xl xl:text-2xl font-medium">Define Your Content</h3>
+                            <p class="text-[#717171] text-[20px] font-light">Choose the type of content you want—blog, press release, or publication. Specify the tone, keywords, and word count to match your vision.</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item list-none basis-full ">
+                    <a href="javascript:void(0)" id="home-tab2" onmouseover="hovertab(event, 'home2')"
+                        class="p-[16px_40px_0_0] block group min-w-[250px]">
+                        <div class="flex flex-col space-y-[6px]">
+                            <h2
+                                class=" text-[#717171] text-[48px] font-semibold leading-[60px] group-[&.active]:text-[#10A37F]">
+                                2</h2>
+                            <h3 class="text-[#202224] text-xl xl:text-2xl font-medium">Let AI Do the Work</h3>
+                            <p class="text-[#717171] text-[20px] font-light">Submit your preferences and watch AI craft polished, SEO-friendly content tailored to your needs in seconds.</p>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="nav-item list-none basis-full ">
+                    <a href="javascript:void(0)" id="home-tab3" onmouseover="hovertab(event, 'home3')"
+                        class="p-[16px_40px_0_0] block group min-w-[250px]">
+                        <div class="flex flex-col space-y-[6px]">
+                            <h2
+                                class=" text-[#717171] text-[48px] font-semibold leading-[60px] group-[&.active]:text-[#10A37F]">
+                                3</h2>
+                            <h3 class="text-[#202224] text-xl xl:text-2xl font-medium">Review and Publish</h3>
+                            <p class="text-[#717171] text-[20px] font-light">Make any final tweaks, add it as an entry, and publish. Your perfect content is ready to captivate your audience!</p>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="tab-content relative">
+            <!-- <div
+                class="w-1/2 opacity-0 flex h-full items-center absolute left-0 hover:opacity-100 justify-start">
+                <button class="w-2/5 sm:w-auto"><img src="/public/img/arrow-prev.svg" alt=""></button>
+            </div> -->
+            <!-- <div
+                class="w-1/2 opacity-0 flex h-full items-center absolute right-0 hover:opacity-100 justify-end">
+                <button class="w-2/5 sm:w-auto ">
+                    <img src="/public/img/arrow-next.svg" alt="" class="ml-auto"></button>
+            </div> -->
+            <div class="tab-pane active w-full hidden  shadow-[-2px_-2px_8px_0px_#00000014]  rounded-xl overflow-hidden"
+                id="home" role="tabpanel" aria-labelledby="home-tab" style="display: none;">
+
+                <img src="/public/img/AI 3.jpg" alt="" class=" w-full">
+            </div>
+            <div class="tab-pane  w-full hidden  shadow-[-2px_-2px_8px_0px_#00000014]  rounded-xl overflow-hidden "
+                id="home2" role="tabpanel" aria-labelledby="home-tab2" style="display: block;">
+                <img src="/public/img/AI2.jpg" class="w-full">
+            </div>
+            <div class="tab-pane  w-full hidden  shadow-[-2px_-2px_8px_0px_#00000014]  rounded-xl overflow-hidden"
+                id="home3" role="tabpanel" aria-labelledby="home-tab3" style="display: none;">
+                <img src="/public/img/AI1.jpg" class=" w-full ">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="flex flex-col space-y-[24px] mb-[24px] sm:mb-10 xl:mb-20">
+        <div class="w-full max-w-[750px]">
+            <h3 class="text-[32px] lg:text-[44px] text-[#202224] font-bold leading-normal lg:leading-[55px] 
+                mb-[12px] ">
+                The Beauty of Effortless AI Writing
+            </h3>
+            <p class="text-[20px] text-[#202224] font-light max-w-[650px]">Transform your content creation process with AI-powered precision and creativity. From saving time to delivering engaging, high-quality content, AI brings a world of possibilities to your fingertips.</p>
+        </div>
+        <div
+            class="grid max-[1280px]:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]  grid-cols-4  gap-[24px]">
+            <div
+                class="p-[16px] bg-[#F8F8F8] rounded-xl block nav-link-tab text-[#202224] m-0  relative group min-w-[256px] lg:min-w-auto">
+                <div class="flex flex-col space-y-[8px]">
+                    <div class="mb-[4px]">
+                        <img src="/public/img/Speed Meets Perfection.svg" alt="sample">
+                    </div>
+                    <h3 class="text-[#202224] text-xl xl:text-2xl font-medium leading-[30px]">Speed Meets Perfection</h3>
+                    <p class="text-[#202224] text-base font-light leading-6">Generate polished content in seconds, saving hours of manual effort while maintaining quality and coherence.</p>
+                </div>
+            </div>
+
+            <div
+                class="p-[16px] bg-[#F8F8F8] rounded-xl block nav-link-tab text-[#202224] m-0  relative group min-w-[256px] lg:min-w-auto">
+                <div class="flex flex-col space-y-[8px]">
+                    <div class="mb-[4px]">
+                        <img src="/public/img/Custom Tailored for You.svg" alt="sample">
+                    </div>
+                    <h3 class="text-[#202224] text-xl xl:text-2xl font-medium leading-[30px]">Custom Tailored for You</h3>
+                    <p class="text-[#202224] text-base font-light leading-6">Choose the tone, style, and structure to match your brand’s voice and purpose—no generic templates here.</p>
+                </div>
+            </div>
+
+
+            <div
+                class="p-[16px] bg-[#F8F8F8] rounded-xl block nav-link-tab text-[#202224] m-0  relative group min-w-[256px] lg:min-w-auto">
+                <div class="flex flex-col space-y-[8px]">
+                    <div class="mb-[4px]">
+                        <img src="/public/img/SEO-Optimized Writing.svg" alt="sample">
+                    </div>
+                    <h3 class="text-[#202224] text-xl xl:text-2xl font-medium leading-[30px]">SEO-Optimized Writing</h3>
+                    <p class="text-[#202224] text-base font-light leading-6">Seamlessly integrate keywords and phrases to ensure your content is search-engine friendly and reaches the right audience.</p>
+                </div>
+            </div>
+
+            <div
+                class="p-[16px] bg-[#F8F8F8] rounded-xl block nav-link-tab text-[#202224] m-0  relative group min-w-[256px] lg:min-w-auto">
+                <div class="flex flex-col space-y-[8px]">
+                    <div class="mb-[4px]">
+                        <img src="/public/img/Adaptable Content Types.svg" alt="sample">
+                    </div>
+                    <h3 class="text-[#202224] text-xl xl:text-2xl font-medium leading-[30px]">Adaptable Content Types</h3>
+                    <p class="text-[#202224] text-base font-light leading-6">Whether it’s a blog, press release, or marketing copy, AI adapts to create content for any purpose effortlessly.</p>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[24px] rounded-lg">
+                <div class="flex flex-col space-y-[16px] items-start pr-8">
+                    <h3 class="text-xl text-[#202224] font-medium">User-Friendly Integration</h3>
+                    <p class="text-[#202224] text-base font-light">Create, review, and edit content directly within the platform, making the process seamless and intuitive.</p>
+                </div>
+                <div
+                    class="mt-auto rounded-[12px_0_0_0] overflow-hidden  shadow-[-2px_-2px_8px_0px_#00000014] ">
+                    <img src="/public/img/ai-screen1.svg" alt="" class="w-full">
+                </div>
+            </div>
+            <div class="p-8 pb-0 pr-0 bg-[#F8F8F8] flex flex-col space-y-[24px] rounded-lg ">
+                <div class="flex flex-col space-y-[16px] items-start pr-8 mb-auto">
+                    <h3 class="text-xl text-[#202224] font-medium">Time-Saving Efficiency</h3>
+                    <p class="text-[#202224] text-base font-light">Focus on strategy and creativity while AI handles the heavy lifting of content generation, delivering results instantly.</p>
+                </div>
+                <div
+                    class=" rounded-[12px_0_0_0] overflow-hidden  shadow-[-2px_-2px_8px_0px_#00000014] ">
+                    <img src="/public/img/AI2.jpg" alt="" class="w-full">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+</section>
+{{template "template-footer" .}}

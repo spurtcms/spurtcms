@@ -155,6 +155,12 @@
     "selling": "Selling",
     "courses": "Courses",
     "listing": "Listing",
+    "browsetheme": "Browse theme",
+    "pages": "Pages",
+  "seo":"SEO",
+    "menuitem": "Menu",
+
+
     "Setting": {
         "title": "Settings",
         "manageroles": "Manage Roles",
@@ -235,7 +241,7 @@
         "hosterr": "Please enter your the host",
         "porterr": "Please enter your the port",
         "imagetypeerror": "Please choose images with .jpg .jpeg .png .svg formats only",
-        "firstnamelable": " Your Last Name as per the records.",
+        "firstnamelable": " Your First Name as per the records.",
         "lastlamelable": " Your Last Name for proper identification.",
         "usernamelable": "The username that will be used for you to login.",
         "rolelable": "Your role in the system, assigned by the admin, defining your access level.",
@@ -1123,6 +1129,8 @@
         "Form Published Successfully": "Form published successfully",
         "Form Unpublished Successfully": "Form unpublished successfully",
         "Form Created Successfully": "Form created successfully",
+        "Ticket Closed Successfully":"Ticket Closed Successfully",
+        "Reply Submitted Successfully":"Reply Submitted Successfully",
         "Form Updated Successfully": "Form updated successfully",
         "EmailStatusUpdatedSuccessfully": "Email status updated successfully",
         "ERRORAWScredentialsnotfound": "Upload failed: Check S3 credentials and try again.",
@@ -1178,7 +1186,10 @@
         "Website Updated Successfully": "Website Updated Successfully",
         "Page Created Successfully": "Page Created Successfully",
         "Page Updated Successfully": "Page Updated Successfully",
-        "Page Deleted Successfully": "Page Deleted Successfully"
+        "Page Deleted Successfully": "Page Deleted Successfully",
+        "Widget Created Successfully": "Widget Created Successfully",
+        "Widget Updated Successfully": "Widget Updated Successfully",
+        "Widget Deleted Successfully": "Widget Deleted Successfully"
     },
     "DashBoard": {
         "lastactive": "Last Active",
@@ -2304,7 +2315,7 @@
         "pricemodelerr": "Please Select the pricing model for your course"
     },
     "Menu": {
-        "website": "Website",
+        "website": "Manage Website",
         "templates": "Templates",
         "seo": "SEO",
         "setting": "Setting",

@@ -1,0 +1,135 @@
+{{template "webhead" .}}
+
+<body>
+
+    <div class="btn-group language-group langdata" style="display: none;">
+        {{$CurrentLanguage := .Menu.CurrentLanguage}}
+        <button type="button" class="dropdown-toggle" id="current-lang" data-bs-toggle="dropdown" aria-expanded="false"
+            data-path="/locales/en.json" data-id="{{$CurrentLanguage.Id}}">
+            <img id="current-langflag" src="{{$CurrentLanguage.ImagePath}}" alt="">
+            {{$CurrentLanguage.LanguageName}} <img src="/public/img/arrow-down.svg" alt="" class="drop-arrow">
+        </button>
+    </div>
+
+    <div class="h-lvh relative 2xl:p-20 sm:p-10 p-6 max-w-[1920px] mx-auto header-rht">
+        <a class="max-w-[110px] absolute top-[16px] left-[16px] sm:left-10" href="/">
+            <img src="/public/img/SpurtCMSlogov1.2.1.svg" />
+        </a>
+        <div class="max-w-[360px] mx-auto pt-10 sm:pt-[12px] 2xl:pt-20 pb-0 sm:pb-[12px]">
+            <div class="mb-10">
+                <h3 class="text-[#202224] text-[22px] font-medium mb-0">Think it. Make it.</h3>
+                <h5 class="text-[22px] text-[#ACABA9] font-medium mb-0">Log in to your spurtCMS account</h5>
+            </div>
+            <div class="flex flex-col space-y-[10px]">
+                <a href="/admin/googlelogin"
+                    class="flex space-x-[10px] items-center text-base text-[#202224] font-normal border-[#E5EAEB] border w-full h-10 justify-center no-underline rounded-[3px] hover:bg-[#f5f5f5]"><img
+                        src="/public/img/google.svg" /> <span>Continue with Google</span></a>
+                <a href="/admin/linkedinlogin"
+                    class="flex space-x-[10px] items-center text-base text-[#202224] font-normal border-[#E5EAEB] border w-full h-10 justify-center no-underline rounded-[3px] hover:bg-[#f5f5f5]"><img
+                        src="/public/img/linkedin.svg" /><span>Continue with Linkedin</span></a>
+                <!-- <a href="#" class="flex space-x-[10px] items-center text-base text-[#202224] font-normal border-[#E5EAEB] border w-full h-10 justify-center no-underline rounded-[3px] hover:bg-[#f5f5f5]"><img src="/public/img/microsoft.svg" /><span>Continue with Microsoft</span></a> -->
+            </div>
+            <div class="w-full h-px bg-[#E5EAEB] my-6"></div>
+            <form action="{{if .userinfo }}/admin/login/otpverification {{else}}/admin/login{{end}}" method="post"
+                name="rloginform" id="rloginform">
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+                <input type="hidden" name="tenantid" value="{{.userinfo.TenantId}}">
+                <div class="mb-[20px] sm:mb-10">
+                    <div class="flex flex-col items-start space-y-[5px]">
+                        <p class="text-xs text-[#202224] font-light mb-0"> Email</p>
+                        <div class="relative w-full">
+                            <input name="emailid" id="useremail"
+                                class="field border-[#E5EAEB] border rounded-[3px] h-10 w-full px-2.5 text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css)"
+                                placeholder="Enter your email address" value="{{.userinfo.Email}}" />
+                            {{if .userinfo }}
+                            <button id="cancelbtn"
+                                class="absolute border-0 bg-transparent w-[16px] h-[16px] right-2.5 top-3"><img
+                                    src="/public/img/cancel.svg" /></button>
+                            {{end}}
+                            <label id="em-error" class="error logScr" style="display: none;">
+                                *
+                                You are not registered with us!</label>
+                            <label id="em-error1" class="error logScr" style="display: none;">
+                                * This account is inactive please contact the admin!</label>
+                        </div>
+                    </div>
+
+                    <p class="text-[#ACABA9] text-xs font-light mb-0 mt-2.5">Use an organization email to easily
+                        collaborate with teammates</p>
+                    {{if .userinfo}}
+                    <div class="mt-[18px] ">
+                        <div class="flex flex-col items-start space-y-[5px]">
+                            <p class="text-xs text-[#202224] font-light mb-0">Login code</p>
+                            <div class="flex items-center border-[#E5EAEB] border rounded-[3px] h-10 last:border-r-0">
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-1" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[1px] border-b-0 !border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-2" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[1px] border-b-0 border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-3" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[1px] border-b-0 border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-4" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[1px] border-b-0 border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-5" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[1px] border-b-0 border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input onkeypress="handleKeyPress(event)" id="otp-input-6" autocomplete="off"
+                                    class="otp-input max-w-[60px] h-[20px] w-full text-center text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal border-t-0 border-r-[0px] border-b-0 border-l-0 border-[#E5EAEB] last:border-r-0"
+                                    maxlength="1" placeholder="-" />
+                                <input type="hidden" name="otpno" value="" class="otpno" id="otpno">
+
+                            </div>
+                            <label id="otp-errorr" class="error otp-errorr text-[#f26674] font-normal text-xs "
+                                style="display: none;">* Please Enter OTP</label>
+                            <label id="otp-error" class="error otp-error text-[#f26674] font-normal text-xs "
+                                style="display: none;">* Invalid OTP</label>
+                            <label id="otp-error1" class="error otp-error1 text-[#f26674] font-normal text-xs "
+                                style="display: none;">* OTP Expired</label>
+                        </div>
+                        <!-- <div class="flex flex-col items-start gap-[5px]">
+                        <p class="text-xs text-[#202224] font-light mb-0"> Login code</p>
+                      
+                      
+                        <input
+                            class="border-[#E5EAEB] border rounded-[3px] h-10 w-full px-2.5 text-[#202224] text-base font-normal focus-visible:outline-none placeholder:font-normal [&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) otpno"
+                           name="otpno" type="number" placeholder="Place Login code" onkeypress="handleKeyPress(event)" />
+                           <label id="otp-error" class="error otp-error" style="display: none;">
+                            *
+                            Invalid OTP</label>
+                            <label id="otp-error1" class="error otp-error1" style="display: none;">
+                                *
+                                Otp Expired</label>
+                    </div> -->
+                        <div class="flex items-center space-x-[10px]">
+                            <p id="otpMessage" class="text-[#ACABA9] text-xs font-light mb-0 mt-2.5">We sent a code to
+                                your inbox. Resend in
+                                <span id="countdown">30</span>s
+                            </p>
+                            <a href="javascript:void(0)" id="resendbtn"
+                                class=" cursor-pointer text-[#ACABA9] text-xs font-light mb-0 mt-2.5 pointer-events-none border-none">Resend</a>
+                        </div>
+                    </div>
+                    {{end}}
+                </div>
+                <div class="flex flex-col space-y-[20px] sm:space-y-[40px]">
+                    <button type="submit" id="loginf"
+                        class="bg-[#05ACD7] hover:bg-[#069ec5] text-white text-base font-medium rounded-[3px] h-10 flex justify-center items-center w-full {{if .userinfo}}otplogin{{else}}loginf{{end}}">Continue
+                        With Login Code</button>
+                    <p class="text-center text-xs text-[#ACABA9] font-light">Your name and photo are displayed to users
+                        who invite you to a workspace using your email. By continuing, you acknowledge that you
+                        understand and agree to the Terms & Conditions and Privacy Policy</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {{template "footer" .}}
+    <script src="/public/js/webpagelogin/weblogin.js"></script>
+
+</body>
+
+</html>

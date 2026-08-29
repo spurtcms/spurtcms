@@ -1,5 +1,6 @@
 {{define "templateheader"}}
 {{$ChannelName:=.ChannelName}}
+
 <header class="bg-black-700 shadow-lg">
     {{$template:=.template_name}}
     <nav class="mx-auto flex max-w-screen-2xl items-center justify-between p-4 lg:px-20 lg:py-6 h-[72px]"
@@ -27,15 +28,18 @@
                         {{ $HeaderId := "" }}
 
                 {{ range .menulist }}
+                
                 {{ if eq .Name "Headers" }}
+              
                 {{ $HeaderId = .Id }}
                 {{ end }}
                 {{ end }}
 
                 {{ if $HeaderId }}
                 {{ range .menulist }}
+             
                 {{ if eq .ParentId $HeaderId }}
-                  <a class="text-sm font-normal leading-4  {{if eq $ChannelName .Name}} text-[#2facd6]{{else}}text-black {{end}}"
+                  <a class="text-sm font-normal leading-4  {{if eq $ChannelName .SlugName}} text-[#2facd6]{{else}}text-black {{end}}"
                     href="{{.UrlPath}} ">{{.Name}}</a>
                 {{ end }}
                 {{ end }}

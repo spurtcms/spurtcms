@@ -1,7 +1,9 @@
 template_name: "Content flow"
-template_image: "/public/img/content_flow.png"
+
+template_image: "/websites/public/img/writerhub.jpg"
+
+
 description: "A content flow template visually maps out each stage of content creation, from planning to publication.It ensures a structured, repeatable process for teams to follow and maintain content quality."
 type: "Blog"
 channel: "Blog,Knowledge Base"
-html_templates: "default.html"
 

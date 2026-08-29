@@ -111,7 +111,19 @@
                         {{end}}
                         {{end}}
                         {{end}}
-                        
+                        {{range .Menu.TblModule}}
+                        {{range .SubModule}}
+                        {{if eq .ModuleName "Graphql Api"}}
+                        {{if .Routes}}
+                        <li><a href="/admin/graphql/"
+                                class="  max-sm:[&.active]:before:h-[2px] max-sm:[&.active]:before:w-full  [&.active]:before:bottom-0 relative before:w-[2px] before:absolute before:right-0 before:h-[100%] before:rounded-[4px] p-[9px_8px] [&.active]:before:bg-[#000000] before:block rounded-[4px_0_0_4px] flex items-center space-x-[8px] hover:bg-[#F9F9F9] [&.active]:bg-[#F9F9F9] sideMenu "
+                                id="myProfileLink"><img src="/public/img/graphQl-setting.svg" alt="graph ql"> <span
+                                    class="text-[#262626] text-[13px] font-normal leading-[16.25px] ">{{$Translate.Graphql.Title}}</span></a>
+                        </li>
+                        {{end}}
+                        {{end}}
+                        {{end}}
+                        {{end}}
                         {{range .Menu.TblModule}}
                         {{range .SubModule}}
                         {{if eq .ModuleName "Languages"}}
@@ -139,7 +151,7 @@
                         {{end}}
                         {{end}}
 
-                        <!-- {{range .Menu.TblModule}}
+                        {{range .Menu.TblModule}}
                         {{range .SubModule}}
                         {{if eq .ModuleName "Data"}}
                         {{if .Routes}}
@@ -169,7 +181,7 @@
                         {{end}}
                         {{end}}
                         {{end}}
-                        {{end}} -->
+                        {{end}}
 
                     </ul>
                 </div>

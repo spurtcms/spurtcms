@@ -180,7 +180,7 @@
                     class="flex max-[600px]:flex-col-reverse justify-between items-start gap-[16px] border-[#1516183D] py-[40px] last:pb-0 border-b last:border-b-0 border-solid max-w-[500px]:mb-[32px]">
                     <div class="flex flex-col items-start max-w-[832px] max-[600px]:max-w-full max-[600px]:max-w-full">
                         <p>{{ $entry.CreatedDate }} by @{{ $entry.Username }} in #{{ $entry.CategoryGroup }}</p>
-                        <a href="{{$entry.Slug}}"
+                        <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}"
                             class="my-[10px] font-medium text-[#120B14] text-[60px] max-[998px]:text-[32px] hover:underline line-clamp-2">  {{ $entry.Title }}</a>
                         <h6 class="font-normal text-[#120B14] text-[20px] line-clamp-3"> {{ $entry.Description }}</h6>
                     </div>
@@ -206,7 +206,7 @@
                  {{if gt (len .Entries) 11}}
                 {{range $i,$entry := .Entries}}
                  {{ if and (ge $i 11) (le $i 15) }}
-                <a href="{{$entry.Slug}}" class="flex flex-col items-start group">
+                <a href="/channel/{{$entry.ChannelName}}/{{$entry.Slug}}" class="flex flex-col items-start group">
                     <div class="mb-[30px] w-full h-[271px]">
                         <img src="{{if $entry.CoverImage}}{{ $entry.CoverImage }}{{else}}/websites/public/img/no-image.png{{end}}" alt=""
                             class="w-full h-full object-cover">

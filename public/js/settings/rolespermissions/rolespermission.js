@@ -125,7 +125,6 @@ $(document).on('click', '.saverolperm', function () {
                 }
                 if (data.role == false) {
                     $('#roleform')[0].submit();
-                    console.log("submit")
                     var url = $("#url").val()
 
                     var rolename = $("#rolename").val();
@@ -287,7 +286,6 @@ $(document).on('click', '#deleterole-btn', function () {
         dataType: 'json',
         success: function (data) {
             if (data.value) {
-                console.log("trrrrr", data.value);
                 $('#dynamicImage').attr('src', '/public/img/delete-icon.svg')
                 $('#delid').addClass("hidden");
                 $('#dltCancelBtn').text(languagedata.ok);
@@ -404,7 +402,6 @@ function RoleStatus(id) {
         dataType: 'json',
         cache: false,
         success: function (result) {
-            console.log(result,);
             notify_content = `<ul class="fixed top-[56px] right-[16px] z-[1000] grid gap-[8px]"><li><div class="toast-msg flex max-sm:max-w-[300px]  relative items-start gap-[8px] rounded-[2px] p-[12px_20px] border-l-[4px] border-[#278E2B] bg-[#E2F7E3]"> <a href="javascript:void(0)" class="absolute right-[8px] top-[8px]" id="cancel-notify"> <img src="/public/img/close-toast.svg" alt="close"> </a>` + `<div> <img src = "/public/img/toast-success.svg" alt = "toast success"></div> <div> <h3 class="text-[#278E2B] text-normal leading-[17px] font-normal mb-[5px] ">Success</h3> <p class="text-[#262626] text-[12px] font-normal leading-[15px]" > Role Status Updated Successfully </p ></div ></div ></li></ul> `;
 
             $(notify_content).insertBefore(".header-rht");
@@ -481,11 +478,9 @@ function Editrole(id, languagedata) {
         caches: false,
         success: function (result) {
             let jsonrole = $.parseJSON(result);
-            console.log("ss", result, jsonrole);
             $('#rolename').val(jsonrole.role.Name)
             $('#roledesc').val(jsonrole.role.Description)
 
-            console.log(jsonrole.role.Id, "admin");
             if (jsonrole.role.Id == 1) {
 
                 $('.roleperm').attr('checked', true);
@@ -618,7 +613,6 @@ $(document).on('click', '.selectcheckbox', function () {
         var img;
 
         if (selectedcheckboxarr[0].status === '1') {
-            console.log(img, setstatus, "see");
 
             setstatus = languagedata.Userss.deactive;
 
@@ -682,7 +676,6 @@ $(document).on('click', '.selectcheckbox', function () {
 
     $('#Check').prop('checked', allChecked);
 
-    console.log(selectedcheckboxarr, "checkkkk")
 })
 
 

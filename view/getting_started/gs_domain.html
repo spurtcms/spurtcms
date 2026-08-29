@@ -1,0 +1,59 @@
+{{template "gshead" .}}
+{{template "gsheader" .}}
+<main class="flex-1 flex justify-center items-center pt-[5rem] px-4">
+
+    <div class="max-w-[738px] w-full mx-auto relative pt-[60px]">
+
+        <form action="/admin/getting-started/subdomain" method="post" id="websiteUrlForm">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <div class="absolute top-0 left-0 h-[1px] bg-[#F5F5F5] max-w-[740px] w-full mx-auto">
+                <span class="absolute t-0 l-0 h-[2px] w-[100%] bg-[#10A37F]"></span>
+            </div>
+
+            <h1 class="text-center font-bold text-3xl text-[#252525] mb-[60px]">Create your domain</h1>
+
+            <div class="mb-[60px]">
+                <div class="sm:px-4 flex flex-nowrap ">
+                    <div class="flex flex-nowrap border-[1px] border-[#F0F0F0] rounded-lg overflow-hidden w-full">
+                        <input type="text" placeholder="domain name" id="websiteInput" name="websiteInput"
+                            class="h-[3rem] grow text-sm font-light text-[#8A8A8A] px-[1.25rem] [&+label]:text-[#F26674] [&+label]:font-normal [&+label]:text-xs"
+                            maxlength="20">
+                        <button
+                            class="h-[3rem] w-[120px] sm:w-[147px] shrink-0 bg-[#E9F1F2] border-0 flex justify-center items-center text-sm font-light text-[#10A37F]">
+                            @spurtcms.com </button>
+                    </div>
+                </div>
+                <div class="px-[15px]">
+                    <label id="websiteInput-error" style="display: none;" for="websiteInput"
+                        class="text-[#F26674] font-normal text-xs mt-1 block">* Please Enter Your
+                        Website URL</label>
+                </div>
+            </div>
+
+
+            <div class="flex justify-between mb-[35px]">
+                <a href="/admin/getting-started/selectcountry"
+                    class="flex justify-center items-center border-[1px] border-[#F3F3F3] rounded-md h-[41px] w-[96px] bg-[#fff] text-[#252525] text-sm hover:bg-[#f4f4f4] transition-all duration-200">
+                    <img src="img/caret-left-dark.svg" alt="" class="me-2"> Back </a>
+                <a href="javascript:void(0)" id="websiteUrlSave"
+                    class="flex justify-center items-center rounded-md h-[41px] w-[156px] bg-[#10A37F] text-white text-sm hover:bg-[#047b5e] transition-all duration-200">
+                    Get Start Now <img src="img/caret-right-white.svg" alt="" class="ms-2"> </a>
+            </div>
+
+            <!-- <div class="flex justify-center">
+                <a href="/admin/channels/addtomycollection/{{.userinfo.ChannelId}}?get-start=true" id="skipnow" class="text-xs font-light text-[#8A8A8A] hover:underline"> Skip for now
+                </a>
+            </div> -->
+
+        </form>
+    </div>
+
+</main>
+
+</div>
+
+{{template "footer" .}}
+
+<script src="/public/js/getting_started/gs_domain.js"></script>
+
+{{template "footerclose" .}}

@@ -24,7 +24,7 @@ $("#verify").click(function () {
             caches: false,
             success: function (data) {
                 result = data.trim();
-                console.log(data, "data");
+                // console.log(data, "data");
 
             }
         })

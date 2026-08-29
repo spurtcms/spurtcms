@@ -1,0 +1,12 @@
+{
+    "Blogmaster": {
+        "Topic": "Topic",
+        "Kewords": "Kewords"
+    },
+    "Blogchild": {
+        "Title": "Title",
+        "Keword": "Kewords",
+        "Articlelength": "Article length",
+        "Tone": "Tone"
+    }
+}

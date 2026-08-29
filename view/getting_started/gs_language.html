@@ -1,0 +1,85 @@
+{{template "gshead" .}}
+{{template "gsheader" .}}
+
+
+<main class="flex-1 flex justify-center items-center pt-[5rem] px-4">
+
+    <div class="max-w-[738px] w-full mx-auto relative pt-[60px]">
+        <form action="/admin/getting-started/selectedlanguage" method="post" id="LanguageList">
+            <div class="absolute top-0 left-0 h-[1px] bg-[#F5F5F5] max-w-[740px] w-full mx-auto">
+                <span class="absolute t-0 l-0 h-[2px] w-[55%] bg-[#10A37F]"></span>
+            </div>
+
+            <h1 class="text-center font-bold text-3xl text-[#252525]">What language do you prefer?</h1>
+
+            <p class="text-center font-normal text-base text-[#616161] mt-3 mb-[60px]">This help us suggest template
+                that
+                help your team do their best work.</p>
+
+            <div class="dropdown mb-[60px] w-full">
+                <button id="selectLanguage"
+                    class="dropdown-toggle border-[1px] border-[#F0F0F0] text-[#8A8A8A] rounded-md text-lg h-[66px] px-[1.25rem] text-left flex justify-between items-center w-full"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{.DefaultLanguage}}
+                </button>
+                <input type="hidden" name="csrf" value="{{.csrf}}">
+
+                <input type="hidden" id="isDefault" name="isDefault" value="0">
+
+                <input type="hidden" id="langId" name="langId" value="{{.DefaultLanguageId}}">
+                <ul class="dropdown-menu border-[1px] border-[#E6E6E6] w-full p-0 shadow-dropdown">
+                    <li>
+                        <a href="#" data-id="1"
+                            class="language flex px-[1.25rem] py-[0.875rem]  justify-start items-center gap-2 flex-nowrap text-sm text-normal text-[#282322] hover:bg-[#F5F5F5]">
+                            <span class="shrink-0 w-[1.125rem]"> <img src="/public/img/india.svg" alt=""> </span>
+                            English
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="2"
+                            class="language flex px-[1.25rem] py-[0.875rem]  justify-start items-center gap-2 flex-nowrap text-sm text-normal text-[#282322] hover:bg-[#F5F5F5]">
+                            <span class="shrink-0 w-[1.125rem]"> <img src="/public/img/spain.svg" alt=""> </span>
+                            Spanish
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="3"
+                            class="language flex px-[1.25rem] py-[0.875rem]  justify-start items-center gap-2 flex-nowrap text-sm text-normal text-[#282322] hover:bg-[#F5F5F5]">
+                            <span class="shrink-0 w-[1.125rem]"> <img src="/public/img/france.svg" alt=""> </span>
+                            French
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="4"
+                            class="language flex px-[1.25rem] py-[0.875rem]  justify-start items-center gap-2 flex-nowrap text-sm text-normal text-[#282322] hover:bg-[#F5F5F5]">
+                            <span class="shrink-0 w-[1.125rem]"> <img src="/public/img/russia.svg" alt=""> </span>
+                            Russia
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex justify-between">
+                <a href="/admin/getting-started/selectchannel"
+                    class="flex justify-center items-center border-[1px] border-[#F3F3F3] rounded-md h-[41px] w-[96px] bg-[#fff] text-[#252525] text-sm hover:bg-[#f4f4f4] transition-all duration-200">
+                    <img src="/public/img/caret-left-dark.svg" alt="" class="me-2"> Back </a>
+                <a href="javascript:void(0);" id="Next"
+                    class="flex justify-center items-center rounded-md h-[41px] w-[96px] bg-[#10A37F] text-white text-sm hover:bg-[#047b5e] transition-all duration-200">
+                    Next <img src="/public/img/caret-right-white.svg" alt="" class="ms-2">
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+</div>
+
+
+{{template "footer" .}}
+
+<script src="/public/js/getting_started/gs_language.js"></script>
+
+{{template "footerclose" .}}

@@ -1,0 +1,187 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+
+<section class="header-rht max-md:ms-0 max-md:max-w-full w-full max-w-[calc(100%-232px)] ml-auto max-md:pt-[90px] max-sm:pt-[64px] min-h-screen">
+    <div class="max-sm:h-fit h-full">
+
+{{template "commonheader" .}}
+
+        <form id="updateWebsiteForm" method="POST" action="/admin/website/updatewebsite">
+            <input type="hidden" name="website_id" class="website_id" value="{{.website.Id}}">
+            <input type="hidden" name="site_name" class="site_name" value="{{.website.Name}}">
+            <input type="hidden" name="channel_name" class="channel_name" value="{{.website.ChannelNames}}">
+            <input type="hidden" name="csrf" value="{{.csrf}}">
+            <input type="hidden" name="template_id" id="template_id" value="{{.website.TemplateId}}">
+            <input type="hidden" name="template_name" class="template_name">
+            <input type="hidden" name="template_desc" class="template_desc">
+            <input type="hidden" name="template_img" class="template_img">
+            <input type="hidden" name="template_type" class="template_type">
+        </form>
+
+        <div class="p-[24px_16px] xl:p-[37px_24px]">
+            <h2 class="text-[20px] leading-[25px] font-medium text-[#252525] mb-[20px]">Choose template</h2>
+            <section class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] xl:grid-cols-[repeat(auto-fill,minmax(374px,1fr))] gap-[20px]">
+                {{range .templatelist}}
+                <div
+                    data-name="{{.TemplateName}}"
+                    data-type="{{.Type}}"
+                    data-desc="{{.Description}}"
+                    data-img="{{.TemplateImage}}"
+                    class="webcreatebtn overflow-hidden rounded-[12px] border border-solid border-[#F0F0F0] shadow-[0px_1px_3px_0px_#0000001F] [&.active]:border-[#10A37F] outline outline-2 outline-transparent [&.active]:outline-[#10A37F] transition-all duration-200 group cursor-pointer">
+
+                    <div class="p-[30px_26px_0_26px] bg-[linear-gradient(118.85deg,_#FFCEF3_5.35%,_#E3D3FF_81.86%)] grid place-items-center relative">
+                        <img src="{{.TemplateImage}}" alt="" class="w-full">
+                        <div class="p-[10px_16px] bg-[#10A37F] rounded-[50px] text-white text-sm leading-[18px] font-normal w-fit absolute group-hover:opacity-100 opacity-0 group-hover:scale-100 scale-50 transition-all duration-200 z-10">
+                            Apply
+                        </div>
+                    </div>
+
+                    <div class="p-[16px]">
+                        <div class="mb-[8px] flex justify-between gap-[16px] items-center">
+                            <span class="rounded-[8px] border border-solid border-[#BBF5ED] bg-[#EFF6F5] text-[12px] leading-[18px] font-normal text-[#10A37F] p-[4px_8px] inline-flex items-center justify-center">
+                                {{.Type}}
+                            </span>
+                            <span class="activeimg hidden">
+                                <img src="/public/img/check-green.svg" alt="selected" class="w-5 h-5">
+                            </span>
+                        </div>
+                        <h3 class="text-base font-semibold text-[#252525] mb-[4px]">{{.TemplateName}}</h3>
+                        <p class="desc text-[12px] text-[#575757]">{{.Description}}</p>
+                    </div>
+                </div>
+                {{end}}
+            </section>
+              {{if gt .Count .Limit}}
+<div
+    class="@container gap-[1rem] max-sm:w-full max-md:w-full flex justify-between  @[500px]:justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)]  right-0 bg-[#ffffff] z-[997] ">
+    <ul class="@[500px]:!ml-auto justify-center items-center gap-[8px] flex">
+      
+
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                class="flex justify-center w-[24px] h-[24px]  items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                <img src="/public/img/pg-prev.svg" alt="previous">
+                <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+            </a>
+        </li>
+        {{if gt .CurrentPage 3}}
+        {{$keyword := .filter.Keyword}}
+        <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                1 </a> </li>
+        {{end}}
+        {{if eq .CurrentPage 5}}
+        <li> <a href="?page=2{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] ">
+                2 </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 5}}
+        <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if gt .CurrentPage 2}}
+        <li> <a href="?page={{.Pagination.TwoBelow}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                {{.Pagination.TwoBelow}} </a> </li>
+        {{end}}
+        {{if gt .CurrentPage 1}}
+        <li> <a href="?page={{.Pagination.PreviousPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                {{.Pagination.PreviousPage}} </a> </li>
+        {{end}}
+
+        <li> <a href=""
+                class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] text-[14px]   @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+                {{.CurrentPage}} </a> </li>
+
+        {{if lt .CurrentPage .Pagination.TotalPages}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+     @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                {{.Pagination.NextPage}} </a> </li>
+        {{end}}
+        {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TwoAfter}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                {{.Pagination.TwoAfter}} </a> </li>
+        {{end}}
+        {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+        <li> <a href="javascript:void(0)" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                ...</a> </li>
+        {{end}}
+        {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+        <li> <a href="?page={{.Pagination.TotalPages}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}" class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222]
+                    @[500px]:w-[33px] @[500px]:h-[36px]  w-[24px] h-[24px] gap-[4px]">
+                {{.Pagination.TotalPages}}</a> </li> {{end}}
+        <li> <a href="?page={{.Pagination.NextPage}}{{if .filter.Keyword}}&keyword={{.filter.Keyword}}{{end}}"
+                class="flex justify-center w-[24px] h-[24px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222]  @[500px]:w-[77px]  @[500px]:h-[36px] gap-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg" alt="next">
+            </a>
+        </li>
+        
+    </ul>
+    <p class="@[500px]:!ml-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+        {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+    </p>
+</div>
+{{end}}
+
+        </div>
+    </div>
+</section>
+
+{{template "footer" .}}
+
+<script src="/public/js/website/website.js"></script>
+<script>
+    $("#cancel-btn").hide();
+    // ── Click handler: select a template ────────────────────────────────
+    document.querySelectorAll('.webcreatebtn').forEach(card => {
+        card.addEventListener('click', function () {
+
+            document.querySelectorAll('.webcreatebtn').forEach(c => {
+                c.classList.remove('active');
+                const icon = c.querySelector('.activeimg');
+                if (icon) icon.classList.add('hidden');
+            });
+
+            this.classList.add('active');
+            const activeIcon = this.querySelector('.activeimg');
+            if (activeIcon) activeIcon.classList.remove('hidden');
+
+            // Update header preview
+            document.getElementById('header-image').src = this.dataset.img;
+            document.getElementById('header-title').textContent = this.dataset.name;
+            document.getElementById('header-desc').textContent = this.dataset.desc;
+
+            // Populate form fields
+            document.getElementById('template_id').value = 0;
+            document.querySelector('.template_name').value = this.dataset.name || '';
+            document.querySelector('.template_desc').value = this.dataset.desc || '';
+            document.querySelector('.template_img').value = this.dataset.img || '';
+            document.querySelector('.template_type').value = this.dataset.type || '';
+
+            // Submit form
+            document.getElementById('updateWebsiteForm').submit();
+        });
+    });
+
+    // ── Restore active state after page reload ───────────────────────────
+    // .web.TemplateName is the currently saved template name from the backend.
+    // We match it against each card's data-name to re-apply the highlight.
+    const activeTemplateName = "{{.web.TemplateName}}";
+    if (activeTemplateName) {
+        document.querySelectorAll('.webcreatebtn').forEach(card => {
+            if (card.dataset.name === activeTemplateName) {
+                card.classList.add('active');
+                const icon = card.querySelector('.activeimg');
+                if (icon) icon.classList.remove('hidden');
+            }
+        });
+    }
+    // ─────────────────────────────────────────────────────────────────────
+</script>
+
+{{template "footerclose" .}}

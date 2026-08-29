@@ -1,0 +1,462 @@
+{{template "header" .}}
+{{template "head" .}}
+{{$Translate := .translate}}
+{{$NameString := .NameString}}
+{{$Viewbaseurl := .Viewbaseurl}}
+{{$ResponseCounts:=.ResponseCount}}
+{{$resp:=.Responses}}
+
+<section class="w-full max-md:max-w-full min-h-screen max-md:ms-0 pt-[72px]">
+
+    <header
+        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] border-b border-[#D9D9D9] px-[16px] py-[12px]  items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+
+        <div class="mr-auto flex items-center gap-[6px]">
+            <a href="javascript:void(0);"
+                class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
+                <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
+            </a>
+            <div class="max-w-[640px]">
+                <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap mb-[4px]">
+                    Public {{$Translate.FormBuilder.Cta}}</h2>
+                <p class="text-[12px] font-light leading-[15px] text-[#525252] line-clamp-2 max-sm:!hidden">
+                    {{$Translate.FormBuilder.Ctaheading}}
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-[12px]">
+            <a href="javascript:void(0);"
+                class=" hd-crd-btn  [&.hide>img:first-of-type]:block   [&amp;.hide>img:last-of-type]:hidden  border border-[#ECECEC] rounded-[4px] w-[32px] h-[32px] grid place-content-center   hover:bg-[#FAFAFA] ">
+                <img src="/public/img\bt-show.svg" alt="show" class="hidden">
+                <img src="/public/img\bt-hide.svg" alt="hide">
+            </a>
+            <div
+                class="{{if .Filter.Keyword}}transitionSearch active w-[300px] h-[32px] flex items-center justify-center relative transition-all !border-[#ECECEC] !border duration-300 ease-in-out rounded-[4px]  {{else}} !border-[#ECECEC] !border transitionSearch active w-[32px] h-[32px] flex items-center justify-center relative transition-all duration-300 ease-in-out rounded-[4px]{{end}}">
+                <a href="javascript:void(0);"
+                    class="top-0 left-0 absolute place-items-center grid hover:bg-[#FAFAFA] w-[32px] h-full group srchBtn-togg">
+                    <img src="/public/img/search-icon.svg" alt="search" class="block group-hover:hidden">
+                    <img src="/public/img/search-icon-active.svg" alt="search"
+                        class="group-hover:block hidden searchopen">
+                </a>
+                <form action="/admin/cta/form-responses" method="get" class="filterform" autocomplete="off">
+                    <input type="text" placeholder="{{$Translate.Csearch}}" name="keyword" id="formsearch"
+                        value="{{.Filter.Keyword}}" class="search shadow-none top-0 text-[12px] font-light leading-[15px] flex-grow border-0 outline-none w-0 p-0 absolute right-0 w-[calc(100%-36px)] h-full block
+
+                          {{if .Filter.Keyword}} w-[calc(100%-36px)] p-[0_24px_0_0] {{else}} w-0 p-0 {{end}}">
+                    {{if .Filter.Keyword}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer searchClosebtn  ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{else}}
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden  Closebtn ">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    <div class=" absolute right-[6px] top-[9px] cursor-pointer hidden SearchClosebtn">
+                        <img src="/public/img/close.svg" alt="close">
+                    </div>
+                    {{end}}
+                </form>
+
+            </div>
+
+            <div class="dropdown filter-dropDown static">
+
+                <a href="javascript:void(0);"
+                    class="w-[32px] h-[32px] grid place-items-center rounded-[4px] group hover:bg-[#FAFAFA] focus:bg-[#F0FFFB]"
+                    data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    <img src="/public/img/filter.svg" alt="filter" class="block group-hover:hidden group-focus:hidden">
+                    <img src="/public/img/filter-active.svg" alt="filter-active"
+                        class="hidden group-hover:block group-focus:block">
+                </a>
+                <ul
+                    class="dropdown-menu dropdown-menu-end [&amp;.show]:flex flex-col space-y-[8px] p-[16px] rounded-lg border-0 shadow-[0px_8px_24px_-4px_#0000001F] w-[300px] !mt-[6px]">
+
+                    <form action="" id="filterform" method="get">
+                        <div class="block mb-[16px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                Ticket No
+                            </p>
+                            <div class="flter-option">
+                                <input type="text" placeholder="Enter Ticket No" name="ticket"
+                                    value="{{.Filter.TicketNo}}"
+                                    class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                            </div>
+                        </div>
+                        <div class="block mb-[16px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.FormBuilder.FromDate}}</p>
+                            <div class="flter-option">
+                                <input type="date" placeholder="Enter From Date" data-date="MM/DD/YYYY" name="fromdate"
+                                    value="{{.Filter.FromDate}}"
+                                    class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                                <label id="fromdate-error" class="error hidden" for="fromdate"
+                                    style="font-size: 10px; font-weight: 400; color: rgb(242, 102, 116); position: absolute;left: 12px;">*
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="block mb-[16px]">
+                            <p class="text-[12px] font-normal leading-[16px] text-[#717171] mb-[4px]">
+                                {{$Translate.FormBuilder.ToDate}}</p>
+                            <div class="flter-option">
+                                <input type="date" placeholder="Enter To Date" data-date="MM/DD/YYYY" name="todate"
+                                    value="{{.Filter.ToDate}}"
+                                    class="border border-[#EDEDED] p-[8px_12px] rounded-[4px] text-[14px] font-normal leading-[17.5px] tracking-[0.005em] border-none outline-none h-[34px] block w-full  placeholder:text-[#B2B2B2]">
+                                <label id="todate-error" class="error hidden " for="todate"
+                                    style="font-size: 10px; font-weight: 400; color: rgb(242, 102, 116); position: absolute;left: 12px;">*
+                                </label>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center space-x-[12px] p-[12px_12px_0_12px] border-t border-[#F4F4F4] -mx-[12px]">
+                            <a href="/admin/cta/form-responses" id="clearbtn"
+                                class="flex-grow h-[30px] flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-[#F7F7F5] hover:bg-[#e0e0e0]  rounded-[3px]  no-underline w-100">{{$Translate.FormBuilder.Clear}}</a>
+                            <button type="submit"
+                                class="text-[14px] font-normal leading-tight text-center py-[7px] px-[16px] h-[30px] rounded-[4px] grid place-items-center flex-grow tracking-[0.7px] w-100 whitespace-nowrap text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)]">
+                                {{$Translate.FormBuilder.ApplyFilter}}
+                            </button>
+                        </div>
+                    </form>
+
+
+                </ul>
+
+            </div>
+
+
+            <a href="/admin/cta/create"
+                class="flex justify-center items-center gap-[5px] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] px-[16px] py-[7px] max-sm:p-[7px] rounded-[4px] w-fit max-sm:w-[32px] max-sm:min-w-[32px] h-[32px] font-normal text-[14px] text-center text-white leading-tight tracking-[0.7px] whitespace-nowrap">
+                <span> </span> <span class="max-sm:hidden">
+                    Create Forms </span></a>
+        </div>
+
+    </header>
+
+    <div class="px-[16px] py-[11px]">
+
+        <div id="hd-crd"
+            class="{{if eq .ctabanner `false`}}hidden{{end}}  [&.hide]:hidden  grid grid-cols-[300px_1fr]  max-[1000px]:p-[16px] max-[1000px]:grid-cols-1 gap-[24px] items-start p-[24px] bg-[#FAFAFA] rounded-[12px] relative mb-[24px]">
+
+            <a href="javascript:void(0);"
+                class="  hd-crd-btn  absolute top-[16px] right-[16px] max-[1000px]:static max-[1000px]:w-fit max-[1000px]:ms-auto ">
+                <img src="/public/img/block-close.svg" alt="close" id="videoclose"></a>
+
+            <div class="relative grid place-items-center">
+                <img src="/public/img/CTA Cover.jpg" alt="video" class="w-full  ">
+                <a href="javascript:void(0);" class="absolute hover:scale-[1.1] transition-all duration-200">
+                    <img src="/public/img/play-video.svg" alt="play">
+                </a>
+            </div>
+
+
+            <div>
+                <h3 class="mb-[12px] text-base text-[#252525] font-medium leading-[20px]">
+                    {{$Translate.FormBuilder.Fbanner}}</h3>
+                <p class="mb-[24px] text-[#717171] text-sm font-normal leading-[17.5px]">
+                    {{$Translate.FormBuilder.Sbanner}}
+
+                    <a href="/admin/entries/entrylist"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Entries}} <span><img src="/public/img/link_icon.svg" alt=""></span>
+                    </a> {{$Translate.FormBuilder.Tbanner}}
+                    <a href="/admin/channels"
+                        class="text-[#000000] inline-flex gap-[4px] hover:underline border-solid border-[#10A37F] items-center"
+                        href="">{{$Translate.Channell.Channels}} <span><img src="/public/img/link_icon.svg"
+                                alt=""></span>
+                    </a> {{$Translate.FormBuilder.Fobanner}}
+
+                </p>
+                <div class="flex items-center space-x-[24px] flex-wrap">
+                    <a href="javascript:void(0);" class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img\how-to.svg" alt="How to use">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">{{$Translate.Blocks.HowToUse}}
+                        </p>
+                    </a>
+                    <a href="https://github.com/spurtcms/forms-builders" target="_blank"
+                        class="flex items-center space-x-[8px] hover:underline">
+                        <img src="/public/img\explore-documentation.svg" alt="Explore Documentation">
+                        <p class="text-sm text-[#262626] font-normal leading-[17.5px]">
+                            {{$Translate.Blocks.ExploreDocumentation}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <ul class="border-[#EDEDED] mb-[24px] border-b nav" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px] active"
+                    href="/admin/cta/form-responses">Responses</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="block [&amp;.active]:before:block relative [&amp;.active]:before:bottom-0 [&amp;.active]:before:left-0 [&amp;.active]:before:absolute [&amp;.active]:before:bg-[#262626] p-[0px_12px_10px] [&amp;.active]:before:rounded-[18px_18px_0_0] [&amp;.active]:before:w-full [&amp;.active]:before:h-[2px] font-normal text-[#717171] text-sm hover:text-[#252525] [&amp;.active]:text-[#252525] max-[400px]:text-xs leading-[17.5px]  "
+                    id="collection-tab" href="/admin/cta">{{$Translate.Blocks.MyCollections}}</a>
+            </li>
+
+
+            <li class="ms-auto">
+                <p class="font-normal text-[#A1A1A1] text-sm max-[400px]:text-xs"> <span
+                        class="text-[#262626]">{{.Count}}</span>
+                    {{if gt .Count 1}}
+                    Responses Available
+                    {{else}}
+                    Response Available
+                    {{end}}</p>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="active fade show tab-pane" id="collection" role="tabpanel" aria-labelledby="collection-tab">
+                <div class="flex flex-col mb-8 w-full">
+                    <input type="hidden" name="csrf" value="{{.csrf}}">
+                    <div class=" @container setConatiner flex flex-col grow ">
+                        <section class="mb-[60px] flex flex-col grow">
+                            <div class="grow">
+                                <div class="overflow-y-unset overflow-x-auto scrollbar-thin ">
+                                    <table class="w-full min-w-[900px]">
+                                        {{if .Responses}}
+                                        <thead>
+                                            <tr class="hover:bg-[#FAFAFA]">
+
+                                                <th
+                                                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#ffffff] font-normal text-[#757575] leading-none text-[13px] w-[30%]">
+                                                    Ticket#
+                                                </th>
+                                                <th
+                                                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#ffffff] font-normal text-[#757575] leading-none text-[13px]">
+                                                    Title
+                                                </th>
+                                                <th
+                                                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#ffffff] font-normal text-[#757575] leading-none text-[13px]">
+                                                    Status
+                                                </th>
+                                                <th
+                                                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#ffffff] font-normal text-[#757575] leading-none text-[13px] ">
+                                                    Request Date
+                                                </th>
+                                                <th
+                                                    class="px-[16px] py-[16px] border-[#EDEDED] border-b bg-[#ffffff] font-normal text-[#757575] leading-none text-[13px]">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        {{end}}
+                                        <tbody>
+                                            {{if .Responses}}
+                                            {{range .Responses}}
+                                            <tr class="hover:bg-[#FAFAFA]">
+
+                                                <td
+                                                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#252525] text-sm font-normal align-middle leading-none">
+                                                    <a href="/admin/cta/response-detail/{{.Ticket }}"
+                                                        class="hover:underline">
+                                                        <div class="mb-[3px] flex items-center gap-[8px]">
+                                                            <h3
+                                                                class="text-sm leading-[18px] font-normal text-[#252525]  line-clamp-1">
+                                                                {{.Ticket }}
+                                                            </h3>
+                                                        </div>
+                                                    </a>
+                                                </td>
+
+                                                <td
+                                                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                    <p class="text-[14px] leading-[16px] font-light text-[#3D3D3D]">
+                                                        {{.FormTitle}}
+                                                    </p>
+                                                </td>
+
+                                                <td
+                                                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                    {{if eq .CloseTicket 0}}
+                                                    <div
+                                                        class=" flex items-center gap-[4px] bg-[#DFF3F3] w-fit rounded-[50px] p-[4px_8px_4px_4px]">
+                                                        <img src="/public/img/open-status.svg" alt="">
+                                                        <p
+                                                            class="text-[12px] leading-[15px] font-normal text-[#30749F]">
+                                                            Open
+                                                        </p>
+                                                    </div>
+                                                    {{else}}
+                                                    <div
+                                                        class=" flex items-center gap-[4px] bg-[#D4F2EA] w-fit rounded-[50px] p-[4px_8px_4px_4px]">
+                                                        <img src="/public/img/close-status.svg" alt="">
+                                                        <p
+                                                            class="text-[12px] leading-[15px] font-normal text-[#10A37F]">
+                                                            Closed
+                                                        </p>
+                                                    </div>
+                                                    {{end}}
+                                                </td>
+
+                                                <td
+                                                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                    <p class="text-[14px] leading-[16px] font-light text-[#3D3D3D]">
+                                                        {{.DateString}}
+                                                    </p>
+                                                </td>
+
+                                                <td
+                                                    class="px-[16px] py-[12px] border-[#EDEDED] border-b text-[#3D3D3D] text-sm font-light align-middle leading-none">
+                                                    <div class="btn-group position-static">
+                                                        <div class="btn-group language-group position-static">
+                                                            <a href="javascript:void(0);" type="button"
+                                                                class="group items-center place-items-center gap-[5px] grid [&.show]:border [&.show]:border-[#ECECEC] [&.show]:border-solid rounded-[4px] w-[24px] h-[24px]"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <img src="/public/img/action-btn-active.svg"
+                                                                    alt="dropdown" />
+                                                            </a>
+                                                            <ul
+                                                                class="bg-[#FFF] shadow-[0px_4px_8px_0px_#00000026] p-[8px] border-0 rounded-[12px] min-w-[132px] dropdown-menu dropdown-menu-end">
+                                                                <li class="mb-[2px] last-of-type:mb-[0]">
+                                                                    <a href="/admin/cta/response-detail/{{.Ticket }}"
+                                                                        class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[14px] leading-[20px] dropdown-item"><img
+                                                                            src="/public/img/edit.svg" />Edit</a>
+                                                                </li>
+                                                                <!-- <li class="mb-[2px] last-of-type:mb-[0]">
+                                                                    <a
+                                                                        class="items-center gap-[16px] grid grid-cols-[16px_1fr] hover:bg-[#F5F5F5] p-[6px_12px] rounded-[3px] w-full h-[30px] font-light text-[##262626] text-[#A01910] text-[14px] leading-[20px] dropdown-item">
+                                                                        <img src="/public/img/delete-drop.svg">Delete
+                                                                    </a>
+                                                                </li> -->
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            {{end}}
+                                            {{ else if or (eq .SearchTrues "ftrue") (eq .SearchTrues "true") }}
+
+                                            <div class="max-w-[328px] mx-auto text-center m-[120px_16px]">
+                                                <div class="text-center w-fit mx-auto">
+                                                    <img src="/public/img/noFilter.svg" alt="noFilter">
+                                                </div>
+                                                <h2
+                                                    class="text-[#262626] text-center text-[18px] font-medium leading-[22.5px] mb-[6px] ">
+                                                    {{$Translate.Filtersearch}}</h2>
+                                                <p
+                                                    class="text-[#717171] text-center text-[12px] font-normal leading-[15px] mb-[8px] ">
+                                                    {{$Translate.Filterkeyword}} </p>
+
+                                            </div>
+
+                                            {{else }}
+
+                                            <div
+                                                class="flex flex-col  items-center mx-auto pt-[60px] w-full max-w-[966px] ">
+                                                <div class="mb-[30px]">
+                                                    <img src="/public/img/Formsnodata.svg" alt="" class="">
+
+                                                </div>
+                                                <div class="flex flex-col items-center w-full">
+                                                    <div class="flex flex-col space-y-[16px] w-full">
+                                                        <h3
+                                                            class="mb-0 font-semibold text-[#262626] text-2xl text-center">
+                                                            No Responses Found
+                                                        </h3>
+                                                        <p class="font-light text-[#717171] text-center mb-2 text-base">
+                                                            {{$Translate.FormBuilder.Noform}}</p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            {{end}}
+                                        </tbody>
+
+
+
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div
+        class=" max-sm:flex-col max-sm:space-y-[16px] max-md:w-full flex justify-center items-center p-[16px] fixed bottom-0 w-[calc(100%-232px)] right-0 bg-[#ffffff]">
+        <ul class="ml-auto    max-sm:mx-auto  justify-center items-center space-x-[8px] flex flex-wrap">
+            {{if gt .Count .Limit}}
+
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] text-[14px] font-normal hover:text-[#222222] hover:bg-[#F5F5F5] text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage 1}}opacity-50  pointer-events-none {{end}}">
+                    <img src="/public/img/pg-prev.svg" alt="previous">
+                    <span class=" max-sm:hidden"> {{$Translate.Jobs.Back}}</span>
+                </a>
+            </li>
+            {{if gt .CurrentPage 3}}
+            {{$keyword := .Filter.Keyword}}
+            <li> <a href="?page=1{{if $keyword}}&keyword={{$keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] font-normal hover:bg-[#F5F5F5] text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    1 </a> </li>
+            {{end}}
+            {{if eq .CurrentPage 5}}
+            <li> <a href="?page=2{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class=" flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px] ">
+                    2 </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 5}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] gap-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if gt .CurrentPage 2}}
+            <li> <a href="?page={{.Pagination.TwoBelow}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF]  hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TwoBelow}} </a> </li>
+            {{end}}
+            {{if gt .CurrentPage 1}}
+            <li> <a href="?page={{.Pagination.PreviousPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.PreviousPage}} </a> </li>
+            {{end}}
+
+            <li> <a href="" class=" {{if  .CurrentPage }} flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC]
+                    text-[14px] w-[33px] h-[36px] space-x-[4px] border-none text-[#FFFFFF] hover:text-[#FFFFFF]
+                    bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] font-bold {{end}}">
+                    {{.CurrentPage}} </a> </li>
+            {{if lt .CurrentPage .Pagination.TotalPages}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.NextPage}} </a> </li>
+            {{end}}
+            {{if (le .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TwoAfter}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px] hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TwoAfter}} </a> </li>
+            {{end}}
+            {{if (lt .Pagination.ThreeAfter .Pagination.TotalPages)}}
+            <li> <a href="javascript:void(0)"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    ...</a> </li>
+            {{end}}
+            {{if (lt .Pagination.TwoAfter .Pagination.TotalPages)}}
+            <li> <a href="?page={{.Pagination.TotalPages}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[33px] h-[36px] space-x-[4px]">
+                    {{.Pagination.TotalPages}}</a> </li> {{end}}
+            <li> <a href="?page={{.Pagination.NextPage}}{{if .Filter.Keyword}}&keyword={{.Filter.Keyword}}{{end}}"
+                    class="flex justify-center max-sm:w-[33px] max-sm:h-[36px] items-center rounded-[4px] border-[.0625rem] border-[#ECECEC] bg-[#FFF] hover:text-[#222222] text-[14px]  hover:bg-[#F5F5F5] font-normal text-[#222222] w-[77px] h-[36px] space-x-[4px] {{if eq .CurrentPage .PageCount}}opacity-50  pointer-events-none {{end}}">
+                    <span class=" max-sm:hidden"> {{$Translate.Next}} </span> <img src="/public/img\pg-nxt.svg"
+                        alt="next">
+                </a>
+            </li>
+            {{end}}
+        </ul>
+        <p class="ml-auto max-sm:mx-auto text-[14px] font-normal text-[#222222] leading-[14px]">
+            <!-- {{.paginationstartcount}} – {{.paginationendcount}} of {{.chentrycount}} -->
+            {{.Paginationstartcount}} – {{.Paginationendcount}} {{$Translate.Of}} {{.Count}}
+        </p>
+    </div>
+</section>
+
+
+
+{{template "footer" .}}
+<script src="/public/js/form-builder/form-responses.js"></script>
+{{template "footerclose" .}}

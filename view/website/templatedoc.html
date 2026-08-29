@@ -1,0 +1,183 @@
+{{template "template-header" .}}
+
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full pt-[48px] min-h-screen">
+    {{template "webpageheader" .}}
+
+    <div class="grid grid-cols-[248px_1fr] h-full max-[900px]:grid-cols-1 ">
+        <div class="accordion p-[12px_16px] bg-[#FAFAFA] flex flex-col space-y-[12px] " id="accordionPanelsStayOpenExample">
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-y-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                      <span>
+                        Getting Started
+                      </span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px] ">
+                            <li><a href="/documentation/prerequisites"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full {{if .Document }} active [&.active]:bg-[#F0F0F0]{{end}}"><span>Prerequisites</span></a>
+                            </li>
+                            <li><a href="/documentation/cms-admin"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full  "><span>
+                                        CMS
+                                    Admin Setup
+                                    </span></a>
+                            </li>                           
+                            <li><a href="/documentation/templates"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full active [&.active]:bg-[#F0F0F0]"><span>
+                                        Templates
+                                    </span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-x-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                        <span>Deployment</span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px]">
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Docker</span></a>
+                            </li>
+                            <li><a href="/documentation/cli"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        CLI</span></a>
+                            </li>
+                            <li><a href="/documentation/prebuild"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr]  items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Prebuild</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="p-[20px]">
+            <p class="mb-[16px] text-sm font-light leading-[20px]">
+                React templates combined with Go provide a powerful solution for building dynamic web applications. By integrating these templates with a GraphQL API, you can efficiently fetch and display dynamic content. This guide walks you through the process of setting up and configuring the default React templates in our Go project, connecting them to a GraphQL, Go backend using Individual API keys for dynamic content, and deploying the entire application to Vercel for production-ready hosting.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 1:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Ensure the spurtcms adminsetup is available ready in your system. Check our pre-requisites and installation guideline for more details.
+            </p>
+
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 2:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">On the templates page,click the deploy button on your desired template in which you want to showcase your data.
+              
+                <!-- <a href="https://github.com/spurtcms/spurtcms-template"
+                class="text-[#10A37F] underline"> https://github.com/spurtcms/spurtcms-template </a>. -->
+            </p>
+            <!-- <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">$git clone https://github.com/spurtcms/spurtcms-template.git </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Upon cloning the project structure, you'll find the
+                following directory layout in your cloned folder:
+            </p>
+
+
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • config</p>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]">• controller</p>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • model
+            </p>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • routes</p>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • storage</p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">• themes</p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • config.json</p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]"> • main.go</p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">• env</p> -->
+
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 3:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Click on the button “Continue with github” to get signed up with github and install vercel.
+                <!-- <a href="https://github.com/spurtcms/themes"
+                class="text-[#10A37F] underline"> https://github.com/spurtcms/themes </a>  -->
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 4: </h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Click on the button “Authorize Vercel”, then vercel will redirect you to the authentication page.On successful authentication you need to enter your api token key. 
+            </p>
+            <!-- <p class="mb-[16px] text-sm font-light leading-[20px]">Within the 'themes' directory, you have the
+                flexibility to add multiple themes tailored to your application's requirements. To specify which theme
+                to utilize, access the 'config.json' file and modify the 'theme' attribute accordingly:
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">{ "theme": "<theme name>" } </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">For instance, you can incorporate diverse themes such
+                as '/themes/lms', '/themes/blog', and '/themes/form', but only one theme will be rendered at a time. As
+                an example, let us configure our LMS theme.
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">{ "theme": "/themes/lms" } </p>
+                  
+                    </code>
+            </div> -->
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 5:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Now inside your spurtcmsAdmin account navigate to API keys,click on Action button and copy the default API token that we will be using for displaying our content.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 6:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Enter you api token and  click on deploy button.Please wait for the deployment steps to get over without reloding or closing the page.Your can see the details as webpage click on the link below the Domains Heading.
+            </p>
+            <!-- <p class="mb-[16px] text-sm font-light leading-[20px]">Once the above said theme configuration is complete,
+                execute the following command to run the application:
+
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">go run main.go </p>
+                  
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">This command initiates the Go program, ensuring that
+                the configured theme is seamlessly integrated for rendering within the application.
+
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Your spurtCMS template with the ready-made theme
+                (Example: LMS) is ready to use now !!
+
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Conclusion:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">By following these systematic steps, you can
+                effortlessly set up and configure spurtCMS Go Templates within your project structure. With the ability
+                to leverage multiple themes while rendering a singular theme at any given time, Go Templates empower
+                developers to create dynamic and visually appealing web applications with ease.
+
+            </p>
+        </div> -->
+    </div>
+
+
+
+
+</section>
+
+
+{{template "template-footer"}}

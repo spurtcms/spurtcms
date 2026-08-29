@@ -7,21 +7,21 @@
 <section class="  max-md:ms-0  max-md:max-w-full  w-full max-w-[calc(100%-232px)] ml-auto pt-[48px] min-h-screen">
 
     <header
-        class="header-rht max-md:ms-0  max-md:w-full  flex justify-end gap-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
-        <div class="mr-auto flex items-center gap-[6px]">
+        class=" max-md:ms-0  max-md:w-full  flex justify-end space-x-[6px] h-[48px] border-b border-[#D9D9D9] p-[6px_16px] items-center fixed top-0 bg-white z-20 w-[calc(100%-232px)] right-0">
+        <div class="mr-auto flex items-center space-x-[6px]">
             <a href="javascript:void(0);"
                 class=" max-md:grid hidden h-[32px] w-[32px] min-w-[32px] place-items-center bg-[#F5F5F5]">
                 <img src="/public/img/menu-button.svg" alt="toggle button" class="w-4 h-4 toggle-button">
             </a>
-            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">Security</h2>
+            <h2 class="text-[16px] font-medium leading-[20px] text-[#252525] whitespace-nowrap">{{$Translate.Securitys.Security}}</h2>
         </div>
 
 
-        <div class="flex gap-3">
-            <a href=""
-                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline ">Cancel</a>
-            <a href="javascript:void(0);"
-                class="passsave h-8 flex items-center justify-center px-3 text-sm font-normal text-white  hover:bg-[var(--btn-hover)] bg-[var(--btn-bg)] rounded-[4px] no-underline ">Save</a>
+        <div class="flex space-x-[12px]">
+            <a href="#"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-bold-black bg-slate-250 rounded-[4px] no-underline cursor-not-allowed">{{$Translate.Securitys.Cancel}}</a>
+            <a href="#"
+                class="h-8 flex items-center justify-center px-3 text-sm font-normal text-white  bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] rounded-[4px] no-underline cursor-not-allowed">{{$Translate.Securitys.Save}}</a>
         </div>
     </header>
 
@@ -33,40 +33,38 @@
 
 
         <div class="p-[24px] @container max-sm:p-[16px]">
-            <h3 class="text-[#262626] text-sm font-normal leading-[17.5px] mb-[6px]">Change Password</h3>
-            <p class="text-[#717171] text-xs font-normal leading-4 mb-[24px]">Change your Login Password</p>
-            <form action="/admin/settings/updatepassword" id="passform" method="post" name="passform">
-                <input type="hidden" name="csrf" value="{{.csrf}}">
+            <h3 class="text-[#262626] text-sm font-normal leading-[17.5px] mb-[6px]">{{$Translate.Securitys.Changepassword}}</h3>
+            <p class="text-[#717171] text-xs font-normal leading-4 mb-[24px]">{{$Translate.Securitys.Changepassworddesc}}</p>
+
             <div class="max-w-[360px]">
-                <div class="mb-[16px] ">
-                    <label for="firstname"  class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">New
-                        Password</label>
-                        <div class="relative">
-                    <input type="password"  id="pass" name="pass" placeholder="{{$Translate.Security.Enternewpass}}"
-                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] text-sm" >
-                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye1">
-                            <img id="img" src="/public/img/eye-closed.svg" alt="">
-
-                        </button>
-                    </div>
-                    </div>
-                <div class="mb-[16px] relative">
-                    <label for="lastname"
-                        class="text-[14px] font-normal text-[#152027] leading-[16.41px] mb-[6px]">Confirm
-                        Password</label>
-                        <div class="relative">
-                    <input type="password" id="cpass" name="cpass" placeholder="{{$Translate.Security.Confirmnewpass}}"
-                        class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] text-sm" >
-                        <button type="button" class="eye absolute right-[8px] top-[10px]" id="eye2">
-                            <img id="img" src="/public/img/eye-closed.svg" alt="">
-
-                        </button>
-                    </div>
-                    </div>
+                <div class="mb-[16px]">
+                    
+                        <label for="firstname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]"> {{$Translate.Securitys.Newpassword}} 
+                            <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Securitys.Newpasswordinfo}} </p>
+                        </div></label>
+                    <input type="text" id="firstname"
+                        class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] cursor-not-allowed" readonly>
+                </div>
+                <div class="mb-[16px]">
+                 
+                        <label for="lastname" class="relative text-[14px] font-normal leading-[17px] text-[#152027] flex items-center gap-[6px] mb-[6px]"> {{$Translate.Securitys.Confirmpassword}} 
+                            <div class="cursor-pointer group">
+                            <img src="/public/img/inputdesc.svg" alt="">
+                            <p
+                                class=" hidden group-hover:block absolute left-0 w-[300px] mb-[6px] bottom-[100%] bg-[#F5F5F5] p-[6px_12px] rounded-[4px] text-[10px] font-normal leading-[12px] text-[#262626]">
+                                {{$Translate.Securitys.Confirmpasswordinfo}}</p>
+                        </div></label>
+                    <input type="text" id="lastname"
+                        class="block w-full  h-[34px] bg-[#F7F7F5] rounded-[4px] p-[8px] cursor-not-allowed" readonly>
+                </div>
             </div>
 
 
-        </form>
+
         </div>
     </div>
 

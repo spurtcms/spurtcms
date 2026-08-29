@@ -79,16 +79,11 @@
                 FormId = $("#FormId").val()
                 Userid = $("#Userid").val()
 
-                var emailValue = "";
-
                 var nameValue = "";
 
                 let spurtdata = event.detail.data
 
                 $.each(spurtdata, function (index, item) {
-                    if (item.question === "Email") {
-                        emailValue = item.value;
-                    }
 
                     if (item.question === "Name") {
                         nameValue = item.value;
@@ -99,7 +94,7 @@
                     url: "{{.URL}}?id=" + entryid,
                     type: "POST",
                     async: false,
-                    data: { "data": JSON.stringify(event.detail.data), "Id": FormId, "UserId": Userid, "emailValue": emailValue, "nameValue": nameValue },
+                    data: { "data": JSON.stringify(event.detail.data), "Id": FormId, "UserId": Userid, "nameValue": nameValue },
                     datatype: "json",
                     caches: false,
                     success: function (data) {

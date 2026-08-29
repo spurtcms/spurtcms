@@ -1,0 +1,125 @@
+          {{ define "commonheader"}}
+
+                    <div class="@container setConatiner overflow-hidden">
+            <div class="flex border-b border-solid border-[#E8E8E8] max-md:flex-col">
+                <div class="flex gap-[20px] items-center p-[30px_24px_20px_24px] max-lg:flex-col max-lg:p-[16px] max-lg:items-start">
+
+                    <div class="min-w-[100px] max-w-[215px] w-full">
+                      <a href="{{.Url}}">  <img id="header-image" src="{{.templatedetail.TemplateImage}}" alt=""></a>
+                    </div>
+
+                    <div class='grow'>
+                        <div class="pr-[1.25rem]">
+                            <h2 id="header-title" class="inline-block mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">{{.web.TemplateName}}</h2>  <p class="text-center pt-[1px] text-white rounded-full w-[80px] h-[25px] inline-block bg-green-500 rounded-full">Active</p>
+                            <p id="header-desc" class="text-[13px] font-light leading-[20px] text-[#616161]">{{.templatedetail.TemplateDescription}}</p>
+
+                        </div>
+                    </div>
+
+                    <a href="/admin/browsetheme/configure/{{.web.TemplateId}}" id="config-btn"
+                        class=" {{if .hideConfigBtn}}hidden{{end}} flex justify-center place-items-center bg-[#10A37F] hover:bg-[#148569] max-sm:p-[7px] px-[16px] py-[7px] rounded-[4px] w-fit h-[32px] font-normal text-[14px] text-white text-center leading-tight tracking-[0.7px] whitespace-nowrap ms-auto">
+                        <span class="mr-[8px] text-lg leading-none"><img src="/public/img/configuration.svg" alt=""></span>
+                        <span>Configure</span>
+                    </a>
+                     <a href="/admin/browsetheme/" id="cancel-btn" class=" {{if .hideCancelBtn}}hidden{{end}} flex justify-center place-items-center bg-[#EAEAEA] hover:bg-[#616161]/20 max-sm:p-[7px] px-[16px] py-[8px] rounded-[4px] w-fit h-[34px] font-medium text-[14px] text-[#252525] text-center leading-tight tracking-[0.7px] whitespace-nowrap border border-solid border-[#EAEAEA]">
+
+                        <span>Cancel</span>
+
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-[24px] xl:gap-[46px] w-full p-[10px_24px] border-b border-solid border-[#E8E8E8]">
+                <div class="flex items-center gap-[8px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Created date:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.web.CreatedDate}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Last Updated:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.web.DateString}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Creator:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.UserDetails.Username}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Owner:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.UserDetails.Username}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Publish:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">{{.web.DateString}}</p>
+                </div>
+                <div class="flex items-center gap-[14px]">
+                    <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Visibility:</h3>
+                    <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Public</p>
+                </div>
+            </div>
+        </div>
+
+        {{end}}
+
+{{define "commonhead"}}
+
+<div class="@container setConatiner overflow-hidden">
+
+    <!-- Top row: image + title + buttons -->
+    <div class="flex border-b border-solid border-[#E8E8E8] max-md:flex-col">
+        <div class="flex gap-[20px] items-center p-[30px_24px_20px_24px] max-lg:flex-col max-lg:p-[16px] max-lg:items-start w-full">
+
+            <div class="min-w-[100px] max-w-[215px] w-full">
+                <a href="{{.Url}}">  <img id="header-image" src="{{.templatedetail.TemplateImage}}" alt=""></a>
+            </div>
+
+            <div class="grow">
+                <div class="pr-[1.25rem]">
+                    <h2 class="inline-block mb-[10px] font-bold text-[#202124] text-[24px] leading-[20px] whitespace-nowrap">
+                        {{.templatedetail.TemplateName}}
+                    </h2>
+                    <p class="text-center pt-[1px] text-white rounded-full w-[80px] h-[25px] inline-block bg-green-500 rounded-full">Active</p>
+                    <p class="text-[13px] font-light leading-[20px] text-[#616161]">
+                        {{.templatedetail.TemplateDescription}}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Meta row: dates, creator, visibility -->
+    <div class="flex flex-wrap items-center gap-[24px] xl:gap-[46px] w-full p-[10px_24px] border-b border-solid border-[#E8E8E8]">
+        <div class="flex items-center gap-[8px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Created date:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">
+                {{.templatedetail.DateString}}
+            </p>
+        </div>
+        <div class="flex items-center gap-[14px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Last Updated:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">
+                {{.web.DateString}}
+            </p>
+        </div>
+        <div class="flex items-center gap-[14px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Creator:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Admin</p>
+        </div>
+        <div class="flex items-center gap-[14px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Owner:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Admin</p>
+        </div>
+        <div class="flex items-center gap-[14px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Publish:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">
+                {{.web.DateString}}
+            </p>
+        </div>
+        <div class="flex items-center gap-[14px]">
+            <h3 class="text-[13px] font-light leading-[16px] text-[#252525] whitespace-nowrap">Visibility:</h3>
+            <p class="text-[13px] font-light leading-[16px] text-[#8A8A8A] whitespace-nowrap">Public</p>
+        </div>
+    </div>
+
+</div>
+
+{{end}}

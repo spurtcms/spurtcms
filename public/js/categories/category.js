@@ -193,6 +193,7 @@ $("body").on("click", "#edit", function () {
   var desc = edit.find("td:eq(2)").html();
   $("#triggerId").html(desc);
   $("#triggerId").css("gap", "5px")
+  $("#triggerId").find('span').css('color', '#262626')
 
   var url = window.location.search
   const urlpar = new URLSearchParams(url)
@@ -596,7 +597,9 @@ $("#categoryModal").on('show.bs.modal', function (event) {
 $(".drp").on("click", function () {
 
   var id = $(this).attr("data-id")
-  $(this).parents('.dropdown-menu').siblings('a').html($(this).html())
+  var $trigger = $(this).parents('.dropdown-menu').siblings('a')
+  $trigger.html($(this).html())
+  $trigger.find('span').css('color', '#262626')
   $("#cid").val(id)
 
   if (id == 0) {

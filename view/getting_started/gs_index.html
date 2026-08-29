@@ -1,0 +1,49 @@
+
+{{template "gshead" .}}
+{{template "gsheader" .}}
+
+    <main class="flex-1 flex justify-center items-center pt-[5rem] px-4">
+      
+        <div class="max-w-[760px] w-full mx-auto relative pt-[60px]">
+            
+            <div class="absolute top-0 left-0 h-[1px] bg-[#F5F5F5] max-w-[740px] w-full mx-auto">
+                <span class="absolute t-0 l-0 h-[2px] w-[14%] bg-[#10A37F]"></span>
+            </div>
+
+            <h1 class="text-center font-bold text-3xl text-[#252525]">What would you like to use SpurtCMS for?</h1>
+
+            <p class="text-center font-normal text-base text-[#616161] mt-3 mb-[60px]">This help us suggest template that help your team do their best work.</p>
+           <form action="/admin/getting-started/usagemodeupdate" method="post" name="usagemodeform" id="usagemodeform">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-[60px]">
+                <input type="hidden" name="usage_mode" id="usage_mode" value="{{.userinfo.UsageMode}}">
+                 <input type="hidden" name="csrf" value="{{.csrf}}">
+                <a href="javascript:void(0)" class="usagebtn group flex flex-col justify-center items-center border-[1px] border-[#F0F0F0]! rounded-xl h-[120px] hover:border-[#10A37F] hover:bg-[#F9FFFD] {{if eq .userinfo.UsageMode `Personal`}}border-[#10A37F] bg-[#F9FFFD]{{end}} transition-all duration-200">
+                    <span class="flex justify-center items-center w-[2.5rem] h-[2.5rem] bg-[#F3F3F3] rounded-full mb-2 relative"> 
+                        <img src="/public/img/user.svg" alt="" class="block group-hover:hidden"> 
+                        <img src="/public/img/user-on.svg" alt="" class="hidden group-hover:block absolute inset-0 m-auto"> 
+                    </span>
+                    <span class="usageword text-base text-medium text-[#252525]">Personal</span>
+                </a>
+                <a href="javascript:void(0)" class="usagebtn group flex flex-col justify-center items-center border-[1px] border-[#F0F0F0]! rounded-xl h-[120px] hover:border-[#10A37F] hover:bg-[#F9FFFD] transition-all duration-200 {{if eq .userinfo.UsageMode `Work`}}border-[#10A37F] bg-[#F9FFFD]{{end}}">
+                    <span class="flex justify-center items-center w-[2.5rem] h-[2.5rem] bg-[#F3F3F3] rounded-full mb-2 relative"> 
+                        <img src="/public/img/case.svg" alt="" class="block group-hover:hidden"> 
+                        <img src="/public/img/case-on.svg" alt="" class="hidden group-hover:block absolute inset-0 m-auto"> 
+                    </span>
+                    <span class="usageword text-base text-medium text-[#252525]">Work</span>
+                </a>
+            </div>
+
+            <div class="flex justify-end">
+                <button href="javascript:void(0)" type="button" class="startbtn flex justify-center items-center rounded-md h-[41px] w-[96px] bg-[#10A37F] text-white text-sm hover:bg-[#047b5e] transition-all duration-200"> Next <img src="/public/img/caret-right-white.svg" alt="" class="ms-2"> </button>
+            </div>
+        </form>
+        </div>
+
+    </main>
+
+</div>
+
+    {{template "footer" .}}
+
+    <script src="/public/js/getting_started/gs_index.js"></script>
+    {{template "footerclose" .}}

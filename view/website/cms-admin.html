@@ -1,0 +1,224 @@
+{{template "template-header" .}}
+
+
+
+
+<section class=" max-md:ms-0  max-md:max-w-full  w-full pt-[48px] min-h-screen">
+    {{template "webpageheader" .}}
+
+    <div class="grid grid-cols-[248px_1fr] h-full max-[900px]:grid-cols-1 ">
+        <div class="accordion p-[12px_16px] bg-[#FAFAFA] flex flex-col space-y-[12px] " id="accordionPanelsStayOpenExample">
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-y-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                      <span>
+                        Getting Started
+                      </span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px] ">
+                            <li><a href="/documentation/prerequisites"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full {{if .Document }} active [&.active]:bg-[#F0F0F0]{{end}}"><span>Prerequisites</span></a>
+                            </li>
+                            <li><a href="/documentation/cms-admin"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full active [&.active]:bg-[#F0F0F0] "><span>
+                                        CMS
+                                    Admin Setup
+                                    </span></a>
+                            </li>                           
+                            <li><a href="/documentation/templates"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>
+                                        Templates
+                                    </span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item border-none bg-transparent">
+                <h2 class="accordion-header mb-[12px]">
+                    <button
+                        class="!text-[#262626] accordion-button items-center bg-transparent border-none shadow-none p-0 flex-row-reverse space-x-[8px] justify-end after:!m-[0_8px_0_0] after:!w-[16px] after:!h-[16px] after:!bg-contain"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                        aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                        <span>Deployment</span>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+                    <div class="accordion-body p-0">
+                        <ul class="flex flex-col space-y-[8px]">
+                            <li><a href="javascript:void(0);"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Docker</span></a>
+                            </li>
+                            <li><a href="/documentation/cli"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr] items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        CLI</span></a>
+                            </li>
+                            <li><a href="/documentation/prebuild"
+                                    class=" hover:bg-[#F0F0F0] p-[8px_12px] grid grid-cols-[auto_1fr]  items-center gap-2 text-[#262626] text-sm font-light leading-[17.5px] rounded-[5px]  before:inline-block before:w-1 before:min-w-[0.25rem] before:h-1 before:bg-[#D9D9D9] before:rounded-full "><span>From
+                                        Prebuild</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="p-[20px]">
+            <p class="mb-[16px] text-sm font-light leading-[20px]">
+                Having successfully covered the prerequisites in the previous section, let's dive into the
+                practical aspects of setting up spurtCMS Admin application. This technical tutorial will guide
+                you through the steps necessary to get your spurtCMS Admin instance up and running smoothly.
+            </p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 1: Download the source files:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Clone the Git repository that contains spurtCMS Admin
+                project files, and .env file from the path
+                <a href="https://github.com/spurtcms/spurtcms-admin"
+                    class="text-[#10A37F] underline">https://github.com/spurtcms/spurtcms</a> using the “git clone”
+                command.
+            </p>
+
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                             git clone https://github.com/spurtcms/spurtcms
+                    </p>
+                    <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                    <div  class="flex items-center space-x-2 hidden copiedbtn">
+                      <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                      <img src="/public/img/feature-check.svg" alt="copied" >
+                    </div>
+                    </code>
+            </div>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">After successful git clone, you should see a folder
+                “spurtcms-admin” with folders locales, view, storage, public and .env, file.</p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 2: Database Setup:</h2>
+            <ul class="mb-[16px] ps-[24px]">
+                <li class=" text-sm font-light leading-[20px] mb-[8px] last-of-type:mb-0 list-disc">
+                    spurtCMS supports PostgreSQL and MySQL. You need to configure the following environment variables in
+                    your .env file:
+                </li>
+                <li class=" text-sm font-light leading-[20px] mb-[8px] last-of-type:mb-0 list-disc">Locate the .env file
+                    inside the project folder “spurtcms-admin-app” and configure it with the details of newly created
+                    database to use either PostgreSQL or MySQL such as database type,name, user name, password etc</li>
+            </ul>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] relative">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                            DATABASE_TYPE=postgres&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Use 'postgres' for PostgreSQL or 'mysql' for MySQL
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_HOST=localhost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database host
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_PORT=5432&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Port for PostgreSQL (use 3306 for MySQL)
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_DATABASE=your_database_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Name of your database
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_USERNAME=your_username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database username
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_PASSWORD=your_password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Database password
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        DB_SSL_MODE=disable
+                    </p>
+                    <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn absolute top-[12px] right-[16px]">
+                    <div  class="flex items-center space-x-2 hidden copiedbtn absolute top-[12px] right-[16px]">
+                      <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                      <img src="/public/img/feature-check.svg" alt="copied" >
+                    </div>
+                    </code>
+            </div>
+
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Successful completion of this step completes the
+                database configuration for spurtCMS Admin application.</p>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 3: Environment Variables for AWS S3:</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">spurtCMS application uses AWS S3 for file storage.
+                You need to configure the following environment variables in your .env file:
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] relative">
+                <code class="font-lexend">
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                            AWS_ACCESS_KEY_ID=your-access-key-id
+                        </p>
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                            AWS_SECRET_ACCESS_KEY=your-secret-access-key
+                         </p>
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                            AWS_DEFAULT_REGION=your-region
+                        </p>
+                        <p class="text-white text-sm font-light leading-[17.5px]">
+                            AWS_BUCKET_NAME=your-bucket-name
+                         </p>
+                         <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn absolute top-[12px] right-[16px]">
+                         <div  class="flex items-center space-x-2 hidden copiedbtn absolute top-[12px] right-[16px]">
+                           <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                           <img src="/public/img/feature-check.svg" alt="copied" >
+                         </div>
+                    </code>
+            </div>
+            <h2 class="mb-[8px] text-[24px] text-[#262626] font-medium">Step 4: Running the Project</h2>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">Open the terminal within the project / cloned folder
+                “spurtcms-admin”, and execute the following command:
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] ">
+                <code class="font-lexend flex justify-between">
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        go run main.go
+                    </p>
+                    <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn">
+                    <div  class="flex items-center space-x-2 hidden copiedbtn">
+                      <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                      <img src="/public/img/feature-check.svg" alt="copied" >
+                    </div>
+                    </code>
+                </code>
+            </div>
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">This command initiates the spurtCMS Admin
+                application, allowing you to begin your journey with this powerful content management system.
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">By following the steps outlined in this article, you
+                have
+                successfully set up spurtCMS Admin on your system. Ensure that all prerequisites are met and the
+                configuration steps
+                are accurately executed to enjoy a seamless experience with spurtCMS Admin application. Now you can
+                explore the
+                features and functionalities of spurtCMS Admin for efficient content management.
+            </p>
+            <p class="mb-[16px] text-sm font-light leading-[20px]">live demo of our intuitive Admin Panel .
+            </p>
+            <div class="bg-[#222222] rounded-[0.1875rem] p-[12px_16px] mb-[16px] relative">
+                <code class="font-lexend ">
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        Username : spurtcmsAdmin
+                    </p>
+                    <p class="text-white text-sm font-light leading-[17.5px]">
+                        Password : Admin@123
+                    </p>
+                    <img src="/public/img/copy-snap.svg" alt="copy"  class="peer-focus:hidden inline-block cursor-pointer copybtn absolute top-[12px] right-[16px]">
+                    <div  class="flex items-center space-x-2 hidden copiedbtn absolute top-[12px] right-[16px]">
+                      <span class="text-[#FFFFFF] text-xs font-light leading-none">copied</span>
+                      <img src="/public/img/feature-check.svg" alt="copied" >
+                    </div>
+                    </code>
+                </code>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+{{template "template-footer"}}

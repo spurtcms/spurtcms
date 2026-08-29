@@ -208,9 +208,9 @@ $(document).on('click', '#pagemodalsave-btn', function () {
                 console.log(data, data.page.Name, "data");
                 if ((pagetype == 'static-page') ||(pagetype=="landing-page")) {
 
-                    window.location.href = "/admin/website/pages/" + data.page.WebsiteId
+                    window.location.href = "/admin/website/pages/"
                 } else if ((pagetype == 'editor-page') ||(pagetype='block-page')){
-                    window.location.href = "/admin/website/pages/editpage/" + data.page.Id + "?webid=" + data.page.WebsiteId
+                    window.location.href = "/admin/website/pages/editpage/" + data.page.Id
                 }
 
 
@@ -324,7 +324,7 @@ $(document).on('click', '.createpagebtn', function () {
             success: function (data) {
                 console.log(data, data.page.Name, "data");
 
-                window.location.href = "/admin/website/pages/editpage/" + data.page.Id + "?webid=" + data.page.WebsiteId
+                window.location.href = "/admin/website/pages/editpage/" + data.page.Id 
 
                 // var str = `<div class="flex items-center hover:bg-[#F5F5F5]">
                 //             <a href="/admin/website/pages/editpage/`+data.page.Id+`?webid=`+templateid+`" class="pagename-link text-[14px] grow font-light leading-[15px] text-[#282322] p-[16px_20px] block">` + data.page.Name + `</a>
@@ -439,7 +439,7 @@ $(document).on('click', '.editpagebtn', function () {
             cache: false,
             success: function (data) {
                 setCookie("get-toast", "Page Created Successfully")
-                window.location.href = "/admin/website/pages/editpage/" + data.page.Id + "?webid=" + data.page.WebsiteId
+                window.location.href = "/admin/website/pages/editpage/" + data.page.Id 
                 // $btn.siblings('.pagename-link').text(newName);
                 // $btn.siblings('.newdiv').find('.pagename-input').addClass('hidden');
                 // $btn.addClass('hidden');
@@ -512,7 +512,7 @@ document.addEventListener('saveChange', function (event) {
         success: function (data) {
 
             setCookie("get-toast", "Page Updated Successfully")
-             window.location.href = "/admin/website/pages/" + templateid
+             window.location.href = "/admin/website/pages/" 
 
         }
     })
@@ -598,6 +598,29 @@ $(document).ready(function () {
     });
 });
 
+ function toggleAccordionindustrydetail(index) {
+    console.log("lkjkjk");
+    
+    const content = document.getElementById(`content-${index}`);
+    const button = document.getElementById(`btn-${index}`);
+    const icon = document.getElementById(`icon-${index}`);
+    const wrapper = document.querySelector(`.accord-${index}`);
+
+    const minusSVG = `<img src="/picco_template/assets/img/accord-up.svg" alt="">`;
+    const plusSVG = `<img src="/picco_template/assets/img/accord-down.svg" alt="">`;
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = '0';
+        icon.innerHTML = plusSVG;
+        button.classList.remove('active');
+        wrapper.classList.remove('active')
+    } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.innerHTML = minusSVG;
+        button.classList.add('active');
+        wrapper.classList.add('active')
+    }
+}
 // 
 
 // JAN 13
@@ -608,8 +631,8 @@ function toggleAccordionfaq(index) {
     const icon = document.getElementById(`icon-${index}`);
     const wrapper = document.querySelector(`.accord-${index}`);
   
-    const minusSVG = `<img src="/picco_template/assets/img/accord-up.svg" alt="">`;
-    const plusSVG = `<img src="/picco_template/assets/img/accord-down.svg" alt="">`;
+    const minusSVG = `<img src="/picco_template/assets/img/accord-minus-dark.svg" alt="">`;
+    const plusSVG = `<img src="/picco_template/assets/img/accord-plus-dark.svg" alt="">`;
   
     if (content.style.maxHeight && content.style.maxHeight !== '0px') {
       content.style.maxHeight = '0';
@@ -687,3 +710,297 @@ function animateHeight(el, from, to, duration) {
     await openItem(this);
     activeIndex = this;
 });
+
+// For carrer page slider
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+
+  const slider = document.getElementById("slider");
+  if (!slider) return; 
+  const slides = slider.children;
+  const totalSlides = slides.length;
+
+  const nextBtn = document.getElementById("next");
+  const prevBtn = document.getElementById("prev");
+  if (!nextBtn || !prevBtn) return;
+
+  let index = 0;
+  let interval;
+  const slideWidth = 75; // 70% + 5% gap
+
+  function updateSlide() {
+    slider.style.transform = `translateX(-${index * slideWidth}%)`;
+  }
+
+  function nextSlide() {
+    index = (index + 1) % totalSlides;   // 🔁 LOOP
+    updateSlide();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + totalSlides) % totalSlides; // 🔁 LOOP BACK
+    updateSlide();
+  }
+  function resetAutoSlide() {
+    clearInterval(interval);
+    startAutoSlide();
+  }
+
+  nextBtn.addEventListener("click", () => {
+    nextSlide();
+    resetAutoSlide();
+  });
+
+  prevBtn.addEventListener("click", () => {
+    prevSlide();
+    resetAutoSlide();
+  });
+});
+$(function () {
+  const $slider = $('#slider');
+  if (!$slider.length) return;
+  const $slides = $slider.children();
+  const $prev = $('#prev');
+  const $next = $('#next');
+
+  let currentIndex = 0;
+  const totalSlides = $slides.length;
+  const animationSpeed = 1000; // adjust speed here
+  let isAnimating = false;
+
+  $slider.css({
+    transition: `transform ${animationSpeed}ms ease-in-out`
+  });
+
+  function updateSlider() {
+    const slideWidth = $slides.outerWidth(true);
+    const translateX = -(slideWidth * currentIndex);
+
+    isAnimating = true;
+    $slider.css('transform', `translateX(${translateX}px)`);
+
+    setTimeout(() => {
+      isAnimating = false;
+    }, animationSpeed);
+  }
+
+  function goNext() {
+    if (isAnimating) return;
+    if (currentIndex < totalSlides - 1) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+
+  function goPrev() {
+    if (isAnimating) return;
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+
+  // Buttons
+  $next.on('click', goNext);
+  $prev.on('click', goPrev);
+
+  // Keyboard
+  $(document).on('keydown', function (e) {
+    if (e.key === "ArrowRight") goNext();
+    if (e.key === "ArrowLeft") goPrev();
+  });
+
+  // Mouse wheel (one move only)
+  $('.relative.overflow-hidden').on('wheel', function (e) {
+    e.preventDefault();
+    if (isAnimating) return;
+
+    if (e.originalEvent.deltaY > 0) {
+      goNext();
+    } else {
+      goPrev();
+    }
+  });
+});
+// ===================
+
+// service detail
+// Tab switching functionality for responsive design
+function switchTab(tabName) {
+  // Remove active class from all tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+    btn.classList.remove('text-[#FFFFFF]', 'bg-[#1D1D1B]', 'border-[#1D1D1B]');
+    btn.classList.add('text-[#3B4045]');
+  });
+  
+  // Hide all tab content
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.add('hidden');
+  });
+  
+  // Show selected tab content
+  const selectedContent = document.getElementById(tabName + '-content');
+  if (selectedContent) {
+    selectedContent.classList.remove('hidden');
+  }
+  
+  // Add active class to selected tab
+  const selectedTab = document.getElementById(tabName + '-tab');
+  if (selectedTab) {
+    selectedTab.classList.add('active');
+    selectedTab.classList.add('text-[#FFFFFF]', 'bg-[#1D1D1B]', 'border-[#1D1D1B]');
+    selectedTab.classList.remove('text-[#3B4045]');
+  }
+}
+
+// Function to generate slug from text
+function generateSlug(text) {
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')        
+        .replace(/\s+/g, '-')             
+        .replace(/-+/g, '-')              
+        .replace(/^-+|-+$/g, '');         
+}
+
+$(document).on('keyup', '.dynamicpage_name', function () {
+    let name = $(this).val();
+    let slugField = $('.dynamicpage_slug');
+    const specialCharRegex = /[^\w\s-]/g;
+    
+    if (specialCharRegex.test(name)) {
+        $(this).siblings('.dynamicnameerr').text('Special characters are not allowed').removeClass('hidden');
+    } else {
+        $(this).siblings('.dynamicnameerr').addClass('hidden');
+    }
+
+    // Always generate slug regardless of special char check
+    if (!slugField.data('manual')) {
+        let slug = generateSlug(name);
+        slugField.val(slug);
+    }
+});
+
+$(document).on('keypress', '.dynamicpage_name', function (e) {
+    const char = String.fromCharCode(e.which);
+    if (!/^[a-zA-Z0-9\-_ ]$/.test(char)) {
+        e.preventDefault();
+        $('.error-dynamicname').remove();
+        const $errorMessage = $('<div class="error-dynamicname text-xs mt-1" style="color: #F26674;">* Only letters, numbers, - and _ are allowed</div>');
+        $(this).after($errorMessage);
+    } else {
+        $('.error-dynamicname').remove();
+    }
+});
+
+$(document).on('keypress', '.dynamicpage_slug', function (e) {
+    const char = String.fromCharCode(e.which);
+    if (!/^[a-zA-Z0-9\-_]$/.test(char)) {
+        e.preventDefault();
+        $('.error-dynamicslug').remove();
+        const $errorMessage = $('<div class="error-dynamicslug text-xs mt-1" style="color: #F26674;">* Only letters, numbers, - and _ are allowed</div>');
+        $(this).after($errorMessage);
+        $(this).data('invalid-pressed', true);
+    } else {
+        $(this).data('invalid-pressed', false);
+        $('.error-dynamicslug').remove();
+    }
+});
+
+$(document).on('keyup', '.dynamicpage_slug', function () {
+    $('.dynamicslugerr').addClass('hidden');
+    const val = $(this).val();
+    const specialCharRegex = /[^\w\-]/g;
+
+    if (specialCharRegex.test(val)) {
+        $(this).val(val.replace(/[^\w\-]/g, ''));
+        $('.error-dynamicslug').remove();
+        const $errorMessage = $('<div class="error-dynamicslug text-xs mt-1" style="color: #F26674;">* Only letters, numbers, - and _ are allowed</div>');
+        $(this).after($errorMessage);
+        $(this).data('invalid-pressed', false);
+    } else if ($(this).data('invalid-pressed')) {
+    } else {
+        $('.error-dynamicslug').remove();
+    }
+    if (val.trim() === '') {
+        $(this).data('manual', false);
+    } else {
+        $(this).data('manual', true);
+    }
+});
+
+// AFTER:
+const carouselTrack = document.querySelector('#carousel-track');
+if (carouselTrack) { // ← guard
+  const carouselWrapper = carouselTrack.closest('.overflow-hidden');
+  if (carouselWrapper) { // ← guard the wrapper too
+    carouselWrapper.style.overflowY = 'visible';
+    carouselWrapper.addEventListener('wheel', function(e) {
+      if (!e.shiftKey) {
+        window.scrollBy(0, e.deltaY);
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+}
+
+
+function fixLinkRowScroll() {
+  
+  const linkRows = document.querySelectorAll('a.link-row, button.link-row');
+  
+  linkRows.forEach(linkRow => {
+    
+    if (linkRow.dataset.scrollFixed) return;
+    linkRow.dataset.scrollFixed = 'true';
+    
+    const originalOverflow = linkRow.style.overflow;
+    
+    
+    linkRow.addEventListener('mouseenter', function() {
+      this.style.overflow = 'visible';
+      this.style.pointerEvents = 'auto';
+      this.classList.add('hover-active');
+    });
+    
+    linkRow.addEventListener('mouseleave', function() {
+      this.style.overflow = originalOverflow || 'hidden';
+      this.style.pointerEvents = 'auto';
+      this.classList.remove('hover-active');
+    });
+    
+    
+    linkRow.addEventListener('wheel', function(e) {
+      e.stopPropagation();
+  
+      window.scrollBy(0, e.deltaY * 2);
+    }, { passive: false });
+    
+    linkRow.addEventListener('touchmove', function(e) {
+      e.stopPropagation();
+    }, { passive: true });
+  });
+}
+
+
+fixLinkRowScroll();
+
+
+setInterval(fixLinkRowScroll, 500);
+
+const observer = new MutationObserver(fixLinkRowScroll);
+observer.observe(document.body, { 
+  childList: true, 
+  subtree: true 
+});
+
+document.addEventListener('wheel', function(e) {
+  const hoveredLink = e.target.closest('a.link-row.hover-active, button.link-row.hover-active');
+  if (hoveredLink) {
+        return;
+  }
+}, { passive: true });

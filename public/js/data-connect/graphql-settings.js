@@ -278,7 +278,6 @@ $(document).on('keypress', '#graphqlSearchBar', function (e) {
 
     if (e.which == 13) {
         var searchText = $('#graphqlSearchBar').val()
-        console.log(searchText, "searchText");
 
 
         if (searchText != "") {
@@ -306,7 +305,6 @@ $(document).on('keyup', '#graphqlSearchBar', function (e) {
 var selectedcheckboxarr = []
 
 //single check box delete function
-console.log(selectedcheckboxarr);
 
 
 $(document).on('click', '.selectcheckbox', function () {
@@ -366,7 +364,6 @@ $(document).on('click', '.selectcheckbox', function () {
 
     $('#Check').prop('checked', allChecked);
 
-    console.log(selectedcheckboxarr);
 
 })
 
@@ -405,7 +402,6 @@ $(document).on('click', '.checkboxdelete', function () {
             "page": pageno
         },
         success: function (data) {
-            console.log(data, "data");
             if (data.value == true) {
 
                 setCookie("get-toast", "Graphql Settings Deleted Successfully")
@@ -558,7 +554,6 @@ $(document).ready(function () {
 
 
 $(document).on('click', '#copy-graphqlendpoint', function () {
-    console.log("working proper")
     TokenCopy($('#endpoint-data').val().trim())
     $(this).text(languagedata.Graphql.copied)
     setTimeout(() => {

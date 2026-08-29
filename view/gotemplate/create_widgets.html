@@ -38,6 +38,7 @@
                                 Title</label>
                             <input type="text" name="title" placeholder="Enter Widget Title" value="{{.widgetdetail.Title}}"
                                 class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full">
+                            <p class="title-data-error text-xs text-[#F26674] hidden"></p>
                         </div>
 
                         <div>
@@ -73,7 +74,8 @@
                                                
                                             </div>
                                              <input type="hidden" class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs  (error label tailwind css) border border-solid border-[#F0F0F0] h-[48px] p-[16px] rounded-[8px] text-sm leading-[18px] font-light placeholder:text-[#757575] text-[#252525] block w-full" name="position" id="position" value="{{.widgetdetail.Position}}">
-                                        </div>
+                                             <p class="position-data-error text-xs text-[#F26674] hidden"></p>
+                                         </div>
                         <div>
                             <label for=""
                                 class="text-sm leading-[18px] font-medium text-[#252525] mb-[10px] block w-full">Limit</label>
@@ -299,6 +301,7 @@
                                     </div>
 
                                 </div>
+                                <p class="entries-error text-xs text-[#F26674] hidden">*Please select at least one Entry</p>
                                 <div class="flex-col gap-1.5 w-[500px] pagesDropdown hidden">
                                     <p class="mb-0 font-normal text-[#152027] text-sm">
                                         Pages</p>
@@ -364,6 +367,7 @@
                                     </div>
 
                                 </div>
+                                <p class="pages-error text-xs text-[#F26674] hidden">*Please select at least one Page</p>
                                 <div class="flex-col gap-1.5 w-[500px] listingsDropdown hidden">
                                     <p class="mb-0 font-normal text-[#152027] text-sm">
                                         Listings
@@ -420,6 +424,7 @@
                                     </div>
 
                                 </div>
+                                <p class="listings-error text-xs text-[#F26674] hidden">*Please select at least one Listing</p>
 
                                 <!-- category dropdown -->
                                 <div class="flex-col gap-1.5 w-[500px] categoryDropdown hidden">
@@ -492,6 +497,7 @@
                                     </div>
 
                                 </div>
+                                <p class="category-error text-xs text-[#F26674] hidden">*Please select at least one Category</p>
                                <!-- channel dropdown -->
 
                                     <div class="flex-col gap-1.5 w-[500px] channelDropdown hidden">
@@ -508,8 +514,8 @@
                                         <input type="hidden" name="subcategoryid" value="" id="cid"
                                             class="[&amp;+label]:text-[#F26674] [&amp;+label]:font-normal [&amp;+label]:text-xs   (error label tailwind css)">
 
-                                        <ul class="dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
-                                shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
+                                        <ul class="channelDropdownMenu dropdown-menu dropdown-value w-full border-0 rounded-[8px] 
+                                 shadow-[0px_8px_24px_-4px_#0000001F] p-[0px_0_4px] !mt-[4px] overflow-auto "
                                             style="height: 230px; overflow: auto;">
 
                                             <div class="sticky top-0 bg-white z-10">
@@ -558,6 +564,7 @@
                                     </div>
 
                                 </div>
+                                <p class="channel-error text-xs text-[#F26674] hidden">*Please select at least one Channel</p>
                     <!-- <div class="flex items-center justify-between gap-[16px] max-w-[318px] mb-[30px] max-sm:mb-[20px]">
                         <input type="radio" name="radio1" id="radio-product" class="hidden peer/product" checked>
                         <input type="radio" name="radio1" id="radio-category" class="hidden peer/category">

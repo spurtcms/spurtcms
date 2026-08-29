@@ -22,7 +22,6 @@ $(document).on('click', '#deletebtn', function () {
 
 
     var pageid = $(this).attr("data-id")
-    console.log("kkk", pageid)
     $("#content").text("Are you sure you want to remove this page")
     var url = window.location.search
     const urlpar = new URLSearchParams(url)
@@ -52,12 +51,10 @@ $(document).on('click', '#deletebtn', function () {
 
 function PageStatus(id) {
     $('#cb' + id).on('change', function () {
-        console.log("printf");
         this.value = this.checked ? 1 : 0;
     }).change();
     var isactive = $('#cb' + id).val();
 
-    console.log("check", isactive, id)
 
     $.ajax({
         url: '/admin/website/pages/pagestatuschange',
@@ -101,7 +98,7 @@ $(document).on("click", ".Closebtn", function () {
 
 $(document).on("click", ".searchClosebtn", function () {
     $(".search").val('')
-    window.location.href = "/admin/website/pages/" + $('.templateid').val()
+    window.location.href = "/admin/website/pages/" 
 })
 
 $(document).ready(function () {
@@ -394,12 +391,10 @@ function handleSubChildDrop(event, $subChild) {
     if ($subChild.closest('#accordionPanelsStayOpenExample').length && 
         !$subChild.closest('.child-container, .subchild-container').length) {
 
-            console.log("checkindepee",$subChild)
         makeSubChildIndependent($subChild);
         return;
     }
     
-    console.log("checksubci")
     // Block subchild → subchild (no 4th level)
     let $hit = $(document.elementFromPoint(event.originalEvent.clientX, event.originalEvent.clientY));
     let $target = $hit.closest('.childdiv').not($subChild);
@@ -416,14 +411,12 @@ function handleSubChildDrop(event, $subChild) {
   10
 );
         $subChild.addClass('ms-[40px] childdiv').attr('data-parent', parentId);
-         console.log("checksubci2")
         updateOrderForContainer($parent, parentId);
     }
 }
 
 function makeSubChildIndependent($subChild) {
 
-    console.log("makee")
     let pageId = $subChild.attr('data-id');
     $subChild.removeClass('ms-[40px] childdiv').attr('data-parent', 0);
     let $wrapper = $(`<div class="sortable-parent" data-id="${pageId}"></div>`);
@@ -445,7 +438,6 @@ function makeItemSubChildOf($sourceChild, $targetChild) {
        
         return;
     }
-    console.log("check2level");
 
     let targetId = parseInt($targetChild.attr('data-id'), 10);
     if (isNaN(targetId)) return;
@@ -526,7 +518,6 @@ function updateOrderForContainer($container, parentId) {
         });
     }
 
-    console.log('ORDER DATA →', orderData);
     if (!orderData.length) return;
 
     $.ajax({
@@ -539,7 +530,6 @@ function updateOrderForContainer($container, parentId) {
             orderData: JSON.stringify(orderData)
         },
         success: function () {
-            console.log('Order saved');
              window.location.reload()
         }
     });
